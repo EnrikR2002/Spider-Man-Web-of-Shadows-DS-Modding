@@ -1,0 +1,11 @@
+/original/*
+!/original/PUT_ROM_HERE.txt
+/work/
+/build/
+/mods/*
+!/mods/README.md
+__pycache__/
+*.py[cod]
+
+# Never stage a ROM, even if one is copied outside original/.
+*.nds
