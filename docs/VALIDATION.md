@@ -103,3 +103,21 @@ This establishes one visible texture modification and a successful baseline boot
 It does not establish a full playthrough, hardware compatibility, new archive resource
 creation, arbitrary engine data edits, or runtime acceptance of re-encoded compression streams.
 Those need their own one-change experiments.
+
+## GitHub clone validation — 2026-10-03
+
+The private GitHub repository was cloned into a separate temporary directory.
+Only the clean ROM was copied into that clone as a private input. From the clone,
+extraction produced both NitroFS files and all 3,733 Glob resources; all 23 tests
+passed; generating the green-suit overlay, building, and verifying succeeded.
+The resulting ROM SHA256 was
+`9fca9e27bed2c220e44f6449d0261f061fea0ddc2e1df62db3d6563d6752eed8`,
+matching the original project build. No source files or Python dependencies were
+copied from the original checkout to make the clone run.
+
+All source modules, tests, the required `reference/glob_manifest.csv`, documentation,
+and metadata reports are tracked. Empty working directories are created by the
+commands; the tracked text placeholders retain `original/` and `mods/` in a clone.
+The temporary clone is a disposable validation artifact and is not an input to
+any tool. The other computer requires Git, Python 3.10+, and the matching clean
+ROM; the existing DeSmuME installation is used only for the manual gameplay check.

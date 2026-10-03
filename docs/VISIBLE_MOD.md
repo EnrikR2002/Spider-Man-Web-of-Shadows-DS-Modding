@@ -49,6 +49,32 @@ or your existing DeSmuME setup. The automated proof below used the separate
    eyes, background and UI retain their colors. Check movement/gameplay as desired.
    Use a fresh boot rather than an old save state that may contain cached assets.
 
+### DeSmuME 0.9.11 on the other computer
+
+The clone contains the texture-edit recipe, so you do not need to transfer the
+generated `mods/spd.nsbtx` or an existing build. Copy the clean ROM into `original/`
+and run the setup commands in [README.md](../README.md#set-up-on-another-computer).
+Those commands create both the byte-identical baseline and the green-suit build.
+
+1. Start your existing DeSmuME 0.9.11. Choose **File > Open ROM** and select
+   `build/roundtrip/Spider-Man-WoS-unmodified.nds` inside the new clone.
+2. Start a new game and reach the first Residential gameplay area. Use the keys
+   assigned to DS Start/A in **Config > Control Config** for menus. Observe the
+   playable Spider-Man's red body sections.
+3. Choose **File > Close ROM**, then **File > Open ROM** and select
+   `build/Spider-Man-WoS-modded.nds`. Start a new game and reach the same area.
+   The previously red sections should be bright green.
+4. After future builds, close and reopen the ROM. Avoid loading an old emulator
+   save state for this comparison, because it can restore previously loaded assets.
+
+These menu names follow the [official DeSmuME Windows manual](https://wiki.desmume.org/index.php?title=DeSmuME_Manual_for_the_Windows_port).
+The manual describes an older version; gameplay evidence in this project uses
+melonDS DS 1.1.5. DeSmuME 0.9.11 gameplay has not been tested here, so this is the
+manual confirmation procedure for your installation. No emulator is required
+for extraction, tests, or ROM builds.
+
+### Optional automated captures
+
 The optional harness supplies the exact sequence used here without requiring your
 BIOS files or a GUI. It never loads/persists your game saves:
 

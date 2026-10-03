@@ -14,24 +14,50 @@ This project must not be distributed with the ROM or extracted copyrighted asset
 
 ## Set up on another computer
 
-Clone the private source repository, then place your own clean ROM dump at the path
-above. The ROM, extracted assets, builds, and active overlay are deliberately excluded
-from GitHub; `python mod.py experiment green-suit` regenerates the reversible example.
+Install Git and Python 3.10+ on the other computer, and make sure `git --version`
+and `python --version` work in PowerShell. Sign in to GitHub as an account with
+access to this private repository when Git asks. Your existing DeSmuME 0.9.11
+installation can be used for the manual boot check below.
+
+GitHub contains the complete source workflow: `mod.py`, all `tools/` modules,
+tests, documentation, the Glob manifest, metadata reports, and the placeholder
+files that create `original/` and `mods/`. There are no Python packages to install
+with pip. No files from the temporary clone check are needed.
+
+Clone the repository, then copy your own untouched ROM to the path above. The ROM,
+extracted assets, builds, and active overlay are excluded from GitHub;
+`python mod.py experiment green-suit` regenerates the reversible example from
+your clean ROM. `extract` creates `work/`, and `build` creates `build/` automatically.
 
 ```powershell
 git clone https://github.com/EnrikR2002/Spider-Man-Web-of-Shadows-DS-Modding.git
 cd Spider-Man-Web-of-Shadows-DS-Modding
 # Copy your clean ROM to original/Spider-Man - Web of Shadows (USA) (En,Fr).nds
 python mod.py extract
+python mod.py verify --round-trip
 python -m unittest discover -s tests -v
 python mod.py experiment green-suit
 python mod.py build
 python mod.py verify
 ```
 
+The clean ROM must be 67,108,864 bytes with SHA256
+`61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203`.
+The tools check this automatically. Copy the ROM as a separate local transfer;
+it is the only game-data input required to reproduce the example and full tests.
+
+In DeSmuME, choose **File > Open ROM**, select
+`build/Spider-Man-WoS-modded.nds` inside your new clone, and start a new game.
+Spider-Man's red suit sections should be green in the opening Residential area.
+After each rebuild, close and reopen the ROM so it loads the new asset. See
+[the DeSmuME procedure](docs/VISIBLE_MOD.md#desmume-0911-on-the-other-computer)
+for the baseline comparison. Gameplay was verified here in melonDS DS 1.1.5;
+DeSmuME 0.9.11 still needs this manual check on your other computer.
+
 When switching computers, push source changes with `git add`, `git commit`, and
-`git push`. Copy the clean ROM and any private overlay you want to preserve separately;
-they are not synchronized through Git.
+`git push`, then run `git pull --ff-only` in the other clone before working.
+Copy any custom private overlays you want to preserve separately; they are not
+synchronized through Git. The clean ROM only needs to be copied once per computer.
 
 ## Daily edit/build/boot loop
 
@@ -44,8 +70,8 @@ python mod.py verify
 ```
 
 Open `build/Spider-Man-WoS-modded.nds` in your DS emulator. Start a fresh boot after
-rebuilding so the game reloads the changed asset. The currently active overlay is
-the proven green-suit experiment, `mods/spd.nsbtx`.
+rebuilding so the game reloads the changed asset. The green-suit commands above
+create the proven example overlay, `mods/spd.nsbtx`.
 
 `build` reads unchanged content directly from the clean ROM, so extraction is optional
 for a build. Only exact manifest filenames are accepted in `mods/`. File sizes may
