@@ -1,0 +1,57 @@
+{
+  "after_png_sha256": "0a07e9a7b6fc0691fa7c547ebebe46486ef644622dbdf7fe0016ade94dfe79c0",
+  "after_screenshot": "build/boot-tests/Spider-Man-WoS-modded-9fca9e27/frame-01799.png",
+  "assessment": "Both cold boots reach Residential gameplay; Spider-Man is red in baseline and green in modified run. Same scripted inputs and pose; no other pixels differ.",
+  "asset_new_sha256": "afc01a3744a1723d98fb74de310193dda14ae2dfd840a428655a07bcf0c0b8ef",
+  "asset_old_sha256": "461b2a00b617a4987e84338a63d7242ce54052c9537d85b8308719aa980c5206",
+  "before_png_sha256": "3376dacd793c422c7523015a4c5c7708bff8d892780079d530ae387d2e5e2f41",
+  "before_screenshot": "build/boot-tests/Spider-Man-WoS-unmodified-61a6ed6e/frame-01799.png",
+  "changed_asset": "spd.nsbtx",
+  "clean_rom_sha256": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203",
+  "comparison_difference_bbox_xyxy": [
+    114,
+    66,
+    141,
+    99
+  ],
+  "comparison_different_pixels": 452,
+  "comparison_frame": 1799,
+  "core_sha256": "534e0a4f489107dd35491bc9a628e8a32d7a9c58460a4951851dac570403312b",
+  "core_version": "melonDS DS 1.1.5",
+  "date": "2026-10-02",
+  "emulated_frames": 1800,
+  "limits": "No full playthrough, hardware test, black-suit test or gameplay data edit test.",
+  "modded_rom_sha256": "9fca9e27bed2c220e44f6449d0261f061fea0ddc2e1df62db3d6563d6752eed8",
+  "palette_colors_changed": 156,
+  "rom_differing_byte_count": 311,
+  "rom_differing_ranges": [
+    [
+      35347656,
+      35347676
+    ],
+    [
+      35347678,
+      35347779
+    ],
+    [
+      35347780,
+      35347884
+    ],
+    [
+      35347886,
+      35347888
+    ],
+    [
+      35347890,
+      35347920
+    ],
+    [
+      35347922,
+      35347950
+    ],
+    [
+      35347952,
+      35347978
+    ]
+  ]
+}
