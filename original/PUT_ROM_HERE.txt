@@ -1,0 +1,3 @@
+Put your clean CS5E ROM in this folder. Do not commit or distribute it.
+Expected filename used by the docs:
+Spider-Man - Web of Shadows (USA) (En,Fr).nds
