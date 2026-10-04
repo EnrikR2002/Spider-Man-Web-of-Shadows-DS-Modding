@@ -202,7 +202,8 @@ def main(argv=None):
                 print(f'Created one reversible overlay: {dest}; now run python mod.py build')
             else:
                 if dest.exists():
-                    if dest.read_bytes() != changed: raise ValueError('Overlay differs from the experiment; refusing to remove your edit')
+                    current = dest.read_bytes()
+                    if current != changed: raise ValueError('Overlay differs from the experiment; refusing to remove your edit')
                     w.safe_output(dest).unlink()
                 print('Experiment overlay removed; run python mod.py build to rebuild without it')
     except (OSError, ValueError, KeyError) as exc:

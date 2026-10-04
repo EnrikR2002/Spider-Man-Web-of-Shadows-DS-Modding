@@ -73,6 +73,13 @@ Open `build/Spider-Man-WoS-modded.nds` in your DS emulator. Start a fresh boot a
 rebuilding so the game reloads the changed asset. The green-suit commands above
 create the proven example overlay, `mods/spd.nsbtx`.
 
+**Fresh boot does not mean New Game.** Save in-game, close the emulator, back up
+its separate battery-save file, rebuild/verify, reopen the ROM, and choose Continue.
+Keep a stable everyday ROM filename; isolated builds may need a copy of the save
+associated with their filename. Do not load old emulator save states to test new
+assets. See `docs/TESTING_WORKFLOW.md` for the plain-language explanation and
+`tools/save_backups.py` for opaque named `.sav`/`.dsv` backups and guarded restores.
+
 `build` reads unchanged content directly from the clean ROM, so extraction is optional
 for a build. Only exact manifest filenames are accepted in `mods/`. File sizes may
 grow or shrink; builds are deterministic, capacity-bounded, and verified before writing.
@@ -166,6 +173,8 @@ The low-level `tools/wos_tool.py` commands remain available: `inspect-rom`,
 Use `mod.py` for the normal workflow; it adds clean-source/manifest/overlay validation.
 
 Read [validation results](docs/VALIDATION.md), [format evidence](docs/FORMAT_NOTES.md),
-and [editing status/priorities](docs/MODDABILITY_MATRIX.md). The next work is actor
-bindings and decoded move triplets, followed by controlled room comparisons and text/UI
-formats. A full game decompilation and GUI are deliberately deferred.
+[editing status/priorities](docs/MODDABILITY_MATRIX.md), and the
+[modding/testing and room-research workflow](docs/TESTING_WORKFLOW.md). The next work
+is actor bindings and decoded move triplets, followed by controlled room comparisons,
+save mapping, and text/UI formats. A full game decompilation and GUI are deliberately
+deferred.

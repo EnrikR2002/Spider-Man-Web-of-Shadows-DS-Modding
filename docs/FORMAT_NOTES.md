@@ -59,6 +59,29 @@ This independently agrees with the offset/list concept in the
 
 ## NSBTX / TEX0 — structural parsing and palette editing tested
 
+### Bounded player resolution experiment — 2026-10-03
+
+tools/movie_suit.py accepts only clean spd model/texture hashes. 64->128 I8 changes
+pixel pool from 4,096 to 16,384 bytes, shifts palette and empty compressed-pool
+offsets, updates TEX0/envelope lengths, texture width/height bit fields (entry at
+file 0x64). Texture dictionary unknown u32 at 0x68 is preserved; no interpretation
+of its apparent dimensions is claimed. Names/palette dictionaries unchanged.
+The texture 64x64 no-op is exact and resized raw serialization round-trips.
+
+Player MDL0 model begins 0x44, single material at 0x8ac; material u16 width/height
+at +32/+34 are 64/64. Single shape at 0x900 has GPU stream beginning 0x910.
+741 TEXCOORD commands (0x22), signed 16-bit S/T fixed-point values, were doubled
+alongside material dimensions. No positions/normals/bones/animation bytes changed.
+GPU packets have four byte opcodes then each command's u32 parameters. Supported
+opcodes are strictly bounded; unfamiliar ones fail rather than guessing lengths.
+Observed UV values range 23..1009 before scaling. 1x no-op and exact inverse pass.
+
+Apicula export gave 744 vertex records/402 polygons and coherent UV mapping in a
+private front-view software preview. Structural leads came from scurest/nsbmd_docs
+and apicula source, then checked against this asset. Original-art 128 control and
+painted variant reached opening gameplay captures; no full-playthrough/hardware
+memory budget proof. See MOVIE_SUIT_EXPERIMENT.md. Complete suite: 42 tests passed.
+
 `tools/nitro_texture.py` parses a single-block, little-endian BTX0 version 1 envelope,
 TEX0 data pools, and texture/palette dictionaries. Every one of the 272 supplied
 NSBTX files passes parsing and exact raw serialization. Unknown fields remain raw.
@@ -207,6 +230,27 @@ is safe. No room edit was made in this session.
 
 ## STRINGS + FONT — compatibility lead only
 
+### Bounded English/American text slots — confirmed 2026-10-03
+
+New local evidence supersedes the English/American "no text editor" status below.
+Both files have SHA256 19474ce9a50c25538515e585727e4ad5878bc3bb7bb11dd987b72a7c1d556088.
+At 0x1064 a u32 0x16c describes the tree region including that word. Following
+90 pairs of little-endian u16 form a Huffman tree rooted at pair 0. Values above
+256 address pair (value-256); byte leaves are below 256. Value 256 occurs as an
+unused special leaf; its semantic meaning is unknown. Bits traverse least-significant
+first within each byte. Decoded bytes are UTF-16LE including custom glyph codes.
+At 0x11d0 are 1,049 u32 offsets relative to 0x1064; first payload is 0x2234.
+Each observed entry terminates with a UTF-16 zero. The 0x1064-byte prefix is unknown
+and preserved, not described as an ID lookup schema. Other languages are unsupported.
+
+tools/qol_suits_menu.py accepts only these clean hashes, retains original slot
+offsets/lengths/tails, and refuses oversized or unencodable edits. All 1,049 entries
+decode/re-encode/decode identically; no-op edits retain exact raw bytes. Four new
+tests bring the full suite to 40 passing tests. 35 text IDs rewritten in both
+English assets; runtime menu layout still requires user checks. See SUITS_MENU_PASS.md.
+Suit prototypes modify only palettes in spd/spdB.nsbtx; black-suit binding at runtime
+is still a name/preview-based hypothesis pending suit-switch screenshots.
+
 All six `.strings` and fourteen `.font` files are inventoried by size/hash. The
 [ACII Discovery notes](https://github.com/hoothin/AC-II-Discovery-Hans) describe
 Huffman text and font investigation, and [its decoder](https://github.com/hoothin/AC-II-Discovery-Hans/blob/main/getText.py)
@@ -224,9 +268,75 @@ is 100; all have first u32 00002000. A simple uncompressed-size wrapper would ac
 for only 32 bytes, leaving GoalCheck unexplained, so these remain unsupported/unknown.
 Do not silently apply a raw-body assumption to them.
 
-DAT tile/frame layout, PAL indexing/ownership, and CBMP dimensions/payload remain
-unknown. Corresponding names and hashes are surveyed. No custom UI asset was changed;
-the visible test used the standard Nitro texture instead.
+General DAT tile/frame layout, PAL ownership, and CBMP dimensions/payload remain
+unknown. The 2026-10-02 survey made no custom UI edits. The following bounded
+minimap experiment adds evidence without establishing a general sprite schema.
+
+### Minimap investigation — 2026-10-03
+
+`tools/qol_minimap.py` accepts only hash-identified clean `SpideyMiniMapIcon` and
+`MissionMiniMapIcon` families. It preserves their DAT and compressed bytes verbatim.
+
+| Family | DAT bytes 0..1 | Decoded 2LZ size | PAL size | Used indices under candidate layout |
+|---|---|---|---|---|
+| SpideyMiniMapIcon | 10 10 | 128 | 32 | 0,2,3,4,5,6,7,11,13,14,15 |
+| MissionMiniMapIcon | 08 18 | 96 | 32 | 0,1,3 |
+
+Interpreting those bytes as width/height and pixels as low-nibble-first 4bpp,
+row-major 8x8 tiles yields a coherent 16x16 Spider-Man face and 8x24 marker sheet.
+Linear pixel order does not yield a coherent face. Both tiled interpretations
+round-trip exactly, and an independently constructed four-tile test checks order
+and nibble orientation. This supports the layout hypothesis for these two assets;
+exact round trips alone are not runtime proof or validation for other families.
+All remaining DAT fields stay unknown. Index-zero transparency is a preview
+assumption, not yet confirmed in-game. Preview colors interpret PAL words as BGR555.
+
+Experiment: change only MissionMiniMapIcon.pal entry 1, LE u16 at offset 2,
+from 001F (red) to 03FF (yellow). Both bytes 2 and 3 change; all other palette
+entries, compressed pixels, and DAT bytes remain exact. Index 3 remains black.
+The offline preview shows yellow fill and the original black edge. Entry 2 is
+also red but unused in this decoded sheet, so it is deliberately not edited.
+
+All 29 automated tests pass, including six new minimap tests: exact family/no-op
+serialization, independent tiled order, invalid input rejection, palette confinement
+and inverse, guarded overlay/revert, one-asset ROM build, and clean ROM identity on
+revert. Build verification checks 3,733 resources; 3,732 remain unchanged.
+Modified ROM SHA256: 8932a811aa934bb683d2266e22e6c225f8c8da0380c2a4243712ca220b7a80ca.
+
+Clean and edited 1,800-frame melonDS DS 1.1.5 runs reached Residential gameplay.
+All six PNG capture hashes match, including frame 1799. The mission marker is not
+visible there, so its runtime color, palette ownership, and readability improvement
+remain unverified. The modified emulator process returned 0. PowerShell reported
+failure for the baseline stderr-redirection invocation despite completed boot.json
+and captures; this is not treated as a gameplay failure or ignored as an absent run.
+See `docs/QOL_PLAN.md` for reproduction and the remaining manual acceptance checks.
+
+Follow-up user gameplay evidence: a supplied DeSmuME 0.9.13 screenshot shows a
+yellow exclamation-style mission marker with a dark outline in Residential, while
+nearby blue S icons appear unchanged. This supports the intended runtime palette
+effect for that display. It does not confirm animation, other palette users, or a
+paired clean comparison. User reports an in-game save; during local inspection
+DeSmuME remained running and the matching mission-icon .dsv was zero bytes.
+Later inspection found 634 bytes in that file while DeSmuME remained running.
+Nonempty disk output is confirmed, but checkpoint validity/reload is not. No real
+save was backed up or modified; close the emulator normally, back up, and test Continue.
+
+## Opaque save snapshots — 2026-10-03
+
+`tools/save_backups.py` backs up/restores user-specified absolute `.sav`/`.dsv`
+paths without parsing, converting, or modifying their contents. No game save fields,
+checksums, slots, or compatibility rules are confirmed by this tool. A snapshot
+stores original bytes and source path, suffix, length, and SHA256 in schema-version-1
+JSON under ignored `work/save-backups/`. Names are immutable; data and metadata
+are verified before restore. Existing different destination bytes are preserved in
+a content-addressed format-specific safety snapshot before atomic replacement.
+Cross-format transfers, empty/oversize saves, direct symlinks, snapshot-storage
+destinations, ROM suffixes, and writes in `original/` are rejected. The emulator
+must be closed; no emulator lock or automatic save-path discovery is implemented.
+Seven synthetic tests cover round trips and safety failures. The complete 36-test
+suite passes, and a subprocess CLI backup/list/restore smoke test reproduced a
+synthetic file exactly. No actual gameplay save has been transferred, and no save
+parser/editor is introduced.
 
 ## Test result and immediate next experiments
 
