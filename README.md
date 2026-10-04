@@ -3,6 +3,9 @@
 USA `CS5E`, title `SPIDERMANWOS`. Python 3.10+; the archive/build workflow uses only
 the standard library. Commands below run from this project directory in PowerShell.
 
+Resume work from [project tasks and session handoff](docs/TASKS.md). It records the
+last release, active task, pending checks and the next action between sessions.
+
 Keep your untouched ROM at:
 
 `original/Spider-Man - Web of Shadows (USA) (En,Fr).nds`
@@ -114,7 +117,7 @@ python tools/playtest.py restore early-game
 The local Battery folder is already configured and the most recently played
 movie-suit `.dsv` has been copied to this ROM's save association, retaining backups
 of all five earlier Spider-Man saves. `before-suit-cleanup`, `before-tasm1`,
-`opening-save-room` and `before-rebound` are available locally.
+`opening-save-room`, `before-rebound` and `before-web-vault` are available locally.
 Checkpoint names must be unique. A checkpoint returns to an in-game save you have
 recorded; it does not jump to an arbitrary room. An isolated copy of current progress
 successfully loaded/resumed in melonDS; native DeSmuME acceptance is still a player
@@ -134,7 +137,9 @@ the gauge below the native visibility threshold. The meter increases XP rewards;
 exact multipliers remain unknown. No credit boost is applied.
 
 Regular builds and verification load `reference/gameplay_profile.json`, which pins
-the complete Rebound overlay recipe. A new clone has source tools but no private
+the complete Rebound + Web Vault overlay recipe. Web Vault replaces Web Launch at
+200 XP: grapple with A (keyboard W), then Up to launch and follow with a short vault.
+See [release evidence](docs/TASM1_WEB_VAULT.md). A new clone has source tools but no private
 assets. The suit painter also needs the private `build/suit-model-inspect/spd.dae`
 export from your clean model; follow the Apicula export procedure in
 [MOVIE_SUIT_EXPERIMENT.md](docs/MOVIE_SUIT_EXPERIMENT.md) first. Then generate a
@@ -144,8 +149,8 @@ complete isolated candidate from your own clean ROM with:
 python tools/qol_suits_menu.py
 python tools/movie_suit.py --combined
 python tools/tasm_suit.py --mods build/movie-suit-clean/combined/mods
-python tools/tasm_rebound.py --mods build/tasm1-stage1/mods --out build/tasm1-rebound
-python mod.py verify --mods build/tasm1-rebound/mods -o build/tasm1-rebound/Rebound.nds --gameplay-profile build/tasm1-rebound/gameplay_profile.json
+python tools/tasm_web_vault.py --mods build/tasm1-stage1/mods --out build/tasm-web-vault
+python mod.py verify --mods build/tasm-web-vault/mods -o build/tasm-web-vault/WebVault.nds --gameplay-profile build/tasm-web-vault/gameplay_profile.json
 ```
 
 An agent promotes the tested overlays and recipe before using the stable publisher.

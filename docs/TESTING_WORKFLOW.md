@@ -35,7 +35,7 @@ changes may require special compatibility tests or disposable saves. Back up fir
 The automated harness can load an isolated battery copy with `--save`; it never
 writes back to that file. Fresh-game captures do not require restarting progress.
 
-### Current release workflow: TASM 1 Rebound
+### Current release workflow: TASM 1 Web Vault + Rebound
 
 `playtest.py build` validates the current DSV wrapper, snapshots it, builds to a
 candidate path, rechecks that DeSmuME is closed and the save is unchanged, retains
@@ -48,19 +48,21 @@ stay in ignored `work/playtest.json`. On another machine add `--emulator FULL_EX
 to configuration. `Play Spider-Man.cmd` changes into its own project directory.
 
 Current named checkpoints: `before-suit-cleanup`, `before-tasm1`, and
-`opening-save-room`, plus the latest `before-rebound`. Ask the agent to return to a named point; restoration retains
+`opening-save-room`, plus `before-rebound` and the latest `before-web-vault`. Ask the agent to return to a named point; restoration retains
 displaced progress first. More points become available as real in-game saves are
 recorded. No arbitrary room warping or save-field editing is implemented.
 
 The adopted progress successfully resumed in the early Residential save room in
 melonDS DS using a read-only payload copy. Native DeSmuME Continue remains the
-player's final acceptance check. The current nine-asset regular overlay includes
-Snap Sweep and purchased Rebound, plus two bounded ARM9 impulse data edits.
+player's final acceptance check. The current eleven-asset regular overlay includes
+Snap Sweep, purchased Rebound and Web Vault. ARM9 retains Rebound's two impulse
+data edits and adds a bounded five-instruction native launch-event hop call.
 The exact recipe is `reference/gameplay_profile.json`; missing or changed required
 overlays block a build rather than silently dropping part of the move. See
-`TASM1_REBOUND.md`. Earlier six/seven-asset and 47/55-test statements are historical;
-the current full suite passes 76 tests. Original Web Kick ownership carries over
-through native saving; refund relocks Rebound. The live battery is never edited.
+`TASM1_WEB_VAULT.md` and `TASM1_REBOUND.md`. Earlier asset/test counts are historical;
+the current full suite passes 81 tests. Original Web Kick ownership carries over
+through native saving; Web Launch ownership carries over as Web Vault. Native
+refund and repurchase/save/reload checks pass for both released replacements. The live battery is never edited.
 
 ### Where features live
 

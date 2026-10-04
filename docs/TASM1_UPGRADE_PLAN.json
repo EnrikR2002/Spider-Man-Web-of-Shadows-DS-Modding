@@ -2,7 +2,7 @@
   "schema_version": 1,
   "date": "2026-10-04",
   "status": "incremental-implementation",
-  "scope": "Seven approved Red-tab replacements. Rebound implemented first; six remain pending.",
+  "scope": "Seven approved Red-tab replacements. Rebound and Web Vault implemented; five remain pending.",
   "free_exception": "Snap Sweep remains the existing base opener",
   "gate_contract": "Native purchase bits13..19, original costs and dependencies retained. Existing purchases carry over.",
   "balance_contract": "Comparable role, total damage and commitment budget, verified against native same-enemy tests before release",
@@ -47,7 +47,8 @@
       "proposal": "Original-budget grapple launch with a short player follow into the air",
       "tradeoff": "Aerial pursuit replaces grounded safety; no extra damage or launch height; shared air skills still require their own purchase",
       "implementation_research": "Purchase gate, launch/air transition, resistance and ceiling/room collision",
-      "status": "approved-pending"
+      "status": "implemented",
+      "implementation_reference": "TASM1_WEB_VAULT.md"
     },
     {
       "id": "sling-strike",
@@ -182,11 +183,14 @@
     "damage_equivalence_measured": false,
     "replacement_gameplay_implemented": true,
     "implemented_entry_ids": [
-      "rebound"
+      "rebound",
+      "web-vault"
     ],
     "native_catalog_rows_verified": 21,
     "rebound_locked_owned_refund_reload_verified": true,
     "rebound_meter_trace_matches_native": true,
-    "rebound_damage_handler_and_contact_budget_preserved": true
+    "rebound_damage_handler_and_contact_budget_preserved": true,
+    "web_vault_locked_owned_refund_reload_verified": true,
+    "web_vault_native_enemy_launch_and_meter_verified": true
   }
 }

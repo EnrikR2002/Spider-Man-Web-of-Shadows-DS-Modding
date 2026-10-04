@@ -689,3 +689,38 @@ custom recovery and meter equivalence. Broader boss/wall/interruption/long-play
 acceptance remains a player-testing limit. Rebound is released through the stable
 save-preserving publisher; source ROM, real save and private test assets are not
 distributed to GitHub.
+
+### Accepted Web Vault event hook and root approach
+
+Web Launch is action 51 / controller state 40 / GMB 3359,
+`spd_GrapplePullBack`, native purchase bit 14 / 200 XP. Its GAB marker occurs at
+time 5. Root-only vertical edits did not produce an airborne transition; native
+hop calls on entry interrupted the launch and were rejected. The accepted hook
+replaces five ARM instructions at 0x020C9268 in the state-40 launch event case:
+`mov r0,r4; bl 020BF164; mov r1,#37; mov r0,#0xC00; b 020C925C`.
+This calls the existing physical hop, then rejoins unchanged native response
+stores/target dispatch. All other state cases, purchase/input gates, collision,
+damage/resistance tables and shared upgrade rows remain exact.
+
+The nine GMB root-X samples become `(0,0,0,8192,24576,40960,40960,40960,40960)`
+Q12; vertical/geometry/event channels retain native bytes. Three independent Chest
+SCA matrices at frames 3/4/5 are rotated 4/9/14 degrees. Runtime confirms a ten-unit
+approach in either facing direction, an 11.632-unit hop, native landing, and normal
+aerial attacks when separately requested. Refund relocks the move and returns
+200 XP; repurchase and native save/reload preserve it. A missed grapple does not
+vault. Rebound's five-unit recoil remains intact.
+
+Paired native/modified enemy positions and animations match at four launch/ascent/
+descent snapshots. Gauge/grace/decay/tier/active values match across all 289 traced
+frames. The credit-marker byte clears earlier with the fall transition; it is
+not claimed identical. Raw enemy HP loss remains undecoded. General ceiling/wall/
+boss/interruption and native DeSmuME player acceptance remain pending.
+
+Accepted ARM9 hash `6e563225538658c6c8437ede1886037132adc5ed865693727ef60457072529bf`;
+ROM hash `bd94b6f9f8a8a1d8566aca4da284ba4c150ac675cd62ce6afb405a6e9be8c092`.
+Eleven assets differ; all 3,733 resources verify. Full suite: 81 passing tests.
+`tools/tasm_web_vault.py` composes both paid replacements; exact seven-asset hashes
+are pinned by the current recipe. Stable publication preserved the current DSV,
+named `before-web-vault` checkpoint and previous Rebound ROM. Detailed replay
+paths and reproduction inputs are in TASM1_WEB_VAULT.md. TASKS.md is the durable
+session handoff and ordered remaining-work tracker.

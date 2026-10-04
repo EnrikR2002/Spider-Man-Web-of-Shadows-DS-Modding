@@ -1,6 +1,6 @@
 """Read-only purchase/currency observations for the identified USA CS5E engine.
 
-This is a RAM view, not a save editor. Addresses identify an unchanged ARM9;
+This is a RAM view, not a save editor. Addresses identify exact known ARM9 profiles;
 heap pointers are discovered for each snapshot and never assumed constant.
 """
 from __future__ import annotations

@@ -1,8 +1,8 @@
 # TASM 1 purchased-upgrade replacement proposal
 
-2026-10-04. **Approved by the user; Rebound implemented first, six entries pending.**
+2026-10-04. **Approved by the user; Rebound and Web Vault implemented; five entries pending.**
 The inventory below was collected before implementation. Current release evidence
-is in [TASM1_REBOUND.md](TASM1_REBOUND.md). Snap Sweep was confirmed working by
+is in [TASM1_WEB_VAULT.md](TASM1_WEB_VAULT.md) and [TASM1_REBOUND.md](TASM1_REBOUND.md). Snap Sweep was confirmed working by
 the user and remains the free base opener.
 
 ## Inventory and proposed replacements
@@ -56,7 +56,7 @@ addresses and native dependencies are now mapped in UPGRADE_ENGINE.md.
 Rebound reuses bit 13 and the native 100-XP price; no persistent layout changed.
 
 Descriptions, list titles and tooltip titles all change together when the actual
-behavior ships. Rebound's description fits and was checked in-game; future entries
+behavior ships. Rebound and Web Vault descriptions fit and were checked in-game; future entries
 still need their own wrapping checks. Keep locked behavior and native button glyphs.
 
 Snap Sweep currently binds the base GroundAttack11 action to GroundAttack15's
@@ -96,6 +96,6 @@ UPGRADE_ENGINE.md and ORIGINAL_GAMEPLAY.json. Speed percentages and counter/flow
 handlers remain research beyond the existing synchronized action rebind helper.
 
 
-Rebound acceptance and release evidence: TASM1_REBOUND.md. The remaining six
+Rebound and Web Vault release evidence: TASM1_REBOUND.md / TASM1_WEB_VAULT.md. The remaining five
 entries keep their original names and behavior until their actual replacements
 are implemented and tested. The original damage/speed budgets stay a requirement.

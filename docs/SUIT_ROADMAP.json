@@ -12,12 +12,13 @@
     {
       "id": "tasm1",
       "name": "The Amazing Spider-Man 1",
-      "status": "active-rebound-release",
+      "status": "active-web-vault-release",
       "kit": "Quick openings, evasive counters, web reconnects",
       "implemented": [
         "clean panels and black lenses",
         "Snap Sweep opening action",
-        "Rebound purchased Web Kick replacement (native 100 XP gate)"
+        "Rebound purchased Web Kick replacement (native 100 XP gate)",
+        "Web Vault purchased Web Launch replacement (native 200 XP gate)"
       ]
     },
     {
@@ -58,6 +59,8 @@
     }
   ],
   "implemented_purchased_skills": [
-    "Rebound"
-  ]
+    "Rebound",
+    "Web Vault"
+  ],
+  "session_tasks": "TASKS.md"
 }

@@ -16,6 +16,16 @@ Priorities:
 
 Confirmed facts are in `docs/ANALYSIS.md` and `reference/glob_manifest.csv`.
 
+## Session continuity and tasks
+
+- Read `docs/TASKS.md` at the start of each session before choosing work.
+- Keep it as the project task/handoff source of truth: current work, last completed
+  release, ordered next steps, unresolved checks and links to detailed evidence.
+- Update it after a milestone and before ending a session. Distinguish implemented,
+  agent-tested and player-confirmed behavior; never mark an untested move complete.
+- Preserve queued work across sessions. Record a concrete next action when stopping
+  during research, along with candidate/evidence paths needed to resume.
+
 ## Accepted user workflow (2026-10-04)
 
 - Develop one suit at a time. TASM 1 is active; retain the selected backlog in
