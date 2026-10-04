@@ -95,15 +95,15 @@ def input_schedule(rows):
     return result
 
 
-def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, ram_captures=(), trace_frames=()):
+def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, ram_captures=(), trace_frames=(), battery_captures=()):
     if os.name != 'nt' or c.sizeof(c.c_void_p) != 8: raise ValueError('Pinned emulator harness requires Windows x64')
     if w.sha256(CORE_PATH.read_bytes()) != CORE_SHA256: raise ValueError('Emulator core integrity check failed')
     rom_data = rom_path.read_bytes(); report = w.validate_rom(rom_data, target=True)
     if trace_frames:
         from tools import player_trace
+        from tools.combat_profile import identify_arm9
         arm9_offset, _, _, arm9_size = struct.unpack_from('<IIII', rom_data, 0x20)
-        if w.sha256(rom_data[arm9_offset:arm9_offset+arm9_size]) != player_trace.ARM9_SHA256:
-            raise ValueError('Player probe requires the known unchanged CS5E ARM9')
+        identify_arm9(rom_data[arm9_offset:arm9_offset+arm9_size])
     dest = w.PROJECT / 'build/boot-tests' / (rom_path.stem + '-' + report['sha256'][:8])
     if label:
         if not label.replace('-', '').replace('_', '').isalnum(): raise ValueError('Invalid run label')
@@ -176,6 +176,7 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
     library.retro_init(); loaded = False
     screenshots = []
     memory_captures = []
+    battery_snapshots = []
     player_samples = []
     battery = None
     try:
@@ -207,11 +208,20 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
                 size = library.retro_get_memory_size(2); pointer = library.retro_get_memory_data(2)
                 if not pointer or size != 4 * 1024 * 1024: raise ValueError('Unexpected DS main RAM')
                 player_samples.append({'frame': frame, **player_trace.sample(c.string_at(pointer, size))})
+            if frame in battery_captures:
+                size = library.retro_get_memory_size(0); pointer = library.retro_get_memory_data(0)
+                if not pointer or size != 512: raise ValueError('Expected CS5E 512-byte save RAM')
+                data = c.string_at(pointer, size)
+                path = dest / f'battery-{frame:05d}.sav'
+                w.atomic_write(path, data, (Path(save_path),) if save_path else ())
+                battery_snapshots.append({'frame': frame, 'path': path.relative_to(w.PROJECT).as_posix(),
+                                          'size': size, 'sha256': w.sha256(data)})
         if player_samples: w.write_json(dest/'player-trace.json', player_samples)
         w.write_json(dest / 'boot.json', {'rom_sha256': report['sha256'], 'core_version': 'melonDS DS 1.1.5',
                      'core_sha256': CORE_SHA256, 'core_url': CORE_URL, 'frames': frames,
                      'input_sequence': script if script is not None else 'For frame>600, each 120-frame period presses Start+A during its first 8 frames; no other input.',
                      'battery_copy': battery, 'ram_captures': memory_captures,
+                     'private_battery_captures': battery_snapshots,
                      'player_trace': 'player-trace.json' if player_samples else None,
                      'options': {key.decode(): value.decode() for key, value in sorted(variables.items())},
                      'screenshots': screenshots, 'assessment': 'Captures require visual inspection; this is not a full gameplay test.'})
@@ -232,24 +242,27 @@ def main():
     parser.add_argument('--label', help='Separate run directory beneath the ROM hash')
     parser.add_argument('--ram-capture', default='', help='Comma-separated frame numbers for private RAM dumps')
     parser.add_argument('--player-trace', help='Half-open START:END range for read-only CS5E player telemetry')
+    parser.add_argument('--battery-capture', default='', help='Private save-RAM captures; never updates source battery')
     args = parser.parse_args()
     try:
         if not 1 <= args.frames <= 10000: raise ValueError('--frames must be 1..10000')
         captures = {int(value) for value in args.capture.split(',')}
         ram_captures = {int(value) for value in args.ram_capture.split(',') if value}
+        battery_captures = {int(value) for value in args.battery_capture.split(',') if value}
         trace_frames = set()
         if args.player_trace:
             start, end = (int(value) for value in args.player_trace.split(':'))
             if not 0 <= start < end <= args.frames: raise ValueError('Player trace range outside run')
             trace_frames = set(range(start, end))
-        if any(not 0 <= frame < args.frames for frame in captures | ram_captures): raise ValueError('Capture frame outside run')
+        if any(not 0 <= frame < args.frames for frame in captures | ram_captures | battery_captures): raise ValueError('Capture frame outside run')
         if args.fetch_core: fetch_core()
         if not CORE_PATH.exists(): raise ValueError('Core not present: run with --fetch-core once')
         path = Path(args.rom); path = path if path.is_absolute() else w.PROJECT / path
         import json
         script = json.loads(Path(args.script).read_text(encoding='utf-8')) if args.script else None
         print(f'Boot capture complete: {run(path.resolve(), args.frames, captures, save_path=args.save,
-              script=script, label=args.label, ram_captures=ram_captures, trace_frames=trace_frames)}')
+              script=script, label=args.label, ram_captures=ram_captures, trace_frames=trace_frames,
+              battery_captures=battery_captures)}')
     except (OSError, ValueError, zipfile.BadZipFile) as exc:
         print(f'error: {exc}', file=sys.stderr); return 1
     return 0

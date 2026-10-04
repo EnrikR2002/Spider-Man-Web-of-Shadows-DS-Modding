@@ -4,15 +4,60 @@
   "active_suit": "tasm1",
   "policy": "One suit at a time; TASM 1 develops through the red form first. Agent handles save backups/checks, stable releases and checkpoint restoration. Snap Sweep may stay free; every future skill replaces a purchased Red-tab upgrade with comparable power and a new name.",
   "upgrade_plan": "TASM1_UPGRADE_PLAN.json",
-  "upgrade_plan_status": "approved-implementation-pending",
-  "user_verified": ["Snap Sweep works in player testing"],
+  "upgrade_plan_status": "incremental-implementation",
+  "user_verified": [
+    "Snap Sweep works in player testing"
+  ],
   "suits": [
-    {"id": "tasm1", "name": "The Amazing Spider-Man 1", "status": "active-stage1", "kit": "Quick openings, evasive counters, web reconnects", "implemented": ["clean panels and black lenses", "Snap Sweep opening action"]},
-    {"id": "scarlet-ben", "name": "Scarlet Spider — Ben Reilly", "status": "selected-backlog", "kit": "Impact webs, stingers, control and setups"},
-    {"id": "2099-classic", "name": "Spider-Man 2099 — classic", "status": "selected-backlog", "kit": "Talons, aerial pursuit, glide and venom research"},
-    {"id": "scarlet-kaine", "name": "Scarlet Spider — Kaine", "status": "selected-backlog", "kit": "Aggressive close combat and burst counters"},
-    {"id": "raimi", "name": "Raimi Spider-Man", "status": "selected-backlog", "kit": "Weighty punches, strong web pulls, resilient recovery"},
-    {"id": "symbiote-classic", "name": "Classic symbiote", "status": "selected-backlog", "kit": "Heavy control, charges, tendril-inspired finishers"},
-    {"id": "tasm2", "name": "The Amazing Spider-Man 2", "status": "secondary-interest", "kit": "Choose later; possible appearance variant"}
+    {
+      "id": "tasm1",
+      "name": "The Amazing Spider-Man 1",
+      "status": "active-rebound-release",
+      "kit": "Quick openings, evasive counters, web reconnects",
+      "implemented": [
+        "clean panels and black lenses",
+        "Snap Sweep opening action",
+        "Rebound purchased Web Kick replacement (native 100 XP gate)"
+      ]
+    },
+    {
+      "id": "scarlet-ben",
+      "name": "Scarlet Spider — Ben Reilly",
+      "status": "selected-backlog",
+      "kit": "Impact webs, stingers, control and setups"
+    },
+    {
+      "id": "2099-classic",
+      "name": "Spider-Man 2099 — classic",
+      "status": "selected-backlog",
+      "kit": "Talons, aerial pursuit, glide and venom research"
+    },
+    {
+      "id": "scarlet-kaine",
+      "name": "Scarlet Spider — Kaine",
+      "status": "selected-backlog",
+      "kit": "Aggressive close combat and burst counters"
+    },
+    {
+      "id": "raimi",
+      "name": "Raimi Spider-Man",
+      "status": "selected-backlog",
+      "kit": "Weighty punches, strong web pulls, resilient recovery"
+    },
+    {
+      "id": "symbiote-classic",
+      "name": "Classic symbiote",
+      "status": "selected-backlog",
+      "kit": "Heavy control, charges, tendril-inspired finishers"
+    },
+    {
+      "id": "tasm2",
+      "name": "The Amazing Spider-Man 2",
+      "status": "secondary-interest",
+      "kit": "Choose later; possible appearance variant"
+    }
+  ],
+  "implemented_purchased_skills": [
+    "Rebound"
   ]
 }

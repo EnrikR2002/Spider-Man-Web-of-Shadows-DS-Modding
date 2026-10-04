@@ -58,7 +58,7 @@ def overlay_files(directory: Path, names: list[str]) -> dict[str, bytes]:
     return out
 
 
-def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, bytes]):
+def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, bytes], *, rebound=False):
     entries = manifest['entries']
     names = [e['name'] for e in entries]
     if set(overlay) - set(names) or 'GlobFiles.txt' in overlay: raise ValueError('Invalid overlay mapping')
@@ -73,6 +73,8 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
         elif e['name'] in overlay: identical.append(e['name'])
     new_glob = w.pack_glob(names, blobs)
     result = w.rebuild_rom(rom, {'Glob.bin': new_glob})
+    from tools.combat_profile import apply_rom
+    result, combat_edits = apply_rom(result, rebound)
     # Re-read every resource from the resulting ROM and compare exact bytes.
     report = w.validate_rom(result, target=True)
     ge = report['nitrofs'][0]
@@ -84,6 +86,7 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
     log = {'schema_version': 1, 'clean_rom_sha256': w.sha256(rom), 'output_rom_sha256': w.sha256(result),
            'clean_glob_sha256': manifest['sha256'], 'output_glob_sha256': w.sha256(new_glob),
            'rom_size': len(result), 'used_rom_size': report['header']['used_rom_size'],
+           'combat_data_edits': combat_edits,
            'header_crc16': report['header']['header_crc16'], 'nitrofs': report['nitrofs'],
            'replaced_assets': replacements, 'identical_overlays': identical,
            'verified_resource_count': len(names), 'unchanged_resource_count': len(names) - len(replacements)}
@@ -131,6 +134,8 @@ def main(argv=None):
         if command in ('build', 'verify'):
             p.add_argument('--mods', default='mods', help='Overlay directory, relative to project')
             p.add_argument('-o', '--out', default='build/Spider-Man-WoS-modded.nds')
+            p.add_argument('--gameplay-profile', default='reference/gameplay_profile.json',
+                           help='Known gameplay recipe, or original for an unpatched engine')
         if command == 'extract': p.add_argument('-o', '--out', default='work')
         if command in ('list', 'find'):
             if command == 'find': p.add_argument('query', help='Case-insensitive filename substring or glob pattern')
@@ -172,7 +177,17 @@ def main(argv=None):
             output = build_output(args.out)
             if output.resolve() == rom_path.resolve(): raise ValueError('Output would overwrite input ROM')
             overlay = overlay_files(project_path(args.mods), [e['name'] for e in manifest['entries']])
-            result, new_glob, log = create_build(rom, glob, manifest, overlay)
+            from tools.combat_profile import load_recipe
+            profile = project_path(args.gameplay_profile)
+            if args.gameplay_profile == 'original':
+                rebound = False
+            elif profile.exists():
+                rebound = load_recipe(profile, overlay)
+            elif args.gameplay_profile == 'reference/gameplay_profile.json':
+                rebound = False
+            else:
+                raise ValueError('Gameplay profile does not exist')
+            result, new_glob, log = create_build(rom, glob, manifest, overlay, rebound=rebound)
             if args.command == 'build':
                 log['overlay_directory'] = Path(args.mods).as_posix()
                 log['output'] = Path(args.out).as_posix()

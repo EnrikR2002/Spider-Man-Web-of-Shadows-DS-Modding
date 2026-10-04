@@ -555,3 +555,137 @@ The real battery changed independently during this read-only audit; preserve the
 latest closed-emulator bytes rather than replacing them with the earlier copy.
 Stable ROM still hashes to
 3c7ec9a5342a80bc20d6b9d058b2b8bfa029ee670d9d42b50a0642122fa9907c.
+
+## Native combat mapping and purchased Rebound — 2026-10-04
+
+This section supersedes the earlier claims that GMB/SCA payloads and purchase
+flags are unmapped. The user approved the seven-slot plan and incremental releases.
+The first purchased replacement is Rebound; the other six retain native behavior.
+Detailed sources and limits: ORIGINAL_GAMEPLAY.md/.json, COMBO_ENGINE.md,
+UPGRADE_ENGINE.md, ANIMATION_RESEARCH.md and TASM1_REBOUND.md.
+
+### GMB channel boundaries and root motion
+
+Decoded header: four LE u16 values at +0/+2/+4/+6. +2 is per-channel record
+count, +4 is channel count; +0/+6 remain unknown. Each channel has a signed
+kind and unknown u16 (`<hH>`), then the declared records. Kind/stride switch
+0x0202A4FC confirms 0:28, 2:44, 3:32, 4:48, 5:36, 6:44, 12:32 bytes.
+Kinds 6/12 do not occur in the clean survey. All 769 decoded assets parse and
+reconstruct exactly; all 126 player clips contain three kind-3 arrays and one
+kind-0 array, total size `24 + 124 * count`. No padding/tail is guessed.
+
+For the selected player root channel, type-3 record words +0/+4/+8 are transform
+translation components. Movement sampler 0x02071BAC uses +8 horizontally with
+facing sign and +4 vertically. The normal physics path at 0x02073F60 also adds
+root deltas before collision processing. Predicate 0x020B241C selects a root-only
+path; its false return does not prohibit root movement. An experimental predicate
+instruction patch was rejected. Rebound works with native instructions.
+
+Other GMB record meanings remain unknown except bounded contact-window/geometry
+correlations. Event/geometry channels, action duration and unknown bytes are
+preserved. `tools/gmb.py` supplies structured lossless reconstruction and a
+bounded word editor; compression is handled by the established wrapper.
+
+### SCA pool layout and bounded animation authoring
+
+All 869 resources have `4ACS`, a 28-byte header, u32 frame count at +4, joint
+count at +8, static byte count at +0xC and frame stride at +0x10. Counts occupy
+bytes 20..25; bytes 26..27 remain unknown. Three descriptor bytes per joint
+select translation/rotation/scale pools: low bit 1 means static, high seven bits
+are the pool index. Translations are 3*i32 Q12 (12 bytes), scale/inverse-scale
+6*i32 Q12 (24 bytes), rotations 9*i16 Q12 matrices (18 bytes).
+
+Total size is `28 + align4(3*joints) + align4(static_bytes) + frames*stride`.
+Header, descriptors, pool bytes and alignment survive exact reconstruction.
+All 126 player clips contain 37 joints. `tools/sca.py` rejects edits to constant
+or shared rotations; independent dynamic matrices can be replaced or composed
+with a bounded axis rotation. All 869 original round trips pass. Synthetic tests
+preserve unknown/alignment bytes and reject malformed layouts and aliased edits.
+
+Web Kick has 9 samples, 37 joints and stride 704. Its independent Chest_M
+joint 3 rotation is at `860 + 704*sample`. Rebound changes only its four matrices
+at samples 5..8 with local-X rotations -5/-11/-16/-12 degrees, after contact.
+Rig hierarchy, general handedness, clip blending, new tracks and complete animation
+export remain unknown/unimplemented; these are fixed-size authored recovery keys.
+
+### Purchase records, ability ownership and native save flow
+
+Native menu records are eight LE u32 values (32 bytes): ownership event,
+required event, dependent event, name/list/description string IDs, level count,
+cost. Tables: shared 0x02120260, Red 0x02120340, Black 0x02120420. All 21 rows
+are verified against the clean ARM9 by a catalog test. Red events 322..328 map
+to ability bits 13..19; Black 329..335 to 20..26. Shared events map to the bits
+recorded individually in ORIGINAL_GAMEPLAY.json. Required/dependent values are
+event IDs, not assumed masks. Dependency pairs include Spider Dance -> Scissor
+and Amazing -> Ultimate; parents cannot be refunded while the child is owned.
+
+Shared native costs: Uppercut 50, Kick-Off 200, Drill 400, Jackhammer 600, Air
+Dodge 200, Enhanced Dodge 800, Quick Recovery 800. The earlier interpretation
+of Enhanced Dodge as 400 from a screenshot was incorrect. Red costs remain
+100/200/600/400/600/800/1000. All prices and flags remain native in this release.
+
+Global stats pointer is 0x02145C5C; three ability words start at stats +0x0C,
+XP currency is +0x44. The player +0xE8 aliases stats +0x0C. Query/set functions
+are 0x020D22AC/0x020D24D8; native buy/refund are 0x020F1AA0/0x020F1B4C.
+Web Kick query at 0x020B603C requires bit 13; success can enter controller state
+42, animation action 49 then 50. State IDs and animation IDs are distinct.
+Unowned/close-target/missed inputs follow native contextual fallback routes.
+
+Actual isolated UI purchase changes 138 -> 38 XP and sets only bit 13. Native
+game saving produces a 512-byte payload captured from a disposable emulator run.
+Reloading this original-build purchase in Rebound keeps ownership and the paid
+route; refund changes 38 -> 138 XP and relocks it. The real DSV is never edited.
+Payload checksums/room layout remain unknown; no game save editor was introduced.
+
+### Combo credit and hidden HUD
+
+The lower-right meter increases enemy XP reward; clean instruction 393 confirms
+a maximum-meter XP bonus. Exact multipliers remain unknown. No damage buff is
+established. HUD vtable 0x0213C848, pointer cell 0x02145C44; model +0 is tier,
++4 Q12 gauge, +0x10 grace, +0x14 decay, +0x18 active, +0x19 credit marker.
+Native accumulator 0x02083BF0 initially reveals the HUD when tier >0 or gauge
+>30. An already active HUD may persist below this threshold while decaying.
+
+Controlled Snap Sweep contact at frame 2729 raises the hidden gauge to about
+12, its second contact at 2745 to about 24; action 57 contact at 2761 reaches
+about 36 and reveals it. This explains the user's observation. No artificial
+credit boost is needed. Logical red action 56 retains category 0; alternate 55
+uses category 7. Repeat-category suppression and tier-dependent coefficients are
+described in COMBO_ENGINE.md. Event 8 writes actor +0x28 through 0x02075370;
+it is an action marker, not meter credit. Event 7 resets contact collection and
+sets motion flag 0x20; event 1 parameters remain unknown.
+
+### Accepted Rebound profile and validation
+
+Rebound replaces Web Kick at 100 XP, native bit 13. Root GMB horizontal samples
+become `(0,0,0,0,0,-4096,-10240,-16384,-20480)` Q12, producing a five-unit
+backward player step after contact. Paired traces show X120 ->115 persists in
+idle; native Web Kick stays X120. The authored SCA recovery changes only four
+post-contact Chest rotations. GAB, contact geometry/windows and duration stay exact.
+
+Attack-kind selector 0x020B2498 maps animation action 50 to kind 32. Three
+response tables use 36-byte records; the third kind-32 record is zero/immune.
+Impulse calculator 0x0207A5F4 reads +0x18 horizontal and +0x1C vertical fields.
+Only ARM9 offsets 0x11A2B8/0x11AA98 change from signed -9011 to -4506. Paired
+right-facing contact RAM confirms target velocity (9011,6554) -> (4506,6554).
+Damage selection/data, vertical impulse, resistance flags and all instructions
+stay exact. Raw enemy HP loss is not independently decoded; do not invent it.
+The complete measured paid-move meter trace and action timeline match native.
+
+`tools/tasm_rebound.py` generates a deterministic isolated build plus a recipe
+pinning five required overlay hashes. `mod.py build/verify` reads the checked-in
+`reference/gameplay_profile.json`; `--gameplay-profile original` explicitly keeps
+native ARM9 data for controls. A missing/drifted required overlay fails. Probes
+accept only the exact clean or accepted combat-data ARM9 hashes.
+
+Accepted ROM SHA256:
+`be5fedb66f760dbd0c7e3b7813bf3aba10b326a6514de881b5c542361674d9bf`.
+Accepted ARM9 SHA256:
+`3298417ae06c47571ea559ebe3e18d33da4ed6f3bfcdcb85025628c440438837`.
+Nine assets differ; all 3,733 resources are reread/verified. The full suite passes
+76 tests in 87.396 seconds. Runtime checks cover locked/owned, original purchase
+carryover, native refund, alternate opener, persistent recoil, enemy reaction,
+custom recovery and meter equivalence. Broader boss/wall/interruption/long-play
+acceptance remains a player-testing limit. Rebound is released through the stable
+save-preserving publisher; source ROM, real save and private test assets are not
+distributed to GitHub.

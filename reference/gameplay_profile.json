@@ -1,0 +1,11 @@
+{
+  "profile": "tasm-rebound",
+  "required_overlays": {
+    "American.strings": "d3119ac40586d97ad1c6276f14e7b0c3e29597c979c7068c95fa8e0538ecfb28",
+    "English.strings": "d3119ac40586d97ad1c6276f14e7b0c3e29597c979c7068c95fa8e0538ecfb28",
+    "spd.xbd": "22bd8c3771aa9e09f66d1869f260fc4e49e394c7ff1a33877d0b92190d7c0d4d",
+    "spd_GrapplePullAttackKick.gmb": "8ac2df995f5b4089fd25ca8902f93ce0225697cffbe3b7f3e4886f63826e946a",
+    "spd_GrapplePullAttackKick.sca": "640f57d4652983c8838a45a7a9b590de01c734cfca86a1c69da82da446798936"
+  },
+  "schema_version": 1
+}

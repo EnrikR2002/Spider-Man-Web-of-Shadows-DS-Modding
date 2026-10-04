@@ -1,9 +1,9 @@
 # TASM 1 purchased-upgrade replacement proposal
 
-2026-10-04. **Approved by the user; implementation pending.** This document began
-as a planning pass; no ROM, regular overlay,
-purchase, checkpoint restoration or real-save changes in this pass. Snap Sweep
-was confirmed working by the user and remains the free base opener.
+2026-10-04. **Approved by the user; Rebound implemented first, six entries pending.**
+The inventory below was collected before implementation. Current release evidence
+is in [TASM1_REBOUND.md](TASM1_REBOUND.md). Snap Sweep was confirmed working by
+the user and remains the free base opener.
 
 ## Inventory and proposed replacements
 
@@ -52,11 +52,12 @@ Each move uses the purchase flag of the slot it replaces. Preserve native prices
 story availability and existing prerequisites. Owning Web Kick in an old save
 means owning Rebound after the replacement; it does not earn the other six moves.
 No save reset, new persistent layout or forced refund. Exact flag/cost/requirement
-addresses are not mapped yet; runtime prices do not establish those structures.
+addresses and native dependencies are now mapped in UPGRADE_ENGINE.md.
+Rebound reuses bit 13 and the native 100-XP price; no persistent layout changed.
 
 Descriptions, list titles and tooltip titles all change together when the actual
-behavior ships. Names fit existing slots; description fit/wrapping still needs
-checking. Keep hidden/locked behavior and the existing button glyphs.
+behavior ships. Rebound's description fits and was checked in-game; future entries
+still need their own wrapping checks. Keep locked behavior and native button glyphs.
 
 Snap Sweep currently binds the base GroundAttack11 action to GroundAttack15's
 SCA/GMB/GAB resources. The original paid action also references those resources.
@@ -78,7 +79,7 @@ animation reuse from input/purchase routing is essential to enforcing the gates.
 
 ## Evidence and limits
 
-Current stage-one ROM hash:
+Historical stage-one inventory ROM hash:
 `3c7ec9a5342a80bc20d6b9d058b2b8bfa029ee670d9d42b50a0642122fa9907c`.
 This pass's current-save copy hash:
 `3367385a2fa73ee66b0c6b601a3e1d0acab04595762a169f5f1c0795f84ad183`.
@@ -89,7 +90,12 @@ in `work/upgrade-research/` and `build/boot-tests/Spider-Man-WoS-modded-3c7ec9a5
 Red tab images: `red-skill-inventory/frame-02170.png`, `frame-02490.png`,
 `frame-02690.png`. Shared tab audit: `shared-skill-audit/`.
 
-IDs and proposed targets are persisted in `TASM1_UPGRADE_PLAN.json`. No purchase
-flag, prerequisite mask, speed percentage, damage offset or cancel handler is
-claimed decoded by this audit. Counter/flow logic needs engine research beyond
-the existing synchronized action rebind helper.
+IDs and proposed targets are persisted in `TASM1_UPGRADE_PLAN.json`. Subsequent
+research mapped all 21 purchase records, ability bits and dependencies in
+UPGRADE_ENGINE.md and ORIGINAL_GAMEPLAY.json. Speed percentages and counter/flow
+handlers remain research beyond the existing synchronized action rebind helper.
+
+
+Rebound acceptance and release evidence: TASM1_REBOUND.md. The remaining six
+entries keep their original names and behavior until their actual replacements
+are implemented and tested. The original damage/speed budgets stay a requirement.

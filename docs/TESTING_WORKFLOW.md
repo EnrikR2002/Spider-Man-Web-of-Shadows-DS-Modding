@@ -35,7 +35,7 @@ changes may require special compatibility tests or disposable saves. Back up fir
 The automated harness can load an isolated battery copy with `--save`; it never
 writes back to that file. Fresh-game captures do not require restarting progress.
 
-### Current release workflow: TASM 1 stage one
+### Current release workflow: TASM 1 Rebound
 
 `playtest.py build` validates the current DSV wrapper, snapshots it, builds to a
 candidate path, rechecks that DeSmuME is closed and the save is unchanged, retains
@@ -48,15 +48,19 @@ stay in ignored `work/playtest.json`. On another machine add `--emulator FULL_EX
 to configuration. `Play Spider-Man.cmd` changes into its own project directory.
 
 Current named checkpoints: `before-suit-cleanup`, `before-tasm1`, and
-`opening-save-room`. Ask the agent to return to a named point; restoration retains
+`opening-save-room`, plus the latest `before-rebound`. Ask the agent to return to a named point; restoration retains
 displaced progress first. More points become available as real in-game saves are
 recorded. No arbitrary room warping or save-field editing is implemented.
 
 The adopted progress successfully resumed in the early Residential save room in
 melonDS DS using a read-only payload copy. Native DeSmuME Continue remains the
-player's final acceptance check. The current seven-asset regular overlay includes
-Snap Sweep; see `TASM1_IMPLEMENTATION.md`. Earlier six-asset/47-test statements
-below are historical; the stage-one full suite passed 55 tests.
+player's final acceptance check. The current nine-asset regular overlay includes
+Snap Sweep and purchased Rebound, plus two bounded ARM9 impulse data edits.
+The exact recipe is `reference/gameplay_profile.json`; missing or changed required
+overlays block a build rather than silently dropping part of the move. See
+`TASM1_REBOUND.md`. Earlier six/seven-asset and 47/55-test statements are historical;
+the current full suite passes 76 tests. Original Web Kick ownership carries over
+through native saving; refund relocks Rebound. The live battery is never edited.
 
 ### Where features live
 
@@ -297,6 +301,9 @@ patches are outside the current safe workflow.
 The archive and ROM builder are validated. NSBTX palette editing, compression
 round trips, XBD binding replacement, and room envelopes have different levels
 of support, documented in [the moddability matrix](MODDABILITY_MATRIX.md).
-Gameplay semantics for BSP, OBJ, GAB, GMB, SCA, save data, and room routing are
-not yet decoded. The next high-value milestone is a differential BSP/OBJ room
-report followed by save-format mapping, not a blind boss or room injection.
+BSP/OBJ geometry, save payloads and arbitrary room routing remain unknown.
+GMB channels/root movement, SCA pools/joint matrices, purchase records and combo
+credit now have tested mappings. Read ORIGINAL_GAMEPLAY.md, COMBO_ENGINE.md,
+UPGRADE_ENGINE.md and ANIMATION_RESEARCH.md before changing another paid move.
+The next approved incremental gameplay replacement is Web Vault; controlled
+collision/launch tests must precede its release.

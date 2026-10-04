@@ -37,8 +37,8 @@ python mod.py extract
 python mod.py verify --round-trip
 python -m unittest discover -s tests -v
 python mod.py experiment green-suit
-python mod.py build
-python mod.py verify
+python mod.py build --gameplay-profile original
+python mod.py verify --gameplay-profile original
 ```
 
 The clean ROM must be 67,108,864 bytes with SHA256
@@ -85,8 +85,17 @@ The current local regular overlay contains the cleaned movie-inspired red suit
 (solid panels, black lenses), the white alternate suit, menu readability changes,
 and yellow mission marker. TASM 1 stage one adds **Snap Sweep**, a compact opening
 low kick in the red form: measured completion in 24 versus 44 emulator frames,
-with the native follow-up string retained. Regular `mods/` now contains seven assets.
+with the native follow-up string retained. Stage one used seven overlay assets.
 See [the cleanup evidence](docs/MOVIE_SUIT_EXPERIMENT.md#clean-panels-and-black-lenses--2026-10-04).
+
+The current incremental release adds **Rebound**, replacing the native **Web Kick**
+purchase at **100 XP**. Grapple with A, then attack with Y: the kick ends with a
+short player recoil and an authored recovery pose, exchanging half the enemy's
+horizontal knockback for player separation. Existing Web Kick ownership carries
+over; unowned and refunded slots remain locked. The other six Red upgrades keep
+their native behavior until their replacements are tested. The regular overlay
+now has nine assets and two bounded ARM9 data-word changes; no instructions change.
+See [Rebound acceptance](docs/TASM1_REBOUND.md).
 
 **Player flow:** double-click `Play Spider-Man.cmd`, choose Continue, play, save
 in-game, close DeSmuME. The launcher opens the stable ROM and backs up progress.
@@ -104,8 +113,8 @@ python tools/playtest.py restore early-game
 
 The local Battery folder is already configured and the most recently played
 movie-suit `.dsv` has been copied to this ROM's save association, retaining backups
-of all five earlier Spider-Man saves. `before-suit-cleanup`, `before-tasm1` and
-`opening-save-room` are available locally.
+of all five earlier Spider-Man saves. `before-suit-cleanup`, `before-tasm1`,
+`opening-save-room` and `before-rebound` are available locally.
 Checkpoint names must be unique. A checkpoint returns to an in-game save you have
 recorded; it does not jump to an arbitrary room. An isolated copy of current progress
 successfully loaded/resumed in melonDS; native DeSmuME acceptance is still a player
@@ -117,6 +126,31 @@ See the [active TASM 1 kit and selected backlog](docs/NEW_SUIT_DESIGN.md),
 [exact implementation/evidence](docs/TASM1_IMPLEMENTATION.md), and
 [66-option catalog](docs/SUIT_CATALOG.md). A third selectable slot and custom
 conditional abilities remain research milestones.
+
+The [original gameplay map](docs/ORIGINAL_GAMEPLAY.md) explains both suit identities,
+all 21 purchased skills, controls, costs and dependencies. The [combo investigation](docs/COMBO_ENGINE.md)
+records why Snap Sweep earns credit before the HUD appears: its contacts can leave
+the gauge below the native visibility threshold. The meter increases XP rewards;
+exact multipliers remain unknown. No credit boost is applied.
+
+Regular builds and verification load `reference/gameplay_profile.json`, which pins
+the complete Rebound overlay recipe. A new clone has source tools but no private
+assets. The suit painter also needs the private `build/suit-model-inspect/spd.dae`
+export from your clean model; follow the Apicula export procedure in
+[MOVIE_SUIT_EXPERIMENT.md](docs/MOVIE_SUIT_EXPERIMENT.md) first. Then generate a
+complete isolated candidate from your own clean ROM with:
+
+```powershell
+python tools/qol_suits_menu.py
+python tools/movie_suit.py --combined
+python tools/tasm_suit.py --mods build/movie-suit-clean/combined/mods
+python tools/tasm_rebound.py --mods build/tasm1-stage1/mods --out build/tasm1-rebound
+python mod.py verify --mods build/tasm1-rebound/mods -o build/tasm1-rebound/Rebound.nds --gameplay-profile build/tasm1-rebound/gameplay_profile.json
+```
+
+An agent promotes the tested overlays and recipe before using the stable publisher.
+Use `--gameplay-profile original` explicitly for earlier asset-only experiments
+and native engine-data controls. It leaves the selected overlay intact.
 
 `build` reads unchanged content directly from the clean ROM, so extraction is optional
 for a build. Only exact manifest filenames are accepted in `mods/`. File sizes may
@@ -146,6 +180,7 @@ python mod.py build --mods work/my-overlay -o build/my-test.nds
 python mod.py verify                        # compares build to clean + current mods
 python mod.py verify --mods work/my-overlay -o build/my-test.nds
 python mod.py verify --round-trip           # checks clean work/glob/, emits exact no-op build/report
+python mod.py build --gameplay-profile original # explicit native ARM9 control
 python -m unittest discover -s tests -v
 ```
 
@@ -161,8 +196,8 @@ active mods are not used for that command.
 
 ```powershell
 python mod.py experiment green-suit
-python mod.py build
-python mod.py verify
+python mod.py build --gameplay-profile original
+python mod.py verify --gameplay-profile original
 ```
 
 This changes only red-dominant palette colors in `spd.nsbtx`. Both original and
@@ -173,8 +208,8 @@ To undo it:
 
 ```powershell
 python mod.py experiment revert
-python mod.py build
-python mod.py verify
+python mod.py build --gameplay-profile original
+python mod.py verify --gameplay-profile original
 ```
 
 With no other overlays, the reverted build is byte-identical to the clean ROM.
@@ -215,6 +250,6 @@ Use `mod.py` for the normal workflow; it adds clean-source/manifest/overlay vali
 Read [validation results](docs/VALIDATION.md), [format evidence](docs/FORMAT_NOTES.md),
 [editing status/priorities](docs/MODDABILITY_MATRIX.md), and the
 [modding/testing and room-research workflow](docs/TESTING_WORKFLOW.md). The next work
-is actor bindings and decoded move triplets, followed by controlled room comparisons,
-save mapping, and text/UI formats. A full game decompilation and GUI are deliberately
-deferred.
+is the next approved purchased replacement, Web Vault, using the native gameplay,
+purchase and animation maps. Room geometry, save payloads, full decompilation and
+a general animation GUI remain research.

@@ -1,0 +1,627 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-04",
+  "game": {
+    "platform": "Nintendo DS",
+    "region": "USA",
+    "code": "CS5E",
+    "rom_sha256": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203"
+  },
+  "source": {
+    "asset": "American.strings / English.strings",
+    "sha256": "19474ce9a50c25538515e585727e4ad5878bc3bb7bb11dd987b72a7c1d556088",
+    "slot_base": 0,
+    "descriptions": "Authored paraphrases of native instructions; not a redistributed extracted string archive",
+    "reference": "ORIGINAL_GAMEPLAY.md"
+  },
+  "cost_units": "XP",
+  "null_cost": "Not independently established here; never interpret null as free",
+  "controls": [
+    {
+      "ds": "Y",
+      "glyph": "U+E601",
+      "role": "Attack",
+      "current_keyboard": "Q"
+    },
+    {
+      "ds": "B",
+      "glyph": "U+E600",
+      "role": "Jump and contextual traversal",
+      "current_keyboard": "Space"
+    },
+    {
+      "ds": "A",
+      "glyph": "U+E602",
+      "role": "Form-specific power",
+      "current_keyboard": "W"
+    },
+    {
+      "ds": "X",
+      "glyph": "U+E603",
+      "role": "Lift / throw",
+      "current_keyboard": "T"
+    },
+    {
+      "ds": "R",
+      "glyph": "U+E604",
+      "role": "Evade / purchased recovery",
+      "current_keyboard": "E"
+    },
+    {
+      "ds": "L",
+      "glyph": "U+E605",
+      "role": "Switch form",
+      "current_keyboard": "R"
+    }
+  ],
+  "red_purchases": [
+    {
+      "name": "Web Kick",
+      "slots": [
+        183,
+        184,
+        185
+      ],
+      "cost": 100,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Y during grapple",
+      "role": "Pull target in and knock it back",
+      "foundation": "Web Grapple",
+      "record_address": 34734912,
+      "event_id": 322,
+      "ability_bit": 13,
+      "required_event": null,
+      "dependent_event": null
+    },
+    {
+      "name": "Web Launch",
+      "slots": [
+        186,
+        187,
+        188
+      ],
+      "cost": 200,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Up during grapple",
+      "role": "Launch held target",
+      "foundation": "Web Grapple",
+      "record_address": 34734944,
+      "event_id": 323,
+      "ability_bit": 14,
+      "required_event": null,
+      "dependent_event": null
+    },
+    {
+      "name": "Mid-Air Snare",
+      "slots": [
+        189,
+        190,
+        191
+      ],
+      "cost": 600,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "A in air toward an enemy",
+      "role": "Pursue enemy and perform short combo",
+      "record_address": 34734976,
+      "event_id": 324,
+      "ability_bit": 15,
+      "required_event": null,
+      "dependent_event": null
+    },
+    {
+      "name": "Spider Dance",
+      "slots": [
+        192,
+        193,
+        194
+      ],
+      "cost": 400,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Y, pause, Y, Y, Y",
+      "role": "Early pause branch into advanced ground string",
+      "record_address": 34735008,
+      "event_id": 325,
+      "ability_bit": 16,
+      "required_event": null,
+      "dependent_event": 326
+    },
+    {
+      "name": "Scissor-Kick Special",
+      "slots": [
+        195,
+        196,
+        197
+      ],
+      "cost": 600,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Y, pause, Y, repeated Y",
+      "role": "Rapid-kick extension",
+      "advertised_parent": "Spider Dance",
+      "binary_prerequisite_verified": false,
+      "record_address": 34735040,
+      "event_id": 326,
+      "ability_bit": 17,
+      "required_event": 325,
+      "dependent_event": null
+    },
+    {
+      "name": "Amazing Speed Boost",
+      "slots": [
+        198,
+        199,
+        200
+      ],
+      "cost": 800,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Passive",
+      "role": "Increased red attack speed",
+      "numeric_multiplier": null,
+      "record_address": 34735072,
+      "event_id": 327,
+      "ability_bit": 18,
+      "required_event": null,
+      "dependent_event": 328
+    },
+    {
+      "name": "Ultimate Speed Boost",
+      "slots": [
+        201,
+        202,
+        203
+      ],
+      "cost": 1000,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Passive",
+      "role": "Maximum advertised red attack speed",
+      "numeric_multiplier": null,
+      "record_address": 34735104,
+      "event_id": 328,
+      "ability_bit": 19,
+      "required_event": 327,
+      "dependent_event": null
+    }
+  ],
+  "black_purchases": [
+    {
+      "name": "Webbed Fury",
+      "slots": [
+        204,
+        205,
+        206
+      ],
+      "cost": 100,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "A after Power Dash hit",
+      "role": "Recall target and attack again",
+      "foundation": "Power Dash",
+      "record_address": 34735136,
+      "event_id": 329,
+      "ability_bit": 20,
+      "required_event": null,
+      "dependent_event": null
+    },
+    {
+      "name": "Power Launch",
+      "slots": [
+        207,
+        208,
+        209
+      ],
+      "cost": 200,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Up + A",
+      "role": "Launch enemy while player remains grounded",
+      "record_address": 34735168,
+      "event_id": 330,
+      "ability_bit": 21,
+      "required_event": null,
+      "dependent_event": null
+    },
+    {
+      "name": "Ground Rebound",
+      "slots": [
+        210,
+        211,
+        212
+      ],
+      "cost": 600,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Hammer Slam hit",
+      "role": "Bounce struck enemies into air",
+      "foundation": "Hammer Slam",
+      "record_address": 34735200,
+      "event_id": 331,
+      "ability_bit": 22,
+      "required_event": null,
+      "dependent_event": null
+    },
+    {
+      "name": "Black Widowmaker",
+      "slots": [
+        213,
+        214,
+        215
+      ],
+      "cost": 400,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Y, Y, Y, pause, Y, Y",
+      "role": "Late pause branch into advanced ground string",
+      "record_address": 34735232,
+      "event_id": 332,
+      "ability_bit": 23,
+      "required_event": null,
+      "dependent_event": 333
+    },
+    {
+      "name": "Poison Pummel",
+      "slots": [
+        216,
+        217,
+        218
+      ],
+      "cost": 600,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Y, Y, Y, pause, repeated Y",
+      "role": "Late barrage extension",
+      "advertised_parent": "Black Widowmaker",
+      "binary_prerequisite_verified": false,
+      "record_address": 34735264,
+      "event_id": 333,
+      "ability_bit": 24,
+      "required_event": 332,
+      "dependent_event": null
+    },
+    {
+      "name": "Super Charge",
+      "slots": [
+        219,
+        220,
+        221
+      ],
+      "cost": 800,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Hold Y during strikes",
+      "role": "Charge strikes",
+      "numeric_damage_multiplier": null,
+      "record_address": 34735296,
+      "event_id": 334,
+      "ability_bit": 25,
+      "required_event": null,
+      "dependent_event": 335
+    },
+    {
+      "name": "Quick Charge",
+      "slots": [
+        222,
+        223,
+        224
+      ],
+      "cost": 1000,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Passive charge modification",
+      "role": "Halve time to full charge",
+      "advertised_charge_time_ratio": 0.5,
+      "binary_timing_verified": false,
+      "record_address": 34735328,
+      "event_id": 335,
+      "ability_bit": 26,
+      "required_event": 334,
+      "dependent_event": null
+    }
+  ],
+  "shared_purchases": [
+    {
+      "name": "Launching Uppercut",
+      "slots": [
+        162,
+        163,
+        164
+      ],
+      "cost": 50,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Up + Y",
+      "role": "Launch enemy",
+      "record_address": 34734688,
+      "event_id": 315,
+      "ability_bit": 6,
+      "required_event": null,
+      "dependent_event": null
+    },
+    {
+      "name": "Enemy Kick-Off",
+      "slots": [
+        180,
+        181,
+        182
+      ],
+      "cost": 200,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "B against mid-air enemy",
+      "role": "Kick backward off enemy",
+      "record_address": 34734720,
+      "event_id": 321,
+      "ability_bit": 12,
+      "required_event": null,
+      "dependent_event": null
+    },
+    {
+      "name": "Drill Kick",
+      "slots": [
+        165,
+        166,
+        167
+      ],
+      "cost": 400,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Y from roll",
+      "role": "Multi-hit kick",
+      "record_address": 34734752,
+      "event_id": 316,
+      "ability_bit": 7,
+      "required_event": null,
+      "dependent_event": null
+    },
+    {
+      "name": "Jackhammer Stomp",
+      "slots": [
+        168,
+        169,
+        170
+      ],
+      "cost": 600,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Down + Y in air",
+      "role": "Four-hit stomp",
+      "advertised_hits": 4,
+      "runtime_hit_count_verified": false,
+      "record_address": 34734784,
+      "event_id": 317,
+      "ability_bit": 8,
+      "required_event": null,
+      "dependent_event": null
+    },
+    {
+      "name": "Air Dodge",
+      "slots": [
+        174,
+        175,
+        176
+      ],
+      "cost": 200,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "R in air",
+      "role": "Mid-air evade",
+      "record_address": 34734816,
+      "event_id": 319,
+      "ability_bit": 10,
+      "required_event": null,
+      "dependent_event": null
+    },
+    {
+      "name": "Enhanced Dodge",
+      "slots": [
+        171,
+        172,
+        173
+      ],
+      "cost": 800,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "Hold R, steer Left/Right",
+      "role": "Successive directional dodges",
+      "record_address": 34734848,
+      "event_id": 318,
+      "ability_bit": 9,
+      "required_event": null,
+      "dependent_event": null
+    },
+    {
+      "name": "Quick Recovery",
+      "slots": [
+        177,
+        178,
+        179
+      ],
+      "cost": 800,
+      "cost_evidence": "confirmed-native-ARM9-menu-record",
+      "input": "R after hit or knockdown",
+      "role": "Prompt recovery and counterattack opportunity",
+      "record_address": 34734880,
+      "event_id": 320,
+      "ability_bit": 11,
+      "required_event": null,
+      "dependent_event": null
+    }
+  ],
+  "red_foundation": [
+    {
+      "name": "Web Grapple",
+      "slots": [
+        246,
+        247,
+        248
+      ],
+      "input": "A; D-pad aim",
+      "role": "Hold enemy or object"
+    },
+    {
+      "name": "Web Pull",
+      "slots": [
+        249,
+        250,
+        251
+      ],
+      "input": "Away from facing direction during grapple",
+      "role": "Pull enemy into other enemies"
+    },
+    {
+      "name": "Web Zip",
+      "slots": [
+        243,
+        244,
+        245
+      ],
+      "input": "A + direction in air",
+      "role": "Reach surface"
+    }
+  ],
+  "black_foundation": [
+    {
+      "name": "Power Dash",
+      "slots": [
+        252,
+        253,
+        254
+      ],
+      "input": "A on ground",
+      "role": "Dash contact throws enemy back"
+    },
+    {
+      "name": "Hammer Spike",
+      "slots": [
+        255,
+        256,
+        257
+      ],
+      "input": "A in air",
+      "role": "Drive enemy downward"
+    },
+    {
+      "name": "Hammer Slam",
+      "slots": [
+        258,
+        259,
+        260
+      ],
+      "input": "Down + A in air",
+      "role": "Ground impact damages surrounding enemies"
+    }
+  ],
+  "world_acquisitions": [
+    {
+      "name": "Ichor Crawl",
+      "description_slot": 134,
+      "obtained_slot": 373,
+      "role": "Climb ichor surfaces"
+    },
+    {
+      "name": "Ichor Web",
+      "description_slot": 137,
+      "obtained_slot": 376,
+      "role": "Swing/zip connection to ichor surfaces"
+    },
+    {
+      "name": "Tarantula Strength",
+      "description_slot": 140,
+      "obtained_slot": 378,
+      "role": "Lift heavy obstructing objects"
+    },
+    {
+      "name": "Reinforced Web",
+      "description_slot": 143,
+      "obtained_slot": 377,
+      "role": "Red grapple of heavy obstructing objects"
+    },
+    {
+      "name": "Bulldozer Dash",
+      "description_slot": 146,
+      "obtained_slot": 374,
+      "role": "Black dash breaks destructible ichor walls"
+    },
+    {
+      "name": "Sledgehammer Slam",
+      "description_slot": 149,
+      "obtained_slot": 375,
+      "role": "Black slam breaks destructible ichor floors"
+    }
+  ],
+  "combo_meter": {
+    "instruction_slot": 393,
+    "advertised_gain": "Combining attacks",
+    "advertised_reward": "Extra enemy XP; large XP bonus at full meter",
+    "damage_buff_advertised": false,
+    "exact_hit_credit_rule": null,
+    "thresholds": null,
+    "xp_multipliers": null,
+    "decay_rule": null,
+    "suit_switch_rule": null,
+    "snap_sweep": "User-reported missing opener gain; compare matched enemy contact before drawing a conclusion",
+    "static_findings": {
+      "confidence": "Original ARM9 disassembly; pending enemy-contact runtime validation",
+      "arm9_sha256": "e541bfcd02441db86b43b8649aaa13570be301d302ddfb198804b78528d215dc",
+      "hud_vtable": "0x0213C848",
+      "model_pointer": "0x02145C44",
+      "model_fields": {
+        "tier": 0,
+        "q12_gauge": 4
+      },
+      "credit_handler": "0x020837D8",
+      "kind_table": "0x0211BCB0",
+      "action_kind_handler": "0x020CC014",
+      "opener_kinds": {
+        "red_logical56": 0,
+        "black_logical55": 7
+      },
+      "opener_native_table_values": {
+        "base": 15,
+        "repetition": 100,
+        "expiry_ticks": 180
+      },
+      "variety_rule": "Same-kind repetition suppressed until history expires; multi-contact coalescing still pending",
+      "tier_max": 5,
+      "promotion_gauge": 100,
+      "promotion_gauge_subtract": 75,
+      "gain_factors_approx": [
+        0.8,
+        0.65,
+        0.5,
+        0.4,
+        0.3,
+        0.2
+      ],
+      "gain_factor_table": "0x0211B894",
+      "taking_hit_handler": "0x02083A9C",
+      "taking_hit_tier_loss": 2,
+      "tick_to_emulator_frame_ratio": null,
+      "xp_bonus_consumption_mapped": false,
+      "snap_sweep_kind_changed": false
+    }
+  },
+  "purchase_system": {
+    "tutorial_slots": [
+      397,
+      410,
+      420,
+      421
+    ],
+    "location": "Save points",
+    "currency": "Experience Points",
+    "practice_option": "Test Upgrades",
+    "binary_flags_mapped": true,
+    "exact_prerequisites_mapped": true,
+    "refund_rules_verified": true,
+    "reference": "UPGRADE_ENGINE.md",
+    "refund_evidence": "Native table and buy/refund code; actual Rebound bit13 UI refund 38 -> 138 XP"
+  },
+  "design_interpretations": {
+    "red": "Target placement, aerial pursuit, early combo branch and speed",
+    "black": "Dash impact, target recall, slam/bounce, late combo branch and charge commitment",
+    "shared": "Launch, evade, recover and exit tools link either specialized form to movement",
+    "confidence": "Derived from native instructions; not a developer statement or measured full combat graph"
+  },
+  "unmeasured": [
+    "native per-hit damage",
+    "range and hitboxes",
+    "stagger and resistance",
+    "recovery and cancel windows",
+    "pause-input timing",
+    "charge frames and damage",
+    "speed tiers and stacking",
+    "complete combo-meter per-move credit catalog (Snap Sweep and Rebound measured)",
+    "acquisition order"
+  ],
+  "native_upgrade_table": {
+    "sha256": "e541bfcd02441db86b43b8649aaa13570be301d302ddfb198804b78528d215dc",
+    "stride": 32,
+    "reference": "UPGRADE_ENGINE.md"
+  }
+}

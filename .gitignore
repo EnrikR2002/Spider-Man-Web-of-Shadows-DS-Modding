@@ -9,3 +9,17 @@ __pycache__/
 
 # Never stage a ROM, even if one is copied outside original/.
 *.nds
+# Battery progress and emulator states remain private even outside work/build.
+*.dsv
+*.sav
+*.dst
+*.ds0
+*.ds1
+*.ds2
+*.ds3
+*.ds4
+*.ds5
+*.ds6
+*.ds7
+*.ds8
+*.ds9
