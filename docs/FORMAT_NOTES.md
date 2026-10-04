@@ -724,3 +724,36 @@ are pinned by the current recipe. Stable publication preserved the current DSV,
 named `before-web-vault` checkpoint and previous Rebound ROM. Detailed replay
 paths and reproduction inputs are in TASM1_WEB_VAULT.md. TASKS.md is the durable
 session handoff and ordered remaining-work tracker.
+
+
+## 2026-10-04: bounded combat HUD/code extension
+
+Confirmed by native runtime captures and reversible byte checks; detailed ABI,
+file relocation, test results and limits are in COMBAT_FEEDBACK.md.
+
+- ARM9 module parameters B64 identify the 24-byte ITCM/DTCM autoload table at
+  1439A0..1439B8, source213E140, and main BSS213E140..214F420. SDK autoload runs
+  before clearing main BSS. A third entry copies our own code into214F420; the
+  main arena lower-bound literal at FF374 is raised by4000. Original RAM
+  addresses, BSS bounds, startup, ARM7 and original autoload entries remain exact.
+- ARM9 file growth requires shifting later header/FAT file offsets, not runtime
+  addresses. Only verified ROM tail padding is consumed; all NitroFS resources,
+  FNT, banner and ARM7 payloads are checked unchanged after relocation.
+- Player native subtraction205F3F0 reads actor+E4 stats+84 Q12 HP; enemy subtraction
+  20492A8 reads actor+44 Q12 HP and clamps before setter2049304. Different virtual
+  layouts must not be confused. Capture effective capped loss, never attack
+  request/strength. Training flag restores enemy HP to 40 Q12 after defeat.
+- HUDTextBG vtable213C994, constructor20E8F04: +1C is the main BG2 font descriptor;
+  +4 is the atlas layer. Native canvas2009328 has a cache at+38 and needs ~238
+  bytes; font3 and UTF16 draw200B3A4 work with a full-size canvas. Our bounded
+  glyph area begins at tile200; readouts clear only their own map rectangles.
+- Native combo is a resource: 75*tier+floor(gauge/4096) crosses the tier rollover
+  continuously. It is not a number of landed hits. Snap's initial 12 is confirmed
+  onscreen while the native >30 bar threshold still applies.
+- Current kind32 Rebound response pairs are (-2253,11469), compared with previous
+  (-4506,6554). Immune/boss response record, damage and player recoil stay exact.
+
+Own extension code is checked by hash; normal tools need only stdlib. These are
+six known hooks, not a generalized decompiler, arbitrary code loader or camera
+projection API. Incidental enemy loss attribution and specialized health paths
+remain limits. No save payload or player persistent layout changed.

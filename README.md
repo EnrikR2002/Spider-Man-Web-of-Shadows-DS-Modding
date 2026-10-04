@@ -255,6 +255,14 @@ Use `mod.py` for the normal workflow; it adds clean-source/manifest/overlay vali
 Read [validation results](docs/VALIDATION.md), [format evidence](docs/FORMAT_NOTES.md),
 [editing status/priorities](docs/MODDABILITY_MATRIX.md), and the
 [modding/testing and room-research workflow](docs/TESTING_WORKFLOW.md). The next work
-is the next approved purchased replacement, Web Vault, using the native gameplay,
+is Sling Strike after the combat-feedback player check, using the native gameplay,
 purchase and animation maps. Room geometry, save payloads, full decompilation and
 a general animation GUI remain research.
+
+
+Current session handoff: [docs/TASKS.md](docs/TASKS.md). Current damage/combo HUD
+and Rebound juggle revision: [COMBAT_FEEDBACK.md](docs/COMBAT_FEEDBACK.md).
+Expanded combined TASM design: [TASM_EXPANDED_ROADMAP.md](docs/TASM_EXPANDED_ROADMAP.md);
+other ideas by impact/effort: [IMPROVEMENT_BACKLOG.md](docs/IMPROVEMENT_BACKLOG.md).
+The default recipe includes feedback; legacy explicit recipes remain available
+for paired controls. Normal builds need only the Python standard library.

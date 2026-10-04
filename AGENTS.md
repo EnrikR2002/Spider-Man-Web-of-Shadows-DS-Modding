@@ -45,6 +45,17 @@ Confirmed facts are in `docs/ANALYSIS.md` and `reference/glob_manifest.csv`.
 
 ## Upgrade progression constraint (2026-10-04)
 
+Latest user steering supersedes the one-for-one limits below: combine the TASM 1
+and TASM 2 combat identity into one TASM kit; ideate 10+ skills and flexible
+prices/power tiers. The original seven slots are a starting implementation path,
+not a design ceiling. Expanded progression/menu/save support remains research;
+do not silently grant abilities or remove shared traversal requirements.
+Web Vault is player-confirmed. Its brief air window should gain deliberate paid
+pursuit/control extensions later. Rebound now needs lower horizontal and higher
+vertical enemy knockback with unchanged damage. Add real dealt/taken damage
+feedback with per-hit and running totals, plus a simple numeric combo HUD that
+shows gains below 30. Never display inferred attack strength as actual HP damage.
+
 - User confirmed Snap Sweep works and may remain the free base opener.
 - Future TASM moves must replace existing purchased Red-tab skills, with new
   names, comparable power/role and purchase gating. Do not grant them at game start.

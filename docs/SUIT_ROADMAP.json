@@ -2,18 +2,19 @@
   "schema_version": 1,
   "updated": "2026-10-04",
   "active_suit": "tasm1",
-  "policy": "One suit at a time; TASM 1 develops through the red form first. Agent handles save backups/checks, stable releases and checkpoint restoration. Snap Sweep may stay free; every future skill replaces a purchased Red-tab upgrade with comparable power and a new name.",
+  "policy": "One suit at a time. One combined TASM 1/2 fighting identity; 10+ paid tools and flexible pricing are design proposals, not a seven-skill ceiling. Existing native ownership, shared traversal, saves and stable releases remain preserved until an explicit migration is implemented.",
   "upgrade_plan": "TASM1_UPGRADE_PLAN.json",
   "upgrade_plan_status": "incremental-implementation",
   "user_verified": [
-    "Snap Sweep works in player testing"
+    "Snap Sweep works in player testing",
+    "Web Vault works well; brief air window should gain later paid connections"
   ],
   "suits": [
     {
       "id": "tasm1",
-      "name": "The Amazing Spider-Man 1",
-      "status": "active-web-vault-release",
-      "kit": "Quick openings, evasive counters, web reconnects",
+      "name": "The Amazing Spider-Man",
+      "status": "active-combat-feedback-release",
+      "kit": "One TASM 1/2 identity: quick openings, kicks, evasive counters, web reconnects and bounded aerial chains",
       "implemented": [
         "clean panels and black lenses",
         "Snap Sweep opening action",
@@ -54,13 +55,14 @@
     {
       "id": "tasm2",
       "name": "The Amazing Spider-Man 2",
-      "status": "secondary-interest",
-      "kit": "Choose later; possible appearance variant"
+      "status": "identity-merged-into-tasm1",
+      "kit": "No separate combat kit queued; a future cosmetic movie appearance can share the Amazing Spider-Man kit"
     }
   ],
   "implemented_purchased_skills": [
     "Rebound",
     "Web Vault"
   ],
-  "session_tasks": "TASKS.md"
+  "session_tasks": "TASKS.md",
+  "expanded_design": "TASM_EXPANDED_ROADMAP.md"
 }

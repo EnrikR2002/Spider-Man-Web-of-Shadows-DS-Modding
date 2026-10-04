@@ -1,6 +1,11 @@
 # TASM 1 purchased-upgrade replacement proposal
 
-2026-10-04. **Approved by the user; Rebound and Web Vault implemented; five entries pending.**
+2026-10-04. Latest direction: [one expanded TASM 1/2 kit](TASM_EXPANDED_ROADMAP.md)
+with 10+ paid tools and flexible prices; additions remain ideation. This document
+retains the approved incremental native-slot path. Rebound's new higher/closer
+launch and current damage/combo feedback are documented in COMBAT_FEEDBACK.md.
+
+**Approved by the user; Rebound and Web Vault implemented; five entries pending.**
 The inventory below was collected before implementation. Current release evidence
 is in [TASM1_WEB_VAULT.md](TASM1_WEB_VAULT.md) and [TASM1_REBOUND.md](TASM1_REBOUND.md). Snap Sweep was confirmed working by
 the user and remains the free base opener.

@@ -1,5 +1,5 @@
 {
-  "profile": "tasm-web-vault",
+  "profile": "tasm-combat-feedback",
   "required_overlays": {
     "American.strings": "f8d4acb0ad9d4029a7c6a8bcbfa9b9bb2526eed0e67a45cbddb7460b591fe5ea",
     "English.strings": "f8d4acb0ad9d4029a7c6a8bcbfa9b9bb2526eed0e67a45cbddb7460b591fe5ea",
