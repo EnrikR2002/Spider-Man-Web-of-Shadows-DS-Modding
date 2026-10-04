@@ -91,14 +91,14 @@ low kick in the red form: measured completion in 24 versus 44 emulator frames,
 with the native follow-up string retained. Stage one used seven overlay assets.
 See [the cleanup evidence](docs/MOVIE_SUIT_EXPERIMENT.md#clean-panels-and-black-lenses--2026-10-04).
 
-The current incremental release adds **Rebound**, replacing the native **Web Kick**
-purchase at **100 XP**. Grapple with A, then attack with Y: the kick ends with a
-short player recoil and an authored recovery pose, exchanging half the enemy's
-horizontal knockback for player separation. Existing Web Kick ownership carries
-over; unowned and refunded slots remain locked. The other six Red upgrades keep
-their native behavior until their replacements are tested. The regular overlay
-now has nine assets and two bounded ARM9 data-word changes; no instructions change.
-See [Rebound acceptance](docs/TASM1_REBOUND.md).
+The current release combines **Rebound**, **Web Vault**, and the combat-feedback
+HUD. Rebound replaces **Web Kick** at **100 XP** with a closer, higher enemy launch
+and the same native damage/gates; Web Vault replaces **Web Launch** at **200 XP**
+with a short grapple follow-up into the air. Existing ownership carries over and
+unowned/refunded slots remain locked. The regular overlay and bounded ARM9
+extension are pinned by `reference/gameplay_profile.json`. See [combat feedback
+and Rebound evidence](docs/COMBAT_FEEDBACK.md), [Rebound history](docs/TASM1_REBOUND.md),
+and [Web Vault history](docs/TASM1_WEB_VAULT.md).
 
 **Player flow:** double-click `Play Spider-Man.cmd`, choose Continue, play, save
 in-game, close DeSmuME. The launcher opens the stable ROM and backs up progress.
@@ -114,10 +114,11 @@ python tools/playtest.py list
 python tools/playtest.py restore early-game
 ```
 
-The local Battery folder is already configured and the most recently played
-movie-suit `.dsv` has been copied to this ROM's save association, retaining backups
-of all five earlier Spider-Man saves. `before-suit-cleanup`, `before-tasm1`,
-`opening-save-room`, `before-rebound` and `before-web-vault` are available locally.
+On the development machine the Battery folder is configured and the current
+save association is retained with named backups. `before-suit-cleanup`,
+`before-tasm1`, `opening-save-room`, `before-rebound`, `before-web-vault` and
+`before-combat-feedback` are available locally; the live save may advance after
+this release.
 Checkpoint names must be unique. A checkpoint returns to an in-game save you have
 recorded; it does not jump to an arbitrary room. An isolated copy of current progress
 successfully loaded/resumed in melonDS; native DeSmuME acceptance is still a player
@@ -125,7 +126,7 @@ check. [Setup on another machine](docs/TESTING_WORKFLOW.md#stable-playtest-comma
 uses that machine's actual Battery folder. Configuration, saves and overlays stay
 private and do not come from Git.
 
-See the [active TASM 1 kit and selected backlog](docs/NEW_SUIT_DESIGN.md),
+See the [active combined TASM kit and selected backlog](docs/TASM_EXPANDED_ROADMAP.md),
 [exact implementation/evidence](docs/TASM1_IMPLEMENTATION.md), and
 [66-option catalog](docs/SUIT_CATALOG.md). A third selectable slot and custom
 conditional abilities remain research milestones.
@@ -137,9 +138,8 @@ the gauge below the native visibility threshold. The meter increases XP rewards;
 exact multipliers remain unknown. No credit boost is applied.
 
 Regular builds and verification load `reference/gameplay_profile.json`, which pins
-the complete Rebound + Web Vault overlay recipe. Web Vault replaces Web Launch at
-200 XP: grapple with A (keyboard W), then Up to launch and follow with a short vault.
-See [release evidence](docs/TASM1_WEB_VAULT.md). A new clone has source tools but no private
+the complete suit, Rebound, Web Vault and feedback recipe. Web Vault uses A (keyboard
+W), then Up to launch and follow with a short vault. A new clone has source tools but no private
 assets. The suit painter also needs the private `build/suit-model-inspect/spd.dae`
 export from your clean model; follow the Apicula export procedure in
 [MOVIE_SUIT_EXPERIMENT.md](docs/MOVIE_SUIT_EXPERIMENT.md) first. Then generate a
@@ -153,7 +153,10 @@ python tools/tasm_web_vault.py --mods build/tasm1-stage1/mods --out build/tasm-w
 python mod.py verify --mods build/tasm-web-vault/mods -o build/tasm-web-vault/WebVault.nds --gameplay-profile build/tasm-web-vault/gameplay_profile.json
 ```
 
-An agent promotes the tested overlays and recipe before using the stable publisher.
+The explicit Web Vault command is a historical isolated candidate recipe. It does
+not include the current combat-feedback extension by itself; use the checked-in
+default profile and `python tools/playtest.py build` for the published release.
+An agent promotes only tested overlays and a composed recipe before using the stable publisher.
 Use `--gameplay-profile original` explicitly for earlier asset-only experiments
 and native engine-data controls. It leaves the selected overlay intact.
 
@@ -255,7 +258,7 @@ Use `mod.py` for the normal workflow; it adds clean-source/manifest/overlay vali
 Read [validation results](docs/VALIDATION.md), [format evidence](docs/FORMAT_NOTES.md),
 [editing status/priorities](docs/MODDABILITY_MATRIX.md), and the
 [modding/testing and room-research workflow](docs/TESTING_WORKFLOW.md). The next work
-is Sling Strike after the combat-feedback player check, using the native gameplay,
+is Sling Strike after the remaining combat-feedback player checks, using the native gameplay,
 purchase and animation maps. Room geometry, save payloads, full decompilation and
 a general animation GUI remain research.
 

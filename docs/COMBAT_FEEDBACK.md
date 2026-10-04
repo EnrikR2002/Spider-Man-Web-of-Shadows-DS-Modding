@@ -129,7 +129,8 @@ checkpoint `before-combat-feedback`. Real battery SHA256
 `9336ca4a3cbb3679ebf2fed31f796d6f8b9a93c9bb7d1faef8c8dd7f61b7861e`
 remains identical before/after; prior Web Vault ROM is retained for rollback.
 `feedback-resume-long` returns from training to Save Options, continues into
-gameplay, clears old totals/font ownership, and runs through frame9999 with
-tick2739, no stale damage entries and a readable COMBO0. Stable filename and the real battery association stay
+gameplay, clears old totals/font ownership, and runs through frame 9999 with
+tick 2739, no stale damage entries and a readable COMBO 0. Stable filename and
+the real battery association stay
 the same. Broader player checks: readability during busy fights, ordinary incoming
 damage, Rebound pursuit near walls/ceilings, unusual bosses, and long play.

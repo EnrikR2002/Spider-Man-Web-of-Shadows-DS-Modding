@@ -35,7 +35,7 @@ changes may require special compatibility tests or disposable saves. Back up fir
 The automated harness can load an isolated battery copy with `--save`; it never
 writes back to that file. Fresh-game captures do not require restarting progress.
 
-### Current release workflow: TASM 1 Web Vault + Rebound
+### Current release workflow: combined TASM feedback release
 
 `playtest.py build` validates the current DSV wrapper, snapshots it, builds to a
 candidate path, rechecks that DeSmuME is closed and the save is unchanged, retains
@@ -47,20 +47,22 @@ The configured executable is the actual DeSmuME 0.9.13 installation; local paths
 stay in ignored `work/playtest.json`. On another machine add `--emulator FULL_EXE`
 to configuration. `Play Spider-Man.cmd` changes into its own project directory.
 
-Current named checkpoints: `before-suit-cleanup`, `before-tasm1`, and
-`opening-save-room`, plus `before-rebound` and the latest `before-web-vault`. Ask the agent to return to a named point; restoration retains
+Current named checkpoints: `before-suit-cleanup`, `before-tasm1`,
+`opening-save-room`, `before-rebound`, `before-web-vault`, and the latest
+`before-combat-feedback`. Ask the agent to return to a named point; restoration retains
 displaced progress first. More points become available as real in-game saves are
 recorded. No arbitrary room warping or save-field editing is implemented.
 
 The adopted progress successfully resumed in the early Residential save room in
 melonDS DS using a read-only payload copy. Native DeSmuME Continue remains the
-player's final acceptance check. The current eleven-asset regular overlay includes
-Snap Sweep, purchased Rebound and Web Vault. ARM9 retains Rebound's two impulse
-data edits and adds a bounded five-instruction native launch-event hop call.
+player's final acceptance check. The current regular overlay includes Snap Sweep,
+purchased Rebound and Web Vault, plus the bounded combat-feedback HUD extension.
+ARM9 retains Rebound's two impulse data edits and the five-instruction native
+launch-event hop call.
 The exact recipe is `reference/gameplay_profile.json`; missing or changed required
 overlays block a build rather than silently dropping part of the move. See
-`TASM1_WEB_VAULT.md` and `TASM1_REBOUND.md`. Earlier asset/test counts are historical;
-the current full suite passes 81 tests. Original Web Kick ownership carries over
+`COMBAT_FEEDBACK.md`, `TASM1_WEB_VAULT.md` and `TASM1_REBOUND.md`. Earlier
+asset/test counts are historical; the current full suite passes 86 tests. Original Web Kick ownership carries over
 through native saving; Web Launch ownership carries over as Web Vault. Native
 refund and repurchase/save/reload checks pass for both released replacements. The live battery is never edited.
 
@@ -102,7 +104,10 @@ To associate a copy with another ROM in the SAME save format, restore to the exa
 save filename/path that your emulator expects for that ROM. The helper permits a
 new filename with the same suffix and retains the source snapshot. It refuses
 `.dsv` -> `.sav` or `.sav` -> `.dsv`; use supported emulator conversion instead.
-No actual gameplay save has been located or transferred by this implementation.
+The current release uses the configured local gameplay save and preserves it as an
+opaque DSV wrapper; the native payload is not decoded or edited by this workflow.
+The older statement that no gameplay save had been located is historical and
+superseded by the current checkpoint records in `docs/TASKS.md`.
 Emulator-specific path/import instructions require confirming your setup first.
 
 ### Confirmed local DeSmuME setup for this experiment
@@ -134,8 +139,9 @@ isolated experiment ROMs for comparison, but normal accepted features go into
 
 `tools/playtest.py` remembers the actual absolute Battery directory in ignored
 `work/playtest.json`. It associates the stable ROM basename with
-`Spider-Man-WoS-modded.dsv` in that directory. It uses the existing opaque snapshot
-helper: no save parser, format conversion, room editor, or save-state loading.
+`Spider-Man-WoS-modded.dsv` in that directory. It parses the DSV wrapper for
+lossless size/hash checks, while the native payload remains opaque: there is no
+save editor, format conversion, room editor, or save-state loading.
 
 This machine is configured for
 `F:\Enrik Desktop Files\PROJECTS\DsSmuMe\Battery`.
@@ -204,8 +210,8 @@ overlay has been promoted into regular `mods/`; Git excludes those private asset
 Four new synthetic playtest tests cover configuration/adoption/checkpoint restore,
 both previous saves retained, repeated stable filename builds with unchanged save
 bytes, idempotent safety snapshots, live-process rejection, invalid paths/formats,
-and corrupt snapshots. Full suite: 47 passing; final helper checks rerun after small
-guard adjustments. Actual save copying/hash verification is complete; user DeSmuME
+and corrupt snapshots. That historical migration run passed 47 tests; the current
+full suite passes 86. Actual save copying/hash verification is complete; user DeSmuME
 Continue and named-checkpoint reload remain manual acceptance checks.
 
 ## Build and test a content change
@@ -307,5 +313,6 @@ BSP/OBJ geometry, save payloads and arbitrary room routing remain unknown.
 GMB channels/root movement, SCA pools/joint matrices, purchase records and combo
 credit now have tested mappings. Read ORIGINAL_GAMEPLAY.md, COMBO_ENGINE.md,
 UPGRADE_ENGINE.md and ANIMATION_RESEARCH.md before changing another paid move.
-The next approved incremental gameplay replacement is Web Vault; controlled
-collision/launch tests must precede its release.
+The next approved incremental gameplay replacement is Sling Strike; controlled
+owned/locked aerial input, hit-budget and collision tests must precede its release.
+Read `docs/TASKS.md` and `docs/COMBAT_FEEDBACK.md` before changing the current recipe.

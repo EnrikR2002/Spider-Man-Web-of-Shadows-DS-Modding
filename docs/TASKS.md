@@ -11,6 +11,8 @@ about 75%; damage/gates/player recoil remain native. DEALT/TAKEN show three rece
 actual capped HP losses and a running SUM. COMBO shows the continuous native
 meter value from zero, including Snap's 12 below the old 30 bar threshold.
 
+Release commit `ea167472c39b1d485d350650186fd2b286678ff9` (`ea16747`, combat
+feedback + Rebound juggle tuning + expanded TASM roadmap).
 ROM SHA256 `fe2be48f62999321edc4b67e3705268c21108e21b1d21efaeb6a07eaa1e7b432`.
 ARM9 SHA256 `0cb23de19e5541393bbbe161b98c5104fc06570ba3c149c0f36ec4b2712903cb`.
 86 tests pass; all 3,733 resources verified. Source commit title:
@@ -41,7 +43,18 @@ reliable. Latest design is ONE combined TASM 1/2 kit, with twelve paid tools plu
 Snap Sweep proposed in `TASM_EXPANDED_ROADMAP.md`. Additional tools/prices are
 ideation, not implemented grants. Other ideas: `IMPROVEMENT_BACKLOG.md`.
 
-## Active TASM 1 task list
+## First actions in a fresh session
+
+1. Read `AGENTS.md`, this file, and `COMBAT_FEEDBACK.md`.
+2. Run `git status --short --branch` and `git log -3 --oneline`; confirm the
+   current release commit and the default feedback profile before editing.
+3. Review the open player checks above. If the user has tested them, record the
+   result here before choosing another feature.
+4. For the next move, trace Sling Strike's owned/locked input and native action,
+   actual HP-loss budget, approach and collision on a fresh save copy. Keep the
+   current recipe composed; do not run a legacy generator over it blindly.
+
+## Active incremental TASM task list
 
 - [x] Clean movie suit panels and black lenses; preserve accepted cosmetics/QoL.
 - [x] Stable ROM/launcher, battery backups and named checkpoints.

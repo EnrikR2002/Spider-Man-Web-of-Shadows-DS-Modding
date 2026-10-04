@@ -1,12 +1,12 @@
-# TASM 1 stage one: Snap Sweep
+# TASM 1 stage one: Snap Sweep (historical foundation)
 
 2026-10-04. One red-form opening action is replaced by an existing compact low
 kick, retaining the native combo controller. No new slot, inputs, combo tree,
 damage constants, unlock flags or save fields are introduced.
 
 User follow-up: Snap Sweep was playtested and confirmed working. It is explicitly
-allowed to remain free. Future purchased skill replacements await the approval
-plan in `TASM1_UPGRADE_PLAN.md`; no additional moves are implemented by that audit.
+allowed to remain free. The current purchased releases and next move are tracked
+in `TASKS.md`; this document records the earlier foundation audit.
 
 ## Exact edit
 

@@ -337,8 +337,9 @@ destinations, ROM suffixes, and writes in `original/` are rejected. The emulator
 must be closed; no emulator lock or automatic save-path discovery is implemented.
 Seven synthetic tests cover round trips and safety failures. The complete 36-test
 suite passes, and a subprocess CLI backup/list/restore smoke test reproduced a
-synthetic file exactly. No actual gameplay save has been transferred, and no save
-parser/editor is introduced.
+synthetic file exactly. This paragraph records the earlier synthetic-only stage;
+the current configured gameplay save is preserved as an opaque DSV wrapper and
+the workflow still provides no native save parser/editor.
 
 ## Test result and immediate next experiments
 

@@ -2,7 +2,8 @@
   "schema_version": 1,
   "date": "2026-10-04",
   "status": "incremental-implementation",
-  "scope": "Seven approved Red-tab replacements. Rebound and Web Vault implemented; five remain pending.",
+  "scope": "Seven approved Red-tab replacements. Rebound and Web Vault implemented; five remain pending. Expanded TASM 1/2 design is tracked separately.",
+  "expanded_design_reference": "TASM_EXPANDED_ROADMAP.md",
   "free_exception": "Snap Sweep remains the existing base opener",
   "gate_contract": "Native purchase bits13..19, original costs and dependencies retained. Existing purchases carry over.",
   "balance_contract": "Comparable role, total damage and commitment budget, verified against native same-enemy tests before release",
@@ -24,10 +25,11 @@
         "Rebound"
       ],
       "proposal": "One grapple kick followed by a short vulnerable player recoil",
-      "tradeoff": "More separation for Spider-Man; less enemy knockback and crowd disruption; no extra hit or automatic launch",
+      "tradeoff": "Closer, higher enemy launch creates a possible juggle; horizontal travel is reduced for faster re-engagement. Damage, player recoil and gates remain native; no automatic chase or extra hit",
       "implementation_research": "Purchase gate, contact timing, independent player/enemy displacement and collision",
       "status": "implemented",
-      "implementation_reference": "TASM1_REBOUND.md"
+      "implementation_reference": "TASM1_REBOUND.md",
+      "current_revision_reference": "COMBAT_FEEDBACK.md"
     },
     {
       "id": "web-vault",

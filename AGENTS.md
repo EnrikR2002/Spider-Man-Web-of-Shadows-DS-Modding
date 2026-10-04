@@ -28,7 +28,7 @@ Confirmed facts are in `docs/ANALYSIS.md` and `reference/glob_manifest.csv`.
 
 ## Accepted user workflow (2026-10-04)
 
-- Develop one suit at a time. TASM 1 is active; retain the selected backlog in
+- Develop one suit at a time. The combined TASM 1/2 identity is active; retain the selected backlog in
   `docs/SUIT_ROADMAP.json`. Prototype through the red form while investigating
   a separate third slot. Describe proposals separately from implemented behavior.
 - The agent handles save management for every feature release. Use the actual
@@ -51,10 +51,11 @@ prices/power tiers. The original seven slots are a starting implementation path,
 not a design ceiling. Expanded progression/menu/save support remains research;
 do not silently grant abilities or remove shared traversal requirements.
 Web Vault is player-confirmed. Its brief air window should gain deliberate paid
-pursuit/control extensions later. Rebound now needs lower horizontal and higher
-vertical enemy knockback with unchanged damage. Add real dealt/taken damage
-feedback with per-hit and running totals, plus a simple numeric combo HUD that
-shows gains below 30. Never display inferred attack strength as actual HP damage.
+pursuit/control extensions later. Rebound's closer, higher juggle response and
+the combat feedback pass are released; player checks remain open for readability,
+ordinary incoming hits and unusual encounters. Never display inferred attack
+strength as actual HP damage. See `docs/COMBAT_FEEDBACK.md` for the current
+recipe and limits.
 
 - User confirmed Snap Sweep works and may remain the free base opener.
 - Future TASM moves must replace existing purchased Red-tab skills, with new
@@ -68,6 +69,7 @@ shows gains below 30. Never display inferred attack strength as actual HP damage
 - Snap Sweep's base binding borrows GroundAttack15 assets. Editing those assets
   globally can leak paid behavior into the opener. Preserve the base action and
   modify purchased action routes separately, checking locked and purchased cases.
-- Before expanding the kit, document original red/black combat identity and
-  investigate the lower-right combo meter, including Snap Sweep's contribution.
-  The user authorizes ambitious mechanics and custom animations where feasible.
+- Original red/black identity and the lower-right combo meter are mapped in
+  `docs/ORIGINAL_GAMEPLAY.md` and `docs/COMBO_ENGINE.md`; preserve those findings
+  while implementing the expanded kit. The user authorizes ambitious mechanics
+  and custom animations where feasible.

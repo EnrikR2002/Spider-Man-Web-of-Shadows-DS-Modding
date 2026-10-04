@@ -1,16 +1,16 @@
 # New playable suit: design and research plan
 
-2026-10-04. **Active suit: TASM 1.** The user selected a shortlist and requested
-one suit at a time, beginning with the existing movie recolor. Persisted selection:
+2026-10-04. **Active kit: combined TASM 1/2 identity.** The user selected a
+shortlist and requested one suit at a time, beginning with the existing movie
+recolor. Persisted selection:
 `SUIT_ROADMAP.json`. Stage one now replaces one red-form attack; a third slot,
 new combo tree, custom conditional ability and new save fields remain future work.
 
-**Latest constraint:** the user playtested Snap Sweep successfully. It stays the
-free base opener. Every future move must replace a paid red-suit upgrade, with a
-new name and comparable budget; nothing else is granted at game start. The
-replacement plan in `TASM1_UPGRADE_PLAN.md` / `.json` supersedes the ungated
-kit ideas below and is now approved. Document original combat and investigate the
-combo meter before expanding the kit; the targets are not yet implemented.
+**Latest constraint:** the user playtested Snap Sweep and Web Vault successfully.
+Snap Sweep stays the free base opener. The safe implementation path replaces
+paid red-suit upgrades with native gates; the broader ten-plus-tool design and
+flexible prices live in `TASM_EXPANDED_ROADMAP.md` and remain ideation until
+progression support is proven. Current release status is in `TASKS.md`.
 
 ## TASM 1: quick, scrappy, evasive
 
@@ -28,8 +28,8 @@ canonically granted by wearing its costume.
 | Move / system | Proposed play | Status |
 |---|---|---|
 | **Snap Sweep** | Compact opening low kick, then continue the normal ground string | Implemented using an existing synchronized action triplet. Measured duration 24 versus 44 emulator frames. Native successors still execute. This is action reuse, not a new combo tree. |
-| **Web Rebound** | Grapple -> pull into kick -> launch -> reconnect in the air | Next target. Existing grapple/kick/launcher assets are bound; prove hit and cancel behavior against an enemy before adding a transition. |
-| **Lizard Vault** | Rising strike -> directional air evade -> descending kick | Planned transition/combination. Existing Launching Uppercut purchase stays required in stage one. |
+| **Rebound** | Grapple -> pull into kick -> closer/higher launch | Released through the native Web Kick slot; current trajectory and feedback evidence are in `COMBAT_FEEDBACK.md`. |
+| **Web Vault** | Grapple -> launch -> short player hop into the air | Released through the native Web Launch slot; the early window remains a setup for future paid pursuit/control. |
 | **Slip Counter** | Well-timed dodge enables one stronger follow-up; waiting or missing consumes it | Planned first custom conditional ability. Map dodge, hit confirmation, collision and timers before patching. Tune the timing window through playtests. |
 | **Momentum** | Successful counters/web follow-ups reward continued movement; getting hit or missing breaks the reward | Later transient passive; requires hit detection and suit gating. Avoid a new persistent save field. |
 
@@ -70,8 +70,9 @@ every release. The player's flow is open launcher, play, save in-game, close.
 Ben Reilly: impact webs/stingers/setups. Classic 2099: talons/aerial pursuit, later
 glide/venom. Kaine: aggressive close combat/burst counters. Raimi: weighty punches,
 strong web pulls/recovery. Classic symbiote: heavy control/charges/finishers.
-TASM 2 is a secondary interest, potentially a later appearance variant. These are
-backlog concepts, not parallel implementation tasks. Earlier Ben/2099 proposals
+TASM 2 is merged into the active combat identity; a later appearance can remain a
+cosmetic variant. The expanded proposal is in `TASM_EXPANDED_ROADMAP.md`. These
+backlog concepts are not parallel implementation tasks. Earlier Ben/2099 proposals
 below remain useful design research.
 
 The complete concept catalog is in `SUIT_IDEAS.json`: costumes, alternate

@@ -20,7 +20,7 @@ the menu. All replacement names fit their existing compressed name slots.
 
 | Original upgrade | Cost | Proposed TASM name | Change and equivalent-role tradeoff |
 |---|---:|---|---|
-| Web Kick | 100 | **Rebound** | Keep a grapple-to-kick follow-up with the same damage budget. Spider-Man recoils a short distance after contact; the enemy travels less far. Gains separation, loses knockback/crowd disruption. No extra hits, automatic launch, invulnerability or free aerial chain. |
+| Web Kick | 100 | **Rebound** | Keep a grapple-to-kick follow-up with the same damage budget. Spider-Man recoils a short distance after contact; the enemy launches closer and higher. Gains a possible juggle window, loses crowd separation. No automatic chase, extra hits or invulnerability. |
 | Web Launch | 200 | **Web Vault** | Launch the grappled target and follow with a short vault. Preserve the original enemy launch height/damage ceiling; the follow adds no hit. Gains aerial pursuit, loses the safety of remaining grounded. Air Dodge and other shared upgrades still need their own purchases. |
 | Mid-Air Snare | 600 | **Sling Strike** | Replace the aerial zip/combo with a committed fly-by kick that passes to the target's far side when space permits. Match the original total damage budget; trade sustained target control for repositioning. No extra target range, airtime resets or repeated free hits. |
 | Spider Dance | 400 | **Oscorp Rush** | Replace the purchased pause-input combo with a compact advancing kick/strike string and a focused finisher. Keep its input family and comparable duration/total damage; narrower coverage is exchanged for forward pressure. It does not grant a free launcher or the Scissor extension. |

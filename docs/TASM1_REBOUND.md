@@ -1,4 +1,4 @@
-# Rebound: first purchased TASM replacement
+# Rebound: first purchased TASM replacement (historical move evidence)
 
 2026-10-04. Replaces **Web Kick**, costs the native **100 XP**, and retains native
 ownership bit 13/event 322. Snap Sweep remains the free opener; the other six
@@ -8,10 +8,12 @@ approved replacements are pending and keep their original behavior and names.
 
 Grapple an enemy with DS A, then press Y while grappled. The paid pull brings a
 distant target in, kicks it, and adds a short backward step with an authored chest
-recovery pose. The enemy's horizontal impulse is approximately halved. This
-exchanges enemy displacement/crowd disruption for Spider-Man's own separation.
-Damage calculation, hit count, vertical reaction, purchase price, recovery timing,
-meter category, invulnerability and boss resistance are retained. The recoil is
+recovery pose. The original candidate's enemy horizontal impulse is approximately
+halved. The published revision makes the launch closer and higher for a possible
+juggle; current values and player checks are in `COMBAT_FEEDBACK.md`.
+In that historical candidate, damage calculation, hit count, purchase price,
+recovery timing, meter category, invulnerability and boss resistance were retained.
+The published revision changes only the enemy trajectory. The recoil is
 ordinary collision-resolved movement; no dodge immunity or extra attack is added.
 
 The original contextual rules still apply. A grappled target already very close

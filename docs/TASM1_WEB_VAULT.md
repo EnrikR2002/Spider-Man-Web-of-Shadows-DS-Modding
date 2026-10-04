@@ -1,9 +1,11 @@
-# Web Vault — purchased Red-suit release
+# Web Vault — purchased Red-suit release (historical move evidence)
 
 2026-10-04. Web Vault replaces **Web Launch at 200 XP**, native event 323 / bit 14.
 Use **A to grapple, then Up** (configured keyboard: **W, then Up**). Existing
 Web Launch ownership carries over. Rebound, Snap Sweep, cosmetics and QoL remain.
-Sling Strike is next; player acceptance for these two paid replacements is pending.
+Sling Strike is next. Web Vault was later confirmed by the player; the current
+combined feedback release and open checks are tracked in `COMBAT_FEEDBACK.md` and
+`TASKS.md`.
 
 ## Implemented behavior
 
