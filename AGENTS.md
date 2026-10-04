@@ -15,3 +15,38 @@ Priorities:
 10. Favor minimal empirical experiments: change one field/asset, rebuild, boot, observe, revert/iterate.
 
 Confirmed facts are in `docs/ANALYSIS.md` and `reference/glob_manifest.csv`.
+
+## Accepted user workflow (2026-10-04)
+
+- Develop one suit at a time. TASM 1 is active; retain the selected backlog in
+  `docs/SUIT_ROADMAP.json`. Prototype through the red form while investigating
+  a separate third slot. Describe proposals separately from implemented behavior.
+- The agent handles save management for every feature release. Use the actual
+  configured Battery directory in ignored `work/playtest.json`. Preserve progress,
+  verify the DSV wrapper and snapshot bytes, and keep DeSmuME closed during mutation.
+- Test isolated candidates, merge all accepted overlays, then publish with
+  `python tools/playtest.py build`. Keep `build/Spider-Man-WoS-modded.nds` stable;
+  retain prior ROM/checkpoints. Do not give the player renamed everyday builds.
+- Player flow: `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
+  The agent creates/restores named battery checkpoints when useful or requested.
+  Do not ask the player to manage filenames or run backup/build commands.
+- Use battery copies for isolated emulator tests; never write research results
+  into the real save or replay an old save state over a changed ROM.
+
+## Upgrade progression constraint (2026-10-04)
+
+- User confirmed Snap Sweep works and may remain the free base opener.
+- Future TASM moves must replace existing purchased Red-tab skills, with new
+  names, comparable power/role and purchase gating. Do not grant them at game start.
+- Preserve each replaced slot's native cost, progression gates and purchase flag;
+  an existing purchase carries over as ownership of its replacement. Keep shared
+  Both Suits upgrades and traversal/progression functions intact.
+- The user approved the full replacement plan. `docs/TASM1_UPGRADE_PLAN.md` /
+  `.json` describe approved targets, not already implemented gameplay. Implement
+  incrementally, retaining purchase gates and measuring balance against originals.
+- Snap Sweep's base binding borrows GroundAttack15 assets. Editing those assets
+  globally can leak paid behavior into the opener. Preserve the base action and
+  modify purchased action routes separately, checking locked and purchased cases.
+- Before expanding the kit, document original red/black combat identity and
+  investigate the lower-right combo meter, including Snap Sweep's contribution.
+  The user authorizes ambitious mechanics and custom animations where feasible.

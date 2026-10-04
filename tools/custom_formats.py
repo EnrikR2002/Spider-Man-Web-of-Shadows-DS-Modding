@@ -60,6 +60,7 @@ class Gab:
     words: tuple[int, ...]
     terminator_offset: int
     padding_size: int
+    records: tuple[tuple[int, int, int], ...]
 
     @classmethod
     def parse(cls, raw: bytes):
@@ -67,7 +68,10 @@ class Gab:
         if raw.endswith(b'\xff' * 6): padding = 0
         elif raw.endswith(b'\xff' * 6 + b'\0\0'): padding = 2
         else: raise ValueError('GAB missing observed three-ffff terminator')
-        return cls(raw, struct.unpack(f'<{len(raw) // 2}H', raw), len(raw) - 6 - padding, padding)
+        end = len(raw) - 6 - padding
+        if end % 6: raise ValueError('GAB payload must contain whole three-u16 records')
+        records = tuple(struct.iter_unpack('<HHH', raw[:end]))
+        return cls(raw, struct.unpack(f'<{len(raw) // 2}H', raw), end, padding, records)
 
     def to_bytes(self): return self.raw
 

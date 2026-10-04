@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-04",
+  "status": "approved-implementation-pending",
+  "scope": "Seven purchased Red-tab slots; no gameplay implementation in this planning pass",
+  "free_exception": "Snap Sweep remains the existing base opener",
+  "gate_contract": "Retain each native slot's purchase flag, cost, availability and prerequisites; existing purchases carry over; exact binary gates remain unmapped",
+  "balance_contract": "Comparable role, total damage and commitment budget, verified against native same-enemy tests before release",
+  "shared_asset_constraint": "Do not globally alter GroundAttack15 SCA/GMB/GAB used by free Snap Sweep; route purchased actions separately",
+  "entries": [
+    {
+      "id": "rebound",
+      "original": "Web Kick",
+      "original_cost": 100,
+      "string_ids": [183, 184, 185],
+      "original_role": "Grapple follow-up that pulls the enemy in and knocks them away",
+      "replacement": "Rebound",
+      "menu_names": ["Rebound", "Rebound"],
+      "proposal": "One grapple kick followed by a short vulnerable player recoil",
+      "tradeoff": "More separation for Spider-Man; less enemy knockback and crowd disruption; no extra hit or automatic launch",
+      "implementation_research": "Purchase gate, contact timing, independent player/enemy displacement and collision"
+    },
+    {
+      "id": "web-vault",
+      "original": "Web Launch",
+      "original_cost": 200,
+      "string_ids": [186, 187, 188],
+      "original_role": "Launch a grappled enemy while Spider-Man stays grounded",
+      "replacement": "Web Vault",
+      "menu_names": ["Web Vault", "Web Vault"],
+      "proposal": "Original-budget grapple launch with a short player follow into the air",
+      "tradeoff": "Aerial pursuit replaces grounded safety; no extra damage or launch height; shared air skills still require their own purchase",
+      "implementation_research": "Purchase gate, launch/air transition, resistance and ceiling/room collision"
+    },
+    {
+      "id": "sling-strike",
+      "original": "Mid-Air Snare",
+      "original_cost": 600,
+      "string_ids": [189, 190, 191],
+      "original_role": "Aerial approach followed by a quick combo",
+      "replacement": "Sling Strike",
+      "menu_names": ["Sling Strike", "Sling Strike"],
+      "proposal": "Committed aerial fly-by kick, passing to the far side when space allows",
+      "tradeoff": "Repositioning replaces sustained target control; comparable total damage; no added targeting range or airtime reset",
+      "implementation_research": "Purchase gate, native aerial hit budget, target approach, far-side collision and repeat limits"
+    },
+    {
+      "id": "oscorp-rush",
+      "original": "Spider Dance",
+      "original_cost": 400,
+      "string_ids": [192, 193, 194],
+      "original_role": "Purchased advanced pause-input ground combo",
+      "replacement": "Oscorp Rush",
+      "menu_names": ["Oscorp Rush", "Oscorp Rush (Combo)"],
+      "proposal": "Compact advancing kick/strike combo with a focused finisher; retain pause-input family",
+      "tradeoff": "Forward pressure replaces coverage; comparable string duration and damage; no free launcher or rapid-kick extension",
+      "implementation_research": "Purchased combo branch, native hit/cancel budget, asset-sharing isolation from Snap Sweep"
+    },
+    {
+      "id": "rebound-barrage",
+      "original": "Scissor-Kick Special",
+      "original_cost": 600,
+      "string_ids": [195, 196, 197],
+      "original_role": "Rapid-kick extension of the advanced Spider Dance combo",
+      "replacement": "Rebound Barrage",
+      "menu_names": ["Rebound Barrage", "Rebound (Combo)"],
+      "proposal": "Finite close-range kick flurry with an optional early retreat finish",
+      "tradeoff": "Early escape sacrifices remaining hits; full string stays near native damage budget; retreat grants no invulnerability",
+      "implementation_research": "Parent-combo dependency, extension purchase gate, finite hit cap, retreat collision"
+    },
+    {
+      "id": "slip-counter",
+      "original": "Amazing Speed Boost",
+      "original_cost": 800,
+      "string_ids": [198, 199, 200],
+      "original_role": "Permanent red-form attack-speed upgrade",
+      "replacement": "Slip Counter",
+      "menu_names": ["Slip Counter", "Slip Counter"],
+      "proposal": "Shift part of permanent speed benefit into one manual punish/recovery opportunity after a correctly timed evade",
+      "tradeoff": "Lower ordinary attack-speed benefit; conditional quicker normal-damage response; no auto-hit or increased invulnerability",
+      "implementation_research": "Native speed tier values, purchase flag, suit gate, genuine evade confirmation, counter window and normal hit handling"
+    },
+    {
+      "id": "momentum",
+      "original": "Ultimate Speed Boost",
+      "original_cost": 1000,
+      "string_ids": [201, 202, 203],
+      "original_role": "Permanent maximum red-form attack-speed upgrade",
+      "replacement": "Momentum",
+      "menu_names": ["Momentum", "Momentum"],
+      "proposal": "Conditional flow after a clean string, purchased web hit or counter; native maximum-speed ceiling and one bounded hit-confirmed evade cancel",
+      "tradeoff": "Lose permanent maximum speed; gain conditional control; hit/whiff drops flow; no stacked damage or infinite refresh",
+      "implementation_research": "Native maximum speed and prerequisites, purchase flag, hit/whiff confirmation, existing cancel behavior, finite burst rules"
+    }
+  ],
+  "unchanged_shared": ["Launching Uppercut", "Enemy Kick-Off", "Drill Kick", "Jackhammer Stomp", "Enhanced Dodge", "Air Dodge", "Quick Recovery"],
+  "preserved_red_foundation": ["Web Grapple", "Web Zip", "Web Pull", "Reinforced Web heavy-object progression function"],
+  "suggested_order": ["rebound", "web-vault", "sling-strike", "oscorp-rush", "rebound-barrage", "slip-counter", "momentum"],
+  "verification": {
+    "native_prices_observed": true,
+    "replacement_name_slots_fit": true,
+    "binary_purchase_flags_mapped": false,
+    "native_speed_percentages_mapped": false,
+    "damage_equivalence_measured": false,
+    "replacement_gameplay_implemented": false
+  }
+}

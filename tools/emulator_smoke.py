@@ -4,7 +4,9 @@
 Run --fetch-core once to download the official v1.1.5 libretro release to work/.
 The main build workflow needs no emulator or dependencies. This harness runs a
 bounded input sequence and captures frames; inspect the images to assess gameplay.
-No game save is loaded or persisted. Source ROMs are read only.
+Optional battery saves are copied into emulator memory, never written back.
+Scripted inputs and RAM captures support paired, reproducible combat experiments.
+Source ROMs and battery files are read only.
 """
 from __future__ import annotations
 import argparse
@@ -19,6 +21,7 @@ import zipfile
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from tools import wos_tool as w
 from tools.nitro_texture import png_rgb
+from tools.desmume_save import Dsv
 
 CORE_URL = 'https://github.com/JesseTG/melonds-ds/releases/download/v1.1.5/melondsds_libretro-win32-x86_64-Release.zip'
 ZIP_SHA256 = 'd93e78d28d8098966360d7654c5ad127db4583113cfecd9a7093a4ce013eaa9e'
@@ -74,11 +77,37 @@ def frame_png(frame, pixel_format):
     return png_rgb(width, height, bytes(rgb))
 
 
-def run(rom_path, frames, captures):
+BUTTONS = {'B': 0, 'Y': 1, 'Select': 2, 'Start': 3, 'Up': 4, 'Down': 5,
+           'Left': 6, 'Right': 7, 'A': 8, 'X': 9, 'L': 10, 'R': 11}
+
+
+def input_schedule(rows):
+    """Validate explicit half-open frame ranges and named DS joypad buttons."""
+    if not isinstance(rows, list): raise ValueError('Input script must be a list')
+    result = []
+    for row in rows:
+        start, end, buttons = row['start'], row['end'], row['buttons']
+        if type(start) is not int or type(end) is not int or not 0 <= start < end <= 10000:
+            raise ValueError('Input frame range must be within 0..10000')
+        if not isinstance(buttons, list) or any(b not in BUTTONS for b in buttons):
+            raise ValueError('Unknown input button')
+        result.append((start, end, frozenset(BUTTONS[b] for b in buttons)))
+    return result
+
+
+def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, ram_captures=(), trace_frames=()):
     if os.name != 'nt' or c.sizeof(c.c_void_p) != 8: raise ValueError('Pinned emulator harness requires Windows x64')
     if w.sha256(CORE_PATH.read_bytes()) != CORE_SHA256: raise ValueError('Emulator core integrity check failed')
     rom_data = rom_path.read_bytes(); report = w.validate_rom(rom_data, target=True)
+    if trace_frames:
+        from tools import player_trace
+        arm9_offset, _, _, arm9_size = struct.unpack_from('<IIII', rom_data, 0x20)
+        if w.sha256(rom_data[arm9_offset:arm9_offset+arm9_size]) != player_trace.ARM9_SHA256:
+            raise ValueError('Player probe requires the known unchanged CS5E ARM9')
     dest = w.PROJECT / 'build/boot-tests' / (rom_path.stem + '-' + report['sha256'][:8])
+    if label:
+        if not label.replace('-', '').replace('_', '').isalnum(): raise ValueError('Invalid run label')
+        dest = dest / label
     w.safe_output(dest)
     system = dest / 'system'; system.mkdir(parents=True, exist_ok=True)
     directory = str(system).encode('utf-8')
@@ -90,6 +119,7 @@ def run(rom_path, frames, captures):
                  b'melonds_start_time_absolute_month': b'1', b'melonds_start_time_absolute_day': b'1',
                  b'melonds_start_time_absolute_hour': b'0', b'melonds_start_time_absolute_minute': b'0'}
     state = {'frame': 0, 'last': None, 'pixel_format': 1}
+    schedule = input_schedule(script) if script is not None else None
 
     @ENV
     def environment(cmd, pointer):
@@ -127,6 +157,9 @@ def run(rom_path, frames, captures):
     @INPUT
     def input_state(port, device, index, button):
         frame = state['frame']
+        if schedule is not None:
+            return int(device == 1 and port == 0 and any(start <= frame < end and button in buttons
+                       for start, end, buttons in schedule))
         return int(device == 1 and port == 0 and frame > 600 and frame % 120 < 8 and button in (3, 8))
 
     for name, callback in [('environment', environment), ('video_refresh', video), ('audio_sample', audio),
@@ -136,13 +169,25 @@ def run(rom_path, frames, captures):
     library.retro_init.restype = None
     library.retro_load_game.argtypes = [c.POINTER(Game)]; library.retro_load_game.restype = c.c_bool
     for name in ('retro_run', 'retro_unload_game', 'retro_deinit'): getattr(library, name).restype = None
+    library.retro_get_memory_data.argtypes = [c.c_uint]; library.retro_get_memory_data.restype = c.c_void_p
+    library.retro_get_memory_size.argtypes = [c.c_uint]; library.retro_get_memory_size.restype = c.c_size_t
     buffer = c.create_string_buffer(rom_data)
     game = Game(str(rom_path).encode('utf-8'), c.cast(buffer, c.c_void_p), len(rom_data), None)
     library.retro_init(); loaded = False
     screenshots = []
+    memory_captures = []
+    player_samples = []
+    battery = None
     try:
         if not library.retro_load_game(c.byref(game)): raise ValueError('melonDS DS rejected ROM')
         loaded = True
+        if save_path is not None:
+            raw = Path(save_path).read_bytes()
+            payload = Dsv.parse(raw).payload if Path(save_path).suffix.lower() == '.dsv' else raw
+            size = library.retro_get_memory_size(0); pointer = library.retro_get_memory_data(0)
+            if not pointer or size != len(payload): raise ValueError(f'Battery size {len(payload)} differs from core size {size}')
+            c.memmove(pointer, payload, size)
+            battery = {'source_sha256': w.sha256(raw), 'payload_sha256': w.sha256(payload), 'size': size}
         for frame in range(frames):
             state['frame'] = frame; library.retro_run()
             if frame in captures:
@@ -152,9 +197,22 @@ def run(rom_path, frames, captures):
                 screenshots.append({'frame': frame, 'path': path.relative_to(w.PROJECT).as_posix(), 'png_sha256': w.sha256(png),
                                     'width': state['last'][1], 'height': state['last'][2]})
                 print(f'Captured {path}', flush=True)
+            if frame in ram_captures:
+                size = library.retro_get_memory_size(2); pointer = library.retro_get_memory_data(2)
+                if not pointer or size != 4 * 1024 * 1024: raise ValueError(f'Unexpected DS system RAM size {size}')
+                data = c.string_at(pointer, size); path = dest / f'ram-{frame:05d}.bin'
+                w.atomic_write(path, data)
+                memory_captures.append({'frame': frame, 'path': path.relative_to(w.PROJECT).as_posix(), 'sha256': w.sha256(data)})
+            if frame in trace_frames:
+                size = library.retro_get_memory_size(2); pointer = library.retro_get_memory_data(2)
+                if not pointer or size != 4 * 1024 * 1024: raise ValueError('Unexpected DS main RAM')
+                player_samples.append({'frame': frame, **player_trace.sample(c.string_at(pointer, size))})
+        if player_samples: w.write_json(dest/'player-trace.json', player_samples)
         w.write_json(dest / 'boot.json', {'rom_sha256': report['sha256'], 'core_version': 'melonDS DS 1.1.5',
                      'core_sha256': CORE_SHA256, 'core_url': CORE_URL, 'frames': frames,
-                     'input_sequence': 'For frame>600, each 120-frame period presses Start+A during its first 8 frames; no other input.',
+                     'input_sequence': script if script is not None else 'For frame>600, each 120-frame period presses Start+A during its first 8 frames; no other input.',
+                     'battery_copy': battery, 'ram_captures': memory_captures,
+                     'player_trace': 'player-trace.json' if player_samples else None,
                      'options': {key.decode(): value.decode() for key, value in sorted(variables.items())},
                      'screenshots': screenshots, 'assessment': 'Captures require visual inspection; this is not a full gameplay test.'})
     finally:
@@ -169,15 +227,29 @@ def main():
     parser.add_argument('--fetch-core', action='store_true')
     parser.add_argument('--frames', type=int, default=1800)
     parser.add_argument('--capture', default='299,599,899,1199,1499,1799')
+    parser.add_argument('--save', help='Read-only .dsv/.sav battery copy for this isolated run')
+    parser.add_argument('--script', help='JSON list of {start,end,buttons} input ranges')
+    parser.add_argument('--label', help='Separate run directory beneath the ROM hash')
+    parser.add_argument('--ram-capture', default='', help='Comma-separated frame numbers for private RAM dumps')
+    parser.add_argument('--player-trace', help='Half-open START:END range for read-only CS5E player telemetry')
     args = parser.parse_args()
     try:
         if not 1 <= args.frames <= 10000: raise ValueError('--frames must be 1..10000')
         captures = {int(value) for value in args.capture.split(',')}
-        if any(not 0 <= frame < args.frames for frame in captures): raise ValueError('Capture frame outside run')
+        ram_captures = {int(value) for value in args.ram_capture.split(',') if value}
+        trace_frames = set()
+        if args.player_trace:
+            start, end = (int(value) for value in args.player_trace.split(':'))
+            if not 0 <= start < end <= args.frames: raise ValueError('Player trace range outside run')
+            trace_frames = set(range(start, end))
+        if any(not 0 <= frame < args.frames for frame in captures | ram_captures): raise ValueError('Capture frame outside run')
         if args.fetch_core: fetch_core()
         if not CORE_PATH.exists(): raise ValueError('Core not present: run with --fetch-core once')
         path = Path(args.rom); path = path if path.is_absolute() else w.PROJECT / path
-        print(f'Boot capture complete: {run(path.resolve(), args.frames, captures)}')
+        import json
+        script = json.loads(Path(args.script).read_text(encoding='utf-8')) if args.script else None
+        print(f'Boot capture complete: {run(path.resolve(), args.frames, captures, save_path=args.save,
+              script=script, label=args.label, ram_captures=ram_captures, trace_frames=trace_frames)}')
     except (OSError, ValueError, zipfile.BadZipFile) as exc:
         print(f'error: {exc}', file=sys.stderr); return 1
     return 0

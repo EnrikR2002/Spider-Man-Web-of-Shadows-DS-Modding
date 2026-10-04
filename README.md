@@ -47,7 +47,8 @@ The tools check this automatically. Copy the ROM as a separate local transfer;
 it is the only game-data input required to reproduce the example and full tests.
 
 In DeSmuME, choose **File > Open ROM**, select
-`build/Spider-Man-WoS-modded.nds` inside your new clone, and start a new game.
+`build/Spider-Man-WoS-modded.nds` inside your new clone. Start a new game only if
+you have no existing progress; otherwise associate your battery save and Continue.
 Spider-Man's red suit sections should be green in the opening Residential area.
 After each rebuild, close and reopen the ROM so it loads the new asset. See
 [the DeSmuME procedure](docs/VISIBLE_MOD.md#desmume-0911-on-the-other-computer)
@@ -79,6 +80,43 @@ Keep a stable everyday ROM filename; isolated builds may need a copy of the save
 associated with their filename. Do not load old emulator save states to test new
 assets. See `docs/TESTING_WORKFLOW.md` for the plain-language explanation and
 `tools/save_backups.py` for opaque named `.sav`/`.dsv` backups and guarded restores.
+
+The current local regular overlay contains the cleaned movie-inspired red suit
+(solid panels, black lenses), the white alternate suit, menu readability changes,
+and yellow mission marker. TASM 1 stage one adds **Snap Sweep**, a compact opening
+low kick in the red form: measured completion in 24 versus 44 emulator frames,
+with the native follow-up string retained. Regular `mods/` now contains seven assets.
+See [the cleanup evidence](docs/MOVIE_SUIT_EXPERIMENT.md#clean-panels-and-black-lenses--2026-10-04).
+
+**Player flow:** double-click `Play Spider-Man.cmd`, choose Continue, play, save
+in-game, close DeSmuME. The launcher opens the stable ROM and backs up progress.
+The agent handles feature releases/checkpoints; the commands below are agent tools.
+
+```powershell
+python tools/playtest.py build
+# Open build/Spider-Man-WoS-modded.nds in DeSmuME and choose Continue.
+# Save in-game and close DeSmuME before each command that copies saves.
+python tools/playtest.py checkpoint early-game
+python tools/playtest.py checkpoint before-boss
+python tools/playtest.py list
+python tools/playtest.py restore early-game
+```
+
+The local Battery folder is already configured and the most recently played
+movie-suit `.dsv` has been copied to this ROM's save association, retaining backups
+of all five earlier Spider-Man saves. `before-suit-cleanup`, `before-tasm1` and
+`opening-save-room` are available locally.
+Checkpoint names must be unique. A checkpoint returns to an in-game save you have
+recorded; it does not jump to an arbitrary room. An isolated copy of current progress
+successfully loaded/resumed in melonDS; native DeSmuME acceptance is still a player
+check. [Setup on another machine](docs/TESTING_WORKFLOW.md#stable-playtest-command--2026-10-04)
+uses that machine's actual Battery folder. Configuration, saves and overlays stay
+private and do not come from Git.
+
+See the [active TASM 1 kit and selected backlog](docs/NEW_SUIT_DESIGN.md),
+[exact implementation/evidence](docs/TASM1_IMPLEMENTATION.md), and
+[66-option catalog](docs/SUIT_CATALOG.md). A third selectable slot and custom
+conditional abilities remain research milestones.
 
 `build` reads unchanged content directly from the clean ROM, so extraction is optional
 for a build. Only exact manifest filenames are accepted in `mods/`. File sizes may
@@ -154,7 +192,9 @@ python tools/emulator_smoke.py build/roundtrip/Spider-Man-WoS-unmodified.nds > b
 ```
 
 `--fetch-core` is needed only once. The captured images need visual inspection;
-the harness does not automatically claim gameplay correctness or load your saves.
+the harness does not automatically claim gameplay correctness. Optional `--save`
+loads a read-only battery copy, `--script` replays explicit DS button ranges and
+`--player-trace START:END` records bounded, read-only CS5E player telemetry.
 
 ## Reverse-engineering tools and notes
 

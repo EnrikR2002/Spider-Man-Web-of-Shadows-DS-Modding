@@ -46,5 +46,22 @@ class MovieSuitTests(unittest.TestCase):
         self.assertTrue(all(i in allowed for i,(a,b) in enumerate(zip(raw,result)) if a!=b))
         with self.assertRaises(ValueError): m.scale_model(result)
 
+    def test_clean_panels_and_black_lenses_do_not_carry_source_speckles(self):
+        raw=self.assets['spd.nsbtx']
+        body=[(0,9,.8)]*(128*128)
+        pixels,palette=m.artwork(raw,body=body)
+        decoded=[struct.unpack_from('<H',palette,i*2)[0] for i in pixels]
+        red=24|3<<5|4<<10; black=1|1<<5|1<<10
+        self.assertEqual(set(decoded),{red,black})
+        for y in range(128):
+            for x in range(128):
+                old=struct.unpack_from('<H',raw,4260+raw[164+(y//2)*64+x//2]*2)[0]
+                lens=min(old>>s&31 for s in (0,5,10))>21
+                self.assertEqual(decoded[y*128+x],black if lens else red)
+        pixels,palette=m.artwork(raw,body=[(0,4.5,0)]*(128*128))
+        self.assertEqual({struct.unpack_from('<H',palette,i*2)[0] for i in pixels},
+                         {2|7<<5|19<<10})
+        with self.assertRaises(ValueError): m.artwork(raw,body=[])
+
 
 if __name__=='__main__': unittest.main()

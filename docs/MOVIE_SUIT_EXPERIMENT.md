@@ -34,7 +34,7 @@ PowerShell export (requires the inspected apicula binary locally):
 ```powershell
 & 'F:\Coding Projects\Spider-Man-Web-of-Shadows-DS-Modding\work\apicula\bin\apicula.exe' convert 'F:\Coding Projects\Spider-Man-Web-of-Shadows-DS-Modding\work\glob\spd.nsbmd' 'F:\Coding Projects\Spider-Man-Web-of-Shadows-DS-Modding\work\glob\spd.nsbtx' -o 'F:\Coding Projects\Spider-Man-Web-of-Shadows-DS-Modding\build\suit-model-inspect'
 python 'F:\Coding Projects\Spider-Man-Web-of-Shadows-DS-Modding\tools\qol_suits_menu.py'
-python 'F:\Coding Projects\Spider-Man-Web-of-Shadows-DS-Modding\tools\movie_suit.py' --combined
+python 'F:\Coding Projects\Spider-Man-Web-of-Shadows-DS-Modding\tools\movie_suit.py' --style legacy --combined
 python 'F:\Coding Projects\Spider-Man-Web-of-Shadows-DS-Modding\mod.py' build --mods 'build/movie-suit-128/combined/mods' -o 'build/movie-suit-128/combined/Spider-Man-WoS-movie-suit-qol.nds'
 python 'F:\Coding Projects\Spider-Man-Web-of-Shadows-DS-Modding\mod.py' verify --mods 'build/movie-suit-128/combined/mods' -o 'build/movie-suit-128/combined/Spider-Man-WoS-movie-suit-qol.nds'
 ```
@@ -66,3 +66,55 @@ Manual acceptance: cold boot, inspect standing/running/jumping/wall poses and bo
 suits, verify front/back seams and readable eyes/emblems. Check menu glyphs, save
 and Continue; never use an old emulator state. Different ROM filenames may require
 separate battery saves. Follow TESTING_WORKFLOW.md if transferring progress.
+
+## Clean panels and black lenses — 2026-10-04
+
+User DeSmuME gameplay screenshots show the procedural web pattern aliasing into
+dark dots. The cleanup removes both the sine-based red web pattern and the woven
+blue dither. It also discards source-texel luminance shading on mapped panels:
+that luminance contains the original web/emblem pattern and would recreate spots.
+Mapped red panels use RGB555 (24,3,4), blue panels (2,7,19). Known originally pale
+eye texels on the mapped head become (1,1,1), giving dark lenses as requested.
+The elongated chest/back emblem remains; unmapped atlas texels remain sampled
+from the original. Broad color shapes read at the DS screen resolution; a larger
+texture cannot itself create more screen pixels.
+
+This is a movie-inspired cleanup on the existing body, not a faithful movie model.
+The earlier 128 texture size and scaled-UV model are retained. White alternate suit,
+menu edits and yellow marker are byte-identical to the previous combined experiment.
+Against that earlier combined overlay, only `spd.nsbtx` changes. Six resources still
+differ from the clean ROM. Earlier experiment folders and original ROM are retained.
+
+Default `movie_suit.py --combined` now generates the cleaned design under
+`build/movie-suit-clean/`. Explicit `--style legacy` retains earlier artwork exactly;
+its generated texture was compared byte-for-byte against the saved previous texture.
+An optional `--out` must stay inside `build/`. Different existing asset edits are
+still refused. To reproduce on a machine with the private model export and QoL
+recipe available:
+
+```powershell
+python tools/movie_suit.py --combined
+python mod.py build --mods build/movie-suit-clean/combined/mods -o build/movie-suit-clean/combined/Spider-Man-WoS-movie-suit-clean.nds
+python mod.py verify --mods build/movie-suit-clean/combined/mods -o build/movie-suit-clean/combined/Spider-Man-WoS-movie-suit-clean.nds
+```
+
+The accepted six assets have also been promoted into local regular `mods/`, so
+`python tools/playtest.py build` creates the same bytes at the stable daily filename
+`build/Spider-Man-WoS-modded.nds`. Both outputs have SHA256
+`02e39959f69904e2fd5e2a756ebac3874b8dd3d4b34a9e310e350928361fbd88`.
+`python mod.py verify` confirms all 3,733 resources. The pre-build stable `.dsv`
+is backed up and remains byte-identical; see TESTING_WORKFLOW.md for migration.
+
+The 47-test suite passes, including a new artwork test that independently checks
+source pale-eye texels become black, all other mapped head texels become uniform
+red, and a mapped blue panel contains no dither/shading variation. After adjusting
+the solid panel colors and helper path guards, the seven affected movie/playtest
+tests passed again. Existing texture no-op/resized round trips and UV exact-inverse
+tests remain in place.
+
+The final stable build completed a 1,800-frame melonDS DS 1.1.5 capture with process
+exit 0. `build/boot-tests/Spider-Man-WoS-modded-02e39959/frame-01799.png` was visually
+inspected: opening Residential gameplay shows solid red/blue suit panels without
+the earlier dotted web pattern. Offline front preview shows black lenses and the
+long emblem. Limited boot evidence does not verify every pose, both suits, texture
+memory under crowded play, or DeSmuME Continue. Those manual checks remain.

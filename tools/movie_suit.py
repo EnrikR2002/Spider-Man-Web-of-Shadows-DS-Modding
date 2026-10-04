@@ -2,6 +2,7 @@
 """Hash-bounded 128x128 I8 suit experiment, retaining geometry and animation."""
 from __future__ import annotations
 import math
+import argparse
 import struct
 import sys
 from pathlib import Path
@@ -11,7 +12,7 @@ from tools import wos_tool as w
 from tools.nitro_texture import TextureArchive, dictionary, preview
 from tools.suit_uv_inspect import uv_body_map, render
 
-DEST = mod.ROOT / 'build/movie-suit-128'
+DEST = mod.ROOT / 'build/movie-suit-clean'
 SIZE = 128
 
 
@@ -97,10 +98,14 @@ def segment_distance(x,y,a,b):
     return math.hypot(x-a[0]-t*dx,y-a[1]-t*dy)
 
 
-def artwork(raw):
+def artwork(raw, style='clean', body=None):
+    if style not in ('clean', 'legacy'):
+        raise ValueError('Unknown suit art style')
     a=TextureArchive.parse(raw); t=a.textures[0]
     source=raw[t['offset']:t['offset']+4096]
-    body=uv_body_map(SIZE)
+    body=uv_body_map(SIZE) if body is None else body
+    if len(body)!=SIZE*SIZE:
+        raise ValueError('Body map must match texture dimensions')
     colors=[]
     for py in range(SIZE):
         for px in range(SIZE):
@@ -117,15 +122,16 @@ def artwork(raw):
             red=head or (torso and (y>7.85 or ax<(.32+.16*(y-5.45)))) or y<2.85
             # Lower arms and hands retain red; upper arms become predominantly blue.
             if ax>3.05 and y>6: red=True
-            # Preserve low-frequency lighting without preserving the original emblem.
+            # The clean pass uses solid panels. Original texel luminance contains
+            # webbing/emblem noise, so carrying it forward recreates dark speckles.
             lum=(r*3+g*6+b)/10
             shade=.60+.40*min(1,lum/19)
             base=(27,4,7) if red else (3,10,25)
-            color=tuple(round(v*shade) for v in base)
-            # Subtle woven blue texture; broad black webbing on red panels.
-            if not red and (px+py)%4==0:
+            color=((24,3,4) if red else (2,7,19)) if style=='clean' else tuple(round(v*shade) for v in base)
+            # Retain the earlier experiment exactly when explicitly requested.
+            if style=='legacy' and not red and (px+py)%4==0:
                 color=tuple(min(31,v+1) for v in color)
-            if red:
+            if style=='legacy' and red:
                 if head:
                     angle=math.atan2(x,max(.10,abs(z)))
                     web=abs(math.sin(angle*9))<.14 or abs(math.sin((y-8.5)*13))<.16
@@ -134,7 +140,7 @@ def artwork(raw):
                 if web: color=(max(4,color[0]//3),2,3)
             # Reuse known eye islands, not an arbitrary head-space rectangle.
             if head and min(r,g,b)>21:
-                color=(29,21,6)
+                color=(1,1,1) if style=='clean' else (29,21,6)
             # Long-legged spider emblem on front AND back (side test remains necessary).
             if torso and abs(z)>.25:
                 black=(ax<.065 and 7.15<y<7.8)
@@ -162,35 +168,46 @@ def artwork(raw):
 
 
 def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--style', choices=('clean','legacy'), default='clean')
+    parser.add_argument('--out', help='Private experiment folder inside build/')
+    parser.add_argument('--combined', action='store_true')
+    args=parser.parse_args()
+    dest=w.safe_output(mod.project_path(args.out)) if args.out else (
+        DEST if args.style=='clean' else mod.ROOT/'build/movie-suit-128')
+    if not dest.is_relative_to((mod.ROOT/'build').resolve()):
+        raise ValueError('Suit experiment outputs must stay in build/')
     _,glob,manifest=mod.load_clean()
     assets={e['name']:glob[e['offset']:e['offset']+e['size']] for e in manifest['entries'] if e['name'] in ('spd.nsbmd','spd.nsbtx')}
     raw=assets['spd.nsbtx']; a=TextureArchive.parse(raw)
     pixels=raw[164:4260]
     up=bytes(pixels[(y//2)*64+x//2] for y in range(128) for x in range(128))
     palette=raw[a.palette_start:a.palette_start+512]
-    painted,pal=artwork(raw)
+    painted,pal=artwork(raw,args.style)
     model=scale_model(assets['spd.nsbmd'])
     for label,indices,colors in [('control',up,palette),('painted',painted,pal)]:
         overlay={'spd.nsbtx':resize_i8(raw,indices,colors),'spd.nsbmd':model}
-        folder=DEST/label/'mods'; folder.mkdir(parents=True,exist_ok=True)
+        folder=dest/label/'mods'; folder.mkdir(parents=True,exist_ok=True)
         for name,data in overlay.items():
             path=folder/name
             if path.exists() and path.read_bytes()!=data: raise ValueError(f'Existing edit differs: {path}')
             w.atomic_write(path,data)
-        preview(overlay['spd.nsbtx'],DEST/label/'texture.png',4)
+        preview(overlay['spd.nsbtx'],dest/label/'texture.png',4)
         rgb=bytearray()
         for i in indices:
             color=w.u16(colors,i*2)
             rgb.extend((color>>s&31)*255//31 for s in (0,5,10))
-        render(rgb,128,DEST/label/'front-preview.png')
-    w.write_json(DEST/'experiment.json',{'texture_size':128,'texture_memory_bytes':16384,
+        render(rgb,128,dest/label/'front-preview.png')
+    w.write_json(dest/'experiment.json',{'texture_size':128,'texture_memory_bytes':16384,
                  'baseline_texture_memory_bytes':4096,'uv_commands':len(uv_offsets(assets['spd.nsbmd'])[1]),
                  'model_vertices_changed':False,'unknown_texture_dictionary_word':'preserved',
-                 'art':'Procedural body-space first-movie-inspired panels/webbing/emblem; not a replica',
+                 'art':('Solid movie-inspired panels, black lenses, elongated emblem; no fine webbing'
+                        if args.style=='clean' else 'Legacy procedural panels/webbing/gold lenses'),
+                 'style':args.style,
                  'exporter_zip_sha256':'2baa745de84f299086713b3f52392d3d5d5b100279d4c0fc745e9556722c32db'})
-    if '--combined' in sys.argv:
-        folder=DEST/'combined/mods'; folder.mkdir(parents=True,exist_ok=True)
-        sources=[DEST/'painted/mods'/n for n in ('spd.nsbmd','spd.nsbtx')]
+    if args.combined:
+        folder=dest/'combined/mods'; folder.mkdir(parents=True,exist_ok=True)
+        sources=[dest/'painted/mods'/n for n in ('spd.nsbmd','spd.nsbtx')]
         sources += [mod.ROOT/'build/qol-suits-menu/mods'/n for n in
                     ('spdB.nsbtx','American.strings','English.strings','MissionMiniMapIcon.pal')]
         payload={p.name:p.read_bytes() for p in sources}
@@ -198,7 +215,7 @@ def main():
             if not p.is_file() or p.name not in payload or p.read_bytes()!=payload[p.name]:
                 raise ValueError(f'Existing combined overlay differs: {p}')
         for name,data in payload.items(): w.atomic_write(folder/name,data)
-    print(f'Generated control and painted experiments: {DEST}')
+    print(f'Generated control and {args.style} experiments: {dest}')
 
 
 if __name__=='__main__': main()

@@ -4,6 +4,8 @@ Evidence date: 2026-10-02. Target: the private USA CS5E dump identified in
 `docs/VALIDATION.md`. `docs/ANALYSIS.md` remains the original confirmed inventory.
 Reports: `reference/roundtrip_report.json`, `reference/format_survey.json`, and
 `reference/visible_mod_report.json`. Generated asset data stays in ignored folders.
+Entries below are dated research history; later sections supersede earlier
+pending-test statements. Current TASM stage-one evidence is at the end.
 
 ## NitroFS / ROM — confirmed and tested
 
@@ -352,3 +354,204 @@ envelope round trips, all NSBTX round trips, and real ROM no-op/resize builds. S
    Use the identical BSP as a control. Resolve room-loader/entrance IDs before test-map routing.
 4. Investigate WoS string-tree/table candidates; use ACII as a lead, not a schema.
 5. Decode known PuCrunch UI assets and establish DAT/PAL relationships before editing tiles.
+
+## Movie cleanup, stable save association, and suit research — 2026-10-04
+
+The user supplied DeSmuME gameplay screenshots of the previous movie suit. Its
+black web pattern becomes disconnected dots at gameplay size. `movie_suit.py`
+now defaults to a clean body-space paint: mapped red RGB555 (24,3,4), blue
+(2,7,19), originally pale head eye islands (1,1,1), with the elongated emblem
+retained. Procedural webbing, woven dither and original-texel luminance modulation
+are removed; carrying original luminance retained the old texture's noisy detail.
+Unmapped texels use the original. This changes artwork, not the binary schema.
+128 I8 size and bounded scaled-UV model are unchanged from the earlier experiment.
+Explicit legacy art generation reproduced the prior texture byte-for-byte.
+
+The clean combined overlay retains the white alternate texture, both English menu
+assets and yellow mission palette exactly. Only spd.nsbtx differs from the earlier
+movie combined overlay. The six assets are promoted into private regular mods/.
+Stable and isolated builds share SHA256
+02e39959f69904e2fd5e2a756ebac3874b8dd3d4b34a9e310e350928361fbd88;
+all 3,733 resources verified. Final 1,800-frame melonDS run returned 0; inspected
+frame 1799 shows coherent solid red/blue opening gameplay. Offline preview confirms
+dark lenses. Full animation, crowded texture budget, alternate suit and DeSmuME
+Continue require manual checks. Full suite: 47 passing; seven affected tests rerun
+successfully after final color/helper guard changes. No unknown binary fields were
+assigned new meanings. See MOVIE_SUIT_EXPERIMENT.md for private evidence paths.
+
+Local DeSmuME inspection with no running emulator found five nonempty 634-byte
+Spider-Man DSV files, each associated with a different played ROM basename. All
+were preserved and hash-validated in named legacy snapshots. The latest movie-suit
+DSV matched recent-ROM entry 0 and was adopted into the stable modded ROM basename;
+source bytes retained, previous destination preserved before replacement. SHA256
+of adopted save: 548d4d8e6d7044b2299067de92c3d48c66896cd872abcb7f370b88d024938484.
+Checkpoint before-suit-cleanup is available. No save payload/footer/slot/checksum
+interpretation is introduced. Copy integrity is confirmed; Continue is unverified.
+
+tools/playtest.py remembers the inspected Battery directory in work/playtest.json,
+publishes build/Spider-Man-WoS-modded.nds, and uses existing opaque save snapshots
+before builds. Windows tasklist CSV inspection blocks save/build mutations while
+DeSmuME is running. It is a process preflight, not a lock against emulator relaunch.
+Four synthetic tests cover stable association, two-save preservation, checkpoint
+restore, repeated filename use, unchanged save bytes, process rejection, invalid
+paths/formats and corrupt snapshots. Save-state replay and arbitrary room jumps
+are not implemented. Details and PowerShell commands are in TESTING_WORKFLOW.md.
+
+Read-only new-suit research confirms only spd.xbd among player-prefixed actor
+definitions; no spdB.xbd appears in the manifest. There are 13 GroundAttack triplets
+(1..6, 11..17) and direct references to the existing launcher, dive, dash-slam,
+grapple and transform families. Their byte offsets/archive IDs are recorded in
+NEW_SUIT_DESIGN.md and private build/suit-research/bindings.json. One actor definition
+does not establish identical behavior in both forms or an absolute two-suit limit.
+Suit selection, model loading, form-dependent action routing, damage/hitbox/status
+fields, resource allocation and unlock persistence remain unknown. No XBD/GAB/GMB/
+SCA/ARM9 changes were made. Adding a third suit is a research objective, not a
+feature supported by the current replacement-only Glob tool. SUIT_CATALOG.md and
+SUIT_IDEAS.json document 66 visual/playstyle concepts and proposed abilities.
+
+## TASM 1 first action and save releases — 2026-10-04
+
+User chose TASM 1 first, authorizing either existing-red-form development or a
+third slot. The practical first release develops the red form. Selected backlog
+is persisted in SUIT_ROADMAP.json; active kit and staged work in NEW_SUIT_DESIGN.md.
+This entry supersedes the earlier no-gameplay-edit/Continue-pending statements.
+
+### GAB record boundaries
+
+All 227 GAB files contain whole 6-byte LE `<HHH>` records before the already
+observed three-ffff terminator and optional two-byte zero padding. Total: 475
+records. The first word is nondecreasing within every file; its interpretation
+as an event time/frame is a hypothesis. Second/third words are unknown event/
+parameter candidates. In particular `(time,1,5)` is not proven damage or a hit.
+`Gab.parse` now exposes these tuples, retaining the original byte stream.
+All 227 parse/serialize round trips pass; synthetic tests cover empty, single,
+multiple records, alignment padding and malformed partial records.
+
+### Player executable and read-only observations
+
+The unchanged ARM9 SHA256 is
+e541bfcd02441db86b43b8649aaa13570be301d302ddfb198804b78528d215dc.
+It contains names consistent with C++ RTTI, including `6Spidey` at runtime
+0x02129704 and `18SpideyStateMachine`. Inspection links the player type metadata
+to vtables 0x0212E3F0, 0x0212E40C and 0x0212E510. A runtime object has these
+pointers at +0, +8, +20. In the opening room, object 0x022A2F28 points at +0x30
+to motion data 0x022A326C. These heap addresses are observations, not constants
+used to locate the player. `player_trace.py` finds a unique matching layout and
+bounds the motion pointer inside 4 MiB main RAM; harness use checks ARM9 identity.
+
+Read-only correlations within motion data: +0x230 holds the observed GMB archive
+ID, +0x23C its tested action-length candidate, +0x254 current action-ID candidate,
++0x178 increments every two emulator frames during the tested ground attacks.
++0x16C retains the last GAB ID, including after idle; it must not be treated as an
+always-current action. Labels remain bounded observations, not a full actor schema.
+Optional research disassembly used Capstone 5.0.9 installed only under ignored
+work/research-libs. Build, trace and archive tools remain Python standard library.
+No executable or RAM bytes are changed.
+
+### Synchronized red opener replacement
+
+Runtime tests show red opener GroundAttack11 (action candidate 56), alternate
+opener GroundAttack1 (candidate 55). `tasm_suit.py` changes spd.xbd IDs at 0x164,
+0x168, 0x16C from GroundAttack11's SCA/GMB/GAB 3371/3370/3369 to GroundAttack15's
+3383/3382/3381. Only these three low bytes differ. Size stays 2,024; other bindings,
+opaque tail and footer stay identical. This is one actor-asset experiment.
+
+Paired single-attack traces: both begin at emulator frame 1700 in action 56;
+baseline returns to idle at 1744, modified at 1724 (44 -> 24 frames). Captures
+show the compact low kick. Repeated Y continues to actions 57/58/59 and idle,
+using original successor GMB IDs 3373/3376/3379. L transformation displays the
+white alternate form and Y still selects original GMB 3367. Hit/damage/range,
+interruptions, bosses, room transitions and long-play behavior remain unmeasured.
+Exact evidence, replay commands and private paths: TASM1_IMPLEMENTATION.md.
+
+Rejected isolated experiment: decoded GroundAttack11.gmb u16@0 changed 30 -> 36
+and literal-reencoded. Paired frames had unchanged clock/pose/duration. This is
+not a proven speed control; field meaning remains unknown. No GMB/GAB/SCA edits
+are in the release. Combined seven-asset ROM SHA256:
+3c7ec9a5342a80bc20d6b9d058b2b8bfa029ee670d9d42b50a0642122fa9907c.
+All 3,733 resources verified. Full suite: 55 tests passed in 75.744 seconds;
+published-ROM boot/attack/idle and read-only battery resume test also returned 0.
+
+### DeSmuME wrapper and automatic maintenance
+
+Primary format sources: [DeSmuME dsv.txt](https://raw.githubusercontent.com/TASEmulators/desmume/master/desmume/doc/dsv.txt)
+and [mc.cpp](https://raw.githubusercontent.com/TASEmulators/desmume/master/desmume/src/mc.cpp).
+The last 40 bytes are six LE u32 followed by the 16-byte cookie
+`|-DESMUME SAVE-|`. Source names describe written size, padded size, unused save
+type, address size, unused save size, version (observed zero). Payload is the
+first padded-size bytes; intervening wrapper text/bytes remain opaque and retained.
+All five local 634-byte Spider-Man DSVs have footer words (1,512,1,1,512,0), a
+512-byte payload and 82 intervening bytes. Written-size=1 must not be interpreted
+as one byte of game progress. Game save checksums/slots/room IDs remain unknown.
+`desmume_save.py` validates this bounded v0 wrapper and round-trips every byte.
+
+The isolated melonDS core exposes 512-byte save RAM after load; source-backed
+installation through retro_get_memory_data(0) occurs before its first frame.
+Current payload copy successfully resumes in the early Residential save room.
+Source: [melonDS DS v1.1.5 sram.cpp](https://raw.githubusercontent.com/JesseTG/melonds-ds/v1.1.5/src/libretro/sram.cpp)
+and [core.cpp](https://raw.githubusercontent.com/JesseTG/melonds-ds/v1.1.5/src/libretro/core/core.cpp).
+The harness never writes its result to the source save.
+
+`Play Spider-Man.cmd` invokes configured DeSmuME with the stable ROM, making a
+pre-play snapshot. `playtest.py build` validates/snapshots current progress, builds
+a candidate, rechecks process/save state, retains the previous ROM under its hash
+in build/releases, then atomically publishes the same stable filename. Synthetic
+tests cover changed/invalid saves blocking publication, rollback retention and
+launcher paths as well as earlier preservation/process guards. Before-tasm1 and
+opening-save-room checkpoints were created. Real stable save SHA256 remains
+548d4d8e6d7044b2299067de92c3d48c66896cd872abcb7f370b88d024938484 after release.
+Native DeSmuME acceptance remains a player check; process detection is not a lock.
+
+## Purchased Red-tab inventory and approval plan — 2026-10-04
+
+User reports Snap Sweep works. They explicitly permit the free base opener, but
+require every future move to replace a purchased red-suit skill with a new name
+and comparable power. They requested a plan and will approve entries before
+implementation. TASM1_UPGRADE_PLAN.md/.json record proposals; no further ROM,
+overlay or executable changes are made in this audit.
+
+Clean localized names/descriptions were read with the existing verified decoder.
+The unchanged stage-one ROM was replayed with a private current-save copy, opened
+through Pause -> Powers & Stats, and its Red tab inspected. Confirmed seven slots:
+
+| Name/list/description text IDs | Original | Observed cost |
+|---|---|---:|
+| 183/184/185 | Web Kick | 100 |
+| 186/187/188 | Web Launch | 200 |
+| 189/190/191 | Mid-Air Snare | 600 |
+| 192/193/194 | Spider Dance | 400 |
+| 195/196/197 | Scissor-Kick Special | 600 |
+| 198/199/200 | Amazing Speed Boost | 800 |
+| 201/202/203 | Ultimate Speed Boost | 1,000 |
+
+Both Suits has the shared launcher, enemy kick-off, roll kick, stomp, air dodge,
+enhanced dodge and quick recovery; these are not red-specific replacement slots.
+Reinforced Web is distinct progression functionality: clean text 377 confirms
+heavy-object obstacles become grappleable on acquisition. Preserve that function
+and acquisition gate along with core Web Grapple/Zip/Pull.
+
+Proposed list/tooltip titles were encoded and decoded in memory: all 14 names
+fit their original allocations; all other 1,035 text entries stayed unchanged.
+Longer early names Web Rebound/Lizard Vault/Slingshot Strike exceed their native
+slots, so the proposed menu labels use Rebound/Web Vault/Sling Strike. No text
+overlays were written. Tooltip Rebound (Combo) stays shorter than the list name
+Rebound Barrage, as the native Scissor labels also differ.
+
+Purchase flag addresses, prerequisite masks, numeric speed effects, hit damage
+and cancel semantics remain unmapped. Runtime prices do not decode their data
+layout. Proposed effects/tradeoffs require paired hostile-target tests after
+approval; they are not claimed equivalent or implemented yet.
+
+Important alias: Snap Sweep's logical base GroundAttack11 binding now selects
+GroundAttack15 payloads. The paid action also binds those payloads. Editing the
+shared assets can affect the free opener; preserve them and change paid logical
+routes independently. Gate testing must cover both owned and unowned slots.
+
+Private evidence: work/upgrade-research/source.json and input schedules;
+build/boot-tests/Spider-Man-WoS-modded-3c7ec9a5/red-skill-inventory and
+shared-skill-audit. Research save-copy hash:
+3367385a2fa73ee66b0c6b601a3e1d0acab04595762a169f5f1c0795f84ad183.
+The real battery changed independently during this read-only audit; preserve the
+latest closed-emulator bytes rather than replacing them with the earlier copy.
+Stable ROM still hashes to
+3c7ec9a5342a80bc20d6b9d058b2b8bfa029ee670d9d42b50a0642122fa9907c.
