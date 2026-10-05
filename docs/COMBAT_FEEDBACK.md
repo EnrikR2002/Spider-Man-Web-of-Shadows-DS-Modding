@@ -1,5 +1,10 @@
 # Combat feedback and Rebound juggle revision
 
+Historical release evidence. The current user-requested replacement removes all
+damage panels and the COMBO label, uses a transient small number and enemy health
+bars, and fixes the training refill. See [COMBAT_HUD.md](COMBAT_HUD.md) and
+[TASM1_SLING_STRIKE.md](TASM1_SLING_STRIKE.md). Rebound's higher/closer tuning remains.
+
 2026-10-04. Web Vault is now **player-confirmed**. Its brief aerial window remains
 an early setup; reliable paid pursuit/control belongs in the expanded kit roadmap.
 This release adds readable combat numbers and the requested Rebound trajectory.

@@ -1,0 +1,114 @@
+[
+  {
+    "buttons": [
+      "A"
+    ],
+    "end": 726,
+    "start": 720
+  },
+  {
+    "buttons": [
+      "A"
+    ],
+    "end": 846,
+    "start": 840
+  },
+  {
+    "buttons": [
+      "A"
+    ],
+    "end": 966,
+    "start": 960
+  },
+  {
+    "buttons": [
+      "A"
+    ],
+    "end": 1086,
+    "start": 1080
+  },
+  {
+    "buttons": [
+      "A"
+    ],
+    "end": 1206,
+    "start": 1200
+  },
+  {
+    "buttons": [
+      "A"
+    ],
+    "end": 1326,
+    "start": 1320
+  },
+  {
+    "buttons": [
+      "Left"
+    ],
+    "end": 1506,
+    "start": 1500
+  },
+  {
+    "buttons": [
+      "Up"
+    ],
+    "end": 1600,
+    "start": 1560
+  },
+  {
+    "buttons": [
+      "X"
+    ],
+    "end": 1726,
+    "start": 1720
+  },
+  {
+    "buttons": [
+      "Down"
+    ],
+    "end": 2004,
+    "start": 2000
+  },
+  {
+    "start": 2000,
+    "end": 2004,
+    "buttons": [
+      "Down"
+    ]
+  },
+  {
+    "start": 2060,
+    "end": 2066,
+    "buttons": [
+      "Down"
+    ]
+  },
+  {
+    "start": 2120,
+    "end": 2126,
+    "buttons": [
+      "A"
+    ]
+  },
+  {
+    "start": 2460,
+    "end": 2498,
+    "buttons": [
+      "Right"
+    ]
+  },
+  {
+    "start": 2520,
+    "end": 2526,
+    "buttons": [
+      "B"
+    ]
+  },
+  {
+    "start": 2540,
+    "end": 2550,
+    "buttons": [
+      "Y"
+    ]
+  }
+]

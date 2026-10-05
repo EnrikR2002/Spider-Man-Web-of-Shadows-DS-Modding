@@ -1,9 +1,13 @@
 {
-  "profile": "tasm-combat-feedback",
+  "profile": "tasm-combat-flow",
   "required_overlays": {
-    "American.strings": "f8d4acb0ad9d4029a7c6a8bcbfa9b9bb2526eed0e67a45cbddb7460b591fe5ea",
-    "English.strings": "f8d4acb0ad9d4029a7c6a8bcbfa9b9bb2526eed0e67a45cbddb7460b591fe5ea",
+    "American.strings": "b11101a6d882071bf6fe191199a1d3a9f925648f67aabac5cc3a708bdcd0e4a3",
+    "English.strings": "b11101a6d882071bf6fe191199a1d3a9f925648f67aabac5cc3a708bdcd0e4a3",
+    "MissionMiniMapIcon.pal": "5072156a663205facf22310c98913e01febb028c74edd1c196e7db26985b5787",
+    "spd.nsbmd": "8ddbdac95ba919b50d4c107f491936b10eea2ae65b2117ed1a6d9fa0ce6f5ad0",
+    "spd.nsbtx": "62052b3cd8034c11e28c44de9b6d1b1bf36f6298d8fbfb0315bd92a7f2244948",
     "spd.xbd": "22bd8c3771aa9e09f66d1869f260fc4e49e394c7ff1a33877d0b92190d7c0d4d",
+    "spdB.nsbtx": "ce8689e1bbea96ded0625858d7aefb8ee70bddf5d536cbb2e90e513b78f5b3f0",
     "spd_GrapplePullAttackKick.gmb": "8ac2df995f5b4089fd25ca8902f93ce0225697cffbe3b7f3e4886f63826e946a",
     "spd_GrapplePullAttackKick.sca": "640f57d4652983c8838a45a7a9b590de01c734cfca86a1c69da82da446798936",
     "spd_GrapplePullBack.gmb": "7e1f3392a63b410564725abf43e209093c77887e38814307c009fd3a81a9a180",

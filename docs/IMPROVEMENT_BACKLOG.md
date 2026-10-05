@@ -24,7 +24,7 @@ or persistent state. Confidence distinguishes known editing surfaces from ideas.
 | Idea | Impact | Effort | Evidence, cost or limitation |
 |---|---|---|---|
 | Numeric combo meter visible from the first gain | High feedback | M | Native model mapped; current HUD extension implements a composite meter value, not a hit counter |
-| Actual dealt/taken HP instances and running totals | High feedback/balance | M-L | Current pass hooks both health paths and renders compact HUD readouts; attribution, world anchoring and broader enemy coverage need further checks |
+| Actual dealt/taken HP instances and running totals | High feedback/balance | M-L | Private HP telemetry remains for balance; visible damage numbers were removed per player request. Common health bars are implemented; specialized coverage needs further checks |
 | Damage/feedback display options in a proper native menu | Medium-high accessibility | M-L | UI strings are editable, but widget routing and persistent option storage remain research; avoid hijacking language/audio flags |
 | Reliable paid air pursuit with a short input buffer | Very high combat feel | M-L | Vault hop/input route known; buffer, target validity, per-launch limits and ceiling collision need engine work |
 | A distinct hit-count readout beside the combo resource | Medium-high feedback | M | Requires confirmed contact events; the existing gauge is not a hit count and should not be relabelled |
@@ -64,3 +64,22 @@ The DS screen, tile/VRAM allocation, heap headroom and bounded update cost are
 real constraints. Current extension reserves 16 KiB from the main heap; no
 general promise of higher-resolution HUD art or an unlimited number of effects
 follows from successfully adding a few numbers.
+
+## Implemented small changes in the compact HUD / Sling release
+
+English/American Rebound/Vault/Sling inputs and four native prerequisites are
+clearer; the requested mission marker is red again; the training dummy restores
+full native maximum health after defeat. Damage panels are removed in favor of
+small wounded-enemy bars and a transient numeral. Prices/difficulty/objective
+text were not changed without a measured need. See COMBAT_HUD.md and
+TASM1_SLING_STRIKE.md. Orbit Breaker adds a late-game acrobatic area-finisher
+proposal to the expanded roadmap; no new progression is granted.
+
+## Implemented player-feedback combat-flow revision
+
+Continuous health bars fix the native bitmap layout and per-shape canvas height.
+Web Vault matches the successful common target's rise and removes incoming drift;
+Sling makes a visible passing kick, stops and turns back. HUD rendering skips idle
+work, checks prior owned rectangles, caches projection scale and warms the font.
+Whole-core timings stayed roughly flat; do not claim a proven FPS/hitch fix.
+See COMBAT_FLOW.md for measured evidence and remaining player checks.

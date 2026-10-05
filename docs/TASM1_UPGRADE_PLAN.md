@@ -3,11 +3,11 @@
 2026-10-04. Latest direction: [one expanded TASM 1/2 kit](TASM_EXPANDED_ROADMAP.md)
 with 10+ paid tools and flexible prices; additions remain ideation. This document
 retains the approved incremental native-slot path. Rebound's new higher/closer
-launch and current damage/combo feedback are documented in COMBAT_FEEDBACK.md.
+launch remains; the current compact HUD is documented in COMBAT_HUD.md.
 
-**Approved by the user; Rebound and Web Vault implemented; five entries pending.**
+**Approved by the user; Rebound, Web Vault and Sling Strike implemented; four entries pending.**
 The inventory below was collected before implementation. Current release evidence
-is in [TASM1_WEB_VAULT.md](TASM1_WEB_VAULT.md) and [TASM1_REBOUND.md](TASM1_REBOUND.md). Snap Sweep was confirmed working by
+also includes [TASM1_SLING_STRIKE.md](TASM1_SLING_STRIKE.md) and is in [TASM1_WEB_VAULT.md](TASM1_WEB_VAULT.md) and [TASM1_REBOUND.md](TASM1_REBOUND.md). Snap Sweep was confirmed working by
 the user and remains the free base opener.
 
 ## Inventory and proposed replacements

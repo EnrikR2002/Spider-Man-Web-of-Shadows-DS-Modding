@@ -35,7 +35,7 @@ changes may require special compatibility tests or disposable saves. Back up fir
 The automated harness can load an isolated battery copy with `--save`; it never
 writes back to that file. Fresh-game captures do not require restarting progress.
 
-### Current release workflow: combined TASM feedback release
+### Current release workflow: matched Vault, passing Sling and continuous bars
 
 `playtest.py build` validates the current DSV wrapper, snapshots it, builds to a
 candidate path, rechecks that DeSmuME is closed and the save is unchanged, retains
@@ -49,22 +49,23 @@ to configuration. `Play Spider-Man.cmd` changes into its own project directory.
 
 Current named checkpoints: `before-suit-cleanup`, `before-tasm1`,
 `opening-save-room`, `before-rebound`, `before-web-vault`, and the latest
-`before-combat-feedback`. Ask the agent to return to a named point; restoration retains
+`before-compact-hud-sling` and `before-combat-flow`. Ask the agent to return to a named point; restoration retains
 displaced progress first. More points become available as real in-game saves are
 recorded. No arbitrary room warping or save-field editing is implemented.
 
-The adopted progress successfully resumed in the early Residential save room in
-melonDS DS using a read-only payload copy. Native DeSmuME Continue remains the
+The latest real progress successfully resumed in the Sewer save room in
+melonDS DS using a read-only payload copy (417 XP, bits13/14/15 owned). Native DeSmuME Continue remains the
 player's final acceptance check. The current regular overlay includes Snap Sweep,
-purchased Rebound and Web Vault, plus the bounded combat-feedback HUD extension.
-ARM9 retains Rebound's two impulse data edits and the five-instruction native
-launch-event hop call.
+purchased Rebound, Web Vault and Sling Strike, plus the compact combo/enemy-bar HUD. The combat-flow revision matches Vault lift, stops/turns Sling, fixes bar layout and reduces render work; see COMBAT_FLOW.md.
+ARM9 composes Rebound response edits and a successful-launch post-dispatch
+hook that matches the common target's upward velocity and removes horizontal drift.
 The exact recipe is `reference/gameplay_profile.json`; missing or changed required
 overlays block a build rather than silently dropping part of the move. See
-`COMBAT_FEEDBACK.md`, `TASM1_WEB_VAULT.md` and `TASM1_REBOUND.md`. Earlier
-asset/test counts are historical; the current full suite passes 86 tests. Original Web Kick ownership carries over
+`COMBAT_FLOW.md`; initial evidence is in `COMBAT_HUD.md`, `TASM1_SLING_STRIKE.md`,
+`TASM1_WEB_VAULT.md` and `TASM1_REBOUND.md`. Earlier
+asset/test counts are historical; the current full suite passes 96 tests. Original Web Kick ownership carries over
 through native saving; Web Launch ownership carries over as Web Vault. Native
-refund and repurchase/save/reload checks pass for both released replacements. The live battery is never edited.
+refund and purchase/save/reload checks cover the three released replacements. The live battery is never edited.
 
 ### Where features live
 
@@ -131,7 +132,7 @@ Keep an additional copy on another drive for important progress. Local snapshots
 are not protection against disk loss. The emulator must stay closed throughout
 restore: this tool cannot lock it out or stop it from overwriting a restored file.
 
-## Stable playtest command — 2026-10-04
+## Stable playtest command â€” 2026-10-04
 
 Use **one everyday filename**, `build/Spider-Man-WoS-modded.nds`. You may retain
 isolated experiment ROMs for comparison, but normal accepted features go into
@@ -313,6 +314,8 @@ BSP/OBJ geometry, save payloads and arbitrary room routing remain unknown.
 GMB channels/root movement, SCA pools/joint matrices, purchase records and combo
 credit now have tested mappings. Read ORIGINAL_GAMEPLAY.md, COMBO_ENGINE.md,
 UPGRADE_ENGINE.md and ANIMATION_RESEARCH.md before changing another paid move.
-The next approved incremental gameplay replacement is Sling Strike; controlled
-owned/locked aerial input, hit-budget and collision tests must precede its release.
-Read `docs/TASKS.md` and `docs/COMBAT_FEEDBACK.md` before changing the current recipe.
+Sling Strike is released and agent-tested; player feel and unusual collision
+checks remain open. The next approved replacement is Oscorp Rush / Spider Dance,
+400 XP. Trace its owned/locked pause-input string and shared asset routes first.
+Read `docs/TASKS.md`, `docs/COMBAT_HUD.md` and `docs/TASM1_SLING_STRIKE.md` before
+changing the current recipe. COMBAT_FEEDBACK.md preserves the historical panels.

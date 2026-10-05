@@ -2,7 +2,7 @@
   "schema_version": 1,
   "date": "2026-10-04",
   "status": "incremental-implementation",
-  "scope": "Seven approved Red-tab replacements. Rebound and Web Vault implemented; five remain pending. Expanded TASM 1/2 design is tracked separately.",
+  "scope": "Seven approved Red-tab replacements. Rebound, Web Vault and Sling Strike implemented and agent-tested; four remain pending. Expanded TASM 1/2 design is tracked separately.",
   "expanded_design_reference": "TASM_EXPANDED_ROADMAP.md",
   "free_exception": "Snap Sweep remains the existing base opener",
   "gate_contract": "Native purchase bits13..19, original costs and dependencies retained. Existing purchases carry over.",
@@ -50,7 +50,8 @@
       "tradeoff": "Aerial pursuit replaces grounded safety; no extra damage or launch height; shared air skills still require their own purchase",
       "implementation_research": "Purchase gate, launch/air transition, resistance and ceiling/room collision",
       "status": "implemented",
-      "implementation_reference": "TASM1_WEB_VAULT.md"
+      "implementation_reference": "TASM1_WEB_VAULT.md",
+      "feedback_revision_reference": "COMBAT_FLOW.md"
     },
     {
       "id": "sling-strike",
@@ -70,7 +71,9 @@
       "proposal": "Committed aerial fly-by kick, passing to the far side when space allows",
       "tradeoff": "Repositioning replaces sustained target control; comparable total damage; no added targeting range or airtime reset",
       "implementation_research": "Purchase gate, native aerial hit budget, target approach, far-side collision and repeat limits",
-      "status": "approved-pending"
+      "status": "implemented-agent-tested",
+      "implementation_reference": "TASM1_SLING_STRIKE.md",
+      "feedback_revision_reference": "COMBAT_FLOW.md"
     },
     {
       "id": "oscorp-rush",

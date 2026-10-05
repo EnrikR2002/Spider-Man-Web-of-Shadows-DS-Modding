@@ -7,7 +7,7 @@ Reports: `reference/roundtrip_report.json`, `reference/format_survey.json`, and
 Entries below are dated research history; later sections supersede earlier
 pending-test statements. Current TASM stage-one evidence is at the end.
 
-## NitroFS / ROM — confirmed and tested
+## NitroFS / ROM â€” confirmed and tested
 
 The clean 64 MiB image contains two FAT entries, both starting on 0x200 boundaries:
 
@@ -36,7 +36,7 @@ original capacity. This policy is for the observed DS/no-overlay layout, not arb
 DSi/overlay ROMs. Exact no-op identity and grow/shrink/zero-length resources are tested.
 Container resizing does not establish that an engine format accepts the changed data.
 
-## Glob.bin — confirmed and tested
+## Glob.bin â€” confirmed and tested
 
 | Location | Structure |
 |---|---|
@@ -59,9 +59,9 @@ All 3,733 resource sizes/hashes were checked from extracted files and rebuilt da
 This independently agrees with the offset/list concept in the
 [ACII Discovery archive tool](https://gist.github.com/luatsenpai/f1a03c3a1eb9a94df2cc7b6ce7e88298).
 
-## NSBTX / TEX0 — structural parsing and palette editing tested
+## NSBTX / TEX0 â€” structural parsing and palette editing tested
 
-### Bounded player resolution experiment — 2026-10-03
+### Bounded player resolution experiment â€” 2026-10-03
 
 tools/movie_suit.py accepts only clean spd model/texture hashes. 64->128 I8 changes
 pixel pool from 4,096 to 16,384 bytes, shifts palette and empty compressed-pool
@@ -113,7 +113,7 @@ Both cold boots reached Residential gameplay in melonDS DS 1.1.5. At frame 1799,
 that this asset controls the visible red-suit player texture. No black-suit or
 full-playthrough claim is made. See `docs/VISIBLE_MOD.md` for reproduction/reversal.
 
-## XBD — outer envelope and actor resource bindings confirmed
+## XBD â€” outer envelope and actor resource bindings confirmed
 
 All 248 files pass the lossless envelope parser in `tools/custom_formats.py`:
 
@@ -155,7 +155,7 @@ of the same extension/tag while preserving every other byte. Synthetic edit/reve
 tests and all-file exact serialization pass. It does not add bindings or decode the
 opaque tail. Do not interpret these records as damage values or actor stats.
 
-## GAB / GMB / SCA — first differential pass
+## GAB / GMB / SCA â€” first differential pass
 
 GAB: all 227 files are multiples of 4 bytes and can be represented as LE u16 words.
 They end in three consecutive FFFF words, followed by two zero bytes in 96 files;
@@ -179,7 +179,7 @@ Header words at 4/8/12/16 are surveyed but retained as unknown. Treating words a
 general offset parser yet. No animation, collision-box, or combat-stat meanings are
 claimed. Next: compare decoded GMB data across numbered attacks before changing fields.
 
-## Compression wrappers — confirmed codecs, limited re-encoding
+## Compression wrappers â€” confirmed codecs, limited re-encoding
 
 `tools/grip_compression.py` implements bounded decoders and deterministic literal
 encoders for 10 and 60. PuCrunch structure was cross-checked against the
@@ -197,7 +197,7 @@ but is not intended as an optimal compressor. All 918 supported resources (769 G
 Handcrafted escaped-literal, RLE, short/long LZ, overlap, EOF, word-order and malformed
 stream tests also pass. Re-encoded streams have not been boot-tested in the engine.
 
-## BSP + paired OBJ — envelope/offsets confirmed, room semantics unknown
+## BSP + paired OBJ â€” envelope/offsets confirmed, room semantics unknown
 
 All 75 BSP files pass the lossless envelope parser:
 
@@ -230,9 +230,9 @@ Useful measured comparisons:
 These are differential facts, not proof that swapping an OBJ or loading a test room
 is safe. No room edit was made in this session.
 
-## STRINGS + FONT — compatibility lead only
+## STRINGS + FONT â€” compatibility lead only
 
-### Bounded English/American text slots — confirmed 2026-10-03
+### Bounded English/American text slots â€” confirmed 2026-10-03
 
 New local evidence supersedes the English/American "no text editor" status below.
 Both files have SHA256 19474ce9a50c25538515e585727e4ad5878bc3bb7bb11dd987b72a7c1d556088.
@@ -261,7 +261,7 @@ Griptonite archive behavior does not establish shared string layout. WoS text is
 still unparsed; take a runtime text sample/dump or identify tree/table relationships
 across all six languages before writing an editor. FONT encoding/glyph mapping is unknown.
 
-## 2LZ / DAT / PAL / CBMP — inventory plus compression progress
+## 2LZ / DAT / PAL / CBMP â€” inventory plus compression progress
 
 149/153 `.2lz` files are confirmed type-60 PuCrunch and decode/round-trip through
 the codec. Four start with 00: `DeathPalHealth`, `DeathPalPoison`,
@@ -274,7 +274,7 @@ General DAT tile/frame layout, PAL ownership, and CBMP dimensions/payload remain
 unknown. The 2026-10-02 survey made no custom UI edits. The following bounded
 minimap experiment adds evidence without establishing a general sprite schema.
 
-### Minimap investigation — 2026-10-03
+### Minimap investigation â€” 2026-10-03
 
 `tools/qol_minimap.py` accepts only hash-identified clean `SpideyMiniMapIcon` and
 `MissionMiniMapIcon` families. It preserves their DAT and compressed bytes verbatim.
@@ -323,7 +323,7 @@ Later inspection found 634 bytes in that file while DeSmuME remained running.
 Nonempty disk output is confirmed, but checkpoint validity/reload is not. No real
 save was backed up or modified; close the emulator normally, back up, and test Continue.
 
-## Opaque save snapshots — 2026-10-03
+## Opaque save snapshots â€” 2026-10-03
 
 `tools/save_backups.py` backs up/restores user-specified absolute `.sav`/`.dsv`
 paths without parsing, converting, or modifying their contents. No game save fields,
@@ -356,7 +356,7 @@ envelope round trips, all NSBTX round trips, and real ROM no-op/resize builds. S
 4. Investigate WoS string-tree/table candidates; use ACII as a lead, not a schema.
 5. Decode known PuCrunch UI assets and establish DAT/PAL relationships before editing tiles.
 
-## Movie cleanup, stable save association, and suit research — 2026-10-04
+## Movie cleanup, stable save association, and suit research â€” 2026-10-04
 
 The user supplied DeSmuME gameplay screenshots of the previous movie suit. Its
 black web pattern becomes disconnected dots at gameplay size. `movie_suit.py`
@@ -410,7 +410,7 @@ SCA/ARM9 changes were made. Adding a third suit is a research objective, not a
 feature supported by the current replacement-only Glob tool. SUIT_CATALOG.md and
 SUIT_IDEAS.json document 66 visual/playstyle concepts and proposed abilities.
 
-## TASM 1 first action and save releases — 2026-10-04
+## TASM 1 first action and save releases â€” 2026-10-04
 
 User chose TASM 1 first, authorizing either existing-red-form development or a
 third slot. The practical first release develops the red form. Selected backlog
@@ -503,7 +503,7 @@ opening-save-room checkpoints were created. Real stable save SHA256 remains
 548d4d8e6d7044b2299067de92c3d48c66896cd872abcb7f370b88d024938484 after release.
 Native DeSmuME acceptance remains a player check; process detection is not a lock.
 
-## Purchased Red-tab inventory and approval plan — 2026-10-04
+## Purchased Red-tab inventory and approval plan â€” 2026-10-04
 
 User reports Snap Sweep works. They explicitly permit the free base opener, but
 require every future move to replace a purchased red-suit skill with a new name
@@ -557,7 +557,7 @@ latest closed-emulator bytes rather than replacing them with the earlier copy.
 Stable ROM still hashes to
 3c7ec9a5342a80bc20d6b9d058b2b8bfa029ee670d9d42b50a0642122fa9907c.
 
-## Native combat mapping and purchased Rebound — 2026-10-04
+## Native combat mapping and purchased Rebound â€” 2026-10-04
 
 This section supersedes the earlier claims that GMB/SCA payloads and purchase
 flags are unmapped. The user approved the seven-slot plan and incremental releases.
@@ -758,3 +758,99 @@ Own extension code is checked by hash; normal tools need only stdlib. These are
 six known hooks, not a generalized decompiler, arbitrary code loader or camera
 projection API. Incidental enemy loss attribution and specialized health paths
 remain limits. No save payload or player persistent layout changed.
+
+# Compact HUD, camera projection and Sling Strike (2026-10-04)
+
+Confirmed against the hash-bounded CS5E runtime. Current details/evidence live in
+COMBAT_HUD.md and TASM1_SLING_STRIKE.md; older feedback findings remain historical.
+
+- Common enemy actor HP/max are +44/+48; motion pointer+30. The observer accepts
+  only updating actors whose vtable+150 points to 02049304. Native motion base
+  XYZ+7C/+80/+84 plus local XY+160/+164 form the observed world position;
+  motion+8C is the observed half-height. Rendering snapshots does not retain a
+  dereferenced actor object and drops stale records after two HUD updates.
+- Global02145C54 points to SideScrollCamera(vtable02130684); camera+3C points to
+  PerspectiveView(vtable02128A4C). View rotation matrix+C, eye+30/+34/+38,
+  aspect+8C and FOV sin/cos+94/+98 reproduce observed training projection.
+  Native020F961C transforms the world-minus-eye vector; 020FA840 divides Q12.
+  With depth=-viewZ, X=128+128*(viewX/depth*cotFOV/aspect),
+  Y=96-96*(viewY/depth*cotFOV). Bar top is projected half-height plus six pixels.
+  Other camera classes are unsupported rather than guessed.
+- Stock FontPaletteSprite entries3/15/2 are black/red/gray. Native font index0
+  produces the small numeral; index3 was the prior large readout. BG2 bitmap
+  canvas constructor02009328, XY020093F0, bitmap02009498 and flush02009398 work
+  for authored 24x4 4bpp bars. Tile IDs200..2FF are reserved for this canvas.
+- Enemy setter02049304 tests actor+88 bit4 and HP<=0, then native02049330
+  assigns40. Changing only that conditional instruction to ldrle actor+48
+  restores full native max HP in the training replay; ordinary enemies retain
+  the branch that bypasses this refill. Other bits remain unknown.
+- Mid-Air Snare's paid A route uses states30->31->51 and actions179/29->1/2/3
+  in the measured right-facing case. Direct Y is a separate normal aerial route.
+  Native gates at020B8EE4/020C76C0/020C7744 still query bit15; all records/prices
+  remain unchanged. The common receiver function02094658 receives a source-actor
+  reference in R2, retained in R5; its ordinary HP call is0209515C.
+- Action queue020728F0 loads the logical action and stores motion+258. The paid
+  source guard can replace requested action1 with3 after zip state31, preserving
+  all animation assets and native normal-air requests. A qualifying kick's
+  requested4096 loss becomes12288, replacing three native4096 follow-ups; the
+  light409 zip contact remains. Capped HP loss and requested loss remain distinct.
+- Actor+18/+1C are used by the native movement/collision path. Changing these
+  during contact alone did not move the player reliably and could amplify target
+  response. The accepted post-controller hook at02073B5C supplies three bounded
+  horizontal steps and stops on normal air recovery. It leaves vertical velocity
+  and coordinates intact; see the paired right/left landing traces. Hard walls,
+  ceilings and special targets remain explicit runtime checks, not assumed passes.
+- Authored Sling marker lives at extension state+680 (actor/countdown/confirmation).
+  HUD ctor clears through+700. The SDK source size remains3600 and the reserved
+  heap region4000; no game save bits or unknown purchase fields are repurposed.
+
+Tests: exact HUD-to-Vault and Sling-to-HUD edit/revert; every native purchase row;
+all NitroFS byte preservation; unchanged text slots and original red palette;
+92-test suite and3733-resource verification. A wall-position fixture put actors
+beyond the training floor and fell; it is not valid wall evidence. Normal-room
+traversal produced no AI contact, so broader normal-fight coverage stays open.
+
+# Player-feedback combat-flow revision (2026-10-04)
+
+Confirmed native canvas02009498 consumes source columns, each of height argument5;
+argument3 is source bits per pixel and argument4 is width. The former row-major
+24x4 buffer produced repeated fill chunks. Native tilemap0200931C is row-major
+32 cells: base+2*X+64*Y. Canvas+18 is the maximum drawn pixel height used by final
+flush02009398/02009A48, and SetXY020093F0 does not reset it. Resetting the next
+bar height accumulator after SetXY prevents numeral-height tail tiles escaping
+four-row dirty tracking. Moving-camera screenshots confirm no fragments. Other
+canvas fields remain known only to the extent described by traced consumers.
+
+Native reaction37 records at ARM9 tables119E20/11A600 have horizontal1434,
+vertical14336 Q12. Old accepted helper020BF164 supplied a smaller player hop;
+paired old RAM shows player8909 versus target13415 vertical velocity at3206.
+New hook after common target dispatch020C9314 accepts state40/bit14/common health
+ABI/native result4, calls that native hop helper, copies the target's positive
+actual vertical velocity and zeros target horizontal velocity. Native result4
+is an observed accepted-contact result; other enum values are unknown. Final
+right replay preserves205 Q12 player/target height difference and identical
+vertical velocity across3206..3240. Left-facing owned launch also matches.
+
+Sling keeps native queued action3 and12697 Q12 total request budget. Its own
+bounded movement marker stores contact targetX/direction/destination; native
+facing setter02072860 turns it back only after actual crossing. Controller fall
+and landing can precede motion action changes, so recovery handling checks that
+transition rather than discarding a still-active movement marker. A rejected
+prototype discarded the marker early and caused residual travel/landing roll.
+Final right/left replays stop and face the target; no new invulnerability exists.
+
+Own source3600/heap reserve4000 are unchanged. Nine8-byte dirty rectangles at
+state+700, count+6A0, render counters+6B0..6BC and cached projection scale+6C0..6C8
+are bounded within that reservation. Ctor clearing through+700 resets counts;
+rectangle contents are overwritten before use. Cheap observer02151920 filters
+nonmatching/full/dead actors before existing full observer02150B20. Rendered bars
+still use copied snapshots, never stale actor pointers. Font is warmed at room
+entry; rendering halves native HUD cadence and skips idle. Native game timing
+and ownership remain unchanged.
+
+96 tests pass; edit/revert restores exact historical Sling;3733 resources verified.
+Direct work counters show substantially fewer canvas passes/cell checks. Same-core
+wall benchmarks are roughly flat overall (means~4.1ms); they do not establish a
+DeSmuME FPS gain or prove the reported hitches are cured. Ordinary AI-density,
+bosses, walls/ceilings/interruption and real DeSmuME lag remain player checks.
+Current details/proof: COMBAT_FLOW.md, work/combat-flow/final-evidence.json.
