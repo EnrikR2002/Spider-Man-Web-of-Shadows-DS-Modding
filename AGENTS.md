@@ -58,14 +58,14 @@ Always distinguish implemented, agent-tested and player-confirmed behavior.
 
 ## Current gameplay authority
 
-2026-10-05 latest steering: FUN COMES FIRST. The user rejected the 26-skill
-catalog as overwhelming. Build one complete trickster-acrobat kit around bounce,
-zip, sling and web burst, with responsive attacks/escapes and a few consistent
-inputs. Prove the fun in a crowd with generous tuning and the full kit enabled
-in an isolated prototype. Defer prices, cooldowns, damage parity and progression
-until the loop earns player acceptance. No target skill count or separate
-purchases for basic movement/cancel/targeting usability. Native limits are not
-design ceilings. Real mechanics/choreography must make the identity visible.
+2026-10-05 latest steering: FUN COMES FIRST. Garfield's Spider-Man is
+spider-like, jumpy and acrobatic; the kit must combo strong enemies and
+web-resistant bosses, hit behind as well as in front, and let R cancel combos to
+reposition without losing them. Leave native abilities (A web, B jump, base
+strings/evade) untouched; change behavior only by rewriting the 7 Red purchase
+slots, gated on their ownership bits. Current design: TASM_ROADMAP "never stand
+still" (Leapfrog, Skyjack, Spider Perch, Split Decision, Spin Cycle, Spider
+Reflex, Spider-Sense). More Red skills/web tags later. Defer prices and balance.
 
 Develop one combined TASM1/2 kit at a time through red form. Selected later suits
 remain in reference/suit_roadmap.json. Preserve native ownership/dependencies,

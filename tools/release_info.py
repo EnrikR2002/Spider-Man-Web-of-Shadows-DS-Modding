@@ -38,6 +38,11 @@ PROFILE_INFO = {
               'red_prices': (50, 100, 150, 150, 200, 250, 350),
               'shared_prices': (25, 50, 100, 150, 50, 200, 150),
               'arm9_sha256': ARM9_SHA256},
+    # Red "never stand still" kit over v0.1.1 (tools/tasm_kit.py); same prices.
+    'tasm-v0.2.0': {'version': '0.2.0', 'date': '2026-10-05', 'kit': True, 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': '99392f5df4a0d2b37652ca5e0d040ae0d2a14702bd6a4fdfc1be3dbe0a91db77'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

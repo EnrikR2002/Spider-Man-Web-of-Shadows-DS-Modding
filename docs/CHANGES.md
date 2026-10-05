@@ -14,6 +14,47 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.2.0 - 2026-10-05 - "Never stand still" Red kit
+
+Published through Play Spider-Man.cmd's stable ROM. SHA256
+`935d486b93f4aadbd63cbe01c932c7c12f90dcab7c0b51fdfe5b42a002b18537`
+(ARM9 `99392f5d...`). Title and Options show v0.2.0. All seven Red purchase
+slots are rewritten (design: TASM_ROADMAP). Native A/B/strings/evade, Black form,
+shared purchases and unowned play keep native behavior; every hook checks Red
+form (actor+0x34 != 1) and the slot's existing ownership bit. Prices, ownership
+bits, dependencies and saves are unchanged.
+
+| Slot (bit, XP) | New skill | Implemented first version |
+|---|---|---|
+| Web Kick (13, 50) | Leapfrog | Native pull + kick connect (lower pop-up); Spidey front-flips over the target in six updates, lands 3 units past and turns back |
+| Web Launch (14, 100) | Skyjack | After the Web Vault launch both fall at quarter speed; Spidey drifts to stay within reach; air finisher (action 4) within reach spikes the target to the floor |
+| Mid-Air Snare (15, 150) | Spider Perch | Snare follow-ups become the stomp action while Spidey is held on the target's head; Y during the pound chains another pound; spring-off when it ends. Replaces Sling Strike (its hooks restored) |
+| Spider Dance (16, 150) | Split Decision | Branch hits 1-2 turn to an enemy behind (held Left/Right wins), sweep takes the nearest; Y+back continues the branch |
+| Scissor (17, 200) | Spin Cycle | Repeats run 10 more times; Left/Right steers; facing flips each loop so contacts alternate sides |
+| Amazing Speed (18, 250) | Spider Reflex | R cancels Red ground/air attack states immediately; held Left/Right turns and rolls, neutral dodges; the string node survives 28 updates so Y resumes at the next hit. Native speed bonus kept |
+| Ultimate Speed (19, 350) | Spider-Sense | R while an enemy within reach is in its attack state (15): Spidey appears behind it, facing it, straight into the heavy string kick (node 14). Native speed bonus kept |
+
+New authored animations (procedural FK/IK, Catmull-Rom curves) replace the Rush
+clips (Split Decision corkscrew/split kick/breakdance sweep) and add six routed
+clips: Reflex flip, handstand helicopter, perch pound, Leapfrog kick-vault,
+Skyjack axe kick and Spider-Sense tornado kick. Routing swaps an action's SCA only
+while its skill is active; native actions keep their bindings.
+
+Agent-tested (training room, copied save, disposable RAM; work/kit/evidence.json,
+20/20 checks): every mechanic above, including damage/contact and positions; Red
+bits cleared and Black-form inputs match v0.1.1 state/action/facing/position
+sequences up to a uniform one-frame load phase. Spider-Sense also triggered
+against live symbiote attacks in the Sewer room left of the save (story-room copy).
+Menu text, purchase and boot version visually checked. All 149 source tests pass;
+candidate regeneration is byte-identical. Real DSV `3f65dfac...` checkpointed and
+unchanged; v0.1.1 ROM and composition retained for rollback.
+
+Not yet player-confirmed: feel, readability, crowds/bosses, walls/ceilings,
+camera, heap headroom (reserve grew 16 -> 24 KiB) and Enhanced Dodge interplay
+(its native successive dodge can delay a Reflex resume). Perch requires a target
+the Snare can lock; Spider-Sense reads enemy state 15 only (other attack states
+unknown). No slow-motion or tingle marker yet.
+
 ## v0.1.1 - 2026-10-05 - Affordable Both Suits tools
 
 Published through Play Spider-Man.cmd's stable ROM. SHA256

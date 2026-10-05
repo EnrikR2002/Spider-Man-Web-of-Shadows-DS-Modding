@@ -1,0 +1,109 @@
+"""Red kit ARM9 extension, authored clips and v0.2.0 release composition (clean ROM)."""
+import struct
+import unittest
+import mod
+from tools import combat_profile as cp, release_info, tasm_kit as kit, wos_tool as w
+from tools import kit_clips
+from tools.kit_choreography import Clip, catmull
+from tools.sca import Sca
+from tools.qol_suits_menu import StringSlots
+
+
+class TasmKitTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.rom, cls.glob, cls.manifest = mod.load_clean()
+        cls.entries = {e['name']: e for e in cls.manifest['entries']}
+        cls.parent, _ = cp.apply_rom(cls.rom, release_info.PROFILE)
+        cls.kit, cls.log = kit.apply_rom(cls.parent)
+
+    def clean(self, name):
+        e = self.entries[name]
+        return self.glob[e['offset']:e['offset'] + e['size']]
+
+    def arm9(self, rom):
+        h = w.parse_header(rom)
+        return rom[h['arm9_offset']:h['arm9_offset'] + h['arm9_size']]
+
+    def test_code_is_pinned_and_fits_before_route_table(self):
+        code = kit.code_bytes()
+        self.assertEqual(w.sha256(code), kit.CODE_SHA256)
+        self.assertLessEqual(len(code), kit.ROUTE_OFFSET)
+        # Every installed hook lands on a branch-table entry.
+        for site, (offset, _) in kit.HOOKS.items():
+            word = struct.unpack_from('<I', code, offset)[0]
+            self.assertEqual(word >> 24, 0xEA, hex(site))
+
+    def test_kit_arm9_is_pinned_and_release_profile_matches(self):
+        self.assertEqual(w.sha256(self.arm9(self.kit)), kit.ARM9_SHA256)
+        released, _ = cp.apply_rom(self.rom, kit.RELEASE_PROFILE)
+        self.assertEqual(released, self.kit)
+        self.assertTrue(kit.uses_kit(kit.RELEASE_PROFILE))
+        self.assertFalse(kit.uses_kit(release_info.PROFILE))
+
+    def test_arm9_changes_are_confined_to_hooks_and_tables(self):
+        old, new = self.arm9(self.parent), self.arm9(self.kit)
+        allowed = set()
+        for site in (*kit.HOOKS, *kit.RESTORE):
+            allowed |= set(range(site - kit.BASE, site - kit.BASE + 4))
+        for at in kit.IMPULSES:
+            allowed |= set(range(at, at + 8))
+        allowed |= set(range(kit.COUNT_OFFSET, kit.COUNT_OFFSET + 4))
+        allowed |= set(range(kit.TABLE_POINTERS, kit.TABLE_POINTERS + 8))
+        allowed |= set(range(kit.ARENA_LOWER, kit.ARENA_LOWER + 4))
+        changed = {i for i in range(kit.SOURCE) if old[i] != new[i]}
+        self.assertTrue(changed <= allowed, sorted(changed - allowed)[:8])
+        for site, (_, original) in kit.HOOKS.items():
+            self.assertEqual(w.u32(old, site - kit.BASE), original)
+            self.assertEqual(w.u32(new, site - kit.BASE), kit.branch(site, kit.KIT_BASE + kit.HOOKS[site][0]))
+        # The prior HUD/flow image is carried byte-for-byte; the kit follows it.
+        self.assertEqual(new[kit.SOURCE:kit.SOURCE + kit.OLD_CODE], old[kit.SOURCE:kit.SOURCE + kit.OLD_CODE])
+        start = kit.SOURCE + kit.OLD_STATE_END
+        self.assertEqual(new[start:start + len(kit.code_bytes())], kit.code_bytes())
+        self.assertEqual(w.u32(new, kit.ARENA_LOWER), kit.TARGET + kit.RESERVE)
+        self.assertEqual(w.u32(new, kit.COUNT_OFFSET), kit.PARENT_COUNT + len(kit.EXTRA_NAMES))
+
+    def test_route_rows_name_appended_resources(self):
+        from tools import oscorp_resources as rush
+        names = [e['name'] for e in self.manifest['entries']] + [*rush.EXTRA_NAMES, *kit.EXTRA_NAMES]
+        self.assertEqual(len(self.manifest['entries']) + len(rush.EXTRA_NAMES), kit.PARENT_COUNT)
+        rows = kit.route_table()
+        for i, (action, route, name) in enumerate(kit.ROUTES):
+            self.assertEqual(struct.unpack_from('<3I', rows, i * 12), (action, route, names.index(name)))
+        self.assertEqual(rows[-12:], bytes(12))
+
+    def test_unknown_parent_and_double_apply_rejected(self):
+        with self.assertRaises(ValueError):
+            kit.apply_rom(self.kit)
+        with self.assertRaises(ValueError):
+            kit.apply_rom(self.rom)
+
+    def test_clips_match_native_sample_counts_and_bake_deterministically(self):
+        for target, (source, name) in kit.CLIP_SOURCES.items():
+            clip = kit_clips.CLIPS[name]
+            self.assertEqual(Sca.parse(self.clean(source)).frame_count, clip.samples, name)
+        first = kit.author_overlays(self.glob, self.entries)
+        again = kit.author_overlays(self.glob, self.entries)
+        self.assertEqual(first, again)
+        for target, data in first.items():
+            sca = Sca.parse(data)
+            self.assertEqual(sca.to_bytes(), data)
+            self.assertEqual(sca.joint_count, 37)
+
+    def test_curves_hit_their_keys_and_reject_unknown_channels(self):
+        keys = [(0, 0.), (3, 90.), (7, 10.)]
+        for t, v in keys:
+            self.assertAlmostEqual(catmull(keys, t), v)
+        with self.assertRaises(ValueError):
+            Clip('bad', 4, {'not_a_channel': [(0, 0.)]})
+
+    def test_release_text_is_encodable_and_roundtrips(self):
+        slots = StringSlots(self.clean('English.strings'))
+        changed = slots.repack(self.clean('English.strings'), kit.TEXT_EDITS)
+        for index, text in kit.TEXT_EDITS.items():
+            self.assertEqual(slots.decode(changed, index), text)
+        self.assertEqual(slots.repack(changed, {}), changed)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,9 +1,9 @@
 {
-  "profile": "tasm-v0.1.1",
-  "release_version": "0.1.1",
+  "profile": "tasm-v0.2.0",
+  "release_version": "0.2.0",
   "required_overlays": {
-    "American.strings": "e8cd7297b00921c175c39534fb78a22f9b3d8882724f56ff9e6ddb38f088e613",
-    "English.strings": "e8cd7297b00921c175c39534fb78a22f9b3d8882724f56ff9e6ddb38f088e613",
+    "American.strings": "9baa2dcc869600a847239ed3fa633836d048ed5f5a5875b38eb016ac1069c410",
+    "English.strings": "9baa2dcc869600a847239ed3fa633836d048ed5f5a5875b38eb016ac1069c410",
     "MissionMiniMapIcon.pal": "5072156a663205facf22310c98913e01febb028c74edd1c196e7db26985b5787",
     "spd.nsbmd": "8ddbdac95ba919b50d4c107f491936b10eea2ae65b2117ed1a6d9fa0ce6f5ad0",
     "spd.nsbtx": "62052b3cd8034c11e28c44de9b6d1b1bf36f6298d8fbfb0315bd92a7f2244948",
@@ -16,9 +16,15 @@
     "spd_GroundAttack16.gmb": "2c0b5fe895d3a1a689047ce0d24362df887b671beb50e51eddd0d4cb1d12f4a8",
     "spd_GroundAttack17.gmb": "dacdde46575d08c496c8d99903a027887195f3f8d0a41583fcbd5d9d61525197",
     "spd_GroundAttack17.sca": "782da8b35e252251b5759afbf00adb8a48a62ca0db397fb3b1d4cadfb41cc2e8",
-    "zz_tasm_RushBridge.sca": "cbe8b7f6a71f8ffc00909a2ca562c177776aa70840d174ec5092bfb51b3aea82",
-    "zz_tasm_RushEntry.sca": "4d443e8aa87748554bf327cab1bbeb9534046bc308dc9736b7a35f1a82ff0880",
-    "zz_tasm_RushFinish.sca": "c2b78a3567e273303be46e7f2b37877245e890eb36a76b709cde1aff96a1be06"
+    "zz_kit_LeapKick.sca": "8a45cff619a043c16bbe09a6354469aea2f3973eab89a41f6e12449ba7c2838e",
+    "zz_kit_PerchPound.sca": "eca9171e99aada96da200f66a4f808cb37e1627ba580e0ab8eae5fe509e6a584",
+    "zz_kit_ReflexFlip.sca": "916dd4f17d8c7476a5250809f96d8eb24e41a217af80df00221292f632f9bf25",
+    "zz_kit_SenseCounter.sca": "a823e0d707fa5f595f189fc5033b66d0cda7126695211f9d6a5e7f1759f880e1",
+    "zz_kit_SkyAxe.sca": "e3b58921800bc6c423305bc8e37ec018cfeef6cde87f6dce1e9f843007c37b66",
+    "zz_kit_Spin.sca": "5b4a8849878c78ab6614747846a6aa83251671b8fb0573e2aa1a0061ce186e1c",
+    "zz_tasm_RushBridge.sca": "c478f8775845e28d92cd48f8b645a794f0f35c4560b4063c9f47b0b09762466b",
+    "zz_tasm_RushEntry.sca": "ec653be102bd3f408ae147a7cdf8407ccf5eeadd9f0a4550156e7a307740f79b",
+    "zz_tasm_RushFinish.sca": "5766f0df098a5779dc45831febf703d82cba13c73bd7cf2f317f7f5178355771"
   },
   "schema_version": 1
 }

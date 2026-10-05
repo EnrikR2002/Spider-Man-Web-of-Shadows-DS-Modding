@@ -60,10 +60,13 @@ def overlay_files(directory: Path, names: list[str], *, added_names=()) -> dict[
 
 
 def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, bytes], *, rebound=False, gameplay_profile=None):
-    from tools import oscorp_resources as expansion, release_info
+    from tools import oscorp_resources as expansion, release_info, tasm_kit
     entries = manifest['entries']
     names = [e['name'] for e in entries]
-    extras=expansion.EXTRA_NAMES if gameplay_profile in (expansion.PROFILE, *release_info.PROFILES) else ()
+    extras=expansion.EXTRA_NAMES if gameplay_profile in (expansion.PROFILE, *release_info.PROFILES, tasm_kit.PROFILE) else ()
+    if tasm_kit.uses_kit(gameplay_profile):
+        extras=(*extras,*tasm_kit.EXTRA_NAMES)
+        if len(entries)+len(expansion.EXTRA_NAMES)!=tasm_kit.PARENT_COUNT: raise ValueError('Kit routes expect the Rush additions first')
     if set(overlay) - set([*names,*extras]) or 'GlobFiles.txt' in overlay: raise ValueError('Invalid overlay mapping')
     if extras:expansion.validate_extra(overlay)
     blobs, replacements, identical = [], [], []
@@ -196,12 +199,14 @@ def main(argv=None):
             from tools.combat_profile import load_recipe
             from tools import release_info
             profile = project_path(args.gameplay_profile)
-            from tools import oscorp_resources as expansion
+            from tools import oscorp_resources as expansion, tasm_kit
             added_names=()
             if profile.exists():
                 candidate_recipe=json.loads(profile.read_text(encoding='utf-8'))
-                if isinstance(candidate_recipe,dict) and candidate_recipe.get('profile') in (expansion.PROFILE, *release_info.PROFILES):
+                if isinstance(candidate_recipe,dict) and candidate_recipe.get('profile') in (expansion.PROFILE, *release_info.PROFILES, tasm_kit.PROFILE):
                     added_names=expansion.EXTRA_NAMES
+                if isinstance(candidate_recipe,dict) and tasm_kit.uses_kit(candidate_recipe.get('profile')):
+                    added_names=(*added_names,*tasm_kit.EXTRA_NAMES)
             overlay = overlay_files(project_path(args.mods), [e['name'] for e in manifest['entries']],added_names=added_names)
             if args.gameplay_profile == 'original':
                 gameplay = False

@@ -769,3 +769,75 @@ scroll/menu limits, spare persistent flags, save checksums and migration remain
 unproved. Event query/setter support 309..381 is not evidence that any unassigned
 looking bit is safe. The 26-tool catalog requires separately qualified ownership
 and crowd controller work; no new targeting/evasion/crowd mechanics are claimed.
+
+## Player state machine and Red kit hooks (v0.2.0)
+
+Updated 2026-10-05. Clean-ARM9 addresses; confirmed by disassembly plus paired
+emulator traces (work/kit/trace.py, training room, copied save, disposable RAM).
+Source/hooks: `tools/tasm_kit.{py,s}`; clips `tools/kit_{choreography,clips}.py`.
+
+### Transitions, states and inputs
+
+`SpideyStateMachine` (vtable `0x021352A4`; derived vtable `+0xA8` think
+`0x020AA3D4`) runs every update from `0x020776BC`: update `+0xA4`, think, apply.
+Normal think `0x020B4888` picks one transition list (default `0x021346FC`, air
+`0x0213478C`, plus `0x021346B4/0x02134590/0x02134560` by condition) and
+`0x020B4A7C` evaluates its pointer-to-member entries in order; the first result
+other than `0x7FFFFFFF` wins and `0x020CD1B0` applies it. Returning the current
+state means "stay"; controller byte `+4` = 1 forces a re-enter of the same state.
+Controller: `+0x08` updates in state, `+0x14` state, `+0x18` previous, `+0x28`
+input-command queue, `+0x44` actor, `+0x54` target interface (actor+4),
+`+0x64` flags (`0x8000` Scissor repeat; `0x40` set while dodging), `+0x80`
+string node, `+0x8C` evade lock, `+0x90` node keep-alive timer, `+0x93` repeat
+count. Queue commands (`0x020CFF0C` peek / `0x020CFC34` consume): 1 attack (Y),
+2 jump (B), 3 evade (R), 4 object (X). Ability query: actor vtable `+0x184`
+(bit) / `[[actor+0xE8]] & (1<<bit)`. Form: actor+0x34 = 1 Black.
+REG_KEYINPUT `0x04000130` gives held D-pad/R on ARM9 (X/Y are ARM7-only).
+
+| State | Meaning (observed) | State | Meaning |
+|---:|---|---:|---|
+| 0/1/4/5/6 | idle, walk, skid, duck, run | 15/19/24 | jump, fall, land |
+| 30/31/51 | Snare aim, zip, follow-up / air attack | 37/38 | grapple shoot/hold |
+| 40 | Web Launch (Vault) | 42/43 | web-kick pull / kick |
+| 46 | ground string | 47 | Y+back turn attack |
+| 52/53/54/57 | air dodge, dodge, Enhanced chain, roll | 63 | player hurt |
+
+Blockers: `0x020B52F8` (states 43..49) returns stay unless actor+0x28 = 1
+(animation cancel window) or, for 46, the node is cancelable; `0x020B7AA4` does
+the same for the air attack. Evade `0x020B5774` (generic path `0x020B5C28`):
+lock, then R → roll 57 (Down/running), Enhanced 54, air 55/52 or dodge 53.
+Y transition `0x020B6968` returns 47 for Y+back. Web-kick pull → kick switches
+at `0x020B6574` when the target is within `[0x021341F4+0x58]`.
+
+### Ground string nodes
+
+Node table `0x0211BB70 + 16*node`: {action, next, pause-next, flags(+9 cancel)}.
+Red: 11 Snap(56) → 12(57) → 13(58) → 14(59); pause branch 11 → 15(61) → 16(60)
+→ 17(62); node 16 repeats with Scissor. Black uses 5..10. String update
+`0x020C32D8` refreshes `+0x90`=10 every update, so the node survives 10 updates
+after leaving 46; entering 46 with a live node advances via `0x020C2F94`
+(alt branch if bit16 Red / bit23 Black and enough pause). Scissor limit
+`6+2*tier` (`0x020B5434`); `0x020B5464` is reached only on the Red bit-17 path.
+
+### Actions, resources and actors
+
+Action request `0x020728F0` (motion+0x258); commit `0x02070428` looks up the
+action record (`0x02001F44` → stack {SCA, NSBTA, ?, GMB, GAB, valid}) then sets
+SCA/GMB/GAB. Repeats of the same action skip the lookup unless motion+0x2FC bit1
+is set. Player actions: 1-4 air string, 5 back attack, 6 back handspring, 29 zip,
+45/46 grapple, 49/50 pull/kick, 51 launch, 56-62 string, 130 rapid stomp,
+133 roll, 139 side-step dodge. Positions: motion+0x7C/+0x80 plus locals
++0x160/+0x164; a teleport must also update actor copies +0x148/+0x180/+0x210/
++0x2CC or physics stalls. Velocity actor+0x18/+0x1C (Q12). Common enemies:
+`NormalEnemy` vtable `0x021301D0`, `EnemyStateMachine` `0x02133368`; attack
+state 15 (actions 55/63 seen). Training dummy flag 4 does not gate its AI.
+
+### Kit extension contract
+
+The kit is appended after the HUD/flow image: code at `0x02152C20`, route table
+`+0x1F00` (12-byte {action, kind, resource}), state `0x02154C20` (copied zeros),
+reserve 16 -> 24 KiB, Glob count 3736 + 6. Hooks are listed in `HOOKS`; Sling's
+contact site is restored to native. The enemy registry (12 slots, refreshed from
+the per-actor observer `0x02073A68`) is trusted for two ticks, so despawned
+actors are never dereferenced. Heap headroom after the larger reserve is not yet
+measured in dense scenes.
