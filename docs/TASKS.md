@@ -10,6 +10,8 @@ published through `python tools/playtest.py build` to
 seventeen guarded overlays. Published ROM, qualified candidate and a fresh
 regeneration from the published composition are byte-identical. Current evidence:
 `OSCORP_RUSH_ANIMATION.md`; initial motion release: `TASM1_OSCORP_RUSH.md`.
+Feature source, tools and evidence notes are committed and pushed to GitHub
+`main` as `572bfc9` (Author isolated Oscorp Rush with compact fighting choreography).
 
 - Rush400 XP/event325/bit16: Y, let Snap finish, Y,Y,Y enters jab-cross-hook,
   a knee/kick and overhand cross. All three paid clips are authored
@@ -279,5 +281,5 @@ be discussed later. Exact selection is in `SUIT_ROADMAP.json`.
   resources are verified. Stablef0382e98 matches the candidate and a fresh
   generation from the published profile. Latest84ede9fb DSV preserved exactly;
   before-rush-refine/before-build checkpoints and old ROM/active composition
-  retained. User authorized GitHub source commit/push. Player acceptance of this
+  retained. Feature source committed and pushed to GitHub main as572bfc9. Player acceptance of this
   revision remains open; next gameplay work remains authored Rebound Barrage.
