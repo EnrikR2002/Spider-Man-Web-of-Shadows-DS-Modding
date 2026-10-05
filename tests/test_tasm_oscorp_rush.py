@@ -55,7 +55,7 @@ class LocalRushTests(unittest.TestCase):
         with self.assertRaises(ValueError):t.apply_rom(self.rom)
         with self.assertRaises(ValueError):t.apply_rom(a)
         # Asset ownership is separate from logical action: only paid red 61/62.
-        catalog=json.loads((mod.ROOT/'docs/ORIGINAL_GAMEPLAY.json').read_text())
+        catalog=json.loads((mod.ROOT/'reference/original_gameplay.json').read_text())
         row=next(x for x in catalog['red_purchases'] if x['ability_bit']==16)
         self.assertEqual(row['cost'],400)
         self.assertNotIn('spd_GroundAttack15.gmb',r.ROOTS)

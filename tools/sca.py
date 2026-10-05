@@ -3,7 +3,7 @@
 Fixed timing, pool sizes, track descriptors, unknown header bytes and alignment
 bytes are preserved. Rotation editing rejects constant or aliased tracks. This
 does not edit movement physics, hit events, purchase routes or animation timing.
-Original loader/sampler evidence: docs/ANIMATION_RESEARCH.md.
+Original loader/sampler evidence: docs/TECHNICAL.md and archived ANIMATION_RESEARCH.md.
 """
 from dataclasses import dataclass
 import math

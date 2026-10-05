@@ -77,7 +77,7 @@ class LocalWebVaultTests(unittest.TestCase):
     def test_all_purchase_costs_flags_dependencies_and_shared_routes_stay_exact(self):
         changed,_ = cp.apply_rom(self.rom,'tasm-web-vault')
         start = struct.unpack_from('<I',self.rom,0x20)[0]
-        catalog = json.loads((mod.ROOT/'docs/ORIGINAL_GAMEPLAY.json').read_text())
+        catalog = json.loads((mod.ROOT/'reference/original_gameplay.json').read_text())
         for group in ('red_purchases','black_purchases','shared_purchases'):
             for item in catalog[group]:
                 at = start+item['record_address']-0x02000000

@@ -4,19 +4,20 @@ Historical Rebound/Web Vault profiles remain available as paired controls.
 The current flow profile composes matched Vault lift, bounded passing/turning
 Sling and continuous bars with reduced drawing through guarded own extensions.
 Purchase records and shared input routes stay native.
-See docs/COMBAT_FLOW.md; historical profiles remain for paired controls.
+See docs/TECHNICAL.md; historical profiles remain for paired controls.
 """
 from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
 import struct
-from tools import combat_feedback, combat_hud, tasm_sling_strike, combat_flow, training_refill, oscorp_resources
+from tools import combat_feedback, combat_hud, tasm_sling_strike, combat_flow, training_refill, oscorp_resources, release_info
 
 ARM9_SHA256 = 'e541bfcd02441db86b43b8649aaa13570be301d302ddfb198804b78528d215dc'
 REBOUND_ARM9_SHA256 = '3298417ae06c47571ea559ebe3e18d33da4ed6f3bfcdcb85025628c440438837'
 WEB_VAULT_ARM9_SHA256 = '6e563225538658c6c8437ede1886037132adc5ed865693727ef60457072529bf'
 KNOWN_ARM9_HASHES = (ARM9_SHA256, REBOUND_ARM9_SHA256, WEB_VAULT_ARM9_SHA256,
+                    *(info['arm9_sha256'] for info in release_info.PROFILE_INFO.values()),
                     combat_feedback.ARM9_SHA256, combat_hud.ARM9_SHA256,
                     tasm_sling_strike.ARM9_SHA256, combat_flow.ARM9_SHA256, training_refill.ARM9_SHA256, oscorp_resources.ARM9_SHA256)
 IMPULSE_OFFSETS = (0x11A2B8, 0x11AA98)
@@ -37,6 +38,10 @@ def identify_arm9(raw):
 
 def apply_rom(rom, enabled=False):
     if not enabled: return rom, []
+    if enabled in release_info.PROFILES:
+        parent, log = apply_rom(rom, oscorp_resources.PROFILE)
+        result, release_log = release_info.apply_rom(parent, enabled)
+        return result, log + release_log
     if enabled == oscorp_resources.PROFILE:
         parent,log=apply_rom(rom,'tasm-oscorp-rush')
         result,expansion_log=oscorp_resources.apply_rom(parent)
@@ -99,9 +104,11 @@ def load_recipe(path, overlay):
     if (not isinstance(data, dict) or data.get('schema_version') != 1 or
             data.get('profile') not in ('original', 'tasm-rebound', 'tasm-web-vault',
                                         'tasm-combat-feedback', 'tasm-readable-combat',
-                                        'tasm-sling-strike', 'tasm-combat-flow', 'tasm-oscorp-rush', 'tasm-oscorp-rush-authored')):
+                                        'tasm-sling-strike', 'tasm-combat-flow', 'tasm-oscorp-rush', 'tasm-oscorp-rush-authored', *release_info.PROFILES)):
         raise ValueError('Unsupported gameplay recipe')
     if data['profile'] == 'original': return False
+    if data['profile'] in release_info.PROFILES and data.get('release_version') != release_info.PROFILE_INFO[data['profile']]['version']:
+        raise ValueError('Versioned recipe version differs from its profile')
     required = data.get('required_overlays')
     if not isinstance(required, dict) or not required:
         raise ValueError('Gameplay recipe needs exact overlay hashes')

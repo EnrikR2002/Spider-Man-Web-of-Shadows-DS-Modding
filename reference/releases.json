@@ -1,0 +1,17 @@
+{
+  "releases": [
+    {
+      "date": "2026-10-05",
+      "previous_rom_sha256": "4d36970e7e06fae190ad27971ba6f85a5cfa74f0cad664f36c61c74455e0f65e",
+      "rom_sha256": "e1b66ebdad90856f7af5a508bd2bcd78ade0640c6926e6668da2c6b36cee1451",
+      "version": "0.1.0"
+    },
+    {
+      "date": "2026-10-05",
+      "previous_rom_sha256": "e1b66ebdad90856f7af5a508bd2bcd78ade0640c6926e6668da2c6b36cee1451",
+      "rom_sha256": "bcc6974a08b899a2def261b550b8bf9a31b005e201c7c4e276fc46dbf3e5d842",
+      "version": "0.1.1"
+    }
+  ],
+  "schema_version": 1
+}

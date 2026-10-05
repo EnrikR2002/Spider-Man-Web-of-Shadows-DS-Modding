@@ -45,8 +45,13 @@ class StringSlots:
         self.texts = tuple(self.decode(raw, i) for i in range(COUNT))
 
     def decode(self, raw, index):
-        start = self.offsets[index]
-        end = self.offsets[index + 1] if index + 1 < COUNT else len(raw)
+        if not 0 <= index < COUNT:
+            raise ValueError('String index out of range')
+        table = BASE + w.u32(self.raw, BASE)
+        start = BASE + w.u32(raw, table + index * 4)
+        end = BASE + w.u32(raw, table + (index + 1) * 4) if index + 1 < COUNT else len(raw)
+        if not table + COUNT * 4 <= start < end <= len(raw):
+            raise ValueError('Invalid string slot bounds')
         output = bytearray()
         node = 0
         for byte in raw[start:end]:
@@ -60,6 +65,51 @@ class StringSlots:
                     if len(output) % 2 == 0 and output[-2:] == b'\0\0':
                         return output[:-2].decode('utf-16le')
         raise ValueError(f'Unterminated string slot {index}')
+
+    def variant_offsets(self, raw):
+        """Validate a variant using the confirmed tree and relative-offset table."""
+        table = BASE + w.u32(self.raw, BASE)
+        if raw[:table] != self.raw[:table] or len(raw) < table + COUNT * 4:
+            raise ValueError('String prefix/tree differs from the confirmed profile')
+        offsets = tuple(BASE + v for v in struct.unpack_from(f'<{COUNT}I', raw, table))
+        if offsets[0] != table + COUNT * 4 or any(
+                not a < b <= len(raw) for a, b in zip(offsets, offsets[1:] + (len(raw),))):
+            raise ValueError('Invalid variant string slot bounds')
+        return offsets
+
+    def repack(self, current, edits):
+        """Grow selected slots; preserve the tree, unknown prefix and other slot bytes.
+
+        Oversized replacements retain the complete former slot after the new
+        terminated stream, preserving unknown trailing bytes. No-op is exact.
+        """
+        offsets = self.variant_offsets(current)
+        chunks = [current[a:b] for a, b in zip(offsets, offsets[1:] + (len(current),))]
+        for index, text in edits.items():
+            if not 0 <= index < COUNT:
+                raise ValueError('String index out of range')
+            if self.decode(current, index) == text:
+                continue
+            encoded = self.encode(text)
+            old = chunks[index]
+            chunks[index] = encoded + (old[len(encoded):] if len(encoded) <= len(old) else old)
+        table = BASE + w.u32(self.raw, BASE)
+        result = bytearray(current[:offsets[0]])
+        at = len(result)
+        for index, chunk in enumerate(chunks):
+            struct.pack_into('<I', result, table + index * 4, at - BASE)
+            result.extend(chunk)
+            at += len(chunk)
+        result = bytes(result)
+        new_offsets = self.variant_offsets(result)
+        for index in range(COUNT):
+            if self.decode(result, index) != edits.get(index, self.decode(current, index)):
+                raise ValueError(f'Repacked text round-trip failed: {index}')
+            if index not in edits:
+                a, b = new_offsets[index], new_offsets[index + 1] if index + 1 < COUNT else len(result)
+                if result[a:b] != chunks[index]:
+                    raise ValueError('Untouched text slot changed')
+        return result
 
     def encode(self, text):
         bits = []

@@ -67,7 +67,7 @@ class LocalFeedbackTests(unittest.TestCase):
         self.assertEqual(cp.identify_arm9(self.new),f.ARM9_SHA256)
 
     def test_purchase_records_and_native_gameplay_abis_are_unchanged(self):
-        catalog=json.loads((mod.ROOT/'docs/ORIGINAL_GAMEPLAY.json').read_text(encoding='utf-8'))
+        catalog=json.loads((mod.ROOT/'reference/original_gameplay.json').read_text(encoding='utf-8'))
         for group in ('red_purchases','black_purchases','shared_purchases'):
             for item in catalog[group]:
                 at=item['record_address']-f.BASE

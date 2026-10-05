@@ -134,6 +134,12 @@ def build(mods='mods', config=CONFIG, store=saves.STORE):
         raise ValueError('Battery save changed during build; keep DeSmuME closed')
     candidate = CANDIDATE.read_bytes()
     previous = ROM.read_bytes() if ROM.exists() else None
+    log_path = CANDIDATE.with_suffix('.build.json')
+    release_log = json.loads(log_path.read_text(encoding='utf-8')) if log_path.exists() else {}
+    version = release_log.get('release_version')
+    if version:
+        from tools import release_info
+        release_info.check_version_reuse(version, w.sha256(candidate))
     if previous is not None:
         rollback = RELEASES / w.sha256(previous) / ROM.name
         if rollback.exists() and rollback.read_bytes() != previous:
@@ -141,13 +147,16 @@ def build(mods='mods', config=CONFIG, store=saves.STORE):
         if not rollback.exists(): w.atomic_write(rollback, previous, (mod.DEFAULT_ROM,))
     w.atomic_write(ROM, candidate, (mod.DEFAULT_ROM,))
     if ROM.read_bytes() != candidate: raise ValueError('Published ROM differs from validated candidate')
-    log_path = CANDIDATE.with_suffix('.build.json')
     if log_path.exists(): w.atomic_write(ROM.with_suffix('.build.json'), log_path.read_bytes())
     w.write_json(RELEASES / w.sha256(candidate) / 'release.json', {
         'schema_version': 1, 'rom_sha256': w.sha256(candidate),
+        'version': version,
         'previous_rom_sha256': w.sha256(previous) if previous is not None else None,
         'battery_checkpoint': snapshot, 'stable_rom': str(ROM),
         'battery_sha256': w.sha256(saves.read_save(path)) if path.exists() else None})
+    if version:
+        release_info.register_release(version, w.sha256(candidate), date=release_log.get('release_date'),
+                                      previous=w.sha256(previous) if previous is not None else None)
     print(f'Always open: {ROM}')
     print(f'Continue uses: {path}')
     if snapshot:

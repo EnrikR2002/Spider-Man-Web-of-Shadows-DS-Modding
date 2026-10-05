@@ -12,7 +12,8 @@
     "sha256": "19474ce9a50c25538515e585727e4ad5878bc3bb7bb11dd987b72a7c1d556088",
     "slot_base": 0,
     "descriptions": "Authored paraphrases of native instructions; not a redistributed extracted string archive",
-    "reference": "ORIGINAL_GAMEPLAY.md"
+    "reference": "../docs/OG_GAMEPLAY.md",
+    "archived_reference": "ORIGINAL_GAMEPLAY.md"
   },
   "cost_units": "XP",
   "null_cost": "Not independently established here; never interpret null as free",
@@ -599,7 +600,8 @@
     "binary_flags_mapped": true,
     "exact_prerequisites_mapped": true,
     "refund_rules_verified": true,
-    "reference": "UPGRADE_ENGINE.md",
+    "reference": "../docs/OG_GAMEPLAY.md",
+    "archived_reference": "UPGRADE_ENGINE.md",
     "refund_evidence": "Native table and buy/refund code; actual Rebound bit13 UI refund 38 -> 138 XP"
   },
   "design_interpretations": {
@@ -622,6 +624,8 @@
   "native_upgrade_table": {
     "sha256": "e541bfcd02441db86b43b8649aaa13570be301d302ddfb198804b78528d215dc",
     "stride": 32,
-    "reference": "UPGRADE_ENGINE.md"
-  }
+    "reference": "../docs/OG_GAMEPLAY.md",
+    "archived_reference": "UPGRADE_ENGINE.md"
+  },
+  "historical_notes_archive": "../docs/archive/legacy-notes.zip"
 }

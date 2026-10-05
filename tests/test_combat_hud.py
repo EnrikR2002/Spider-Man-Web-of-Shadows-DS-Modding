@@ -60,7 +60,7 @@ class LocalReadableCombatTests(unittest.TestCase):
         with self.assertRaises(ValueError): h.apply_rom(self.hud)
 
     def test_all_native_purchase_and_shared_input_records_preserved(self):
-        catalog = json.loads((mod.ROOT/'docs/ORIGINAL_GAMEPLAY.json').read_text())
+        catalog = json.loads((mod.ROOT/'reference/original_gameplay.json').read_text())
         for group in ('red_purchases', 'black_purchases', 'shared_purchases'):
             for item in catalog[group]:
                 off = item['record_address'] - h.BASE

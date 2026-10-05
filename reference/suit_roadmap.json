@@ -1,0 +1,77 @@
+{
+  "active_suit": "tasm1",
+  "archived_expanded_design": "TASM_EXPANDED_ROADMAP.md",
+  "current_release": "0.1.1",
+  "expanded_design": "../docs/TASM_ROADMAP.md",
+  "historical_notes_archive": "../docs/archive/legacy-notes.zip",
+  "implemented_purchased_skills": [
+    "Rebound",
+    "Web Vault",
+    "Sling Strike",
+    "Oscorp Rush"
+  ],
+  "policy": "One combined TASM identity at a time. Fun comes first: a complete acrobatic crowd kit before skill counts, progression or balance. Existing public purchases/progress remain until an explicit qualified migration.",
+  "schema_version": 1,
+  "session_tasks": "../docs/TASKS.md",
+  "suits": [
+    {
+      "id": "tasm1",
+      "implemented": [
+        "clean panels and black lenses",
+        "Snap Sweep opening action",
+        "Rebound purchased Web Kick replacement (50 XP native ownership gate)",
+        "Web Vault purchased Web Launch replacement (100 XP native ownership gate)",
+        "Sling Strike purchased Mid-Air Snare replacement (150 XP native ownership gate), agent-tested; player check pending",
+        "Matched Web Vault rise, passing/turning Sling, continuous health bars and bounded HUD work; player revision check pending",
+        "Oscorp Rush purchased Spider Dance replacement (150 XP native ownership gate), fully authored anime revision agent-tested; player acceptance pending"
+      ],
+      "kit": "Bounce off enemies, zip between targets, sling enemies through crowds and burst webs when surrounded; short attacks and responsive escapes connect the whole kit. Prototype proposed, not yet implemented.",
+      "name": "The Amazing Spider-Man",
+      "status": "active-v0.1.1-fun-prototype-queued"
+    },
+    {
+      "id": "scarlet-ben",
+      "kit": "Impact webs, stingers, control and setups",
+      "name": "Scarlet Spider - Ben Reilly",
+      "status": "selected-backlog"
+    },
+    {
+      "id": "2099-classic",
+      "kit": "Talons, aerial pursuit, glide and venom research",
+      "name": "Spider-Man 2099 - classic",
+      "status": "selected-backlog"
+    },
+    {
+      "id": "scarlet-kaine",
+      "kit": "Aggressive close combat and burst counters",
+      "name": "Scarlet Spider - Kaine",
+      "status": "selected-backlog"
+    },
+    {
+      "id": "raimi",
+      "kit": "Weighty punches, strong web pulls, resilient recovery",
+      "name": "Raimi Spider-Man",
+      "status": "selected-backlog"
+    },
+    {
+      "id": "symbiote-classic",
+      "kit": "Heavy control, charges, tendril-inspired finishers",
+      "name": "Classic symbiote",
+      "status": "selected-backlog"
+    },
+    {
+      "id": "tasm2",
+      "kit": "No separate combat kit queued; a future cosmetic movie appearance can share the Amazing Spider-Man kit",
+      "name": "The Amazing Spider-Man 2",
+      "status": "identity-merged-into-tasm1"
+    }
+  ],
+  "updated": "2026-10-05",
+  "upgrade_plan": "tasm_upgrade_plan.json",
+  "upgrade_plan_status": "fun-first-core-prototype-proposed-progression-deferred",
+  "user_verified": [
+    "Snap Sweep works in player testing",
+    "Initial Web Vault works; player requested matched rise/no backward target drift. Revision agent-tested, player check pending."
+  ],
+  "prototype_reference": "../docs/TASM_ROADMAP.md#build-the-smallest-version-that-can-prove-the-fun"
+}

@@ -1,0 +1,2 @@
+# Archived metadata is read through tools/doc_archive.py, not routine code searches.
+/docs/archive/

@@ -23,7 +23,7 @@ def load_clean(path=DEFAULT_ROM):
     rom = Path(path).read_bytes()
     report = w.validate_rom(rom, target=True)
     if report['sha256'] != CLEAN_SHA256:
-        raise ValueError('Clean ROM SHA256 differs from the validated baseline. Use your untouched CS5E dump; see docs/VALIDATION.md.')
+        raise ValueError('Clean ROM SHA256 differs from the validated baseline. Use your untouched CS5E dump; see README.md.')
     e = report['nitrofs'][0]
     glob = rom[e['start']:e['end']]
     manifest = w.glob_manifest(glob)
@@ -60,10 +60,10 @@ def overlay_files(directory: Path, names: list[str], *, added_names=()) -> dict[
 
 
 def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, bytes], *, rebound=False, gameplay_profile=None):
-    from tools import oscorp_resources as expansion
+    from tools import oscorp_resources as expansion, release_info
     entries = manifest['entries']
     names = [e['name'] for e in entries]
-    extras=expansion.EXTRA_NAMES if gameplay_profile==expansion.PROFILE else ()
+    extras=expansion.EXTRA_NAMES if gameplay_profile in (expansion.PROFILE, *release_info.PROFILES) else ()
     if set(overlay) - set([*names,*extras]) or 'GlobFiles.txt' in overlay: raise ValueError('Invalid overlay mapping')
     if extras:expansion.validate_extra(overlay)
     blobs, replacements, identical = [], [], []
@@ -103,6 +103,10 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
            'replaced_assets': replacements, 'identical_overlays': identical,
            'added_assets':added,
            'verified_resource_count': len(names), 'unchanged_resource_count': len(names) - len(replacements)-len(added)}
+    if gameplay_profile in release_info.PROFILES:
+        release = release_info.PROFILE_INFO[gameplay_profile]
+        log['release_version'] = release['version']
+        log['release_date'] = release['date']
     return result, new_glob, log
 
 
@@ -190,12 +194,13 @@ def main(argv=None):
             output = build_output(args.out)
             if output.resolve() == rom_path.resolve(): raise ValueError('Output would overwrite input ROM')
             from tools.combat_profile import load_recipe
+            from tools import release_info
             profile = project_path(args.gameplay_profile)
             from tools import oscorp_resources as expansion
             added_names=()
             if profile.exists():
                 candidate_recipe=json.loads(profile.read_text(encoding='utf-8'))
-                if isinstance(candidate_recipe,dict) and candidate_recipe.get('profile')==expansion.PROFILE:
+                if isinstance(candidate_recipe,dict) and candidate_recipe.get('profile') in (expansion.PROFILE, *release_info.PROFILES):
                     added_names=expansion.EXTRA_NAMES
             overlay = overlay_files(project_path(args.mods), [e['name'] for e in manifest['entries']],added_names=added_names)
             if args.gameplay_profile == 'original':

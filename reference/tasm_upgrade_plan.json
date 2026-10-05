@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-05",
+  "current_release": "0.1.1",
+  "design_status": "fun-first-core-prototype-proposed-not-implemented",
+  "design_reference": "../docs/TASM_ROADMAP.md",
+  "implemented_reference": "../docs/CHANGES.md",
+  "superseded": "The 26-skill catalog and extra-shop-row-first ordering were rejected as overwhelming. No target skill count remains.",
+  "priority": "Prove one complete trickster-acrobat loop in a crowd before progression or balance.",
+  "core_interactions": [
+    "bounce",
+    "zip",
+    "sling",
+    "web-burst"
+  ],
+  "core_usability": [
+    "short attacks",
+    "immediate escapes",
+    "air steering",
+    "input buffering",
+    "readable target selection"
+  ],
+  "first_prototype": "Connected bounce, zip and immediate escape in one repeatable crowd encounter; then web burst and directional enemy collisions.",
+  "prototype_setup": "Full kit enabled with generous tuning in isolated candidates and disposable saves/RAM. Real progress is never edited to unlock tests.",
+  "progression": "Deferred until the player accepts the fun loop; select a few meaningful upgrades afterward. Existing public ownership and shared traversal require explicit migration.",
+  "balance": "Later. No initial price, cooldown, air-hop ration or native-damage-parity design target.",
+  "entries": [
+    {
+      "id": "rebound",
+      "original": "Web Kick",
+      "current_name": "Rebound",
+      "current_cost": 50,
+      "ability_bit": 13,
+      "status": "implemented"
+    },
+    {
+      "id": "web-vault",
+      "original": "Web Launch",
+      "current_name": "Web Vault",
+      "current_cost": 100,
+      "ability_bit": 14,
+      "status": "implemented"
+    },
+    {
+      "id": "sling-strike",
+      "original": "Mid-Air Snare",
+      "current_name": "Sling Strike",
+      "current_cost": 150,
+      "ability_bit": 15,
+      "status": "implemented-agent-tested"
+    },
+    {
+      "id": "oscorp-rush",
+      "original": "Spider Dance",
+      "current_name": "Oscorp Rush",
+      "current_cost": 150,
+      "ability_bit": 16,
+      "status": "implemented-agent-tested"
+    },
+    {
+      "id": "rebound-barrage",
+      "original": "Scissor-Kick Special",
+      "current_name": "Scissor-Kick Special",
+      "current_cost": 200,
+      "ability_bit": 17,
+      "status": "native-row-retained"
+    },
+    {
+      "id": "slip-counter",
+      "original": "Amazing Speed Boost",
+      "current_name": "Amazing Speed Boost",
+      "current_cost": 250,
+      "ability_bit": 18,
+      "status": "native-row-retained"
+    },
+    {
+      "id": "momentum",
+      "original": "Ultimate Speed Boost",
+      "current_name": "Ultimate Speed Boost",
+      "current_cost": 350,
+      "ability_bit": 19,
+      "status": "native-row-retained"
+    }
+  ],
+  "current_shared_costs": {
+    "Air Dodge": 50,
+    "Drill Kick": 100,
+    "Enemy Kick-Off": 50,
+    "Enhanced Dodge": 200,
+    "Jackhammer Stomp": 150,
+    "Launching Uppercut": 25,
+    "Quick Recovery": 150
+  }
+}

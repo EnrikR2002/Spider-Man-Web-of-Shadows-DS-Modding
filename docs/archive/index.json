@@ -1,0 +1,1601 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-10-05",
+  "purpose": "Historical source notes; current status is in docs/TASKS.md. Read only a selected entry/section with tools/doc_archive.py.",
+  "archive_sha256": "ebd62d13d56dd45780f09c5dc43cb2866b36ba743c37dbfd50e6b68ced65a150",
+  "entries": [
+    {
+      "path": "AGENTS.md",
+      "title": "Codex project instructions",
+      "bytes": 5102,
+      "words": 692,
+      "sha256": "16f312fefc0acf5bb644bede9a126e61579c322c9729dd515559a019a0ed545b",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Codex project instructions",
+          "level": 1
+        },
+        {
+          "line": 19,
+          "heading": "Session continuity and tasks",
+          "level": 2
+        },
+        {
+          "line": 29,
+          "heading": "Accepted user workflow (2026-10-04)",
+          "level": 2
+        },
+        {
+          "line": 46,
+          "heading": "Upgrade progression constraint (2026-10-04)",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "README.md",
+      "title": "Spider-Man: Web of Shadows DS — personal mod workflow",
+      "bytes": 16537,
+      "words": 2070,
+      "sha256": "b951cf3f266598a841ca60d4e41bb9f5c9c59a1fc9eb4c60e9ef25dc143f510f",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Spider-Man: Web of Shadows DS — personal mod workflow",
+          "level": 1
+        },
+        {
+          "line": 18,
+          "heading": "Set up on another computer",
+          "level": 2
+        },
+        {
+          "line": 38,
+          "heading": "Copy your clean ROM to original/Spider-Man - Web of Shadows (USA) (En,Fr).nds",
+          "level": 1
+        },
+        {
+          "line": 66,
+          "heading": "Daily edit/build/boot loop",
+          "level": 2
+        },
+        {
+          "line": 71,
+          "heading": "Copy only an asset you intend to change from work/glob/ into mods/, then edit it.",
+          "level": 1
+        },
+        {
+          "line": 126,
+          "heading": "Open build/Spider-Man-WoS-modded.nds in DeSmuME and choose Continue.",
+          "level": 1
+        },
+        {
+          "line": 127,
+          "heading": "Save in-game and close DeSmuME before each command that copies saves.",
+          "level": 1
+        },
+        {
+          "line": 203,
+          "heading": "Commands",
+          "level": 2
+        },
+        {
+          "line": 227,
+          "heading": "Proven visible experiment",
+          "level": 2
+        },
+        {
+          "line": 250,
+          "heading": "Optional automated emulator captures",
+          "level": 2
+        },
+        {
+          "line": 266,
+          "heading": "Reverse-engineering tools and notes",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/ANALYSIS.md",
+      "title": "Confirmed ROM analysis",
+      "bytes": 4977,
+      "words": 703,
+      "sha256": "87daebc8463364c3bce2f65e24abab4bfba14dc153510a10de3b777664c5588a",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Confirmed ROM analysis",
+          "level": 1
+        },
+        {
+          "line": 3,
+          "heading": "ROM",
+          "level": 2
+        },
+        {
+          "line": 14,
+          "heading": "NitroFS",
+          "level": 2
+        },
+        {
+          "line": 21,
+          "heading": "Glob.bin container",
+          "level": 2
+        },
+        {
+          "line": 33,
+          "heading": "Resource inventory",
+          "level": 2
+        },
+        {
+          "line": 57,
+          "heading": "Standard Nintendo Nitro formats already exposed",
+          "level": 2
+        },
+        {
+          "line": 65,
+          "heading": "Important custom formats / likely responsibilities",
+          "level": 2
+        },
+        {
+          "line": 75,
+          "heading": "Player assets",
+          "level": 2
+        },
+        {
+          "line": 85,
+          "heading": "Map assets",
+          "level": 2
+        },
+        {
+          "line": 96,
+          "heading": "Repacking",
+          "level": 2
+        },
+        {
+          "line": 106,
+          "heading": "Validated workflow update — 2026-10-02",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/ANIMATION_AUTHORING.md",
+      "title": "Authoring distinct Spider-Man animations",
+      "bytes": 12291,
+      "words": 1597,
+      "sha256": "0f4324c702c81916fe96d99789eb0facd74a2a3fa9755d9c42ed231b1ce2b5e3",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Authoring distinct Spider-Man animations",
+          "level": 1
+        },
+        {
+          "line": 15,
+          "heading": "What was in the game at the initial investigation",
+          "level": 2
+        },
+        {
+          "line": 29,
+          "heading": "New working authoring tools",
+          "level": 2
+        },
+        {
+          "line": 48,
+          "heading": "Author sampled local rotations/translations in a separate private JSON file.",
+          "level": 1
+        },
+        {
+          "line": 64,
+          "heading": "Rig mapping and Blender conversion",
+          "level": 2
+        },
+        {
+          "line": 114,
+          "heading": "Isolated game proof",
+          "level": 2
+        },
+        {
+          "line": 167,
+          "heading": "Initial milestones and subsequent progress",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/ANIMATION_RESEARCH.md",
+      "title": "CS5E SCA joint animation: confirmed layout and bounded custom poses",
+      "bytes": 15648,
+      "words": 2250,
+      "sha256": "23257c225b1bdbe7deaac7a3a369825cb20120b1bdfb942543294f74e4dd33a3",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "CS5E SCA joint animation: confirmed layout and bounded custom poses",
+          "level": 1
+        },
+        {
+          "line": 14,
+          "heading": "Evidence and original code paths",
+          "level": 2
+        },
+        {
+          "line": 43,
+          "heading": "SCA4 header",
+          "level": 2
+        },
+        {
+          "line": 80,
+          "heading": "Joint descriptors and channel pools",
+          "level": 2
+        },
+        {
+          "line": 118,
+          "heading": "Player rig and Rebound target",
+          "level": 2
+        },
+        {
+          "line": 162,
+          "heading": "Recommended first custom pose",
+          "level": 2
+        },
+        {
+          "line": 188,
+          "heading": "Validation and acceptance",
+          "level": 2
+        },
+        {
+          "line": 230,
+          "heading": "Follow-up: independent sampled track authoring",
+          "level": 2
+        },
+        {
+          "line": 248,
+          "heading": "Full authored Rush follow-up (2026-10-04)",
+          "level": 3
+        }
+      ]
+    },
+    {
+      "path": "docs/COMBAT_FEEDBACK.md",
+      "title": "Combat feedback and Rebound juggle revision",
+      "bytes": 9243,
+      "words": 1241,
+      "sha256": "ed0ecd2ca06b7dcd7ca60d2c23fb4aa9a2ef957e1d0233c3f5cf049b0d785dc4",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Combat feedback and Rebound juggle revision",
+          "level": 1
+        },
+        {
+          "line": 13,
+          "heading": "Player-visible behavior",
+          "level": 2
+        },
+        {
+          "line": 38,
+          "heading": "Health paths and limits",
+          "level": 2
+        },
+        {
+          "line": 68,
+          "heading": "Code and rendering",
+          "level": 2
+        },
+        {
+          "line": 104,
+          "heading": "Validation and release",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/COMBAT_FLOW.md",
+      "title": "Combat flow revision: player-feedback fixes",
+      "bytes": 8436,
+      "words": 1092,
+      "sha256": "78f4719e66ef6cf3d5d40594552883cd0a45cc968372288b34e9fd2e96c3b5bf",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Combat flow revision: player-feedback fixes",
+          "level": 1
+        },
+        {
+          "line": 10,
+          "heading": "Player behavior and confirmed cause",
+          "level": 2
+        },
+        {
+          "line": 35,
+          "heading": "Bounded code and state",
+          "level": 2
+        },
+        {
+          "line": 62,
+          "heading": "HUD work and performance evidence",
+          "level": 2
+        },
+        {
+          "line": 92,
+          "heading": "Validation and private evidence",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/COMBAT_HUD.md",
+      "title": "Compact combat HUD and readability release",
+      "bytes": 4827,
+      "words": 631,
+      "sha256": "0a95929c6a11d1864a803411d558cd86376aa88f48762b4a131df27d2dfe014c",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Compact combat HUD and readability release",
+          "level": 1
+        },
+        {
+          "line": 9,
+          "heading": "Player-facing behavior",
+          "level": 2
+        },
+        {
+          "line": 29,
+          "heading": "Engine implementation and bounds",
+          "level": 2
+        },
+        {
+          "line": 61,
+          "heading": "Verification",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/COMBO_ENGINE.md",
+      "title": "Combo meter and GMB channel research",
+      "bytes": 9384,
+      "words": 1427,
+      "sha256": "e65c47b03bff263e72bcf1c662c5024da08f61f4d0eb6c0799a45b7eba4022fa",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Combo meter and GMB channel research",
+          "level": 1
+        },
+        {
+          "line": 9,
+          "heading": "What the original meter rewards",
+          "level": 2
+        },
+        {
+          "line": 23,
+          "heading": "Why the first Snap Sweep hits can appear not to count",
+          "level": 2
+        },
+        {
+          "line": 52,
+          "heading": "Static engine map",
+          "level": 2
+        },
+        {
+          "line": 112,
+          "heading": "GAB events are not arbitrary damage/meter fields",
+          "level": 2
+        },
+        {
+          "line": 134,
+          "heading": "Decoded GMB structure",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/FORMAT_NOTES.md",
+      "title": "Format notes",
+      "bytes": 68388,
+      "words": 9084,
+      "sha256": "87c7ecc9b52e32b6317a00b317fc7f02a981d284f8ef13e86b8696c0d347b62b",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Format notes",
+          "level": 1
+        },
+        {
+          "line": 10,
+          "heading": "NitroFS / ROM â€” confirmed and tested",
+          "level": 2
+        },
+        {
+          "line": 39,
+          "heading": "Glob.bin â€” confirmed and tested",
+          "level": 2
+        },
+        {
+          "line": 62,
+          "heading": "NSBTX / TEX0 â€” structural parsing and palette editing tested",
+          "level": 2
+        },
+        {
+          "line": 64,
+          "heading": "Bounded player resolution experiment â€” 2026-10-03",
+          "level": 3
+        },
+        {
+          "line": 116,
+          "heading": "XBD â€” outer envelope and actor resource bindings confirmed",
+          "level": 2
+        },
+        {
+          "line": 158,
+          "heading": "GAB / GMB / SCA â€” first differential pass",
+          "level": 2
+        },
+        {
+          "line": 182,
+          "heading": "Compression wrappers â€” confirmed codecs, limited re-encoding",
+          "level": 2
+        },
+        {
+          "line": 200,
+          "heading": "BSP + paired OBJ â€” envelope/offsets confirmed, room semantics unknown",
+          "level": 2
+        },
+        {
+          "line": 233,
+          "heading": "STRINGS + FONT â€” compatibility lead only",
+          "level": 2
+        },
+        {
+          "line": 235,
+          "heading": "Bounded English/American text slots â€” confirmed 2026-10-03",
+          "level": 3
+        },
+        {
+          "line": 264,
+          "heading": "2LZ / DAT / PAL / CBMP â€” inventory plus compression progress",
+          "level": 2
+        },
+        {
+          "line": 277,
+          "heading": "Minimap investigation â€” 2026-10-03",
+          "level": 3
+        },
+        {
+          "line": 326,
+          "heading": "Opaque save snapshots â€” 2026-10-03",
+          "level": 2
+        },
+        {
+          "line": 344,
+          "heading": "Test result and immediate next experiments",
+          "level": 2
+        },
+        {
+          "line": 359,
+          "heading": "Movie cleanup, stable save association, and suit research â€” 2026-10-04",
+          "level": 2
+        },
+        {
+          "line": 413,
+          "heading": "TASM 1 first action and save releases â€” 2026-10-04",
+          "level": 2
+        },
+        {
+          "line": 420,
+          "heading": "GAB record boundaries",
+          "level": 3
+        },
+        {
+          "line": 431,
+          "heading": "Player executable and read-only observations",
+          "level": 3
+        },
+        {
+          "line": 452,
+          "heading": "Synchronized red opener replacement",
+          "level": 3
+        },
+        {
+          "line": 476,
+          "heading": "DeSmuME wrapper and automatic maintenance",
+          "level": 3
+        },
+        {
+          "line": 506,
+          "heading": "Purchased Red-tab inventory and approval plan â€” 2026-10-04",
+          "level": 2
+        },
+        {
+          "line": 560,
+          "heading": "Native combat mapping and purchased Rebound â€” 2026-10-04",
+          "level": 2
+        },
+        {
+          "line": 568,
+          "heading": "GMB channel boundaries and root motion",
+          "level": 3
+        },
+        {
+          "line": 590,
+          "heading": "SCA pool layout and bounded animation authoring",
+          "level": 3
+        },
+        {
+          "line": 612,
+          "heading": "Purchase records, ability ownership and native save flow",
+          "level": 3
+        },
+        {
+          "line": 641,
+          "heading": "Combo credit and hidden HUD",
+          "level": 3
+        },
+        {
+          "line": 659,
+          "heading": "Accepted Rebound profile and validation",
+          "level": 3
+        },
+        {
+          "line": 694,
+          "heading": "Accepted Web Vault event hook and root approach",
+          "level": 3
+        },
+        {
+          "line": 730,
+          "heading": "2026-10-04: bounded combat HUD/code extension",
+          "level": 2
+        },
+        {
+          "line": 762,
+          "heading": "Compact HUD, camera projection and Sling Strike (2026-10-04)",
+          "level": 1
+        },
+        {
+          "line": 813,
+          "heading": "Player-feedback combat-flow revision (2026-10-04)",
+          "level": 1
+        },
+        {
+          "line": 859,
+          "heading": "Additional bounded instruction clarity pass (2026-10-04)",
+          "level": 3
+        },
+        {
+          "line": 871,
+          "heading": "Purchased Oscorp Rush route and bounded motion (2026-10-04)",
+          "level": 3
+        },
+        {
+          "line": 904,
+          "heading": "Training HP chord in the accepted observer (2026-10-04)",
+          "level": 3
+        },
+        {
+          "line": 928,
+          "heading": "Independent SCA track growth and canonical rig ancestry (2026-10-04)",
+          "level": 3
+        },
+        {
+          "line": 963,
+          "heading": "Dedicated authored Rush SCAs and bounded Glob append (2026-10-04)",
+          "level": 3
+        },
+        {
+          "line": 1005,
+          "heading": "Rush pose refinement and axis correction (2026-10-04)",
+          "level": 3
+        },
+        {
+          "line": 1024,
+          "heading": "Rush camera-plane reach and bounded limb translations (2026-10-05)",
+          "level": 3
+        }
+      ]
+    },
+    {
+      "path": "docs/IMPROVEMENT_BACKLOG.md",
+      "title": "ROM-grounded improvement options",
+      "bytes": 9867,
+      "words": 1467,
+      "sha256": "9df390c7373a2fff1eeb40a3f68ac600700f23d7f31b150be3ab3d4cb6f23b39",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "ROM-grounded improvement options",
+          "level": 1
+        },
+        {
+          "line": 9,
+          "heading": "High-value small changes",
+          "level": 2
+        },
+        {
+          "line": 22,
+          "heading": "Targeted gameplay and feedback work",
+          "level": 2
+        },
+        {
+          "line": 39,
+          "heading": "Larger projects",
+          "level": 2
+        },
+        {
+          "line": 55,
+          "heading": "Suggested order",
+          "level": 2
+        },
+        {
+          "line": 68,
+          "heading": "Implemented small changes in the compact HUD / Sling release",
+          "level": 2
+        },
+        {
+          "line": 78,
+          "heading": "Implemented player-feedback combat-flow revision",
+          "level": 2
+        },
+        {
+          "line": 87,
+          "heading": "Additional small instruction pass",
+          "level": 2
+        },
+        {
+          "line": 95,
+          "heading": "Oscorp Rush, training QoL and performance/visual investigation",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/MODDABILITY_MATRIX.md",
+      "title": "Moddability matrix",
+      "bytes": 10202,
+      "words": 1394,
+      "sha256": "22fb53e48bfb7821e6053f428e73eef86ee0c77ff28f32923c5d3a72940002b1",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Moddability matrix",
+          "level": 1
+        }
+      ]
+    },
+    {
+      "path": "docs/MOVIE_SUIT_EXPERIMENT.md",
+      "title": "First-movie-inspired suit and 128x128 texture experiment",
+      "bytes": 8023,
+      "words": 957,
+      "sha256": "5524683205acdd7d6c12949dcc5bd7221ec0fd937980b79616d0a845c8140b45",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "First-movie-inspired suit and 128x128 texture experiment",
+          "level": 1
+        },
+        {
+          "line": 7,
+          "heading": "New artwork and limits",
+          "level": 2
+        },
+        {
+          "line": 23,
+          "heading": "Evidence and repeatability",
+          "level": 2
+        },
+        {
+          "line": 48,
+          "heading": "Tests and boot evidence",
+          "level": 2
+        },
+        {
+          "line": 70,
+          "heading": "Clean panels and black lenses — 2026-10-04",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/NEW_SUIT_DESIGN.md",
+      "title": "New playable suit: design and research plan",
+      "bytes": 14387,
+      "words": 2024,
+      "sha256": "fb6796cfb3982ee8a3cf13647a28302a55ac139e6f140e1315a84ed22468cd27",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "New playable suit: design and research plan",
+          "level": 1
+        },
+        {
+          "line": 15,
+          "heading": "TASM 1: quick, scrappy, evasive",
+          "level": 2
+        },
+        {
+          "line": 41,
+          "heading": "Play the first step",
+          "level": 3
+        },
+        {
+          "line": 53,
+          "heading": "Current sequence",
+          "level": 3
+        },
+        {
+          "line": 68,
+          "heading": "Retained shortlist",
+          "level": 3
+        },
+        {
+          "line": 87,
+          "heading": "Two particularly promising directions",
+          "level": 2
+        },
+        {
+          "line": 89,
+          "heading": "Scarlet Spider: Ben Reilly, the web tactician",
+          "level": 3
+        },
+        {
+          "line": 117,
+          "heading": "Spider-Man 2099: the committed aerial predator",
+          "level": 3
+        },
+        {
+          "line": 144,
+          "heading": "What the ROM actually supports so far",
+          "level": 2
+        },
+        {
+          "line": 180,
+          "heading": "Incremental implementation",
+          "level": 2
+        },
+        {
+          "line": 217,
+          "heading": "Reference scope",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/ORIGINAL_GAMEPLAY.md",
+      "title": "Original CS5E gameplay reference",
+      "bytes": 24830,
+      "words": 3884,
+      "sha256": "4951272e45578bd6b1afc79978d982667d3f8a2298f2c27245c45ac8f3042b4c",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Original CS5E gameplay reference",
+          "level": 1
+        },
+        {
+          "line": 16,
+          "heading": "Evidence and confidence",
+          "level": 2
+        },
+        {
+          "line": 40,
+          "heading": "Controls and contextual language",
+          "level": 2
+        },
+        {
+          "line": 63,
+          "heading": "Shared foundation",
+          "level": 2
+        },
+        {
+          "line": 100,
+          "heading": "Original red form: webs, pursuit and tempo",
+          "level": 2
+        },
+        {
+          "line": 102,
+          "heading": "Core form-specific tools",
+          "level": 3
+        },
+        {
+          "line": 116,
+          "heading": "Seven Red-tab purchases",
+          "level": 3
+        },
+        {
+          "line": 134,
+          "heading": "Composition map",
+          "level": 3
+        },
+        {
+          "line": 159,
+          "heading": "Original black form: impact, recall and commitment",
+          "level": 2
+        },
+        {
+          "line": 161,
+          "heading": "Core form-specific tools",
+          "level": 3
+        },
+        {
+          "line": 175,
+          "heading": "Seven Black-tab purchases",
+          "level": 3
+        },
+        {
+          "line": 193,
+          "heading": "Composition map",
+          "level": 3
+        },
+        {
+          "line": 218,
+          "heading": "How the two identities fit together",
+          "level": 2
+        },
+        {
+          "line": 234,
+          "heading": "Purchase, world progression and rewards",
+          "level": 2
+        },
+        {
+          "line": 236,
+          "heading": "XP and save-point economy",
+          "level": 3
+        },
+        {
+          "line": 250,
+          "heading": "Acquisitions that protect exploration",
+          "level": 3
+        },
+        {
+          "line": 268,
+          "heading": "Lower-right Combo Meter",
+          "level": 3
+        },
+        {
+          "line": 295,
+          "heading": "Static meter rules found during the engine investigation",
+          "level": 3
+        },
+        {
+          "line": 318,
+          "heading": "Current engine footholds",
+          "level": 2
+        },
+        {
+          "line": 344,
+          "heading": "Measurement contract for future TASM moves",
+          "level": 2
+        },
+        {
+          "line": 361,
+          "heading": "Confirmed combo-meter encounter",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/OSCORP_RUSH_ANIMATION.md",
+      "title": "Full Oscorp Rush animation redesign",
+      "bytes": 11884,
+      "words": 1580,
+      "sha256": "8b9bc24617410960e7d7bbe12a7234e3e91d65d19b9742f4881a706dcebaa850",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Full Oscorp Rush animation redesign",
+          "level": 1
+        },
+        {
+          "line": 10,
+          "heading": "Authored sequence",
+          "level": 2
+        },
+        {
+          "line": 40,
+          "heading": "Isolation and archive extension",
+          "level": 2
+        },
+        {
+          "line": 73,
+          "heading": "Authoring implementation",
+          "level": 2
+        },
+        {
+          "line": 117,
+          "heading": "Reproduction and qualification",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/PERFORMANCE_VISUALS.md",
+      "title": "Performance and visual upgrade investigation",
+      "bytes": 10211,
+      "words": 1379,
+      "sha256": "d0ee82dd341b911627573c1c570a05d608a402b871e196322f62c73bed830abc",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Performance and visual upgrade investigation",
+          "level": 1
+        },
+        {
+          "line": 8,
+          "heading": "What was measured and implemented",
+          "level": 2
+        },
+        {
+          "line": 52,
+          "heading": "Actual DeSmuME configuration and next tests",
+          "level": 2
+        },
+        {
+          "line": 87,
+          "heading": "ROM-side performance priorities",
+          "level": 2
+        },
+        {
+          "line": 114,
+          "heading": "Visual upgrade feasibility",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/QOL_CLARITY.md",
+      "title": "Small instruction clarity pass",
+      "bytes": 3128,
+      "words": 387,
+      "sha256": "0117071e342c891968c8f3025570252fef4b7ab08546f2db3fe56af1198b90eb",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Small instruction clarity pass",
+          "level": 1
+        }
+      ]
+    },
+    {
+      "path": "docs/QOL_PLAN.md",
+      "title": "Vanilla-plus QoL plan and first experiment",
+      "bytes": 9307,
+      "words": 1140,
+      "sha256": "c36db9f58479f2896933928919143c9771db32a8c444e0c2831429a8aa979ef4",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Vanilla-plus QoL plan and first experiment",
+          "level": 1
+        },
+        {
+          "line": 10,
+          "heading": "First experiment: mission marker contrast",
+          "level": 2
+        },
+        {
+          "line": 33,
+          "heading": "What to look for, and when to stop playing",
+          "level": 3
+        },
+        {
+          "line": 57,
+          "heading": "Reproduce from Windows PowerShell",
+          "level": 3
+        },
+        {
+          "line": 76,
+          "heading": "Revert",
+          "level": 3
+        },
+        {
+          "line": 89,
+          "heading": "Tests and acceptance",
+          "level": 3
+        },
+        {
+          "line": 107,
+          "heading": "Optional stats and damage numbers — research backlog",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/SESSION_HANDOFF.md",
+      "title": "Next-session handoff",
+      "bytes": 2093,
+      "words": 288,
+      "sha256": "2d961ee5bbcef0282f9291cc65781f8fbad7dffee2877ca876fed88afaa582a2",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Next-session handoff",
+          "level": 1
+        }
+      ]
+    },
+    {
+      "path": "docs/SUITS_MENU_PASS.md",
+      "title": "Menu readability and suit palette prototypes",
+      "bytes": 3642,
+      "words": 438,
+      "sha256": "a0f39a6929070e27c88bb4bbabe845e467354a32f3f46fb2e4b20aabc3afc6f2",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Menu readability and suit palette prototypes",
+          "level": 1
+        },
+        {
+          "line": 6,
+          "heading": "Implemented",
+          "level": 2
+        },
+        {
+          "line": 24,
+          "heading": "Reproduce (PowerShell)",
+          "level": 2
+        },
+        {
+          "line": 37,
+          "heading": "Validation and manual acceptance",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/SUIT_CATALOG.md",
+      "title": "Suit concept catalog",
+      "bytes": 18236,
+      "words": 2947,
+      "sha256": "b6e48537578c5c9f9e5ada8eefc53db104c82a0f4d5879b5ffde75fdcb7e9402",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Suit concept catalog",
+          "level": 1
+        }
+      ]
+    },
+    {
+      "path": "docs/SUIT_IDEAS.json",
+      "title": "[",
+      "bytes": 20106,
+      "words": 2128,
+      "sha256": "914885b8ce419f4a06b6fa9d5553176e0c49685b31728db9a7d184b5cfda4f12",
+      "sections": []
+    },
+    {
+      "path": "docs/TASKS.md",
+      "title": "Project tasks and session handoff",
+      "bytes": 20584,
+      "words": 2511,
+      "sha256": "5dd4b35513b8b28279a352f1d5d7c61697eac42cb706703cb0ae391ce0f1d994",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Project tasks and session handoff",
+          "level": 1
+        },
+        {
+          "line": 5,
+          "heading": "Resume here",
+          "level": 2
+        },
+        {
+          "line": 105,
+          "heading": "First actions in a fresh session",
+          "level": 2
+        },
+        {
+          "line": 146,
+          "heading": "Active incremental TASM task list",
+          "level": 2
+        },
+        {
+          "line": 185,
+          "heading": "Selected suit backlog",
+          "level": 2
+        },
+        {
+          "line": 192,
+          "heading": "Working rules and evidence",
+          "level": 2
+        },
+        {
+          "line": 210,
+          "heading": "Session log",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/TASM1_IMPLEMENTATION.md",
+      "title": "TASM 1 stage one: Snap Sweep (historical foundation)",
+      "bytes": 4111,
+      "words": 550,
+      "sha256": "68848b2527dc27d164ffc4495a9404dc6837a54d3a3a854433db32e3e868c3f4",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "TASM 1 stage one: Snap Sweep (historical foundation)",
+          "level": 1
+        },
+        {
+          "line": 11,
+          "heading": "Exact edit",
+          "level": 2
+        },
+        {
+          "line": 30,
+          "heading": "Runtime evidence",
+          "level": 2
+        },
+        {
+          "line": 62,
+          "heading": "Reproduce privately",
+          "level": 2
+        },
+        {
+          "line": 76,
+          "heading": "Rejected experiment",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/TASM1_OSCORP_RUSH.md",
+      "title": "Oscorp Rush and training refill",
+      "bytes": 8222,
+      "words": 1031,
+      "sha256": "e9daad84b68ba92cc179d6a461ee2a89571f7c7c1d8b75f5aa30bb7fc515b8fa",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Oscorp Rush and training refill",
+          "level": 1
+        },
+        {
+          "line": 11,
+          "heading": "Released behavior",
+          "level": 2
+        },
+        {
+          "line": 35,
+          "heading": "Asset isolation and engine findings",
+          "level": 2
+        },
+        {
+          "line": 63,
+          "heading": "Paired agent checks",
+          "level": 2
+        },
+        {
+          "line": 89,
+          "heading": "Reproduction and evidence",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/TASM1_REBOUND.md",
+      "title": "Rebound: first purchased TASM replacement (historical move evidence)",
+      "bytes": 6717,
+      "words": 873,
+      "sha256": "19471451de76b1e1f92d56bd9a34e84330e2d8fb751d731778246bf96fcf366d",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Rebound: first purchased TASM replacement (historical move evidence)",
+          "level": 1
+        },
+        {
+          "line": 7,
+          "heading": "Player behavior",
+          "level": 2
+        },
+        {
+          "line": 24,
+          "heading": "Deterministic recipe",
+          "level": 2
+        },
+        {
+          "line": 64,
+          "heading": "Runtime evidence",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/TASM1_SLING_STRIKE.md",
+      "title": "Sling Strike: purchased aerial zip-and-kick replacement",
+      "bytes": 6421,
+      "words": 839,
+      "sha256": "0dcf5eab09d214b28fe27378fa4d4d8bfbbb4338e9f26b11cd2e8ef41c86d026",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Sling Strike: purchased aerial zip-and-kick replacement",
+          "level": 1
+        },
+        {
+          "line": 10,
+          "heading": "Use and budget",
+          "level": 2
+        },
+        {
+          "line": 27,
+          "heading": "Bounded engine edits",
+          "level": 2
+        },
+        {
+          "line": 64,
+          "heading": "Private runtime evidence and remaining checks",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/TASM1_UPGRADE_PLAN.md",
+      "title": "TASM 1 purchased-upgrade replacement proposal",
+      "bytes": 8961,
+      "words": 1206,
+      "sha256": "53f75e526ad3b85ce51fe7e89431342cfba49c4607f3fd03310231086cb82308",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "TASM 1 purchased-upgrade replacement proposal",
+          "level": 1
+        },
+        {
+          "line": 18,
+          "heading": "Inventory and proposed replacements",
+          "level": 2
+        },
+        {
+          "line": 47,
+          "heading": "What remains outside these seven replacements",
+          "level": 2
+        },
+        {
+          "line": 59,
+          "heading": "Purchase and save contract",
+          "level": 2
+        },
+        {
+          "line": 78,
+          "heading": "Acceptance for every approved entry",
+          "level": 2
+        },
+        {
+          "line": 90,
+          "heading": "Evidence and limits",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/TASM1_WEB_VAULT.md",
+      "title": "Web Vault — purchased Red-suit release (historical move evidence)",
+      "bytes": 6538,
+      "words": 885,
+      "sha256": "ced8793bbae04362560d60cc0cd01b7f3594cb4170e9c83549ae12779f2dd902",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Web Vault — purchased Red-suit release (historical move evidence)",
+          "level": 1
+        },
+        {
+          "line": 10,
+          "heading": "Implemented behavior",
+          "level": 2
+        },
+        {
+          "line": 20,
+          "heading": "Bounded implementation",
+          "level": 2
+        },
+        {
+          "line": 44,
+          "heading": "Verification and private replay evidence",
+          "level": 2
+        },
+        {
+          "line": 82,
+          "heading": "Publication and remaining checks",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/TASM_EXPANDED_ROADMAP.md",
+      "title": "One Amazing Spider-Man kit: design discussion",
+      "bytes": 8640,
+      "words": 1313,
+      "sha256": "30d342403b159111210d6a149143cbc7fd68aabb7d3b1e14f3f62a26d9e0c90a",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "One Amazing Spider-Man kit: design discussion",
+          "level": 1
+        },
+        {
+          "line": 8,
+          "heading": "Identity and progression",
+          "level": 2
+        },
+        {
+          "line": 23,
+          "heading": "Proposed tools",
+          "level": 2
+        },
+        {
+          "line": 54,
+          "heading": "Implementation path",
+          "level": 2
+        },
+        {
+          "line": 75,
+          "heading": "Choices to discuss next",
+          "level": 2
+        },
+        {
+          "line": 89,
+          "heading": "Acrobatic area finisher: Orbit Breaker",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/TESTING_WORKFLOW.md",
+      "title": "Mod and reverse-engineering test workflow",
+      "bytes": 18514,
+      "words": 2513,
+      "sha256": "a590541128ada5e01368464c5f3bad1248adfca2f381886d37a88521d381fe63",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Mod and reverse-engineering test workflow",
+          "level": 1
+        },
+        {
+          "line": 6,
+          "heading": "The simple version: rebuilding does not erase your progress",
+          "level": 2
+        },
+        {
+          "line": 38,
+          "heading": "Current release workflow: matched Vault, passing Sling and continuous bars",
+          "level": 3
+        },
+        {
+          "line": 73,
+          "heading": "Where features live",
+          "level": 3
+        },
+        {
+          "line": 82,
+          "heading": "Save backup/restore helper",
+          "level": 2
+        },
+        {
+          "line": 103,
+          "heading": "Only when you want to return to that checkpoint, with emulator closed:",
+          "level": 1
+        },
+        {
+          "line": 117,
+          "heading": "Confirmed local DeSmuME setup for this experiment",
+          "level": 3
+        },
+        {
+          "line": 138,
+          "heading": "Stable playtest command â€” 2026-10-04",
+          "level": 2
+        },
+        {
+          "line": 173,
+          "heading": "Save in-game, then close DeSmuME.",
+          "level": 1
+        },
+        {
+          "line": 176,
+          "heading": "Open build/Spider-Man-WoS-modded.nds; Continue, then test the changed feature.",
+          "level": 1
+        },
+        {
+          "line": 178,
+          "heading": "At a useful IN-GAME SAVE point, save normally and close DeSmuME:",
+          "level": 1
+        },
+        {
+          "line": 183,
+          "heading": "With DeSmuME closed, return to a previously recorded checkpoint:",
+          "level": 1
+        },
+        {
+          "line": 185,
+          "heading": "Reopen the SAME stable ROM and choose Continue.",
+          "level": 1
+        },
+        {
+          "line": 221,
+          "heading": "Build and test a content change",
+          "level": 2
+        },
+        {
+          "line": 253,
+          "heading": "Room and progression investigation",
+          "level": 2
+        },
+        {
+          "line": 258,
+          "heading": "Phase 1: establish room identities",
+          "level": 3
+        },
+        {
+          "line": 268,
+          "heading": "Phase 2: differential room analysis",
+          "level": 3
+        },
+        {
+          "line": 280,
+          "heading": "Phase 3: safe runtime experiments",
+          "level": 3
+        },
+        {
+          "line": 289,
+          "heading": "Phase 4: create private testing tools",
+          "level": 3
+        },
+        {
+          "line": 311,
+          "heading": "Current limits and priorities",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/UPGRADE_ENGINE.md",
+      "title": "Native upgrade ownership and purchase routing",
+      "bytes": 9389,
+      "words": 1415,
+      "sha256": "869d0768e47330013998ba2b8e34d82e351e45a0a518fe81cfb930045f204403",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Native upgrade ownership and purchase routing",
+          "level": 1
+        },
+        {
+          "line": 9,
+          "heading": "Native Red menu records",
+          "level": 2
+        },
+        {
+          "line": 44,
+          "heading": "Purchase, refund and gameplay ownership share one bitset",
+          "level": 2
+        },
+        {
+          "line": 84,
+          "heading": "Web Kick and Web Launch transitions",
+          "level": 2
+        },
+        {
+          "line": 103,
+          "heading": "Rebound movement research",
+          "level": 2
+        },
+        {
+          "line": 136,
+          "heading": "Purchase and catalog validation",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/VALIDATION.md",
+      "title": "Toolchain validation — 2026-10-02",
+      "bytes": 6842,
+      "words": 908,
+      "sha256": "733aa7b71a9244138a61e550d1bd1d62768ff543551938b811f895b5de1e99c6",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Toolchain validation — 2026-10-02",
+          "level": 1
+        },
+        {
+          "line": 3,
+          "heading": "Tested input and exact round trip",
+          "level": 2
+        },
+        {
+          "line": 32,
+          "heading": "Structural checks",
+          "level": 2
+        },
+        {
+          "line": 50,
+          "heading": "Automated tests",
+          "level": 2
+        },
+        {
+          "line": 79,
+          "heading": "Reproduction",
+          "level": 2
+        },
+        {
+          "line": 93,
+          "heading": "Runtime verification and limits",
+          "level": 2
+        },
+        {
+          "line": 107,
+          "heading": "GitHub clone validation — 2026-10-03",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/VISIBLE_MOD.md",
+      "title": "One reversible visible mod: green Spider-Man",
+      "bytes": 6261,
+      "words": 795,
+      "sha256": "36878fa3464b1bb4b31e27407a68f35cafcdaa6a76ae92e54c29a3eb26236dfc",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "One reversible visible mod: green Spider-Man",
+          "level": 1
+        },
+        {
+          "line": 6,
+          "heading": "Exact modification",
+          "level": 2
+        },
+        {
+          "line": 29,
+          "heading": "Build and confirm in a desktop emulator",
+          "level": 2
+        },
+        {
+          "line": 52,
+          "heading": "DeSmuME 0.9.11 on the other computer",
+          "level": 3
+        },
+        {
+          "line": 76,
+          "heading": "Optional automated captures",
+          "level": 3
+        },
+        {
+          "line": 105,
+          "heading": "Revert and rebuild",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "mods/README.md",
+      "title": "Personal overlays",
+      "bytes": 478,
+      "words": 67,
+      "sha256": "62b6b579dc1ccac2c4b4d3633e45822e4f2aa4cab1d2e90ef66b78730a35e648",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Personal overlays",
+          "level": 1
+        }
+      ]
+    }
+  ]
+}

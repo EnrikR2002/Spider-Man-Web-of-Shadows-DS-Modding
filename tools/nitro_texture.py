@@ -126,7 +126,7 @@ def green_suit(data: bytes) -> tuple[bytes, dict]:
     return changed, {'asset': 'spd.nsbtx', 'old_sha256': w.sha256(data), 'new_sha256': w.sha256(changed),
                      'old_size': len(data), 'new_size': len(changed), 'palette_start': archive.palette_start,
                      'palette_size': archive.palette_size, 'color_edits': edits,
-                     'boot_evidence': 'See docs/VISIBLE_MOD.md and reference/visible_mod_report.json',
+                     'boot_evidence': 'See archived VISIBLE_MOD.md and reference/visible_mod_report.json',
                      'rule': 'swap red/green for r>=8, r>g+4, r>b+4; preserve bit15'}
 
 

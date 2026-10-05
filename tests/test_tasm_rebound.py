@@ -93,7 +93,7 @@ class LocalReboundTests(unittest.TestCase):
         with self.assertRaises(ValueError): cp.apply_rom(changed, True)
 
     def test_original_catalog_matches_all_21_native_purchase_records(self):
-        catalog = json.loads((mod.ROOT/'docs/ORIGINAL_GAMEPLAY.json').read_text())
+        catalog = json.loads((mod.ROOT/'reference/original_gameplay.json').read_text())
         start = struct.unpack_from('<I', self.rom, 0x20)[0]
         for group in ('red_purchases', 'black_purchases', 'shared_purchases'):
             self.assertEqual(len(catalog[group]), 7)

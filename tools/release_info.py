@@ -1,0 +1,156 @@
+"""Deterministic numbered releases: native version labels and guarded upgrade prices."""
+from __future__ import annotations
+import argparse
+import json
+from pathlib import Path
+import re
+import struct
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from tools import wos_tool as w, oscorp_resources
+from tools.qol_suits_menu import StringSlots
+
+VERSION = '0.1.1'
+RELEASE_DATE = '2026-10-05'
+PROFILE = f'tasm-v{VERSION}'
+PARENT_PROFILE = 'tasm-v0.1.0'
+PARENT_ROM_SHA = 'e1b66ebdad90856f7af5a508bd2bcd78ade0640c6926e6668da2c6b36cee1451'
+PARENT_RECIPE_SHA = '6267bb27ead9e4efe35b9cba76aeedf4174621f5d9b14ae3a75a03af25aa7814'
+PRICE_TABLE = 0x120340
+OLD_PRICES = (100, 200, 600, 400, 600, 800, 1000)
+PRICES = (50, 100, 150, 150, 200, 250, 350)
+SHARED_PRICE_TABLE = 0x120260
+SHARED_NAMES = ('Launching Uppercut', 'Enemy Kick-Off', 'Drill Kick', 'Jackhammer Stomp',
+                'Air Dodge', 'Enhanced Dodge', 'Quick Recovery')
+SHARED_BITS = (6, 12, 7, 8, 10, 9, 11)
+OLD_SHARED_PRICES = (50, 200, 400, 600, 200, 800, 800)
+SHARED_PRICES = (25, 50, 100, 150, 50, 200, 150)
+TEXT_EDITS = {50: f'TASM v{VERSION}\nPress a button to start',
+              74: f'Options v{VERSION}'}
+# Exact authored parent plus the Red and Both Suits price words.
+ARM9_SHA256 = '322fbd7bd597f91f875957f65eadc6fcb7611480c64e76db6a14a0ef736ed6f6'
+PROFILE_INFO = {
+    'tasm-v0.1.0': {'version': '0.1.0', 'date': '2026-10-05',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350), 'shared_prices': None,
+                    'arm9_sha256': 'da50ad8a0f249ad95461fe63157c61957bb6bfa6b5c1361a7bdef6d107d3e86e'},
+    PROFILE: {'version': VERSION, 'date': RELEASE_DATE,
+              'red_prices': (50, 100, 150, 150, 200, 250, 350),
+              'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+              'arm9_sha256': ARM9_SHA256},
+}
+PROFILES = tuple(PROFILE_INFO)
+HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'
+
+
+def check_version_reuse(version, digest, history=None):
+    """A published version must always identify one exact ROM."""
+    if not isinstance(version, str) or not re.fullmatch(r'(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)', version):
+        raise ValueError('Expected a major.minor.patch version')
+    path = HISTORY if history is None else Path(history)
+    data = json.loads(path.read_text(encoding='utf-8')) if path.exists() else {'schema_version': 1, 'releases': []}
+    if data.get('schema_version') != 1 or not isinstance(data.get('releases'), list):
+        raise ValueError('Invalid release history')
+    for row in data['releases']:
+        if row.get('version') == version and row.get('rom_sha256') != digest:
+            raise ValueError('Version already identifies a different published ROM; bump the version')
+    return data
+
+
+def register_release(version, digest, *, date, previous, history=None):
+    data = check_version_reuse(version, digest, history)
+    path = HISTORY if history is None else Path(history)
+    if not any(row.get('version') == version for row in data['releases']):
+        data['releases'].append({'version': version, 'date': date,
+                                'rom_sha256': digest, 'previous_rom_sha256': previous})
+        w.write_json(path, data)
+
+
+def apply_rom(rom, profile=PROFILE):
+    if profile not in PROFILE_INFO:
+        raise ValueError('Unknown numbered release profile')
+    info = PROFILE_INFO[profile]
+    header = w.parse_header(rom)
+    start, size = header['arm9_offset'], header['arm9_size']
+    raw = rom[start:start + size]
+    if w.sha256(raw) != oscorp_resources.ARM9_SHA256:
+        raise ValueError('Versioned prices require the exact authored Rush parent')
+    result = bytearray(rom)
+    edits = []
+    groups = [('red', PRICE_TABLE, tuple(range(13, 20)), OLD_PRICES, info['red_prices'])]
+    if info['shared_prices']:
+        groups.append(('shared', SHARED_PRICE_TABLE, SHARED_BITS, OLD_SHARED_PRICES, info['shared_prices']))
+    for group, table, bits, old_prices, prices in groups:
+        for row, (bit, old, new) in enumerate(zip(bits, old_prices, prices)):
+            offset = table + row * 32 + 28
+            if w.u32(raw, offset) != old or w.u32(raw, offset - 28) != bit + 309:
+                raise ValueError(f'Native {group} purchase record differs')
+            struct.pack_into('<I', result, start + offset, new)
+            edits.append({'field': f'{group}_upgrade_price', 'arm9_offset': offset,
+                          'ability_bit': bit, 'old': old, 'new': new})
+    if w.sha256(result[start:start + size]) != info['arm9_sha256']:
+        raise ValueError('Unexpected versioned price ARM9')
+    return bytes(result), edits
+
+
+def generate(output=None):
+    import mod
+    from tools import combat_profile as cp
+    dest = w.safe_output(mod.project_path(output or f'build/version-{VERSION}'))
+    if not dest.is_relative_to((mod.ROOT / 'build').resolve()):
+        raise ValueError('Candidates belong in build/')
+    rom, glob, manifest = mod.load_clean()
+    entries = {e['name']: e for e in manifest['entries']}
+    recipe_path = mod.ROOT / 'reference/gameplay_profile.json'
+    overlays = mod.overlay_files(mod.ROOT / 'mods', list(entries),
+                                 added_names=oscorp_resources.EXTRA_NAMES)
+    recipe = json.loads(recipe_path.read_text(encoding='utf-8'))
+    current = cp.load_recipe(recipe_path, overlays)
+    if current != PARENT_PROFILE or w.sha256(recipe_path.read_bytes()) != PARENT_RECIPE_SHA:
+        raise ValueError('Version candidate requires the exact accepted parent recipe')
+    if set(overlays) != set(recipe['required_overlays']):
+        raise ValueError('Explicit merge required for additional overlays')
+    parent, _, _ = mod.create_build(rom, glob, manifest, overlays, gameplay_profile=current)
+    if w.sha256(parent) != PARENT_ROM_SHA:
+        raise ValueError('Parent release is not the measured current release')
+    before = dict(overlays)
+    for name in ('English.strings', 'American.strings'):
+        e = entries[name]
+        clean = glob[e['offset']:e['offset'] + e['size']]
+        overlays[name] = StringSlots(clean).repack(overlays[name], TEXT_EDITS)
+    for name, data in overlays.items():
+        w.atomic_write(dest / 'mods' / name, data, (mod.DEFAULT_ROM,))
+    recipe = {'schema_version': 1, 'profile': PROFILE, 'release_version': VERSION,
+              'required_overlays': {name: w.sha256(data) for name, data in overlays.items()}}
+    w.write_json(dest / 'gameplay_profile.json', recipe)
+    result, _, log = mod.create_build(rom, glob, manifest, overlays, gameplay_profile=PROFILE)
+    log['release_version'] = VERSION
+    path = dest / 'Versioned.nds'
+    w.atomic_write(path, result, (mod.DEFAULT_ROM,))
+    w.write_json(path.with_suffix('.build.json'), log)
+    h = w.parse_header(result)
+    report = {'version': VERSION, 'rom_sha256': w.sha256(result),
+              'arm9_sha256': w.sha256(result[h['arm9_offset']:h['arm9_offset'] + h['arm9_size']]),
+              'parent_rom_sha256': PARENT_ROM_SHA, 'old_prices': OLD_PRICES, 'prices': PRICES,
+              'old_shared_prices': OLD_SHARED_PRICES, 'shared_prices': SHARED_PRICES,
+              'text_edits': TEXT_EDITS,
+              'unchanged_overlays': [n for n in overlays if overlays[n] == before[n]],
+              'qualification': 'Structural candidate; boot/options/buy/refund checks required.'}
+    w.write_json(dest / 'release.json', report)
+    return path
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--out', default=f'build/version-{VERSION}')
+    args = parser.parse_args()
+    try:
+        print(generate(args.out))
+        return 0
+    except (OSError, ValueError) as exc:
+        print(f'error: {exc}', file=sys.stderr)
+        return 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

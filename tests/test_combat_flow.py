@@ -39,7 +39,7 @@ class LocalCombatFlowTests(unittest.TestCase):
         with self.assertRaises(ValueError):f.apply_rom(self.after)
 
     def test_native_purchase_input_damage_and_sdk_records_preserved(self):
-        catalog=json.loads((mod.ROOT/'docs/ORIGINAL_GAMEPLAY.json').read_text())
+        catalog=json.loads((mod.ROOT/'reference/original_gameplay.json').read_text())
         for group in ('red_purchases','black_purchases','shared_purchases'):
             for item in catalog[group]:
                 offset=item['record_address']-h.BASE

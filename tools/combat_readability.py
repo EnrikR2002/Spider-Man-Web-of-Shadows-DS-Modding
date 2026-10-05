@@ -18,6 +18,8 @@ def text_overlay(clean, current, extra=None):
              if slots.decode(current, i) != slots.texts[i]}
     edits.update(TEXT_EDITS)
     if extra: edits.update(extra)
+    if len(current) != len(clean) or slots.variant_offsets(current) != slots.offsets:
+        return slots.repack(current, edits)
     return slots.replace(edits)
 
 

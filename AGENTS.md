@@ -1,75 +1,82 @@
-# Codex project instructions
+# Project instructions
 
-We are reverse-engineering the Nintendo DS version of Spider-Man: Web of Shadows (USA, game code CS5E) for private modding/research.
+Private modding/research of Nintendo DS Spider-Man: Web of Shadows, USA CS5E.
+User instructions override older plans. Never overwrite the original ROM or
+publish ROMs/extracted copyrighted assets.
 
-Priorities:
-1. Never overwrite the original ROM. Read it from `original/`; write builds to `build/`.
-2. Keep all tools deterministic and scriptable from Windows PowerShell.
-3. Prefer Python standard library for archive/ROM tooling unless a dependency clearly saves substantial work.
-4. Every parser/repacker needs round-trip tests before it is trusted.
-5. Unknown binary fields must be documented as unknown rather than guessed.
-6. Preserve unknown bytes wherever possible.
-7. Keep `docs/FORMAT_NOTES.md` updated with every confirmed structure, hypothesis, and test result.
-8. Keep a `docs/MODDABILITY_MATRIX.md` with each format, what it likely controls, parsing status, editing status, and confidence.
-9. Do not distribute the ROM or extracted copyrighted assets. If public patching is added later, produce patches/tools only.
-10. Favor minimal empirical experiments: change one field/asset, rebuild, boot, observe, revert/iterate.
+## Fixed document layout
 
-Confirmed facts are in `docs/ANALYSIS.md` and `reference/glob_manifest.csv`.
+There are six core Markdown documents. Edit these in place; do not create another
+feature, release, experiment, session, plan or handoff Markdown file.
 
-## Session continuity and tasks
+| File | Owns |
+|---|---|
+| AGENTS.md | Startup instructions, guardrails and this document policy |
+| docs/TASKS.md | Current work, ordered backend queue/ideas and short handoff |
+| docs/TECHNICAL.md | Everything learned about ROM formats/engine/tools; confidence, unknowns and evidence |
+| docs/OG_GAMEPLAY.md | How the original game works, before modifications |
+| docs/CHANGES.md | Implemented mod behavior, numbered release history and validation limits |
+| docs/TASM_ROADMAP.md | TASM identity, combat design, progression and prototype order |
 
-- Read `docs/TASKS.md` at the start of each session before choosing work.
-- Keep it as the project task/handoff source of truth: current work, last completed
-  release, ordered next steps, unresolved checks and links to detailed evidence.
-- Update it after a milestone and before ending a session. Distinguish implemented,
-  agent-tested and player-confirmed behavior; never mark an untested move complete.
-- Preserve queued work across sessions. Record a concrete next action when stopping
-  during research, along with candidate/evidence paths needed to resume.
+Root README is a short entry point/workflow; mods/README is the overlay-loader
+exception. No other active Markdown is permitted. The documentation-layout test
+enforces this set and bounds TASKS/AGENTS size. Technical detail may grow in the
+single notebook, but must use searchable topic headings, not repeated logs.
+Machine-readable catalogs/release records live under reference/. Generated
+reports/scripts/captures live in ignored work/ or build/.
 
-## Accepted user workflow (2026-10-04)
+Read AGENTS and TASKS at startup. Then search headings with rg and read only the
+section relevant to the task. Never bulk-read TECHNICAL, CHANGES, catalogs or the
+archive. Older exact notes are in docs/archive/legacy-notes.zip; use
+`python tools/doc_archive.py list <topic>` then `read <note> --toc/--section`.
+Update TASKS after milestones/before stopping, replacing stale state. Keep it
+under 900 words; preserve concrete next actions/evidence paths and backend queue.
+Put shipped facts in CHANGES, research in TECHNICAL, proposals in TASM_ROADMAP.
+Always distinguish implemented, agent-tested and player-confirmed behavior.
 
-- Develop one suit at a time. The combined TASM 1/2 identity is active; retain the selected backlog in
-  `docs/SUIT_ROADMAP.json`. Prototype through the red form while investigating
-  a separate third slot. Describe proposals separately from implemented behavior.
-- The agent handles save management for every feature release. Use the actual
-  configured Battery directory in ignored `work/playtest.json`. Preserve progress,
-  verify the DSV wrapper and snapshot bytes, and keep DeSmuME closed during mutation.
-- Test isolated candidates, merge all accepted overlays, then publish with
-  `python tools/playtest.py build`. Keep `build/Spider-Man-WoS-modded.nds` stable;
-  retain prior ROM/checkpoints. Do not give the player renamed everyday builds.
-- Player flow: `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
-  The agent creates/restores named battery checkpoints when useful or requested.
-  Do not ask the player to manage filenames or run backup/build commands.
-- Use battery copies for isolated emulator tests; never write research results
-  into the real save or replay an old save state over a changed ROM.
+## Tools, testing and release safety
 
-## Upgrade progression constraint (2026-10-04)
+- Read originals from original/, write builds to build/. Keep tools deterministic
+  and scriptable in Windows PowerShell; prefer Python standard library.
+- Every parser/repacker needs lossless round-trip tests. Preserve unknown bytes;
+  call unknown fields unknown. Test one empirical change at a time with a control.
+- Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.
+  Agent manages builds/checkpoints; keep build/Spider-Man-WoS-modded.nds stable.
+- Use the actual Battery directory in ignored work/playtest.json. Keep DeSmuME
+  closed for save mutations/publication, verify DSV wrapper/snapshot bytes, and
+  preserve latest progress/prior ROMs/active compositions. Re-read latest battery.
+- Use copied batteries/disposable emulator RAM for research; never write fixtures
+  into the real save or load stale emulator states over a changed ROM.
+- Qualify isolated candidates, compose all accepted overlays, publish through
+  `python tools/playtest.py build`. Do not ask the player to manage filenames,
+  backups or build commands. Record the release in CHANGES and reference/releases.json.
+- Version is major.minor.patch: minor for new/overhauled mechanics, patch for
+  fixes/polish/balance, major for a finished overhaul or incompatible contract.
+  A published version identifies one exact ROM; never reuse it for different bytes.
+  Show the same version at boot and in Options. Keep release code in existing
+  tools/release_info.py rather than creating per-version scripts/modules.
 
-Latest user steering supersedes the one-for-one limits below: combine the TASM 1
-and TASM 2 combat identity into one TASM kit; ideate 10+ skills and flexible
-prices/power tiers. The original seven slots are a starting implementation path,
-not a design ceiling. Expanded progression/menu/save support remains research;
-do not silently grant abilities or remove shared traversal requirements.
-Web Vault is player-confirmed. Its brief air window should gain deliberate paid
-pursuit/control extensions later. Rebound's closer, higher juggle response and
-the combat feedback pass are released; player checks remain open for readability,
-ordinary incoming hits and unusual encounters. Never display inferred attack
-strength as actual HP damage. See `docs/COMBAT_FEEDBACK.md` for the current
-recipe and limits.
+## Current gameplay authority
 
-- User confirmed Snap Sweep works and may remain the free base opener.
-- Future TASM moves must replace existing purchased Red-tab skills, with new
-  names, comparable power/role and purchase gating. Do not grant them at game start.
-- Preserve each replaced slot's native cost, progression gates and purchase flag;
-  an existing purchase carries over as ownership of its replacement. Keep shared
-  Both Suits upgrades and traversal/progression functions intact.
-- The user approved the full replacement plan. `docs/TASM1_UPGRADE_PLAN.md` /
-  `.json` describe approved targets, not already implemented gameplay. Implement
-  incrementally, retaining purchase gates and measuring balance against originals.
-- Snap Sweep's base binding borrows GroundAttack15 assets. Editing those assets
-  globally can leak paid behavior into the opener. Preserve the base action and
-  modify purchased action routes separately, checking locked and purchased cases.
-- Original red/black identity and the lower-right combo meter are mapped in
-  `docs/ORIGINAL_GAMEPLAY.md` and `docs/COMBO_ENGINE.md`; preserve those findings
-  while implementing the expanded kit. The user authorizes ambitious mechanics
-  and custom animations where feasible.
+2026-10-05 latest steering: FUN COMES FIRST. The user rejected the 26-skill
+catalog as overwhelming. Build one complete trickster-acrobat kit around bounce,
+zip, sling and web burst, with responsive attacks/escapes and a few consistent
+inputs. Prove the fun in a crowd with generous tuning and the full kit enabled
+in an isolated prototype. Defer prices, cooldowns, damage parity and progression
+until the loop earns player acceptance. No target skill count or separate
+purchases for basic movement/cancel/targeting usability. Native limits are not
+design ceilings. Real mechanics/choreography must make the identity visible.
+
+Develop one combined TASM1/2 kit at a time through red form. Selected later suits
+remain in reference/suit_roadmap.json. Preserve native ownership/dependencies,
+existing purchases, Both Suits traversal and Reinforced Web unless a deliberate
+migration is implemented. Do not grant paid moves at start or steal black bits.
+Expanded shop rows/save support and third suit selection remain research;
+progression work follows the fun prototype. Fully enabled research uses copied
+saves/disposable RAM, never the real save. Public ownership migration stays explicit.
+
+Snap Sweep is player-confirmed. It borrows GroundAttack15 payloads; author paid
+routes separately and test locked/owned cases. G11/16/17 also have m6.xbd users,
+so they are not spare storage; retain original IDs/other actor bindings.
+Original Web Vault is player-confirmed; later refinements/player checks remain
+open. Never report attack strength as HP damage or the combo gauge as hit count.
