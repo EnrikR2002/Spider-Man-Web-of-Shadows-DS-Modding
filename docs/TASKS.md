@@ -4,78 +4,132 @@ Updated: 2026-10-04 (America/Edmonton).
 
 ## Resume here
 
-**Current release:** combat-flow revision plus small instruction clarity pass, published with
-`python tools/playtest.py build` to `build/Spider-Man-WoS-modded.nds`.
-Exact tested candidate and published ROM match. Profile **tasm-combat-flow**
-composes all eleven accepted overlays. See `COMBAT_FLOW.md` for current evidence;
-`COMBAT_HUD.md` and `TASM1_SLING_STRIKE.md` preserve the initial release.
-The current text-only addition is documented in `QOL_CLARITY.md`: sixteen shorter
-shared/traversal instructions, combo-gap explanation and map/save/training tips.
-Menu and training layout agent-checked; individual tutorial popups remain unvisited.
+**Current release: compact boxing refinement of authored Oscorp Rush**,
+published through `python tools/playtest.py build` to
+`build/Spider-Man-WoS-modded.nds`. Profile **tasm-oscorp-rush-authored** composes
+seventeen guarded overlays. Published ROM, qualified candidate and a fresh
+regeneration from the published composition are byte-identical. Current evidence:
+`OSCORP_RUSH_ANIMATION.md`; initial motion release: `TASM1_OSCORP_RUSH.md`.
 
-- Sling Strike keeps native aerial web targeting but now makes one visible
-  passing kick, stops residual movement and turns back toward the enemy.
-  600 XP / event324 / bit15 and the native 12697-Q12 total request remain.
-  Both facing directions, locked case and owned ordinary aerial Y are agent-tested.
-- Web Vault now copies the successfully launched common target's actual upward
-  velocity and zeros its horizontal drift. Player and target rise alongside each
-  other: measured height difference under0.051 units in the right-facing chain.
-  Use A grapple -> Up -> A again while airborne for purchased Sling.
-  200 XP / event323 / bit14 retained. Initial Vault was player-confirmed;
-  this matched-height revision is agent-tested, awaiting player acceptance.
-- Health bars are one continuous 24x4 strip. Fixed native column-major pixel
-  order and canvas height accumulation; moving-camera cleanup visually verified.
-  Positive health below resolution retains one red pixel. Tiny transient combo
-  numeral, no damage numbers, native meter and red mission marker are retained.
-- HUD redraws every second native HUD tick, skips idle rendering, clears only
-  owned rectangles, caches projection scale and prewarms the stock font.
-  Whole-core timing was roughly flat: this reduces HUD work, but does not prove
-  the intermittent DeSmuME hitches are fixed. Settings were not guessed/changed.
+- Rush400 XP/event325/bit16: Y, let Snap finish, Y,Y,Y enters jab-cross-hook,
+  a knee/kick and overhand cross. All three paid clips are authored
+  across their full39/12/20 samples using FK/IK and quaternion controls. Native
+  six-contact HP/credit, sample clocks, commitment and prior root advance remain.
+  Close guard, restrained hip motion and correctly oriented shoulder twist
+  replace the dance-like sway rejected by the player. Novelty was confirmed;
+  this refined animation's quality/feel still awaits player acceptance.
+- Dedicated SCA IDs3733..3735 isolate the player choreography. All original3733
+  IDs, original animation payloads, Snap and other actor bindings stay exact
+  against the parent. m6 also uses G11/16/17: none is a globally unused spare.
+  Only three player SCA bindings and the Glob count literal change for routing.
+- Prior native purchase/refund/save/reload and locked checks remain recorded;
+  gates, bindings and ARM9 are exact against that release. The latest revision
+  matches contact frames, HP/credit and final position in both facing directions.
+  Scissor remains the600-XP/bit17 repeat extension, not the proposed Barrage.
+  A rapid-input fixture repeats action60 four times for eight contacts; this
+  is not a universal cap. Final and old builds have matching native HP/credit.
+- All contacts including unchanged Snap shift two emulator frames earlier. A
+  count-only control with old player bindings/text has the same final contact
+  frames. Relative timing, native clocks and final position stay exact; this
+  does not establish an FPS or speed change.
+- Accepted suit, Rebound, matched-rise Vault, passing/turning Sling, compact
+  feedback, red marker, instruction clarity and SELECT+Down training refill
+  are retained. Original Vault is player-confirmed. Refined Rush and the later
+  move/feedback revisions are agent-tested, awaiting player acceptance.
 
-ROM SHA256 `67472ad12cc6be60134588a992945eaba505eacc85a741f48684ce3a5f737520`.
-ARM9 SHA256 `b43630d4f0bf0ea3530a6330f7c80482d6ba1f70ba194a447eb93e8a738d77ea`.
-**96 tests pass; all3,733 resources verified.** Required overlay hashes are guarded
-by `reference/gameplay_profile.json`. Snap, shared traversal, purchased ownership,
-Rebound response and all21 native purchase records stay intact.
+ROM SHA256 `f0382e984ae3bd6038e0bb87a14effa4d844fd390456ab1f36eb67159d386d4b`.
+ARM9 SHA256 `72ab438e0998ec2b021bd79a4f36adf5e88a456ccbe51afff100c81461390b12`.
+**125 revision-source tests pass; all3,736 resources verified during build.** ARM9 differs
+from the accepted Rush parent only at source0x77F8: Glob count3733 ->3736.
+The ordinary overlay workflow still rejects manual GlobFiles/arbitrary additions;
+only this authored profile permits its three fixed hash-pinned SCA filenames.
 
-DeSmuME was closed throughout checkpoint/publication. Latest real save before/after:
-`a22cdc22490db27af413520d4a7aa09e7decdec3ab5d41636c575bc6bd19ce46`,
-634-byte DSV v0/512 payload. `before-combat-flow`, `before-clarity` and the content-addressed
-before-build checkpoint retain it. Previous stable ROM
-`c700f3b5bbf1d05d2c4d1b61da6256129c3a2e91648068b4f6a237aea99e09cf`
-is retained in `build/releases/`. Actual latest progress copy fresh-boots to Sewer,
-417 XP and bits13/14/15; idle HUD performs zero draws. Older native-menu training
-batteries are isolated and were never restored over this newer player progress.
-Private proof: `work/combat-flow/final-evidence.json` and
-`build/boot-tests/CombatFlow-c700f3b5/`.
+DeSmuME was closed during checkpoint/publication. Latest real save before/after:
+`84ede9fb98686a88a789775d4ceba67abc38dc1859926d327f21651381f59414`,
+634-byte DSVv0/512 payload. Content-addressed `before-rush-refine` and
+`before-build` checkpoints preserve it. Prior8bc72be4 ROM remains in
+`build/releases/<old-sha>/`; its active recipe and overlays are preserved under
+`visual-refinement-parent/`. Earlier releases/checkpoints remain. No research
+purchase, HP, Scissor fixture or older save was restored to the real battery.
+Current assertions: `work/animation-research/visual-refinement-evidence.json`;
+current replays: `build/boot-tests/OscorpAuthored-f0382e98/`;
+initial qualification: `work/animation-research/dedicated-evidence.json` and
+`build/boot-tests/OscorpAuthored-8bc72be4/`;
+count-only: `build/boot-tests/CountControl-409c6d41/count-only-owned/`.
 
-**Player checks pending:** revised Sling/Vault feel; ordinary/dense AI encounters,
-specialized enemy/boss health paths, walls/ceilings/interruption and long play;
-intermittent lag; revised Rebound pursuit. Do not describe dummy replays as ordinary
-AI-contact coverage or claim guaranteed extra aerial Y hits. A direct wall-position
-fixture fell outside the training floor and remains excluded. Native collision is
-used, but that is not a wall-test pass. Full/dead bars expire after a bounded delay.
+**Performance/visual deep dive:** `PERFORMANCE_VISUALS.md`. Added deterministic
+compact0x60 GMB encoding (all769 native decoded round trips), benchmark tooling
+and a read-only272-archive/1654-texture census. Only two changed Rush wrappers use
+compact encoding; their combined892 bytes avoid15092 literal bytes, without an
+FPS claim. Threaded software rendering reduced average pinned-core host cost
+~15.9% over two alternating idle Sewer rounds; tails/idle poses vary, exact PNG
+parity is not established. This is not a measured DeSmuME hitch/dense-AI fix.
+Actual INI plus release source suggest software/interpreter/disk streaming/1x.
+Optional JIT12/preload and AUTOGL/2x presets are prepared, not activated. The
+launcher doesn't edit INI, but DeSmuME itself persists renderer selection.
 
-**Next approved development:** Oscorp Rush / Spider Dance, 400 XP. Trace purchased
-and locked pause-input string, damage/credit/recovery and shared asset ownership
-before changing it. Preserve Snap's borrowed GroundAttack15 assets. Further player
-feedback takes priority; never run a legacy generator over the default flow recipe.
+**Player checks pending:** full Rush strike readability/feet/transition/feel;
+revised Sling/Vault/Rebound feel; ordinary/dense AI, specialized enemies/bosses,
+walls/ceilings/interruption and long play. Training floor replays are not those
+encounter checks. Real DeSmuME hitch and optional2x visual acceptance remain open.
+Health-bar specialized coverage and crowding remain open. A prior wall fixture
+fell outside the floor and remains excluded.
 
-The latest player steering replaces the earlier brief Vault hop with matched rise
-and no incoming target drift. Further paid pursuit/control and Air Catch's separate
-purchase/bundle remain undecided. ONE combined TASM1/2 kit has thirteen paid tools
-plus Snap proposed in `TASM_EXPANDED_ROADMAP.md`. Orbit Breaker remains a late-game
-acrobatic area-finisher proposal with launch/reconnect setup and single-target use;
-not implemented or allocated a save bit. See `IMPROVEMENT_BACKLOG.md`.
+**Next approved move:** Rebound Barrage / Scissor-Kick Special600 XP/event326/bit17,
+retaining Rush dependency. First measure native action60 repeat entry/cap/control,
+then isolate a distinct authored Barrage sequence/mechanic. Rush's new bridge SCA
+is dedicated to its paid route; preserve its current budget and the other actor's
+native clips. Useful gate0x020B5444, table0x0211BB70;
+`work/animation-research/scissor-input.json`, `dedicated-evidence.json`,
+`work/rush/research.py`, `tables.txt`, `probe.py`; native inputs under
+`reference/combat-inputs/oscorp-*.json`.
+
+Latest design remains ONE combined TASM1/2 kit with13 proposed paid tools plus
+Snap. Paid pursuit/control extensions, Air Catch purchase/bundle, independent
+shop rows/save migration and third suit remain research. Orbit Breaker remains
+a late-game area-finisher proposal, not implemented or allocated a save bit.
+Preserve `TASM_EXPANDED_ROADMAP.md`, `IMPROVEMENT_BACKLOG.md` and selected suit backlog.
 
 ## First actions in a fresh session
 
-1. Read AGENTS.md, this file, COMBAT_FLOW.md and QOL_CLARITY.md; initial release docs are historical.
-2. Check git status/log, stable hashes, configured real battery and the current
-   guarded tasm-combat-flow recipe. Never mutate progress with DeSmuME running.
-3. Record new player feedback separately from agent tests. Preserve paid gates.
-4. For Oscorp Rush, map the native Spider Dance owned/locked entry, contact and
-   recovery, especially routes sharing Snap assets. Retain all accepted overlays.
+The player confirmed Rush's full choreography was new but rejected its dance-like
+sway. A compact jab-cross-hook, knee/kick and overhand refinement is now published.
+Record feedback on the close guard, strike readability and transition before
+marking this revision player-confirmed.
+`sca_author.py` retains all869 exact sample-document and126 player independent
+bake tests. `animation_rig.py` maps canonical37 names/parents. Procedural FK/IK
+enables original choreography now; a Blender bridge remains separate work.
+
+Immediate next action: ordinary encounter/player checks of planted feet, strike
+readability, start/end transitions, facing, walls and interruptions. Refine the
+control curves if feedback warrants. For the next paid move, trace/measure the
+Scissor repeat path and author an independently routed Barrage. Do not reuse
+original G11 as spare storage: m6 still binds it. All original player animations
+are referenced by actor XBDs. Existing IDs must stay stable.
+
+Tools: `oscorp_animation.py`, `oscorp_resources.py`, `rush_choreography.py`;
+candidate `build/oscorp-visual-refinement/`, regeneration
+`build/oscorp-refinement-regenerated/`, count-only `build/oscorp-count-control/`;
+private `work/animation-research/{visual-refinement-evidence.json,
+check-visual-refinement.py,promote-visual-refinement.py}`. Initial compiler/recovery proof remains in
+ANIMATION_AUTHORING.md. Blender bind/axis round trip, scale edits, retiming,
+unused-track compaction and measured heap headroom remain open.
+
+Controlled research uses copied `before-oscorp-rush` bytes; earlier Continue
+qualification used a read-only copy of the then-current real battery. Live save
+advanced independently to84ede9fb
+and is preserved by this release. Never restore older a22cdc or0d063aa6 progress
+over it. Re-read the actual latest battery while closed before any next release.
+
+1. Read AGENTS.md, this file, OSCORP_RUSH_ANIMATION.md, COMBAT_FLOW.md and PERFORMANCE_VISUALS.md.
+2. Check git status, stable hashes, actual configured battery and guarded authored
+   recipe. Keep DeSmuME closed before save mutations/publication.
+3. Record player feedback separately from agent checks. Preserve accepted overlays,
+   native paid gates/shared traversal and the stable launcher/save flow.
+4. For Barrage, isolate native bit17 extension on the current paid parent; for
+   lag, isolate JIT/preload/renderer before changing more game code.
+5. Retain original choreography as the priority for future move replacements;
+   a stock clip with a new name is insufficient visual differentiation.
 
 ## Active incremental TASM task list
 
@@ -88,8 +142,10 @@ not implemented or allocated a save bit. See `IMPROVEMENT_BACKLOG.md`.
 - [x] Sling Strike: purchased Mid-Air Snare replacement, 600 XP; agent-tested.
 - [x] Feedback revision: continuous bars, matched Vault rise and bounded passing/turning Sling; agent-tested.
 - [ ] Player check for revised Sling/Vault feel and unusual encounters.
-- [ ] Real DeSmuME intermittent hitch/density check; whole-core benchmark gain not established.
-- [ ] Oscorp Rush: replace Spider Dance, 400 XP.
+- [ ] Real DeSmuME intermittent hitch/density check; idle threaded-core mean gain~15.9% is not a DeSmuME hitch fix.
+- [ ] Isolated JIT/preload/renderer trials, then2x visual acceptance; optional presets prepared but inactive.
+- [x] Oscorp Rush: replaces Spider Dance,400 XP; native buy/refund/save/reload, both facing and locked cases agent-tested.
+- [ ] Player check of Oscorp Rush feel, spacing and unusual encounters.
 - [ ] Rebound Barrage: replace Scissor-Kick Special, 600 XP; retain dependency.
 - [ ] Slip Counter: replace Amazing Speed Boost, 800 XP; engine research required.
 - [ ] Momentum: replace Ultimate Speed Boost, 1,000 XP; retain dependency.
@@ -105,9 +161,14 @@ not implemented or allocated a save bit. See `IMPROVEMENT_BACKLOG.md`.
 - [x] Remove damage numbers; wounded common enemies use small actor-anchored health bars.
 - [x] Restore red mission marker, clearer upgrade inputs/prerequisites and full dummy refill.
 - [x] Small shared/traversal, combo-gap and map/save/training instruction clarity pass; menu layout agent-tested.
+- [x] SELECT+Down native training HP refill; positive/flag-clear controls and help text agent-tested.
 - [ ] Optional native HUD toggle/crowding refinements remain future research.
 - [ ] Broader walls/ceilings/bosses/interruption/long-play checks as the kit develops.
 - [ ] Independent third suit selection; investigate without altering traversal.
+- [x] Sampled SCA compiler, canonical rig map and independent-track game proof; research only.
+- [ ] Blender bind/axes calibration and exact native clip export/import.
+- [x] Complete original three-clip paid Rush choreography, dedicated resource isolation and controlled qualification; player acceptance pending.
+- [ ] Broad gameplay/transition checks for the authored Rush sequence; refine from player feedback.
 
 ## Selected suit backlog
 
@@ -129,7 +190,7 @@ be discussed later. Exact selection is in `SUIT_ROADMAP.json`.
 - Approved scope/order: `TASM1_UPGRADE_PLAN.md` / `.json`.
 - Original behavior: `ORIGINAL_GAMEPLAY.md`, `UPGRADE_ENGINE.md`, `COMBO_ENGINE.md`.
 - Animation data: `ANIMATION_RESEARCH.md`, `FORMAT_NOTES.md`, `MODDABILITY_MATRIX.md`.
-- Current release evidence: `COMBAT_FLOW.md`; initial HUD/Sling evidence:
+- Current release evidence: `TASM1_OSCORP_RUSH.md`, `PERFORMANCE_VISUALS.md` and `COMBAT_FLOW.md`; initial HUD/Sling evidence:
   `COMBAT_HUD.md`, `TASM1_SLING_STRIKE.md`; historical move evidence:
   `TASM1_WEB_VAULT.md` and `TASM1_REBOUND.md`;
   save workflow: `TESTING_WORKFLOW.md`.
@@ -171,3 +232,52 @@ be discussed later. Exact selection is in `SUIT_ROADMAP.json`.
   and unchanged ARM9. Published clarity67472ad1 through the stable playtest build;
   latest a22cdc save preserved, before-clarity checkpoint and c700f3b5 prior ROM
   retained. Oscorp Rush and larger menu/camera/settings work stay queued.
+
+- 2026-10-04: continued after usage interruption and released Oscorp Rush400,
+  bounded purchased advance/recovery and SELECT+Down training HP refill.102 tests
+  and3,733 resources pass; native buy/refund/save/reload, owned/locked/mirrored
+  contact/credit and positive/negative refill controls pass. Latest a22cdc DSV
+  preserved exactly, before-oscorp-rush checkpoint and prior67472ad1 ROM retained.
+  Added compact GMB encoding, texture census and performance/visual report.
+  Threaded idle core mean improves~15.9%; DeSmuME hitch and HD acceptance remain
+  open. Next move Rebound Barrage600; earlier player checks stay queued.
+
+- 2026-10-04: player asked for original attack choreography. Added sampled SCA
+  export/import with independent rotation/translation tracks and canonical37-bone
+  ancestry; all869 exact sample round trips and126 player independent bakes pass.
+  Isolated unchanged rebake and six-bone recovery play in-game; training contacts,
+  actual HP/credit, ownership and final position match. This is an authoring proof,
+  not a complete new attack or tested Blender bridge. All115 tests and3,733
+  resource verification pass. Historical combat-flow generation now refuses a
+  Rush parent. Stable ecb07b9a remains unchanged; real save advanced independently
+  to observed0d063aa6 and was never mutated by research. Next concrete action:
+  calibrate DCC bind/axes, prove a native-clip round trip, then author a whole paid
+  GroundAttack17 finisher. See ANIMATION_AUTHORING.md and the private candidate/
+  evidence paths in First actions. Rebound Barrage and prior player checks remain
+  queued; no animation prototype was published.
+
+- 2026-10-04: player reported Rush looked like Scissor and authorized full
+  choreography. Published grounded alternating palms, knee/kick and turning
+  backfist across39/12/20 samples using FK/IK. m6 references rejected the spare-G11
+  trial; appended three dedicated SCAs instead, preserving every original ID,
+  animation payload and other actor binding. Patched only the confirmed Glob
+  count literal beyond the accepted engine. Both facing, locked/refund/native
+  save/reload/latest Continue and count-only control pass;125 tests and3,736
+  resources verified. Stable8bc72be4 matches candidate/fresh regeneration. Latest
+  b58ed2ac battery preserved exactly; before-oscorp-animation checkpoint and prior
+  ecb07b9a ROM/recipe/overlays retained. Scissor's native repeat relation is now
+  measured; Barrage and prior player/ordinary encounter checks remain queued.
+  Next action: player transition/readability/encounter feedback, then isolated
+  native repeat measurement and distinct Barrage authoring. Blender remains open.
+
+- 2026-10-04: player confirmed a distinct animation but rejected the broad sway
+  as dance-like. Published compact jab-cross-hook, guarded knee/kick and overhand
+  cross with quiet hips, loaded shoulder and corrected local-X vertical torso
+  twist. Only three dedicated SCAs and localized input text change against8bc72be4;
+  all gameplay code/bindings/events remain exact. Both facing floor replays match
+  HP/credit/contact frames/final position;125 source tests pass and all3736
+  resources are verified. Stablef0382e98 matches the candidate and a fresh
+  generation from the published profile. Latest84ede9fb DSV preserved exactly;
+  before-rush-refine/before-build checkpoints and old ROM/active composition
+  retained. User authorized GitHub source commit/push. Player acceptance of this
+  revision remains open; next gameplay work remains authored Rebound Barrage.

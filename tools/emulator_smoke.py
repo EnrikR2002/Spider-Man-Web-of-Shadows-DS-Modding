@@ -16,6 +16,8 @@ import os
 from pathlib import Path
 import struct
 import sys
+import time
+import statistics
 import urllib.request
 import zipfile
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -95,7 +97,7 @@ def input_schedule(rows):
     return result
 
 
-def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, ram_captures=(), trace_frames=(), battery_captures=()):
+def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, ram_captures=(), trace_frames=(), battery_captures=(), frame_hook=None, observer=None, core_options=None, timing_start=None):
     if os.name != 'nt' or c.sizeof(c.c_void_p) != 8: raise ValueError('Pinned emulator harness requires Windows x64')
     if w.sha256(CORE_PATH.read_bytes()) != CORE_SHA256: raise ValueError('Emulator core integrity check failed')
     rom_data = rom_path.read_bytes(); report = w.validate_rom(rom_data, target=True)
@@ -118,6 +120,10 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
                  b'melonds_start_time_mode': b'absolute', b'melonds_start_time_absolute_year': b'2004',
                  b'melonds_start_time_absolute_month': b'1', b'melonds_start_time_absolute_day': b'1',
                  b'melonds_start_time_absolute_hour': b'0', b'melonds_start_time_absolute_minute': b'0'}
+    if core_options:
+        if any(not isinstance(k, bytes) or not isinstance(v, bytes) for k, v in core_options.items()):
+            raise ValueError('Core option keys and values must be bytes')
+        variables.update(core_options)
     state = {'frame': 0, 'last': None, 'pixel_format': 1}
     schedule = input_schedule(script) if script is not None else None
 
@@ -179,6 +185,7 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
     battery_snapshots = []
     player_samples = []
     battery = None
+    observations, timings = [], []
     try:
         if not library.retro_load_game(c.byref(game)): raise ValueError('melonDS DS rejected ROM')
         loaded = True
@@ -190,7 +197,19 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
             c.memmove(pointer, payload, size)
             battery = {'source_sha256': w.sha256(raw), 'payload_sha256': w.sha256(payload), 'size': size}
         for frame in range(frames):
-            state['frame'] = frame; library.retro_run()
+            state['frame'] = frame
+            stamp = time.perf_counter_ns()
+            library.retro_run()
+            elapsed = time.perf_counter_ns() - stamp
+            if timing_start is not None and frame >= timing_start:
+                timings.append(elapsed / 1000000)
+            # Optional research callbacks operate only on this disposable core.
+            # No state is loaded and source battery files are never written.
+            if frame_hook is not None:
+                frame_hook(frame, library)
+            if observer is not None:
+                value = observer(frame, library)
+                if value is not None: observations.append(value)
             if frame in captures:
                 if state['last'] is None: raise ValueError('Core has not produced a video frame')
                 png = frame_png(state['last'], state['pixel_format'])
@@ -217,12 +236,22 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
                 battery_snapshots.append({'frame': frame, 'path': path.relative_to(w.PROJECT).as_posix(),
                                           'size': size, 'sha256': w.sha256(data)})
         if player_samples: w.write_json(dest/'player-trace.json', player_samples)
+        if observations: w.write_json(dest/'observations.json', observations)
+        if timings:
+            ordered = sorted(timings)
+            w.write_json(dest/'frame-timing.json', {
+                'first_frame': timing_start, 'last_frame': frames-1, 'samples': len(timings),
+                'mean_ms': statistics.mean(timings), 'median_ms': statistics.median(timings),
+                'p95_ms': ordered[int(0.95*len(ordered))], 'p99_ms': ordered[int(0.99*len(ordered))],
+                'max_ms': max(timings), 'frame_ms': timings,
+                'measure': 'Host wall time of retro_run, including video callback; not DS or DeSmuME FPS'})
         w.write_json(dest / 'boot.json', {'rom_sha256': report['sha256'], 'core_version': 'melonDS DS 1.1.5',
                      'core_sha256': CORE_SHA256, 'core_url': CORE_URL, 'frames': frames,
                      'input_sequence': script if script is not None else 'For frame>600, each 120-frame period presses Start+A during its first 8 frames; no other input.',
                      'battery_copy': battery, 'ram_captures': memory_captures,
                      'private_battery_captures': battery_snapshots,
                      'player_trace': 'player-trace.json' if player_samples else None,
+                     'research_callbacks': {'frame_hook': frame_hook is not None, 'observer': observer is not None},
                      'options': {key.decode(): value.decode() for key, value in sorted(variables.items())},
                      'screenshots': screenshots, 'assessment': 'Captures require visual inspection; this is not a full gameplay test.'})
     finally:
@@ -243,9 +272,13 @@ def main():
     parser.add_argument('--ram-capture', default='', help='Comma-separated frame numbers for private RAM dumps')
     parser.add_argument('--player-trace', help='Half-open START:END range for read-only CS5E player telemetry')
     parser.add_argument('--battery-capture', default='', help='Private save-RAM captures; never updates source battery')
+    parser.add_argument('--timing-start', type=int, help='Measure retro_run wall time from this frame; no FPS claim')
+    parser.add_argument('--threaded-renderer', action='store_true', help='Isolated software-renderer experiment')
     args = parser.parse_args()
     try:
         if not 1 <= args.frames <= 10000: raise ValueError('--frames must be 1..10000')
+        if args.timing_start is not None and not 0 <= args.timing_start < args.frames:
+            raise ValueError('Timing start outside run')
         captures = {int(value) for value in args.capture.split(',')}
         ram_captures = {int(value) for value in args.ram_capture.split(',') if value}
         battery_captures = {int(value) for value in args.battery_capture.split(',') if value}
@@ -262,7 +295,8 @@ def main():
         script = json.loads(Path(args.script).read_text(encoding='utf-8')) if args.script else None
         print(f'Boot capture complete: {run(path.resolve(), args.frames, captures, save_path=args.save,
               script=script, label=args.label, ram_captures=ram_captures, trace_frames=trace_frames,
-              battery_captures=battery_captures)}')
+              battery_captures=battery_captures, timing_start=args.timing_start,
+              core_options={b'melonds_threaded_renderer': b'enabled'} if args.threaded_renderer else None)}')
     except (OSError, ValueError, zipfile.BadZipFile) as exc:
         print(f'error: {exc}', file=sys.stderr); return 1
     return 0

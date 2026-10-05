@@ -1,6 +1,7 @@
 import json
 import struct
 import unittest
+from unittest.mock import patch
 import mod
 from tools import combat_flow as f, combat_profile as cp, tasm_sling_strike as s, combat_hud as h, wos_tool as w
 from tools import combat_readability as q
@@ -53,7 +54,13 @@ class LocalCombatFlowTests(unittest.TestCase):
 
     def test_instruction_text_preserves_every_other_composed_slot(self):
         entries={e['name']:e for e in self.manifest['entries']}
-        overlays=mod.overlay_files(mod.ROOT/'mods',list(entries))
+        from tools.oscorp_resources import EXTRA_NAMES
+        overlays=mod.overlay_files(mod.ROOT/'mods',list(entries),added_names=EXTRA_NAMES)
+        # This historical composition starts from its own prerequisite recipe,
+        # not the newer Rush strings now installed in the local default overlay.
+        for name in ('English.strings','American.strings'):
+            e=entries[name];clean=self.glob[e['offset']:e['offset']+e['size']]
+            overlays[name]=q.text_overlay(clean,clean)
         before=dict(overlays)
         q.compose(self.glob,self.manifest,overlays,f.TEXT_EDITS)
         for name in ('English.strings','American.strings'):
@@ -66,5 +73,7 @@ class LocalCombatFlowTests(unittest.TestCase):
             self.assertEqual(len(overlays[name]),len(before[name]))
         for name in set(overlays)-{'English.strings','American.strings'}:
             self.assertEqual(overlays[name],before[name])
+        with patch.object(cp,'load_recipe',return_value='tasm-oscorp-rush'):
+            with self.assertRaises(ValueError):f.generate(output='build/rejected-historical-flow')
 
 if __name__=='__main__':unittest.main()

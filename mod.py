@@ -37,10 +37,11 @@ def load_clean(path=DEFAULT_ROM):
     return rom, glob, manifest
 
 
-def overlay_files(directory: Path, names: list[str]) -> dict[str, bytes]:
+def overlay_files(directory: Path, names: list[str], *, added_names=()) -> dict[str, bytes]:
     """Only exact manifest names; no hidden ignored replacement files."""
     directory = directory.resolve()
     if not directory.is_dir(): raise ValueError(f'Overlay directory does not exist: {directory}')
+    names=[*names,*added_names]
     mapping = {name.casefold(): name for name in names}
     out = {}
     for path in sorted(directory.rglob('*'), key=lambda p: p.relative_to(directory).as_posix()):
@@ -59,9 +60,12 @@ def overlay_files(directory: Path, names: list[str]) -> dict[str, bytes]:
 
 
 def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, bytes], *, rebound=False, gameplay_profile=None):
+    from tools import oscorp_resources as expansion
     entries = manifest['entries']
     names = [e['name'] for e in entries]
-    if set(overlay) - set(names) or 'GlobFiles.txt' in overlay: raise ValueError('Invalid overlay mapping')
+    extras=expansion.EXTRA_NAMES if gameplay_profile==expansion.PROFILE else ()
+    if set(overlay) - set([*names,*extras]) or 'GlobFiles.txt' in overlay: raise ValueError('Invalid overlay mapping')
+    if extras:expansion.validate_extra(overlay)
     blobs, replacements, identical = [], [], []
     for e in entries:
         old = glob[e['offset']:e['offset'] + e['size']]
@@ -71,6 +75,14 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
             replacements.append({'index': e['index'], 'name': e['name'], 'old_size': len(old),
                                  'new_size': len(new), 'old_sha256': e['sha256'], 'new_sha256': w.sha256(new)})
         elif e['name'] in overlay: identical.append(e['name'])
+    added=[]
+    if extras:
+        names,blobs=expansion.append_resources(names,blobs,{name:overlay[name] for name in extras})
+        for i,name in enumerate(extras,start=len(entries)):
+            added.append({'index':i,'name':name,'size':len(overlay[name]),'sha256':w.sha256(overlay[name])})
+        table=manifest['name_table_index'];e=entries[table]
+        replacements.append({'index':table,'name':e['name'],'old_size':e['size'],'new_size':len(blobs[table]),
+                             'old_sha256':e['sha256'],'new_sha256':w.sha256(blobs[table]),'generated':True})
     new_glob = w.pack_glob(names, blobs)
     result = w.rebuild_rom(rom, {'Glob.bin': new_glob})
     from tools.combat_profile import apply_rom
@@ -89,7 +101,8 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
            'combat_data_edits': combat_edits,
            'header_crc16': report['header']['header_crc16'], 'nitrofs': report['nitrofs'],
            'replaced_assets': replacements, 'identical_overlays': identical,
-           'verified_resource_count': len(names), 'unchanged_resource_count': len(names) - len(replacements)}
+           'added_assets':added,
+           'verified_resource_count': len(names), 'unchanged_resource_count': len(names) - len(replacements)-len(added)}
     return result, new_glob, log
 
 
@@ -176,9 +189,15 @@ def main(argv=None):
         elif args.command in ('build', 'verify'):
             output = build_output(args.out)
             if output.resolve() == rom_path.resolve(): raise ValueError('Output would overwrite input ROM')
-            overlay = overlay_files(project_path(args.mods), [e['name'] for e in manifest['entries']])
             from tools.combat_profile import load_recipe
             profile = project_path(args.gameplay_profile)
+            from tools import oscorp_resources as expansion
+            added_names=()
+            if profile.exists():
+                candidate_recipe=json.loads(profile.read_text(encoding='utf-8'))
+                if isinstance(candidate_recipe,dict) and candidate_recipe.get('profile')==expansion.PROFILE:
+                    added_names=expansion.EXTRA_NAMES
+            overlay = overlay_files(project_path(args.mods), [e['name'] for e in manifest['entries']],added_names=added_names)
             if args.gameplay_profile == 'original':
                 gameplay = False
             elif profile.exists():
@@ -201,7 +220,7 @@ def main(argv=None):
                 candidate = output.read_bytes()
                 w.validate_rom(candidate, target=True)
                 if candidate != result: raise ValueError('ROM does not match clean source + current overlay; rebuild it')
-                print(f'PASS: ROM exactly matches current overlay; {len(manifest["entries"])} resources verified; SHA256 {w.sha256(candidate)}')
+                print(f'PASS: ROM exactly matches current overlay; {log["verified_resource_count"]} resources verified; SHA256 {w.sha256(candidate)}')
         elif args.command == 'experiment':
             from tools import nitro_texture
             e = next(e for e in manifest['entries'] if e['name'] == 'spd.nsbtx')

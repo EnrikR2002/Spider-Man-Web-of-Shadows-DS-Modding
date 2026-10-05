@@ -11,14 +11,14 @@ import hashlib
 import json
 from pathlib import Path
 import struct
-from tools import combat_feedback, combat_hud, tasm_sling_strike, combat_flow
+from tools import combat_feedback, combat_hud, tasm_sling_strike, combat_flow, training_refill, oscorp_resources
 
 ARM9_SHA256 = 'e541bfcd02441db86b43b8649aaa13570be301d302ddfb198804b78528d215dc'
 REBOUND_ARM9_SHA256 = '3298417ae06c47571ea559ebe3e18d33da4ed6f3bfcdcb85025628c440438837'
 WEB_VAULT_ARM9_SHA256 = '6e563225538658c6c8437ede1886037132adc5ed865693727ef60457072529bf'
 KNOWN_ARM9_HASHES = (ARM9_SHA256, REBOUND_ARM9_SHA256, WEB_VAULT_ARM9_SHA256,
                     combat_feedback.ARM9_SHA256, combat_hud.ARM9_SHA256,
-                    tasm_sling_strike.ARM9_SHA256, combat_flow.ARM9_SHA256)
+                    tasm_sling_strike.ARM9_SHA256, combat_flow.ARM9_SHA256, training_refill.ARM9_SHA256, oscorp_resources.ARM9_SHA256)
 IMPULSE_OFFSETS = (0x11A2B8, 0x11AA98)
 NATIVE_IMPULSE, REBOUND_IMPULSE = -9011, -4506
 VAULT_OFFSET = 0xC9268
@@ -37,6 +37,14 @@ def identify_arm9(raw):
 
 def apply_rom(rom, enabled=False):
     if not enabled: return rom, []
+    if enabled == oscorp_resources.PROFILE:
+        parent,log=apply_rom(rom,'tasm-oscorp-rush')
+        result,expansion_log=oscorp_resources.apply_rom(parent)
+        return result,log+expansion_log
+    if enabled == 'tasm-oscorp-rush':
+        flow,log = apply_rom(rom,'tasm-combat-flow')
+        result,training_log = training_refill.apply_rom(flow)
+        return result,log+training_log
     if enabled == 'tasm-combat-flow':
         sling,log = apply_rom(rom,'tasm-sling-strike')
         result,flow_log = combat_flow.apply_rom(sling)
@@ -91,7 +99,7 @@ def load_recipe(path, overlay):
     if (not isinstance(data, dict) or data.get('schema_version') != 1 or
             data.get('profile') not in ('original', 'tasm-rebound', 'tasm-web-vault',
                                         'tasm-combat-feedback', 'tasm-readable-combat',
-                                        'tasm-sling-strike', 'tasm-combat-flow')):
+                                        'tasm-sling-strike', 'tasm-combat-flow', 'tasm-oscorp-rush', 'tasm-oscorp-rush-authored')):
         raise ValueError('Unsupported gameplay recipe')
     if data['profile'] == 'original': return False
     required = data.get('required_overlays')

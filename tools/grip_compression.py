@@ -5,6 +5,7 @@ favor simplicity and determinism over compression ratio. Original wrappers are
 retained for no-op round trips. References and limitations: FORMAT_NOTES.md.
 """
 from dataclasses import dataclass
+from collections import deque
 import struct
 from . import wos_tool as w
 
@@ -136,6 +137,55 @@ def encode_literals(data: bytes, kind=0x60) -> bytes:
     return result
 
 
+def encode_backrefs(data: bytes) -> bytes:
+    """Deterministic 0x60 greedy LZ encoder using the already decoded copy token.
+
+    Fixed escape0/width8/extra0, at most128 recent candidates per three-byte
+    prefix, nearest-distance tie break. RLE and dynamic escape stay unused.
+    No-op wrappers are preserved by CompressedBlob, independently of this encoder.
+    """
+    if len(data) >= 1 << 24: raise ValueError('Input exceeds 24-bit compressed header length')
+    writer, positions = BitWriter(), {}
+    def gamma_cost(n):
+        count=n.bit_length()-1
+        return 2*count + (count<7)
+    def remember(at):
+        if at+3<=len(data):
+            queue=positions.setdefault(data[at:at+3],deque(maxlen=128))
+            queue.append(at)
+    at=0
+    while at<len(data):
+        length,distance=0,0
+        for previous in reversed(positions.get(data[at:at+3],())):
+            gap=at-previous
+            if gap>65024: break
+            limit=min(256,len(data)-at)
+            n=3
+            while n<limit and data[previous+n]==data[at+n]: n+=1
+            if n>length: length,distance=n,gap
+            if n==limit: break
+        # A copy includes prefix8, length gamma, high-distance gamma and low8.
+        cost=16+gamma_cost(length-1)+gamma_cost(((distance-1)>>8)+1) if length>=3 else 1<<30
+        literal_cost=sum(19 if v==0 else 8 for v in data[at:at+length])
+        if length>=3 and cost<literal_cost:
+            writer.write(0,8);writer.gamma(length-1)
+            writer.gamma(((distance-1)>>8)+1);writer.write((distance-1)&255,8)
+            for i in range(length):remember(at+i)
+            at+=length
+        else:
+            value=data[at];writer.write(value,8)
+            if value==0:
+                writer.gamma(1);writer.write(2,2);writer.write(0,8)
+            remember(at);at+=1
+    writer.write(0,8);writer.gamma(2);writer.gamma(255)
+    stream=bytes(writer.data)+bytes((-len(writer.data))%4)
+    stream=b''.join(stream[i:i+4][::-1] for i in range(0,len(stream),4))
+    result=struct.pack('<I',(len(data)<<8)|0x60)+b'\x04\0\0\x08'+bytes(4)+stream
+    if decode(result)!=data:raise ValueError('Back-reference stream failed round-trip verification')
+    literal=encode_literals(data)
+    return result if len(result)<len(literal) else literal
+
+
 @dataclass(frozen=True)
 class CompressedBlob:
     raw: bytes
@@ -143,5 +193,6 @@ class CompressedBlob:
     @classmethod
     def parse(cls, raw): return cls(raw, decode(raw))
     def to_bytes(self): return self.raw
-    def replace_decoded(self, data):
-        return self.raw if data == self.decoded else encode_literals(data, self.raw[0])
+    def replace_decoded(self, data, *, compact=False):
+        if data==self.decoded:return self.raw
+        return encode_backrefs(data) if compact and self.raw[0]==0x60 else encode_literals(data,self.raw[0])

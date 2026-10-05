@@ -5,9 +5,14 @@ with 10+ paid tools and flexible prices; additions remain ideation. This documen
 retains the approved incremental native-slot path. Rebound's new higher/closer
 launch remains; the current compact HUD is documented in COMBAT_HUD.md.
 
-**Approved by the user; Rebound, Web Vault and Sling Strike implemented; four entries pending.**
+**Approved by the user; Rebound, Web Vault, Sling Strike and Oscorp Rush implemented; three entries pending.**
+
+Rush now has full authored palm/knee/turning choreography in three isolated SCA
+resources. Scissor remains its native purchased repeat extension; Barrage's
+distinct future mechanics are still pending. Current evidence:
+[OSCORP_RUSH_ANIMATION.md](OSCORP_RUSH_ANIMATION.md).
 The inventory below was collected before implementation. Current release evidence
-also includes [TASM1_SLING_STRIKE.md](TASM1_SLING_STRIKE.md) and is in [TASM1_WEB_VAULT.md](TASM1_WEB_VAULT.md) and [TASM1_REBOUND.md](TASM1_REBOUND.md). Snap Sweep was confirmed working by
+also includes [TASM1_OSCORP_RUSH.md](TASM1_OSCORP_RUSH.md), [TASM1_SLING_STRIKE.md](TASM1_SLING_STRIKE.md), [TASM1_WEB_VAULT.md](TASM1_WEB_VAULT.md) and [TASM1_REBOUND.md](TASM1_REBOUND.md). Snap Sweep was confirmed working by
 the user and remains the free base opener.
 
 ## Inventory and proposed replacements
@@ -101,6 +106,7 @@ UPGRADE_ENGINE.md and ORIGINAL_GAMEPLAY.json. Speed percentages and counter/flow
 handlers remain research beyond the existing synchronized action rebind helper.
 
 
-Rebound and Web Vault release evidence: TASM1_REBOUND.md / TASM1_WEB_VAULT.md. The remaining five
-entries keep their original names and behavior until their actual replacements
+Four replacements are implemented and agent-tested; Rush retains400 XP/bit16,
+native pause/contact/credit budget and Snap's shared assets. See TASM1_OSCORP_RUSH.md.
+The remaining three entries keep their original names and behavior until their replacements
 are implemented and tested. The original damage/speed budgets stay a requirement.

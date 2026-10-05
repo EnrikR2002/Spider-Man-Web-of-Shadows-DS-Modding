@@ -226,3 +226,47 @@ and last-frame transition, adding new dynamic tracks, optimal data deduplication
 and full Blender/NSBCA-to-SCA authoring. A complete new clip pipeline is beyond
 the tested fixed-size matrix editor; it is now an engineering task with a concrete
 format foundation rather than an opaque-file experiment.
+
+## Follow-up: independent sampled track authoring
+
+2026-10-04 follow-up requested by the player: distinct new attack animations are
+the goal, rather than all moves borrowing stock choreography. The fixed-size
+editor above is retained. New `sca_author.py` exports/imports sampled local
+rotations/translations and appends independent tracks for static/shared bones.
+All869 originals round-trip exactly through sample JSON; all126 player clips
+bake37 independent rotations. Scale authoring and variable clip lengths remain
+disabled. `animation_rig.py` extracts canonical37 ancestry and names, checking
+NODE parents against the SBC matrix stack; apicula's34 exported ordinals differ.
+
+The game loads a rebaked20-frame finisher with rotation count31 ->68 and stride
+884 ->1548. Its finisher captures match native sampled poses. A separate six-bone
+recovery proof visibly changes poses while retaining controlled contact/HP/credit,
+ownership and final position. It remains isolated; current Rush is unchanged.
+This proves track growth and authored sequence playback, not a full new attack,
+Blender import/export, limb contact equivalence or player acceptance.
+
+### Full authored Rush follow-up (2026-10-04)
+
+The later release authors the full39/12/20-sample paid sequence using procedural
+FK/IK and quaternion controls, including preparation, impact and recovery. Its
+stored matrices transpose to column-vector FK; Y up/Z forward are calibrated for
+this player rig. A complete XBD scan found m6 shares original GroundAttack11/16/17,
+so the published version appends three dedicated SCAs and changes only the paid
+player SCA bindings. Every original animation payload stays exact against the
+parent release. Native gates, HP/credit, relative contact timing, both facing,
+locked/refund/save/reload and latest Continue pass. The archive/count-only control
+explains the replay's two-frame phase shift without new choreography. Full details,
+hashes, resource-count patch and open encounter checks: OSCORP_RUSH_ANIMATION.md.
+
+Player feedback confirmed novelty but rejected the broad swaying pose quality.
+The current refinement uses close guard, jab-cross-hook and an overhand cross,
+with fixed local-axis shoulder twist, quiet hips and restrained leg motion. All
+bindings/event assets/ARM9 remain exact; both facing floor HP/credit/contact
+frames/final position match the previous full-animation release. Player acceptance
+of this revision remains open. See OSCORP_RUSH_ANIMATION.md for current proof.
+
+Next: neutral/bind/axis calibration and unchanged native clip DCC round trip,
+plus a separately authored Barrage sequence. Detailed pipeline,
+limitations, memory cost and private candidate/evidence paths:
+[ANIMATION_AUTHORING.md](ANIMATION_AUTHORING.md). New helpers preserve unknown
+fields; nonzero alignment loss and descriptor overflow are rejected.

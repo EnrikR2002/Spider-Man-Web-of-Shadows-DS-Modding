@@ -91,20 +91,29 @@ low kick in the red form: measured completion in 24 versus 44 emulator frames,
 with the native follow-up string retained. Stage one used seven overlay assets.
 See [the cleanup evidence](docs/MOVIE_SUIT_EXPERIMENT.md#clean-panels-and-black-lenses--2026-10-04).
 
-The current release combines **Rebound**, **Web Vault**, **Sling Strike** and a
+The current release combines **Rebound**, **Web Vault**, **Sling Strike**, **Oscorp Rush** and a
 compact HUD. Rebound replaces **Web Kick** at **100 XP** with a closer, higher
 enemy launch. Web Vault replaces **Web Launch** at **200 XP** and rises alongside
 a successfully launched common enemy without pulling it backward. Sling Strike
 replaces **Mid-Air Snare** at **600 XP** with one passing kick, a clean stop and
-turn back. Existing ownership carries over; unowned/refunded slots remain locked.
+turn back. Oscorp Rush replaces **Spider Dance** at **400 XP**: Y, let the sweep
+end, Y, Y, Y for a newly authored jab-cross-hook combination, a knee/kick and a
+compact overhand cross. All three paid clips have dedicated resources; Snap and
+other actors retain their previous clips. Native contact,
+damage, credit and duration remain. Existing ownership carries over;
+unowned/refunded slots remain locked. In Test Upgrades, **SELECT and Down** refill
+the training target's HP without leaving the room.
 Small continuous enemy health bars replace damage numbers, and the transient
 combo numeral leaves the native meter visible. HUD work is reduced, but overall
-emulator benchmarks do not establish a lag fix. The latest small pass adds clearer
+emulator benchmarks do not establish a DeSmuME lag fix. The prior small pass adds clearer
 shared/traversal and map/save/training instructions.
 
 The complete overlay and ARM9 extension are pinned by
-`reference/gameplay_profile.json` (**tasm-combat-flow**). See
-[current combat evidence](docs/COMBAT_FLOW.md), [instruction clarity](docs/QOL_CLARITY.md),
+`reference/gameplay_profile.json` (**tasm-oscorp-rush-authored**). See
+[full authored Rush animation and isolation](docs/OSCORP_RUSH_ANIMATION.md),
+[Oscorp Rush and training evidence](docs/TASM1_OSCORP_RUSH.md),
+[performance and visual investigation](docs/PERFORMANCE_VISUALS.md),
+[combat-flow evidence](docs/COMBAT_FLOW.md), [instruction clarity](docs/QOL_CLARITY.md),
 [Rebound history](docs/TASM1_REBOUND.md) and [Web Vault history](docs/TASM1_WEB_VAULT.md).
 
 **Player flow:** double-click `Play Spider-Man.cmd`, choose Continue, play, save
@@ -124,7 +133,7 @@ python tools/playtest.py restore early-game
 On the development machine the Battery folder is configured and the current
 save association is retained with named backups. `before-suit-cleanup`,
 `before-tasm1`, `opening-save-room`, `before-rebound`, `before-web-vault` and
-`before-combat-feedback`, `before-combat-flow` and `before-clarity` are available locally; the live save may advance after
+`before-combat-feedback`, `before-combat-flow`, `before-clarity` and `before-oscorp-rush` are available locally; the live save may advance after
 this release.
 Checkpoint names must be unique. A checkpoint returns to an in-game save you have
 recorded; it does not jump to an arbitrary room. An isolated copy of current progress
@@ -138,6 +147,11 @@ See the [active combined TASM kit and selected backlog](docs/TASM_EXPANDED_ROADM
 [66-option catalog](docs/SUIT_CATALOG.md). A third selectable slot and custom
 conditional abilities remain research milestones.
 
+Distinct animation authoring now has a sampled SCA exporter/importer and a full
+three-clip Rush sequence authored with procedural FK/IK. Native purchase gates
+and relative contact timing remain; a Blender round trip remains separate work.
+See [custom animation tools, evidence and pipeline](docs/ANIMATION_AUTHORING.md).
+
 The [original gameplay map](docs/ORIGINAL_GAMEPLAY.md) explains both suit identities,
 all 21 purchased skills, controls, costs and dependencies. The [combo investigation](docs/COMBO_ENGINE.md)
 records why Snap Sweep earns credit before the HUD appears: its contacts can leave
@@ -145,7 +159,7 @@ the gauge below the native visibility threshold. The meter increases XP rewards;
 exact multipliers remain unknown. No credit boost is applied.
 
 Regular builds and verification load `reference/gameplay_profile.json`, which pins
-the complete suit, Rebound, Web Vault and feedback recipe. Web Vault uses A (keyboard
+the complete suit, Rebound, Web Vault, Sling, Rush and feedback recipe. Web Vault uses A (keyboard
 W), then Up to launch and follow with a short vault. A new clone has source tools but no private
 assets. The suit painter also needs the private `build/suit-model-inspect/spd.dae`
 export from your clean model; follow the Apicula export procedure in
@@ -170,7 +184,9 @@ and native engine-data controls. It leaves the selected overlay intact.
 `build` reads unchanged content directly from the clean ROM, so extraction is optional
 for a build. Only exact manifest filenames are accepted in `mods/`. File sizes may
 grow or shrink; builds are deterministic, capacity-bounded, and verified before writing.
-Unknown names, case mismatches, `GlobFiles.txt` changes, and path escapes fail clearly.
+Unknown names, case mismatches, manual `GlobFiles.txt` changes, and path escapes
+fail clearly. Only the authored Rush profile enables its three fixed appended
+SCA resources; it preserves all existing IDs and generates the added name records.
 The current workflow replaces existing assets; it does not add archive IDs/resources.
 
 Each build emits:
@@ -265,8 +281,8 @@ Use `mod.py` for the normal workflow; it adds clean-source/manifest/overlay vali
 Read [validation results](docs/VALIDATION.md), [format evidence](docs/FORMAT_NOTES.md),
 [editing status/priorities](docs/MODDABILITY_MATRIX.md), and the
 [modding/testing and room-research workflow](docs/TESTING_WORKFLOW.md). The next work
-is Oscorp Rush after the remaining combat-flow player checks, using the native gameplay,
-purchase and animation maps. Room geometry, save payloads, full decompilation and
+is player qualification of the authored Rush, then a distinct Rebound Barrage
+using the native repeat/purchase and animation maps. Room geometry, save payloads, full decompilation and
 a general animation GUI remain research.
 
 

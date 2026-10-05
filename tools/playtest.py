@@ -24,6 +24,17 @@ CONFIG = mod.ROOT / 'work/playtest.json'
 ROM = mod.ROOT / 'build/Spider-Man-WoS-modded.nds'
 CANDIDATE = mod.ROOT / 'build/playtest-candidate/Spider-Man-WoS-modded.nds'
 RELEASES = mod.ROOT / 'build/releases'
+# Optional DeSmuME0.9.13 command-line experiments. The ordinary launcher uses
+# saved settings. This tool does not edit the INI or load save states, but the
+# emulator persists its selected 3D renderer even for a command-line override.
+# Sources: release_0_9_13/src/commandline.cpp and frontend/windows/main.cpp.
+# Performance/visual acceptance remains open; presets are not activated by default.
+LAUNCH_PRESETS = {
+    'current': (),
+    'performance-preview': ('--preload-rom', '--jit-enable', '--jit-size', '12'),
+    'hd-preview': ('--preload-rom', '--jit-enable', '--jit-size', '12',
+                   '--3d-render', 'autogl', '--gpu-resolution-multiplier', '2'),
+}
 
 
 def assert_closed():
@@ -146,8 +157,9 @@ def build(mods='mods', config=CONFIG, store=saves.STORE):
     return 0
 
 
-def launch(config=CONFIG, store=saves.STORE):
+def launch(config=CONFIG, store=saves.STORE, preset='current'):
     assert_closed()
+    if preset not in LAUNCH_PRESETS: raise ValueError('Unknown DeSmuME launch preset')
     data = json.loads(Path(config).read_text(encoding='utf-8'))
     exe = emulator_path(data.get('emulator', ''))
     path = current_save(config)
@@ -156,8 +168,9 @@ def launch(config=CONFIG, store=saves.STORE):
     if path.exists():
         inspect_save(path)
         print(f'Progress backed up: {preserve(path, "before-play", store)}')
-    subprocess.Popen([str(exe), str(ROM)], cwd=str(exe.parent))
+    subprocess.Popen([str(exe), *LAUNCH_PRESETS[preset], str(ROM)], cwd=str(exe.parent))
     print('Opened the stable ROM in DeSmuME. Choose Continue, then save in-game before closing.')
+    if preset != 'current': print(f'Preview preset: {preset}; performance and visuals still need player checks.')
     return 0
 
 
@@ -186,7 +199,8 @@ def main(argv=None):
         p.add_argument('name')
     commands.add_parser('list')
     commands.add_parser('status')
-    commands.add_parser('launch')
+    p = commands.add_parser('launch')
+    p.add_argument('--preset', choices=LAUNCH_PRESETS, default='current')
     args = parser.parse_args(argv)
     try:
         if args.command in ('adopt', 'checkpoint', 'restore', 'configure'):
@@ -198,7 +212,7 @@ def main(argv=None):
         elif args.command == 'list':
             list_snapshots()
         elif args.command == 'launch':
-            return launch()
+            return launch(preset=args.preset)
         else:
             path = current_save()
             if args.command == 'adopt':

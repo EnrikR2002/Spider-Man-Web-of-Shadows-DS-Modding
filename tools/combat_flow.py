@@ -53,7 +53,9 @@ def generate(base_mods='mods',output='build/combat-flow'):
  if not root.is_relative_to((mod.ROOT/'build').resolve()): raise ValueError('Candidates belong in build/')
  rom,glob,manifest=mod.load_clean();names=[e['name'] for e in manifest['entries']]
  overlays=mod.overlay_files(mod.project_path(base_mods),names)
- cp.load_recipe(mod.ROOT/'reference/gameplay_profile.json',overlays)
+ current=cp.load_recipe(mod.ROOT/'reference/gameplay_profile.json',overlays)
+ if current not in ('tasm-sling-strike','tasm-combat-flow'):
+  raise ValueError('Historical combat-flow generator cannot replace a newer gameplay composition')
  q.compose(glob,manifest,overlays,TEXT_EDITS)
  for name,data in overlays.items():w.atomic_write(root/'mods'/name,data,(mod.DEFAULT_ROM,))
  w.write_json(root/'gameplay_profile.json',{'schema_version':1,'profile':'tasm-combat-flow',

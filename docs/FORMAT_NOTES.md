@@ -867,3 +867,156 @@ Only two string overlays change; ARM9 remains b43630d4, all3,733 resources verif
 Menu/training layout was visually inspected; individual tutorial-triggered tips
 are codec/bounds verified rather than all story-visited. See QOL_CLARITY.md.
 No new binary structure, input window or purchase/save field is inferred.
+
+### Purchased Oscorp Rush route and bounded motion (2026-10-04)
+
+Native ARM9 table0x0211BB70 has16-byte records. Its first three words resolve as
+logical action, ordinary successor and paid-pause successor in the observed
+ground route: branch11=(56,12,15), branch15=(61,16,0), branch16=(60,17,0),
+branch17=(62,0,0). Other entries/word3 flag semantics remain incompletely mapped.
+The native pause gate loads ownership bit16 at0x020C3148; while state0x2E is
+active, the clock comparison at0x020C319C requires at least0xC000 (12 Q12 samples).
+Outside that state the clock check is skipped while the prior combo branch can
+briefly survive. A delayed Y after the sweep ends enters the owned branch; rapid
+Y selects ordinary branches12/13/14. This is an observed route, not a general
+input-buffer guarantee. Native Scissor's bit17 gate at0x020B5444 remains unchanged.
+
+Paid action61 uses GroundAttack16;62 uses17. Action60 and base Snap56 share15:
+its payloads/XBD are preserved relative to the accepted release. GroundAttack16
+has39 GMB samples and17 has20, with channels(kind,u16)=(3,0),(3,1),(3,0),(0,0).
+Only channel0's32-byte records, word2, change to bounded horizontal advances.
+All other decoded bytes/contact geometry/duration/GAB stay exact. GroundAttack17
+SCA is20 frames/37 joints; only joint3 Chest dynamic rotations at10..16 change.
+First10 frames, including contact6/7, remain exact. Authored smoothstep6+2 local
+Q12 units yields collision-adjusted world motion; exact requested distance is
+not assumed. Round-trip, byte-confinement and exact decoded edit/revert pass.
+
+The new optional0x60 encoder emits fixed escape0,width8,extra0; three-to256-byte
+copy tokens, distance1..65024, existing bounded gamma fields and EOF high254.
+It considers at most128 recent positions per3-byte prefix, prefers nearest ties,
+and uses a copy only when cheaper than literals. RLE/dynamic escape are not
+emitted. It returns the smaller of copy/literal encodings, verifies decode
+equality, and preserves raw wrappers for no-op edits. All769 native GMBs and
+random/overlap/large-distance controls round-trip. Runtime accepts the two new
+Rush wrappers (560+332 bytes vs472+192 original; literals9968+5124). Other assets
+and historical generators retain their original encoding behavior.
+
+### Training HP chord in the accepted observer (2026-10-04)
+
+Native common health setter0x02049304 writes HP at actor+0x44, tests actor+0x88
+bit4 at0x02049320 and clamps depleted flagged actors to40 Q12 before later
+processing. The earlier accepted patch replaces that clamp with full max HP.
+Max HP is actor+0x48. A training target has bit4; its other flag meanings remain
+unknown. Clearing bit4 in an isolated training fixture disables the new chord.
+
+Only own source0x145EA0..0x14601F / runtime0x02151920..0x02151A9F is replaced.
+The existing hook remains. Same active-HUD and common-health ABI guards:
+vtable0x02120000..0x0213DF00 and vtable+0x150==0x02049304. For bit4 actors with
+active-low KEYINPUT(0x04000130) Select0x4+Down0x80 both clear, copy positive max
+to current HP, then use accepted full/dead filtering and observer continuation.
+Register/CPSR preservation and code-size bound are retained. No persistent
+field/state/heap addition: own source0x3600 and heap0x4000 unchanged.
+
+Positive fixture HP restores65536; same chord with bit4 cleared leaves41984.
+Native buy/refund/save/reload retain400 XP/event325/bit16. Both facing fixtures
+match native contact timing, measured actual loss17408 Q12 for the paid portion,
+and combo credit. This does not qualify bosses, ordinary AI density, walls,
+ceilings or player feel. All102 tests pass. Final hashes and evidence paths:
+TASM1_OSCORP_RUSH.md. Performance/texture census and unresolved timing/residency
+questions: PERFORMANCE_VISUALS.md; no new memory fields are guessed there.
+
+### Independent SCA track growth and canonical rig ancestry (2026-10-04)
+
+Sampled rotation/translation authoring can promote a static/shared descriptor to
+an appended independent dynamic entry. The header counts/stride and that joint's
+descriptor change; static pools, old unused dynamic values, unselected samples,
+unknown bytes26/27 and descriptor padding remain. Recalculate T/S/R frame block
+ordering and align4 stride. Zero frame alignment can resize; nonzero discarded
+alignment is rejected. Descriptor indices remain7 bits; counts >=128 cannot
+receive another appended entry. Scale/inverse-scale values and frame count stay
+native; scale semantics and coordinated retiming remain separate work.
+
+All869 SCA sample JSON exports/imports are exact no-ops. All126 player clips
+bake37 independent rotations with exact sampled values. Native runtime accepts
+GroundAttack17 count31 ->68, stride884 ->1548, size18248 ->31528. Twenty frames/
+37 joints/static pool unchanged. Finisher-and-later captures match the original;
+one earlier frame3140 differs before this clip plays, so whole-run exact PNG
+parity is not established. Six-joint recovery keys at11..17 produce distinct
+in-game poses; controlled HP contacts/credit and final position/ownership match.
+
+Read-only player model extraction: MDL0 model base0x44, object dictionary0x84,
+37 named objects, SBC0x764 through END at0x82A. NODE0x06/26/46/66 parameters supply
+object/parent/unknown flag, optional store/load stack IDs. For all37 player nodes,
+parent bytes agree with the object lineage obtained by playing the matrix stack.
+Unknown flags remain unknown. Canonical7=Shoulder_L,17=Shoulder_R,26=Hip_L,30=Hip_R;
+fresh apicula DAE IDs are joint9/joint7/joint13/joint12 respectively. Its34 export
+joints omit helpers34/35/36. Numeric export ordinals must not be used as SCA IDs.
+No geometry/skin/model mutation or general skeleton editor is implemented.
+
+The fixture's finisher sample clock remains6 at emulator3264..3274 after contact,
+9 at3280 and14 at3290. Do not infer fixed60-Hz custom SCA sampling from a standard
+NSBCA exporter. Loader/evaluator behavior remains as mapped in ANIMATION_RESEARCH.
+Blender pose-space/rest-axis conversion and stored-matrix transpose need explicit
+calibration. New code/proof/next action: ANIMATION_AUTHORING.md. No full custom
+attack has been released by this research; default recipe/ROM remain unchanged.
+
+### Dedicated authored Rush SCAs and bounded Glob append (2026-10-04)
+
+The follow-up now publishes a full39/12/20-sample paid animation through procedural
+FK/IK. For the canonical player, stored Q12 rotation matrices transpose to
+column-vector FK: Y up, Z forward, confirmed against native leg endpoints and
+grounded/forward custom poses in-game. Bone count, native scale/inverse-scale,
+unknown header bytes and original unused SCA pools remain; dynamic independent
+rotations/translations are authored for the full clips. Quaternion pose blending
+and post-blend leg IK return the finisher's final sample19 exactly to native Idle0.
+This is not a Blender bridge or a general coordinate contract for every model.
+
+All original actor XBDs were scanned: m6.xbd still references original G11/16/17.
+The private trial reusing G11 was rejected for publication. Original G11/15/16/17
+payloads and every other actor binding stay exact against the accepted parent.
+Player spd.xbd SCA indices at404/416/428 point to newly appended IDs3733/3734/3735:
+zz_tasm_RushBridge.sca, zz_tasm_RushEntry.sca, zz_tasm_RushFinish.sca. All GMB/GAB
+and Snap's356/360/364 triple remain exact. All existing3733 IDs are preserved.
+
+Glob filename table remains resource805. Append three padded63-byte ASCII names
+plus newline to the original238912 bytes, preserving every existing record. Grow
+the offsets array from3734 to3737 words and recompute payload offsets. The native
+loader0x02007758 uses literal source0x77F8/runtime0x020077F8=3733, adds one for EOF,
+resizes its offset buffer and reads count+1 words; change the literal to3736.
+Offset getter0x020079F0 and filename805/64-byte lookup0x02007A04 remain native.
+No other ARM9 byte differs from the Rush parent. Only the authored profile permits
+these three fixed new names; manual GlobFiles and arbitrary additions stay rejected.
+
+Synthetic append/no-op/repack/strip-exact-revert tests preserve unknown old data,
+filename records and IDs and reject collisions/unsafe names. Full build verification
+re-reads all3736 resources. Runtime loaded all three added clips; native purchased,
+locked, both-facing, refund/save/reload and latest real Continue checks pass.
+Controlled paid HP/credit, native sample clocks and relative hit timing match.
+All contacts including unmodified Snap occur two emulator frames earlier; a
+count-only control with old player bindings/text matches those final contact frames
+exactly. This establishes the phase shift without authored choreography; no FPS
+or new attack-speed claim is made. Scissor bit17 repeats action60 to eight contacts
+in the tested input/meter fixture; a universal repeat cap is not established.
+
+New clip sizes/strides:12088/932,51976/1316,31768/1560. Heap high-water/headroom,
+unused-track compaction, ordinary AI/wall/boss/interruption acceptance, retiming
+and a Blender round trip remain open. Current evidence: OSCORP_RUSH_ANIMATION.md.
+
+### Rush pose refinement and axis correction (2026-10-04)
+
+The player confirmed new choreography but rejected its broad sway. The refinement
+uses a quiet boxing base, jab-cross-hook, guarded knee/kick and an overhand cross.
+The explicit authoring ROOT basis maps local X -> world Y, local Y -> world Z,
+local Z -> world X. BackA local-X rotation therefore turns shoulders around world
+up; local Y would tip the torso sideways. Small local-Z chest/neck counter-pitch
+keeps the head upright against root forward lean. This is a property of the chosen
+canonical authoring basis, not a new interpretation of unknown binary fields.
+
+Against authored8bc72be4, only zz_tasm_RushBridge/Entry/Finish.sca and the two
+localized instruction resources change. All3,736 IDs, every XBD/GMB/GAB/original
+SCA payload and all ARM9 bytes are exact. New copied-battery floor replays in
+both facing directions retain contact frames, actual HP/credit and final position.
+All125 source tests pass; the standard build verifies all3,736 resources. Stable
+f0382e98 equals the candidate and a fresh generation from its pinned composition.
+Player acceptance and broader encounter/heap checks remain open. Detailed
+evidence, hashes and publication/save preservation: OSCORP_RUSH_ANIMATION.md.

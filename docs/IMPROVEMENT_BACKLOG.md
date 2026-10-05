@@ -91,3 +91,19 @@ map/save/training tips are shorter and more explicit. Menu glyphs/wrapping and
 the training panel are captured; text boundaries and other slot bytes are exact.
 Gameplay and progression are unchanged. See QOL_CLARITY.md. Native retry routing,
 new HUD options and camera tracking remain larger research tasks.
+
+## Oscorp Rush, training QoL and performance/visual investigation
+
+Oscorp Rush400 XP/bit16 now advances through its purchased native pause string
+with bounded motion/recovery changes and unchanged measured contact/credit budget.
+SELECT+Down refills native training-target HP without leaving Test Upgrades;
+the panel explains it. Native buy/refund/save/reload and a flag-clear negative
+control pass. Player feel/ordinary AI/walls/bosses remain open.
+
+Added deterministic compact movement compression, serial/threaded host timing
+and a lossless272-archive texture census. Threaded mean host cost is~15.9% lower
+in the idle Sewer scene, without establishing the user's DeSmuME hitch fix.
+JIT/preload and2x internal3D are prepared optional previews; actual renderer,
+dense-combat and visual acceptance remain open. Details and ordered experiments:
+TASM1_OSCORP_RUSH.md / PERFORMANCE_VISUALS.md. Larger camera/options/shop work
+remains queued; no independent purchase rows or new save bits are granted.
