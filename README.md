@@ -97,8 +97,9 @@ enemy launch. Web Vault replaces **Web Launch** at **200 XP** and rises alongsid
 a successfully launched common enemy without pulling it backward. Sling Strike
 replaces **Mid-Air Snare** at **600 XP** with one passing kick, a clean stop and
 turn back. Oscorp Rush replaces **Spider Dance** at **400 XP**: Y, let the sweep
-end, Y, Y, Y for a newly authored jab-cross-hook combination, a knee/kick and a
-compact overhand cross. All three paid clips have dedicated resources; Snap and
+end, Y, Y, Y for newly authored exaggerated punches, a rising uppercut, a high
+knee/kick and a lunging overhand. Brief impact stretch gives the limbs longer
+silhouettes. All three paid clips have dedicated resources; Snap and
 other actors retain their previous clips. Native contact,
 damage, credit and duration remain. Existing ownership carries over;
 unowned/refunded slots remain locked. In Test Upgrades, **SELECT and Down** refill

@@ -259,11 +259,13 @@ explains the replay's two-frame phase shift without new choreography. Full detai
 hashes, resource-count patch and open encounter checks: OSCORP_RUSH_ANIMATION.md.
 
 Player feedback confirmed novelty but rejected the broad swaying pose quality.
-The current refinement uses close guard, jab-cross-hook and an overhand cross,
-with fixed local-axis shoulder twist, quiet hips and restrained leg motion. All
-bindings/event assets/ARM9 remain exact; both facing floor HP/credit/contact
-frames/final position match the previous full-animation release. Player acceptance
-of this revision remains open. See OSCORP_RUSH_ANIMATION.md for current proof.
+The compact refinement corrected the shoulder axis but was also rejected as
+stubby. The2026-10-05 revision uses larger camera-plane windups/extensions,
+a rising uppercut, full high kick and lunging overhand, with bounded contact-only
+limb translation stretch. Native scale stays exact. All bindings/event assets/ARM9
+remain exact; both facing floor HP/credit/contact frames/final position match the
+compact release. Player acceptance remains open. See OSCORP_RUSH_ANIMATION.md
+for current proof.
 
 Next: neutral/bind/axis calibration and unchanged native clip DCC round trip,
 plus a separately authored Barrage sequence. Detailed pipeline,

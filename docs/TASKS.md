@@ -1,25 +1,28 @@
 # Project tasks and session handoff
 
-Updated: 2026-10-04 (America/Edmonton).
+Updated: 2026-10-05 (America/Edmonton).
 
 ## Resume here
 
-**Current release: compact boxing refinement of authored Oscorp Rush**,
+**Current release: anime exaggeration revision of authored Oscorp Rush**,
 published through `python tools/playtest.py build` to
 `build/Spider-Man-WoS-modded.nds`. Profile **tasm-oscorp-rush-authored** composes
 seventeen guarded overlays. Published ROM, qualified candidate and a fresh
 regeneration from the published composition are byte-identical. Current evidence:
 `OSCORP_RUSH_ANIMATION.md`; initial motion release: `TASM1_OSCORP_RUSH.md`.
-Feature source, tools and evidence notes are committed and pushed to GitHub
-`main` as `572bfc9` (Author isolated Oscorp Rush with compact fighting choreography).
+Feature source, tools and evidence notes track this release on GitHub `main`.
+Historical compact source is `572bfc9`; that version was rejected as stubby.
 
-- Rush400 XP/event325/bit16: Y, let Snap finish, Y,Y,Y enters jab-cross-hook,
-  a knee/kick and overhand cross. All three paid clips are authored
+- Rush400 XP/event325/bit16: Y, let Snap finish, Y,Y,Y enters a loaded straight,
+  high cross and rising uppercut, a high knee/full kick and lunging overhand.
+  All three paid clips are authored
   across their full39/12/20 samples using FK/IK and quaternion controls. Native
   six-contact HP/credit, sample clocks, commitment and prior root advance remain.
-  Close guard, restrained hip motion and correctly oriented shoulder twist
-  replace the dance-like sway rejected by the player. Novelty was confirmed;
-  this refined animation's quality/feel still awaits player acceptance.
+  Larger windups, taller/wider stance, camera-plane extensions, forearm-aligned
+  wrists and contact-only translation stretch (arms12/16%, kick8%) address the
+  compact revision's short-looking limbs. The kick's re-read two-bone extension
+  rises0.353 ->0.990. Novelty was confirmed for the earlier full choreography;
+  this animation's quality/feel still awaits player acceptance.
 - Dedicated SCA IDs3733..3735 isolate the player choreography. All original3733
   IDs, original animation payloads, Snap and other actor bindings stay exact
   against the parent. m6 also uses G11/16/17: none is a globally unused spare.
@@ -30,7 +33,8 @@ Feature source, tools and evidence notes are committed and pushed to GitHub
   Scissor remains the600-XP/bit17 repeat extension, not the proposed Barrage.
   A rapid-input fixture repeats action60 four times for eight contacts; this
   is not a universal cap. Final and old builds have matching native HP/credit.
-- All contacts including unchanged Snap shift two emulator frames earlier. A
+- The original archive extension shifted contacts, including unchanged Snap,
+  two emulator frames earlier than the pre-extension release. A
   count-only control with old player bindings/text has the same final contact
   frames. Relative timing, native clocks and final position stay exact; this
   does not establish an FPS or speed change.
@@ -39,22 +43,28 @@ Feature source, tools and evidence notes are committed and pushed to GitHub
   are retained. Original Vault is player-confirmed. Refined Rush and the later
   move/feedback revisions are agent-tested, awaiting player acceptance.
 
-ROM SHA256 `f0382e984ae3bd6038e0bb87a14effa4d844fd390456ab1f36eb67159d386d4b`.
+ROM SHA256 `4d36970e7e06fae190ad27971ba6f85a5cfa74f0cad664f36c61c74455e0f65e`.
 ARM9 SHA256 `72ab438e0998ec2b021bd79a4f36adf5e88a456ccbe51afff100c81461390b12`.
-**125 revision-source tests pass; all3,736 resources verified during build.** ARM9 differs
+**8 choreography tests pass, including2 new baked-pose/stretch checks;
+all3,736 resources verified during build.** Prior compact source passed125 tests;
+the full suite was not rerun for this pose revision. ARM9 differs
 from the accepted Rush parent only at source0x77F8: Glob count3733 ->3736.
 The ordinary overlay workflow still rejects manual GlobFiles/arbitrary additions;
 only this authored profile permits its three fixed hash-pinned SCA filenames.
 
 DeSmuME was closed during checkpoint/publication. Latest real save before/after:
-`84ede9fb98686a88a789775d4ceba67abc38dc1859926d327f21651381f59414`,
-634-byte DSVv0/512 payload. Content-addressed `before-rush-refine` and
-`before-build` checkpoints preserve it. Prior8bc72be4 ROM remains in
+`5a03c116b31de0f35e57a81f8fa77cbbf0615850fb665391c52943b1079e237e`,
+634-byte DSVv0/512 payload. Content-addressed `before-rush-anime` and
+`before-build` checkpoints preserve the user's newly saved progress. Prior f0382e98 ROM remains in
 `build/releases/<old-sha>/`; its active recipe and overlays are preserved under
-`visual-refinement-parent/`. Earlier releases/checkpoints remain. No research
+`anime-parent/`. Earlier releases/checkpoints remain. No research
 purchase, HP, Scissor fixture or older save was restored to the real battery.
-Current assertions: `work/animation-research/visual-refinement-evidence.json`;
-current replays: `build/boot-tests/OscorpAuthored-f0382e98/`;
+Current assertions: `work/animation-research/anime-evidence.json`;
+current replays/contact sheets: `build/boot-tests/OscorpAuthored-4d36970e/{anime-right,anime-left}/`;
+candidate/poses: `build/oscorp-anime/choreography.json`;
+fresh deterministic regeneration: `build/oscorp-anime-regenerated/`.
+Historical compact evidence: `visual-refinement-evidence.json` and
+`build/boot-tests/OscorpAuthored-f0382e98/`;
 initial qualification: `work/animation-research/dedicated-evidence.json` and
 `build/boot-tests/OscorpAuthored-8bc72be4/`;
 count-only: `build/boot-tests/CountControl-409c6d41/count-only-owned/`.
@@ -95,9 +105,9 @@ Preserve `TASM_EXPANDED_ROADMAP.md`, `IMPROVEMENT_BACKLOG.md` and selected suit 
 ## First actions in a fresh session
 
 The player confirmed Rush's full choreography was new but rejected its dance-like
-sway. A compact jab-cross-hook, knee/kick and overhand refinement is now published.
-Record feedback on the close guard, strike readability and transition before
-marking this revision player-confirmed.
+sway, then rejected compact boxing as stubby. The anime exaggeration revision is
+now published and agent-tested. First record player feedback on the larger
+windups, extended arms/high kick, feet and recovery before marking it player-confirmed.
 `sca_author.py` retains all869 exact sample-document and126 player independent
 bake tests. `animation_rig.py` maps canonical37 names/parents. Procedural FK/IK
 enables original choreography now; a Blender bridge remains separate work.
@@ -110,16 +120,16 @@ original G11 as spare storage: m6 still binds it. All original player animations
 are referenced by actor XBDs. Existing IDs must stay stable.
 
 Tools: `oscorp_animation.py`, `oscorp_resources.py`, `rush_choreography.py`;
-candidate `build/oscorp-visual-refinement/`, regeneration
-`build/oscorp-refinement-regenerated/`, count-only `build/oscorp-count-control/`;
-private `work/animation-research/{visual-refinement-evidence.json,
-check-visual-refinement.py,promote-visual-refinement.py}`. Initial compiler/recovery proof remains in
+candidate `build/oscorp-anime/`, regeneration
+`build/oscorp-anime-regenerated/`, count-only `build/oscorp-count-control/`;
+private `work/animation-research/{anime-evidence.json,
+check-anime.py,promote-anime.py}`. Initial compiler/recovery proof remains in
 ANIMATION_AUTHORING.md. Blender bind/axis round trip, scale edits, retiming,
 unused-track compaction and measured heap headroom remain open.
 
 Controlled research uses copied `before-oscorp-rush` bytes; earlier Continue
 qualification used a read-only copy of the then-current real battery. Live save
-advanced independently to84ede9fb
+advanced independently to5a03c116
 and is preserved by this release. Never restore older a22cdc or0d063aa6 progress
 over it. Re-read the actual latest battery while closed before any next release.
 

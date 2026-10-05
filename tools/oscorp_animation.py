@@ -16,7 +16,8 @@ PROFILE='tasm-oscorp-rush-authored'
 PARENT_RECIPE_SHA='a2b63f8def8c0e2ee7e0751b7b27ddf0655a27ab9d76522cea4f85a988af7ac0'
 AUTHORED_RECIPE_SHA='3606b6015a95a50e473fdff4a6e1c9f23a3bbcefa5cf9757c58008bcaa69219b'
 REFINED_RECIPE_SHA='293dc1dc8b630276e87617da5b3b4199d8f59bba8952b3924d849aae995946f8'
-TEXT_EDITS={194:'\ue601, let the sweep end, \ue601, \ue601, \ue601.\nPunch combo, knee and overhand.'}
+ANIME_RECIPE_SHA='7a78a5f641965a2876353cb5b2ea0c56d0fb37b7444d328d6e77b0612eb5b266'
+TEXT_EDITS={194:'\ue601, let the sweep end, \ue601, \ue601, \ue601.\nPunches, high kick, heavy finish.'}
 
 def isolate_rush(raw,names):
     x=Xbd.parse(raw,names);out=raw;changes=[]
@@ -39,7 +40,7 @@ def generate(output='build/oscorp-dedicated'):
     extra=resources.EXTRA_NAMES if json.loads(recipe.read_text())['profile']==PROFILE else ()
     overlays=mod.overlay_files(mod.ROOT/'mods',names,added_names=extra)
     current=cp.load_recipe(recipe,overlays)
-    accepted={PARENT:{PARENT_RECIPE_SHA},PROFILE:{AUTHORED_RECIPE_SHA,REFINED_RECIPE_SHA}}
+    accepted={PARENT:{PARENT_RECIPE_SHA},PROFILE:{AUTHORED_RECIPE_SHA,REFINED_RECIPE_SHA,ANIME_RECIPE_SHA}}
     if w.sha256(recipe.read_bytes()) not in accepted.get(current,set()):
         raise ValueError('Full authoring requires an exact accepted Rush composition')
     if set(overlays)!=set(json.loads(recipe.read_text())['required_overlays']):

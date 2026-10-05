@@ -14,7 +14,7 @@ the described structure; runtime behavior requires separate experiments.
 | XBD UI/other kinds | UI definitions/configuration, inferred from names | Envelope only: 92 UI-associated + one other kind | Raw replacement only | Medium for envelope; payload unknown |
 | GAB | Timed action events | All 227 parse losslessly as 6-byte records plus terminator/padding; dispatch inspected | Existing synchronized bindings retained; no generalized event editor | Events 7/8/9 have bounded contact-reset/action-marker findings; event 1 parameters unknown; event 8 is not meter credit |
 | GMB | Root movement and contact/geometry channels | All769 structured round trips and optional compact0x60 re-encode/decode; fixed kind/stride table; all126 player layouts validated | Single-word editor; Rebound recoil, Vault approach and purchased Rush16/17 root advances; no-op wrappers preserved | High for boundaries and tested facing/contact path; unknown geometry fields retained; two compact wrappers runtime-tested |
-| SCA | Skeletal animation translation/scale/rotation tracks | All869 structured and sample-JSON no-op round trips;126 player clips bake37 independent rotations | Three full authored Rush clips via FK/IK, sampled repacker and dedicated added resources; constant/shared tracks detach safely | High for tested player layout/growth and floor contact parity; scale/retiming/Blender conversion and broad encounters remain open; OSCORP_RUSH_ANIMATION.md |
+| SCA | Skeletal animation translation/scale/rotation tracks | All869 structured and sample-JSON no-op round trips;126 player clips bake37 independent rotations | Three dedicated Rush clips via FK/IK; bounded contact-only limb translation stretch, native scale retained; constant/shared tracks detach safely | High for tested player layout/growth, baked camera-plane reach and both-facing floor contact parity; scale/retiming/Blender conversion, heap and broad encounters remain open; OSCORP_RUSH_ANIMATION.md |
 | Player animation rig | Canonical37 object indices and parent ancestry | Read-only model dictionary/SBC extraction; parent bytes verified against stack lineage; raw model no-op | Authoring JSON supplies names/parents;34 exported DAE ordinals require mapping | High for original player tree; no skin/rig editor; DCC bind/axes calibration remains open |
 | BSP | Room spatial/collision data, hypothesis | All 75 envelopes/region offsets parsed losslessly | No geometry/collision editor | High for envelope; low for node/coordinate semantics |
 | OBJ | Room placements/encounters/triggers, hypothesis | Paired 75; word0=2, rest unknown | No object editor | Low: begin with 104-byte difference between Downtown_Save02/03 |
@@ -37,8 +37,10 @@ The current release composes seventeen overlays: accepted cosmetics/feedback,
 Rebound, matched-rise Web Vault, passing/turning Sling, fully authored Oscorp Rush
 and training refill. The default recipe pins overlays and the complete ARM9 hash.
 Every authored build verifies all3736 resources; every original ID stays stable.
-All125 revision-source tests pass. The latest Rush refinement replaces broad
-sway with a compact boxing sequence; both facing contact/HP/credit/position checks
+All8 current choreography tests pass; the prior compact source passed125 tests.
+The latest Rush revision replaces the rejected short-looking compact poses with
+larger windups, camera-plane strikes, a full high kick and bounded impact stretch.
+Both facing contact/HP/credit/position checks
 match the prior release, with unchanged bindings/events/ARM9. Player approval of
 the revised motion remains open. Current evidence/limits: OSCORP_RUSH_ANIMATION.md,
 COMBAT_FLOW.md and PERFORMANCE_VISUALS.md; initial Rush history: TASM1_OSCORP_RUSH.md.

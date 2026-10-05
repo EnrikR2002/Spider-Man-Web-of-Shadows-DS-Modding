@@ -1,8 +1,8 @@
 {
   "profile": "tasm-oscorp-rush-authored",
   "required_overlays": {
-    "American.strings": "366ac920c0fe24e65bc8f602d2e31ec4e1d7fa9ad27b1078bb84df1f8c8bf925",
-    "English.strings": "366ac920c0fe24e65bc8f602d2e31ec4e1d7fa9ad27b1078bb84df1f8c8bf925",
+    "American.strings": "a977fd8c1a57fc7806df2a12128c852678f424d97896bdd2d18b1870cc88198a",
+    "English.strings": "a977fd8c1a57fc7806df2a12128c852678f424d97896bdd2d18b1870cc88198a",
     "MissionMiniMapIcon.pal": "5072156a663205facf22310c98913e01febb028c74edd1c196e7db26985b5787",
     "spd.nsbmd": "8ddbdac95ba919b50d4c107f491936b10eea2ae65b2117ed1a6d9fa0ce6f5ad0",
     "spd.nsbtx": "62052b3cd8034c11e28c44de9b6d1b1bf36f6298d8fbfb0315bd92a7f2244948",
@@ -15,9 +15,9 @@
     "spd_GroundAttack16.gmb": "2c0b5fe895d3a1a689047ce0d24362df887b671beb50e51eddd0d4cb1d12f4a8",
     "spd_GroundAttack17.gmb": "dacdde46575d08c496c8d99903a027887195f3f8d0a41583fcbd5d9d61525197",
     "spd_GroundAttack17.sca": "782da8b35e252251b5759afbf00adb8a48a62ca0db397fb3b1d4cadfb41cc2e8",
-    "zz_tasm_RushBridge.sca": "cc7126b061a659339aa2a78484a91eaedd22f297fb94d980df5c8bd30ed7246b",
-    "zz_tasm_RushEntry.sca": "f7426466598fbd44344b4f1f5d07a2920f9396ee2ffe09b63a883529de0e8af8",
-    "zz_tasm_RushFinish.sca": "bd86acd3dd2b608ebe0f099bffd7095f8256ba6c32b26b78606272944022d151"
+    "zz_tasm_RushBridge.sca": "cbe8b7f6a71f8ffc00909a2ca562c177776aa70840d174ec5092bfb51b3aea82",
+    "zz_tasm_RushEntry.sca": "4d443e8aa87748554bf327cab1bbeb9534046bc308dc9736b7a35f1a82ff0880",
+    "zz_tasm_RushFinish.sca": "c2b78a3567e273303be46e7f2b37877245e890eb36a76b709cde1aff96a1be06"
   },
   "schema_version": 1
 }

@@ -1020,3 +1020,33 @@ All125 source tests pass; the standard build verifies all3,736 resources. Stable
 f0382e98 equals the candidate and a fresh generation from its pinned composition.
 Player acceptance and broader encounter/heap checks remain open. Detailed
 evidence, hashes and publication/save preservation: OSCORP_RUSH_ANIMATION.md.
+
+### Rush camera-plane reach and bounded limb translations (2026-10-05)
+
+The player rejected compact boxing as stubby. Re-read quantized SCA FK identifies
+a folded kick: sample9 hip-to-ankle distance divided by thigh+shin length0.353.
+The exaggerated revision reaches0.990, with ankle Y4.80/Z5.79 rather than2.26/1.13.
+The lifted-knee sample4 remains folded0.418 with the knee above the hip. Entry
+contact wrist forward positions rise2.38/2.51 ->3.76/4.02; uppercut wrist height
+rises6.10 ->8.41. Those are canonical pose-space measurements, not collision
+reach, damage or measured pixel counts. Larger Y/Z motion reads in the floor
+camera; mostly-X sweeps foreshorten. Wrists align the known native knuckle axis
+along the forearm instead of retaining idle world orientation. Native fingers stay.
+
+Known lower/end translation tracks8/9 and18/19 gain at most12% during entry
+impacts;18/19 gain at most16% for the finisher;31/32 gain at most8% for the kick.
+Keyed zero gains restore native lengths. All scale/inverse-scale channels and
+unknown bytes remain preserved. This establishes bounded translation length
+authoring on this rig, not a general scale compensation contract or permanent
+mesh edit. Sample19 of the finisher still returns exactly to native Idle0.
+New bridge/entry/finish sizes and strides are12376/956,53848/1364,31768/1560.
+
+Against compact f0382e98, only the three dedicated SCAs and two instruction
+resources change; every original asset/ID/binding, GMB/GAB and ARM9 byte stays
+exact. Dense captured floor frames reviewed in both directions show the kick
+unfolding. Paired replays retain all8 HP contacts including Snap, native credit,
+exact contact frames and final position. Eight choreography tests pass, including
+new baked-pose camera-plane extension and bounded-stretch checks. Build verifies
+all3736 resources; stable4d36970e equals candidate and fresh regeneration.
+Player quality acceptance, broader encounters and heap headroom remain open.
+Private evidence/current save and release hashes: OSCORP_RUSH_ANIMATION.md.

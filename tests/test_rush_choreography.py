@@ -77,6 +77,49 @@ class LocalChoreographyTests(unittest.TestCase):
         # Existing GMB/GAB and all non-Rush actors remain on their native IDs.
         for offset in (408,412,420,424,432,436):self.assertEqual(changed[offset:offset+4],raw[offset:offset+4])
         with self.assertRaises(ValueError):release.isolate_rush(changed,names)
+
+    def test_strikes_read_in_the_camera_plane_and_kick_unfolds(self):
+        idle=Sca.parse(self.idle)
+        def bake(variant,asset):
+            changed,_=c.author(self.clean(asset+'.sca'),self.idle,self.rig.parents,variant)
+            a=Sca.parse(changed);poses=[]
+            for f in range(a.frame_count):
+                p=c.Pose(idle,self.rig.parents)
+                p.r=[c.decoded(a.rotation(j,f)) for j in range(37)]
+                p.t=[tuple(v/4096 for v in sample(a,j,f,'translation')) for j in range(37)]
+                poses.append(p.fk()[1])
+            return a,poses
+        _,entry=bake('entry','spd_GroundAttack16')
+        for f,upper,lower,end in ((5,7,8,9),(12,17,18,19),(18,7,8,9)):
+            chain=c.length(c.sub(entry[f][lower],entry[f][upper]))+c.length(c.sub(entry[f][end],entry[f][lower]))
+            v=c.sub(entry[f][end],entry[f][upper])
+            self.assertGreater((v[1]**2+v[2]**2)**.5/chain,.80)
+        self.assertGreater(entry[5][9][2]-entry[3][9][2],4.5)
+        self.assertGreater(entry[12][19][2]-entry[11][19][2],4.5)
+        self.assertGreater(entry[18][9][1]-entry[16][9][1],2.8)
+        _,bridge=bake('bridge','spd_GroundAttack15')
+        def extension(pos):
+            return c.length(c.sub(pos[32],pos[30]))/(c.length(c.sub(pos[31],pos[30]))+c.length(c.sub(pos[32],pos[31])))
+        self.assertLess(extension(bridge[4]),.65)
+        self.assertGreater(bridge[4][31][1],bridge[4][30][1])
+        self.assertGreater(extension(bridge[9]),.95)
+        self.assertGreater(bridge[9][32][2]-bridge[9][30][2],4.5)
+        self.assertGreater(bridge[9][32][1],4.)
+
+    def test_contact_stretch_is_bounded_and_returns_to_native_lengths(self):
+        idle=Sca.parse(self.idle)
+        allowed={1,8,9,18,19,31,32}
+        for variant,asset in (('entry','spd_GroundAttack16'),('bridge','spd_GroundAttack15'),('finish','spd_GroundAttack17')):
+            changed,_=c.author(self.clean(asset+'.sca'),self.idle,self.rig.parents,variant);a=Sca.parse(changed)
+            for f in range(a.frame_count):
+                for j in range(37):
+                    value=sample(a,j,f,'translation');native=sample(idle,j,0,'translation')
+                    if j not in allowed:self.assertEqual(value,native)
+                    if j in (8,9,18,19,31,32):
+                        ratio=c.length(value)/c.length(native)
+                        self.assertGreaterEqual(ratio,.999)
+                        self.assertLessEqual(ratio,1.081 if j in (31,32) else 1.161)
+                        if f==0 or (variant=='finish' and f==19):self.assertEqual(value,native)
     def test_native_engine_and_purchase_table_exactly_preserved(self):
         before,_=cp.apply_rom(self.rom,'tasm-oscorp-rush');after,_=cp.apply_rom(self.rom,release.PROFILE)
         h=w.parse_header(after);restored=bytearray(after)
