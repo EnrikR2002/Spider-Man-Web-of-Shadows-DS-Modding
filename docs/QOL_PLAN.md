@@ -1,5 +1,8 @@
 # Vanilla-plus QoL plan and first experiment
 
+Historical first experiment. The current mission marker is red per player request;
+current instruction improvements are documented in [QOL_CLARITY.md](QOL_CLARITY.md).
+
 Updated 2026-10-03. Keep combat balance, progression, saves, and room logic unchanged
 in the initial readability pass. All extracted assets, previews, builds, and emulator
 captures remain private/ignored. No original ROM or regular overlay is overwritten.

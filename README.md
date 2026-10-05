@@ -86,19 +86,26 @@ assets. See `docs/TESTING_WORKFLOW.md` for the plain-language explanation and
 
 The current local regular overlay contains the cleaned movie-inspired red suit
 (solid panels, black lenses), the white alternate suit, menu readability changes,
-and yellow mission marker. TASM 1 stage one adds **Snap Sweep**, a compact opening
+and red mission marker. TASM 1 stage one adds **Snap Sweep**, a compact opening
 low kick in the red form: measured completion in 24 versus 44 emulator frames,
 with the native follow-up string retained. Stage one used seven overlay assets.
 See [the cleanup evidence](docs/MOVIE_SUIT_EXPERIMENT.md#clean-panels-and-black-lenses--2026-10-04).
 
-The current release combines **Rebound**, **Web Vault**, and the combat-feedback
-HUD. Rebound replaces **Web Kick** at **100 XP** with a closer, higher enemy launch
-and the same native damage/gates; Web Vault replaces **Web Launch** at **200 XP**
-with a short grapple follow-up into the air. Existing ownership carries over and
-unowned/refunded slots remain locked. The regular overlay and bounded ARM9
-extension are pinned by `reference/gameplay_profile.json`. See [combat feedback
-and Rebound evidence](docs/COMBAT_FEEDBACK.md), [Rebound history](docs/TASM1_REBOUND.md),
-and [Web Vault history](docs/TASM1_WEB_VAULT.md).
+The current release combines **Rebound**, **Web Vault**, **Sling Strike** and a
+compact HUD. Rebound replaces **Web Kick** at **100 XP** with a closer, higher
+enemy launch. Web Vault replaces **Web Launch** at **200 XP** and rises alongside
+a successfully launched common enemy without pulling it backward. Sling Strike
+replaces **Mid-Air Snare** at **600 XP** with one passing kick, a clean stop and
+turn back. Existing ownership carries over; unowned/refunded slots remain locked.
+Small continuous enemy health bars replace damage numbers, and the transient
+combo numeral leaves the native meter visible. HUD work is reduced, but overall
+emulator benchmarks do not establish a lag fix. The latest small pass adds clearer
+shared/traversal and map/save/training instructions.
+
+The complete overlay and ARM9 extension are pinned by
+`reference/gameplay_profile.json` (**tasm-combat-flow**). See
+[current combat evidence](docs/COMBAT_FLOW.md), [instruction clarity](docs/QOL_CLARITY.md),
+[Rebound history](docs/TASM1_REBOUND.md) and [Web Vault history](docs/TASM1_WEB_VAULT.md).
 
 **Player flow:** double-click `Play Spider-Man.cmd`, choose Continue, play, save
 in-game, close DeSmuME. The launcher opens the stable ROM and backs up progress.
@@ -117,7 +124,7 @@ python tools/playtest.py restore early-game
 On the development machine the Battery folder is configured and the current
 save association is retained with named backups. `before-suit-cleanup`,
 `before-tasm1`, `opening-save-room`, `before-rebound`, `before-web-vault` and
-`before-combat-feedback` are available locally; the live save may advance after
+`before-combat-feedback`, `before-combat-flow` and `before-clarity` are available locally; the live save may advance after
 this release.
 Checkpoint names must be unique. A checkpoint returns to an in-game save you have
 recorded; it does not jump to an arbitrary room. An isolated copy of current progress
@@ -258,14 +265,15 @@ Use `mod.py` for the normal workflow; it adds clean-source/manifest/overlay vali
 Read [validation results](docs/VALIDATION.md), [format evidence](docs/FORMAT_NOTES.md),
 [editing status/priorities](docs/MODDABILITY_MATRIX.md), and the
 [modding/testing and room-research workflow](docs/TESTING_WORKFLOW.md). The next work
-is Sling Strike after the remaining combat-feedback player checks, using the native gameplay,
+is Oscorp Rush after the remaining combat-flow player checks, using the native gameplay,
 purchase and animation maps. Room geometry, save payloads, full decompilation and
 a general animation GUI remain research.
 
 
-Current session handoff: [docs/TASKS.md](docs/TASKS.md). Current damage/combo HUD
-and Rebound juggle revision: [COMBAT_FEEDBACK.md](docs/COMBAT_FEEDBACK.md).
+Current session handoff: [docs/TASKS.md](docs/TASKS.md). Current aerial moves and
+compact HUD: [COMBAT_FLOW.md](docs/COMBAT_FLOW.md). Small instruction improvements:
+[QOL_CLARITY.md](docs/QOL_CLARITY.md).
 Expanded combined TASM design: [TASM_EXPANDED_ROADMAP.md](docs/TASM_EXPANDED_ROADMAP.md);
 other ideas by impact/effort: [IMPROVEMENT_BACKLOG.md](docs/IMPROVEMENT_BACKLOG.md).
-The default recipe includes feedback; legacy explicit recipes remain available
+The default recipe includes all accepted combat/clarity changes; legacy explicit recipes remain available
 for paired controls. Normal builds need only the Python standard library.

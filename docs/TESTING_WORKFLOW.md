@@ -49,7 +49,7 @@ to configuration. `Play Spider-Man.cmd` changes into its own project directory.
 
 Current named checkpoints: `before-suit-cleanup`, `before-tasm1`,
 `opening-save-room`, `before-rebound`, `before-web-vault`, and the latest
-`before-compact-hud-sling` and `before-combat-flow`. Ask the agent to return to a named point; restoration retains
+`before-compact-hud-sling`, `before-combat-flow` and `before-clarity`. Ask the agent to return to a named point; restoration retains
 displaced progress first. More points become available as real in-game saves are
 recorded. No arbitrary room warping or save-field editing is implemented.
 
@@ -66,6 +66,9 @@ overlays block a build rather than silently dropping part of the move. See
 asset/test counts are historical; the current full suite passes 96 tests. Original Web Kick ownership carries over
 through native saving; Web Launch ownership carries over as Web Vault. Native
 refund and purchase/save/reload checks cover the three released replacements. The live battery is never edited.
+
+The latest small text pass adds clearer shared/traversal instructions and
+map/save/training tips without changing ARM9; see `QOL_CLARITY.md`.
 
 ### Where features live
 

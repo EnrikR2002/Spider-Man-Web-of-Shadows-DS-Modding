@@ -1,5 +1,8 @@
 # Combat flow revision: player-feedback fixes
 
+The current release adds a text-only clarity pass; see [QOL_CLARITY.md](QOL_CLARITY.md).
+The engine implementation and evidence below remain unchanged.
+
 2026-10-04. Implemented and agent-tested; new player feel/lag acceptance pending.
 Profile `tasm-combat-flow` composes every accepted overlay and the historical
 Sling release. Stable publication uses the same ROM/launcher and preserves saves.

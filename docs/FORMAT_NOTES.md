@@ -854,3 +854,16 @@ wall benchmarks are roughly flat overall (means~4.1ms); they do not establish a
 DeSmuME FPS gain or prove the reported hitches are cured. Ordinary AI-density,
 bosses, walls/ceilings/interruption and real DeSmuME lag remain player checks.
 Current details/proof: COMBAT_FLOW.md, work/combat-flow/final-evidence.json.
+
+
+### Additional bounded instruction clarity pass (2026-10-04)
+
+The existing verified English/American Huffman codec supports sixteen shorter
+shared/traversal and map/save/practice instructions. The new tool edits current
+slot prefixes directly: tree, offsets, lengths, all unedited slot bytes and edited
+slot tails remain exact. All1,049 slots in each language decode to expected text;
+reapplying produces identical bytes. Unsupported glyphs/slot overflow are rejected.
+Only two string overlays change; ARM9 remains b43630d4, all3,733 resources verify.
+Menu/training layout was visually inspected; individual tutorial-triggered tips
+are codec/bounds verified rather than all story-visited. See QOL_CLARITY.md.
+No new binary structure, input window or purchase/save field is inferred.

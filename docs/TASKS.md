@@ -4,11 +4,14 @@ Updated: 2026-10-04 (America/Edmonton).
 
 ## Resume here
 
-**Current release:** player-feedback combat-flow revision, published with
+**Current release:** combat-flow revision plus small instruction clarity pass, published with
 `python tools/playtest.py build` to `build/Spider-Man-WoS-modded.nds`.
 Exact tested candidate and published ROM match. Profile **tasm-combat-flow**
 composes all eleven accepted overlays. See `COMBAT_FLOW.md` for current evidence;
 `COMBAT_HUD.md` and `TASM1_SLING_STRIKE.md` preserve the initial release.
+The current text-only addition is documented in `QOL_CLARITY.md`: sixteen shorter
+shared/traversal instructions, combo-gap explanation and map/save/training tips.
+Menu and training layout agent-checked; individual tutorial popups remain unvisited.
 
 - Sling Strike keeps native aerial web targeting but now makes one visible
   passing kick, stops residual movement and turns back toward the enemy.
@@ -29,7 +32,7 @@ composes all eleven accepted overlays. See `COMBAT_FLOW.md` for current evidence
   Whole-core timing was roughly flat: this reduces HUD work, but does not prove
   the intermittent DeSmuME hitches are fixed. Settings were not guessed/changed.
 
-ROM SHA256 `c700f3b5bbf1d05d2c4d1b61da6256129c3a2e91648068b4f6a237aea99e09cf`.
+ROM SHA256 `67472ad12cc6be60134588a992945eaba505eacc85a741f48684ce3a5f737520`.
 ARM9 SHA256 `b43630d4f0bf0ea3530a6330f7c80482d6ba1f70ba194a447eb93e8a738d77ea`.
 **96 tests pass; all3,733 resources verified.** Required overlay hashes are guarded
 by `reference/gameplay_profile.json`. Snap, shared traversal, purchased ownership,
@@ -37,9 +40,9 @@ Rebound response and all21 native purchase records stay intact.
 
 DeSmuME was closed throughout checkpoint/publication. Latest real save before/after:
 `a22cdc22490db27af413520d4a7aa09e7decdec3ab5d41636c575bc6bd19ce46`,
-634-byte DSV v0/512 payload. `before-combat-flow` and the content-addressed
+634-byte DSV v0/512 payload. `before-combat-flow`, `before-clarity` and the content-addressed
 before-build checkpoint retain it. Previous stable ROM
-`92f4aa29cddf77e69f986b39a5ac8e181bbc1a0dca66d830055bc046888ae3d3`
+`c700f3b5bbf1d05d2c4d1b61da6256129c3a2e91648068b4f6a237aea99e09cf`
 is retained in `build/releases/`. Actual latest progress copy fresh-boots to Sewer,
 417 XP and bits13/14/15; idle HUD performs zero draws. Older native-menu training
 batteries are isolated and were never restored over this newer player progress.
@@ -67,7 +70,7 @@ not implemented or allocated a save bit. See `IMPROVEMENT_BACKLOG.md`.
 
 ## First actions in a fresh session
 
-1. Read AGENTS.md, this file and COMBAT_FLOW.md; initial release docs are historical.
+1. Read AGENTS.md, this file, COMBAT_FLOW.md and QOL_CLARITY.md; initial release docs are historical.
 2. Check git status/log, stable hashes, configured real battery and the current
    guarded tasm-combat-flow recipe. Never mutate progress with DeSmuME running.
 3. Record new player feedback separately from agent tests. Preserve paid gates.
@@ -101,6 +104,7 @@ not implemented or allocated a save bit. See `IMPROVEMENT_BACKLOG.md`.
 - [ ] Independent additional shop rows/ownership/save migration research before expanding purchases.
 - [x] Remove damage numbers; wounded common enemies use small actor-anchored health bars.
 - [x] Restore red mission marker, clearer upgrade inputs/prerequisites and full dummy refill.
+- [x] Small shared/traversal, combo-gap and map/save/training instruction clarity pass; menu layout agent-tested.
 - [ ] Optional native HUD toggle/crowding refinements remain future research.
 - [ ] Broader walls/ceilings/bosses/interruption/long-play checks as the kit develops.
 - [ ] Independent third suit selection; investigate without altering traversal.
@@ -160,3 +164,10 @@ be discussed later. Exact selection is in `SUIT_ROADMAP.json`.
   96 tests and3,733 resources verified. Latest a22cdc real DSV preserved exactly,
   checkpoint and prior92f4 ROM retained. Player acceptance/actual lag checks open;
   next paid move remains Oscorp Rush400.
+
+- 2026-10-04: user authorized GitHub commit/push and further small proposed QoL.
+  Committed combat-flow/HUD/Sling source as d6725dc. Added sixteen bounded text
+  improvements with menu/training captures, full slot round-trip/byte confinement
+  and unchanged ARM9. Published clarity67472ad1 through the stable playtest build;
+  latest a22cdc save preserved, before-clarity checkpoint and c700f3b5 prior ROM
+  retained. Oscorp Rush and larger menu/camera/settings work stay queued.

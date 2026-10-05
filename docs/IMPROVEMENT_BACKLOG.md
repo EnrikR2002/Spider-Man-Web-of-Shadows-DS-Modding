@@ -83,3 +83,11 @@ Sling makes a visible passing kick, stops and turns back. HUD rendering skips id
 work, checks prior owned rectangles, caches projection scale and warms the font.
 Whole-core timings stayed roughly flat; do not claim a proven FPS/hitch fix.
 See COMBAT_FLOW.md for measured evidence and remaining player checks.
+
+## Additional small instruction pass
+
+Sixteen shared/traversal descriptions, the Spider Dance gap explanation, and
+map/save/training tips are shorter and more explicit. Menu glyphs/wrapping and
+the training panel are captured; text boundaries and other slot bytes are exact.
+Gameplay and progression are unchanged. See QOL_CLARITY.md. Native retry routing,
+new HUD options and camera tracking remain larger research tasks.

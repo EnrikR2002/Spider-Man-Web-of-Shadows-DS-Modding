@@ -1,8 +1,8 @@
 {
   "profile": "tasm-combat-flow",
   "required_overlays": {
-    "American.strings": "b11101a6d882071bf6fe191199a1d3a9f925648f67aabac5cc3a708bdcd0e4a3",
-    "English.strings": "b11101a6d882071bf6fe191199a1d3a9f925648f67aabac5cc3a708bdcd0e4a3",
+    "American.strings": "387d4f7e955951d4afd476b24231b8eb63996ffae5c1fc76ca1c80c0c6f80ac2",
+    "English.strings": "387d4f7e955951d4afd476b24231b8eb63996ffae5c1fc76ca1c80c0c6f80ac2",
     "MissionMiniMapIcon.pal": "5072156a663205facf22310c98913e01febb028c74edd1c196e7db26985b5787",
     "spd.nsbmd": "8ddbdac95ba919b50d4c107f491936b10eea2ae65b2117ed1a6d9fa0ce6f5ad0",
     "spd.nsbtx": "62052b3cd8034c11e28c44de9b6d1b1bf36f6298d8fbfb0315bd92a7f2244948",
