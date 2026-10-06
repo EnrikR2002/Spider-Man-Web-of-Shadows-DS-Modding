@@ -53,17 +53,21 @@ PARENT_IMPULSE, LEAP_IMPULSE = (-2253, 11469), (3072, 6144)
 COUNT_OFFSET = 0x77F8
 PARENT_COUNT = 3736
 EXTRA_NAMES: tuple[str, ...] = ('zz_kit_ReflexFlip.sca', 'zz_kit_Spin.sca', 'zz_kit_PerchPound.sca',
-                                   'zz_kit_LeapKick.sca', 'zz_kit_SkyAxe.sca', 'zz_kit_SenseCounter.sca')
+                                   'zz_kit_LeapKick.sca', 'zz_kit_SkyAxe.sca', 'zz_kit_SenseCounter.sca',
+                                   'zz_kit_ReflexBackflip.sca')
 # Route rows: (action, kind, appended name). Kinds: 1 Spin Cycle repeat, 2 Reflex
 # roll, 3 Perch stomp, 4 owned Red web kick (Leapfrog), 5 Skyjack juggle,
-# 6 Spider-Sense counter. Native actions keep their bindings when unrouted.
+# 6 Spider-Sense counter, 7 Perch hop/spring flip, 8 Reflex neutral back tuck.
+# Native actions keep their bindings when unrouted.
 ROUTES: tuple[tuple[int, int, str], ...] = ((133, 2, 'zz_kit_ReflexFlip.sca'), (60, 1, 'zz_kit_Spin.sca'), (130, 3, 'zz_kit_PerchPound.sca'),
                                              (50, 4, 'zz_kit_LeapKick.sca'), (4, 5, 'zz_kit_SkyAxe.sca'),
-                                             (59, 6, 'zz_kit_SenseCounter.sca'))
+                                             (59, 6, 'zz_kit_SenseCounter.sca'), (133, 7, 'zz_kit_ReflexFlip.sca'),
+                                             (139, 8, 'zz_kit_ReflexBackflip.sca'))
 # Authored clips: overlay name -> (native SCA with the same sample count, clip).
 # The Split Decision clips overwrite the dedicated Rush resources (actions 61/60/62).
 CLIP_SOURCES = {
     'zz_kit_ReflexFlip.sca': ('spd_RollDodge.sca', 'reflex_flip'),
+    'zz_kit_ReflexBackflip.sca': ('spd_SideStepDodge.sca', 'reflex_backflip'),
     'zz_kit_Spin.sca': ('spd_GroundAttack15.sca', 'spin'),
     'zz_kit_PerchPound.sca': ('spd_RapidStompAttack.sca', 'perch_pound'),
     'zz_kit_LeapKick.sca': ('spd_GrapplePullAttackKick.sca', 'leap_kick'),
@@ -74,7 +78,7 @@ CLIP_SOURCES = {
     'zz_tasm_RushFinish.sca': ('spd_GroundAttack17.sca', 'split_sweep'),
 }
 PROFILE = 'tasm-kit'
-VERSION = '0.2.1'
+VERSION = '0.3.0'
 RELEASE_DATE = '2026-10-05'
 RELEASE_PROFILE = f'tasm-v{VERSION}'
 PARENT_RELEASE = 'tasm-v0.1.1'
@@ -86,7 +90,7 @@ TEXT_EDITS = {
     186: 'Skyjack', 187: 'Skyjack',
     188: 'Grapple with \ue602, then press up.\nFloating juggle, finisher spikes.',
     189: 'Spider Perch', 190: 'Spider Perch',
-    191: 'In mid-air, press \ue602 near an enemy.\nRide and pound, \ue601 keeps pounding.',
+    191: 'In mid-air, press \ue602 near an enemy.\n\ue601 pound, \ue602 next head, \ue600 spring.',
     192: 'Split Decision', 193: 'Split Decision',
     194: '\ue601, let the sweep end, \ue601, \ue601, \ue601.\nEach hit picks a side.',
     195: 'Spin Cycle', 196: 'Spin Cycle (Combo)',
@@ -100,8 +104,8 @@ TEXT_EDITS = {
 
 def uses_kit(profile):
     return profile == PROFILE or bool(release_info.PROFILE_INFO.get(profile, {}).get('kit'))
-CODE_SHA256 = 'd3851f52a9128f74650a28916a6831c594051727d49a0edb527e3daf0c9ed8bd'
-ARM9_SHA256 = 'e0f1c3d333712efca521782ddb83fde50c3d23fd981bded13daafa1790a1ee16'
+CODE_SHA256 = 'd2c1d4df0711b1af4edf0ff69dae9609ab12a35b2ba9460c91d0d09d122817d3'
+ARM9_SHA256 = '0483dc4044cb6221ab90d3b0db89f615e14e2d8d7751e7039f1b80465c2bec70'
 
 
 def branch(source, target):

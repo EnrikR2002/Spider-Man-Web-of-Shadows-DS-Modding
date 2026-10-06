@@ -841,16 +841,41 @@ is set. Player actions: 1-4 air string, 5 back attack, 6 back handspring, 29 zip
 +0x2CC or physics stalls. Velocity actor+0x18/+0x1C (Q12). Common enemies:
 `NormalEnemy` vtable `0x021301D0`, `EnemyStateMachine` `0x02133368`; attack
 state 15 (actions 55/63 seen). Training dummy flag 4 does not gate its AI.
+Sewer symbiote attacks (v0.3.0 research, 17 player-hurt events over three
+1,500-frame idle arena runs, `sense_research*`): melee state 15 with action 63
+lands from ~8 units and action 55 lunges 10 -> 5 units; **state 16 action 71 is
+a ranged attack**: the enemy enters it 9-25 units away, backs off, and Spidey is
+hit ~20 frames later with no enemy near. State 24 action 41 was seen once near a
+hit (unconfirmed). States 0/1/2 idle/move; a small state-6 action-40 object
+(HP ~4000) floats around the room.
+Air string chaining: controller+0x64 bits 0xC00 are set when an air contact
+hits and cleared at the contact clock when it misses; a buffered Y only chains
+into the next air attack with them set (a whiffed pound ends the chain).
+While riding (state 51) native A and B do nothing; a queued B fires the native
+air web-swing (states 26-28) as soon as state 51 ends unless consumed
+(`0x020CFC34`, type 2). Action request is just `motion+0x258 = action`
+(`0x020728F0`), committed later; set motion+0x2FC bit 1 to force the lookup.
 
 ### Kit extension contract
 
 The kit is appended after the HUD/flow image: code at `0x02152C20`, route table
 `+0x1F00` (12-byte {action, kind, resource}), state `0x02154C20` (copied zeros),
-reserve 16 -> 24 KiB, Glob count 3736 + 6. Hooks are listed in `HOOKS`; Sling's
+reserve 16 -> 24 KiB, Glob count 3736 + 7 (v0.3.0). Hooks are listed in `HOOKS`; Sling's
 contact site is restored to native. The enemy registry (12 slots, refreshed from
 the per-actor observer `0x02073A68`) is trusted for two ticks, so despawned
-actors are never dereferenced. Heap headroom after the larger reserve is not yet
-measured in dense scenes.
+actors are never dereferenced. State offsets in use: 0 tick, 4/0x10/0x368 Reflex,
+8/0x14 spin, 0x20-0xDF registry, 0x300-0x30C Perch, 0x310-0x320 Leapfrog,
+0x330-0x338 Skyjack, 0x340 Sense, 0x350-0x35C Perch flip/hop, 0x360/0x364 held/new
+keys (edge-detected once per Spidey update). The 1 KiB after KIT_STATE+0x400 up to
+the arena is unused (lab phantom lives there).
+Heap headroom (v0.3.0, empirical): `OS_GetInitArenaLo` (`0x020FF2E8`, case 0)
+returns the patched literal `0x020FF374`; the main arena is now 0x02155420 ..
+0x023E0000 (2.54 MiB; the original started at 0x0214F420, so HUD + kit cost
+24 KiB). The game does not use an SDK OSHeapInfo layout. In zero-initialised
+emulator RAM, 332 of 651 arena pages were never written in the sewer arena at
+frame 200 and 324 after a 25 s combo fight (largest untouched runs 748/724 KiB),
+so the reserve is small next to the observed headroom. Caveats: zero pages can be
+allocated-but-unwritten; bosses/other levels are unmeasured.
 
 ### Kit animation authoring
 
@@ -891,9 +916,17 @@ observations.json (state, action, node, facing, position, enemies).
 - Keystone pitfalls (v0.2.1): a literal more than 4 KiB before the end pool is
   silently wrapped (Reflex read a code word as the state pointer and hung); a
   mid-file `.ltorg` mis-resolves every later absolute branch to native code by the
-  pool offset (black screen on room load). Keep one `.ltorg` at the end and build
-  far constants from immediates (`mov/orr`). `assemble_tasm_kit.py` now rejects
-  both. Code is ~4.4 KiB of the 7.75 KiB before the route table.
+  pool offset (black screen on room load); plain `.word` data mid-file is safe.
+  Since v0.3.0 the kit never uses `ldr rX,=V`: constants live in one labelled
+  `lit_xxxxxxxx: .word` table mid-code, loaded with `ldr rX,lit_name`.
+  `assemble_tasm_kit.py` verifies every pc-relative load and every native branch
+  target against the source and requires a single trailing `.ltorg`. Code is
+  ~5.2 KiB of the 7.75 KiB before the route table.
+- Arena `--place` moves the nearest fighters (HP >= 16384, not state 6) next to
+  Spidey, but placed enemies often stay frozen in their idle state (no attacks)
+  and the Snare frequently zips to scenery there; use natural spawns for AI
+  research. For kit targeting/movement, `trace --phantom DX` adds a fake registry
+  enemy (no AI/hitbox) in the training room; contacts on it whiff.
 - A teleport must update motion+0x7C/+0x80 and actor copies +0x148/+0x180/+0x210/
   +0x2CC. Repeating the same action skips resource lookup unless motion+0x2FC
   bit1 is set (Spin Cycle uses this).

@@ -48,6 +48,11 @@ PROFILE_INFO = {
                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                     'arm9_sha256': 'e0f1c3d333712efca521782ddb83fde50c3d23fd981bded13daafa1790a1ee16'},
+    # Perch spring/head-hop, Reflex back tuck, Sense vs ranged (CHANGES v0.3.0).
+    'tasm-v0.3.0': {'version': '0.3.0', 'date': '2026-10-05', 'kit': True, 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': '0483dc4044cb6221ab90d3b0db89f615e14e2d8d7751e7039f1b80465c2bec70'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

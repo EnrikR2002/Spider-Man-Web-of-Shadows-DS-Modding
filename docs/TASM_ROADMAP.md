@@ -162,20 +162,22 @@ an unowned or non-Red state stays native.
 | Skyjack | Web Vault rise (bit 14) | Aerial string lock-on; spike knockdown on others | Native air attacks after the rise |
 
 Also needed: where bits 18/19 are queried (passive speed), so the bonus is kept
-while new gates are added. ARM9 headroom (16 KiB reserved) is still unmeasured.
+while new gates are added. Heap headroom with the 24 KiB reserve: TECHNICAL
+"Kit extension contract" (large untouched arena in the sewer fight).
 
-## Status (v0.2.1) and next iterations
+## Status (v0.3.0) and next iterations
 
 All seven shipped in v0.2.0 as simplest working versions. Player verdict on
 v0.2.0 (2026-10-05): "very good"; only the helicopter spin missed every other
-hit and looked like breakdancing, fixed in v0.2.1 (CHANGES). Per-skill feel is
-still unconfirmed.
+hit and looked like breakdancing, fixed in v0.2.1 (CHANGES). v0.3.0 added the
+queued Perch exits, the neutral Reflex flip and Sense vs ranged attackers.
+Per-skill feel is still unconfirmed.
 
 | Skill | Shipped version | Next iteration once mapped/played |
 |---|---|---|
-| Spider Reflex | Ground/air R cancel, directional roll, 28-update resume | Dedicated flip for neutral R; Enhanced Dodge interplay; dodge-cancel from more paid states |
-| Spider-Sense | Enemy attack state 15 → teleport behind + heavy kick | Hit-anticipation timing, slow-motion, tingle marker, other enemy attack states |
-| Spider Perch | Snare follow-up → held stomp pounding, Y chains, spring-off | B/A exits and head-hopping, boss shake-off, entry from jumps/walls |
+| Spider Reflex | Ground/air R cancel, directional roll (front flip), neutral back tuck (v0.3.0), 28-update resume | Enhanced Dodge interplay; dodge-cancel from more paid states |
+| Spider-Sense | Melee state 15 (12 units) or ranged state 16 (16 units, v0.3.0) → teleport behind + heavy kick | Hit-anticipation timing, slow-motion, tingle marker; state 24 if confirmed |
+| Spider Perch | Snare follow-up → held stomp pounding, Y chains; v0.3.0: B flip spring, A flip head-hop to the next enemy | Boss shake-off, entry from jumps/walls; hop feel on real crowds |
 | Split Decision | Auto-face per hit (behind preference within 12 units) + new choreography | True two-sided contact geometry |
 | Spin Cycle | v0.2.1: straight blade-leg handstand spin; each contact aims (other side within 7, else nearest within 16), glide into reach, any-direction repeats | Exit flourish, spin-to-launch |
 | Leapfrog | Native kick + vault over the popped target | Vault before the kick once grappled targets can be hit mid-pull |

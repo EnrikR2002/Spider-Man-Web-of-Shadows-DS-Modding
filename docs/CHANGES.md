@@ -14,6 +14,40 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.3.0 - 2026-10-05 - Perch exits, Reflex back tuck, Sense vs ranged
+
+Published through Play Spider-Man.cmd's stable ROM. SHA256
+`34736eeb50ae36dfb427ce16e232c3055a87589a9a0d2165a7e241c1880c1647`
+(ARM9 `0483dc40...`, kit code `d2c1d4df...` + text). Title and Options show
+v0.3.0. Queued roadmap iterations after the v0.2.1 fix; prices/ownership unchanged.
+
+- **Spider Perch: B springs off.** While riding (air attack state 51), B launches
+  him high off the head (initial 4.75 units/update up, Left/Right drift) in the Reflex front
+  flip. That B is used up, so a second B is needed to web-swing.
+- **Spider Perch: A hops to the next head.** A while riding picks the nearest other
+  enemy within 24 units (held Left/Right picks the side), faces it and arcs onto
+  its head over 8 updates (6-unit peak) in the front flip, landing straight into a
+  pound. The perch lets go without a spring if he is hit, Snares or swings; in the
+  short falls between pounds native A/B work as before.
+- **Spider Reflex: neutral R back tuck.** With no direction held, the in-place
+  dodge plays a new 7-sample back tuck (route kind 8 on action 139) instead of
+  the native side-step; directional R still rolls with the front flip.
+- **Spider-Sense reads ranged attacks.** Besides melee state 15 (within 12
+  units), an enemy in state 16 (the ranged attack, see TECHNICAL) within 16 units
+  now triggers the flip-behind counter.
+- Perch shop text: "Y pound, A next head, B spring."
+
+Agent-tested (training room, copied save): qualification 27/27
+(`work/kit/evidence.json`), four new checks that fail on v0.2.1 (Sense vs forced
+state 16, B spring height without a swing, head-hop onto a phantom enemy,
+back-tuck routing flag). The head-hop target is a lab phantom (fake registry
+enemy without AI or hitbox) because arena placements were unreliable; its landing
+pound therefore whiffs, and chaining Y after a hop on a real enemy is untested.
+Frames checked: spring flip, hop arc, back tuck, Perch text in Powers & Stats,
+Options v0.3.0. All 153 source tests pass. Real DSV `75bb8efc...` checkpointed;
+v0.2.1 ROM retained for rollback. Not yet player-confirmed: feel of all four,
+head-hop on real crowds/bosses, Sense counter range against spitters.
+
 ## v0.2.1 - 2026-10-05 - Spin Cycle reach and blade legs
 
 Published through Play Spider-Man.cmd's stable ROM. SHA256
@@ -44,7 +78,7 @@ Agent-tested (training dummy, copied save): qualification 23/23
 (`work/kit/evidence.json`), including three new spin checks that fail on v0.2.0
 (contacts landing vs a lone dummy 14/14, back-steer then glide back, sweep still
 in reach). Captured in-game frames show straight blade legs and hit sparks on
-contacts. 152 source tests pass. Real DSV `75bb8efc...` checkpointed; v0.2.0 ROM
+contacts. All 153 source tests pass. Real DSV `75bb8efc...` checkpointed; v0.2.0 ROM
 retained for rollback. Not yet player-confirmed: look, reach feel in crowds,
 glide strength against moving enemies.
 

@@ -13,12 +13,17 @@ source = (ROOT / 'tools/tasm_kit.s').read_text(encoding='utf-8')
 code = bytes(Ks(KS_ARCH_ARM, KS_MODE_ARM).asm(source, KIT_BASE)[0])
 
 
-def literal_errors(code, source, base=KIT_BASE):
-    """Keystone silently wraps out-of-range literal loads: check each 'ldr rX,=V'."""
+def literal_errors(code, source):
+    """Keystone silently wraps out-of-range literal loads: check every pc-relative
+    load ('ldr rX,=V' or 'ldr rX,lit_name' from a '.word' table) reads its value."""
     import re
     import struct
-    pattern = r'^\s*ldr\w*\s+\w+,\s*=\s*(-?(?:0x[0-9a-fA-F]+|\d+))'
-    wanted = [int(v, 0) & 0xFFFFFFFF for v in re.findall(pattern, source, re.M)]
+    value = r'(-?(?:0x[0-9a-fA-F]+|\d+))'
+    table = {m.group(1): int(m.group(2), 0) & 0xFFFFFFFF
+             for m in re.finditer(r'^(lit_\w+):\s*\.word\s+' + value, source, re.M)}
+    wanted = []
+    for m in re.finditer(r'^\s*ldr\w*\s+\w+,\s*(?:=\s*' + value + r'|(lit_\w+))', source, re.M):
+        wanted.append(int(m.group(1), 0) & 0xFFFFFFFF if m.group(1) else table.get(m.group(2)))
     loads = []
     for at in range(0, len(code), 4):
         word = struct.unpack_from('<I', code, at)[0]
@@ -31,13 +36,29 @@ def literal_errors(code, source, base=KIT_BASE):
     return [f'literal {i}: {got} != {want:#x}' for i, (got, want) in enumerate(zip(loads, wanted)) if got != want]
 
 
-errors = literal_errors(code, source)
+def native_branch_errors(code, source, base=KIT_BASE):
+    """Every 'b/bl 0xADDR' to native code must encode exactly that address, in order."""
+    import re
+    import struct
+    wanted = [int(x, 16) for x in re.findall(r'^\s*b\w*\s+0x([0-9a-fA-F]{8})\b', source, re.M)]
+    got = []
+    for at in range(0, len(code), 4):
+        word = struct.unpack_from('<I', code, at)[0]
+        if (word >> 25) & 7 == 5 and word >> 28 != 0xF:
+            delta = word & 0xFFFFFF
+            if delta & 0x800000: delta -= 0x1000000
+            target = base + at + 8 + delta * 4
+            if target < base: got.append(target)
+    return [] if got == wanted else [f'native branches {[hex(x) for x in got[:4]]} != {[hex(x) for x in wanted[:4]]}']
+
+
+errors = literal_errors(code, source) + native_branch_errors(code, source)
 body = [line.split('//')[0].strip() for line in source.splitlines()]
 if [line for line in body if line][-1] != '.ltorg' or body.count('.ltorg') != 1:
     # Keystone mis-resolves absolute branch targets placed after a mid-file pool.
     errors.append('exactly one .ltorg, at the end of the source')
 if errors:
-    raise SystemExit('Literal pool problem (build far constants from immediates): ' + '; '.join(errors[:3]))
+    raise SystemExit('Literal problem (use the mid-code lit_ table): ' + '; '.join(errors[:3]))
 if len(code) > 0x1F00:
     raise SystemExit(f'Kit code overlaps the route table: {len(code)} bytes')
 (ROOT / 'tools/tasm_kit.hex').write_text('\n'.join(code[i:i + 32].hex() for i in range(0, len(code), 32)) + '\n',

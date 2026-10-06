@@ -41,6 +41,36 @@ REFLEX_FLIP = Clip('reflex_flip', 8, {
     'point_r': [(0, 0.), (1, 1.), (4, 1.), (5, .3), (6, 0.)],
 })
 
+# Spider Reflex, neutral R (routed onto SideStepDodge, 7 samples): a snappy
+# back tuck over the incoming hit. Arms swing up and back to drive the jump,
+# knees snap in, the body opens early and lands in a wide crouch, lead hand
+# brushing the floor, ready to resume the string.
+REFLEX_BACKFLIP = Clip('reflex_backflip', 7, {
+    'root': [(0, (0., 3.3, -.1)), (1, (0., 4.9, -.25)), (2, (0., 6.3, -.45)), (3, (0., 6.6, -.6)),
+             (4, (0., 5.8, -.65)), (5, (0., 4.4, -.6)), (6, (0., 3.4, -.5))],
+    'pitch': [(0, 12.), (1, -45.), (2, -140.), (3, -228.), (4, -295.), (5, -345.), (6, -352.)],
+    'spine_pitch': [(0, 22.), (1, -18.), (2, 32.), (3, 40.), (4, 28.), (5, 8.), (6, 22.)],
+    'head_pitch': [(0, -10.), (1, -40.), (3, 15.), (5, -10.), (6, -20.)],
+    'hand_l': [(0, (1.5, -2.4, 1.3)), (1, (1.3, 2.0, -.7)), (2, TUCK_HANDS_L), (3, TUCK_HANDS_L),
+               (4, (1.9, -.6, 1.4)), (5, (2.5, .2, .8)), (6, (1.3, -3.4, 2.3))],
+    'hand_r': [(0, (-1.5, -2.2, 1.1)), (1, (-1.3, 2.1, -.8)), (2, TUCK_HANDS_R), (3, TUCK_HANDS_R),
+               (4, (-2.0, -.4, 1.1)), (5, (-2.5, .5, -.5)), (6, (-1.9, .6, -1.6))],
+    'elbow_l': [(0, (1.8, -.4, -1.2)), (2, (2.0, -.5, .4)), (6, (2.2, .2, -.6))],
+    'elbow_r': [(0, (-1.8, -.4, -1.2)), (2, (-2.0, -.5, .4)), (6, (-2.0, .6, -1.0))],
+    'foot_l': [(0, (1.3, -2.6, 1.0)), (1, (1.0, -3.5, .3)), (2, TUCK_FEET_L), (3, TUCK_FEET_L),
+               (4, (1.0, -2.1, 1.0)), (5, (1.4, -3.2, 1.0)), (6, (1.6, -2.6, 1.1))],
+    'foot_r': [(0, (-1.3, -2.6, -.9)), (1, (-1.0, -3.4, -.3)), (2, TUCK_FEET_R), (3, TUCK_FEET_R),
+               (4, (-1.0, -2.3, .6)), (5, (-1.4, -3.1, -.6)), (6, (-1.5, -2.6, -1.1))],
+    'knee_l': [(0, (1.2, .5, 2.5)), (2, (.6, 1.2, 3.0)), (6, (1.6, .4, 2.4))],
+    'knee_r': [(0, (-1.2, .5, 2.5)), (2, (-.6, 1.2, 3.0)), (6, (-1.6, .4, 2.2))],
+    'plant_l': [(0, 1.), (1, .2), (2, 0.), (5, 0.), (6, 1.)],
+    'plant_r': [(0, 1.), (1, .2), (2, 0.), (5, 0.), (6, 1.)],
+    'world_l': [(0, (1.3, .78, .9)), (6, (1.6, .78, .6))],
+    'world_r': [(0, (-1.3, .78, -1.0)), (6, (-1.5, .78, -1.6))],
+    'point_l': [(0, 0.), (1, 1.), (4, 1.), (5, .3), (6, 0.)],
+    'point_r': [(0, 0.), (1, 1.), (4, 1.), (5, .3), (6, 0.)],
+})
+
 # Spin Cycle: inverted spider handstand, legs locked straight in a wide,
 # near-horizontal split that whirls one full turn per 12-sample loop (repeats of
 # node 16) like helicopter blades at chest height. The split is symmetric, so a
@@ -266,5 +296,5 @@ SENSE_COUNTER = Clip('sense_counter', 19, {
     'point_r': [(0, 0.), (2, .5), (3, 1.), (6, 1.), (8, 0.)],
 })
 
-CLIPS = {c.name: c for c in (REFLEX_FLIP, SPIN, SPLIT_CORKSCREW, SPLIT_KICK, SPLIT_SWEEP, PERCH_POUND,
+CLIPS = {c.name: c for c in (REFLEX_FLIP, REFLEX_BACKFLIP, SPIN, SPLIT_CORKSCREW, SPLIT_KICK, SPLIT_SWEEP, PERCH_POUND,
                              LEAP_KICK, SKY_AXE, SENSE_COUNTER)}

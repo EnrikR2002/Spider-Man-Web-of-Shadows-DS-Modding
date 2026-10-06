@@ -53,9 +53,7 @@ h_reflex_direction:
   cmp r0,#0
   beq reflex_native
   // Remember the cancelled node so the string exit keeps it alive longer.
-  mov r0,#0x02000000       // KIT_STATE without a literal: the end pool is
-  orr r0,r0,#0x154000      // beyond the 4 KiB literal reach here
-  orr r0,r0,#0xc20
+  ldr r0,lit_02154c20
   mov r1,#1
   str r1,[r0,#4]
   bl kit_keys
@@ -65,12 +63,14 @@ h_reflex_direction:
   mov r1,#1
   tst r0,#0x10
   bne reflex_turn
-  b 0x020b5da4              // neutral: in-place spider-sense dodge (state 53)
+  // Neutral: the in-place dodge (state 53) plays the back tuck (route kind 8).
+  ldr r0,lit_02154c20
+  mov r2,#1
+  str r2,[r0,#0x368]
+  b 0x020b5da4
 reflex_turn:
   // Directional: face the held side, then the native forward roll (state 57).
-  mov r0,#0x02000000       // KIT_STATE without a literal: the end pool is
-  orr r0,r0,#0x154000      // beyond the 4 KiB literal reach here
-  orr r0,r0,#0xc20
+  ldr r0,lit_02154c20
   mov r2,#1
   str r2,[r0,#0x10]
   ldr r0,[r5,#0x44]
@@ -233,13 +233,22 @@ h_update:
   mrs r12,cpsr
   push {r12}
   ldr r0,[r4]
-  ldr r1,=0x0212e3f0
+  ldr r1,lit_0212e3f0
   cmp r0,r1
   bne update_done
-  ldr r0,=0x02154C20
+  ldr r0,lit_02154c20
   ldr r1,[r0]
   add r1,r1,#1
   str r1,[r0]
+  bl kit_keys               // held keys and this update's new presses
+  ldr r1,lit_02154c20
+  ldr r2,[r1,#0x360]
+  str r0,[r1,#0x360]
+  bic r2,r0,r2
+  str r2,[r1,#0x364]
+  ldr r2,[r1,#0x350]        // flip animation timer (Perch hop/spring)
+  subs r2,r2,#1
+  strge r2,[r1,#0x350]
   mov r0,r4
   bl spin_update
   mov r0,r4
@@ -270,7 +279,7 @@ spin_update:                // r0=actor
   push {r4,r5,r6,lr}
   mov r4,r0
   bl kit_spin_active
-  ldr r2,=0x02154C20
+  ldr r2,lit_02154c20
   cmp r0,#0
   bne spin_active
   ldr r1,[r2,#0x14]         // spin entry latch
@@ -322,7 +331,7 @@ spin_move:
   tst r0,#0x10
   movne r1,#0x2800
   tst r0,#0x20
-  ldrne r1,=0xffffd800
+  ldrne r1,lit_ffffd800
   tst r0,#0x30
   bne spin_velocity
   mov r0,r4
@@ -336,7 +345,7 @@ spin_move:
   ble spin_velocity
   cmp r2,#1
   moveq r1,#0x2000
-  ldrne r1,=0xffffe000
+  ldrne r1,lit_ffffe000
 spin_velocity:
   str r1,[r4,#0x18]
 spin_out:
@@ -374,7 +383,7 @@ spin_no:
 // Native keeps the left string node alive for 10 updates. A Reflex cancel this
 // update extends that to 28 so Y after the dodge resumes at the next hit.
 resume_update:              // r0=actor
-  ldr r3,=0x02154C20
+  ldr r3,lit_02154c20
   ldr r1,[r3,#4]
   cmp r1,#0
   bxeq lr
@@ -389,7 +398,7 @@ resume_update:              // r0=actor
   bxlo lr
   cmp r2,#18
   bxhs lr
-  ldr r3,=0x0211bb74
+  ldr r3,lit_0211bb74
   ldr r3,[r3,r2,lsl #4]
   cmp r3,#0
   bxeq lr
@@ -398,18 +407,17 @@ resume_update:              // r0=actor
   bx lr
 
 // The Reflex roll marker ends with the roll; animation routing reads it.
-roll_update:
+roll_update:                // Reflex clip flags live only through their dodge state
   ldr r1,[r0,#0x30]
   ldr r1,[r1,#0x1f8]
   cmp r1,#0
-  beq roll_clear
-  ldr r1,[r1,#0x14]
-  cmp r1,#57
-  bxeq lr
-roll_clear:
-  ldr r1,=0x02154C20
+  ldrne r1,[r1,#0x14]
+  ldr r3,lit_02154c20
   mov r2,#0
-  str r2,[r1,#0x10]
+  cmp r1,#57
+  strne r2,[r3,#0x10]       // directional roll
+  cmp r1,#53
+  strne r2,[r3,#0x368]      // neutral back tuck
   bx lr
 
 // ---------------------------------------------------------------- Spider Perch
@@ -422,17 +430,36 @@ h_action:                   // r0=actor, r1=&action (native: ldr r1,[r1])
   pop {r0,r2,r3,lr}
   b 0x020728f4
 
-perch_action:               // r0=actor, r1=action -> r1=action (maybe 130)
+perch_action:               // r0=actor, r1=action -> r1=action (maybe 130/133)
   push {r4,r5,r6,lr}
   mov r4,r0
   mov r5,r1
+  // During a Perch hop/spring flip, air/fall/stomp requests keep the flip.
+  ldr r2,lit_02154c20
+  ldr r2,[r2,#0x350]
+  cmp r2,#0
+  beq perch_action_native
+  ldr r2,[r4]
+  ldr r3,lit_0212e3f0
+  cmp r2,r3
+  bne perch_action_native
+  cmp r5,#38
+  cmpne r5,#130
+  beq perch_flip_take
+  sub r2,r5,#1
+  cmp r2,#3
+  bhi perch_action_native
+perch_flip_take:
+  mov r5,#133
+  b perch_action_out
+perch_action_native:
   sub r2,r5,#1
   cmp r2,#3
   bhi perch_action_out
   cmp r5,#130
   beq perch_action_out
   ldr r2,[r4]
-  ldr r3,=0x0212e3f0
+  ldr r3,lit_0212e3f0
   cmp r2,r3
   bne perch_action_out
   mov r0,r4
@@ -451,7 +478,7 @@ perch_action:               // r0=actor, r1=action -> r1=action (maybe 130)
   beq perch_take
   cmp r3,#51
   bne perch_action_out
-  ldr r3,=0x02154C20
+  ldr r3,lit_02154c20
   ldr r6,[r3,#0x300]
   cmp r6,#0
   bne perch_take
@@ -469,7 +496,7 @@ perch_take:
   pop {r3}
   cmp r0,#0
   beq perch_action_out
-  ldr r6,=0x02154C20
+  ldr r6,lit_02154c20
   mov r0,#1
   str r0,[r6,#0x300]
   str r3,[r6,#0x304]
@@ -481,7 +508,7 @@ perch_action_out:
 perch_update:               // r0=actor
   push {r4,r5,r6,r7,r8,lr}
   mov r4,r0
-  ldr r8,=0x02154C20
+  ldr r8,lit_02154c20
   ldr r0,[r8,#0x300]
   cmp r0,#0
   beq perch_out
@@ -489,9 +516,49 @@ perch_update:               // r0=actor
   ldr r1,[r5,#0x1f8]
   cmp r1,#0
   beq perch_end
+  ldr r2,[r1,#0x14]
+  cmp r2,#19                // brief fall between pounds: native A/B win
+  beq perch_fall
+  cmp r2,#51
+  bne perch_release         // hit, Snare, swing...: let go without a spring
+  ldr r0,[r8,#0x354]
+  cmp r0,#0
+  bne perch_hop
+  ldr r0,[r8,#0x364]        // new presses
+  tst r0,#2
+  bne perch_spring          // B: spring off high
+  tst r0,#1
+  beq perch_keep
+  mov r0,r4                 // A: hop onto the next head
+  bl hop_pick
+  cmp r0,#0
+  beq perch_keep
+  str r0,[r8,#0x304]
+  mov r1,r2
+  mov r0,r4
+  bl kit_face
+  ldr r0,[r5,#0x7c]
+  ldr r1,[r5,#0x160]
+  add r0,r0,r1
+  str r0,[r8,#0x358]        // hop start x/y
+  ldr r0,[r5,#0x80]
+  ldr r1,[r5,#0x164]
+  add r0,r0,r1
+  str r0,[r8,#0x35c]
+  mov r0,#1
+  str r0,[r8,#0x354]
+  mov r0,r5
+  bl perch_flip
+  b perch_out
+perch_fall:
+  ldr r0,[r8,#0x354]        // a hop in flight keeps flying
+  cmp r0,#0
+  bne perch_hop
+perch_keep:
   // A buffered Y re-enters the air attack a few updates after the stomp ends;
   // keep the hold through that gap so it becomes another pound.
   mov r3,#4
+  ldr r1,[r5,#0x1f8]
   ldr r2,[r1,#0x14]
   cmp r2,#51
   bne perch_grace
@@ -533,12 +600,100 @@ perch_hold:
   str r0,[r4,#0x18]
   str r0,[r4,#0x1c]
   b perch_out
+perch_spring:               // B: high flip off the head, steer with Left/Right
+  mov r0,#0
+  str r0,[r8,#0x300]
+  str r0,[r8,#0x354]
+  ldr r0,[r8,#0x360]
+  mov r1,#0
+  tst r0,#0x10
+  movne r1,#0x1400
+  tst r0,#0x20
+  ldrne r1,lit_ffffec00
+  str r1,[r4,#0x18]
+  mov r1,#0x4c00
+  str r1,[r4,#0x1c]
+  mov r0,r5
+  bl perch_flip
+  // Use up this B: otherwise the native air B swings as the flip ends.
+  ldr r0,[r5,#0x1f8]
+  sub sp,sp,#8
+  mov r1,#2
+  str r1,[sp]
+  mov r1,sp
+  add r0,r0,#0x28
+  bl 0x020cfc34
+  add sp,sp,#8
+  b perch_out
+perch_hop:                  // r0 = step 1..8: arc from the start to the new head
+  str r0,[r8,#0x308]        // r0 >= 1: keep the hold alive (grace)
+  ldr r6,[r8,#0x304]
+  mov r0,r6
+  bl kit_fresh
+  cmp r0,#0
+  beq perch_end
+  ldr r7,[r6,#0x30]
+  cmp r7,#0
+  beq perch_end
+  ldr r6,[r8,#0x354]        // step
+  ldr r0,[r7,#0x7c]
+  ldr r1,[r7,#0x160]
+  add r0,r0,r1              // target x
+  ldr r2,[r5,#0x180]
+  cmp r2,#1
+  subeq r0,r0,#0x1800
+  addne r0,r0,#0x1800
+  ldr r1,[r8,#0x358]
+  sub r0,r0,r1
+  mul r2,r0,r6
+  add r0,r1,r2,asr #3       // x = start + (end - start) * step / 8
+  ldr r1,[r7,#0x80]
+  ldr r2,[r7,#0x164]
+  add r1,r1,r2
+  add r1,r1,#0x7000         // head height
+  ldr r2,[r8,#0x35c]
+  sub r1,r1,r2
+  mul r3,r1,r6
+  add r1,r2,r3,asr #3
+  rsb r2,r6,#8
+  mul r3,r2,r6
+  mov r2,#0x600             // arc: 6 units at mid-hop
+  mla r1,r3,r2,r1
+  ldr r2,[r5,#0x160]
+  sub r0,r0,r2
+  str r0,[r5,#0x7c]
+  ldr r2,[r5,#0x164]
+  sub r1,r1,r2
+  str r1,[r5,#0x80]
+  mov r0,#0
+  str r0,[r4,#0x18]
+  str r0,[r4,#0x1c]
+  add r6,r6,#1
+  cmp r6,#8
+  movgt r6,#0
+  str r6,[r8,#0x354]
+  bne perch_out
+  // Landed: pound straight away; a long grace leaves time for Y/A/B.
+  mov r0,#12
+  str r0,[r8,#0x308]
+  mov r0,#130
+  str r0,[r5,#0x258]
+  ldr r0,[r5,#0x2fc]
+  orr r0,r0,#2
+  str r0,[r5,#0x2fc]
+  b perch_out
+perch_release:
+  mov r0,#0
+  str r0,[r8,#0x354]
+  str r0,[r8,#0x300]
+  b perch_out
 perch_end:
   mov r0,#0
+  str r0,[r8,#0x354]
   str r0,[r8,#0x300]
   ldr r2,[r5,#0x180]
   cmp r2,#1
-  ldreq r1,=0xffffec00
+  ldreq r1,lit_ffffec00
   movne r1,#0x1400
   str r1,[r4,#0x18]
   mov r1,#0x2c00
@@ -546,9 +701,86 @@ perch_end:
 perch_out:
   pop {r4,r5,r6,r7,r8,pc}
 
+// perch_flip(motion): play the Reflex front flip (route kind 7) for 8 updates.
+perch_flip:
+  ldr r1,lit_02154c20
+  mov r2,#8
+  str r2,[r1,#0x350]
+  mov r2,#133
+  str r2,[r0,#0x258]
+  ldr r2,[r0,#0x2fc]
+  orr r2,r2,#2
+  str r2,[r0,#0x2fc]
+  bx lr
+
+// hop_pick(actor) -> r0=nearest other fresh enemy within 24 units (held
+// Left/Right picks that side), r2=facing toward it; skips the current perch.
+hop_pick:
+  push {r4,r5,r6,r7,r8,r9,r10,r11,lr}
+  ldr r4,[r0,#0x30]
+  ldr r5,[r4,#0x7c]
+  ldr r6,[r4,#0x160]
+  add r5,r5,r6              // px
+  ldr r6,[r4,#0x80]
+  ldr r7,[r4,#0x164]
+  add r6,r6,r7              // py
+  ldr r4,lit_02154c20
+  ldr r9,[r4]               // tick
+  ldr r10,[r4,#0x304]       // current perch (excluded)
+  ldr r11,[r4,#0x360]       // held keys
+  add r4,r4,#0x20
+  mov r0,#0
+  mov lr,#0
+  ldr r8,lit_7fffffff
+  mov r7,#12
+hop_loop:
+  ldr r1,[r4]
+  cmp r1,#0
+  cmpne r1,r10
+  beq hop_next
+  ldr r2,[r4,#12]
+  add r2,r2,#2
+  cmp r2,r9
+  bls hop_next
+  ldr r2,[r4,#8]
+  subs r2,r2,r6
+  rsbmi r2,r2,#0
+  cmp r2,#0xc000            // heads up to 12 units above/below
+  bgt hop_next
+  ldr r2,[r4,#4]
+  subs r3,r2,r5             // dx
+  tst r11,#0x10
+  beq hop_left
+  cmp r3,#0
+  ble hop_next
+hop_left:
+  tst r11,#0x20
+  beq hop_dist
+  cmp r3,#0
+  bge hop_next
+hop_dist:
+  mov r12,r3
+  cmp r12,#0
+  rsblt r12,r12,#0
+  cmp r12,#0x18000
+  bgt hop_next
+  cmp r12,r8
+  bge hop_next
+  mov r8,r12
+  mov r0,r1
+  cmp r3,#0
+  movgt lr,#1
+  movle lr,#0
+hop_next:
+  add r4,r4,#16
+  subs r7,r7,#1
+  bne hop_loop
+  mov r2,lr
+  pop {r4,r5,r6,r7,r8,r9,r10,r11,pc}
+
 kit_fresh:                  // r0=actor -> r0=1 if the registry saw it this/last tick
   push {r4,lr}
-  ldr r1,=0x02154C20
+  ldr r1,lit_02154c20
   ldr r2,[r1]
   add r1,r1,#0x20
   mov r3,#12
@@ -568,6 +800,24 @@ fresh_next:
   mov r0,#0
   pop {r4,pc}
 
+// ---------------------------------------------------------------- literals
+// One labelled table mid-code (ARM literal loads reach 4 KiB either way).
+// Do not use 'ldr rX,=value' or a mid-file .ltorg: Keystone wraps far
+// literals and shifts later absolute branches (TECHNICAL, research pitfalls).
+lit_02049304: .word 0x02049304
+lit_0211bb74: .word 0x0211BB74
+lit_02120000: .word 0x02120000
+lit_0212e3f0: .word 0x0212E3F0
+lit_0213df00: .word 0x0213DF00
+lit_02154b20: .word 0x02154B20
+lit_02154c20: .word 0x02154C20
+lit_7fffffff: .word 0x7FFFFFFF
+lit_ffff7000: .word 0xFFFF7000
+lit_ffffd800: .word 0xFFFFD800
+lit_ffffe000: .word 0xFFFFE000
+lit_ffffec00: .word 0xFFFFEC00
+lit_fffff000: .word 0xFFFFF000
+
 // ---------------------------------------------------------------- Leapfrog
 // Bit 13 (Web Kick slot): the native pull and kick connect (damage, low pop);
 // after the hit-stop Spidey front-flips over the target in six updates (also
@@ -576,7 +826,7 @@ fresh_next:
 leap_update:                // r0=actor
   push {r4,r5,r6,r7,r8,lr}
   mov r4,r0
-  ldr r8,=0x02154C20
+  ldr r8,lit_02154c20
   ldr r5,[r4,#0x30]
   ldr r6,[r5,#0x1f8]
   cmp r6,#0
@@ -717,7 +967,7 @@ leap_height:   .word 150, 235, 256, 210, 120, 0
 sky_update:                 // r0=actor
   push {r4,r5,r6,r7,r8,lr}
   mov r4,r0
-  ldr r8,=0x02154C20
+  ldr r8,lit_02154c20
   ldr r5,[r4,#0x30]
   ldr r6,[r5,#0x1f8]
   cmp r6,#0
@@ -798,7 +1048,7 @@ sky_float:
   cmp r0,#0
   moveq r0,#-1
   str r0,[r8,#0x338]
-  ldr r1,=0xffff7000
+  ldr r1,lit_ffff7000
   str r1,[r6,#0x1c]
   mov r1,#0
   str r1,[r6,#0x18]
@@ -840,7 +1090,7 @@ sky_player:
   cmp r2,#0x1000
   movgt r2,#0x1000
   cmn r2,#0x1000
-  ldrlt r2,=0xfffff000
+  ldrlt r2,lit_fffff000
   ldr r1,[r5,#0x7c]
   add r1,r1,r2
   str r1,[r5,#0x7c]
@@ -852,8 +1102,9 @@ sky_out:
   pop {r4,r5,r6,r7,r8,pc}
 
 // ---------------------------------------------------------------- Spider-Sense
-// Bit 19 (Ultimate Speed slot, needs bit 18): R while an enemy within reach is
-// mid-attack (enemy state 15) flips Spidey behind that attacker, facing him,
+// Bit 19 (Ultimate Speed slot, needs bit 18): R while an enemy is mid-attack
+// (melee state 15 within 12 units, ranged state 16 within 16) flips Spidey
+// behind that attacker, facing him,
 // straight into the heavy string kick (node 14) with the reversal animation.
 sense_try:                  // r0=controller -> r0=1 if the counter was set up
   push {r4,r5,r6,r7,r8,r9,r10,r11,lr}
@@ -871,12 +1122,12 @@ sense_try:                  // r0=controller -> r0=1 if the counter was set up
   ldr r8,[r6,#0x80]
   ldr r0,[r6,#0x164]
   add r8,r8,r0              // py
-  ldr r9,=0x02154C20
+  ldr r9,lit_02154c20
   ldr r10,[r9]              // tick
   add r9,r9,#0x20
   mov r11,#12
   mov r0,#0                 // best attacker
-  ldr lr,=0x7fffffff        // best distance
+  ldr lr,lit_7fffffff        // best distance
 sense_loop:
   ldr r1,[r9]
   cmp r1,#0
@@ -893,7 +1144,7 @@ sense_loop:
   ldr r2,[r9,#4]
   subs r2,r2,r7
   rsbmi r2,r2,#0
-  cmp r2,#0xc000
+  cmp r2,#0x10000
   bgt sense_next
   cmp r2,lr
   bge sense_next
@@ -904,8 +1155,13 @@ sense_loop:
   cmp r3,#0
   beq sense_next
   ldr r3,[r3,#0x14]
-  cmp r3,#15                // enemy attack state
+  cmp r3,#16                // ranged attack (spit), within 16 units
+  beq sense_take
+  cmp r3,#15                // melee attack state, within 12 units
   bne sense_next
+  cmp r2,#0xc000
+  bgt sense_next
+sense_take:
   mov lr,r2
   mov r0,r1
 sense_next:
@@ -936,7 +1192,7 @@ sense_next:
   bl kit_face
   mov r0,#13                // entering 46 advances to node 14: heavy kick
   str r0,[r4,#0x80]
-  ldr r0,=0x02154C20
+  ldr r0,lit_02154c20
   mov r1,#1
   str r1,[r0,#0x340]
   mov r0,#1
@@ -948,7 +1204,7 @@ sense_no:
 sense_update:               // r0=actor: the counter flag lasts while node 14 plays
   ldr r1,[r0,#0x30]
   ldr r1,[r1,#0x1f8]
-  ldr r3,=0x02154C20
+  ldr r3,lit_02154c20
   cmp r1,#0
   beq sense_clear
   ldr r2,[r1,#0x14]
@@ -970,17 +1226,17 @@ h_observer:
   push {r0,r1,r2,r3,r4,r5,r6,r7,r12,lr}
   mrs r7,cpsr
   ldr r4,[r0]
-  ldr r5,=0x02120000
+  ldr r5,lit_02120000
   cmp r4,r5
   blo obs_done
-  ldr r5,=0x0213df00
+  ldr r5,lit_0213df00
   cmp r4,r5
   bhi obs_done
-  ldr r5,=0x0212e3f0
+  ldr r5,lit_0212e3f0
   cmp r4,r5
   beq obs_done
   ldr r5,[r4,#0x150]
-  ldr r6,=0x02049304
+  ldr r6,lit_02049304
   cmp r5,r6
   bne obs_done
   ldr r5,[r0,#0x44]
@@ -989,7 +1245,7 @@ h_observer:
   ldr r1,[r0,#0x30]
   cmp r1,#0
   beq obs_done
-  ldr r2,=0x02154C20
+  ldr r2,lit_02154c20
   ldr r3,[r2]               // tick
   add r4,r2,#0x20
   mov r5,#0
@@ -1053,12 +1309,12 @@ kit_target_in:
   ldr r7,[r4,#0x164]
   add r6,r6,r7              // py
   ldr r11,[r4,#0x180]       // facing (1 = right)
-  ldr r4,=0x02154C20
+  ldr r4,lit_02154c20
   ldr r9,[r4]               // tick
   add r4,r4,#0x20
   mov r0,#0                 // best actor
   mov lr,#0                 // facing toward best
-  ldr r8,=0x7fffffff        // best score
+  ldr r8,lit_7fffffff        // best score
   mov r7,#12
 target_loop:
   ldr r1,[r4]
@@ -1141,11 +1397,11 @@ kit_route:                  // r0=motion, r1=record (SCA id at +0)
   beq route_out
   ldr r6,[r4]               // owning actor
   ldr r2,[r6]
-  ldr r3,=0x0212e3f0
+  ldr r3,lit_0212e3f0
   cmp r2,r3
   bne route_out
   ldr r2,[r4,#0x258]        // requested action
-  ldr r3,=0x02154b20        // route table (KIT_BASE+0x1F00): {action, kind, sca}
+  ldr r3,lit_02154b20        // route table (KIT_BASE+0x1F00): {action, kind, sca}
 route_loop:
   ldr r0,[r3]
   cmp r0,#0
@@ -1165,7 +1421,7 @@ route_loop:
 route_kind2:
   cmp r0,#3                 // kind 3: Spider Perch stomp
   bne route_kind2b
-  ldr r0,=0x02154C20
+  ldr r0,lit_02154c20
   ldr r0,[r0,#0x300]
   cmp r0,#0
   bne route_take
@@ -1191,7 +1447,7 @@ route_kind2b:
 route_kind2c:
   cmp r0,#5                 // kind 5: Skyjack juggle in progress
   bne route_kind2d
-  ldr r0,=0x02154C20
+  ldr r0,lit_02154c20
   ldr r0,[r0,#0x330]
   cmp r0,#0
   bne route_take
@@ -1199,15 +1455,31 @@ route_kind2c:
 route_kind2d:
   cmp r0,#6                 // kind 6: Spider-Sense counter kick
   bne route_kind2e
-  ldr r0,=0x02154C20
+  ldr r0,lit_02154c20
   ldr r0,[r0,#0x340]
   cmp r0,#0
   bne route_take
   b route_next
 route_kind2e:
+  cmp r0,#7                 // kind 7: Perch hop/spring flip
+  bne route_kind2f
+  ldr r0,lit_02154c20
+  ldr r0,[r0,#0x350]
+  cmp r0,#0
+  bne route_take
+  b route_next
+route_kind2f:
+  cmp r0,#8                 // kind 8: Reflex neutral back tuck
+  bne route_kind2g
+  ldr r0,lit_02154c20
+  ldr r0,[r0,#0x368]
+  cmp r0,#0
+  bne route_take
+  b route_next
+route_kind2g:
   cmp r0,#2                 // kind 2: Reflex roll
   bne route_next
-  ldr r0,=0x02154C20
+  ldr r0,lit_02154c20
   ldr r0,[r0,#0x10]
   cmp r0,#0
   bne route_take

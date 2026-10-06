@@ -7,13 +7,16 @@ build/boot-tests/<rom>-<hash>/<label>/ (observations.json, trace.txt, frames)
 and work/kit/ (previews, sheets, qualification evidence).
 
   trace ROM LABEL INPUTS [--frames N --bits B --clear-bits B --enemy-state F0:F1:S
-                          --patch P.json --probe ADDR:LEN --cap a,b --ram a,b --near U]
-      Training room ("Test Upgrades" dummy); --near U starts Spidey U units left of it. INPUTS frames are relative to
-      control start (frame 3030). Red bits are OR-ed in 20 frames before start.
-  arena ROM LABEL INPUTS [--tx X --ty Y ...]
+                          --patch P.json --probe ADDR:LEN --cap a,b --ram a,b --near U --phantom DX]
+      Training room ("Test Upgrades" dummy). INPUTS frames are relative to control
+      start (frame 3030). Red bits are OR-ed in 20 frames before start. --near U
+      starts Spidey U units left of the dummy; --phantom DX adds a fake registry
+      enemy DX units from it (no AI/hitbox: kit targeting and movement only).
+  arena ROM LABEL INPUTS [--tx X --ty Y --place DX:DY,... ...]
       Sewer room left of the story save with live symbiotes; Spidey is teleported
-      (all position copies) onto the floor. Spawns vary between runs.
-  qualify ROM          kit checks (23) incl. native/Black parity vs the
+      (all position copies) onto the floor. Spawns vary between runs; --place
+      moves the nearest enemies to fixed offsets (units) from Spidey.
+  qualify ROM          kit checks (27) incl. native/Black parity vs the
                        stable parent; writes work/kit/evidence.json.
   preview CLIP [marks] stick-figure sheet of a tools/kit_clips.py clip.
   sheet DIR [x0,y0,x1,y1 scale cols]  contact sheet of captured frames.
@@ -119,6 +122,25 @@ def apply_patches(lib, patches, verify):
         c.memmove(ptr + at, data, len(data))
 
 
+PHANTOM_ACTOR, PHANTOM_MOTION = 0x02155020, 0x02155100   # unused kit reserve tail
+KIT_STATE, KIT_REGISTRY_LAST = 0x02154C20, 0x02154C20 + 0x20 + 11 * 16
+
+
+def put_phantom(lib, dx):
+    """Training-room fixture: a fake second enemy the kit's registry sees (last slot),
+    standing dx (Q12) right of the dummy on its floor. It has no AI, HP or hitbox;
+    it only tests kit targeting/movement (e.g. Perch head-hops) deterministically."""
+    ptr, ram = ram_of(lib)
+    live = enemies(ram)
+    if not live: return
+    x, y = live[0]['position'][0] + dx, live[0]['position'][1]
+    tick = struct.unpack_from('<I', ram, KIT_STATE - p.BASE)[0]
+    c.memmove(ptr + PHANTOM_ACTOR - p.BASE + 0x30, struct.pack('<I', PHANTOM_MOTION), 4)
+    for off, value in ((0x7C, x), (0x80, y), (0x160, 0), (0x164, 0), (0x1F8, 0)):
+        c.memmove(ptr + PHANTOM_MOTION - p.BASE + off, struct.pack('<i', value), 4)
+    c.memmove(ptr + KIT_REGISTRY_LAST - p.BASE, struct.pack('<Iii I', PHANTOM_ACTOR, x, y, tick), 16)
+
+
 def set_bits(lib, bits, clear):
     ptr, ram = ram_of(lib)
     stats = struct.unpack_from('<I', ram, STATS_POINTER - p.BASE)[0] - p.BASE
@@ -143,7 +165,7 @@ def run(rom, label, inputs, **options):
 
 
 def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=None, patch=None, probe=None,
-        caps=(), rams=(), arena=False, tx=120000, ty=40922, save=None, near=None):
+        caps=(), rams=(), arena=False, tx=120000, ty=40922, save=None, near=None, place=(), phantom=None):
     """One disposable emulator run; returns (output directory, observation rows)."""
     rom = Path(rom).resolve()
     rel = rows_from(inputs) if not isinstance(inputs, list) else inputs
@@ -170,18 +192,33 @@ def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=N
         if frame == start - 20:
             set_bits(lib, bits, clear)
             ptr, ram = ram_of(lib)
+            dest = (tx, ty)
             if not arena:   # training dummy: generous HP so a run never kills it
                 for e in enemies(ram):
                     c.memmove(ptr + e['actor'] - p.BASE + 0x44, struct.pack('<2i', 65536, 65536), 8)
                 if near is not None and enemies(ram):   # stand `near` (Q12) left of the dummy
-                    tx = enemies(ram)[0]['position'][0] - near
-                    ty = struct.unpack_from('<i', ram, p.sample(ram)['motion_address'] - p.BASE + 0x80)[0] +                         struct.unpack_from('<i', ram, p.sample(ram)['motion_address'] - p.BASE + 0x164)[0]
+                    mot = p.sample(ram)['motion_address'] - p.BASE
+                    dest = (enemies(ram)[0]['position'][0] - near,
+                            sum(struct.unpack_from('<i', ram, mot + off)[0] for off in (0x80, 0x164)))
             if arena or near is not None:   # teleport: base position plus every actor position copy
                 o = p.sample(ram); mot = o['motion_address'] - p.BASE; act = o['actor_address'] - p.BASE
                 lx, ly = struct.unpack_from('<2i', ram, mot + 0x160)
-                c.memmove(ptr + mot + 0x7C, struct.pack('<2i', tx - lx, ty - ly), 8)
+                c.memmove(ptr + mot + 0x7C, struct.pack('<2i', dest[0] - lx, dest[1] - ly), 8)
                 for off in (0x148, 0x180, 0x210, 0x2CC):
-                    c.memmove(ptr + act + off, struct.pack('<2i', tx, ty), 8)
+                    c.memmove(ptr + act + off, struct.pack('<2i', *dest), 8)
+            # place: (dx, dy) Q12 offsets from Spidey for the nearest enemies, in order
+            fighters = [e for e in enemies(ram) if e['hp'] >= 16384 and e['state'] != 6]   # skip spawners/projectiles
+            live = sorted(fighters, key=lambda e: abs(e['position'][0] - dest[0]) + abs(e['position'][1] - dest[1]))
+            for (dx, dy), e in zip(place, live):
+                at = e['actor'] - p.BASE
+                mot = struct.unpack_from('<I', ram, at + 0x30)[0] - p.BASE
+                ex, ey = dest[0] + dx, dest[1] + dy
+                lx, ly = struct.unpack_from('<2i', ram, mot + 0x160)
+                c.memmove(ptr + mot + 0x7C, struct.pack('<2i', ex - lx, ey - ly), 8)
+                for off in (0x148, 0x180, 0x210, 0x2CC):
+                    c.memmove(ptr + at + off, struct.pack('<2i', ex, ey), 8)
+        if phantom is not None and frame >= start - 20:
+            put_phantom(lib, phantom)
         if enemy_state and start + enemy_state[0] <= frame < start + enemy_state[1]:
             ptr, ram = ram_of(lib)
             for e in enemies(ram):
@@ -228,7 +265,7 @@ def first(rows, cond):
 
 
 def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a31b005e201c7c4e276fc46dbf3e5d842/Spider-Man-WoS-modded.nds'):
-    """Measured expectations for the kit (v0.2.0 + v0.2.1 spin); parent = v0.1.1 for native parity."""
+    """Measured expectations for the kit (v0.2.0, v0.2.1 spin, v0.3.0); parent = v0.1.1 for native parity."""
     def go(label, name, frames, **kw): return run(rom, label, INPUTS / f'{name}.json', frames=frames, **kw)[1]
     ck = {}
     o = go('q_reflex', 'reflex', 300)
@@ -273,6 +310,26 @@ def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a3
     s = first(o, lambda r: r['st'] == 46 and r['node'] == 14)
     ck['sense_counter_behind_attacker'] = bool(s and s['f'] <= 72 and (s['pos'][0] > s['en'][0][1][0]) == (s['face'] == 0))
     ck['sense_counter_damage'] = o[-1]['en'][0][0] < 65536
+    # v0.3.0 iteration: ranged attackers, Perch exits, neutral Reflex flip
+    o = go('q_sense16', 'sense', 160, enemy_state=(60, 76, 16))
+    s = first(o, lambda r: r['st'] == 46 and r['node'] == 14)
+    ck['sense_counters_ranged_state_16'] = bool(s and s['f'] <= 72 and (s['pos'][0] > s['en'][0][1][0]) == (s['face'] == 0))
+    o = go('q_perch_spring', 'perchspring', 220)
+    b = first(o, lambda r: r['f'] >= 160 and r['act'] == 133)
+    after = [r for r in o if b and b['f'] <= r['f'] <= b['f'] + 30]
+    ck['perch_b_springs_high_without_swing'] = bool(
+        b and b['f'] <= 163 and max(r['pos'][1] for r in after) - b['pos'][1] > 6 * 4096
+        and not any(r['st'] in (26, 27, 28) for r in after))
+    o = go('q_perch_hop', 'perchhop', 200, phantom=12 * 4096)
+    hop = [r for r in o if r['f'] >= 134 and r['act'] == 133]
+    land = first(o, lambda r: hop and r['f'] > hop[-1]['f'] and r['act'] == 130)
+    target = (o[-1]['en'][0][1][0] if o[-1]['en'] else 0) + 12 * 4096
+    ck['perch_a_hops_onto_next_head'] = bool(
+        len(hop) >= 10 and land and abs(land['pos'][0] - (target - 0x1800)) < 2 * 4096
+        and max(r['pos'][1] for r in hop) > land['pos'][1] + 2 * 4096)
+    o = go('q_reflex_neutral', 'reflex', 80, probe=(0x02154C20 + 0x368, 4))
+    dodge = [r for r in o if r['st'] == 53]
+    ck['reflex_neutral_plays_back_tuck'] = bool(dodge) and all(r['probe'][0] == 1 for r in dodge[1:]) and         o[-1]['probe'][0] == 0
     for label, name, frames, kw in (('q_gate', 'gate', 260, {'bits': 0, 'clear': 0xFE000}),
                                     ('q_snare_off', 'snare', 200, {'bits': 0, 'clear': 0xFE000}),
                                     ('q_black', 'black', 300, {})):
@@ -441,6 +498,8 @@ def main(argv=None):
         s.add_argument('--cap', default=''); s.add_argument('--ram', default=''); s.add_argument('--save', default=None)
         s.add_argument('--tx', type=int, default=120000); s.add_argument('--ty', type=int, default=40922)
         s.add_argument('--near', type=float, default=None, help='training: start this many units left of the dummy')
+        s.add_argument('--place', default='', help='DX:DY,... units: move the nearest enemies next to Spidey')
+        s.add_argument('--phantom', type=float, default=None, help='training: fake second enemy DX units from the dummy')
     s = sub.add_parser('_child'); s.add_argument('request')
     s = sub.add_parser('qualify'); s.add_argument('rom'); s.add_argument('--parent', default=None)
     s = sub.add_parser('preview'); s.add_argument('clip'); s.add_argument('marks', nargs='?', default='')
@@ -462,13 +521,16 @@ def main(argv=None):
                              enemy_state=state, patch=a.patch or None, probe=probe, save=a.save,
                              caps=[int(x) for x in a.cap.split(',') if x], rams=[int(x) for x in a.ram.split(',') if x],
                              arena=a.cmd == 'arena', tx=a.tx, ty=a.ty,
-                             near=None if a.near is None else round(a.near * 4096))
+                             near=None if a.near is None else round(a.near * 4096),
+                             place=tuple(tuple(round(float(v) * 4096) for v in xy.split(':')) for xy in a.place.split(',') if xy),
+                             phantom=None if a.phantom is None else round(a.phantom * 4096))
             print(dest / 'trace.txt')
         elif a.cmd == '_child':
             req = json.loads(a.request)
             opts = req['options']
             for key in ('caps', 'rams', 'enemy_state', 'probe'):
                 if opts.get(key) is not None: opts[key] = tuple(opts[key])
+            if opts.get('place'): opts['place'] = tuple(tuple(x) for x in opts['place'])
             dest, _ = _run(req['rom'], req['label'], req['inputs'], **opts)
             print('KITLAB_DEST ' + str(dest), flush=True)
         elif a.cmd == 'qualify':
