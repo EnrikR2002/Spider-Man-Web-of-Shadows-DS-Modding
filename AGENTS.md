@@ -27,8 +27,8 @@ including at the end of a task: update the owning document instead.
 | docs/TASM_ROADMAP.md | TASM identity, combat design, skill status and next iterations |
 
 Root README is a short entry point/workflow; mods/README is the overlay-loader
-exception. No other active Markdown is permitted. The documentation-layout test
-enforces this set and bounds TASKS/AGENTS size. Technical detail may grow in the
+exception. No other active Markdown is permitted; a test enforces this set and
+the TASKS/AGENTS size. Technical detail may grow in the
 single notebook, but must use searchable topic headings, not repeated logs.
 Machine-readable catalogs/release records/input scripts live under reference/.
 Generated reports/captures and scratch scripts live in ignored work/ or build/;
@@ -81,10 +81,10 @@ Leapfrog, Skyjack, Spider Perch, Split Decision, Spin Cycle, Spider Reflex and
 Spider-Sense (TASM_ROADMAP); iterate them from player feedback. More Red
 skills/web tags later. Defer prices and balance unless the player asks.
 2026-10-05: player confirmed v0.2.1/v0.3.0 "looks feels way better". Keep the game
-super fast paced: no slow-motion or time-slowing effects (Spider-Sense included);
-they would break the pace and make it too easy.
+super fast paced: no slow-motion or time-slowing effects (Spider-Sense included).
 2026-10-06: no teleports (felt "teleporty", clipped out of the level, froze the
 game): moves travel visibly; kit code moves Spidey by velocity only.
+2026-10-06: player asked for the Test Upgrades sparring room (CHANGES v0.5.0).
 
 New moves need new, fluid, acrobatic animations (not repackaged native clips).
 The player rejected earlier per-key-eased clips as looking like dancing; follow

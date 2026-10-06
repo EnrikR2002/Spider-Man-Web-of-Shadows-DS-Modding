@@ -37,7 +37,9 @@ movement and form-specific barrier interactions protect progression.
 
 ## Native purchases
 
-Bought/refunded with XP at save points; Test Upgrades allows practice. Existing
+Bought/refunded with XP at save points; Test Upgrades allows practice in a bare
+room (Test_Combat01) against one passive Brute dummy that never attacks, has 1
+health unit and cannot die (a lethal hit leaves it at a sliver). Existing
 ownership is native ability bits, also used by gameplay and saved by the game.
 These are **original prices**, not the current mod prices.
 

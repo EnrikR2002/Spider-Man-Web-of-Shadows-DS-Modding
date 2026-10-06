@@ -11,7 +11,7 @@ from pathlib import Path
 import struct
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from tools import wos_tool as w, combat_feedback, release_info
+from tools import wos_tool as w, combat_feedback, release_info, training_room
 
 BASE = 0x02000000
 TARGET = combat_feedback.TARGET            # existing extension destination 0214F420
@@ -44,6 +44,7 @@ HOOKS = {
     0x020B7B18: (0x28, 0xE5D01028),  # ldrb r1,[r0,#0x28] air attack stay
     0x020728F0: (0x2C, 0xEA03798A),  # Sling action-queue branch -> Perch substitution
     0x02078628: (0x30, 0xE12FFF34),  # blx r4: hit dispatch to the victim's ReceiveHit
+    0x0205F420: (0x34, 0xE5823084),  # str r3,[r2,#0x84]: player HP store (training floor)
 }
 # Spider Perch replaces Sling Strike in the Mid-Air Snare slot: restore the
 # native action-queue and contact instructions Sling had redirected.
@@ -79,7 +80,7 @@ CLIP_SOURCES = {
     'zz_tasm_RushFinish.sca': ('spd_GroundAttack17.sca', 'split_sweep'),
 }
 PROFILE = 'tasm-kit'
-VERSION = '0.4.1'
+VERSION = '0.5.0'
 RELEASE_DATE = '2026-10-06'
 RELEASE_PROFILE = f'tasm-v{VERSION}'
 PARENT_RELEASE = 'tasm-v0.1.1'
@@ -100,13 +101,14 @@ TEXT_EDITS = {
     200: 'Red: \ue604 cancels any attack.\nHold a side to flip, \ue601 resumes.',
     201: 'Spider-Sense', 202: 'Spider-Sense',
     203: 'Needs Spider Reflex. \ue604 as an\nenemy attacks: flip behind, counter.',
+    417: 'Sparring: you heal every 30 s.\nSELECT and Down: refill all.\nPause: Return to Save Point.',
 }
 
 
 def uses_kit(profile):
     return profile == PROFILE or bool(release_info.PROFILE_INFO.get(profile, {}).get('kit'))
-CODE_SHA256 = '3826b452a3a8ac9cdeb3fb9c3b66d27afe9843b648bf769434c83a22a41e68ca'
-ARM9_SHA256 = 'b806e50864957323fe8a92a856166d22627d5548b9e4340ab68e82f352a7cf6f'
+CODE_SHA256 = '395e9bfad75552cc45e7d0e5b6b7bd08981600556dcc62ce028790cc90d234c3'
+ARM9_SHA256 = '88328d560f095a0f46fe07a2476922fb957e4933cb429ca831105113ed650f97'
 
 
 def branch(source, target):
@@ -258,6 +260,8 @@ def generate(output=None):
     if current != RELEASE_PROFILE and set(overlays) != set(recipe['required_overlays']):
         raise ValueError('Explicit merge required for additional overlays')
     overlays.update(author_overlays(glob, entries))
+    e = entries[training_room.NAME]                      # Test Upgrades sparring Brutes
+    overlays[training_room.NAME] = training_room.with_sparring(glob[e['offset']:e['offset'] + e['size']])
     for name in ('English.strings', 'American.strings'):
         e = entries[name]
         overlays[name] = StringSlots(glob[e['offset']:e['offset'] + e['size']]).repack(overlays[name], TEXT_EDITS)

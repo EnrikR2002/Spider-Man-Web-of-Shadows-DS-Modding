@@ -14,6 +14,37 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.5.0 - 2026-10-06 - Test Upgrades sparring room
+
+Published through Play Spider-Man.cmd's stable ROM. SHA256
+`fd7e4420f97645dd55011504843ce62f068d1276234c3cd781931c85bb1eb193`
+(ARM9 `88328d56...`, kit code `395e9bfa...`). Title and Options show v0.5.0.
+Player request (2026-10-06): several enemies in the training room that hit
+back, with automatic healing so Spidey does not die. Applies to every suit
+(training room only); the Red kit is unchanged.
+
+- **Three sparring Brutes** join Test Upgrades: one left of Spidey's start,
+  two at the far right. They use the native Brute AI (walk in, swing, hit
+  for one health unit). The original practice dummy stays as a passive
+  punching bag.
+- **Enemies get back up.** Training enemies have 8 health units instead of 1;
+  "defeating" one refills it to full instead of killing it, so the fight
+  never empties.
+- **Spidey cannot die in training.** He heals to full every 30 seconds, and
+  holding SELECT+Down now refills him as well as the enemies. A hit that
+  would kill him leaves him on an empty bar instead.
+- Help text: "Sparring: you heal every 30 s. SELECT and Down: refill all.
+  Pause: Return to Save Point."
+
+Agent-tested: qualification 31/31 (solo-dummy room, unchanged checks), crash
+hunt 12/12 sewer fights clean, 163 unit tests. Training room (copied save,
+`--sparring`):
+idle 3000 frames among the Brutes (healed at 30 s, lethal hits leave him
+alive), three 4000-frame random Y/R fights (no stall, all four enemies alive
+with 9-12 defeat refills each, SELECT+Down healed him); sewer arena: training
+logic never active. Frames reviewed. Not yet player-confirmed: sparring feel,
+heal interval, Brute count and spacing.
+
 ## v0.4.1 - 2026-10-06 - Freeze and clip fix; smoother Sense and Leapfrog
 
 Published through Play Spider-Man.cmd's stable ROM. SHA256

@@ -14,6 +14,8 @@ and work/kit/ (previews, sheets, qualification evidence).
       about 3.5 and 236.5 units, --place then puts the dummy relative to him);
       --phantom DX adds a fake registry
       enemy DX units from it (no AI/hitbox: kit targeting and movement only).
+      Training runs use a solo-dummy copy of the ROM (sparring Brutes removed,
+      build/lab-solo/); --sparring keeps the Brutes and native enemy HP.
   arena ROM LABEL INPUTS [--tx X --ty Y --place DX:DY,... ...]
       Sewer room left of the story save with live symbiotes; Spidey is teleported
       (motion position and probes) onto the floor. Spawns vary between runs; --place
@@ -168,9 +170,37 @@ def set_bits(lib, bits, clear):
     c.memmove(ptr + stats + 0xC, struct.pack('<I', (old | bits) & ~clear), 4)
 
 
+def solo_rom(rom):
+    """Training fixture: the ROM with the clean Test_Combat01 OBJ (lone passive dummy).
+
+    v0.5.0 adds sparring Brutes to the Test Upgrades room; kit traces and
+    qualification keep the deterministic one-dummy room. Cached in build/lab-solo/."""
+    from tools import training_room, wos_tool as w
+    data = Path(rom).read_bytes()
+    entry = next(e for e in w.validate_rom(data)['nitrofs'] if e['name'] == 'Glob.bin')
+    glob = data[entry['start']:entry['end']]
+    offsets, names, _ = w.parse_glob(glob)
+    index = names.index(training_room.NAME)
+    blob = glob[offsets[index]:offsets[index + 1]]
+    if w.sha256(blob) == training_room.CLEAN_SHA256:
+        return Path(rom)
+    out = ROOT / 'build/lab-solo' / w.sha256(data)[:8] / f'{Path(rom).stem}-solo.nds'
+    if not out.is_file():
+        clean = (ROOT / 'work/glob' / training_room.NAME).read_bytes()
+        if w.sha256(clean) != training_room.CLEAN_SHA256:
+            raise ValueError('work/glob/Test_Combat01_app.obj is not the clean resource')
+        blobs = [glob[offsets[i]:offsets[i + 1]] for i in range(len(names))]
+        blobs[index] = clean
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_bytes(w.rebuild_rom(data, {'Glob.bin': w.pack_glob(names, blobs)}))
+    return out
+
+
 def run(rom, label, inputs, **options):
     """Run in a child process (the core prints thousands of log lines); return (dir, rows)."""
     import subprocess
+    if not options.get('arena') and not options.get('sparring'):
+        rom = solo_rom(rom)
     request = {'rom': str(Path(rom).resolve()), 'label': label,
                'inputs': inputs if isinstance(inputs, list) else str(inputs), 'options': options}
     done = subprocess.run([sys.executable, str(Path(__file__).resolve()), '_child', json.dumps(request)],
@@ -185,7 +215,8 @@ def run(rom, label, inputs, **options):
 
 
 def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=None, patch=None, probe=None,
-        caps=(), rams=(), arena=False, tx=120000, ty=40922, save=None, near=None, place=(), phantom=None, start_x=None, refill=False, extra_hook=None):
+        caps=(), rams=(), arena=False, tx=120000, ty=40922, save=None, near=None, place=(), phantom=None, start_x=None, refill=False, extra_hook=None,
+        sparring=False):
     """One disposable emulator run; returns (output directory, observation rows)."""
     rom = Path(rom).resolve()
     rel = rows_from(inputs) if not isinstance(inputs, list) else inputs
@@ -213,9 +244,10 @@ def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=N
             set_bits(lib, bits, clear)
             ptr, ram = ram_of(lib)
             dest = (tx, ty)
-            if not arena:   # training dummy: generous HP so a run never kills it
-                for e in enemies(ram):
-                    c.memmove(ptr + e['actor'] - p.BASE + 0x44, struct.pack('<2i', 65536, 65536), 8)
+            if not arena:
+                if not sparring:   # training dummy: generous HP so a run never kills it
+                    for e in enemies(ram):
+                        c.memmove(ptr + e['actor'] - p.BASE + 0x44, struct.pack('<2i', 65536, 65536), 8)
                 ptr, ram = ram_of(lib)   # re-read: --place filters on the new HP
                 if (near is not None or start_x is not None) and enemies(ram):   # `near` (Q12) left of the dummy, or x `at`
                     mot = p.sample(ram)['motion_address'] - p.BASE
@@ -549,6 +581,7 @@ def main(argv=None):
         s.add_argument('--place', default='', help='DX:DY|skip,... units: move the nearest enemies next to Spidey')
         s.add_argument('--phantom', type=float, default=None, help='training: fake second enemy DX units from the dummy')
         s.add_argument('--at', type=float, default=None, help='training: start at this absolute x (units); walls ~3.5/236.5')
+        s.add_argument('--sparring', action='store_true', help='training: keep the v0.5.0 sparring Brutes and native HP')
     s = sub.add_parser('_child'); s.add_argument('request')
     s = sub.add_parser('qualify'); s.add_argument('rom'); s.add_argument('--parent', default=None)
     s = sub.add_parser('preview'); s.add_argument('clip'); s.add_argument('marks', nargs='?', default='')
@@ -574,7 +607,7 @@ def main(argv=None):
                              place=tuple(None if xy == 'skip' else tuple(round(float(v) * 4096) for v in xy.split(':'))
                                          for xy in a.place.split(',') if xy),
                              phantom=None if a.phantom is None else round(a.phantom * 4096),
-                             start_x=None if a.at is None else round(a.at * 4096))
+                             start_x=None if a.at is None else round(a.at * 4096), sparring=a.sparring)
             print(dest / 'trace.txt')
         elif a.cmd == '_child':
             req = json.loads(a.request)

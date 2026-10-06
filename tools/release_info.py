@@ -64,6 +64,11 @@ PROFILE_INFO = {
                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                     'arm9_sha256': 'b806e50864957323fe8a92a856166d22627d5548b9e4340ab68e82f352a7cf6f'},
+    # Test Upgrades sparring: three attacking Brutes, 30 s heal, no lethal hits (CHANGES v0.5.0).
+    'tasm-v0.5.0': {'version': '0.5.0', 'date': '2026-10-06', 'kit': True, 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': '88328d560f095a0f46fe07a2476922fb957e4933cb429ca831105113ed650f97'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

@@ -16,6 +16,7 @@
   b h_reflex_air          // +28 from 020B7B18  air attack stay (air dodge itself needs bit 10)
   b h_action              // +2C from 020728F0  action request (Perch substitution)
   b h_hit_capture         // +30 from 02078628  hit dispatch (blx to victim ReceiveHit)
+  b h_train_floor         // +34 from 0205F420  player HP store (training: no lethal hits)
 
 // ---------------------------------------------------------------- Reflex
 // Bit 18 (Amazing Speed slot): R cancels Red attack states immediately.
@@ -252,6 +253,8 @@ h_update:
   ldr r2,[r1,#0x350]        // flip animation timer (Perch hop/spring)
   subs r2,r2,#1
   strge r2,[r1,#0x350]
+  mov r0,r4
+  bl train_update
   mov r0,r4
   bl spin_update
   mov r0,r4
@@ -1623,6 +1626,7 @@ h_observer:
   ldr r6,lit_02049304
   cmp r5,r6
   bne obs_done
+  bl train_observe
   ldr r5,[r0,#0x44]
   cmp r5,#0
   ble obs_done
@@ -1673,6 +1677,87 @@ obs_done:
   msr cpsr_f,r7
   pop {r0,r1,r2,r3,r4,r5,r6,r7,r12,lr}
   b 0x02151920
+
+// ---------------------------------------------------------------- Training room
+// Test Upgrades: the room's native training target carries actor+0x88 bit 4
+// (no story enemy seen with it). Observer calls count bit-4 sightings
+// (+0x2F0); each Spidey update turns them into the active flag (+0x2F4).
+// While active, every common-health enemy gets bit 4 (the native setter then
+// clamps a lethal hit to 40 instead of killing), 8 HP units instead of the
+// native 1, and refills to max once "defeated" (HP 1..40). Spidey heals to
+// full every 900 updates (30 s, timer +0x2F8) or while SELECT+Down is held;
+// h_train_floor leaves him 1 Q12 on a lethal hit.
+train_observe:              // r0=enemy actor (common-health ABI checked); keeps r0
+  push {r1,r2,r3,lr}
+  ldr r3,lit_02154c20
+  ldr r2,[r0,#0x88]
+  tst r2,#4
+  ldrne r1,[r3,#0x2f0]
+  addne r1,r1,#1
+  strne r1,[r3,#0x2f0]
+  ldr r1,[r3,#0x2f4]
+  cmp r1,#0
+  beq train_obs_out
+  orr r2,r2,#4
+  str r2,[r0,#0x88]
+  ldr r1,[r0,#0x48]
+  cmp r1,#0x1000            // native training HP (1 unit) -> 8 units
+  moveq r1,#0x8000
+  streq r1,[r0,#0x48]
+  streq r1,[r0,#0x44]
+  ldr r2,[r0,#0x44]
+  cmp r2,#0
+  ble train_obs_out
+  cmp r2,#40
+  strle r1,[r0,#0x44]
+train_obs_out:
+  pop {r1,r2,r3,pc}
+
+train_update:               // r0=Spidey actor
+  push {r4,r5,lr}
+  mov r4,r0
+  ldr r5,lit_02154c20
+  ldr r1,[r5,#0x2f0]
+  mov r2,#0
+  str r2,[r5,#0x2f0]
+  cmp r1,#0
+  movne r1,#1
+  str r1,[r5,#0x2f4]
+  beq train_out
+  ldr r0,[r4,#0xe4]         // stats: +0x84 HP, +0x88 max (Q12)
+  bl kit_ram_ok
+  cmp r0,#0
+  beq train_out
+  ldr r4,[r4,#0xe4]
+  ldr r1,[r5,#0x2f8]
+  add r1,r1,#1
+  ldr r2,[r5,#0x360]        // held keys: SELECT 0x4 + Down 0x80 heals now
+  and r2,r2,#0x84
+  cmp r2,#0x84
+  moveq r1,#900
+  cmp r1,#900
+  blo train_store
+  ldr r2,[r4,#0x88]
+  cmp r2,#0
+  strgt r2,[r4,#0x84]
+  mov r1,#0
+train_store:
+  str r1,[r5,#0x2f8]
+train_out:
+  pop {r4,r5,pc}
+
+h_train_floor:              // r2=stats, r3=new HP (0 if lethal); native str r3,[r2,#0x84]
+  push {r0}
+  ldr r0,lit_02154c20
+  ldr r0,[r0,#0x2f4]
+  cmp r0,#0
+  beq floor_store
+  cmp r3,#1
+  movlt r3,#1
+floor_store:
+  pop {r0}
+  str r3,[r2,#0x84]
+  b 0x0205f424
 
 // kit_target(actor, mode) -> r0=enemy actor or 0, r2=facing toward it, r3=|dx|
 // (modes 0/2). Fresh registry entries within 40 units horizontally and 10

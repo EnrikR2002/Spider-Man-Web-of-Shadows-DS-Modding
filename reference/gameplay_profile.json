@@ -1,10 +1,11 @@
 {
-  "profile": "tasm-v0.4.1",
-  "release_version": "0.4.1",
+  "profile": "tasm-v0.5.0",
+  "release_version": "0.5.0",
   "required_overlays": {
-    "American.strings": "ed587524549ce04e594014fc40cb0c1af550573b3938517df52090a7af2245d9",
-    "English.strings": "ed587524549ce04e594014fc40cb0c1af550573b3938517df52090a7af2245d9",
+    "American.strings": "e48a2ed5d309f52904a72c0b3f96428446a22b549e42f9b6ffc5f6762fd73908",
+    "English.strings": "e48a2ed5d309f52904a72c0b3f96428446a22b549e42f9b6ffc5f6762fd73908",
     "MissionMiniMapIcon.pal": "5072156a663205facf22310c98913e01febb028c74edd1c196e7db26985b5787",
+    "Test_Combat01_app.obj": "7db7d05399354e194d4af191780e47360bf3764a3e4c7d63349536369d3db30d",
     "spd.nsbmd": "8ddbdac95ba919b50d4c107f491936b10eea2ae65b2117ed1a6d9fa0ce6f5ad0",
     "spd.nsbtx": "62052b3cd8034c11e28c44de9b6d1b1bf36f6298d8fbfb0315bd92a7f2244948",
     "spd.xbd": "eccd54172654eb531a7146b54a591edca5df26df250aade9b4addd65b65e6cfd",

@@ -1,6 +1,6 @@
 # ROM technical knowledge
 
-Updated 2026-10-05. This is the single technical notebook. Search its headings and
+Updated 2026-10-06. This is the single technical notebook. Search its headings and
 read only the relevant section; never bulk-read it to start a session. Confirmed
 fields, hypotheses, unknown bytes, editing confidence and test evidence belong
 here. Release behavior/history belongs in [CHANGES](CHANGES.md), native gameplay
@@ -902,7 +902,7 @@ contact site is restored to native. The enemy registry (12 slots, refreshed from
 the per-actor observer `0x02073A68`) is trusted for two ticks, and since v0.4.1
 `kit_alive` also checks the vtable and motion/controller pointers before any
 dereference (`kit_fresh` includes it). State offsets in use: 0 tick, 4/0x10/0x368 Reflex,
-8/0x14 spin, 0x20-0xDF registry, 0x300-0x30C Perch, 0x310-0x320 Leapfrog,
+8/0x14 spin, 0x20-0xDF registry, 0x2F0-0x2F8 training room (v0.5.0), 0x300-0x30C Perch, 0x310-0x320 Leapfrog,
 0x330-0x33C Skyjack, 0x340-0x34C Sense (side, dash/guard counter, attacker,
 target x), 0x350-0x35C Perch flip/hop, 0x360/0x364 held/new
 keys (edge-detected once per Spidey update), 0x36C-0x3FF hit capture (0x374
@@ -970,6 +970,59 @@ Spider-Sense flip clipped Spidey down into an unreachable part of the map.
   `0x0201DC0C`/`0x0201DCE8`; in seed 727 the per-frame free-list watch caught
   node actor+0x210 receiving 0xFFFF1406, a Sense x, 100 frames before the
   crash). v0.4.1: 0 corruption, 0 crashes in 48.
+
+### Training room (Test Upgrades, v0.5.0)
+
+- **Room.** Test Upgrades loads `Test_Combat01` (room table record at
+  `0x02130DA0`: id 0x51F, name pointer, Glob indices 0x805/0x803/0x806 =
+  textures/BSP/OBJ, then 1, 1). `Upgrade_Test` (id 0x4C7, Spiderman + "Enemy
+  Brute") is a different, unused-here room. Spidey starts at x 120 units
+  (491520, the OBJ's Spiderman record); walls about 3.5/236.5 units.
+- **OBJ layout (Test_Combat01_app.obj, 2140 bytes, partly decoded).** u32 2,
+  u32 end of object records (0x4C8), u32 name-block offset (0x4E0); a 24-byte
+  room header at 0x0C (unknown); three object records {u16 size, 01 01, u32 0,
+  five u16 section end offsets relative to +0x14, sections}. Object 3 (0x47C)
+  is the dummy: characters section {u16 size = 8 + 24n, u8 8, u8 n, n bytes
+  0x18, pad to 4} then 24-byte records {x, y, z (Q12), u32 2, u32 angle
+  (0x4000 faces right, 0xC000 left), u16 0, u16 character type}; the dummy is
+  type 50, the black-suited Brute (Upgrade_Test's "Enemy Brute" is also 50),
+  followed by an event-graph section (bytes unknown). After the records come
+  one 8-byte entry per object and the name blocks {u32 size, u16 0x14, 7
+  cumulative u16 counts per name category (characters first), 32-byte
+  space-padded names}; names look editor-only, the editor keeps them matched.
+  Object 1 holds Spiderman, an event graph (music/level/timer names) and
+  "Enemy Spawn Points"/"SpawnPoint 0" sections (not decoded, apparently unused
+  by Test Upgrades). `tools/training_room.py` appends up to three copies of
+  the dummy record (lossless round trip with none).
+- **AI.** The first placement (native dummy) stays in state 0 action 99
+  forever; extra placements of the same record spawn with full Brute AI:
+  walk (state 1, action 158), states 2/8, attacks state 15 (actions 55/63),
+  4096 Q12 damage per hit to Spidey (6 units = 24576 max in the research
+  save: six hits kill). Not every Brute attacks at once (the far two often
+  hold back until the near one is busy). Enemy flag actor+0x88 bit 4 (value 4)
+  is the native training-target flag: clearing it does not wake the dummy
+  and setting it on the Brutes does not change their AI (paired 900-frame
+  runs, identical). Its passivity source is unknown (placement order or
+  Test Upgrades code). Bit 4 was found on no other enemy in every RAM dump in
+  build/boot-tests (story enemies: 0, 1, 3 seen). Native training HP is 4096.
+- **Player health.** Spidey HP is stats `[actor+0xE4]+0x84`, max `+0x88`
+  (Q12). Damage `0x0205F3F0` only does HP = max(HP - damage, 0) and stores
+  it at `0x0205F420`; death is decided later from HP 0. Kit tick: about 30
+  Spidey updates per second (148 per 295 frames).
+- **Kit training logic** (`train_observe`/`train_update`/`h_train_floor`,
+  state +0x2F0 sightings, +0x2F4 active, +0x2F8 heal timer). Active = a bit-4
+  enemy passed the observer since the previous Spidey update. While active:
+  every common-health enemy gets bit 4 (the native setter clamps a lethal hit
+  to 40), native max 4096 becomes 32768 (8 units), HP 1..40 refills to max;
+  Spidey heals to max every 900 updates or while SELECT+Down is held; the HP
+  store hook keeps him at 1 Q12 instead of 0. Evidence (work/training/*.json,
+  scratch `work/training/probe.py`): idle 3000 frames, healed at the 900th
+  update, lethal hits leave HP 1 with no death or tutorial; three 4000-frame
+  random fights: no stalls, all four enemies alive (9-12 defeat refills
+  each), SELECT+Down healed him; sewer arena 1500 frames: never active, no
+  enemy got bit 4. Lab: training traces/qualification use a solo-dummy copy
+  (`kit_lab.solo_rom`, build/lab-solo/); `trace --sparring` keeps the Brutes
+  and native HP.
 
 ## Research workflow and pitfalls (Red kit sessions)
 
