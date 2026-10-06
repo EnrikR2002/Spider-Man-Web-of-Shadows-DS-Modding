@@ -6,6 +6,7 @@ import mod
 from tools import combat_flow as f, combat_profile as cp, tasm_sling_strike as s, combat_hud as h, wos_tool as w
 from tools import combat_readability as q
 from tools.qol_suits_menu import StringSlots
+from tools.tasm_kit import EXTRA_NAMES as KIT_NAMES  # current mods/ also holds kit clips
 
 class AuthoredFlowTests(unittest.TestCase):
     def test_authored_code_and_reserved_state_bounds(self):
@@ -55,7 +56,7 @@ class LocalCombatFlowTests(unittest.TestCase):
     def test_instruction_text_preserves_every_other_composed_slot(self):
         entries={e['name']:e for e in self.manifest['entries']}
         from tools.oscorp_resources import EXTRA_NAMES
-        overlays=mod.overlay_files(mod.ROOT/'mods',list(entries),added_names=EXTRA_NAMES)
+        overlays=mod.overlay_files(mod.ROOT/'mods',list(entries),added_names=(*EXTRA_NAMES,*KIT_NAMES))
         # This historical composition starts from its own prerequisite recipe,
         # not the newer Rush strings now installed in the local default overlay.
         for name in ('English.strings','American.strings'):

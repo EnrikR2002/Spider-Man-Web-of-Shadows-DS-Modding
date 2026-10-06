@@ -12,6 +12,7 @@ from tools import oscorp_resources as resources
 import struct
 from tools.qol_suits_menu import StringSlots
 from tools import combat_readability as q,combat_flow,tasm_oscorp_rush
+from tools.tasm_kit import EXTRA_NAMES as KIT_NAMES  # current mods/ also holds kit clips
 
 class MathTests(unittest.TestCase):
     def test_shortest_arc_and_stored_matrix_convention(self):
@@ -126,12 +127,15 @@ class LocalChoreographyTests(unittest.TestCase):
         struct.pack_into('<I',restored,h['arm9_offset']+resources.COUNT_OFFSET,3733)
         self.assertEqual(before,restored)
     def test_new_input_text_preserves_every_other_current_slot(self):
-        overlays=mod.overlay_files(mod.ROOT/'mods',self.names,added_names=resources.EXTRA_NAMES);before=dict(overlays)
-        q.compose(self.glob,self.manifest,overlays,combat_flow.TEXT_EDITS | tasm_oscorp_rush.TEXT_EDITS | release.TEXT_EDITS)
+        overlays=mod.overlay_files(mod.ROOT/'mods',self.names,added_names=(*resources.EXTRA_NAMES,*KIT_NAMES));before=dict(overlays)
+        from tools import tasm_kit
+        # Current text layers: historical flow/Rush, numbered release, then the v0.2.0 kit.
+        edits=combat_flow.TEXT_EDITS | tasm_oscorp_rush.TEXT_EDITS | release.TEXT_EDITS | tasm_kit.TEXT_EDITS
+        q.compose(self.glob,self.manifest,overlays,edits)
         for name in ('English.strings','American.strings'):
             slots=StringSlots(self.clean(name))
             for index in range(len(slots.texts)):
-                self.assertEqual(slots.decode(overlays[name],index),release.TEXT_EDITS.get(index,slots.decode(before[name],index)))
+                self.assertEqual(slots.decode(overlays[name],index),edits.get(index,slots.decode(before[name],index)))
         for name in set(overlays)-{'English.strings','American.strings'}:self.assertEqual(overlays[name],before[name])
 
 if __name__=='__main__':unittest.main()

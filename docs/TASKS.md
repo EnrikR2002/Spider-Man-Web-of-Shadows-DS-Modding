@@ -11,7 +11,7 @@ slots rewritten as the "never stand still" kit (TASM_ROADMAP, CHANGES): Leapfrog
 Skyjack, Spider Perch, Split Decision, Spin Cycle, Spider Reflex, Spider-Sense,
 with nine new authored clips. Prices/ownership unchanged. Agent-tested only:
 work/kit/evidence.json 20/20 (training dummy; Spider-Sense also vs live
-symbiotes), unowned and Black play match v0.1.1; 149 source tests pass. Real save
+symbiotes), unowned and Black play match v0.1.1; 151 source tests pass. Real save
 `3f65dfac...` owns bits 13-17 (five kit skills live) but not 18/19, and has 4 XP:
 Reflex costs 250, Sense 350. Player feel/crowds/bosses not yet confirmed.
 
@@ -41,9 +41,10 @@ kit. Shared progression/traversal remain intact. Research/ideas are not releases
 
 - Kit: source `tools/tasm_kit.{py,s,hex}`, `tools/kit_choreography.py`,
   `tools/kit_clips.py`; candidate `build/version-0.2.0` (regenerate:
-  `python tools/tasm_kit.py`). Research tools in `work/kit/`: trace.py (training
-  room, `--bits/--clear-bits/--enemy-state`), arena.py (Sewer room left of save,
-  teleport incl. actor copies), qualify.py, clip_preview.py, author_clips.py.
+  `python tools/tasm_kit.py`). Research/qualification: `tools/kit_lab.py`
+  (inputs `reference/combat-inputs/kit/`; last evidence work/kit/evidence.json,
+  20/20). Workflow and pitfalls: TECHNICAL "Research workflow and pitfalls".
+  work/kit/ holds only old scratch from the first session; do not depend on it.
 - Prior release: build/version-0.1.1, recipe copy work/kit/prior-gameplay-profile-
   v0.1.1.json, ROM rollback build/releases/bcc6974a.../.
 - Real Battery path: work/playtest.json. Re-read the latest save while DeSmuME is

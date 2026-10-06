@@ -1,0 +1,51 @@
+[
+ {
+  "start": 20,
+  "end": 24,
+  "buttons": [
+   "B"
+  ]
+ },
+ {
+  "start": 40,
+  "end": 44,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 46,
+  "end": 50,
+  "buttons": [
+   "R"
+  ]
+ },
+ {
+  "start": 120,
+  "end": 124,
+  "buttons": [
+   "B"
+  ]
+ },
+ {
+  "start": 134,
+  "end": 138,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 146,
+  "end": 150,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 158,
+  "end": 162,
+  "buttons": [
+   "Y"
+  ]
+ }
+]

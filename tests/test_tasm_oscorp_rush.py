@@ -7,6 +7,7 @@ from tools.grip_compression import CompressedBlob
 from tools.gmb import Gmb
 from tools.sca import Sca
 from tools.qol_suits_menu import StringSlots
+from tools.tasm_kit import EXTRA_NAMES as KIT_NAMES  # current mods/ also holds kit clips
 
 @unittest.skipUnless(mod.DEFAULT_ROM.exists(),'Private original absent')
 class LocalRushTests(unittest.TestCase):
@@ -64,7 +65,7 @@ class LocalRushTests(unittest.TestCase):
 
     def test_text_preserves_other_composed_slots_and_is_idempotent(self):
         from tools.oscorp_resources import EXTRA_NAMES
-        overlays=mod.overlay_files(mod.ROOT/'mods',list(self.entries),added_names=EXTRA_NAMES)
+        overlays=mod.overlay_files(mod.ROOT/'mods',list(self.entries),added_names=(*EXTRA_NAMES,*KIT_NAMES))
         # Test this release's historical prerequisite text, not a later full
         # choreography release's revised instructions.
         q.compose(self.glob,self.manifest,overlays,f.TEXT_EDITS | r.TEXT_EDITS)

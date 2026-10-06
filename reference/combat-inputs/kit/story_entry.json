@@ -1,0 +1,67 @@
+[
+ {
+  "start": 720,
+  "end": 726,
+  "buttons": [
+   "A"
+  ]
+ },
+ {
+  "start": 840,
+  "end": 846,
+  "buttons": [
+   "A"
+  ]
+ },
+ {
+  "start": 960,
+  "end": 966,
+  "buttons": [
+   "A"
+  ]
+ },
+ {
+  "start": 1080,
+  "end": 1086,
+  "buttons": [
+   "A"
+  ]
+ },
+ {
+  "start": 1200,
+  "end": 1206,
+  "buttons": [
+   "A"
+  ]
+ },
+ {
+  "start": 1320,
+  "end": 1326,
+  "buttons": [
+   "A"
+  ]
+ },
+ {
+  "start": 1600,
+  "end": 1800,
+  "buttons": [
+   "Left"
+  ]
+ },
+ {
+  "start": 1700,
+  "end": 1708,
+  "buttons": [
+   "Left",
+   "B"
+  ]
+ },
+ {
+  "start": 1790,
+  "end": 1798,
+  "buttons": [
+   "Left",
+   "B"
+  ]
+ }
+]

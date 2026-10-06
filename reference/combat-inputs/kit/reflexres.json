@@ -1,0 +1,58 @@
+[
+ {
+  "start": 20,
+  "end": 24,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 40,
+  "end": 44,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 48,
+  "end": 52,
+  "buttons": [
+   "R"
+  ]
+ },
+ {
+  "start": 72,
+  "end": 76,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 96,
+  "end": 100,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 200,
+  "end": 204,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 210,
+  "end": 214,
+  "buttons": [
+   "R"
+  ]
+ },
+ {
+  "start": 240,
+  "end": 244,
+  "buttons": [
+   "Y"
+  ]
+ }
+]

@@ -1,0 +1,72 @@
+[
+ {
+  "start": 20,
+  "end": 24,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 36,
+  "end": 40,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 56,
+  "end": 60,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 84,
+  "end": 88,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 120,
+  "end": 124,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 220,
+  "end": 224,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 250,
+  "end": 254,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 270,
+  "end": 274,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 290,
+  "end": 294,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 310,
+  "end": 314,
+  "buttons": [
+   "Y"
+  ]
+ }
+]

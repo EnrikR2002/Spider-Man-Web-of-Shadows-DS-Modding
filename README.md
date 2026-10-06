@@ -10,8 +10,9 @@ Six core documents: [instructions](AGENTS.md), [tasks/backend queue](docs/TASKS.
 [ROM technical knowledge](docs/TECHNICAL.md), [original gameplay](docs/OG_GAMEPLAY.md),
 [implemented changes/releases](docs/CHANGES.md), [TASM redesign](docs/TASM_ROADMAP.md).
 Start with instructions/tasks; read other sections only as needed. No new
-feature/release/session Markdown files. Machine data belongs in reference/;
-reports/captures/scripts belong in ignored work/ or build/.
+feature/release/session/summary Markdown files. Machine data belongs in
+reference/; reports/captures/scratch scripts belong in ignored work/ or build/.
+The repo docs are the shared memory for every assistant working here.
 
 ## Agent workflow
 
@@ -28,6 +29,17 @@ python -m unittest discover -s tests -v
 # After isolated qualification, merge all accepted overlays/profile; emulator closed:
 python tools/playtest.py checkpoint before-feature
 python tools/playtest.py build
+```
+
+Red kit (v0.2.0+) and emulator research:
+
+```powershell
+python tools/assemble_tasm_kit.py            # after editing tools/tasm_kit.s (then re-pin hashes)
+python tools/tasm_kit.py                     # candidate build/version-<VERSION>
+python tools/kit_lab.py qualify build/version-0.2.0/Versioned.nds
+python tools/kit_lab.py trace <rom> <label> reflex --frames 300 --cap 30,40
+python tools/kit_lab.py preview spin 4,9     # stick-figure clip check
+python tools/kit_lab.py disasm 0x020B5C28 20
 ```
 
 Use the candidate's composed `--gameplay-profile` for new recipes; `original`

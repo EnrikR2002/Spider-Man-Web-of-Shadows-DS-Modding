@@ -1,0 +1,16 @@
+[
+ {
+  "start": 5,
+  "end": 40,
+  "buttons": [
+   "Right"
+  ]
+ },
+ {
+  "start": 70,
+  "end": 74,
+  "buttons": [
+   "R"
+  ]
+ }
+]

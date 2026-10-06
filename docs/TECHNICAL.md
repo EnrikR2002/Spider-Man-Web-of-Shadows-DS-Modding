@@ -263,9 +263,9 @@ whole file; individual audio editing is untested. Archive section `BSP + paired 
 
 Native21 purchase records, flags, costs and dependencies are mapped; read
 [GAMEPLAY](OG_GAMEPLAY.md) before paid route changes. Current recipe is guarded by
-`reference/gameplay_profile.json`. Known Rebound response, Vault lift, Sling
-movement/contact, HUD and training-refill hooks preserve native ownership.
-The HUD reserves16 KiB; free heap/VRAM peaks are unknown. Common player/enemy
+`reference/gameplay_profile.json` (now tasm-v0.2.0: v0.1.1 parent + Red kit;
+Sling's hooks restored, Rebound response retuned for Leapfrog). The HUD + kit
+extension reserves 24 KiB; free heap/VRAM peaks are unknown. Common player/enemy
 HP telemetry is actual loss, with specialized health coverage still incomplete.
 Training SELECT+Down refill has positive/flag-clear controls and preserves
 position/reaction/XP/meter; other target flags are unknown.
@@ -292,7 +292,10 @@ with focused evidence links; avoid appending another duplicate release log.
 
 ## Animation authoring and current evidence
 
-Updated 2026-10-05. Full choreography on the existing37-bone player rig works
+Updated 2026-10-05. **Current authoring path: `tools/kit_choreography.py` +
+`tools/kit_clips.py` (see "Kit animation authoring" below).** The Oscorp Rush
+material in this section is history: v0.2.0 re-authored its three resources as
+Split Decision. Full choreography on the existing37-bone player rig works
 through procedural FK/IK. Blender conversion, new rigs/models and variable
 clip duration remain research. Read [TASKS](TASKS.md) for current acceptance and
 [WORKFLOW](../README.md) before publication. Exact original investigations are
@@ -359,7 +362,7 @@ retain omitted helpers. Detailed conversion hypothesis and primary-source links
 are preserved in archived `ANIMATION_AUTHORING.md`, section `Rig mapping and
 Blender conversion`. No tested Blender import/export is claimed.
 
-### Current authored Oscorp Rush
+### Oscorp Rush (historical, superseded by Split Decision in v0.2.0)
 
 400 XP/event325/bit16. Input **Y, let Snap finish, Y,Y,Y**. The player confirmed
 novel choreography, rejected dance-like sway, then rejected compact boxing as
@@ -600,7 +603,7 @@ runtime/player acceptance requires separate checks. [Format entry points](TECHNI
 | Format / area | Likely or confirmed control | Parsing | Editing | Confidence / limitation |
 |---|---|---|---|---|
 | NDS / NitroFS | Executables/top-level resources | FNT/FAT/CRC/bounds/capacity validated | Exact no-op; resized files in64 MiB | High for tested no-overlay layout |
-| Glob.bin | Ordered named assets | 3,733 original; 3,736 authored resources verified | Variable sizes; three guarded Rush additions; IDs retained | High for tested append/revert; arbitrary names/manual GlobFiles rejected |
+| Glob.bin | Ordered named assets | 3,733 original; 3,742 authored resources verified | Variable sizes; Rush 3 + kit 6 guarded additions; IDs retained | High for tested append/revert; arbitrary names/manual GlobFiles rejected |
 | NSBTX | 3D pixels/palettes | 272 lossless;1654-texture census | Palette and bounded128x128 player I8 repaint | High bounded path; general format5 encoding absent |
 | NSBMD | Models/UVs/materials | Player export and rig/SBC mapped | Bounded player UV/material changes | No topology/skin/skeleton editor |
 | NSBTA | Material/texture animation | Inventory, XBD tag1 bindings | No local editor | Bindings confirmed; payload undecoded |
@@ -608,7 +611,7 @@ runtime/player acceptance requires separate checks. [Format entry points](TECHNI
 | XBD other kinds | UI/configuration, inferred | 92 UI-associated plus one envelope | Raw replacement only | Payload unknown |
 | GAB | Timed action events | 227 lossless record round trips | Existing bindings; no general event editor | Bounded event7/8/9 findings; event1 parameters unknown |
 | GMB | Root motion/contact geometry | 769 lossless;126 player layouts; compact codec decoded round trips | Single-word/root/response edits; no-op wrappers retained | Confirmed strides/selected motion; unknown geometry preserved |
-| SCA | Joint T/S/R animation | 869 exact/sample round trips;126 independent player bakes | Full Rush FK/IK, independent tracks and bounded limb translations | High tested growth/poses; scale/retime/Blender/heap/broad encounters open |
+| SCA | Joint T/S/R animation | 869 exact/sample round trips;126 independent player bakes | Kit FK/IK clips (flips, spins, handstand) at native sample counts; runtime routing | High tested growth/poses; scale/retime/Blender/heap/broad encounters open |
 | Player rig | Canonical37 names/ancestry | Model dictionary/SBC ancestry agree | Read-only map/authoring controls | DAE34-bone ordinals differ; no skin editor |
 | BSP | Room spatial/collision, hypothesis | 75 lossless envelopes/offsets | No geometry editor | High envelope; node/coordinate semantics unknown |
 | OBJ | Placements/triggers/encounters, hypothesis | 75 pairs;word0=2 | No object editor | Low;104-byte Save02/03 difference is a lead |
@@ -619,17 +622,17 @@ runtime/player acceptance requires separate checks. [Format entry points](TECHNI
 | CBMP | Custom bitmap, likely | 142 inventoried | No editor | Low |
 | MDAT / MGFX / MPAL | Scene groups, likely | 65 sets inventoried | No editor | Low |
 | SDAT | DS audio | Whole file preserved/hashed | Whole-file replacement surface only | Internal audio edits untested |
-| ARM9 | Rules/gates/health/movement | Hash-guarded known tables/hooks/autoload | Bounded accepted combat/HUD/refill/count patches | Unknown health/counter/speed paths;16 KiB reserved, headroom unmeasured |
+| ARM9 | Rules/gates/health/movement | Hash-guarded known tables/hooks/autoload | Bounded HUD/refill/count patches + Red kit hooks | Unknown health/counter/speed paths; 24 KiB reserved, headroom unmeasured |
 | Combo / health HUD | Native combo rewards, wounded bars | Model/category/common HP/projection mapped | Transient combo numeral/continuous bars | Specialized HP/density/ordinary hits and player feel open; no inferred damage |
 | Saves | Progress/ownership | DSVv0 wrapper exact;game payload opaque | Byte-preserving backups/guarded restores | Native buy/refund/save/reload tested; no game-save editor |
-| Purchases | Native7+7+7 rows | All21 costs/flags/dependencies mapped | Rebound13,Vault14,Sling15,Rush16 | Expanded rows/ownership/save migration unproved |
+| Purchases | Native7+7+7 rows | All21 costs/flags/dependencies mapped | Kit: Leapfrog13 Skyjack14 Perch15 Split16 Spin17 Reflex18 Sense19 | Expanded rows/ownership/save migration unproved |
 | Third suit | Independent selectable kit | Red/alternate routes partly mapped | Red prototype only | Selector/UI/persistent slot unimplemented |
 | Training refill | Common target max HP | Native flag4/chord/setter mapped | SELECT+Down in existing observer | Positive/flag-clear controls pass; no full state reset |
 | Performance/graphics | Host emulation/rendering/resolution | INI/source inference, host benchmarks, texture census | Optional inactive previews, compact changed GMBs | Idle threaded mean~15.9% lower; actual DeSmuME hitch/FPS/2x acceptance unproved |
 
-Released composition: seventeen overlays, original IDs retained,3,736 verified
-resources. Latest Rush has eight choreography tests/both-facing floor parity;
-prior compact source passed125 tests; maintenance now passes all131 source tests.
+Released composition (v0.2.0): 22 overlays, original IDs retained, 3,742
+verified resources (Rush 3 + kit 6 appended). Kit qualification 20/20
+(`python tools/kit_lab.py qualify`); 151 source tests pass.
 Player acceptance and ordinary/dense AI,
 specialized enemies/bosses, walls/ceilings/interruption/long play remain open.
 No game assets/saves/captures are included in source documentation.
@@ -841,3 +844,53 @@ contact site is restored to native. The enemy registry (12 slots, refreshed from
 the per-actor observer `0x02073A68`) is trusted for two ticks, so despawned
 actors are never dereferenced. Heap headroom after the larger reserve is not yet
 measured in dense scenes.
+
+### Kit animation authoring
+
+`kit_choreography.Clip` channels are keyed per sample: root (pelvis position),
+yaw/pitch/roll (full flips/spins; pitch + = forward), spine, head, chest-relative
+hand targets, pelvis-relative foot targets (or `plant_*` world ankles), knee/elbow
+poles and `point_*` toes. Body frame: X = Spidey's left, Y up, Z forward; the side
+camera shows Y/Z, so flips about X read best. Catmull-Rom curves keep velocity
+continuous. The player rejected per-key-eased clips (Rush) as "dancing": avoid
+holds at every key, use anticipation, overlap and follow-through. A clip must
+match its source action's sample count (2 emulator frames per sample) and place
+impacts on the native contact clocks. Workflow: edit `kit_clips.py` →
+`python tools/kit_lab.py preview CLIP 4,9` (stick figures, marked contact samples)
+→ `python tools/tasm_kit.py` (candidate) → `kit_lab trace ... --cap` + `sheet
+--box ... --scale 2` for in-game frames. Root height in a clip is visual only;
+gameplay movement comes from GMB root motion or kit code.
+
+## Research workflow and pitfalls (Red kit sessions)
+
+Tools: `tools/kit_lab.py` (trace/arena/qualify/preview/sheet/disasm/xrefs/words/
+patch); inputs `reference/combat-inputs/kit/`. Each emulator run happens in a
+quiet child process; read `build/boot-tests/<rom>-<hash>/<label>/trace.txt` or
+observations.json (state, action, node, facing, position, enemies).
+
+- Training room is deterministic; the story arena (room left of the save) is not:
+  spawns differ between runs. Use the dummy plus `--enemy-state F0:F1:15` to force
+  an attack for Spider-Sense-style logic, then confirm once in the arena.
+- Runtime RAM patches (`kit_lab patch` → `--patch`) need JIT disabled (the lab
+  does this). Put a branch table at the start of patch code: Keystone cannot
+  resolve labels from a source prefix.
+- Kit code: never read a pointer without a null check (a crash shows as a black
+  screen). ARM immediates must be encodable (use `ldr rX,=value`). Preserve flags
+  when hooking mid-function (`mrs/msr`).
+- A teleport must update motion+0x7C/+0x80 and actor copies +0x148/+0x180/+0x210/
+  +0x2CC. Repeating the same action skips resource lookup unless motion+0x2FC
+  bit1 is set (Spin Cycle uses this).
+- Growing the Glob shifts everything by about one emulator frame; parity checks
+  allow one constant phase (`kit_lab.same_behavior`).
+- Strings: no `;` in the text Huffman table. Button glyphs: `` B, ``
+  Y, `` A, `` X, `` R, `` L. Keep them as escapes in
+  source (editors may write raw private-use characters).
+- Kit change loop: edit `tools/tasm_kit.s` → `python tools/assemble_tasm_kit.py`
+  → update `CODE_SHA256`/`ARM9_SHA256` in tasm_kit.py and the profile's
+  `arm9_sha256` in release_info.py → bump VERSION/TEXT_EDITS for a new release
+  (a published version never changes bytes) → `python tools/tasm_kit.py` →
+  `python tools/kit_lab.py qualify build/version-X/Versioned.nds` → tests →
+  copy candidate mods + gameplay_profile.json → `python tools/playtest.py build`.
+  The kit source pins one code/ARM9 hash, so an older kit release profile is not
+  rebuildable from newer source; its rollback is the retained ROM in
+  `build/releases/<sha>/`.

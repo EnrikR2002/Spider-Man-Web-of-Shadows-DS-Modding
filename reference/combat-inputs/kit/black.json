@@ -1,0 +1,58 @@
+[
+ {
+  "start": 10,
+  "end": 16,
+  "buttons": [
+   "L"
+  ]
+ },
+ {
+  "start": 90,
+  "end": 94,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 100,
+  "end": 104,
+  "buttons": [
+   "R"
+  ]
+ },
+ {
+  "start": 160,
+  "end": 164,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 176,
+  "end": 180,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 192,
+  "end": 196,
+  "buttons": [
+   "Y"
+  ]
+ },
+ {
+  "start": 200,
+  "end": 230,
+  "buttons": [
+   "Left"
+  ]
+ },
+ {
+  "start": 208,
+  "end": 212,
+  "buttons": [
+   "Y"
+  ]
+ }
+]
