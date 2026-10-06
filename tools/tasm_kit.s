@@ -6,7 +6,7 @@
   b h_reflex_generic      // +00 from 020B5738  attack states 43..49 "stay"
   b h_reflex_string       // +04 from 020B5334  ground string non-cancel node
   b h_reflex_direction    // +08 from 020B5C58  evade choice after R queued
-  nop                     // +0C reserved
+  b h_spin_repeat         // +0C from 020B5508  Scissor repeat: queued Y direction
   b h_string_node         // +10 from 020C31E4  string node before action queue
   b h_update              // +14 from 02073B5C  after an actor controller update
   b h_observer            // +18 from 02073A68  per-actor observer (enemy registry)
@@ -53,7 +53,9 @@ h_reflex_direction:
   cmp r0,#0
   beq reflex_native
   // Remember the cancelled node so the string exit keeps it alive longer.
-  ldr r0,=0x02154C20
+  mov r0,#0x02000000       // KIT_STATE without a literal: the end pool is
+  orr r0,r0,#0x154000      // beyond the 4 KiB literal reach here
+  orr r0,r0,#0xc20
   mov r1,#1
   str r1,[r0,#4]
   bl kit_keys
@@ -66,7 +68,9 @@ h_reflex_direction:
   b 0x020b5da4              // neutral: in-place spider-sense dodge (state 53)
 reflex_turn:
   // Directional: face the held side, then the native forward roll (state 57).
-  ldr r0,=0x02154C20
+  mov r0,#0x02000000       // KIT_STATE without a literal: the end pool is
+  orr r0,r0,#0x154000      // beyond the 4 KiB literal reach here
+  orr r0,r0,#0xc20
   mov r2,#1
   str r2,[r0,#0x10]
   ldr r0,[r5,#0x44]
@@ -149,14 +153,23 @@ split_face:                 // r0=controller
   tst r0,#0x10
   movne r1,#1
   bne split_turn
-  // Hits 1-2 prefer an enemy behind; the sweep takes the nearest.
-  mov r0,r6
+  // Hits 1-2 prefer an enemy behind within 12 units; otherwise (and for the
+  // sweep) the nearest, so a far enemy behind never turns him off a close one.
   cmp r5,#17
-  moveq r1,#0
-  movne r1,#1
+  beq split_nearest
+  mov r0,r6
+  mov r1,#1
+  mov r2,#0xc000
+  bl kit_target_in
+  cmp r0,#0
+  bne split_found
+split_nearest:
+  mov r0,r6
+  mov r1,#0
   bl kit_target
   cmp r0,#0
   beq split_out
+split_found:
   mov r1,r2
 split_turn:
   mov r0,r6
@@ -193,6 +206,20 @@ string_back_native:
   pop {r0,r1,r2,r3,lr}
   ldr r0,[r4]
   b 0x020b6b58
+
+// Native repeats only take neutral/forward Y; Y+back or up/down leaves the
+// spin for the sweep. While spinning, any direction counts as a repeat (the
+// native accept path, which reads the direction twice), so steering away from
+// the aimed enemy keeps him spinning. r1=command, r8=controller.
+h_spin_repeat:
+  push {r1,r2,r3,lr}
+  ldr r0,[r8,#0x44]
+  bl kit_spin_active
+  cmp r0,#0
+  pop {r1,r2,r3,lr}
+  bne 0x020b5560
+  ldr r0,[r1,#4]
+  b 0x020b550c
 
 // Native allows 6 + 2*tier repeats; Spin Cycle keeps going while Y is mashed.
 h_spin_limit:
@@ -234,50 +261,84 @@ update_done:
   mov r2,#0
   b 0x02073b60
 
-// Bit 17 (Scissor slot): handstand spin while repeating node 16. Steer with
-// Left/Right; flip facing once per loop so the two contacts cover both sides.
+// Bit 17 (Scissor slot): handstand spin while repeating node 16. Before each
+// of the loop's two contacts (clocks 4 and 9) aim: an enemy on the other side
+// within hit reach wins (crowds get both sides), else the nearest within spin
+// reach (16 units). Left/Right steers; with neither held he glides toward the enemy he
+// faces until it is inside hit reach, so both contacts land.
 spin_update:                // r0=actor
   push {r4,r5,r6,lr}
   mov r4,r0
   bl kit_spin_active
   ldr r2,=0x02154C20
   cmp r0,#0
-  streq r0,[r2,#0x14]       // spin entry latch
-  beq spin_out
+  bne spin_active
+  ldr r1,[r2,#0x14]         // spin entry latch
+  cmp r1,#0
+  strne r0,[r4,#0x18]       // leaving the spin: drop steer/glide velocity
+  str r0,[r2,#0x14]
+  str r0,[r2,#8]            // aimed contact half
+  b spin_out
+spin_active:
   ldr r5,[r4,#0x30]
   // First spin update: ask the motion to re-commit action 60 so the
   // resource lookup (h_anim_route) swaps in the spin clip.
   ldr r1,[r2,#0x14]
   cmp r1,#0
-  bne spin_steer
+  bne spin_aim
   mov r1,#1
   str r1,[r2,#0x14]
   ldr r1,[r5,#0x2fc]
   orr r1,r1,#2
   str r1,[r5,#0x2fc]
-spin_steer:
+spin_aim:
+  ldr r0,[r5,#0x178]        // action clock, 0..11 per loop
+  cmp r0,#6
+  movlo r6,#1
+  movhs r6,#2
+  ldr r1,[r2,#8]
+  cmp r1,r6
+  beq spin_move
+  str r6,[r2,#8]
+  mov r0,r4
+  mov r1,#1                 // prefer the other side...
+  mov r2,#0x7000            // ...within hit reach (7 units)
+  bl kit_target_in
+  cmp r0,#0
+  bne spin_turn
+  mov r0,r4
+  mov r1,#0                 // else the nearest within spin reach
+  mov r2,#0x10000
+  bl kit_target_in
+  cmp r0,#0
+  beq spin_move
+spin_turn:
+  mov r1,r2
+  mov r0,r4
+  bl kit_face
+spin_move:
   bl kit_keys
   mov r1,#0
   tst r0,#0x10
   movne r1,#0x2800
   tst r0,#0x20
   ldrne r1,=0xffffd800
-  str r1,[r4,#0x18]
-  ldr r0,[r5,#0x178]        // action clock, 0..11 per loop
-  ldr r2,=0x02154C20
-  cmp r0,#6
-  movlo r1,#0
-  strlo r1,[r2,#8]
-  blo spin_out
-  ldr r1,[r2,#8]
-  cmp r1,#0
-  bne spin_out
-  mov r1,#1
-  str r1,[r2,#8]
-  ldr r1,[r5,#0x180]
-  eor r1,r1,#1
+  tst r0,#0x30
+  bne spin_velocity
   mov r0,r4
-  bl kit_face
+  mov r1,#2                 // nearest enemy on the facing side
+  mov r2,#0x10000
+  bl kit_target_in
+  mov r1,#0
+  cmp r0,#0
+  beq spin_velocity
+  cmp r3,#0x4800            // already inside hit reach
+  ble spin_velocity
+  cmp r2,#1
+  moveq r1,#0x2000
+  ldrne r1,=0xffffe000
+spin_velocity:
+  str r1,[r4,#0x18]
 spin_out:
   pop {r4,r5,r6,pc}
 
@@ -973,10 +1034,16 @@ obs_done:
   pop {r0,r1,r2,r3,r4,r5,r6,r7,r12,lr}
   b 0x02151920
 
-// kit_target(actor, prefer_behind) -> r0=enemy actor or 0, r2=facing toward it.
-// Fresh registry entries within 40 units horizontally and 10 vertically.
+// kit_target(actor, mode) -> r0=enemy actor or 0, r2=facing toward it, r3=|dx|
+// (modes 0/2). Fresh registry entries within 40 units horizontally and 10
+// vertically. Mode 0 nearest, 1 prefer behind, 2 facing side only.
+// kit_target_in takes the horizontal reach in r2.
 kit_target:
+  mov r2,#0x28000
+kit_target_in:
   push {r4,r5,r6,r7,r8,r9,r10,r11,lr}
+  sub sp,sp,#4
+  str r2,[sp]
   mov r10,r1
   ldr r4,[r0,#0x30]
   ldr r5,[r4,#0x7c]
@@ -1011,10 +1078,23 @@ target_loop:
   mov r12,r3
   cmp r12,#0
   rsblt r12,r12,#0
-  cmp r12,#0x28000
+  ldr r2,[sp]
+  cmp r12,r2
   bgt target_next
   cmp r10,#0
   beq target_score
+  cmp r10,#2
+  bne target_behind
+  cmp r11,#1                // facing side only
+  bne target_front_left
+  cmp r3,#0
+  ble target_next
+  b target_score
+target_front_left:
+  cmp r3,#0
+  bge target_next
+  b target_score
+target_behind:
   // prefer behind: an enemy opposite the facing side scores far better
   cmp r11,#1
   bne target_left
@@ -1037,6 +1117,8 @@ target_next:
   subs r7,r7,#1
   bne target_loop
   mov r2,lr
+  mov r3,r8
+  add sp,sp,#4
   pop {r4,r5,r6,r7,r8,r9,r10,r11,pc}
 
 // ---------------------------------------------------------------- animation routing

@@ -41,24 +41,25 @@ REFLEX_FLIP = Clip('reflex_flip', 8, {
     'point_r': [(0, 0.), (1, 1.), (4, 1.), (5, .3), (6, 0.)],
 })
 
-# Spin Cycle: inverted spider handstand, straddled legs whirling one full turn
-# per 12-sample loop (repeats of node 16). The straddle is symmetric, so the
-# kit's mid-loop facing flip (sample 6) is visually seamless. Legs scissor
-# wider through the two contact samples (4, 9) for a whipping read.
+# Spin Cycle: inverted spider handstand, legs locked straight in a wide,
+# near-horizontal split that whirls one full turn per 12-sample loop (repeats of
+# node 16) like helicopter blades at chest height. The split is symmetric, so a
+# kit facing change between contacts is visually seamless. The striking leg
+# (right at 4, left at 9) flattens and reaches through its contact; the other lifts.
 SPIN = Clip('spin', 12, {
-    'root': [(0, (0., 4.55, 0.)), (3, (0., 4.75, 0.)), (6, (0., 4.55, 0.)), (9, (0., 4.75, 0.)), (11, (0., 4.6, 0.))],
+    'root': [(0, (0., 4.55, 0.)), (3, (0., 4.7, 0.)), (6, (0., 4.55, 0.)), (9, (0., 4.7, 0.)), (11, (0., 4.6, 0.))],
     'yaw': [(0, -30.), (11, 300.)],
-    'pitch': [(0, 172.), (6, 166.), (11, 171.)],
-    'roll': [(0, 6.), (3, -6.), (6, 6.), (9, -6.), (11, 4.)],
-    'spine_pitch': [(0, -12.), (6, -18.), (11, -13.)],
+    'pitch': [(0, 170.), (6, 165.), (11, 169.)],
+    'roll': [(0, 5.), (3, -5.), (6, 5.), (9, -5.), (11, 4.)],
+    'spine_pitch': [(0, -10.), (6, -15.), (11, -11.)],
     'head_pitch': [(0, -35.)],
     'hand_l': [(0, (1.15, 3.05, .45))], 'hand_r': [(0, (-1.15, 3.05, .45))],
     'elbow_l': [(0, (2.2, 1.0, -.8))], 'elbow_r': [(0, (-2.2, 1.0, -.8))],
-    'foot_l': [(0, (2.55, -3.5, .2)), (2, (2.0, -3.9, .9)), (4, (3.1, -3.0, .3)), (7, (2.2, -3.8, -.5)),
-               (9, (2.9, -3.2, .2)), (11, (2.5, -3.5, .2))],
-    'foot_r': [(0, (-2.55, -3.5, -.2)), (2, (-3.0, -3.1, -.4)), (4, (-2.3, -3.8, .6)), (7, (-3.1, -3.0, .2)),
-               (9, (-2.1, -3.9, -.6)), (11, (-2.55, -3.5, -.2))],
-    'knee_l': [(0, (1.6, -1.0, 2.0))], 'knee_r': [(0, (-1.6, -1.0, 2.0))],
+    'foot_l': [(0, (4.85, -1.7, .2)), (2, (4.6, -2.2, -.4)), (4, (4.55, -2.4, -.6)), (7, (4.9, -1.6, .4)),
+               (9, (5.05, -.95, .5)), (11, (4.85, -1.7, .2))],
+    'foot_r': [(0, (-4.85, -1.7, -.2)), (2, (-4.9, -1.5, .3)), (4, (-5.05, -.95, .5)), (7, (-4.6, -2.25, -.5)),
+               (9, (-4.55, -2.4, -.6)), (11, (-4.85, -1.7, -.2))],
+    'knee_l': [(0, (2.4, -2.4, 1.6))], 'knee_r': [(0, (-2.4, -2.4, 1.6))],
     'point_l': [(0, 1.)], 'point_r': [(0, 1.)],
 })
 

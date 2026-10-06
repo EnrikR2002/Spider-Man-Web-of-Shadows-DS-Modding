@@ -164,18 +164,20 @@ an unowned or non-Red state stays native.
 Also needed: where bits 18/19 are queried (passive speed), so the bonus is kept
 while new gates are added. ARM9 headroom (16 KiB reserved) is still unmeasured.
 
-## Status (v0.2.0) and next iterations
+## Status (v0.2.1) and next iterations
 
-All seven shipped as simplest working versions, agent-tested on the training
-dummy (Spider-Sense also against live symbiotes); feel is unconfirmed.
+All seven shipped in v0.2.0 as simplest working versions. Player verdict on
+v0.2.0 (2026-10-05): "very good"; only the helicopter spin missed every other
+hit and looked like breakdancing, fixed in v0.2.1 (CHANGES). Per-skill feel is
+still unconfirmed.
 
-| Skill | v0.2.0 first version | Next iteration once mapped/played |
+| Skill | Shipped version | Next iteration once mapped/played |
 |---|---|---|
 | Spider Reflex | Ground/air R cancel, directional roll, 28-update resume | Dedicated flip for neutral R; Enhanced Dodge interplay; dodge-cancel from more paid states |
 | Spider-Sense | Enemy attack state 15 → teleport behind + heavy kick | Hit-anticipation timing, slow-motion, tingle marker, other enemy attack states |
 | Spider Perch | Snare follow-up → held stomp pounding, Y chains, spring-off | B/A exits and head-hopping, boss shake-off, entry from jumps/walls |
-| Split Decision | Auto-face per hit + new choreography | True two-sided contact geometry |
-| Spin Cycle | Long steerable handstand spin, alternating sides | Exit flourish, spin-to-launch |
+| Split Decision | Auto-face per hit (behind preference within 12 units) + new choreography | True two-sided contact geometry |
+| Spin Cycle | v0.2.1: straight blade-leg handstand spin; each contact aims (other side within 7, else nearest within 16), glide into reach, any-direction repeats | Exit flourish, spin-to-launch |
 | Leapfrog | Native kick + vault over the popped target | Vault before the kick once grappled targets can be hit mid-pull |
 | Skyjack | Floating juggle, drift, spike finisher | Impact damage/bowling on landing, crowd spike |
 

@@ -43,6 +43,11 @@ PROFILE_INFO = {
                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                     'arm9_sha256': '99392f5df4a0d2b37652ca5e0d040ae0d2a14702bd6a4fdfc1be3dbe0a91db77'},
+    # Spin Cycle aims each contact and glides into reach; straight blade-leg spin clip.
+    'tasm-v0.2.1': {'version': '0.2.1', 'date': '2026-10-05', 'kit': True, 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': 'e0f1c3d333712efca521782ddb83fde50c3d23fd981bded13daafa1790a1ee16'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

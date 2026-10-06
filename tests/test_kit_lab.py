@@ -20,6 +20,11 @@ class KitLabTests(unittest.TestCase):
         moved = [(-20, 0, 99, 1, 10), (21, 46, 56, 1, 10), (41, 53, 139, 0, 10)]
         self.assertFalse(kit_lab.same_behavior(moved, base))
 
+    def test_spin_hits_counts_hp_drops_of_the_first_enemy(self):
+        rows = [{'en': [(hp, [0, 0], 0, 99)]} for hp in (100, 100, 90, 90, 80, 85, 70)]
+        self.assertEqual(kit_lab.spin_hits(rows), 3)
+        self.assertEqual(kit_lab.spin_hits(rows[:1]), 0)
+
 
 if __name__ == '__main__':
     unittest.main()

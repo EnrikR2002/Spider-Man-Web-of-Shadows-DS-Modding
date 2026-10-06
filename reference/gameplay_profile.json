@@ -1,9 +1,9 @@
 {
-  "profile": "tasm-v0.2.0",
-  "release_version": "0.2.0",
+  "profile": "tasm-v0.2.1",
+  "release_version": "0.2.1",
   "required_overlays": {
-    "American.strings": "9baa2dcc869600a847239ed3fa633836d048ed5f5a5875b38eb016ac1069c410",
-    "English.strings": "9baa2dcc869600a847239ed3fa633836d048ed5f5a5875b38eb016ac1069c410",
+    "American.strings": "14656f36bb53d8d483202aa6266a2c969b02fcf73bf1cbb545e5250a8ad8a08c",
+    "English.strings": "14656f36bb53d8d483202aa6266a2c969b02fcf73bf1cbb545e5250a8ad8a08c",
     "MissionMiniMapIcon.pal": "5072156a663205facf22310c98913e01febb028c74edd1c196e7db26985b5787",
     "spd.nsbmd": "8ddbdac95ba919b50d4c107f491936b10eea2ae65b2117ed1a6d9fa0ce6f5ad0",
     "spd.nsbtx": "62052b3cd8034c11e28c44de9b6d1b1bf36f6298d8fbfb0315bd92a7f2244948",
@@ -21,7 +21,7 @@
     "zz_kit_ReflexFlip.sca": "916dd4f17d8c7476a5250809f96d8eb24e41a217af80df00221292f632f9bf25",
     "zz_kit_SenseCounter.sca": "a823e0d707fa5f595f189fc5033b66d0cda7126695211f9d6a5e7f1759f880e1",
     "zz_kit_SkyAxe.sca": "e3b58921800bc6c423305bc8e37ec018cfeef6cde87f6dce1e9f843007c37b66",
-    "zz_kit_Spin.sca": "5b4a8849878c78ab6614747846a6aa83251671b8fb0573e2aa1a0061ce186e1c",
+    "zz_kit_Spin.sca": "6e810d537873a0cfeff6273a3836eba6820c6daccc5293a090a96c7c7bc82d67",
     "zz_tasm_RushBridge.sca": "c478f8775845e28d92cd48f8b645a794f0f35c4560b4063c9f47b0b09762466b",
     "zz_tasm_RushEntry.sca": "ec653be102bd3f408ae147a7cdf8407ccf5eeadd9f0a4550156e7a307740f79b",
     "zz_tasm_RushFinish.sca": "5766f0df098a5779dc45831febf703d82cba13c73bd7cf2f317f7f5178355771"

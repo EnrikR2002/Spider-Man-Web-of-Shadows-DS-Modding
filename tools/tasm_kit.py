@@ -40,6 +40,7 @@ HOOKS = {
     0x02070480: (0x1C, 0xE5DD0040),  # ldrb r0,[sp,#0x40] action record lookup
     0x020B6B54: (0x20, 0xE5940000),  # ldr r0,[r4]        Y+back turn attack choice
     0x020B5464: (0x24, 0xE1D809D3),  # ldrsb r0,[r8,#0x93] Red Scissor repeat limit
+    0x020B5508: (0x0C, 0xE5910004),  # ldr r0,[r1,#4]     Scissor repeat queued direction
     0x020B7B18: (0x28, 0xE5D01028),  # ldrb r1,[r0,#0x28] air attack stay
     0x020728F0: (0x2C, 0xEA03798A),  # Sling action-queue branch -> Perch substitution
 }
@@ -73,7 +74,7 @@ CLIP_SOURCES = {
     'zz_tasm_RushFinish.sca': ('spd_GroundAttack17.sca', 'split_sweep'),
 }
 PROFILE = 'tasm-kit'
-VERSION = '0.2.0'
+VERSION = '0.2.1'
 RELEASE_DATE = '2026-10-05'
 RELEASE_PROFILE = f'tasm-v{VERSION}'
 PARENT_RELEASE = 'tasm-v0.1.1'
@@ -99,8 +100,8 @@ TEXT_EDITS = {
 
 def uses_kit(profile):
     return profile == PROFILE or bool(release_info.PROFILE_INFO.get(profile, {}).get('kit'))
-CODE_SHA256 = '68b22ad3b91e7d608e13d8abba393afec37cf32af562c3d82b97c5445cf851da'
-ARM9_SHA256 = '99392f5df4a0d2b37652ca5e0d040ae0d2a14702bd6a4fdfc1be3dbe0a91db77'
+CODE_SHA256 = 'd3851f52a9128f74650a28916a6831c594051727d49a0edb527e3daf0c9ed8bd'
+ARM9_SHA256 = 'e0f1c3d333712efca521782ddb83fde50c3d23fd981bded13daafa1790a1ee16'
 
 
 def branch(source, target):
@@ -233,7 +234,7 @@ def author_overlays(glob, entries):
 
 
 def generate(output=None):
-    """Candidate v0.2.0: accepted v0.1.1 overlays + kit clips + Red text + version."""
+    """Kit candidate: accepted v0.1.1 (or prior kit) overlays + kit clips + Red text + version."""
     import json
     import mod
     from tools import combat_profile as cp, oscorp_resources as expansion
@@ -247,9 +248,9 @@ def generate(output=None):
     overlays = mod.overlay_files(mod.ROOT / 'mods', list(entries), added_names=(*expansion.EXTRA_NAMES, *EXTRA_NAMES))
     current = cp.load_recipe(recipe_path, overlays)
     recipe = json.loads(recipe_path.read_text(encoding='utf-8'))
-    if current not in (PARENT_RELEASE, RELEASE_PROFILE):
-        raise ValueError('Kit release requires the accepted v0.1.1 (or same-version) recipe')
-    if current == PARENT_RELEASE and set(overlays) != set(recipe['required_overlays']):
+    if current not in (PARENT_RELEASE, RELEASE_PROFILE) and not uses_kit(current):
+        raise ValueError('Kit release requires the accepted v0.1.1, a kit release or same-version recipe')
+    if current != RELEASE_PROFILE and set(overlays) != set(recipe['required_overlays']):
         raise ValueError('Explicit merge required for additional overlays')
     overlays.update(author_overlays(glob, entries))
     for name in ('English.strings', 'American.strings'):

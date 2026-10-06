@@ -821,6 +821,13 @@ Red: 11 Snap(56) → 12(57) → 13(58) → 14(59); pause branch 11 → 15(61) �
 after leaving 46; entering 46 with a live node advances via `0x020C2F94`
 (alt branch if bit16 Red / bit23 Black and enough pause). Scissor limit
 `6+2*tier` (`0x020B5434`); `0x020B5464` is reached only on the Red bit-17 path.
+Repeats are decided near the end of each loop in the state-46 blocker: a queued
+Y (`0x020B54E0`) is fetched and its direction word (+4) read twice
+(`0x020B5508`, `0x020B5538`): 2 (up/down) rejects; 0 and 4 repeat only when
+forward (actor vfunc `+0xD0` facing test), so Y+back rejects; others accept at
+`0x020B5560` (consume, set +0x64 bit 15, stay 46). A rejected Y then reaches the
+Y transition, which re-enters 46 and advances 16 -> 17 (the sweep). v0.2.1 hooks
+`0x020B5508` to jump to the accept path during an owned spin.
 
 ### Actions, resources and actors
 
@@ -868,6 +875,10 @@ patch); inputs `reference/combat-inputs/kit/`. Each emulator run happens in a
 quiet child process; read `build/boot-tests/<rom>-<hash>/<label>/trace.txt` or
 observations.json (state, action, node, facing, position, enemies).
 
+- `trace --near U` starts Spidey U units left of the training dummy (all position
+  copies). Native string hits home in to about 5 units; spin contacts land at
+  5.4-6 units when facing the dummy and never when facing away. Dummy HP drops
+  2048 per spin contact; `kit_lab.spin_hits` counts drops.
 - Training room is deterministic; the story arena (room left of the save) is not:
   spawns differ between runs. Use the dummy plus `--enemy-state F0:F1:15` to force
   an attack for Spider-Sense-style logic, then confirm once in the arena.
@@ -877,6 +888,12 @@ observations.json (state, action, node, facing, position, enemies).
 - Kit code: never read a pointer without a null check (a crash shows as a black
   screen). ARM immediates must be encodable (use `ldr rX,=value`). Preserve flags
   when hooking mid-function (`mrs/msr`).
+- Keystone pitfalls (v0.2.1): a literal more than 4 KiB before the end pool is
+  silently wrapped (Reflex read a code word as the state pointer and hung); a
+  mid-file `.ltorg` mis-resolves every later absolute branch to native code by the
+  pool offset (black screen on room load). Keep one `.ltorg` at the end and build
+  far constants from immediates (`mov/orr`). `assemble_tasm_kit.py` now rejects
+  both. Code is ~4.4 KiB of the 7.75 KiB before the route table.
 - A teleport must update motion+0x7C/+0x80 and actor copies +0x148/+0x180/+0x210/
   +0x2CC. Repeating the same action skips resource lookup unless motion+0x2FC
   bit1 is set (Spin Cycle uses this).

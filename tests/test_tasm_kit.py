@@ -1,4 +1,4 @@
-"""Red kit ARM9 extension, authored clips and v0.2.0 release composition (clean ROM)."""
+"""Red kit ARM9 extension, authored clips and kit release composition (clean ROM)."""
 import struct
 import unittest
 import mod
@@ -89,6 +89,20 @@ class TasmKitTests(unittest.TestCase):
             sca = Sca.parse(data)
             self.assertEqual(sca.to_bytes(), data)
             self.assertEqual(sca.joint_count, 37)
+
+    def test_spin_legs_are_straight_blades_not_a_breakdance_v(self):
+        # v0.2.1 player feedback: legs locked out in a wide, near-horizontal split.
+        import math
+        from tools.animation_rig import AnimationRig
+        from tools.kit_choreography import Rig
+        rig = Rig(Sca.parse(self.clean('spd_Idle.sca')), AnimationRig.parse(self.clean('spd.nsbmd')).parents)
+        full = math.dist(rig.bind_p[26], rig.bind_p[27]) + math.dist(rig.bind_p[27], rig.bind_p[28])
+        for s, pos in enumerate(rig.bake(kit_clips.SPIN)[2]):
+            for hip, ankle in ((26, 28), (30, 32)):
+                leg = [pos[ankle][i] - pos[hip][i] for i in range(3)]
+                self.assertGreater(math.dist(pos[hip], pos[ankle]) / full, .94, s)
+                self.assertLess(math.degrees(math.atan2(leg[1], math.hypot(leg[0], leg[2]))), 35., s)
+            self.assertGreater(math.dist(pos[28], pos[32]), 9., s)
 
     def test_curves_hit_their_keys_and_reject_unknown_channels(self):
         keys = [(0, 0.), (3, 90.), (7, 10.)]

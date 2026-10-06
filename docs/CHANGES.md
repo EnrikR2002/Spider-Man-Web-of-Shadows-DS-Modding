@@ -14,6 +14,40 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.2.1 - 2026-10-05 - Spin Cycle reach and blade legs
+
+Published through Play Spider-Man.cmd's stable ROM. SHA256
+`00ca471c9627cf389cce4850423a7dc6a91938f6cc315ad9fbecbe9f72f03bc1`
+(ARM9 `e0f1c3d3...`, kit code `d3851f52...`). Title and Options show v0.2.1.
+Player feedback on v0.2.0: kit "very good"; the helicopter spin hit only every
+other time and looked like breakdancing.
+
+- **Spin Cycle aims every contact.** v0.2.0 flipped facing once per loop, so
+  against one enemy every second contact kicked empty air (measured: 7 of 14
+  contacts landed). Now, before each of the loop's two contacts, Spidey faces an
+  enemy on the other side within 7 units (crowds still get both sides), else the
+  nearest within 16 units.
+- **Longer reach.** With no direction held, he glides (2 units/update) toward the
+  enemy he faces until it is within 4.5 units, from up to 16 units away.
+- **Steering no longer ends the spin.** Native Scissor repeats rejected Y with a
+  back (or up/down) direction and fell into the sweep; during an owned spin any
+  direction now repeats (new hook `0x020B5508`).
+- **No slide after the spin.** Steering/glide velocity is cleared when the spin
+  ends (v0.2.0 kept drifting ~9 units into the sweep, which then missed).
+- **Split Decision never turns off a close target.** Hits 1-2 prefer an enemy
+  behind only within 12 units (was 40); otherwise they face the nearest.
+- **Blade legs.** New spin clip: legs locked straight (96-99% extension) in a wide
+  near-horizontal split (9.5-unit span, 3-33 degrees above horizontal, was 80% and
+  45-60 degrees, a V); the forward leg flattens through each contact.
+
+Agent-tested (training dummy, copied save): qualification 23/23
+(`work/kit/evidence.json`), including three new spin checks that fail on v0.2.0
+(contacts landing vs a lone dummy 14/14, back-steer then glide back, sweep still
+in reach). Captured in-game frames show straight blade legs and hit sparks on
+contacts. 152 source tests pass. Real DSV `75bb8efc...` checkpointed; v0.2.0 ROM
+retained for rollback. Not yet player-confirmed: look, reach feel in crowds,
+glide strength against moving enemies.
+
 ## v0.2.0 - 2026-10-05 - "Never stand still" Red kit
 
 Published through Play Spider-Man.cmd's stable ROM. SHA256

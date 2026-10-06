@@ -7,13 +7,13 @@ build/boot-tests/<rom>-<hash>/<label>/ (observations.json, trace.txt, frames)
 and work/kit/ (previews, sheets, qualification evidence).
 
   trace ROM LABEL INPUTS [--frames N --bits B --clear-bits B --enemy-state F0:F1:S
-                          --patch P.json --probe ADDR:LEN --cap a,b --ram a,b]
-      Training room ("Test Upgrades" dummy). INPUTS frames are relative to
+                          --patch P.json --probe ADDR:LEN --cap a,b --ram a,b --near U]
+      Training room ("Test Upgrades" dummy); --near U starts Spidey U units left of it. INPUTS frames are relative to
       control start (frame 3030). Red bits are OR-ed in 20 frames before start.
   arena ROM LABEL INPUTS [--tx X --ty Y ...]
       Sewer room left of the story save with live symbiotes; Spidey is teleported
       (all position copies) onto the floor. Spawns vary between runs.
-  qualify ROM          v0.2.0 kit checks (20) incl. native/Black parity vs the
+  qualify ROM          kit checks (23) incl. native/Black parity vs the
                        stable parent; writes work/kit/evidence.json.
   preview CLIP [marks] stick-figure sheet of a tools/kit_clips.py clip.
   sheet DIR [x0,y0,x1,y1 scale cols]  contact sheet of captured frames.
@@ -143,7 +143,7 @@ def run(rom, label, inputs, **options):
 
 
 def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=None, patch=None, probe=None,
-        caps=(), rams=(), arena=False, tx=120000, ty=40922, save=None):
+        caps=(), rams=(), arena=False, tx=120000, ty=40922, save=None, near=None):
     """One disposable emulator run; returns (output directory, observation rows)."""
     rom = Path(rom).resolve()
     rel = rows_from(inputs) if not isinstance(inputs, list) else inputs
@@ -170,15 +170,18 @@ def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=N
         if frame == start - 20:
             set_bits(lib, bits, clear)
             ptr, ram = ram_of(lib)
-            if arena:   # teleport: base position plus every actor position copy
+            if not arena:   # training dummy: generous HP so a run never kills it
+                for e in enemies(ram):
+                    c.memmove(ptr + e['actor'] - p.BASE + 0x44, struct.pack('<2i', 65536, 65536), 8)
+                if near is not None and enemies(ram):   # stand `near` (Q12) left of the dummy
+                    tx = enemies(ram)[0]['position'][0] - near
+                    ty = struct.unpack_from('<i', ram, p.sample(ram)['motion_address'] - p.BASE + 0x80)[0] +                         struct.unpack_from('<i', ram, p.sample(ram)['motion_address'] - p.BASE + 0x164)[0]
+            if arena or near is not None:   # teleport: base position plus every actor position copy
                 o = p.sample(ram); mot = o['motion_address'] - p.BASE; act = o['actor_address'] - p.BASE
                 lx, ly = struct.unpack_from('<2i', ram, mot + 0x160)
                 c.memmove(ptr + mot + 0x7C, struct.pack('<2i', tx - lx, ty - ly), 8)
                 for off in (0x148, 0x180, 0x210, 0x2CC):
                     c.memmove(ptr + act + off, struct.pack('<2i', tx, ty), 8)
-            else:       # training dummy: generous HP so a run never kills it
-                for e in enemies(ram):
-                    c.memmove(ptr + e['actor'] - p.BASE + 0x44, struct.pack('<2i', 65536, 65536), 8)
         if enemy_state and start + enemy_state[0] <= frame < start + enemy_state[1]:
             ptr, ram = ram_of(lib)
             for e in enemies(ram):
@@ -215,12 +218,17 @@ def same_behavior(a, b):
     return len(shifts) <= 1 and all(abs(s) <= 2 for s in shifts)
 
 
+def spin_hits(rows):
+    """Number of HP drops of the first enemy across consecutive rows."""
+    return sum(1 for x, y in zip(rows, rows[1:]) if y['en'][0][0] < x['en'][0][0])
+
+
 def first(rows, cond):
     return next((r for r in rows if cond(r)), None)
 
 
 def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a31b005e201c7c4e276fc46dbf3e5d842/Spider-Man-WoS-modded.nds'):
-    """Measured expectations for the v0.2.0 kit; parent = v0.1.1 for native parity."""
+    """Measured expectations for the kit (v0.2.0 + v0.2.1 spin); parent = v0.1.1 for native parity."""
     def go(label, name, frames, **kw): return run(rom, label, INPUTS / f'{name}.json', frames=frames, **kw)[1]
     ck = {}
     o = go('q_reflex', 'reflex', 300)
@@ -237,6 +245,15 @@ def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a3
     ck['spin_repeat_active'] = len(spin) > 20
     ck['spin_steers_left'] = bool(spin and min(r['pos'][0] for r in spin) < spin[0]['pos'][0] - 40000)
     ck['split_and_spin_damage'] = o[-1]['en'][0][0] < 65536
+    # v0.2.1: every spin contact lands on a lone enemy (aim per contact, glide into reach)
+    o = go('q_spin_reach', 'spinreach', 330, near=6 * 4096)
+    spin = [r for r in o if r['node'] == 16 and r['f64'] & 0x8000]
+    ck['spin_every_contact_hits'] = len(spin) > 60 and spin_hits(spin) >= 12
+    o = go('q_spin_glide', 'spinglide', 300, near=6 * 4096)
+    late = [r for r in o if r['f'] >= 140 and r['node'] == 16 and r['f64'] & 0x8000]
+    ck['spin_survives_back_steer_and_glides_back'] = len(late) > 60 and spin_hits(late) >= 8
+    sweep = [r for r in o if r['node'] == 17 and r['act'] == 62]
+    ck['spin_exit_keeps_sweep_in_reach'] = bool(sweep and sweep[-1]['en'][0][0] < sweep[0]['en'][0][0])
     o = go('q_perch', 'perch2', 320)
     pounds = [r for r in o if r['st'] == 51 and r['act'] == 130]
     ck['perch_pounds'] = len(pounds) > 20
@@ -423,6 +440,7 @@ def main(argv=None):
         s.add_argument('--patch', default=''); s.add_argument('--probe', default='')
         s.add_argument('--cap', default=''); s.add_argument('--ram', default=''); s.add_argument('--save', default=None)
         s.add_argument('--tx', type=int, default=120000); s.add_argument('--ty', type=int, default=40922)
+        s.add_argument('--near', type=float, default=None, help='training: start this many units left of the dummy')
     s = sub.add_parser('_child'); s.add_argument('request')
     s = sub.add_parser('qualify'); s.add_argument('rom'); s.add_argument('--parent', default=None)
     s = sub.add_parser('preview'); s.add_argument('clip'); s.add_argument('marks', nargs='?', default='')
@@ -443,7 +461,8 @@ def main(argv=None):
             dest, rows = run(a.rom, a.label, inputs, frames=a.frames, bits=int(a.bits, 0), clear=int(a.clear_bits, 0),
                              enemy_state=state, patch=a.patch or None, probe=probe, save=a.save,
                              caps=[int(x) for x in a.cap.split(',') if x], rams=[int(x) for x in a.ram.split(',') if x],
-                             arena=a.cmd == 'arena', tx=a.tx, ty=a.ty)
+                             arena=a.cmd == 'arena', tx=a.tx, ty=a.ty,
+                             near=None if a.near is None else round(a.near * 4096))
             print(dest / 'trace.txt')
         elif a.cmd == '_child':
             req = json.loads(a.request)
