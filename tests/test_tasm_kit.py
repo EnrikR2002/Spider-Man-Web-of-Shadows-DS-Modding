@@ -72,6 +72,15 @@ class TasmKitTests(unittest.TestCase):
             self.assertEqual(struct.unpack_from('<3I', rows, i * 12), (action, route, names.index(name)))
         self.assertEqual(rows[-12:], bytes(12))
 
+    def test_kit_never_writes_the_false_actor_position_copies(self):
+        # Spidey's actor allocation is 0xF4 bytes; +0x148/+0x180/+0x210/+0x2CC
+        # are past its end. v0.4.0 Spider-Sense stored x there and corrupted
+        # the heap (crash/freeze). Motion +0x180 is facing (read only).
+        import re
+        source = (kit.Path(kit.__file__).with_name('tasm_kit.s')).read_text(encoding='utf-8')
+        stores = re.findall(r'^\s*str\w*\s+\w+,\s*\[\w+,\s*#(0x148|0x180|0x210|0x2cc)\]', source, re.M | re.I)
+        self.assertEqual(stores, [])
+
     def test_unknown_parent_and_double_apply_rejected(self):
         with self.assertRaises(ValueError):
             kit.apply_rom(self.kit)

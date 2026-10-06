@@ -58,6 +58,12 @@ PROFILE_INFO = {
                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                     'arm9_sha256': 'b4e91fdd3b90d033d849306028756a014f71d79ed2343d923bca197a2e933fdc'},
+    # Freeze/clip fix: Sense dashes (no teleport/heap writes), Leapfrog and Perch
+    # move by velocity, pointer checks, neutral Reflex consumes R (CHANGES v0.4.1).
+    'tasm-v0.4.1': {'version': '0.4.1', 'date': '2026-10-06', 'kit': True, 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': 'b806e50864957323fe8a92a856166d22627d5548b9e4340ab68e82f352a7cf6f'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

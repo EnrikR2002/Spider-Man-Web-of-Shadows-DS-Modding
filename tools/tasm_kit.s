@@ -64,9 +64,12 @@ h_reflex_direction:
   tst r0,#0x10
   bne reflex_turn
   // Neutral: the in-place dodge (state 53) plays the back tuck (route kind 8).
+  // 020B5DA4 consumes the queued command type in r2: it must be 3 (R); 1
+  // would eat a queued Y and leave the R queued (v0.4.0 bug).
   ldr r0,lit_02154c20
   mov r2,#1
   str r2,[r0,#0x368]
+  mov r2,#3
   b 0x020b5da4
 reflex_turn:
   // Directional: face the held side, then the native forward roll (state 57).
@@ -590,15 +593,7 @@ perch_hold:
   subeq r0,r0,#0x1800       // just behind the head on the near side
   addne r0,r0,#0x1800
   add r1,r1,#0x7000         // standing on the head
-  ldr r2,[r5,#0x160]
-  sub r0,r0,r2
-  str r0,[r5,#0x7c]
-  ldr r2,[r5,#0x164]
-  sub r1,r1,r2
-  str r1,[r5,#0x80]
-  mov r0,#0
-  str r0,[r4,#0x18]
-  str r0,[r4,#0x1c]
+  bl perch_steer
   b perch_out
 perch_spring:               // B: high flip off the head, steer with Left/Right
   mov r0,#0
@@ -659,15 +654,7 @@ perch_hop:                  // r0 = step 1..8: arc from the start to the new hea
   mul r3,r2,r6
   mov r2,#0x600             // arc: 6 units at mid-hop
   mla r1,r3,r2,r1
-  ldr r2,[r5,#0x160]
-  sub r0,r0,r2
-  str r0,[r5,#0x7c]
-  ldr r2,[r5,#0x164]
-  sub r1,r1,r2
-  str r1,[r5,#0x80]
-  mov r0,#0
-  str r0,[r4,#0x18]
-  str r0,[r4,#0x1c]
+  bl perch_steer
   add r6,r6,#1
   cmp r6,#8
   movgt r6,#0
@@ -700,6 +687,25 @@ perch_end:
   str r1,[r4,#0x1c]
 perch_out:
   pop {r4,r5,r6,r7,r8,pc}
+
+// perch_steer: r0/r1 = wanted x/y, r4 = actor, r5 = motion. v0.4.1: velocity
+// toward the point (at most 6 units per update) instead of a position write,
+// so native collision keeps the ride and the head-hop out of walls/ceilings.
+perch_steer:
+  push {r0,lr}
+  ldr r2,[r5,#0x7c]
+  ldr r3,[r5,#0x160]
+  add r2,r2,r3
+  sub r0,r0,r2
+  bl leap_clamp
+  str r0,[r4,#0x18]
+  ldr r2,[r5,#0x80]
+  ldr r3,[r5,#0x164]
+  add r2,r2,r3
+  sub r0,r1,r2
+  bl leap_clamp
+  str r0,[r4,#0x1c]
+  pop {r0,pc}
 
 // perch_flip(motion): play the Reflex front flip (route kind 7) for 8 updates.
 perch_flip:
@@ -791,14 +797,51 @@ fresh_loop:
   ldr r4,[r1,#12]
   add r4,r4,#2
   cmp r4,r2
-  movhi r0,#1
-  pophi {r4,pc}
+  bhi fresh_alive
 fresh_next:
   add r1,r1,#16
   subs r3,r3,#1
   bne fresh_loop
   mov r0,#0
   pop {r4,pc}
+fresh_alive:
+  bl kit_alive
+  pop {r4,pc}
+
+// kit_alive(r0=actor) -> r0=1 if its vtable is in the class range and its
+// motion (+0x30) and controller (motion+0x1F8, may be 0) pointers are RAM.
+// A registry entry is trusted for two ticks; an actor freed and reused in
+// that window must not be dereferenced (v0.4.0 abort in the Sense scan).
+kit_alive:
+  push {r1,r2,lr}
+  mov r1,r0
+  bl kit_ram_ok
+  cmp r0,#0
+  beq alive_no
+  ldr r2,[r1]
+  ldr r0,lit_02120000
+  cmp r2,r0
+  blo alive_no
+  ldr r0,lit_0213df00
+  cmp r2,r0
+  bhi alive_no
+  ldr r0,[r1,#0x30]
+  bl kit_ram_ok
+  cmp r0,#0
+  beq alive_no
+  ldr r2,[r1,#0x30]
+  ldr r0,[r2,#0x1f8]
+  cmp r0,#0
+  beq alive_yes
+  bl kit_ram_ok
+  cmp r0,#0
+  beq alive_no
+alive_yes:
+  mov r0,#1
+  pop {r1,r2,pc}
+alive_no:
+  mov r0,#0
+  pop {r1,r2,pc}
 
 // ---------------------------------------------------------------- literals
 // One labelled table mid-code (ARM literal loads reach 4 KiB either way).
@@ -815,6 +858,7 @@ lit_02154b20: .word 0x02154B20
 lit_02154c20: .word 0x02154C20
 lit_7fffffff: .word 0x7FFFFFFF
 lit_ffff7000: .word 0xFFFF7000
+lit_ffffa000: .word 0xFFFFA000
 lit_ffffd800: .word 0xFFFFD800
 lit_ffffe000: .word 0xFFFFE000
 lit_ffffec00: .word 0xFFFFEC00
@@ -822,9 +866,14 @@ lit_fffff000: .word 0xFFFFF000
 
 // ---------------------------------------------------------------- Leapfrog
 // Bit 13 (Web Kick slot): the native pull and kick connect (damage, low pop);
-// after the hit-stop Spidey front-flips over the target in six updates (also
-// through the following fall state), lands past it and turns back toward it.
-// Latch at +0x310: 0 idle, 1 kick started, 2 vaulting (step count at +0x320).
+// after the hit-stop Spidey front-flips over the target in six updates (kick
+// clocks 3-8), lands 3 units past it and turns back toward it.
+// v0.4.1: horizontal velocity (desired point - current position, at most 6
+// units per update, plus the cancelled Rebound recoil), so native collision
+// stops it at walls; no position writes. The kick state ignores vertical
+// velocity: the height over his head is the clip's (visual) root.
+// Latch at +0x310: 0 idle, 1 kick started, 2 vaulting (step count at +0x320),
+// 3 landed.
 leap_update:                // r0=actor
   push {r4,r5,r6,r7,r8,lr}
   mov r4,r0
@@ -856,7 +905,10 @@ leap_update:                // r0=actor
   str r0,[r8,#0x31c]
   mov r1,#1
   str r1,[r8,#0x310]
-leap_wait:                  // contact + hit-stop occupy clocks 0..1
+leap_wait:                  // contact + hit-stop occupy the kick's clocks 0..1
+  ldr r0,[r5,#0x254]        // the first kick update still shows the pull's clock
+  cmp r0,#50
+  bne leap_out
   ldr r0,[r5,#0x178]
   cmp r0,#2
   blt leap_out
@@ -877,7 +929,7 @@ leap_vault:
   cmpne r7,#19
   cmpne r7,#20
   cmpne r7,#24
-  bne leap_reset
+  bne leap_cut
   ldr r0,[r8,#0x31c]
   bl kit_fresh
   cmp r0,#0
@@ -885,7 +937,7 @@ leap_vault:
   ldr r0,[r8,#0x320]
   add r0,r0,#1
   str r0,[r8,#0x320]
-  sub r0,r0,#1              // step index 0..5
+  sub r0,r0,#1              // step index 0..5 (kick clocks 3..8)
   ldr r1,[r8,#0x31c]
   ldr r1,[r1,#0x30]
   ldr r2,[r1,#0x7c]
@@ -899,40 +951,30 @@ leap_vault:
   adr r1,leap_progress
   ldr r1,[r1,r0,lsl #2]
   mul r12,r2,r1
-  add r3,r3,r12,asr #8
-  adr r1,leap_height
-  ldr r1,[r1,r0,lsl #2]
-  mov r2,#0x8000
-  mul r12,r2,r1
-  ldr r2,[r8,#0x318]
-  add r2,r2,r12,asr #8
-  ldr r1,[r5,#0x160]
-  sub r3,r3,r1
-  str r3,[r5,#0x7c]
-  ldr r1,[r5,#0x164]
-  sub r2,r2,r1
-  str r2,[r5,#0x80]
-  mov r1,#0
-  str r1,[r4,#0x18]
-  str r1,[r4,#0x1c]
+  add r3,r3,r12,asr #8      // desired x
+  push {r0}
+  ldr r1,[r5,#0x7c]
+  ldr r12,[r5,#0x160]
+  add r1,r1,r12
+  sub r0,r3,r1
+  bl leap_recoil
+  add r0,r0,r1
+  bl leap_clamp
+  str r0,[r4,#0x18]
+  pop {r0}
   cmp r0,#5
   blt leap_out
-  str r3,[r8,#0x314]        // landing base x/y for the hold
-  str r2,[r8,#0x318]
   mov r1,#3
   str r1,[r8,#0x310]
   b leap_out
-leap_landed:                // hold the landing through the kick's end; no recoil hop
+leap_landed:                // cancel the kick's recoil step through its end
+  bl leap_recoil
+  str r1,[r4,#0x18]
+  cmp r7,#43
+  beq leap_out
+leap_cut:                   // the vault was cut short: stop, still face him
   mov r1,#0
   str r1,[r4,#0x18]
-  str r1,[r4,#0x1c]
-  cmp r7,#43
-  bne leap_turn
-  ldr r1,[r8,#0x314]
-  str r1,[r5,#0x7c]
-  ldr r1,[r8,#0x318]
-  str r1,[r5,#0x80]
-  b leap_out
 leap_turn:
   mov r1,#0
   str r1,[r8,#0x310]
@@ -955,12 +997,39 @@ leap_turn:
   bl kit_face
   b leap_out
 leap_reset:
+  ldr r0,[r8,#0x310]
+  cmp r0,#2                 // cut short mid-vault: drop the vault velocity
+  moveq r0,#0
+  streq r0,[r4,#0x18]
   mov r0,#0
   str r0,[r8,#0x310]
 leap_out:
   pop {r4,r5,r6,r7,r8,pc}
-leap_progress: .word 50, 110, 165, 210, 240, 256
-leap_height:   .word 150, 235, 256, 210, 120, 0
+leap_progress: .word 45, 105, 165, 215, 245, 256
+// The Web Kick GMB (Rebound, v0.1.1) steps back 4096, 6144, 6144, 4096 on
+// clocks 5-8. leap_recoil -> r1 = the velocity that cancels this update's step.
+leap_recoil:                // r5=motion; keeps r0
+  ldr r1,[r5,#0x254]
+  cmp r1,#50
+  movne r1,#0
+  bxne lr
+  ldr r1,[r5,#0x178]
+  cmp r1,#8
+  movhi r1,#0
+  bxhi lr
+  adr r12,leap_rebound
+  ldr r1,[r12,r1,lsl #2]
+  ldr r12,[r5,#0x180]       // facing 1 = right: the step goes left
+  cmp r12,#1
+  rsbne r1,r1,#0
+  bx lr
+leap_rebound:  .word 0, 0, 0, 0, 0, 4096, 6144, 6144, 4096
+leap_clamp:                 // r0 = clamp(r0, +-6 units)
+  cmp r0,#0x6000
+  movgt r0,#0x6000
+  cmn r0,#0x6000
+  ldrlt r0,lit_ffffa000
+  bx lr
 
 // ---------------------------------------------------------------- hit capture
 // The native contact dispatcher calls the victim's ReceiveHit interface
@@ -1011,6 +1080,23 @@ capture_info:
   str r0,[r5,#0x3e8]        // victim part: the replay hits someone else
 capture_done:
   pop {r0,r1,r2,r3,r4,r5,r12}
+  // Spider-Sense dash guard: a hit on Spidey is answered "ignored" (1, as
+  // for native get-up states) without calling his ReceiveHit.
+  push {r0,r2}
+  ldr r2,lit_02154c20
+  ldr r2,[r2,#0x344]
+  cmp r2,#0
+  beq capture_native
+  ldr r2,[r1,#-8]
+  ldr r0,lit_0212e3f0
+  cmp r2,r0
+  bne capture_native
+  pop {r0,r2}
+  mov r2,#1
+  str r2,[r0]
+  b 0x0207862c
+capture_native:
+  pop {r0,r2}
   ldr lr,lit_0207862c
   bx r4
 
@@ -1059,6 +1145,11 @@ ram_bad:
 kit_replay_hit:
   push {r4,lr}
   sub sp,sp,#0x10
+  mov r4,r0
+  bl kit_alive
+  cmp r0,#0
+  beq replay_none
+  mov r0,r4
   ldr r4,lit_02154c20
   add r1,r0,#8
   ldr r12,[r1]
@@ -1302,8 +1393,13 @@ sky_out:
 // ---------------------------------------------------------------- Spider-Sense
 // Bit 19 (Ultimate Speed slot, needs bit 18): R while an enemy is mid-attack
 // (melee state 15 within 12 units, ranged state 16 within 16) flips Spidey
-// behind that attacker, facing him,
-// straight into the heavy string kick (node 14) with the reversal animation.
+// over that attacker into the heavy string kick (node 14) with the reversal
+// animation. v0.4.1: no teleport. He dashes 3 units past the attacker in four
+// updates with velocity, which the native collision resolves (a position
+// write could put him inside walls or floors), then turns to face him.
+// Counter +0x344 (7 at the press): dash while 6..3, turn at 2, and while it
+// is above 0 hits on Spidey are ignored (h_hit_capture). +0x340 = 1 dash
+// left / 2 dash right (also routes the clip), +0x348 attacker, +0x34C target x.
 sense_try:                  // r0=controller -> r0=1 if the counter was set up
   push {r4,r5,r6,r7,r8,r9,r10,r11,lr}
   mov r4,r0
@@ -1346,9 +1442,14 @@ sense_loop:
   bgt sense_next
   cmp r2,lr
   bge sense_next
-  ldr r3,[r1,#0x30]
+  push {r0,r1,r2,lr}
+  mov r0,r1
+  bl kit_alive
+  mov r3,r0
+  pop {r0,r1,r2,lr}
   cmp r3,#0
   beq sense_next
+  ldr r3,[r1,#0x30]
   ldr r3,[r3,#0x1f8]
   cmp r3,#0
   beq sense_next
@@ -1368,41 +1469,40 @@ sense_next:
   bne sense_loop
   cmp r0,#0
   beq sense_no
-  // Behind the attacker: 3 units past him on the far side, facing back.
+  // Lock the attacker; aim 3 units past him and face him (the dash direction).
+  ldr r9,lit_02154c20
+  str r0,[r9,#0x348]
   ldr r1,[r0,#0x30]
   ldr r2,[r1,#0x7c]
   ldr r3,[r1,#0x160]
   add r2,r2,r3              // ex
   cmp r2,r7
   addgt r3,r2,#0x3000
-  movgt r10,#0              // land right of him: face left
+  movgt r10,#1              // he is right of Spidey: dash right
   suble r3,r2,#0x3000
-  movle r10,#1
-  ldr r1,[r6,#0x160]
-  sub r1,r3,r1
-  str r1,[r6,#0x7c]
-  str r3,[r5,#0x148]
-  str r3,[r5,#0x180]
-  str r3,[r5,#0x210]
-  str r3,[r5,#0x2cc]
+  movle r10,#0
+  str r3,[r9,#0x34c]
+  add r1,r10,#1
+  str r1,[r9,#0x340]
+  mov r1,#7
+  str r1,[r9,#0x344]
   mov r0,r5
   mov r1,r10
   bl kit_face
   mov r0,#13                // entering 46 advances to node 14: heavy kick
   str r0,[r4,#0x80]
-  ldr r0,lit_02154c20
-  mov r1,#1
-  str r1,[r0,#0x340]
   mov r0,#1
   pop {r4,r5,r6,r7,r8,r9,r10,r11,pc}
 sense_no:
   mov r0,#0
   pop {r4,r5,r6,r7,r8,r9,r10,r11,pc}
 
-sense_update:               // r0=actor: the counter flag lasts while node 14 plays
-  ldr r1,[r0,#0x30]
+sense_update:               // r0=actor: dash, turn; the flag lasts while node 13/14 plays
+  push {r4,r5,r6,lr}
+  mov r4,r0
+  ldr r5,lit_02154c20
+  ldr r1,[r4,#0x30]
   ldr r1,[r1,#0x1f8]
-  ldr r3,lit_02154c20
   cmp r1,#0
   beq sense_clear
   ldr r2,[r1,#0x14]
@@ -1411,11 +1511,97 @@ sense_update:               // r0=actor: the counter flag lasts while node 14 pl
   ldr r2,[r1,#0x80]
   cmp r2,#14
   cmpne r2,#13
-  bxeq lr
+  bne sense_clear
+  ldr r6,[r5,#0x344]
+  subs r6,r6,#1
+  blt sense_out
+  str r6,[r5,#0x344]
+  cmp r6,#2
+  blt sense_out             // 1, 0: guard only
+  beq sense_turn
+  // Dash step (r6 = 6..3): velocity = remaining / updates left (4..1).
+  bl sense_target_x         // r0 = target x
+  ldr r1,[r4,#0x30]
+  ldr r2,[r1,#0x7c]
+  ldr r3,[r1,#0x160]
+  add r2,r2,r3              // px
+  sub r0,r0,r2
+  sub r1,r6,#2
+  adr r2,sense_recip
+  ldr r2,[r2,r1,lsl #2]
+  mul r3,r0,r2
+  mov r0,r3,asr #8
+  cmp r0,#0x6000            // at most 6 units per update
+  movgt r0,#0x6000
+  cmn r0,#0x6000
+  ldrlt r0,lit_ffffa000
+  str r0,[r4,#0x18]
+  b sense_out
+sense_turn:                 // dash over: stop and face the attacker
+  mov r0,#0
+  str r0,[r4,#0x18]
+  ldr r1,[r5,#0x340]
+  cmp r1,#2
+  moveq r1,#0               // dashed right: by default face back left
+  movne r1,#1
+  ldr r0,[r5,#0x348]
+  push {r1}
+  bl kit_fresh
+  pop {r1}
+  cmp r0,#0
+  beq sense_face
+  ldr r0,[r5,#0x348]
+  ldr r0,[r0,#0x30]
+  cmp r0,#0
+  beq sense_face
+  ldr r2,[r0,#0x7c]
+  ldr r3,[r0,#0x160]
+  add r2,r2,r3              // ex
+  ldr r0,[r4,#0x30]
+  ldr r3,[r0,#0x7c]
+  ldr r0,[r0,#0x160]
+  add r3,r3,r0              // px
+  cmp r2,r3
+  movgt r1,#1
+  movle r1,#0
+sense_face:
+  mov r0,r4
+  bl kit_face
+  b sense_out
 sense_clear:
-  mov r2,#0
-  str r2,[r3,#0x340]
-  bx lr
+  ldr r1,[r5,#0x344]
+  cmp r1,#2                 // cut short mid-dash: drop the dash velocity
+  movgt r1,#0
+  strgt r1,[r4,#0x18]
+  mov r1,#0
+  str r1,[r5,#0x340]
+  str r1,[r5,#0x344]
+sense_out:
+  pop {r4,r5,r6,pc}
+
+sense_target_x:             // r5=KIT_STATE -> r0 = 3 units past the attacker (last known)
+  push {lr}
+  ldr r0,[r5,#0x348]
+  bl kit_fresh
+  cmp r0,#0
+  beq sense_target_old
+  ldr r0,[r5,#0x348]
+  ldr r0,[r0,#0x30]
+  cmp r0,#0
+  beq sense_target_old
+  ldr r1,[r0,#0x7c]
+  ldr r0,[r0,#0x160]
+  add r0,r0,r1
+  ldr r1,[r5,#0x340]
+  cmp r1,#2
+  addeq r0,r0,#0x3000
+  subne r0,r0,#0x3000
+  str r0,[r5,#0x34c]
+  pop {pc}
+sense_target_old:
+  ldr r0,[r5,#0x34c]
+  pop {pc}
+sense_recip: .word 0, 256, 128, 85, 64
 
 // ---------------------------------------------------------------- enemy registry
 // Every live common-health enemy refreshes a slot each update. Entries are

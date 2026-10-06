@@ -79,8 +79,8 @@ CLIP_SOURCES = {
     'zz_tasm_RushFinish.sca': ('spd_GroundAttack17.sca', 'split_sweep'),
 }
 PROFILE = 'tasm-kit'
-VERSION = '0.4.0'
-RELEASE_DATE = '2026-10-05'
+VERSION = '0.4.1'
+RELEASE_DATE = '2026-10-06'
 RELEASE_PROFILE = f'tasm-v{VERSION}'
 PARENT_RELEASE = 'tasm-v0.1.1'
 # Red purchase names (menu/list) and instructions; boot and Options version.
@@ -105,8 +105,8 @@ TEXT_EDITS = {
 
 def uses_kit(profile):
     return profile == PROFILE or bool(release_info.PROFILE_INFO.get(profile, {}).get('kit'))
-CODE_SHA256 = '68b1129e6862f29efed68c524a5428503f8399a6ff81c1ea526ca141f01e19eb'
-ARM9_SHA256 = 'b4e91fdd3b90d033d849306028756a014f71d79ed2343d923bca197a2e933fdc'
+CODE_SHA256 = '3826b452a3a8ac9cdeb3fb9c3b66d27afe9843b648bf769434c83a22a41e68ca'
+ARM9_SHA256 = 'b806e50864957323fe8a92a856166d22627d5548b9e4340ab68e82f352a7cf6f'
 
 
 def branch(source, target):

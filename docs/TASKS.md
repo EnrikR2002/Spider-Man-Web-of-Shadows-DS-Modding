@@ -1,30 +1,48 @@
 # Current work, backend queue and handoff
 
-Updated 2026-10-05 (America/Edmonton). Read this and AGENTS at startup; then only
+Updated 2026-10-06 (America/Edmonton). Read this and AGENTS at startup; then only
 the section relevant to the task. Shipped history: [CHANGES](CHANGES.md); ROM
 knowledge: [TECHNICAL](TECHNICAL.md); combat design: [TASM_ROADMAP](TASM_ROADMAP.md).
 
 ## Current work
 
-**v0.4.0 published (stable `5e6465d8`, profile tasm-v0.4.0).** Player confirmed
-v0.3.0 ("looks feels way better") and set a rule: keep it super fast, no
-slow-motion (AGENTS). v0.4.0: the Skyjack spike now bowls enemies near the
-landing with a native knockdown hit, using a new hit-capture/replay primitive
-(TECHNICAL "Hit pipeline"). Agent-tested: work/kit/evidence.json 28/28 plus arena
-runs (bowl fired when an enemy was within 8 units). Real save `75bb8efc...`
-checkpointed (unchanged: the player has not saved in-game since v0.2.1).
+**v0.4.1 published (stable `da324b3c`, profile tasm-v0.4.1).** Player verdict on
+v0.4.0: lots of fun, smooth, but Sense/Leapfrog "teleporty", a Sense flip clipped
+him out of the level, and a crowd fight with Y/R spam froze the game. Root cause
+(TECHNICAL "Freeze root cause and crash hunting"): the Sense teleport wrote x past
+Spidey's 0xF4-byte actor into the heap. v0.4.1: Sense is a 4-update velocity dash
+with a guard window and a new flip/roundhouse clip; Leapfrog vault and Perch move
+by velocity; `kit_alive` pointer checks; neutral Reflex consumes R. Rule in AGENTS:
+no teleports. Agent-tested: qualification 31/31 (work/kit/evidence.json), crash
+hunt 0/48 corrupt or crashed vs v0.4.0 9/48 corrupt, 2 crashed. Real save
+`80c3ed12...` checkpointed before publication (player saved since v0.4.0).
 
 ## Ordered next development
 
-1. **Player playtest of v0.4.0:** Skyjack bowling feel/radius in real crowds;
-   Perch hop Y-chaining on real enemies (only lab-phantom tested); bosses.
-2. Use the hit replay for more crowd play: Spin Cycle hitting enemies it passes
-   through, Leapfrog kick-through, *Stop Hitting Yourself*. Keep the pace fast.
-3. Remaining TASM_ROADMAP iterations: Spider-Sense timing and tingle marker (no
-   slow-motion); Perch boss shake-off and entry from jumps/walls; Leapfrog vault
-   before the kick; Spin Cycle exit flourish; Split Decision two-sided contacts.
-4. Confirm enemy state 24 (action 41) as an attack; measure heap in a boss room.
-5. Player feedback on incoming hits, walls/ceilings, HUD crowding and long play.
+1. **Player playtest of v0.4.1:** long crowd fights with Y/R/held-R spam (no
+   freeze?), Sense dash feel and guard window, Leapfrog vault feel, Perch near
+   walls; still open from v0.4.0: Skyjack bowling radius, Perch hop on real
+   crowds, bosses.
+2. Crowd play with the hit replay (TECHNICAL "Hit pipeline"): Spin Cycle hits
+   enemies it passes through; Leapfrog kick-through (the popped enemy bowls the
+   one behind him); *Stop Hitting Yourself*. Keep the pace fast.
+3. Spider-Sense tingle: a marker over an enemy starting an attack behind or
+   off-screen (no slow-motion). Needs a sprite/HUD hook (TECHNICAL HUD notes).
+4. Remaining TASM_ROADMAP iterations: Perch boss shake-off and entry from
+   jumps/walls; Leapfrog vault before the kick; Spin Cycle exit flourish and
+   spin-to-launch; Split Decision two-sided contacts.
+5. Confirm enemy state 24 (action 41) as an attack; measure heap in a boss room;
+   run `tools/crash_hunt.py batch` in a boss room and a second level.
+
+## New ideas to discuss with the player (2026-10-06)
+
+Within the 7 Red slots (extensions, no new shop rows): air Reflex toward an enemy
+becomes a web-zip hop to him (chain aerial hops between enemies, Lizard-fight
+style); wall bounce: Reflex into a nearby wall rebounds into a flying kick;
+Split Decision sweep launches into a short juggle; Skyjack finisher can be
+steered into a chosen enemy; Perch spring lands into a dive kick. Needing shop
+rows (research): web tags (tag now, yank later), web spray crowd stun, yank
+objects/crates into enemies, Clap, Reel, Cocoon.
 
 ## Backend ideas retained
 
@@ -38,16 +56,21 @@ kit. Shared progression/traversal remain intact. Research/ideas are not releases
 ## Evidence and safe resumption
 
 - Kit: source `tools/tasm_kit.{py,s,hex}`, `tools/kit_choreography.py`,
-  `tools/kit_clips.py`; candidate `build/version-0.4.0` (regenerate:
+  `tools/kit_clips.py`; candidate `build/version-0.4.1` (regenerate:
   `python tools/tasm_kit.py`). Constants only via the `lit_` table (TECHNICAL
-  pitfalls); `assemble_tasm_kit.py` checks literals and native branches. Research/qualification: `tools/kit_lab.py`
-  (inputs `reference/combat-inputs/kit/`; last evidence work/kit/evidence.json,
-  28/28). Fixtures: `--near U`, `--phantom DX` (training), `--place DX:DY|skip`
-  (arena; non-deterministic, retry until the scenario happens). Workflow and pitfalls: TECHNICAL "Research workflow and pitfalls".
-  work/kit/ holds only old scratch from the first session; do not depend on it.
+  pitfalls); `assemble_tasm_kit.py` checks literals and native branches. Kit code
+  never writes positions and checks other actors with `kit_alive`.
+- Research/qualification: `tools/kit_lab.py` (inputs `reference/combat-inputs/kit/`;
+  evidence work/kit/evidence.json, 31/31). Fixtures: `--near U`, `--at X`,
+  `--phantom DX`, `--place DX:DY|skip` (training and arena; arena is
+  non-deterministic). Lab teleports now use `kit_lab.teleport` (motion base and
+  probes); older lab runs corrupted the heap. Freeze/crash hunting:
+  `python tools/crash_hunt.py batch FIRST LAST --rom R` (outputs work/crash/),
+  `regs STATE --ram RAM` decodes aborts. Workflow: TECHNICAL "Research workflow".
 - Prior releases (candidate mods + recipe in build/version-X, ROM rollback in
-  build/releases/<sha>/): v0.3.0 `34736eeb`, v0.2.1 `00ca471c`, v0.2.0 `935d486b`,
-  v0.1.1 `bcc6974a`.
+  build/releases/<sha>/): v0.4.0 `5e6465d8` (freeze bug), v0.3.0 `34736eeb`,
+  v0.2.1 `00ca471c`, v0.2.0 `935d486b`, v0.1.1 `bcc6974a`. All kit releases before
+  v0.4.1 carry the Sense heap bug; do not roll back to them.
 - Real Battery path: work/playtest.json. Re-read the latest save while DeSmuME is
   closed before publication/checkpoints; verify wrapper/snapshot bytes. Player only
   launches/Continues/plays/saves/closes. Agent owns other operations.

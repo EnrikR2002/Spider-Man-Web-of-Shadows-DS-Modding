@@ -25,6 +25,20 @@ class KitLabTests(unittest.TestCase):
         self.assertEqual(kit_lab.spin_hits(rows), 3)
         self.assertEqual(kit_lab.spin_hits(rows[:1]), 0)
 
+    def test_teleport_moves_base_and_probes_keeping_probe_offsets(self):
+        import ctypes, struct
+        buf = ctypes.create_string_buffer(0x300)
+        struct.pack_into('<2i', buf, 0x7C, 100, 200)       # base
+        struct.pack_into('<2i', buf, 0x160, 10, 20)        # local: absolute (110, 220)
+        for off, dy in zip(kit_lab.PROBES, (-5, 7, -5)):
+            struct.pack_into('<2i', buf, off, 110, 220 + dy)
+        kit_lab.teleport(ctypes.addressof(buf), buf.raw, 0, 1000, 2000)
+        self.assertEqual(struct.unpack_from('<2i', buf, 0x7C), (990, 1980))
+        for off, dy in zip(kit_lab.PROBES, (-5, 7, -5)):
+            self.assertEqual(struct.unpack_from('<2i', buf, off), (1000, 2000 + dy))
+        # Never the old false "actor copies" (past the 0xF4-byte actor: heap corruption).
+        self.assertTrue(set(kit_lab.PROBES).isdisjoint({0x148, 0x180, 0x210, 0x2CC}))
+
 
 if __name__ == '__main__':
     unittest.main()

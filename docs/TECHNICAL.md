@@ -809,7 +809,9 @@ Blockers: `0x020B52F8` (states 43..49) returns stay unless actor+0x28 = 1
 (animation cancel window) or, for 46, the node is cancelable; `0x020B7AA4` does
 the same for the air attack. Evade `0x020B5774` (generic path `0x020B5C28`):
 lock, then R → roll 57 (Down/running), Enhanced 54, air 55/52 or dodge 53.
-Y transition `0x020B6968` returns 47 for Y+back. Web-kick pull → kick switches
+Y transition `0x020B6968` returns 47 for Y+back. The evade exits consume the
+queued command whose type is in r2 (`0x020B5DA4`: dodge 53 expects r2 = 3, R);
+v0.2.0-v0.4.0 entered it with r2 = 1 and ate a queued Y instead of the R. Web-kick pull → kick switches
 at `0x020B6574` when the target is within `[0x021341F4+0x58]`.
 
 ### Ground string nodes
@@ -837,8 +839,18 @@ SCA/GMB/GAB. Repeats of the same action skip the lookup unless motion+0x2FC bit1
 is set. Player actions: 1-4 air string, 5 back attack, 6 back handspring, 29 zip,
 45/46 grapple, 49/50 pull/kick, 51 launch, 56-62 string, 130 rapid stomp,
 133 roll, 139 side-step dodge. Positions: motion+0x7C/+0x80 plus locals
-+0x160/+0x164; a teleport must also update actor copies +0x148/+0x180/+0x210/
-+0x2CC or physics stalls. Velocity actor+0x18/+0x1C (Q12). Common enemies:
++0x160/+0x164, and three motion probes (x, y + own offset: feet/body points)
+at motion+0x44, +0x10C, +0x1C8 (2026-10-06, RAM dumps in training and arena).
+**Spidey's actor allocation is only 0xF4 bytes** (heap header magic 0x00035544,
+size word at header+4); the "actor copies +0x148/+0x180/+0x210/+0x2CC" used by
+v0.2.0-v0.4.0 were false: they lie past that block (motion sits at actor+0xE10
+in training, +0x20B4 in the sewer arena) and writing them corrupted the heap
+(see "Freeze root cause" below). Motion+0x180 is facing. Velocity actor
++0x18/+0x1C (Q12, units per update, applied the same update when written after
+the controller update; ground state 43 ignores vertical velocity, state 51
+applies both). Walls clamp velocity motion; overlapping bodies push apart
+softly (about 0.5 unit per update), so a fast dash passes through an enemy.
+Common enemies:
 `NormalEnemy` vtable `0x021301D0`, `EnemyStateMachine` `0x02133368`; attack
 state 15 (actions 55/63 seen). Training dummy flag 4 does not gate its AI.
 Sewer symbiote attacks (v0.3.0 research, 17 player-hurt events over three
@@ -877,6 +889,9 @@ gives a knockdown (41 -> 48 -> 49). The kit hooks `0x02078628` (entry +0x30) to
 copy Spidey's latest hit (state +0x36C..+0x3FF) and replays it with
 `kit_replay_hit`. A lab replay patch that captured *every* hit stalled the
 training Skyjack at the grapple; the kit's version (range-checked) did not.
+Guard frames (v0.4.1): the hook writes result 1 and skips the victim's
+ReceiveHit; the dispatcher then treats the hit as ignored (native path for
+get-up states). The Spider-Sense dash uses this for Spidey for 7 updates.
 
 ### Kit extension contract
 
@@ -884,10 +899,12 @@ The kit is appended after the HUD/flow image: code at `0x02152C20`, route table
 `+0x1F00` (12-byte {action, kind, resource}), state `0x02154C20` (copied zeros),
 reserve 16 -> 24 KiB, Glob count 3736 + 7 (v0.3.0). Hooks are listed in `HOOKS`; Sling's
 contact site is restored to native. The enemy registry (12 slots, refreshed from
-the per-actor observer `0x02073A68`) is trusted for two ticks, so despawned
-actors are never dereferenced. State offsets in use: 0 tick, 4/0x10/0x368 Reflex,
+the per-actor observer `0x02073A68`) is trusted for two ticks, and since v0.4.1
+`kit_alive` also checks the vtable and motion/controller pointers before any
+dereference (`kit_fresh` includes it). State offsets in use: 0 tick, 4/0x10/0x368 Reflex,
 8/0x14 spin, 0x20-0xDF registry, 0x300-0x30C Perch, 0x310-0x320 Leapfrog,
-0x330-0x33C Skyjack, 0x340 Sense, 0x350-0x35C Perch flip/hop, 0x360/0x364 held/new
+0x330-0x33C Skyjack, 0x340-0x34C Sense (side, dash/guard counter, attacker,
+target x), 0x350-0x35C Perch flip/hop, 0x360/0x364 held/new
 keys (edge-detected once per Spidey update), 0x36C-0x3FF hit capture (0x374
 bowl telemetry: count + 256 * result, 0x378 last bowled actor). The 1 KiB after KIT_STATE+0x400 up to
 the arena is unused (lab phantom lives there).
@@ -916,10 +933,50 @@ impacts on the native contact clocks. Workflow: edit `kit_clips.py` →
 --box ... --scale 2` for in-game frames. Root height in a clip is visual only;
 gameplay movement comes from GMB root motion or kit code.
 
+### Freeze root cause and crash hunting (v0.4.1)
+
+Player report (2026-10-06, v0.4.0): in a crowd, spamming Y and R with Both Suits
+Enhanced Dodge held, the game "froze and won't unfreeze"; separately a
+Spider-Sense flip clipped Spidey down into an unreachable part of the map.
+
+- **Cause 1, heap corruption (the freeze).** The Sense teleport (v0.2.0-v0.4.0)
+  stored Spidey's new x at actor +0x148/+0x180/+0x210/+0x2CC, past his 0xF4-byte
+  actor block, into neighbouring heap blocks. Sewer arena crash (fuzz seed 303):
+  the global list/node pool at `0x021459E0` (allocator `0x0201DCCC` pops the
+  free list at pool+8; list insert `0x0201DBFC`, remove `0x0201DB98`) handed out
+  node `0x022A7394` = actor+0x210 whose link held 0xFFFF13C2 = -60478, exactly
+  the x of a Sense teleport 380 frames earlier (actor+0x148/+0x180/+0x2CC still
+  held it); the insert wrote through it: data abort at `0x0201DC0C`.
+- **Cause 2, stale registry pointer.** The Sense scan read [[enemy+0x30]+0x1F8]
+  with a null check only; an entry's motion pointer was 0x60000 (freed/reused or
+  corrupted actor): data abort at kit `0x02153E54` (seed 504). Fixed by `kit_alive`.
+- **Clip.** Every position write ignores collision; the teleport landed 3 units
+  past the attacker even inside walls. v0.4.1 kit code writes velocity only.
+- A frozen DS screen here is a data abort: CPU mode 0x17, PC 0xFFFF0108 (BIOS
+  exception vector, the game installs no handler), SP_abt 0. The interrupted
+  SP/LR are banked R_ABT; the main stack is in DTCM (`0x027E3xxx`). A halted CPU
+  at `0x020FFA30` (sys mode) is the normal idle wait of a menu/tutorial/pause.
+- Lab: the dummy placement and every lab teleport had the same bug (writes past
+  the actor); placing the training dummy crashed in the GAB event player
+  `0x0200305C` (object +0xC). Fixed with `kit_lab.teleport` (motion probes).
+- `tools/crash_hunt.py` reproduces fights (random Y strings, R taps, held R,
+  A/B/X, crowd refilled to max HP, ledge start (55000, 376880)), saves state +
+  RAM when the kit tick stops outside the tutorial, and decodes melonDS states
+  (`ARM9` section: cycles, halted, R0-R15, CPSR, banked FIQ/SVC/ABT/IRQ; the
+  DTCM is the last 16 KiB of `CP15`). Evidence (4,000-frame fights, same setup):
+  v0.4.0 froze in 4 of about 90 fights with the old lab; with the fixed lab a
+  heap-link check flagged fresh corruption in 9 of 48 v0.4.0 fights (mostly
+  frames 90-210, right after the first Sense) and 2 crashed (pool abort at
+  `0x0201DC0C`/`0x0201DCE8`; in seed 727 the per-frame free-list watch caught
+  node actor+0x210 receiving 0xFFFF1406, a Sense x, 100 frames before the
+  crash). v0.4.1: 0 corruption, 0 crashes in 48.
+
 ## Research workflow and pitfalls (Red kit sessions)
 
 Tools: `tools/kit_lab.py` (trace/arena/qualify/preview/sheet/disasm/xrefs/words/
-patch); inputs `reference/combat-inputs/kit/`. Each emulator run happens in a
+patch; training `--at X` starts at an absolute x, `--place` then puts the dummy
+relative to him; walls at about 3.5 and 236.5 units) and `tools/crash_hunt.py`
+(freeze/crash fights, see "Freeze root cause"); inputs `reference/combat-inputs/kit/`. Each emulator run happens in a
 quiet child process; read `build/boot-tests/<rom>-<hash>/<label>/trace.txt` or
 observations.json (state, action, node, facing, position, enemies).
 
@@ -944,15 +1001,24 @@ observations.json (state, action, node, facing, position, enemies).
   `lit_xxxxxxxx: .word` table mid-code, loaded with `ldr rX,lit_name`.
   `assemble_tasm_kit.py` verifies every pc-relative load and every native branch
   target against the source and requires a single trailing `.ltorg`. Code is
-  ~5.2 KiB of the 7.75 KiB before the route table.
+  ~6.4 KiB of the 7.75 KiB before the route table (v0.4.1).
 - Arena `--place DX:DY|skip,...` moves the nearest fighters (HP >= 16384, not state 6) next to
-  Spidey, but placed enemies often stay frozen in their idle state (no attacks)
+  Spidey (before 2026-10-06 it also corrupted their heap neighbours), but placed
+  enemies often stay frozen in their idle state (no attacks)
   and the Snare frequently zips to scenery there; use natural spawns for AI
   research. For kit targeting/movement, `trace --phantom DX` adds a fake registry
   enemy (no AI/hitbox) in the training room; contacts on it whiff.
-- A teleport must update motion+0x7C/+0x80 and actor copies +0x148/+0x180/+0x210/
-  +0x2CC. Repeating the same action skips resource lookup unless motion+0x2FC
+- Kit code never writes positions (v0.4.1): it moves Spidey with velocity so
+  native collision resolves walls and floors. A position write ignores
+  collision (the v0.4.0 Sense teleport put Spidey 2 units inside the training
+  room's right wall at x=968577 and clipped the player out of the level). Lab
+  teleports (`kit_lab.teleport`) write the motion base and the three probes
+  only. Repeating the same action skips resource lookup unless motion+0x2FC
   bit1 is set (Spin Cycle uses this).
+- Never dereference another actor without `kit_alive` (vtable in the class
+  range, motion and controller pointers in RAM): registry entries are trusted
+  for two ticks and a freed/reused actor once held motion pointer 0x60000
+  (data abort in the v0.4.0 Sense scan).
 - Growing the Glob shifts everything by about one emulator frame; parity checks
   allow one constant phase (`kit_lab.same_behavior`).
 - Strings: no `;` in the text Huffman table. Button glyphs: `` B, ``

@@ -14,6 +14,48 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.4.1 - 2026-10-06 - Freeze and clip fix; smoother Sense and Leapfrog
+
+Published through Play Spider-Man.cmd's stable ROM. SHA256
+`da324b3c5b812fc941f58179386f0489ea151091518c350a5df1bbaf662fed29`
+(ARM9 `b806e508...`, kit code `3826b452...`). Title and Options show v0.4.1.
+Player report on v0.4.0 (2026-10-06): loving the kit, smooth overall, but
+Spider-Sense and Leapfrog feel "teleporty"; a Sense flip clipped Spidey down
+into an unreachable area; and the game froze for good during Y/R spam in a
+crowd with Enhanced Dodge held.
+
+- **Freeze fixed.** Every Spider-Sense teleport since v0.2.0 wrote Spidey's
+  position past the end of his actor object, corrupting nearby heap memory; a
+  later allocation then crashed the game (a data abort, which looks like a
+  freeze). Spider-Sense no longer writes positions. The kit also checks every
+  other enemy's pointers before reading them (a second crash in the Sense scan).
+  Details: TECHNICAL "Freeze root cause and crash hunting".
+- **Spider-Sense is a dash, not a teleport.** R as an enemy attacks: Spidey
+  springs into a tucked front flip over the attacker (4 updates, top speed
+  about 3 units per update), turns in the air and whips a roundhouse into his
+  back. Walls stop the dash (he counters from the front instead of going
+  through the wall). He ignores hits for 7 updates (about 0.23 s) from the
+  press, like the old instant teleport did. New counter animation.
+- **Leapfrog vault is continuous.** After the kick's hit-stop he moves forward
+  every update (6 updates, about 2 units each, cancelling the kick's built-in
+  recoil step) and lands about 3 units past the target, facing him; no more
+  overshoot, snap back and drop. The flip goes higher in the animation.
+- **Spider Perch** rides and head-hops by steering velocity instead of
+  writing positions, so walls and ceilings can no longer be passed through.
+- **Neutral Spider Reflex** (R with no direction) now consumes the R press; it
+  used to consume a queued Y and leave the R queued.
+
+Agent-tested: qualification 31/31 (new: Sense never moves more than 6 units in
+one update, Sense next to the training wall stops at the wall where v0.4.0 put
+Spidey 2 units inside it, Leapfrog vault continuous). Crash hunt
+(`tools/crash_hunt.py`, sewer arena, random Y/R/held-R crowd fights of 4,000
+frames with endless enemies, same setup for both): v0.4.1 0 crashes and 0 heap
+corruption in 48 fights; v0.4.0 showed fresh heap corruption in 9 of 48 and
+crashed in 2 (plus 4 freezes in about 90 earlier fights), every crash the same
+abort in a heap pool whose node sits right after Spidey's actor. Frames reviewed for the Sense flip and
+the Leapfrog vault. Not yet player-confirmed: Sense and Leapfrog feel, the
+guard window, freeze-free long play.
+
 ## v0.4.0 - 2026-10-05 - Skyjack spike bowls the crowd
 
 Published through Play Spider-Man.cmd's stable ROM. SHA256

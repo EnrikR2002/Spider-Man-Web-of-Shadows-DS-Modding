@@ -10,13 +10,15 @@ and work/kit/ (previews, sheets, qualification evidence).
                           --patch P.json --probe ADDR:LEN --cap a,b --ram a,b --near U --phantom DX]
       Training room ("Test Upgrades" dummy). INPUTS frames are relative to control
       start (frame 3030). Red bits are OR-ed in 20 frames before start. --near U
-      starts Spidey U units left of the dummy; --phantom DX adds a fake registry
+      starts Spidey U units left of the dummy (--at X: at absolute x; walls are at
+      about 3.5 and 236.5 units, --place then puts the dummy relative to him);
+      --phantom DX adds a fake registry
       enemy DX units from it (no AI/hitbox: kit targeting and movement only).
   arena ROM LABEL INPUTS [--tx X --ty Y --place DX:DY,... ...]
       Sewer room left of the story save with live symbiotes; Spidey is teleported
-      (all position copies) onto the floor. Spawns vary between runs; --place
+      (motion position and probes) onto the floor. Spawns vary between runs; --place
       moves the nearest enemies to fixed offsets (units) from Spidey.
-  qualify ROM          kit checks (28) incl. native/Black parity vs the
+  qualify ROM          kit checks (31) incl. native/Black parity vs the
                        stable parent; writes work/kit/evidence.json.
   preview CLIP [marks] stick-figure sheet of a tools/kit_clips.py clip.
   sheet DIR [x0,y0,x1,y1 scale cols]  contact sheet of captured frames.
@@ -135,10 +137,28 @@ def put_phantom(lib, dx):
     if not live: return
     x, y = live[0]['position'][0] + dx, live[0]['position'][1]
     tick = struct.unpack_from('<I', ram, KIT_STATE - p.BASE)[0]
+    c.memmove(ptr + PHANTOM_ACTOR - p.BASE, struct.pack('<I', ENEMY_VTABLE), 4)   # kit_alive checks the class
     c.memmove(ptr + PHANTOM_ACTOR - p.BASE + 0x30, struct.pack('<I', PHANTOM_MOTION), 4)
     for off, value in ((0x7C, x), (0x80, y), (0x160, 0), (0x164, 0), (0x1F8, 0)):
         c.memmove(ptr + PHANTOM_MOTION - p.BASE + off, struct.pack('<i', value), 4)
     c.memmove(ptr + KIT_REGISTRY_LAST - p.BASE, struct.pack('<Iii I', PHANTOM_ACTOR, x, y, tick), 16)
+
+
+# Motion-object position probes: x plus a y offset from the base position
+# (+0x7C base, +0x160 local). Actor +0x148/+0x180/+0x210/+0x2CC, used before
+# 2026-10-06, lie past the 0xF4-byte actor allocation: writing them corrupted
+# the heap (TECHNICAL "Research workflow and pitfalls").
+PROBES = (0x44, 0x10C, 0x1C8)
+
+
+def teleport(ptr, ram, mot, x, y):
+    """Move a motion object (Spidey or enemy) to absolute (x, y), probes included."""
+    bx, by = struct.unpack_from('<2i', ram, mot + 0x7C)
+    lx, ly = struct.unpack_from('<2i', ram, mot + 0x160)
+    c.memmove(ptr + mot + 0x7C, struct.pack('<2i', x - lx, y - ly), 8)
+    for off in PROBES:
+        px, py = struct.unpack_from('<2i', ram, mot + off)
+        c.memmove(ptr + mot + off, struct.pack('<2i', x, y + (py - (by + ly))), 8)
 
 
 def set_bits(lib, bits, clear):
@@ -165,7 +185,7 @@ def run(rom, label, inputs, **options):
 
 
 def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=None, patch=None, probe=None,
-        caps=(), rams=(), arena=False, tx=120000, ty=40922, save=None, near=None, place=(), phantom=None):
+        caps=(), rams=(), arena=False, tx=120000, ty=40922, save=None, near=None, place=(), phantom=None, start_x=None, refill=False, extra_hook=None):
     """One disposable emulator run; returns (output directory, observation rows)."""
     rom = Path(rom).resolve()
     rel = rows_from(inputs) if not isinstance(inputs, list) else inputs
@@ -196,31 +216,36 @@ def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=N
             if not arena:   # training dummy: generous HP so a run never kills it
                 for e in enemies(ram):
                     c.memmove(ptr + e['actor'] - p.BASE + 0x44, struct.pack('<2i', 65536, 65536), 8)
-                if near is not None and enemies(ram):   # stand `near` (Q12) left of the dummy
+                ptr, ram = ram_of(lib)   # re-read: --place filters on the new HP
+                if (near is not None or start_x is not None) and enemies(ram):   # `near` (Q12) left of the dummy, or x `at`
                     mot = p.sample(ram)['motion_address'] - p.BASE
-                    dest = (enemies(ram)[0]['position'][0] - near,
+                    dest = (start_x if start_x is not None else enemies(ram)[0]['position'][0] - near,
                             sum(struct.unpack_from('<i', ram, mot + off)[0] for off in (0x80, 0x164)))
-            if arena or near is not None:   # teleport: base position plus every actor position copy
-                o = p.sample(ram); mot = o['motion_address'] - p.BASE; act = o['actor_address'] - p.BASE
-                lx, ly = struct.unpack_from('<2i', ram, mot + 0x160)
-                c.memmove(ptr + mot + 0x7C, struct.pack('<2i', dest[0] - lx, dest[1] - ly), 8)
-                for off in (0x148, 0x180, 0x210, 0x2CC):
-                    c.memmove(ptr + act + off, struct.pack('<2i', *dest), 8)
+            if arena or near is not None or start_x is not None:   # teleport Spidey (motion position + probes)
+                teleport(ptr, ram, p.sample(ram)['motion_address'] - p.BASE, *dest)
             # place: (dx, dy) Q12 offsets from Spidey for the nearest enemies, in order
             fighters = [e for e in enemies(ram) if e['hp'] >= 16384 and e['state'] != 6]   # skip spawners/projectiles
             live = sorted(fighters, key=lambda e: abs(e['position'][0] - dest[0]) + abs(e['position'][1] - dest[1]))
             for xy, e in zip(place, live):
                 if xy is None: continue            # 'skip' keeps that enemy where it is
                 dx, dy = xy
-                at = e['actor'] - p.BASE
-                mot = struct.unpack_from('<I', ram, at + 0x30)[0] - p.BASE
-                ex, ey = dest[0] + dx, dest[1] + dy
-                lx, ly = struct.unpack_from('<2i', ram, mot + 0x160)
-                c.memmove(ptr + mot + 0x7C, struct.pack('<2i', ex - lx, ey - ly), 8)
-                for off in (0x148, 0x180, 0x210, 0x2CC):
-                    c.memmove(ptr + at + off, struct.pack('<2i', ex, ey), 8)
+                mot = struct.unpack_from('<I', ram, e['actor'] - p.BASE + 0x30)[0] - p.BASE
+                teleport(ptr, ram, mot, dest[0] + dx, dest[1] + dy)
+        if refill and frame >= start and frame % 20 == 0:   # endless crowd: enemies and Spidey back to max HP
+            ptr, ram = ram_of(lib)
+            actors = [e['actor'] for e in enemies(ram) if e['hp'] > 0]
+            try:
+                actors.append(p.sample(ram)['actor_address'])
+            except ValueError:
+                pass
+            for a in actors:
+                hp, top = struct.unpack_from('<2i', ram, a - p.BASE + 0x44)
+                if 0 < hp < top < 0x1000000:
+                    c.memmove(ptr + a - p.BASE + 0x44, struct.pack('<i', top), 4)
         if phantom is not None and frame >= start - 20:
             put_phantom(lib, phantom)
+        if extra_hook is not None:   # in-process callers only (tools/crash_hunt.py)
+            extra_hook(frame - start, lib)
         if enemy_state and start + enemy_state[0] <= frame < start + enemy_state[1]:
             ptr, ram = ram_of(lib)
             for e in enemies(ram):
@@ -267,7 +292,7 @@ def first(rows, cond):
 
 
 def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a31b005e201c7c4e276fc46dbf3e5d842/Spider-Man-WoS-modded.nds'):
-    """Measured expectations for the kit (v0.2.0, v0.2.1 spin, v0.3.0, v0.4.0); parent = v0.1.1 for native parity."""
+    """Measured expectations for the kit (v0.2.0 .. v0.4.1); parent = v0.1.1 for native parity."""
     def go(label, name, frames, **kw): return run(rom, label, INPUTS / f'{name}.json', frames=frames, **kw)[1]
     ck = {}
     o = go('q_reflex', 'reflex', 300)
@@ -303,6 +328,10 @@ def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a3
     ck['leapfrog_damage'] = end['en'][0][0] < 65536
     ck['leapfrog_faces_target'] = (end['face'] == 1) == (end['en'][0][1][0] > end['pos'][0])
     ck['leapfrog_swaps_sides'] = bool(beg and (beg['en'][0][1][0] > beg['pos'][0]) != (end['en'][0][1][0] > end['pos'][0]))
+    # v0.4.1: the vault moves forward every update (no snap back, no jump).
+    kick = [r for r in o if r['st'] == 43 and r['act'] == 50]
+    d = [y['pos'][0] - x['pos'][0] for x, y in zip(kick, kick[1:])]
+    ck['leapfrog_vault_is_continuous'] = bool(d) and max(d) <= 0x6000 and min(d) >= -0x200 and sum(d) > 8 * 4096
     # +0x36C capture tick, +0x370 attacker, +0x374 bowl count, +0x380 captured kind
     o = go('q_sky', 'vault', 220, probe=(0x02154C20 + 0x36C, 0x18))
     spike = first(o, lambda r: r['act'] == 4 and r['st'] == 51)
@@ -324,6 +353,15 @@ def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a3
     o = go('q_sense16', 'sense', 160, enemy_state=(60, 76, 16))
     s = first(o, lambda r: r['st'] == 46 and r['node'] == 14)
     ck['sense_counters_ranged_state_16'] = bool(s and s['f'] <= 72 and (s['pos'][0] > s['en'][0][1][0]) == (s['face'] == 0))
+    # v0.4.1: the counter is a velocity dash (no teleport): never more than 6
+    # units per update, and next to a wall it stops at the wall (the v0.4.0
+    # teleport put Spidey 2 units inside the right training wall at 968577).
+    o = go('q_sense', 'sense', 110, enemy_state=(60, 76, 15))
+    steps = [abs(y['pos'][0] - x['pos'][0]) for x, y in zip(o, o[1:]) if y['st'] == 46 and y['node'] == 14]
+    ck['sense_dash_has_no_teleport'] = bool(steps) and max(steps) <= 0x6000 + 0x800
+    o = go('q_sense_wall', 'sensewall', 120, enemy_state=(60, 76, 15), start_x=226 * 4096, place=((9 * 4096, 205),))
+    ck['sense_dash_stops_at_wall'] = (max(r['pos'][0] for r in o) <= 968577 + 64
+                                      and min(r['en'][0][0] for r in o) < 65536)
     o = go('q_perch_spring', 'perchspring', 220)
     b = first(o, lambda r: r['f'] >= 160 and r['act'] == 133)
     after = [r for r in o if b and b['f'] <= r['f'] <= b['f'] + 30]
@@ -510,6 +548,7 @@ def main(argv=None):
         s.add_argument('--near', type=float, default=None, help='training: start this many units left of the dummy')
         s.add_argument('--place', default='', help='DX:DY|skip,... units: move the nearest enemies next to Spidey')
         s.add_argument('--phantom', type=float, default=None, help='training: fake second enemy DX units from the dummy')
+        s.add_argument('--at', type=float, default=None, help='training: start at this absolute x (units); walls ~3.5/236.5')
     s = sub.add_parser('_child'); s.add_argument('request')
     s = sub.add_parser('qualify'); s.add_argument('rom'); s.add_argument('--parent', default=None)
     s = sub.add_parser('preview'); s.add_argument('clip'); s.add_argument('marks', nargs='?', default='')
@@ -534,7 +573,8 @@ def main(argv=None):
                              near=None if a.near is None else round(a.near * 4096),
                              place=tuple(None if xy == 'skip' else tuple(round(float(v) * 4096) for v in xy.split(':'))
                                          for xy in a.place.split(',') if xy),
-                             phantom=None if a.phantom is None else round(a.phantom * 4096))
+                             phantom=None if a.phantom is None else round(a.phantom * 4096),
+                             start_x=None if a.at is None else round(a.at * 4096))
             print(dest / 'trace.txt')
         elif a.cmd == '_child':
             req = json.loads(a.request)

@@ -83,6 +83,8 @@ skills/web tags later. Defer prices and balance unless the player asks.
 2026-10-05: player confirmed v0.2.1/v0.3.0 "looks feels way better". Keep the game
 super fast paced: no slow-motion or time-slowing effects (Spider-Sense included);
 they would break the pace and make it too easy.
+2026-10-06: no teleports (felt "teleporty", clipped out of the level, froze the
+game): moves travel visibly; kit code moves Spidey by velocity only.
 
 New moves need new, fluid, acrobatic animations (not repackaged native clips).
 The player rejected earlier per-key-eased clips as looking like dancing; follow
