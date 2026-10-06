@@ -43,6 +43,7 @@ HOOKS = {
     0x020B5508: (0x0C, 0xE5910004),  # ldr r0,[r1,#4]     Scissor repeat queued direction
     0x020B7B18: (0x28, 0xE5D01028),  # ldrb r1,[r0,#0x28] air attack stay
     0x020728F0: (0x2C, 0xEA03798A),  # Sling action-queue branch -> Perch substitution
+    0x02078628: (0x30, 0xE12FFF34),  # blx r4: hit dispatch to the victim's ReceiveHit
 }
 # Spider Perch replaces Sling Strike in the Mid-Air Snare slot: restore the
 # native action-queue and contact instructions Sling had redirected.
@@ -78,7 +79,7 @@ CLIP_SOURCES = {
     'zz_tasm_RushFinish.sca': ('spd_GroundAttack17.sca', 'split_sweep'),
 }
 PROFILE = 'tasm-kit'
-VERSION = '0.3.0'
+VERSION = '0.4.0'
 RELEASE_DATE = '2026-10-05'
 RELEASE_PROFILE = f'tasm-v{VERSION}'
 PARENT_RELEASE = 'tasm-v0.1.1'
@@ -104,8 +105,8 @@ TEXT_EDITS = {
 
 def uses_kit(profile):
     return profile == PROFILE or bool(release_info.PROFILE_INFO.get(profile, {}).get('kit'))
-CODE_SHA256 = 'd2c1d4df0711b1af4edf0ff69dae9609ab12a35b2ba9460c91d0d09d122817d3'
-ARM9_SHA256 = '0483dc4044cb6221ab90d3b0db89f615e14e2d8d7751e7039f1b80465c2bec70'
+CODE_SHA256 = '68b1129e6862f29efed68c524a5428503f8399a6ff81c1ea526ca141f01e19eb'
+ARM9_SHA256 = 'b4e91fdd3b90d033d849306028756a014f71d79ed2343d923bca197a2e933fdc'
 
 
 def branch(source, target):

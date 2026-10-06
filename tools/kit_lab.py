@@ -16,7 +16,7 @@ and work/kit/ (previews, sheets, qualification evidence).
       Sewer room left of the story save with live symbiotes; Spidey is teleported
       (all position copies) onto the floor. Spawns vary between runs; --place
       moves the nearest enemies to fixed offsets (units) from Spidey.
-  qualify ROM          kit checks (27) incl. native/Black parity vs the
+  qualify ROM          kit checks (28) incl. native/Black parity vs the
                        stable parent; writes work/kit/evidence.json.
   preview CLIP [marks] stick-figure sheet of a tools/kit_clips.py clip.
   sheet DIR [x0,y0,x1,y1 scale cols]  contact sheet of captured frames.
@@ -71,7 +71,7 @@ def enemies(ram):
         xy = [struct.unpack_from('<i', ram, motion + b)[0] + struct.unpack_from('<i', ram, motion + l)[0]
               for b, l in ((0x7C, 0x160), (0x80, 0x164))]
         ctl = struct.unpack_from('<I', ram, motion + 0x1F8)[0]
-        state = struct.unpack_from('<I', ram, ctl - p.BASE + 0x14)[0] if ctl else None
+        state = struct.unpack_from('<I', ram, ctl - p.BASE + 0x14)[0] if 0 < ctl - p.BASE < len(ram) - 0x20 else None
         out.append({'actor': p.BASE + at, 'hp': hp, 'max': maximum, 'position': xy, 'controller': ctl,
                     'state': state, 'action': struct.unpack_from('<I', ram, motion + 0x254)[0]})
     return out
@@ -209,7 +209,9 @@ def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=N
             # place: (dx, dy) Q12 offsets from Spidey for the nearest enemies, in order
             fighters = [e for e in enemies(ram) if e['hp'] >= 16384 and e['state'] != 6]   # skip spawners/projectiles
             live = sorted(fighters, key=lambda e: abs(e['position'][0] - dest[0]) + abs(e['position'][1] - dest[1]))
-            for (dx, dy), e in zip(place, live):
+            for xy, e in zip(place, live):
+                if xy is None: continue            # 'skip' keeps that enemy where it is
+                dx, dy = xy
                 at = e['actor'] - p.BASE
                 mot = struct.unpack_from('<I', ram, at + 0x30)[0] - p.BASE
                 ex, ey = dest[0] + dx, dest[1] + dy
@@ -265,7 +267,7 @@ def first(rows, cond):
 
 
 def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a31b005e201c7c4e276fc46dbf3e5d842/Spider-Man-WoS-modded.nds'):
-    """Measured expectations for the kit (v0.2.0, v0.2.1 spin, v0.3.0); parent = v0.1.1 for native parity."""
+    """Measured expectations for the kit (v0.2.0, v0.2.1 spin, v0.3.0, v0.4.0); parent = v0.1.1 for native parity."""
     def go(label, name, frames, **kw): return run(rom, label, INPUTS / f'{name}.json', frames=frames, **kw)[1]
     ck = {}
     o = go('q_reflex', 'reflex', 300)
@@ -301,11 +303,19 @@ def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a3
     ck['leapfrog_damage'] = end['en'][0][0] < 65536
     ck['leapfrog_faces_target'] = (end['face'] == 1) == (end['en'][0][1][0] > end['pos'][0])
     ck['leapfrog_swaps_sides'] = bool(beg and (beg['en'][0][1][0] > beg['pos'][0]) != (end['en'][0][1][0] > end['pos'][0]))
-    o = go('q_sky', 'vault', 220)
+    # +0x36C capture tick, +0x370 attacker, +0x374 bowl count, +0x380 captured kind
+    o = go('q_sky', 'vault', 220, probe=(0x02154C20 + 0x36C, 0x18))
     spike = first(o, lambda r: r['act'] == 4 and r['st'] == 51)
     ck['skyjack_air_hits_connect'] = min(r['en'][0][0] for r in o) <= 65536 - 3 * 4096
     landed = first(o, lambda r: spike and r['f'] > spike['f'] and r['en'][0][1][1] < 25000)
     ck['skyjack_spike_lands_target_fast'] = bool(spike and landed and landed['f'] - spike['f'] < 40)
+    # v0.4.0: Spidey's hits are captured (finisher kind 0x16 before the landing),
+    # the landing is detected (template switched to the knockdown kind 0x1F) and,
+    # with no second enemy, nobody is bowled.
+    kinds = [r['probe'][5] for r in o]
+    ck['skyjack_impact_captures_and_detects_landing'] = bool(
+        0x16 in kinds and kinds[-1] == 0x1F and o[-1]['probe'][2] == 0 and o[-1]['probe'][1] != 0
+        and kinds.index(0x1F) > kinds.index(0x16))
     o = go('q_sense', 'sense', 160, enemy_state=(60, 76, 15))
     s = first(o, lambda r: r['st'] == 46 and r['node'] == 14)
     ck['sense_counter_behind_attacker'] = bool(s and s['f'] <= 72 and (s['pos'][0] > s['en'][0][1][0]) == (s['face'] == 0))
@@ -498,7 +508,7 @@ def main(argv=None):
         s.add_argument('--cap', default=''); s.add_argument('--ram', default=''); s.add_argument('--save', default=None)
         s.add_argument('--tx', type=int, default=120000); s.add_argument('--ty', type=int, default=40922)
         s.add_argument('--near', type=float, default=None, help='training: start this many units left of the dummy')
-        s.add_argument('--place', default='', help='DX:DY,... units: move the nearest enemies next to Spidey')
+        s.add_argument('--place', default='', help='DX:DY|skip,... units: move the nearest enemies next to Spidey')
         s.add_argument('--phantom', type=float, default=None, help='training: fake second enemy DX units from the dummy')
     s = sub.add_parser('_child'); s.add_argument('request')
     s = sub.add_parser('qualify'); s.add_argument('rom'); s.add_argument('--parent', default=None)
@@ -522,7 +532,8 @@ def main(argv=None):
                              caps=[int(x) for x in a.cap.split(',') if x], rams=[int(x) for x in a.ram.split(',') if x],
                              arena=a.cmd == 'arena', tx=a.tx, ty=a.ty,
                              near=None if a.near is None else round(a.near * 4096),
-                             place=tuple(tuple(round(float(v) * 4096) for v in xy.split(':')) for xy in a.place.split(',') if xy),
+                             place=tuple(None if xy == 'skip' else tuple(round(float(v) * 4096) for v in xy.split(':'))
+                                         for xy in a.place.split(',') if xy),
                              phantom=None if a.phantom is None else round(a.phantom * 4096))
             print(dest / 'trace.txt')
         elif a.cmd == '_child':
@@ -530,7 +541,7 @@ def main(argv=None):
             opts = req['options']
             for key in ('caps', 'rams', 'enemy_state', 'probe'):
                 if opts.get(key) is not None: opts[key] = tuple(opts[key])
-            if opts.get('place'): opts['place'] = tuple(tuple(x) for x in opts['place'])
+            if opts.get('place'): opts['place'] = tuple(None if x is None else tuple(x) for x in opts['place'])
             dest, _ = _run(req['rom'], req['label'], req['inputs'], **opts)
             print('KITLAB_DEST ' + str(dest), flush=True)
         elif a.cmd == 'qualify':

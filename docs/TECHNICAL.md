@@ -856,6 +856,28 @@ air web-swing (states 26-28) as soon as state 51 ends unless consumed
 (`0x020CFC34`, type 2). Action request is just `motion+0x258 = action`
 (`0x020728F0`), committed later; set motion+0x2FC bit 1 to force the lookup.
 
+### Hit pipeline (v0.4.0, runtime-probed)
+
+Every actor has an interface sub-object at actor+8 whose vtable slot +0x40 is
+ReceiveHit (thunk, e.g. `0x0204BFC8`: this-8 -> `0x02074AC8`, which forwards to
+the victim controller's vtable +0x54; enemy `0x02094658` picks the reaction from
+0x24-byte attack records at `0x0211A600`/`0x02119E20`/`0x0211ADE0` by kind).
+The contact dispatcher `0x020784A4` resolves the victim from a handle and calls
+it at `0x02078628` (`blx r4`): r0=&result, r1=victim+8, r2=&attacker actor,
+r3=&info (by value on the caller stack), [sp]=0x1000. Result 4 = taken, 1 =
+ignored (e.g. get-up states 48/49/51). Info: +0 attack kind, +4 strength (Q12),
++8 3, +0xC -> extent record, +0x10 -> contact record {attacker part,3, victim
+part, 5, 0, kind, attacker part, strength}, then values. Spidey kinds seen:
+string 0x04 (0xC00/0x800), air 1-3 0x14 (0x1000), Skyjack finisher 0x16
+(0x1800), stomp 0x15 (0xC00), heavy kick 0x1F (0x1000), web kick 0x20, grapple
+0x21/0x22, launch 0x25/0x26. Replaying a captured info later works from any
+distance (24 units tested), also with the victim-part pointer cleared: same
+damage and reaction. Kind 0x16 on a standing enemy gives a stagger (37); 0x1F
+gives a knockdown (41 -> 48 -> 49). The kit hooks `0x02078628` (entry +0x30) to
+copy Spidey's latest hit (state +0x36C..+0x3FF) and replays it with
+`kit_replay_hit`. A lab replay patch that captured *every* hit stalled the
+training Skyjack at the grapple; the kit's version (range-checked) did not.
+
 ### Kit extension contract
 
 The kit is appended after the HUD/flow image: code at `0x02152C20`, route table
@@ -865,8 +887,9 @@ contact site is restored to native. The enemy registry (12 slots, refreshed from
 the per-actor observer `0x02073A68`) is trusted for two ticks, so despawned
 actors are never dereferenced. State offsets in use: 0 tick, 4/0x10/0x368 Reflex,
 8/0x14 spin, 0x20-0xDF registry, 0x300-0x30C Perch, 0x310-0x320 Leapfrog,
-0x330-0x338 Skyjack, 0x340 Sense, 0x350-0x35C Perch flip/hop, 0x360/0x364 held/new
-keys (edge-detected once per Spidey update). The 1 KiB after KIT_STATE+0x400 up to
+0x330-0x33C Skyjack, 0x340 Sense, 0x350-0x35C Perch flip/hop, 0x360/0x364 held/new
+keys (edge-detected once per Spidey update), 0x36C-0x3FF hit capture (0x374
+bowl telemetry: count + 256 * result, 0x378 last bowled actor). The 1 KiB after KIT_STATE+0x400 up to
 the arena is unused (lab phantom lives there).
 Heap headroom (v0.3.0, empirical): `OS_GetInitArenaLo` (`0x020FF2E8`, case 0)
 returns the patched literal `0x020FF374`; the main arena is now 0x02155420 ..
@@ -922,7 +945,7 @@ observations.json (state, action, node, facing, position, enemies).
   `assemble_tasm_kit.py` verifies every pc-relative load and every native branch
   target against the source and requires a single trailing `.ltorg`. Code is
   ~5.2 KiB of the 7.75 KiB before the route table.
-- Arena `--place` moves the nearest fighters (HP >= 16384, not state 6) next to
+- Arena `--place DX:DY|skip,...` moves the nearest fighters (HP >= 16384, not state 6) next to
   Spidey, but placed enemies often stay frozen in their idle state (no attacks)
   and the Snare frequently zips to scenery there; use natural spawns for AI
   research. For kit targeting/movement, `trace --phantom DX` adds a fake registry

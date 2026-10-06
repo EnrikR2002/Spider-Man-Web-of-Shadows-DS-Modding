@@ -53,6 +53,11 @@ PROFILE_INFO = {
                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                     'arm9_sha256': '0483dc4044cb6221ab90d3b0db89f615e14e2d8d7751e7039f1b80465c2bec70'},
+    # Skyjack spike bowls nearby enemies with a replayed native hit (CHANGES v0.4.0).
+    'tasm-v0.4.0': {'version': '0.4.0', 'date': '2026-10-05', 'kit': True, 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': 'b4e91fdd3b90d033d849306028756a014f71d79ed2343d923bca197a2e933fdc'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

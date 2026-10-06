@@ -15,7 +15,7 @@
   b h_spin_limit          // +24 from 020B5464  Red bit17 repeat limit (Black path never reaches)
   b h_reflex_air          // +28 from 020B7B18  air attack stay (air dodge itself needs bit 10)
   b h_action              // +2C from 020728F0  action request (Perch substitution)
-  nop                     // +30 reserved
+  b h_hit_capture         // +30 from 02078628  hit dispatch (blx to victim ReceiveHit)
 
 // ---------------------------------------------------------------- Reflex
 // Bit 18 (Amazing Speed slot): R cancels Red attack states immediately.
@@ -805,7 +805,9 @@ fresh_next:
 // Do not use 'ldr rX,=value' or a mid-file .ltorg: Keystone wraps far
 // literals and shifts later absolute branches (TECHNICAL, research pitfalls).
 lit_02049304: .word 0x02049304
+lit_0207862c: .word 0x0207862C
 lit_0211bb74: .word 0x0211BB74
+lit_027e0000: .word 0x027E0000
 lit_02120000: .word 0x02120000
 lit_0212e3f0: .word 0x0212E3F0
 lit_0213df00: .word 0x0213DF00
@@ -960,6 +962,129 @@ leap_out:
 leap_progress: .word 50, 110, 165, 210, 240, 256
 leap_height:   .word 150, 235, 256, 210, 120, 0
 
+// ---------------------------------------------------------------- hit capture
+// The native contact dispatcher calls the victim's ReceiveHit interface
+// ([[actor+8]+0x40]: r0=&result, r1=actor+8, r2=&attacker, r3=&info,
+// [sp]=0x1000). Keep a replayable copy of the latest hit Spidey deals: info
+// (0x40 bytes) at +0x380, its two pointed-to records at +0x3C0/+0x3E0 (victim
+// part pointer cleared), the attacker at +0x370 and the tick at +0x36C.
+h_hit_capture:
+  push {r0,r1,r2,r3,r4,r5,r12}
+  mov r0,r2
+  bl kit_ram_ok
+  cmp r0,#0
+  beq capture_done
+  ldr r12,[r2]
+  mov r0,r12
+  bl kit_ram_ok
+  cmp r0,#0
+  beq capture_done
+  mov r0,r3
+  bl kit_ram_ok
+  cmp r0,#0
+  beq capture_done
+  ldr r0,[r12]
+  ldr r1,lit_0212e3f0
+  cmp r0,r1
+  bne capture_done
+  ldr r5,lit_02154c20
+  str r12,[r5,#0x370]
+  ldr r0,[r5]
+  str r0,[r5,#0x36c]
+  add r1,r5,#0x380
+  mov r4,#0
+capture_info:
+  ldr r0,[r3,r4]
+  str r0,[r1,r4]
+  add r4,r4,#4
+  cmp r4,#0x40
+  blo capture_info
+  ldr r2,[r3,#12]
+  add r1,r5,#0x3c0
+  bl capture_record
+  str r1,[r5,#0x38c]
+  ldr r2,[r3,#16]
+  add r1,r5,#0x3e0
+  bl capture_record
+  str r1,[r5,#0x390]
+  mov r0,#0
+  str r0,[r5,#0x3e8]        // victim part: the replay hits someone else
+capture_done:
+  pop {r0,r1,r2,r3,r4,r5,r12}
+  ldr lr,lit_0207862c
+  bx r4
+
+capture_record:             // copy 0x20 bytes from r2 to r1 (zeros if r2 is not RAM)
+  push {lr}
+  mov r0,r2
+  bl kit_ram_ok
+  cmp r0,#0
+  moveq r2,#0
+  pop {lr}
+  mov r4,#0
+capture_loop:
+  cmp r2,#0
+  moveq r0,#0
+  ldrne r0,[r2,r4]
+  str r0,[r1,r4]
+  add r4,r4,#4
+  cmp r4,#0x20
+  blo capture_loop
+  bx lr
+
+// kit_ram_ok(r0) -> r0=1 for a word address in main RAM or DTCM (no data abort).
+kit_ram_ok:
+  tst r0,#3
+  bne ram_bad
+  cmp r0,#0x02000000
+  blo ram_bad
+  cmp r0,#0x02400000
+  blo ram_good
+  push {r1}
+  ldr r1,lit_027e0000
+  cmp r0,r1
+  pop {r1}
+  blo ram_bad
+  cmp r0,#0x02800000
+  bhs ram_bad
+ram_good:
+  mov r0,#1
+  bx lr
+ram_bad:
+  mov r0,#0
+  bx lr
+
+// kit_replay_hit(actor): the captured Spidey hit lands on actor through its
+// own ReceiveHit; r0 = native result (4 = taken, 1 = ignored, 0 = none).
+kit_replay_hit:
+  push {r4,lr}
+  sub sp,sp,#0x10
+  ldr r4,lit_02154c20
+  add r1,r0,#8
+  ldr r12,[r1]
+  ldr r2,lit_02120000       // only real actors: interface vtable in the class range
+  cmp r12,r2
+  blo replay_none
+  ldr r2,lit_0213df00
+  cmp r12,r2
+  bhi replay_none
+  ldr r12,[r12,#0x40]
+  mov r0,#0
+  str r0,[sp,#8]
+  mov r0,#0x1000
+  str r0,[sp]
+  add r0,sp,#8
+  add r2,r4,#0x370
+  add r3,r4,#0x380
+  blx r12
+  ldr r0,[sp,#8]
+  add sp,sp,#0x10
+  pop {r4,pc}
+replay_none:
+  mov r0,#0
+  add sp,sp,#0x10
+  pop {r4,pc}
+
 // ---------------------------------------------------------------- Skyjack
 // Bit 14 (Web Launch slot): after the Web Vault launch (state 40) the juggle
 // floats (both fall at quarter speed) and the air finisher (action 4) spikes
@@ -975,7 +1100,12 @@ sky_update:                 // r0=actor
   ldr r7,[r6,#0x14]
   ldr r0,[r8,#0x330]
   cmp r0,#0
-  bne sky_active
+  beq sky_idle
+  ldr r0,[r8,#0x338]
+  cmn r0,#1                 // spike delivered: wait for the target to land
+  beq sky_impact
+  b sky_active
+sky_idle:
   cmp r7,#40
   bne sky_out
   mov r0,r4
@@ -1095,9 +1225,77 @@ sky_player:
   add r1,r1,r2
   str r1,[r5,#0x7c]
   b sky_out
+// Bowling: when the spiked target stops falling (vertical velocity >= 0, or
+// 40 updates pass), the finisher's captured hit lands on every other enemy
+// within 8 units of it. One impact per spike.
+sky_impact:
+  ldr r0,[r8,#0x334]
+  bl kit_fresh
+  cmp r0,#0
+  beq sky_reset
+  ldr r6,[r8,#0x334]
+  ldr r0,[r8,#0x33c]
+  add r0,r0,#1
+  str r0,[r8,#0x33c]
+  cmp r0,#40
+  bgt sky_reset
+  ldr r1,[r6,#0x1c]
+  cmp r1,#0
+  blt sky_out
+  ldr r0,[r8]               // the template must be this spike's hit
+  ldr r1,[r8,#0x36c]
+  sub r0,r0,r1
+  cmp r0,#60
+  bhi sky_reset
+  mov r0,#0x1f              // bowl with the heavy kick's knockdown reaction
+  str r0,[r8,#0x380]
+  str r0,[r8,#0x3f4]
+  ldr r7,[r6,#0x30]
+  ldr r4,[r7,#0x7c]
+  ldr r0,[r7,#0x160]
+  add r4,r4,r0              // impact x
+  ldr r5,[r7,#0x80]
+  ldr r0,[r7,#0x164]
+  add r5,r5,r0              // impact y
+  add r7,r8,#0x20
+  mov r3,#12
+sky_bowl:
+  ldr r0,[r7]
+  cmp r0,#0
+  cmpne r0,r6
+  beq sky_bowl_next
+  ldr r1,[r7,#12]
+  add r1,r1,#2
+  ldr r2,[r8]
+  cmp r1,r2
+  bls sky_bowl_next
+  ldr r1,[r7,#4]
+  subs r1,r1,r4
+  rsbmi r1,r1,#0
+  cmp r1,#0x8000
+  bgt sky_bowl_next
+  ldr r1,[r7,#8]
+  subs r1,r1,r5
+  rsbmi r1,r1,#0
+  cmp r1,#0x6000
+  bgt sky_bowl_next
+  push {r3}
+  ldr r1,[r7]
+  str r1,[r8,#0x378]        // telemetry: last bowled actor, count
+  bl kit_replay_hit
+  ldr r1,[r8,#0x374]
+  add r1,r1,r0,lsl #8       // + result * 256 per replay
+  add r1,r1,#1
+  str r1,[r8,#0x374]
+  pop {r3}
+sky_bowl_next:
+  add r7,r7,#16
+  subs r3,r3,#1
+  bne sky_bowl
 sky_reset:
   mov r0,#0
   str r0,[r8,#0x330]
+  str r0,[r8,#0x33c]
 sky_out:
   pop {r4,r5,r6,r7,r8,pc}
 

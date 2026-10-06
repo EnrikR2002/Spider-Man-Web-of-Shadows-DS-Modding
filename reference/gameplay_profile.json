@@ -1,9 +1,9 @@
 {
-  "profile": "tasm-v0.3.0",
-  "release_version": "0.3.0",
+  "profile": "tasm-v0.4.0",
+  "release_version": "0.4.0",
   "required_overlays": {
-    "American.strings": "65188e37b78ec4922727356e92a2dda442ceeae62d0207e0408178ecf76c5467",
-    "English.strings": "65188e37b78ec4922727356e92a2dda442ceeae62d0207e0408178ecf76c5467",
+    "American.strings": "305a89dae5fe8d8682aa8862a11412f66a6706194ced4b3e20b995670a546c60",
+    "English.strings": "305a89dae5fe8d8682aa8862a11412f66a6706194ced4b3e20b995670a546c60",
     "MissionMiniMapIcon.pal": "5072156a663205facf22310c98913e01febb028c74edd1c196e7db26985b5787",
     "spd.nsbmd": "8ddbdac95ba919b50d4c107f491936b10eea2ae65b2117ed1a6d9fa0ce6f5ad0",
     "spd.nsbtx": "62052b3cd8034c11e28c44de9b6d1b1bf36f6298d8fbfb0315bd92a7f2244948",

@@ -14,6 +14,33 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.4.0 - 2026-10-05 - Skyjack spike bowls the crowd
+
+Published through Play Spider-Man.cmd's stable ROM. SHA256
+`5e6465d824ef0a27c9372363806deb669703f1d8cbee2e26d2c54402f1d51207`
+(ARM9 `b4e91fdd...`, kit code `68b1129e...`). Title and Options show v0.4.0.
+Player confirmed v0.3.0 ("looks feels way better") and asked to keep the game
+fast: no slow-motion anywhere.
+
+- **Skyjack bowling.** When the spiked enemy hits the ground (it stops falling,
+  within 40 updates of the spike), every other enemy within 8 units across and
+  6 up/down of the impact takes a native heavy-kick hit: damage (4096 observed)
+  and a full knockdown (launched, down, get-up). One impact per spike.
+- How: a new hook on the native hit dispatcher keeps a copy of the latest hit
+  Spidey deals; the kit replays it (as attack kind 0x1F, the heavy kick's
+  knockdown) through each bystander's own ReceiveHit. Enemies in their get-up
+  ignore it, as natively. Pointers are range-checked before use.
+
+Agent-tested: qualification 28/28 (new check: hits captured and the landing
+detected, nobody bowled with a lone dummy; native/Black parity unchanged with the
+always-on capture hook). Sewer arena with live symbiotes (non-deterministic, a
+second enemy placed near the landing; most runs have nobody within 8 units of
+the landing): on the final bytes the bowl fired in run 2 of 2 (result "taken",
+bystander HP -4096, states 41 -> 48 -> 49; frames show the impact spark and the
+bystander launched); two earlier candidate builds showed the same. All 153 source tests
+pass. Real DSV `75bb8efc...` checkpointed (unchanged). Not yet player-confirmed:
+feel, bowling radius, bosses (not tested).
+
 ## v0.3.0 - 2026-10-05 - Perch exits, Reflex back tuck, Sense vs ranged
 
 Published through Play Spider-Man.cmd's stable ROM. SHA256
@@ -45,8 +72,9 @@ enemy without AI or hitbox) because arena placements were unreliable; its landin
 pound therefore whiffs, and chaining Y after a hop on a real enemy is untested.
 Frames checked: spring flip, hop arc, back tuck, Perch text in Powers & Stats,
 Options v0.3.0. All 153 source tests pass. Real DSV `75bb8efc...` checkpointed;
-v0.2.1 ROM retained for rollback. Not yet player-confirmed: feel of all four,
-head-hop on real crowds/bosses, Sense counter range against spitters.
+v0.2.1 ROM retained for rollback. **Player-confirmed (2026-10-05):** overall
+"looks feels way better" after playing v0.3.0; no specific skill was singled out,
+so head-hop on bosses and Sense vs spitters remain individually unconfirmed.
 
 ## v0.2.1 - 2026-10-05 - Spin Cycle reach and blade legs
 
@@ -79,8 +107,8 @@ Agent-tested (training dummy, copied save): qualification 23/23
 (contacts landing vs a lone dummy 14/14, back-steer then glide back, sweep still
 in reach). Captured in-game frames show straight blade legs and hit sparks on
 contacts. All 153 source tests pass. Real DSV `75bb8efc...` checkpointed; v0.2.0 ROM
-retained for rollback. Not yet player-confirmed: look, reach feel in crowds,
-glide strength against moving enemies.
+retained for rollback. **Player-confirmed (2026-10-05, via v0.3.0):** spin look
+and hits feel "way better".
 
 ## v0.2.0 - 2026-10-05 - "Never stand still" Red kit
 

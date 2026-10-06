@@ -62,8 +62,9 @@ restarting. Dodge-cancelling keeps your combo; it doesn't cost it.
 
 ### 19 · Spider-Sense: the reward
 
-Press R just before an enemy hit lands to trigger a **sense flip**: a brief
-slow-motion beat, then Spider-Man flips over or around the attacker, lands behind
+Press R just before an enemy hit lands to trigger a **sense flip**: Spider-Man
+instantly flips over or around the attacker (no slow-motion: the player wants
+the game super fast paced, 2026-10-05), lands behind
 him and delivers a **reversal strike that staggers even heavies and bosses**. The
 combo resumes from there. A mistimed press is still a normal Reflex dodge.
 
@@ -165,23 +166,27 @@ Also needed: where bits 18/19 are queried (passive speed), so the bonus is kept
 while new gates are added. Heap headroom with the 24 KiB reserve: TECHNICAL
 "Kit extension contract" (large untouched arena in the sewer fight).
 
-## Status (v0.3.0) and next iterations
+## Status (v0.4.0) and next iterations
 
 All seven shipped in v0.2.0 as simplest working versions. Player verdict on
 v0.2.0 (2026-10-05): "very good"; only the helicopter spin missed every other
 hit and looked like breakdancing, fixed in v0.2.1 (CHANGES). v0.3.0 added the
 queued Perch exits, the neutral Reflex flip and Sense vs ranged attackers.
-Per-skill feel is still unconfirmed.
+Player verdict on v0.3.0 (2026-10-05): "looks feels way better", no specific
+issues; keep it fast (no slow-motion). v0.4.0 adds Skyjack bowling via a reusable
+native "hit any enemy" replay (TECHNICAL "Hit pipeline"), which can also power
+later ideas (Leapfrog kick-through, Spin Cycle crowd hits, Stop Hitting
+Yourself).
 
 | Skill | Shipped version | Next iteration once mapped/played |
 |---|---|---|
 | Spider Reflex | Ground/air R cancel, directional roll (front flip), neutral back tuck (v0.3.0), 28-update resume | Enhanced Dodge interplay; dodge-cancel from more paid states |
-| Spider-Sense | Melee state 15 (12 units) or ranged state 16 (16 units, v0.3.0) → teleport behind + heavy kick | Hit-anticipation timing, slow-motion, tingle marker; state 24 if confirmed |
+| Spider-Sense | Melee state 15 (12 units) or ranged state 16 (16 units, v0.3.0) → teleport behind + heavy kick | Hit-anticipation timing, tingle marker (never slow-motion); state 24 if confirmed |
 | Spider Perch | Snare follow-up → held stomp pounding, Y chains; v0.3.0: B flip spring, A flip head-hop to the next enemy | Boss shake-off, entry from jumps/walls; hop feel on real crowds |
 | Split Decision | Auto-face per hit (behind preference within 12 units) + new choreography | True two-sided contact geometry |
 | Spin Cycle | v0.2.1: straight blade-leg handstand spin; each contact aims (other side within 7, else nearest within 16), glide into reach, any-direction repeats | Exit flourish, spin-to-launch |
 | Leapfrog | Native kick + vault over the popped target | Vault before the kick once grappled targets can be hit mid-pull |
-| Skyjack | Floating juggle, drift, spike finisher | Impact damage/bowling on landing, crowd spike |
+| Skyjack | Floating juggle, drift, spike finisher; v0.4.0: landing bowls enemies within 8 units (native knockdown hit) | Tune radius/strength from play; bosses |
 
 Player builds come after each iteration; the playtest below decides what stays.
 
