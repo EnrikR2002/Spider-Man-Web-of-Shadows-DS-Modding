@@ -1,0 +1,187 @@
+{
+  "agent_tested": {
+    "chapter_tour": "14/14 directed links, arrivals at expected spawns, visited flags 252..256 only (v0.6.0 36aa52f8 and dev a023350e)",
+    "collision_roundtrips": 75,
+    "crash_hunt": "12/12 clean on 36aa52f8",
+    "death_in_chapter": "native touch health-orb minigame, resumes in room 76",
+    "empty_shell_checks": "7/7: room 76, player, continued updates, right/left input, jump, rendering, pause return to native room 64",
+    "empty_shell_hash_prefix": "9407c67f",
+    "encounters": "ML_Switching spawns 4 like native Sewer_Map13; ML_Service fights end with working exits (seeds 11, 12; seed 13 inconclusive lab teleport), flag 268 written, native control identical",
+    "entity_batches": 586,
+    "event_commands": 2830,
+    "event_groups": 1424,
+    "kit_qualification": "31/31 on 36aa52f8",
+    "milestone_native_save_reload": "4/4, schema-1 encoding 0x004D4C78, copied battery only",
+    "normal_context_exit_checks": "8/8: empty room 76, right/left input, jump, no enemies, rendered captures, native queued return to 64, continued updates, unchanged candidate",
+    "refuge_save_continue": "6/6 on 36aa52f8; control without guard patch leaves Continue on the title",
+    "room_object_roundtrips": 75,
+    "shell_checks": "6/6: appended entry 76, ongoing updates, movement, frames, return to native room 64",
+    "shell_hash_prefix": "edf0521b",
+    "source_tests": "199 full-suite tests passed; focused Midnight Line/document tests pass"
+  },
+  "authorization": "2026-10-06: implement the approved Midnight Line first-station plan",
+  "current_research_gate": "Puzzle, Signal Leech and Conductor teaser not built; first slice (rooms, doors, refuge save, encounters) agent-tested in v0.6.0",
+  "deferred": [
+    "moving_train",
+    "full_conductor_boss",
+    "rescue_population",
+    "procedural_generation",
+    "new_paid_upgrades"
+  ],
+  "enemy": {
+    "art": "Original model and texture on a compatible existing rig",
+    "behaviour": "Ceiling dweller; marked electrical zone, charge flash, discharge, vulnerable recovery",
+    "id": "signal-leech",
+    "requirements": "Defeatable with native attacks and no required purchases"
+  },
+  "entrance": {
+    "candidate": "Sewer_Save02",
+    "placement": {
+      "destination": "ML_Platform spawn 1",
+      "return_spawn": {
+        "facing": "left",
+        "id": 2,
+        "units": [
+          44,
+          2
+        ]
+      },
+      "room": "Sewer_Save02",
+      "trigger_center_units": [
+        61,
+        4
+      ],
+      "trigger_size": [
+        12,
+        24
+      ]
+    },
+    "requirements": "Walk into the far right wall past the desk of the save room off Sewer_Map07; native exits untouched"
+  },
+  "id": "midnight-line",
+  "identity": "Optional eerie subway adventure, connected to the existing campaign",
+  "implemented_foundations": [
+    "lossless_room_objects",
+    "entity_batch_framing",
+    "collision_node_list_framing",
+    "native_room_lookup_catalog",
+    "namespace_asset_staging",
+    "authored_geometry_shell",
+    "candidate_versioned_progress_codec",
+    "lossless_room_event_groups",
+    "repaired_empty_room_initialization",
+    "normal_context_entry_and_native_exit_probe",
+    "native_door_spawn_and_variable_formats",
+    "production_room_table_in_kit_autoload",
+    "authored_native_entrance_door",
+    "five_sanitized_room_clones_with_palette_grade",
+    "native_flag_persistence_252_275",
+    "refuge_save_room_guard_patch"
+  ],
+  "objectives": [
+    "find_emergency_power",
+    "reach_switching_house",
+    "restore_main_power",
+    "investigate_sealed_tunnel"
+  ],
+  "persistence": {
+    "milestones": [
+      "discovered",
+      "main_power_restored",
+      "completed"
+    ],
+    "publication_gate": "Passed for the first slice: refuge save/Continue restores room 77 and its flag; rollback ROMs without the guard patch reject chapter saves",
+    "required": true,
+    "storage": {
+      "evidence": "Flags 245..282 unset in 62 save slots; 251..275 no event, ARM9 constant or room-table reference",
+      "kind": "native story flags (stats+0x1C, saved natively)",
+      "milestones": {
+        "completed": 258,
+        "discovered": 252,
+        "main_power_restored": 257,
+        "teaser_seen": 259
+      },
+      "puzzle_state": [
+        260,
+        267
+      ],
+      "remapped_encounter_flags": {
+        "ML_Service ambush (Sewer_Map02 0x42)": 268,
+        "free": [
+          269,
+          275
+        ]
+      },
+      "unassigned": 251,
+      "visited": {
+        "ML_Gallery": 256,
+        "ML_Platform": 252,
+        "ML_Refuge": 253,
+        "ML_Service": 254,
+        "ML_Switching": 255
+      }
+    },
+    "temporary_circuit": "Restore a safe configuration on re-entry"
+  },
+  "player_confirmed": false,
+  "player_kit": "Preserve accepted Red, Black and shared abilities and purchases",
+  "published": false,
+  "release_gates": [
+    "room_collision_and_reversible_exit",
+    "namespaced_asset_registration",
+    "safe_persistent_storage",
+    "signal_leech",
+    "five_room_composition",
+    "save_reload_and_native_parity",
+    "performance_and_crash_qualification"
+  ],
+  "remaining_implementation": [
+    "power_puzzle_and_objective_board",
+    "signal_leech_art_and_behaviour",
+    "conductor_teaser",
+    "chapter_minimap_and_area_label",
+    "completion_milestones_and_reward",
+    "player_feedback_iteration"
+  ],
+  "research_evidence": "work/midnight-line/",
+  "rooms": [
+    {
+      "id": "ml_platform",
+      "name": "Last Platform",
+      "role": "Campaign entrance, return point and introduction",
+      "room_index": 76,
+      "source": "Sewer_Map03"
+    },
+    {
+      "id": "ml_refuge",
+      "name": "Maintenance Refuge",
+      "role": "Combat-free office; emergency power lights the refuge and objective board",
+      "room_index": 77,
+      "source": "Sewer_Save03"
+    },
+    {
+      "id": "ml_service",
+      "name": "Service Passage",
+      "role": "Lower route, emergency-power switch and first Signal Leech",
+      "room_index": 78,
+      "source": "Sewer_Map02"
+    },
+    {
+      "id": "ml_switching",
+      "name": "Switching House",
+      "role": "Route power between track lighting and service gate; restore main power",
+      "room_index": 79,
+      "source": "Sewer_Map13"
+    },
+    {
+      "id": "ml_gallery",
+      "name": "Overhead Gallery",
+      "role": "Upper return route, permanent shortcut and sealed-tunnel teaser",
+      "room_index": 80,
+      "source": "Sewer_Map01"
+    }
+  ],
+  "schema_version": 1,
+  "status": "first-slice-candidate",
+  "teaser": "Sequential tunnel-light blackout, passing silhouette, distant massive sound; no forced boss or timed escape"
+}

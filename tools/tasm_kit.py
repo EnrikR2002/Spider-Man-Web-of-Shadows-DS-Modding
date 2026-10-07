@@ -80,8 +80,8 @@ CLIP_SOURCES = {
     'zz_tasm_RushFinish.sca': ('spd_GroundAttack17.sca', 'split_sweep'),
 }
 PROFILE = 'tasm-kit'
-VERSION = '0.5.0'
-RELEASE_DATE = '2026-10-06'
+VERSION = '0.6.0'
+RELEASE_DATE = '2026-10-07'
 RELEASE_PROFILE = f'tasm-v{VERSION}'
 PARENT_RELEASE = 'tasm-v0.1.1'
 # Red purchase names (menu/list) and instructions; boot and Options version.
@@ -154,6 +154,13 @@ def grow_extension(rom, raw, kit_image):
     new_table = SOURCE + len(image)
     struct.pack_into('<2I', new, TABLE_POINTERS, BASE + new_table, BASE + new_table + 36)
     struct.pack_into('<I', new, ARENA_LOWER, TARGET + RESERVE)
+    return replace_arm9(rom, bytes(new))
+
+
+def replace_arm9(rom, new):
+    """Store a grown ARM9 binary; relocate ARM7/FNT/FAT/files by the padded growth."""
+    h = w.parse_header(rom)
+    start = h['arm9_offset']
     boundary = h['arm7_offset']
     delta = w.align_up(start + len(new)) - boundary
     if delta < 0 or h['used_rom_size'] + delta > len(rom) or (delta and any(x not in (0, 255) for x in rom[-delta:])):

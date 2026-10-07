@@ -181,7 +181,10 @@ Yourself).
 Player verdict on v0.4.0 (2026-10-06): having lots of fun, smooth overall, but
 Spider-Sense and Leapfrog felt "teleporty"; Sense clipped him out of the level
 and a crowd fight froze the game. v0.4.1 fixes both (Sense teleport corrupted
-the heap) and makes every kit movement velocity-driven: no position writes.
+the heap) and converts Sense, Leapfrog and Perch to velocity. A 2026-10-06 audit
+found remaining direct Skyjack juggle drift; velocity and combined crowd-backend
+candidates passed agent checks, including native wall bounds. They remain
+unpublished and player feel is untested (TECHNICAL "Shared crowd-hit backend candidates").
 
 | Skill | Shipped version | Next iteration once mapped/played |
 |---|---|---|
@@ -207,6 +210,13 @@ Measure time spent being hit while committed, wrong-direction hits and failed
 cancels. Real HP is telemetry, not a target yet.
 
 ## Parked for later Red skills
+
+2026-10-06: the player wants combat left steady while learning it; authorized
+Midnight Line chapter work takes priority (reference/midnight_line.json).
+Previously offered slot extensions remain deferred: air Reflex web-zip hops
+between enemies, wall-rebound flying kick, Split sweep-to-juggle, steerable
+Skyjack spike and Perch spring-to-dive-kick. Additional web spray/crowd stun and
+object/crate yanks need shop/ownership research alongside the tools below.
 
 These need extra shop rows (research): web tags shared across tools, Clap,
 bowling-spread tags, Reel/Net, Orbit tetherball, tier-5 Cocoon. Wall/ceiling

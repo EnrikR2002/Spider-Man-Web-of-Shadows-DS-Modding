@@ -83,9 +83,12 @@ class PlaytestTests(unittest.TestCase):
         exe = self.root/'DeSmuME.exe'; exe.write_bytes(b'placeholder')
         p.configure(self.battery, self.config, exe)
         p.adopt(self.source, self.destination, self.store); self.rom.write_bytes(b'placeholder')
-        with patch.object(p, 'assert_closed'), patch.object(p.w, 'validate_rom'), patch.object(p.subprocess, 'Popen') as launch:
-            self.assertEqual(p.launch(self.config, self.store), 0)
-        launch.assert_called_once_with([str(exe.resolve()), str(self.rom)], cwd=str(exe.parent))
+        for preset in ('current', 'jit-preview', 'renderer-preview'):
+            with self.subTest(preset=preset):
+                with patch.object(p, 'assert_closed'), patch.object(p.w, 'validate_rom'), patch.object(p.subprocess, 'Popen') as launch:
+                    self.assertEqual(p.launch(self.config, self.store, preset), 0)
+                launch.assert_called_once_with([str(exe.resolve()), *p.LAUNCH_PRESETS[preset], str(self.rom)],
+                                              cwd=str(exe.parent))
         self.assertEqual(self.destination.read_bytes(), self.source.read_bytes())
         self.assertEqual(len(list(self.store.glob('before-play-*'))), 1)
 

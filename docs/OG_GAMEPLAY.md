@@ -103,3 +103,23 @@ changes alone do not prove new mechanics. Exact evasion/cancel/recovery windows,
 specialized health paths, room entities/triggers and all story gates remain
 research. The complete earlier gameplay/engine notes are preserved in the archive:
 `ORIGINAL_GAMEPLAY.md`, `UPGRADE_ENGINE.md`, `COMBO_ENGINE.md`.
+
+## Rooms, save points and near-death
+
+The world is 75 rooms (Downtown, Hive, Pier, Residential, Sewer, plus test rooms)
+joined by edge doors: walking into an edge loads the neighbour and places Spidey
+beside its matching door, facing into the room (side doors walk him a few steps
+in; overhead doors drop him). Part of the Sewer is an underground subway
+station (Sewer_Map02 station and timetable, Sewer_Map03 tracks, Sewer_Map13
+stairs). Each room marks itself visited on entry; certain first entries advance
+the mission counter (Sewer_Map01 and Sewer_Map03 do). Some rooms run one-time
+ambushes that lock their doors while enemies are alive.
+
+Save rooms hold a save sphere: X opens Save Options (Save, Buy Upgrades, Test
+Upgrades, Continue); Save asks "Do you want to save your progress?" then shows
+"Save Complete". Continue from the title resumes in the saved room.
+
+At zero health a touch-screen minigame starts: collect health orbs and touch
+poison orbs to burst them. Doing badly ("Failure! Very little health
+replenished") still resumes play in the same room with a little health.
+Technical formats: TECHNICAL "Native doors, spawns and game variables".

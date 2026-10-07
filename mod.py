@@ -98,13 +98,22 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
     if checked_names != names: raise ValueError('Build verification: changed filename table')
     for i, blob in enumerate(blobs):
         if checked[offsets[i]:offsets[i + 1]] != blob: raise ValueError(f'Build verification failed: {names[i]}')
+    chapter = None
+    if release_info.PROFILE_INFO.get(gameplay_profile, {}).get('chapter'):
+        # Final verified stage: Midnight Line appends its rooms and grows the
+        # kit autoload; it proves every other resource unchanged itself.
+        from tools import midnight_chapter
+        result, chapter = midnight_chapter.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = report['nitrofs'][0]
+        new_glob = result[ge['start']:ge['end']]
     log = {'schema_version': 1, 'clean_rom_sha256': w.sha256(rom), 'output_rom_sha256': w.sha256(result),
            'clean_glob_sha256': manifest['sha256'], 'output_glob_sha256': w.sha256(new_glob),
            'rom_size': len(result), 'used_rom_size': report['header']['used_rom_size'],
            'combat_data_edits': combat_edits,
            'header_crc16': report['header']['header_crc16'], 'nitrofs': report['nitrofs'],
            'replaced_assets': replacements, 'identical_overlays': identical,
-           'added_assets':added,
+           'added_assets':added, 'midnight_line': chapter,
            'verified_resource_count': len(names), 'unchanged_resource_count': len(names) - len(replacements)-len(added)}
     if gameplay_profile in release_info.PROFILES:
         release = release_info.PROFILE_INFO[gameplay_profile]

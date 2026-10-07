@@ -69,6 +69,12 @@ PROFILE_INFO = {
                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                     'arm9_sha256': '88328d560f095a0f46fe07a2476922fb957e4933cb429ca831105113ed650f97'},
+    # Midnight Line first station: five appended rooms behind Sewer_Save02 (CHANGES v0.6.0).
+    # The kit ARM9 above is composed first; mod.create_build then applies the chapter.
+    'tasm-v0.6.0': {'version': '0.6.0', 'date': '2026-10-07', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': 'efab33e0f8154f6ad76fcf453c70d9d7146165b83e04ee1d4ea2cfd6b1b7b621'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

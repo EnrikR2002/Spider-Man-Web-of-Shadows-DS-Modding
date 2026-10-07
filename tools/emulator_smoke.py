@@ -97,6 +97,25 @@ def input_schedule(rows):
     return result
 
 
+POINTER, POINTER_X, POINTER_Y, POINTER_PRESSED = 6, 0, 1, 2   # libretro pointer device
+SCREEN = (256, 384)                                           # both DS screens, top first
+
+
+def touch_schedule(rows):
+    """Optional row 'touch': [x, y] pixels of the stacked output (bottom screen y>=192)."""
+    result = []
+    input_schedule(rows)                                      # same frame-range validation
+    for row in rows:
+        if 'touch' not in row: continue
+        point = row['touch']
+        if (not isinstance(point, list) or len(point) != 2 or any(type(v) is not int for v in point)
+                or not 0 <= point[0] < SCREEN[0] or not 0 <= point[1] < SCREEN[1]):
+            raise ValueError('Touch point must be [x, y] inside the 256x384 output')
+        scaled = tuple(round((v + 0.5) * 2 * 0x7FFF / size) - 0x7FFF for v, size in zip(point, SCREEN))
+        result.append((row['start'], row['end'], scaled))
+    return result
+
+
 def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, ram_captures=(), trace_frames=(), battery_captures=(), frame_hook=None, observer=None, core_options=None, timing_start=None):
     if os.name != 'nt' or c.sizeof(c.c_void_p) != 8: raise ValueError('Pinned emulator harness requires Windows x64')
     if w.sha256(CORE_PATH.read_bytes()) != CORE_SHA256: raise ValueError('Emulator core integrity check failed')
@@ -126,6 +145,8 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
         variables.update(core_options)
     state = {'frame': 0, 'last': None, 'pixel_format': 1}
     schedule = input_schedule(script) if script is not None else None
+    touches = touch_schedule(script) if script is not None else []
+    if touches: variables[b'melonds_touch_mode'] = b'touch'
 
     @ENV
     def environment(cmd, pointer):
@@ -163,6 +184,10 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
     @INPUT
     def input_state(port, device, index, button):
         frame = state['frame']
+        if device == POINTER and port == 0 and index == 0:
+            point = next((xy for start, end, xy in touches if start <= frame < end), None)
+            if point is None: return 0
+            return point[0] if button == POINTER_X else point[1] if button == POINTER_Y else int(button == POINTER_PRESSED)
         if schedule is not None:
             return int(device == 1 and port == 0 and any(start <= frame < end and button in buttons
                        for start, end, buttons in schedule))

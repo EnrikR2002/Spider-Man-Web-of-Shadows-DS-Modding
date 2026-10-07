@@ -216,7 +216,7 @@ def run(rom, label, inputs, **options):
 
 def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=None, patch=None, probe=None,
         caps=(), rams=(), arena=False, tx=120000, ty=40922, save=None, near=None, place=(), phantom=None, start_x=None, refill=False, extra_hook=None,
-        sparring=False):
+        sparring=False, timing=False, core_options=None):
     """One disposable emulator run; returns (output directory, observation rows)."""
     rom = Path(rom).resolve()
     rel = rows_from(inputs) if not isinstance(inputs, list) else inputs
@@ -230,8 +230,11 @@ def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=N
         save = Path(save or TRAINING_SAVE)
     if not save.is_file():
         raise ValueError(f'Copied research save missing: {save} (use --save with a private snapshot copy)')
-    script = prefix + [{'start': r['start'] + start, 'end': r['end'] + start, 'buttons': r['buttons']} for r in rel]
+    script = prefix + [{**r, 'start': r['start'] + start, 'end': r['end'] + start} for r in rel]
     patches = rows_from(patch) if patch else []
+    options = {**NO_JIT, **(core_options or {})}
+    if patches and options[b'melonds_jit_enable'] != b'disabled':
+        raise ValueError('Runtime code patches require JIT disabled')
 
     def hook(frame, lib):
         if patches and frame in (60, start - 40):
@@ -289,7 +292,8 @@ def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=N
         return observe_row(ram_of(lib)[1], frame, start, probe)
 
     dest = emu.run(rom, start + frames, {start + x for x in caps}, save_path=save, script=script, label=label,
-                   frame_hook=hook, observer=observe, ram_captures={start + x for x in rams}, core_options=NO_JIT)
+                   frame_hook=hook, observer=observe, ram_captures={start + x for x in rams}, core_options=options,
+                   timing_start=start if timing else None)
     path = dest / 'observations.json'
     rows = json.loads(path.read_text()) if path.exists() else []
     write_trace(dest, rows)
@@ -323,9 +327,18 @@ def first(rows, cond):
     return next((r for r in rows if cond(r)), None)
 
 
-def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a31b005e201c7c4e276fc46dbf3e5d842/Spider-Man-WoS-modded.nds'):
+def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a31b005e201c7c4e276fc46dbf3e5d842/Spider-Man-WoS-modded.nds',
+            *, patch=None, label_prefix='', out=None, progress=None):
     """Measured expectations for the kit (v0.2.0 .. v0.4.1); parent = v0.1.1 for native parity."""
-    def go(label, name, frames, **kw): return run(rom, label, INPUTS / f'{name}.json', frames=frames, **kw)[1]
+    published_evidence = ROOT / 'work/kit/evidence.json'
+    if patch and (not out or not label_prefix or Path(out).resolve() == published_evidence.resolve()):
+        raise ValueError('Patched qualification needs separate output and trace labels')
+    if label_prefix and not label_prefix.replace('-', '').replace('_', '').isalnum():
+        raise ValueError('Invalid qualification label prefix')
+    def go(label, name, frames, **kw):
+        if progress: progress(label)
+        if patch: kw['patch'] = str(patch)
+        return run(rom, label_prefix + label, INPUTS / f'{name}.json', frames=frames, **kw)[1]
     ck = {}
     o = go('q_reflex', 'reflex', 300)
     d = first(o, lambda r: r['f'] >= 30 and r['st'] == 53)
@@ -414,10 +427,12 @@ def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a3
                                     ('q_snare_off', 'snare', 200, {'bits': 0, 'clear': 0xFE000}),
                                     ('q_black', 'black', 300, {})):
         mine = seq(go(label, name, frames, **kw))
-        base = seq(run(parent, label + '_p', INPUTS / f'{name}.json', frames=frames, **kw)[1])
+        base = seq(run(parent, label_prefix + label + '_p', INPUTS / f'{name}.json', frames=frames, **kw)[1])
         ck[f'native_identical_{label}'] = same_behavior(mine, base)
     report = {'rom': str(rom), 'parent': str(parent), 'checks': ck, 'passed': all(ck.values())}
-    out = ROOT / 'work/kit/evidence.json'
+    if patch: report['runtime_patch'] = str(patch)
+    out = Path(out or published_evidence)
+    emu.w.safe_output(out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(report, indent=1))
     return report
@@ -584,6 +599,7 @@ def main(argv=None):
         s.add_argument('--sparring', action='store_true', help='training: keep the v0.5.0 sparring Brutes and native HP')
     s = sub.add_parser('_child'); s.add_argument('request')
     s = sub.add_parser('qualify'); s.add_argument('rom'); s.add_argument('--parent', default=None)
+    s.add_argument('--patch'); s.add_argument('--label-prefix', default=''); s.add_argument('--out')
     s = sub.add_parser('preview'); s.add_argument('clip'); s.add_argument('marks', nargs='?', default='')
     s = sub.add_parser('sheet'); s.add_argument('dir'); s.add_argument('--box', default='0,0,256,192')
     s.add_argument('--scale', type=int, default=1); s.add_argument('--cols', type=int, default=8)
@@ -618,7 +634,8 @@ def main(argv=None):
             dest, _ = _run(req['rom'], req['label'], req['inputs'], **opts)
             print('KITLAB_DEST ' + str(dest), flush=True)
         elif a.cmd == 'qualify':
-            report = qualify(a.rom, *( [a.parent] if a.parent else []))
+            report = qualify(a.rom, *( [a.parent] if a.parent else []),
+                             patch=a.patch, label_prefix=a.label_prefix, out=a.out)
             print(json.dumps(report, indent=1)); return 0 if report['passed'] else 1
         elif a.cmd == 'preview':
             print(preview_clip(a.clip, tuple(int(x) for x in a.marks.split(',') if x)))

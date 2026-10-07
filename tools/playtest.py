@@ -24,13 +24,18 @@ CONFIG = mod.ROOT / 'work/playtest.json'
 ROM = mod.ROOT / 'build/Spider-Man-WoS-modded.nds'
 CANDIDATE = mod.ROOT / 'build/playtest-candidate/Spider-Man-WoS-modded.nds'
 RELEASES = mod.ROOT / 'build/releases'
-# Optional DeSmuME0.9.13 command-line experiments. The ordinary launcher uses
-# saved settings. This tool does not edit the INI or load save states, but the
+# DeSmuME0.9.13 command-line experiments. The current preset uses saved settings;
+# accepted baseline is jit-preview; the shortcut selects renderer-preview
+# during the current isolated renderer trial.
+# This tool does not edit the INI or load save states, but the
 # emulator persists its selected 3D renderer even for a command-line override.
 # Sources: release_0_9_13/src/commandline.cpp and frontend/windows/main.cpp.
-# Performance/visual acceptance remains open; presets are not activated by default.
+# JIT12 performance is player-confirmed; renderer previews need separate validation.
 LAUNCH_PRESETS = {
     'current': (),
+    'jit-preview': ('--jit-enable', '--jit-size', '12'),
+    'renderer-preview': ('--jit-enable', '--jit-size', '12',
+                         '--3d-render', 'autogl', '--gpu-resolution-multiplier', '1'),
     'performance-preview': ('--preload-rom', '--jit-enable', '--jit-size', '12'),
     'hd-preview': ('--preload-rom', '--jit-enable', '--jit-size', '12',
                    '--3d-render', 'autogl', '--gpu-resolution-multiplier', '2'),

@@ -1,9 +1,30 @@
 """Kit research lab: tracked input scripts stay valid; parity comparison tolerates only a phase."""
 import unittest
+import tempfile
+from pathlib import Path
+from unittest import mock
 from tools import emulator_smoke, kit_lab
 
 
 class KitLabTests(unittest.TestCase):
+    def test_runtime_patch_cannot_replace_published_qualification_evidence(self):
+        published = kit_lab.ROOT / 'work/kit/evidence.json'
+        for options in ({}, {'out': published, 'label_prefix': 'candidate-'},
+                        {'out': published.with_name('candidate.json')}):
+            with self.subTest(options=options), self.assertRaisesRegex(ValueError, 'separate output'):
+                kit_lab.qualify('unused.nds', patch='unused.json', **options)
+
+    def test_jit_rejected_before_applying_runtime_code_patches(self):
+        with tempfile.TemporaryDirectory() as directory:
+            save = Path(directory) / 'copy.dsv'
+            save.write_bytes(b'fixture')
+            patches = Path(directory) / 'patches.json'
+            patches.write_text('[{"addr": 33554432, "hex": "00000000"}]')
+            with mock.patch.object(emulator_smoke, 'run', side_effect=AssertionError('must not run')):
+                with self.assertRaisesRegex(ValueError, 'JIT disabled'):
+                    kit_lab._run('unused.nds', 'test', [], save=save, patch=patches,
+                                 core_options={b'melonds_jit_enable': b'enabled'})
+
     def test_every_tracked_input_script_is_a_valid_schedule(self):
         files = sorted(kit_lab.INPUTS.glob('*.json'))
         self.assertGreater(len(files), 10)

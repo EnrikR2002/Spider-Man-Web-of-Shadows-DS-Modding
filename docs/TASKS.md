@@ -1,52 +1,69 @@
 # Current work, backend queue and handoff
 
-Updated 2026-10-06 (America/Edmonton). Read this and AGENTS at startup; then only
+Updated 2026-10-07 (America/Edmonton). Read this and AGENTS at startup; then only
 the section relevant to the task. Shipped history: [CHANGES](CHANGES.md); ROM
 knowledge: [TECHNICAL](TECHNICAL.md); combat design: [TASM_ROADMAP](TASM_ROADMAP.md).
 
 ## Current work
 
-**v0.5.0 (profile tasm-v0.5.0): Test Upgrades sparring room.** Player asked
-(2026-10-06) for several enemies in training that hit back, with auto-heal.
-Three Brutes added to `Test_Combat01_app.obj` (`tools/training_room.py`); kit
-training logic (TECHNICAL "Training room (Test Upgrades, v0.5.0)"): Brutes get
-the native training flag (defeat refills them, 8 HP units), Spidey heals every
-30 s or on SELECT+Down and cannot die there. Red kit unchanged otherwise.
-Published stable `fd7e4420`; agent-tested (qualification 31/31, crash hunt
-12/12, sparring idle/fight runs in work/training/), not yet player-confirmed.
-Real save `80c3ed12...` checkpointed before publication.
-v0.4.1 (`da324b3c`) remains the previous stable: freeze fix, Sense dash,
-continuous Leapfrog vault (CHANGES v0.4.1); its player playtest is still open.
+**v0.6.0 stable `36aa52f8`: Midnight Line first station (exploration slice).**
+Authorized 2026-10-06 and prioritized over new combat mechanics. Entrance:
+Sewer_Save02's far right wall. Five rooms 76-80 (sanitized native subway
+clones, midnight palette grade), loop Platform -> Service -> Switching ->
+Gallery -> Platform, Refuge with a working save sphere, encounters in Service
+and Switching. Persistence uses native flags 252..275 (visited 252..256,
+milestones 257..259, puzzle 260..267, remapped encounters 268..275).
+Agent-tested: 14/14 doors, Refuge save/Continue, death minigame, kit 31/31,
+crash hunt 12/12, 215 unit tests. Not player-confirmed. Spec:
+`reference/midnight_line.json`; build: TECHNICAL "Midnight Line chapter build
+(v0.6.0)"; formats: "Native doors, spawns and game variables".
 
-## Ordered next development
+Next (in order): 1) player feedback on route feel, discoverability and fights;
+2) power puzzle (Switching House: native switch/gate entities and `0x1D`/`0x26`
+on flags 257/260+, objective board in the Refuge); 3) Signal Leech (original
+model/texture on an existing rig, ceiling charge/discharge, defeatable with
+native attacks); 4) Conductor teaser (light blackout + silhouette; Sewer_Map01's
+route-following silhouette NPC is a candidate); 5) chapter minimap/area label
+(bottom screen shows the source rooms' maps, Refuge says "Pier"). Gallery's
+mini-boss stays dormant outside its story beat.
 
-1. **Player playtest of v0.5.0 sparring:** heal interval (30 s), Brute count
-   and spacing, whether the passive dummy should also fight; offer the other
-   training ideas below.
-2. **Player playtest of v0.4.1 moves:** long crowd fights with Y/R/held-R spam (no
-   freeze?), Sense dash feel and guard window, Leapfrog vault feel, Perch near
-   walls; still open from v0.4.0: Skyjack bowling radius, Perch hop on real
-   crowds, bosses.
-3. Crowd play with the hit replay (TECHNICAL "Hit pipeline"): Spin Cycle hits
-   enemies it passes through; Leapfrog kick-through (the popped enemy bowls the
-   one behind him); *Stop Hitting Yourself*. Keep the pace fast.
-4. Spider-Sense tingle: a marker over an enemy starting an attack behind or
-   off-screen (no slow-motion). Needs a sprite/HUD hook (TECHNICAL HUD notes).
-5. Remaining TASM_ROADMAP iterations: Perch boss shake-off and entry from
-   jumps/walls; Leapfrog vault before the kick; Spin Cycle exit flourish and
-   spin-to-launch; Split Decision two-sided contacts.
-6. Confirm enemy state 24 (action 41) as an attack; measure heap in a boss room;
-   run `tools/crash_hunt.py batch` in a boss room and a second level.
+### Handoff commands
 
-## New ideas to discuss with the player (2026-10-06)
+Run `python -m unittest discover -s tests` (215/215). Chapter dev candidate from
+stable v0.5.0: `python tools/midnight_chapter.py` (`build/midnight-line/
+chapter.nds`). Release: `python tools/tasm_kit.py` composes kit + chapter
+(`mod.create_build` applies `midnight_chapter.apply_rom` for profiles with
+`chapter`). Lab checks (copied saves; add `--rom R`): `python
+tools/midnight_line.py tour`, `save-test`, `ambush [--native] [--seed N]`.
+Evidence: `work/midnight-line/chapter-*.json`, `work/kit/v0.6.0/`. The older
+`stage-platform`/`probe-room` shells and the padding-bit codec
+(`midnight_progress.py`) are superseded research; do not ship them.
 
-Within the 7 Red slots (extensions, no new shop rows): air Reflex toward an enemy
-becomes a web-zip hop to him (chain aerial hops between enemies, Lizard-fight
-style); wall bounce: Reflex into a nearby wall rebounds into a flying kick;
-Split Decision sweep launches into a short juggle; Skyjack finisher can be
-steered into a chosen enemy; Perch spring lands into a dive kick. Needing shop
-rows (research): web tags (tag now, yank later), web spray crowd stun, yank
-objects/crates into enemies, Clap, Reel, Cocoon.
+**Crowd performance:** JIT12 is player-confirmed as the accepted baseline.
+AUTOGL 1x + JIT12 renderer trial is pending player verdict; evidence is
+`work/performance/renderer-player-trial-2026-10-06.json` and TECHNICAL
+"Crowd combat performance".
+
+**Shared crowd-hit backend staged, player ROM unchanged.** Area, Skyjack and
+combined candidates pass their isolated checks; velocity candidates still drift
+outside walls. Sources: `tools/crowd_{hits.s,backend.py,area_lab.py}`;
+validation: `work/kit/crowd-backend/validation.json`.
+
+**v0.5.0 `fd7e4420` (included in v0.6.0): Test Upgrades sparring.** Feel is
+not player-confirmed. Details: CHANGES v0.5.0/TECHNICAL "Training room".
+
+## Previous queue (deferred; Midnight Line first)
+
+1. Midnight Line puzzle, Signal Leech and teaser (Current work list).
+2. Await renderer verdict; then integrate/qualify the staged crowd backend.
+3. Player-test v0.5.0 sparring and v0.4.1 move feel. Kit iterations remain
+   deferred; later research includes enemy state 24/action 41 and boss rooms.
+
+## Deferred combat ideas
+
+Kit extensions and additional shop skills remain in TASM_ROADMAP. Midnight Line
+is now the authorized priority; leave combat mechanics steady while the player
+learns the kit.
 
 ## Training room ideas offered to the player (2026-10-06)
 
@@ -56,20 +73,19 @@ or count presets, a combo/damage readout, quick reset of positions.
 
 ## Backend ideas retained
 
-Independent shop rows/ownership/refund/save migration; third suit selector;
-native HUD/accessibility settings; training timing/reset/quick retry; camera
-tracking; enemy windups/fair anti-loop AI; room/encounter/BSP/OBJ editing; same-size
-texture work, models/rigs and SDAT sound tools. Selected Ben Reilly/2099/Kaine/
-Raimi/symbiote backlog is in reference/suit_roadmap.json, after the combined TASM
-kit. Shared progression/traversal remain intact. Research/ideas are not releases.
+Training controls/challenges, expanded shop/ownership/refund migration, HUD/Sense
+warning, camera, AI, extra suits and audio remain queued research. Selected suits:
+reference/suit_roadmap.json. Preserve shared progression/traversal. Renderer and
+crowd-backend work are approved but unpublished; Midnight Line now takes priority.
 
 ## Evidence and safe resumption
 
 - Kit: source `tools/tasm_kit.{py,s,hex}`, `tools/kit_choreography.py`,
   `tools/kit_clips.py`, `tools/training_room.py`; candidate
-  `build/version-0.5.0` (regenerate: `python tools/tasm_kit.py`). Constants only via the `lit_` table (TECHNICAL
+  `build/version-0.6.0` (regenerate: `python tools/tasm_kit.py`). Constants only via the `lit_` table (TECHNICAL
   pitfalls); `assemble_tasm_kit.py` checks literals and native branches. Kit code
-  never writes positions and checks other actors with `kit_alive`.
+  checks other actors with `kit_alive`; remaining Skyjack position drift has
+  the separate velocity-only candidate above.
 - Research/qualification: `tools/kit_lab.py` (inputs `reference/combat-inputs/kit/`;
   evidence work/kit/evidence.json, 31/31). Fixtures: `--near U`, `--at X`,
   `--phantom DX`, `--place DX:DY|skip` (training and arena; arena is
@@ -78,14 +94,14 @@ kit. Shared progression/traversal remain intact. Research/ideas are not releases
   `python tools/crash_hunt.py batch FIRST LAST --rom R` (outputs work/crash/),
   `regs STATE --ram RAM` decodes aborts. Workflow: TECHNICAL "Research workflow".
 - Prior releases (candidate mods + recipe in build/version-X, ROM rollback in
-  build/releases/<sha>/): v0.4.1 `da324b3c`, v0.4.0 `5e6465d8` (freeze bug), v0.3.0 `34736eeb`,
+  build/releases/<sha>/): v0.5.0 `fd7e4420`, v0.4.1 `da324b3c`, v0.4.0 `5e6465d8` (freeze bug), v0.3.0 `34736eeb`,
   v0.2.1 `00ca471c`, v0.2.0 `935d486b`, v0.1.1 `bcc6974a`. All kit releases before
   v0.4.1 carry the Sense heap bug; do not roll back to them.
 - Real Battery path: work/playtest.json. Re-read the latest save while DeSmuME is
   closed before publication/checkpoints; verify wrapper/snapshot bytes. Player only
-  launches/Continues/plays/saves/closes. Agent owns other operations.
+  launches/Continues/plays/saves/closes. Agent owns other operations. Saves made
+  inside the chapter are rejected by ROMs before v0.6.0 (battery intact).
 
-No new Markdown files. Use the six fixed roles; append technical evidence/change
-entries in their owner and keep this handoff under 900 words. Archives are read
-through tools/doc_archive.py in bounded sections. Cache files remain ignored;
+No new Markdown files. Update the six owning documents; keep this under 900 words.
+Read archives through tools/doc_archive.py in bounded sections. Cache files remain ignored;
 prior deletion was rejected by automatic approval review.

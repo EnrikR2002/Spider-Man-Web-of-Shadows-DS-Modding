@@ -452,8 +452,8 @@ Floor contact parity and reviewed contact sheets do not cover those encounters.
 
 ## Performance and visuals
 
-2026-10-04. The best next performance experiments are the actual DeSmuME CPU,
-ROM loading and renderer settings. The clearest visual upgrade is higher internal
+Updated 2026-10-06. Combat measurements below strengthen the case for testing
+DeSmuME JIT first, then renderer settings. The clearest visual upgrade is higher internal
 3D resolution, followed by selective texture/pose work. Neither a whole-game
 speedup nor a new HD art pack has been established by this investigation.
 
@@ -514,8 +514,9 @@ The window is already639x958; a larger window alone does not add 3D detail.
 The release CLI supports ROM preloading, JIT, block-size control, OpenGL selection
 and a2x GPU resolution multiplier. Prepared optional `playtest.py launch --preset`
 choices: `performance-preview` preloads/JIT12; `hd-preview` adds AUTOGL/2x.
-The normal `Play Spider-Man.cmd` retains its current launch path. Neither preview
-was launched or accepted here. The launcher itself does not edit INI files, but
+Neither combined preview was launched or accepted in the 2026-10-04 investigation.
+The later JIT-only player trial uses the normal shortcut (see the crowd section).
+The launcher itself does not edit INI files, but
 DeSmuME's startup saves the selected renderer, including a CLI override; back up
 the INI before an HD trial and restore it while closed if reverting.
 [CLI implementation](https://github.com/TASEmulators/desmume/blob/release_0_9_13/desmume/src/commandline.cpp),
@@ -535,6 +536,124 @@ frames while the emulator stays at full speed has a different bottleneck from
 host emulation slowdown. Current evidence does not distinguish those cases for
 the reported intermittent lag. Keep frame limiter, timing accuracy, audio and
 purchase/save behavior fixed while isolating each variable.
+
+### Crowd combat performance (v0.5.0, 2026-10-06)
+
+**Player report:** large rooms with many enemies and long combos slow the whole
+scene, like slow motion; not just a brief pause on each impact. Investigation
+used the unchanged published v0.5.0 ROM (`fd7e4420...`), copied research saves and
+disposable melonDS DS 1.1.5 instances. No player ROM, save or emulator settings
+were changed. This is research, not a published FPS fix.
+
+Reusable tool: `tools/combat_benchmark.py`; optional `_run(timing=True,
+core_options=...)` in `kit_lab.py`. Workers fresh-boot serially, alternate mode
+order across two rounds, and use seeded Y/R/held-R/web/jump inputs for 1,800
+combat frames after the existing training/story entry scripts. All seven Red
+slots and shared dodge prerequisites are enabled only in disposable RAM. Story
+actors/player refill in RAM so combat can continue. The solo scene removes the
+sparring placements through `kit_lab.solo_rom`; the sparring scene keeps all four
+enemies. Source ROM/save hashes are checked, and captures were inspected.
+
+Host times measure `retro_run` including its video callback, excluding RAM
+exports, Python observers and PNG generation. **These are not Nintendo DS FPS or
+DeSmuME measurements.** JIT uses this core's default 32-instruction blocks with
+fast-memory disabled; the proposed DeSmuME trial explicitly uses block size 12.
+The player's emulator was initially open and closed during the first series;
+other host workload, scheduling and differing AI trajectories limit precision.
+Do not compare absolute times across the two campaigns or multiply their gains.
+
+First campaign: two runs/mode/scene, seeds 600/601. Numbers are medians of the two
+run means/p95s, in ms per emulator call:
+
+| Scene | Interpreter mean / p95 | JIT mean / p95 | Lower mean host cost |
+|---|---:|---:|---:|
+| Solo idle | 5.927 / 7.666 | 4.659 / 6.789 | 21.4% |
+| Four-enemy sparring combos | 8.378 / 12.679 | 6.060 / 9.381 | 27.7% |
+| Sewer story combos | 11.692 / 20.399 | 8.882 / 15.787 | 24.0% |
+
+The story comparison is weaker: median live common-enemy actor counts varied
+4/7 (interpreter) versus 5/5 (JIT), and the count includes small state-6 objects.
+It is not a fixed-density comparison. The enclosed sparring scene retained four
+live enemies in every mode and is the stronger control.
+
+Second campaign: enclosed sparring only, seeds 630/631, JIT in both modes.
+Serial software rendering: mean 5.498 ms, p95 7.814; threaded software rendering:
+mean 4.256, p95 5.354. Mean host cost fell 22.6%, supporting a renderer trial after
+JIT. It does not establish DeSmuME renderer performance or exact framebuffer/AI
+parity; the reviewed frames were coherent with all four enemies present.
+
+**Cadence:** the kit tick at `0x02154C20` counts Spidey updates, not rendered
+frames. In the second round of the first campaign and all accepted renderer
+runs, the HUD callback counter at `0x0215242C` stayed 29.98-30.02 updates per 60
+emulated frames, with at most one intervening frame without an update. Player
+updates were about 28-29.5 during combat, with gaps up to 11 frames while the HUD
+kept updating: consistent with per-actor impact pauses, not evidence of a global
+FPS drop. This strengthens the host-processing lead but does not identify every
+large-room/boss bottleneck. Native update/render regional timing remains unmapped.
+
+**Rejected comparison:** story renderer seed 620 crossed through a room exit.
+The HUD counter reset; the benchmark guard rejected it. Its apparent low cost
+must not be counted as a renderer improvement. Raw evidence/log remains at
+`build/boot-tests/Spider-Man-WoS-modded-fd7e4420/perf-arena-combo-jit-threaded-620/`
+and `work/performance/perf-arena-combo-jit-threaded-620.log`. Keep both tick series
+before deriving cadence so failed trials remain diagnosable. Reject counter
+resets, room changes and empty-room comparisons instead of reporting speedups.
+
+Evidence: `work/performance/crowds-2026-10-06.json`,
+`crowds-renderer-training-2026-10-06.json` and `crowds-summary-2026-10-06.json`;
+each accepted run links its captures, observations, timing and tick arrays.
+Repeat with `python tools/combat_benchmark.py build/Spider-Man-WoS-modded.nds
+--scenes sparring-combo --modes interpreter,jit --rounds 2 --seed 640` (one line).
+Use enclosed sparring for renderer comparisons; random story movement can exit
+the encounter. Runtime code patches remain prohibited with JIT enabled.
+
+**Before the player trial:** the configured DeSmuME INI had Renderer=2, no
+CPUmode/JitSize setting, and its observed launch command had no JIT override.
+Release 0.9.13 defaults CPUmode to false and JitSize to 12 (startup inference,
+not a live CPU-settings-panel reading):
+[release initialization](https://github.com/TASEmulators/desmume/blob/release_0_9_13/desmume/src/frontend/windows/main.cpp#L1954).
+Added `playtest.py launch --preset jit-preview` (only `--jit-enable --jit-size 12`)
+so the agent can isolate CPU execution after the player saves/closes, using the
+stable filename, latest battery validation/checkpoint and normal Continue flow.
+`Play Spider-Man.cmd` selects `jit-preview`, now retained after the player
+confirmed improved performance. Ordinary launches use JIT12. ROM preloading is a separate later test; existing
+`performance-preview` combines it with JIT. Renderer trials
+must retain 1x resolution and check effects/UI before an HD trial. No enemy cap,
+effect reduction, timing relaxation or speculative kit rewrite is supported by
+these measurements.
+
+Player authorized and the agent launched the JIT12-only trial on 2026-10-06.
+The live DeSmuME process command was verified with `--jit-enable --jit-size 12`
+and the unchanged stable v0.5.0 ROM. Latest real DSV: 634 bytes, SHA256
+`9162423b6acac15768213f3e74ea8915c9866bf0106e1d350fe2490f0a9a2ca1`;
+wrapper parsed and full bytes matched the verified `before-jit-test-dsv-<sha>`
+snapshot before launch. DeSmuME was closed for the checkpoint. Its original INI
+was backed up by content hash (`94b4844a...`) under
+`work/performance/emulator-settings/`. Trial record:
+`work/performance/jit-player-trial-2026-10-06.json`. Startup/arguments verified;
+the player confirmed overall performance was better, with occasional moments
+that "weren't bad" (2026-10-06). This is subjective DeSmuME acceptance, not a
+measured FPS gain or separate confirmation of every gameplay/save path. The player
+asked whether a normal launch would use JIT, so the shortcut was set to this
+trial preset. Its prior bytes are preserved in
+`work/performance/launcher-before-jit.cmd`; reverting the trial removes only
+`--preset jit-preview` from its launch line. No renderer/resolution/preloading/
+timing flags added, and no ROM or save changes for the shortcut update.
+
+Next isolated comparison is `playtest.py launch --preset renderer-preview`:
+same accepted JIT12, AUTOGL, internal resolution explicitly 1x, no ROM preload.
+Player authorized this comparison and the crowd backend on 2026-10-06. The
+trial was launched and its live arguments verified; the saved renderer changed
+2 -> 1. Performance/visual verdict pending. Current accepted INI, JIT-only
+launcher and latest battery `5ec452a1...` were preserved while closed. Record:
+`work/performance/renderer-player-trial-2026-10-06.json`. The normal shortcut now
+selects `renderer-preview` during the trial. Preserve this baseline for rollback:
+renderer CLI overrides can persist. Compare the same crowded fight and check
+web transparency, shadows, fog, HUD and audio. Do not infer DeSmuME OpenGL gains
+from the melonDS threaded-software result. Retain JIT12 if reverting a renderer
+trial; the pre-JIT launcher baseline is historical, not the accepted default.
+Only afterward isolate ROM preloading (disk-read hitches, not a proven CPU/FPS
+fix) and time native enemy/contact/animation regions if sustained dips remain.
 
 ### ROM-side performance priorities
 
@@ -614,7 +733,7 @@ runtime/player acceptance requires separate checks. [Format entry points](TECHNI
 | SCA | Joint T/S/R animation | 869 exact/sample round trips;126 independent player bakes | Kit FK/IK clips (flips, spins, handstand) at native sample counts; runtime routing | High tested growth/poses; scale/retime/Blender/heap/broad encounters open |
 | Player rig | Canonical37 names/ancestry | Model dictionary/SBC ancestry agree | Read-only map/authoring controls | DAE34-bone ordinals differ; no skin editor |
 | BSP | Room spatial/collision, hypothesis | 75 lossless envelopes/offsets | No geometry editor | High envelope; node/coordinate semantics unknown |
-| OBJ | Placements/triggers/encounters, hypothesis | 75 pairs;word0=2 | No object editor | Low;104-byte Save02/03 difference is a lead |
+| OBJ | Placements; trigger/event graphs mostly unknown | 75 pairs; bounded Test_Combat01 character section decoded | Training Brute placements/count/spacing via training_room.py | High for one guarded training resource; general OBJ/trigger editing unproved |
 | STRINGS | Localized instructions | English/American Huffman/1,049 slots round-trip | Bounded same-slot names/descriptions | High bounded codec; other languages/popups unqualified |
 | FONT | Glyphs/metrics | Inventory/native draw traced | Reuse stock font/canvas | File editor absent |
 | 2LZ | UI/sprites, likely | 149 PuCrunch;two minimap previews round-trip | Bounded tiled conversion | Four00 wrappers/general schema unknown |
@@ -628,7 +747,7 @@ runtime/player acceptance requires separate checks. [Format entry points](TECHNI
 | Purchases | Native7+7+7 rows | All21 costs/flags/dependencies mapped | Kit: Leapfrog13 Skyjack14 Perch15 Split16 Spin17 Reflex18 Sense19 | Expanded rows/ownership/save migration unproved |
 | Third suit | Independent selectable kit | Red/alternate routes partly mapped | Red prototype only | Selector/UI/persistent slot unimplemented |
 | Training refill | Common target max HP | Native flag4/chord/setter mapped | SELECT+Down in existing observer | Positive/flag-clear controls pass; no full state reset |
-| Performance/graphics | Host emulation/rendering/resolution | INI/source inference, host benchmarks, texture census | Optional inactive previews, compact changed GMBs | Idle threaded mean~15.9% lower; actual DeSmuME hitch/FPS/2x acceptance unproved |
+| Performance/graphics | Host emulation/rendering/resolution | INI/source inference, idle/crowd benchmarks, texture census | JIT12 normal launcher; optional 1x renderer/preload/HD trials | Player-confirmed JIT improvement with mild remaining dips; renderer/HD and measured DeSmuME FPS unproved |
 
 Released composition (v0.2.0): 22 overlays, original IDs retained, 3,742
 verified resources (Rush 3 + kit 6 appended). Kit qualification 20/20
@@ -877,10 +996,10 @@ the victim controller's vtable +0x54; enemy `0x02094658` picks the reaction from
 The contact dispatcher `0x020784A4` resolves the victim from a handle and calls
 it at `0x02078628` (`blx r4`): r0=&result, r1=victim+8, r2=&attacker actor,
 r3=&info (by value on the caller stack), [sp]=0x1000. Result 4 = taken, 1 =
-ignored (e.g. get-up states 48/49/51). Info: +0 attack kind, +4 strength (Q12),
+ignored (native protection predicate; see the backend fixtures below). Info: +0 attack kind, +4 strength (Q12),
 +8 3, +0xC -> extent record, +0x10 -> contact record {attacker part,3, victim
 part, 5, 0, kind, attacker part, strength}, then values. Spidey kinds seen:
-string 0x04 (0xC00/0x800), air 1-3 0x14 (0x1000), Skyjack finisher 0x16
+string 0x04 (0xC00/0x800), Snap 0x05 (0xC00, observed 2026-10-06), air 1-3 0x14 (0x1000), Skyjack finisher 0x16
 (0x1800), stomp 0x15 (0xC00), heavy kick 0x1F (0x1000), web kick 0x20, grapple
 0x21/0x22, launch 0x25/0x26. Replaying a captured info later works from any
 distance (24 units tested), also with the victim-part pointer cleared: same
@@ -892,6 +1011,92 @@ training Skyjack at the grapple; the kit's version (range-checked) did not.
 Guard frames (v0.4.1): the hook writes result 1 and skips the victim's
 ReceiveHit; the dispatcher then treats the hit as ignored (native path for
 get-up states). The Spider-Sense dash uses this for Spidey for 7 updates.
+
+### Shared crowd-hit backend candidates
+
+Player approved shared crowd targeting/hit work and explicitly authorized
+concurrent copied-save checks while testing OpenGL (2026-10-06). Workers use
+below-normal priority and one logical CPU each (6/7); live player settings and
+affinity are untouched. Prototype source: `tools/crowd_hits.s`; staging/qualification
+tool: `tools/crowd_backend.py`. The published source/hex and player ROM remain
+unchanged. Staging reproduces the published 6804-byte kit exactly before making
+one isolated own-code RAM patch. Both candidates pass the existing literal and
+absolute native-branch validators and fit before the route table at +0x1F00.
+
+- **Area replay:** `work/kit/crowd-backend/area-fc29a872/`, 7008 bytes. Replaces
+  Skyjack's duplicated scan with `kit_area_hit(x,y,xReach,yReach,skip,maxAge)`.
+  It scans the existing 12 registry slots, keeps the two-tick freshness/range
+  filters and primary-victim exclusion, rejects empty/stale/non-Spidey captures,
+  then delegates each candidate to the existing pointer-checked native replay.
+  Preserves Skyjack's 8-by-6-unit reach, kind/strength, ownership gate and debug
+  telemetry. Returns replay attempts, sum of native result codes and last
+  attempted actor; these are not HP damage or confirmed hit counts. No allocation,
+  new save fields or movement writes. Multi-target/contact deduplication for
+  future Spin Cycle/Leapfrog callers still needs empirical design/qualification.
+- **Skyjack drift:** `work/kit/crowd-backend/sky-velocity-d0a84d97/`, 6796 bytes.
+  Audit found that `sky_player` still directly adds its bounded horizontal drift
+  (at most 1 unit/update) to motion+0x7C. The earlier claim that *all* kit movement
+  was velocity-only was too broad. This separate candidate stores the same
+  clamped correction in actor+0x18 for native physics/collision to apply. It is a
+  movement-contract correction, not a measured performance improvement.
+
+**Validation:** area and velocity candidates independently passed all 31 existing
+kit checks. Composition `combined-1f874330` is 7000 bytes and passed 31/31 too;
+paired Skyjack open/wall/cancel passed 9/9. Assembly/source reproduction,
+literals/native branches/code space and staging guards passed. These use copied
+research saves, disposable RAM and JIT-disabled runtime code patches. Concurrent
+checks require explicit `--allow-player-session`; `--cpu-core N` sets the worker
+and children to a single Windows logical CPU at below-normal priority.
+Final identity/count record: `work/kit/crowd-backend/validation.json` (20 Python
+tests passed, three 31/31 qualifications, targeted 19/19 + 6/6 + 9/9). Stable
+ROM hash remains `fd7e4420...`; FPS gains and player feel are untested. Staging
+records reload retained validation reports so restaging cannot silently relabel
+a passed candidate as pending.
+Patched qualification requires its own trace prefix/report; it cannot overwrite
+the published `work/kit/evidence.json` or patch the native-parity parent control.
+The current 31 checks mostly use one dummy; `tools/crowd_area_lab.py` supplements
+them with 14 real-actor/API fixtures and 19 assertions, all passed. Native replay
+and area replay of the same Snap capture (kind 5, strength 3072 Q12) each remove
+4096 Q12 actual HP and produce state 37/action 82. Multi-target replay removes
+4096 from each of two separated Brutes (2 attempts, native result sum 8), leaving
+the primary victim excluded. Empty/stale/non-Spidey captures, stale registry,
+negative reach and exclusion/range controls skip replay; invalid actor/motion
+pointers return 0 without damage. Reviewed captures are coherent. Report:
+`area-fc29a872/area-coverage.json`; per-case reports link captures/traces.
+
+**Immunity fixture correction:** forcing enemy state 48 did not prevent a hit;
+it must not be treated as blanket immunity. Disassembly of ReceiveHit
+`0x02094658` and its predicate `0x0209EC9C` finds protected states 25, 33..36,
+53, and state 51 while controller+8 <= 1 (other ReceiveHit bypasses can apply).
+Setting state 51/clock 0 immediately before replay makes both native and area
+return 1 with zero HP loss. Fixtures mutate only disposable RAM. These checks
+prove bounded replay behavior, not new Spin/Leapfrog contacts, player feel or a
+performance gain. No backend candidate is published yet.
+
+Integrated Skyjack landing in `combined-1f874330/bowling-coverage.json`: 6/6
+checks passed. Native and combined callers each replay twice, remove 4096 Q12
+HP from each bystander, and produce state 41/action 84 after native reaction
+commit. Captured telemetry delta 2050 = 2 attempts + 8 * 256 native-result sum.
+RAM fixture moves two idle bystanders beside an already spiked native target;
+the third stays distant. Read reactions four frames after dispatch, since the
+controller commits the queued state on a later update; immediate state snapshots
+can differ with actor update order. General area/API guards remain isolated above.
+
+Paired open Skyjack chains remove 21504 Q12 HP in each mode. R+Left at frame 91
+enters air evade at frame 93 in each, preserves 11264 Q12 HP loss, moves left and
+eventually clears the Skyjack latch. Do not require an immediate latch reset:
+air Reflex retains it to resume the combo. A 6-unit launch gap makes the unchanged
+Web Vault overshoot and whiff; use the established ~21-unit gap. A target placed
+at the wall failed to enter Snare/Vault in both controls, so bounds alone there
+cannot qualify Skyjack drift. The active-wall fixture instead relocates an
+established native juggle at frame 60 in disposable RAM (Spidey x=236, target
+x=235, heights preserved). Its behind-target correction aims right into the wall.
+Published direct drift reaches x=991232 (242 units), beyond the native player
+wall limit 968577 (~236.5); the velocity candidate stops at exactly 968577.
+The fixture passed and captures were inspected (candidate remains visible beside
+the enemy; the control drifts beyond the room boundary). This is a reproduced
+movement/collision fix, not a speedup. Both wall runs still have an active juggle
+at frame 219; this check establishes bounds, not completed recovery or player feel.
 
 ### Kit extension contract
 
@@ -973,9 +1178,11 @@ Spider-Sense flip clipped Spidey down into an unreachable part of the map.
 
 ### Training room (Test Upgrades, v0.5.0)
 
-- **Room.** Test Upgrades loads `Test_Combat01` (room table record at
-  `0x02130DA0`: id 0x51F, name pointer, Glob indices 0x805/0x803/0x806 =
-  textures/BSP/OBJ, then 1, 1). `Upgrade_Test` (id 0x4C7, Spiderman + "Enemy
+- **Room.** Test Upgrades loads `Test_Combat01` (native lookup index 70;
+  descriptor at `0x02130DA4`: name pointer, Glob indices 0x805/0x803/0x806 =
+  textures/BSP/OBJ, then 1, 1). Earlier notes incorrectly started its descriptor
+  four bytes early: 0x51F at `0x02130DA0` is the preceding room's minimap
+  resource, not a room ID. `Upgrade_Test` (lookup index 73, Spiderman + "Enemy
   Brute") is a different, unused-here room. Spidey starts at x 120 units
   (491520, the OBJ's Spiderman record); walls about 3.5/236.5 units.
 - **OBJ layout (Test_Combat01_app.obj, 2140 bytes, partly decoded).** u32 2,
@@ -1024,6 +1231,303 @@ Spider-Sense flip clipped Spidey down into an unreachable part of the map.
   (`kit_lab.solo_rom`, build/lab-solo/); `trace --sparring` keeps the Brutes
   and native HP.
 
+## Midnight Line room authoring and persistence
+
+Authorized 2026-10-06: optional eerie five-room first station, original Signal
+Leech, environmental puzzle/refuge, persistent milestones, Conductor teaser.
+Spec: `reference/midnight_line.json`. Production build: "Midnight Line chapter
+build (v0.6.0)" below; earlier subsections are the research that led to it.
+Tools read clean originals or isolated candidates; real batteries/ROM stay intact.
+
+### Native doors, spawns and game variables
+
+Confirmed on all 75 clean rooms (`tools/room_doors.py`, `tests/test_room_doors.py`)
+and in the emulator (2026-10-07):
+
+- **Exit event.** Opcode `0x12` (handler `0x02039A4C`) calls `0x020D6B88`
+  with operand bytes (room u8, OBJ record selector, spawn id, 0). Every
+  record-0 group k>=1 of a story room is one exit. Story rooms use selector
+  1; Downtown_Map01/12 and Sewer_Map07 have a third record (selector 2).
+- **Trigger entity.** Type 7, 28 bytes: i32 x/y/z (Q12), u32 7, u32 0 or -1,
+  u16 box w/h at +20/+22, u16 0x0A, u8 mode at +26 (2 on every exit), u8 at
+  +27 = event group + 1 (same record). Player-collide triggers fire any group.
+  Sewer_Save02's left exit (centre x=-18, w=16) fired as Spidey reached
+  x=-7.3; box/centre semantics are inferred, not decoded.
+- **Spawn table.** OBJ header +13 = spawn count, u16 +14 = 20 x count, records
+  at +16: i32 x/y/z, u16 angle (0x4000 faces right, 0xC000 left), unknown
+  +14..+17, u8 id at +18, unknown +19. Names are the record-0 name block's
+  slots after the last category. A door names the *arrival* spawn beside the
+  destination's door back. Spawn 0 without a table entry is the room's default
+  Spidey placement (5 native exits). Side-door arrivals auto-walk ~12 units in;
+  overhead arrivals drop. Sampled position is ~5 units above the spawn origin.
+- **Inter-record table** after the records is `08000000 00000000` in all 156
+  records; nothing in the envelope stores absolute offsets, so appending
+  spawns/entities/groups only moves the +4/+8 boundaries.
+- **Record header** byte +2 = action-group count, +3 = event-group count.
+  Conditional `0x1D`: u16 var, u16 delay?, op at +4 (0 ==, 1 !=, 2 <, 3 <=,
+  4 >, 5 >=), value +5; then-targets +6..+9, else +10..+13, groups 1-based
+  in the same bank. `0x26` set (u16 var, u8 value), `0x25` increment,
+  `0x24` decrement, `0x15` message/VO, `0x19` music, `0x1B` Spidey binding
+  (1-based entity).
+- **Game variables** (`0x020D22AC` get, `0x020D24D8` set): ids 0..0x122 are
+  bit flags at stats+0x1C (saved); 0x123..0x126 bytes at stats+0x48 (0x123 =
+  mission counter: entering Sewer_Map01 at 8 sets 9, Sewer_Map03 at 9 sets 10;
+  0x125 enemy difficulty); 0x127..0x130 per-room bytes; 0x135+ are ability/
+  purchase bits (stats+0xC). Room r's init sets visited flag 0xB0+r.
+- **Unused flags.** 245..282 are never set in 62 backed-up save slots
+  (up to 44 visited rooms); 251..275 have no event reference, no constant
+  get/set in ARM9 and no room-table entry. The chapter uses 252..275 (below).
+- **Room-count guards.** 22 `cmp #75` sites: most are action ids or list
+  terminators (keep). Two guard the current room: saved-block validation
+  `0x02085720` (room >= 75 rejects the save; Continue stays on the title) and
+  room reload `0x020D64B8` (room >= 75 takes the fallback path).
+- **Death.** HP 0 opens the native touch-screen health-orb minigame, then
+  resumes in the same room with little health ("Failure!" path verified in
+  room 76). The reload path behind `0x020D64B8` was not exercised.
+
+### Room-object and BSP framing
+
+`tools/room_objects.py` parses all 75 paired OBJ envelopes: u32 version 2;
+record-area end/name-block start at +4/+8; u8 record count +12; first record
+at 16+u16(+14). Records have a 20-byte prefix, u16 total size and five cumulative
+u16 section ends at +8 (relative to payload +20). Their meanings remain unknown.
+An 8-byte-per-record opaque table precedes one name block per record: u32 size,
+20-byte prefix, seven cumulative u16 name-category ends at +6, then 32-byte
+slots. Some slots follow all seven categories; retain them, do not truncate to
+the last category count. 156 records parsed; all no-op section repacks exact.
+This is not a general entity/event compiler; adding entities needs name and event
+reference qualification separately.
+
+`tools/room_entities.py` frames section 0 as consecutive batches: u16 batch size,
+u8 header size, u8 record count, one u8 length per record padded to four bytes,
+then records. All 586 batches across 156 objects round-trip exactly; concatenated
+record counts equal each name block's first category end. The bounded named
+24-byte character edit changes only XYZ. Tail kind words remain unknown outside
+the empirically tested training type 50; high words in other placements must not
+be presented as simple character IDs.
+
+`tools/room_collision.py` adds framing to the BSP envelope: between table_end
+and first listed region lie 12-byte nodes {i32 unknown_word0, u32 unknown_word1,
+u16 unknown2, u16 unknown3}. Every listed region is u16 count followed by count
+{u16 node_index, u16 unknown} entries. All 75 reconstruct exactly: 8,789 nodes,
+5,503 lists. Do not assume every node is axis aligned; many word1 values differ
+from the test-room 0x40000000..06 patterns.
+
+Controlled training edit: node 1 word0 983041 (240*4096+1) -> 737281
+(180*4096+1). Native right bound changes 968577 -> 722817, exactly 60 Q12 units;
+frames reviewed, visible native geometry unchanged. Only this boundary's
+coordinate interpretation is empirical; arbitrary geometry/tree generation is
+not qualified. Evidence: `work/midnight-line/collision-{stage,control,candidate}.json`.
+
+### Native room lookup and namespace probes
+
+`tools/room_catalog.py`: lookup `0x02084AB4` reads an index then a descriptor
+pointer from `0x021321F4` (75 entries). Each descriptor starts at its NAME pointer,
+not four bytes earlier: texture/BSP/OBJ indices +4/+8/+12; model-array pointer
++0x20; minimap CBMP resource +0x4C; other fields remain unknown. Test_Combat01
+index 70 / descriptor 0x02130DA4; Sewer_Map07 index 57. Preceding 0x51F is the
+previous descriptor's minimap, not a room ID. All names/resource associations
+validate against the original archive. Survey: `work/midnight-line/room-survey.json`.
+
+`tools/room_extension.py` builds a disposable lookup at KIT_STATE+0x400,
+preserving original entries and sentinel 75; clones occupy indices 76..80.
+They fit the existing unused 1 KiB reservation. The lab changes the lookup
+literal and Test Upgrades entry only in disposable RAM (JIT disabled), never
+the player ROM. Clone index 76 loaded with Spidey and native room rendering;
+frames reviewed (`room-registration.json`). This is not a production loader.
+Native save validation still rejects room indices >=75; exits and expanded-room
+saves remain unqualified. Do not globally replace every compare-to-75 instruction.
+
+`tools/model_geometry.py` parses bounded single-model/single-block NSBMD shape
+streams and appends authored GPU quads while preserving material/rig/SBC/old
+payload bytes. Format source: https://github.com/scurest/nsbmd_docs . A station
+shell uses original debug materials, authored background/columns/bench/sign
+geometry and an edited boundary. Camera looks from positive Z: placing the back
+wall on positive Z occludes Spidey; move it/decorations to negative Z. Frames
+reviewed with visible Spidey and new geometry. These are development materials,
+not finished station art.
+
+`midnight_line.py stage-platform` appends four zz_ml resources plus a two-byte
+alignment resource. The v0.5.0 archive ends at offset mod4=2: unaligned appended
+native-copy model/texture controls black-screen; the aligned control renders.
+Keep padding in its own unreferenced resource, not opaque asset tails. Every
+original resource except the generated filename table remains exact; IDs stable.
+Default staging retains native Test_Combat01 OBJ and actors (not a finished
+chapter). Candidate `edf0521b...` passes six room/continued-update/movement/
+capture/return checks; pause-menu return loads native room 64 and save options.
+Evidence: `platform-probe-edf0521b-mode2.json`, per-hash staging JSON and frames
+in build/boot-tests; native source ROM unchanged. Runtime lookup patches remain
+disposable, not stored in that candidate ROM. Staging/probe commands cannot be
+substituted for playtest publication or a production loader.
+
+### OBJ event commands and initialization repair
+
+2026-10-06 follow-up resolves the earlier empty-room initialization gate.
+The native entry argument at `0x020ED7DC` is an **OBJ record selector**, not a
+generic gameplay mode. Loader `0x02031710` builds two runtime banks: record 0
+in bank 0, selected record in bank 1 (argument 0 omits bank 1). Constructor
+`0x020D285C` initializes bank 0, then bank 1 if the selector is positive.
+Thus Test Upgrades selector 2 needs the third record; two-record challenge/save
+OBJ transplants crash in lookup `0x020360BC` because record 2 does not exist.
+Changing a record's unknown header word cannot repair this missing selection.
+
+`tools/room_events.py` frames section 1 with record byte +3 event-group count:
+u16 operand offsets, then one {u8 command count, opcode bytes} header per group,
+word-alignment padding, and operands. Native width table `0x02119CCC` has 39
+entries; dispatcher `0x0203B400` uses 12-byte records at `0x021199F8`.
+All 75 rooms / 156 records / 1,424 groups / 2,830 commands reconstruct exactly;
+native nonzero padding is preserved. Most opcode meanings remain unknown.
+Evidence: `work/midnight-line/event-framing-survey.json`; tests verify the native
+width table, all section/name counts, bounds and byte-exact round trips.
+
+Training record 2 EG_INIT contains opcodes {0x15, 0x0D, 0x0D}. Both 0x0D
+operands (`00010001`, `00010201`) refer to entity 1 in **their own runtime bank**,
+not the base Spidey. Handler `0x02039640` derives the bank from event context;
+the command selects an entity and changes motion flags / a virtual property.
+Deleting the entities/names while retaining either reference reaches the
+`0x7FFF` invalid-entity sentinel and aborts at `0x0200177C`. Removing only the
+last command still crashes (`5b1a8915`); remove both. Opcode 0x15 writes the
+native message/tutorial selection (41 here) and has no entity reference.
+
+`midnight_line.py stage-platform --empty-dummy --repair-empty-init` retains
+the base records, empty secondary bank and opcode 0x15 while removing both
+deleted-dummy references. Authored shell `9407c67f` passes **7/7**: room 76,
+player, continued updates, right/left input response, native jump, rendering,
+and pause-menu return to native room 64. Enemy registry is empty; frames reviewed.
+Earlier equivalent scratch candidate `0da8575d` passed the older 6-check harness.
+Evidence: `platform-probe-9407c67f-mode2.json` and its boot-test trace/frames.
+This remains an isolated development shell with debug materials/native tutorial,
+not the chapter or a published loader. Existing uncorrected omission probes
+remain intentional failing controls.
+
+Independent normal-context path: challenge OBJ selects record 1, where Spidey
+and its 0x1B target-binding command live. Selector 1 alone renders/falls but
+does not respond to input. Test Upgrades also sets stats+0x7A at `0x020ED7B8`;
+changing the preceding `mov r1,#1` at `0x020ED7AC` to `mov r1,#0` in disposable
+RAM restores right/left movement, native jump and continued kit updates with
+no enemies (`8e2c2f18`). The flag also selects training-only pause text/actions
+(`0x020EF3D0`, `0x020EF4AC`), so the training Return action is unavailable.
+Use `probe-room --authored --mode 1 --story-context` for this distinct path;
+a production chapter needs its own native transitions. Evidence and xrefs:
+`work/midnight-line/test-context-xrefs.json`, `normal-entry-native-exit.json`.
+Do not infer expanded-room save validation from playable entry.
+
+Normal-context transition fixture passes **8/8**: empty room 76, horizontal
+input, native jump, no enemies, rendered captures, queued exit to room 64,
+continued updates there and unchanged candidate ROM. Native API `0x020D6B88`
+takes `r0=[0x02145C90+8]`, `r1=&destination_room`, `r2=OBJ record selector`,
+`r3=spawn selector`; its wrapper forwards to `0x020D6500` and queues a scene
+transition. The fixture calls it once after 180 relative lab frames with
+destination 64 / record 1 / spawn 0. This proves the native transition path,
+not an authored doorway trigger or a persisted chapter checkpoint. The temporary
+ARM stub fits at `0x02155334` after the extended lookup; production must allocate
+and verify its own loader rather than treat this RAM fixture as a shipped hook.
+The 40 native flag bytes at stats+0x1C..+0x43 match before/after that exit;
+this is progression parity for the transition fixture, not a persistence audit.
+
+The probe now requires horizontal response in both scripted direction windows
+and native jump state 15; gravity-only position changes are not input success.
+The kit tick is cumulative across the copied-save entry/menu/rooms, not a
+relative frame counter. Schedule one-shot experiments through the lab's frame
+hook rather than assuming tick 180 means frame 180. All patches remain in
+disposable RAM; original/stable ROMs and real batteries are untouched.
+
+### Candidate persistent flag padding (superseded)
+
+Superseded 2026-10-07 by native flags 252..275 ("Native doors, spawns and game
+variables"): they are addressable by native event opcodes and saved by the
+native flag copy, so no custom codec or kit code is needed. The padding-bit
+codec below is kept as research only; do not ship it.
+
+Native stats allocation is 0x98 bytes (0x020D6CF4); common saved block 0x58 bytes
+(read 0x0208608C, write view 0x02085FC4). Flags occupy stats+0x1C..+0x43 (40
+bytes); logical flag query/set checks bound 0x123 (291). Constructor clears all
+40 bytes. Native save copies all 40 (0x020D67CC..F4). Upper padding in the final
+word (stats+0x40, bits 3..31) is therefore a candidate, not an assigned allocation.
+Variable IDs >=291 can address other scalar fields; they are not extra flags.
+
+Paired copied-save experiment injects 0x004D4C38 at stats+0x40 in disposable RAM.
+Native saved battery differs from control only at three marker bytes and four
+checksum bytes. Fresh boot restores marker and retains original logical flags.
+All 165 signature-bearing slots sampled from existing backup DSVs have zero
+upper padding. Sources stay byte-identical. Captures reviewed; checksums are
+still opaque (not zlib CRC32/Adler32). Evidence: save-{control,fixture,reload}.json.
+
+`tools/midnight_progress.py` provides a provisional versioned encoding in bits
+291..311, preserving native low bits and other unallocated bits; unknown occupied
+data/version is rejected. The actual codec's schema-1 completed state
+0x004D4C78 passed the same native write/fresh-boot test; all three milestones
+decode true, no unrelated native flags changed (`save-verification.json`, 4/4).
+This is not an editor or published runtime hook.
+Audit all native reads/writes, reset/copy/refund paths and composed save/reload
+before assigning storage or clearing the persistence publication gate.
+
+Source validation at that point: 199/199 on 2026-10-06. Current status (215/215,
+release v0.6.0) is in "Midnight Line chapter build (v0.6.0)".
+
+### Midnight Line chapter build (v0.6.0)
+
+`tools/midnight_chapter.py` (`apply_rom`; tests `tests/test_midnight_chapter.py`)
+is the final verified stage of `mod.create_build` for profiles with
+`'chapter': True` (`tasm-v0.6.0`). It requires the pinned kit ARM9 and clean
+native sources, and proves every other resource byte-identical. Dev candidate:
+`python tools/midnight_chapter.py` (from stable v0.5.0, `build/midnight-line/`).
+
+- **Rooms 76..80** (75 stays the native invalid sentinel): ML_Platform <-
+  Sewer_Map03 (tracks), ML_Refuge <- Sewer_Save03, ML_Service <- Sewer_Map02
+  (station, timetable), ML_Switching <- Sewer_Map13 (stairs), ML_Gallery <-
+  Sewer_Map01. Models, BSP, texture animation and minimaps are shared native
+  indices; each room appends `zz_<room>_app.obj` and a palette-graded
+  `zz_<room>Textures.nsbtx` (cold "midnight" grade; amber "emergency" in the
+  Refuge; only palette bytes change). `zz_ml_alignment.bin` keeps appends
+  word-aligned.
+- **Room table.** Kit autoload grows from 0x5C00 to 0x6800: the kit's unused
+  reserve tail (zeros) plus a 0x800 chapter block at `0x02155420` holding an
+  81-entry lookup (native 0..74, 0, chapter 76..80), five descriptors cloned
+  from the sources (name, texture, OBJ, model-array pointer changed), model
+  arrays and names. Arena lower moves to `0x02155C20` (2 KiB less heap).
+  Patches: lookup literal `0x02084AC8`, Glob count `0x020077F8`, and both
+  current-room guards `cmp r1,#75` -> `#81`.
+- **Sanitized clones.** Record 0 keeps Spidey, exits, camera and ambience;
+  exits are retargeted by `LINKS`; messages and writes to mission scalars are
+  dropped (reads kept: they only gate the dropped groups); upgrade orbs move
+  4000 units below the floor. Record 1 is either the empty Test_Surfaces01
+  state record plus the visited flag (Platform, Refuge) or the source's
+  encounter record with flags remapped (Service ambush flag 0x42 -> 268,
+  Switching's three spawners, Gallery). Gallery's mini-boss/silhouette stay
+  dormant outside their story beat.
+- **Links.** Arrival facing right means the door back is on the left; links
+  join right-side exits to left-side arrivals so a held direction does not
+  bounce Spidey back out. Loop Platform -> Service -> Switching -> Gallery ->
+  Platform alcove; Refuge up the Platform's top-right stairs; Gallery's
+  overhead exit is the one left-to-left pair.
+- **Entrance.** Sewer_Save02 gains trigger (61, 4) size 12x24 -> room 76
+  spawn 1, and return spawn id 2 at (44, 2) facing left. Its native exit
+  and record 1 are unchanged. It fired at x=51.9 when walking right.
+- **Flags.** 252..256 visited (0xB0+room), 257 main power, 258 completed,
+  259 teaser seen, 260..267 puzzle state, 268..275 remapped encounter flags;
+  251 unassigned. Discovered = flag 252.
+
+Agent-tested on release `36aa52f8` and dev candidate `a023350e` (same chapter
+bytes): `midnight_line.py tour` rides all 14 directed links once
+(lab warp into Sewer_Save02, teleport onto each trigger): correct rooms,
+arrivals at the expected spawns, five visited flags and no other chapter flag.
+`midnight_line.py save-test`: saving at the Refuge sphere (X, Save, Yes) and
+Continue from a fresh boot restores room 77 with flag 253; control
+`chapter-control.nds` without the guard patch leaves Continue on the title.
+Native-vs-clone walk: Switching spawns 4 thugs exactly like Sewer_Map13.
+`ambush` (crash-hunt fight inputs, Red kit owned, Spidey kept alive, enemy
+HP capped at 1): Service exits work after fights (seeds 11, 12; seed 13
+inconclusive because teleports do not take while Spidey stands on the station
+stairs); flag 268 is written when "Unblock Doors" runs (not every run, natively
+too); the native Sewer_Map02 control behaves the same. Death at HP 0 runs the
+health-orb minigame and resumes in room 76. Release `36aa52f8`: kit
+qualification 31/31, crash hunt 12/12 (`work/kit/v0.6.0/`), native
+Sewer_Save02 left exit still reaches Sewer_Map07 record 2, title v0.6.0.
+Evidence: `work/midnight-line/chapter-{build,tour,save}*.json`, frames under
+`build/boot-tests/chapter-*`. Rollback caveat: a save made inside the chapter
+is rejected by any ROM without the guard patch (battery bytes stay intact).
+
 ## Research workflow and pitfalls (Red kit sessions)
 
 Tools: `tools/kit_lab.py` (trace/arena/qualify/preview/sheet/disasm/xrefs/words/
@@ -1061,8 +1565,10 @@ observations.json (state, action, node, facing, position, enemies).
   and the Snare frequently zips to scenery there; use natural spawns for AI
   research. For kit targeting/movement, `trace --phantom DX` adds a fake registry
   enemy (no AI/hitbox) in the training room; contacts on it whiff.
-- Kit code never writes positions (v0.4.1): it moves Spidey with velocity so
-  native collision resolves walls and floors. A position write ignores
+- Sense, Leapfrog and Perch use velocity (v0.4.1), letting native collision
+  resolve walls/floors. Audit found a remaining direct Skyjack juggle drift
+  write to motion+0x7C; sky-velocity and combined candidates are now agent-qualified
+  but unpublished (see "Shared crowd-hit backend candidates"). A position write ignores
   collision (the v0.4.0 Sense teleport put Spidey 2 units inside the training
   room's right wall at x=968577 and clipped the player out of the level). Lab
   teleports (`kit_lab.teleport`) write the motion base and the three probes
@@ -1074,6 +1580,16 @@ observations.json (state, action, node, facing, position, enemies).
   (data abort in the v0.4.0 Sense scan).
 - Growing the Glob shifts everything by about one emulator frame; parity checks
   allow one constant phase (`kit_lab.same_behavior`).
+- Room warp fixture (lab only): patch the Test Upgrades entry `0x020ED7AC`
+  `mov r1,#0` (story context), `0x020ED7B4` `mov r2,#room`, `0x020ED7DC`
+  `mov r2,#selector`, `0x020ED7E0` `mov r3,#spawn` via `--patch`; selecting
+  Test Upgrades then loads that room natively (`midnight_line.py tour`).
+- Touch: script rows may carry `touch: [x, y]` (pixels of the stacked 256x384
+  output; bottom screen y>=192); the harness then sets `melonds_touch_mode`
+  to `touch`. `kit_lab._run` forwards whole rows (it used to drop `touch`).
+- After room transitions a freed copy of Spidey's actor can stay in RAM;
+  `player_trace.sample` keeps the candidate whose motion object points back
+  at it (`[motion+0]`), otherwise traces stopped after a few rooms.
 - Strings: no `;` in the text Huffman table. Button glyphs: `` B, ``
   Y, `` A, `` X, `` R, `` L. Keep them as escapes in
   source (editors may write raw private-use characters).

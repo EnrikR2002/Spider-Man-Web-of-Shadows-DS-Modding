@@ -14,6 +14,43 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.6.0 - 2026-10-07 - Midnight Line: first station (exploration slice)
+
+Published through Play Spider-Man.cmd's stable ROM. SHA256
+`36aa52f8e5aef674d12f18f31aac1ac98aa874c9fed7d7b0d63264cfd9216021`
+(ARM9 `efab33e0...` = v0.5.0 kit ARM9 `88328d56...` plus the chapter stage).
+Title and Options show v0.6.0. Kit, prices and all native rooms' behaviour
+are unchanged except Sewer_Save02, which gains one doorway.
+
+- **Finding it.** In the sewer save room off Sewer Map 7 (Sewer_Save02, the
+  one with the save sphere and the man at the desk), walk into the far right
+  wall past the desk. Walking back out the Platform's left door returns you
+  beside the desk.
+- **Five new rooms** of an abandoned, cold-lit subway line (rooms 76-80, built
+  from the native sewer subway section with a midnight colour grade):
+  Last Platform (tracks; quiet arrival), Service Passage (station with the
+  timetable; enemies and a one-time ambush), Switching House (station stairs;
+  three enemy groups), Overhead Gallery (upper return route) and the
+  Maintenance Refuge (amber emergency light, up the Platform's top-right
+  stairs, no enemies, **save sphere**). The rooms form a loop: Platform ->
+  Service -> Switching -> Gallery -> back to the Platform.
+- **Saving inside the chapter works**: save at the Refuge sphere and Continue
+  returns you to the Refuge. Visits and the Service ambush are remembered.
+- Not in this slice yet: the power puzzle, the Signal Leech, the Conductor
+  teaser and a chapter map (the bottom screen shows the source rooms' map).
+
+Agent-tested (copied saves, lab warps/teleports): all 14 doors in one tour
+with correct arrivals; Refuge save -> fresh boot -> Continue restores room 77
+(control build without the room guard patch fails); death in the chapter runs
+the native health-orb minigame and resumes there; Switching spawns the same 4
+enemies as its native room; Service fights end with a working exit (seeds 11,
+12; seed 13 inconclusive); native Sewer_Save02 exit unchanged; kit
+qualification 31/31; crash hunt 12/12 clean. Not player-confirmed: route feel,
+discoverability, encounter difficulty, lighting.
+Rollback caveat: a save made inside the chapter is ignored by v0.5.0 and older
+ROMs (the battery itself stays intact). Details: TECHNICAL "Midnight Line
+chapter build (v0.6.0)".
+
 ## v0.5.0 - 2026-10-06 - Test Upgrades sparring room
 
 Published through Play Spider-Man.cmd's stable ROM. SHA256
@@ -44,6 +81,19 @@ alive), three 4000-frame random Y/R fights (no stall, all four enemies alive
 with 9-12 defeat refills each, SELECT+Down healed him); sewer arena: training
 logic never active. Frames reviewed. Not yet player-confirmed: sparring feel,
 heal interval, Brute count and spacing.
+
+Launcher-only player performance trial (2026-10-06): `Play Spider-Man.cmd` now
+selects `jit-preview` (DeSmuME JIT enabled, block size 12) so the normal play flow
+uses the trial. Same v0.5.0 ROM and save; no renderer/resolution/timing overrides.
+Launch arguments verified. Player confirmed overall performance was better,
+with occasional dips that "weren't bad"; keep JIT12 in the normal launcher.
+Broader gameplay/save compatibility was not separately confirmed. Details and
+settings/launcher rollback baselines: TECHNICAL "Crowd combat performance".
+
+Next renderer trial launched on 2026-10-06: normal shortcut now selects AUTOGL
+at 1x while retaining accepted JIT12, the same v0.5.0 ROM and latest progress.
+Prior software/JIT launcher and INI preserved; arguments and renderer setting
+change verified. Renderer performance/visual acceptance pending.
 
 ## v0.4.1 - 2026-10-06 - Freeze and clip fix; smoother Sense and Leapfrog
 

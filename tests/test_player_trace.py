@@ -37,3 +37,13 @@ class PlayerTraceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'outside'): sample(data)
         with self.assertRaises(ValueError): sample(bytes(40))
         with self.assertRaisesRegex(ValueError, 'found 0'): sample(bytes(len(data)))
+
+    def test_stale_actor_copy_is_ignored_when_the_live_motion_points_back(self):
+        data = bytearray(4*1024*1024)
+        for actor, motion in ((0x300, 0x600), (0x2000, 0x2400)):   # live, then a freed copy
+            for offset, value in zip((0, 8, 20), VTABLES): struct.pack_into('<I', data, actor + offset, value)
+            struct.pack_into('<I', data, actor + 0x30, BASE + motion)
+        struct.pack_into('<I', data, 0x600, BASE + 0x300)          # live motion owner
+        self.assertEqual(sample(bytes(data))['actor_address'], BASE + 0x300)
+        struct.pack_into('<I', data, 0x2400, BASE + 0x2000)        # both owned: still ambiguous
+        with self.assertRaisesRegex(ValueError, 'found 2'): sample(bytes(data))

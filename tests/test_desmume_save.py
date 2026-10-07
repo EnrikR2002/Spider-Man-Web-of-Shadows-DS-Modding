@@ -1,7 +1,7 @@
 import struct
 import unittest
 from tools.desmume_save import Dsv, COOKIE
-from tools.emulator_smoke import input_schedule
+from tools.emulator_smoke import input_schedule, touch_schedule
 
 
 def dsv(payload=bytes(512), middle=b'unknown wrapper text'):
@@ -34,3 +34,11 @@ class DsvTests(unittest.TestCase):
                      [{'start': 7, 'end': 7, 'buttons': ['Y']}],
                      [{'start': 7, 'end': 9, 'buttons': ['unknown']}]):
             with self.assertRaises(ValueError): input_schedule(rows)
+
+    def test_touch_points_scale_to_libretro_pointer_range(self):
+        rows = [{'start': 7, 'end': 9, 'buttons': []}, {'start': 9, 'end': 12, 'buttons': [], 'touch': [0, 383]},
+                {'start': 20, 'end': 21, 'buttons': ['A'], 'touch': [255, 192]}]
+        self.assertEqual(touch_schedule(rows), [(9, 12, (-32639, 32682)), (20, 21, (32639, 85))])
+        for point in ([256, 200], [-1, 200], [10], [1.5, 200], 'center'):
+            with self.assertRaises(ValueError):
+                touch_schedule([{'start': 1, 'end': 2, 'buttons': [], 'touch': point}])
