@@ -14,13 +14,15 @@
     "milestone_native_save_reload": "4/4, schema-1 encoding 0x004D4C78, copied battery only",
     "normal_context_exit_checks": "8/8: empty room 76, right/left input, jump, no enemies, rendered captures, native queued return to 64, continued updates, unchanged candidate",
     "refuge_save_continue": "6/6 on 36aa52f8; control without guard patch leaves Continue on the title",
+    "release_0_6_1": "c3010cba: tour 14/14, refuge save/continue, ambush seeds 11/12 exits work (11 completed ambush), kit 31/31, crash hunt 12/12",
+    "release_0_7_0": "c56095be: tour 30/30, saves+Continue in Refuge/NestRest/NestShrine, fights end with working exits (Station, Shaft, Throat, Span, Hollow, Gate; enemy HP capped), boss start/death/completed flag/exit, map diagram in game, title v0.7.0, crash hunt 12/12",
     "room_object_roundtrips": 75,
     "shell_checks": "6/6: appended entry 76, ongoing updates, movement, frames, return to native room 64",
     "shell_hash_prefix": "edf0521b",
     "source_tests": "199 full-suite tests passed; focused Midnight Line/document tests pass"
   },
   "authorization": "2026-10-06: implement the approved Midnight Line first-station plan",
-  "current_research_gate": "Puzzle, Signal Leech and Conductor teaser not built; first slice (rooms, doors, refuge save, encounters) agent-tested in v0.6.0",
+  "current_research_gate": "Puzzle, Signal Leech and Conductor teaser not built; Nest wing, boss and map diagram agent-tested in v0.7.0",
   "deferred": [
     "moving_train",
     "full_conductor_boss",
@@ -37,7 +39,8 @@
   "entrance": {
     "candidate": "Sewer_Save02",
     "placement": {
-      "destination": "ML_Platform spawn 1",
+      "destination": "ML_Entry spawn 3",
+      "doorway": "native Door (empty) copy at x=54 (grey door behind the desk)",
       "return_spawn": {
         "facing": "left",
         "id": 2,
@@ -76,7 +79,13 @@
     "authored_native_entrance_door",
     "five_sanitized_room_clones_with_palette_grade",
     "native_flag_persistence_252_275",
-    "refuge_save_room_guard_patch"
+    "refuge_save_room_guard_patch",
+    "cross_area_room_clones",
+    "minimap_cbmp_codec_and_chapter_diagram",
+    "relocated_sewer_area_room_list",
+    "message_continuation_preserved",
+    "boss_reward_without_native_grant",
+    "grown_text_huffman_tree"
   ],
   "objectives": [
     "find_emergency_power",
@@ -87,43 +96,79 @@
   "persistence": {
     "milestones": [
       "discovered",
-      "main_power_restored",
       "completed"
     ],
     "publication_gate": "Passed for the first slice: refuge save/Continue restores room 77 and its flag; rollback ROMs without the guard patch reject chapter saves",
     "required": true,
     "storage": {
-      "evidence": "Flags 245..282 unset in 62 save slots; 251..275 no event, ARM9 constant or room-table reference",
+      "evidence": "Flags 245..282 unset in 62 save slots; 245..275 no event or ARM9 constant reference (245..250 are visited flags of unreachable debug rooms 69..74)",
       "kind": "native story flags (stats+0x1C, saved natively)",
       "milestones": {
-        "completed": 258,
-        "discovered": 252,
-        "main_power_restored": 257,
-        "teaser_seen": 259
+        "completed": "ML_Venom reward flag (0xAB remapped; 246 in v0.7.0)",
+        "discovered": 252
       },
-      "puzzle_state": [
-        260,
-        267
-      ],
       "remapped_encounter_flags": {
-        "ML_Service ambush (Sewer_Map02 0x42)": 268,
-        "free": [
+        "ML_Platform 0x27/0x62/0x11c": [
           269,
-          275
+          270,
+          271
+        ],
+        "ML_Station ambush (Sewer_Map02 0x42)": 268,
+        "build_report": "work/midnight-line/chapter-build.json local_flags",
+        "pool_first_use_order": [
+          268,
+          269,
+          270,
+          271,
+          272,
+          273,
+          274,
+          275,
+          266,
+          267,
+          251,
+          250,
+          249,
+          248,
+          247,
+          246,
+          245
         ]
       },
-      "unassigned": 251,
       "visited": {
-        "ML_Gallery": 256,
-        "ML_Platform": 252,
+        "ML_Entry": 252,
+        "ML_NestGallery": 262,
+        "ML_NestGate": 264,
+        "ML_NestHollow": 261,
+        "ML_NestRest": 258,
+        "ML_NestShaft": 257,
+        "ML_NestShrine": 263,
+        "ML_NestSpan": 260,
+        "ML_NestThroat": 259,
+        "ML_Platform": 256,
         "ML_Refuge": 253,
-        "ML_Service": 254,
-        "ML_Switching": 255
+        "ML_Stairs": 255,
+        "ML_Station": 254,
+        "ML_Venom": 265
       }
     },
     "temporary_circuit": "Restore a safe configuration on re-entry"
   },
   "player_confirmed": false,
+  "player_feedback": [
+    {
+      "addressed_in": "0.6.1: matching door kinds, visible doorway, train-roof fight, Sewer map; open: chapter on the map, new geometry, new enemies",
+      "date": "2026-10-07",
+      "summary": "Really cool; entrance hard to find and invisible; doors led to unexpected places (trapdoor to side door); fights low-level; recoloured native rooms recognisable; no working map was unnerving",
+      "version": "0.6.0"
+    },
+    {
+      "addressed_in": "0.7.0: Nest wing, boss, chapter on the map",
+      "date": "2026-10-07",
+      "summary": "Not tested yet; asked to keep building as much content as possible ('a kid on christmas')",
+      "version": "0.6.1"
+    }
+  ],
   "player_kit": "Preserve accepted Red, Black and shared abilities and purchases",
   "published": false,
   "release_gates": [
@@ -139,46 +184,107 @@
     "power_puzzle_and_objective_board",
     "signal_leech_art_and_behaviour",
     "conductor_teaser",
-    "chapter_minimap_and_area_label",
-    "completion_milestones_and_reward",
     "player_feedback_iteration"
   ],
   "research_evidence": "work/midnight-line/",
   "rooms": [
     {
-      "id": "ml_platform",
-      "name": "Last Platform",
-      "role": "Campaign entrance, return point and introduction",
+      "id": "ml_entry",
+      "name": "Maintenance Entry",
+      "role": "Arrival from Sewer_Save02 and way back; ceiling exit to the Station (second hatch sealed in v0.7.0)",
       "room_index": 76,
-      "source": "Sewer_Map03"
+      "source": "Sewer_Map01"
     },
     {
       "id": "ml_refuge",
       "name": "Maintenance Refuge",
-      "role": "Combat-free office; emergency power lights the refuge and objective board",
+      "role": "Combat-free save room; future objective board",
       "room_index": 77,
-      "source": "Sewer_Save03"
+      "source": "Sewer_Save04"
     },
     {
-      "id": "ml_service",
-      "name": "Service Passage",
-      "role": "Lower route, emergency-power switch and first Signal Leech",
+      "id": "ml_station",
+      "name": "Midnight Station",
+      "role": "Station hall with timetable; one-time ambush",
       "room_index": 78,
       "source": "Sewer_Map02"
     },
     {
-      "id": "ml_switching",
-      "name": "Switching House",
-      "role": "Route power between track lighting and service gate; restore main power",
+      "id": "ml_stairs",
+      "name": "Switchback Stairs",
+      "role": "Between Platform and Refuge; floor grate up from the Nest Gate; three enemy groups",
       "room_index": 79,
       "source": "Sewer_Map13"
     },
     {
-      "id": "ml_gallery",
-      "name": "Overhead Gallery",
-      "role": "Upper return route, permanent shortcut and sealed-tunnel teaser",
+      "id": "ml_platform",
+      "name": "Last Platform",
+      "role": "Tracks and parked train; train-roof fight; floor grate down into the Nest (top trapdoor sealed); future power puzzle",
       "room_index": 80,
-      "source": "Sewer_Map01"
+      "source": "Sewer_Map03"
+    },
+    {
+      "id": "ml_nest_shaft",
+      "name": "Nest Shaft",
+      "role": "Drop-in from the tracks' floor grate; fliers",
+      "room_index": 81,
+      "source": "Hive_Map07"
+    },
+    {
+      "id": "ml_nest_rest",
+      "name": "Nest Rest",
+      "role": "Save point",
+      "room_index": 82,
+      "source": "Hive_Save02"
+    },
+    {
+      "id": "ml_nest_throat",
+      "name": "Nest Throat",
+      "role": "Climb; fliers; ichor locks",
+      "room_index": 83,
+      "source": "Hive_Map06"
+    },
+    {
+      "id": "ml_nest_span",
+      "name": "Nest Span",
+      "role": "Long hall; two waves; ichor walls",
+      "room_index": 84,
+      "source": "Hive_Map05"
+    },
+    {
+      "id": "ml_nest_hollow",
+      "name": "Nest Hollow",
+      "role": "Ambush; ichor locks",
+      "room_index": 85,
+      "source": "Hive_Map04"
+    },
+    {
+      "id": "ml_nest_gallery",
+      "name": "Nest Gallery",
+      "role": "Quiet climb (Venom cameo removed)",
+      "room_index": 86,
+      "source": "Hive_Map03"
+    },
+    {
+      "id": "ml_nest_shrine",
+      "name": "Nest Shrine",
+      "role": "Second save point",
+      "room_index": 87,
+      "source": "Hive_Save02"
+    },
+    {
+      "id": "ml_nest_gate",
+      "name": "Nest Gate",
+      "role": "Ambush, then up through the Stairs' floor grate",
+      "room_index": 88,
+      "source": "Hive_Map02"
+    },
+    {
+      "id": "ml_venom",
+      "name": "Rooftop Arena",
+      "role": "Boss: Mini-Boss 06 with ichor gates and platforms; completion; native reward withheld",
+      "room_index": 89,
+      "source": "Downtown_Map14"
     }
   ],
   "schema_version": 1,

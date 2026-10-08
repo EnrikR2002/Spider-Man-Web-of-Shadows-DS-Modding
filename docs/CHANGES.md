@@ -14,6 +14,87 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.7.0 - 2026-10-07 - Midnight Line: The Nest, a boss, and the chapter on the map
+
+Published through Play Spider-Man.cmd's stable ROM. SHA256
+`c56095be2dfd999adb475c93f5238bd916289dbfe9dce1eb9b3cf4f8563d43b8`
+(ARM9 `a19896db...`; kit code unchanged). Title and Options show v0.7.0.
+Player asked (2026-10-07, before testing v0.6.1) for as much new content as
+possible. v0.6.1 changes are included.
+
+- **The Nest (8 rooms).** The floor grate on the Last Platform's tracks now
+  drops into a symbiote nest under the line: Shaft, Rest (save), Throat,
+  Span, Hollow, Gallery, Shrine (save), Gate. These are the game's Hive rooms
+  (you have only seen Hive_Map01), recoloured and cloned with their own
+  encounters: symbiote crowds and fliers (about twice the health of sewer
+  thugs), ambushes that seal the doors with purple ichor crystals you smash
+  to get out, and two save spheres. All Nest doors are the game's own pairs.
+  The Gate's ceiling exit climbs back out through the Stairs' floor grate,
+  next to the Refuge, so the chapter is a loop.
+- **Boss: the rooftop arena.** Between the Shrine and the Gate is the
+  Downtown_Map14 arena (a room you have not visited): an orange symbiote
+  mini-boss with its own health bar, ichor gates and timed platforms. Beating
+  it marks the chapter completed. Its native reward (Sledgehammer Slam and a
+  story collectible) is *not* given, so the main story is untouched.
+- **The chapter is on the map.** The Sewer touch-screen map now has a
+  subway-style diagram in its empty lower-left corner: the line from the
+  arrow (back to the Sewer) through Entry, Station, Platform, Stairs and
+  Refuge, with the Nest loop below and the boss marked with a cross; save
+  rooms have a dot. Rooms appear as you visit them; the current room is lit.
+- Sealed: the Entry's second ceiling hatch and the Platform's top trapdoor
+  (their floor-grate partners now lead into the Nest). Entry -> Station ->
+  Platform is the way in.
+- Dialogue removed from cloned rooms no longer cuts off the script steps
+  that followed it (the follow-up group still runs).
+- Version text needed the digit 7, which the game's compressed text table
+  lacked; the table now gains that symbol (all 1049 strings re-encoded).
+
+Agent-tested on `c56095be`: door tour 30/30 (rooms, arrival points, 14
+visited flags, no other flags), save/Continue in the Refuge, Rest and Shrine,
+fights end with working exits in Station, Shaft, Throat, Span, Hollow and
+Gate (enemies capped at 1 HP), boss fight starts, boss death (HP capped)
+sets the completed flag without the native reward and the exit opens, map
+diagram drawn and highlighted in game, title shows v0.7.0, kit
+qualification 31/31, crash hunt 12/12 (`work/kit/v0.7.0/`), Station ambush
+seeds 11/12. Not player-confirmed. Still
+missing: power puzzle, Signal Leech (original enemy), Conductor teaser.
+
+## v0.6.1 - 2026-10-07 - Midnight Line: doors that make sense, a visible way in
+
+Published through Play Spider-Man.cmd's stable ROM. SHA256
+`c3010cba9255a30645ad9f020d3af284550f42da26b98f728e93b4c94f8ef590`
+(ARM9 `817c23a4...`; kit ARM9 unchanged). Title and Options show v0.6.1.
+Player feedback on v0.6.0 (2026-10-07): "really cool"; but the entrance was
+hard to find (no visible door, "Sewer Map 7" meant nothing in game), doors led
+to unexpected places (a ceiling trapdoor came out of a side door and vice
+versa), fights were low-level sewer enemies, rooms are recognisably recoloured
+sewer rooms, and having no working map was unnerving.
+
+- **Doors now match.** Every chapter door pairs left with right and ceiling
+  with floor: climb out through a ceiling hatch and you come up through the
+  next room's floor grate. Three of the six links are the game's own
+  connections. New layout: Maintenance Entry (arrival) -> up to the Station or
+  up to the Last Platform; Station -> right -> Platform; Platform <-> Stairs
+  (side door and top trapdoor); Stairs -> left -> Refuge (save sphere).
+- **Visible entrance.** A grey doorway now stands at the right wall of the
+  sewer save room behind the desk (Sewer_Save02: the save point in the lower
+  middle of the Sewer map). Walk through it.
+- **Last Platform fight.** The tracks room now runs its native encounter
+  record: a crowd including red suits on the roof of a parked subway car.
+  Station ambush and the Stairs' three groups remain.
+- **Map.** Chapter rooms show the real Sewer map (your explored sewer and its
+  save points) instead of an empty "Pier" map. The chapter's own rooms and
+  your position are not drawn on it yet.
+- Rooms renamed for what they are (Entry, Station, Platform, Stairs, Refuge);
+  saves made in the v0.6.0 Refuge still Continue into the Refuge.
+
+Agent-tested: all 14 doors (door kinds checked from trigger/spawn geometry
+against 175 native pairs), Refuge save -> Continue, Station fights end with a
+working exit (seed 11 also completed the ambush), Platform spawns up to 6
+enemies on the train roof, kit qualification 31/31, crash hunt 12/12, native
+Sewer_Save02 exit unchanged. Not player-confirmed. Still missing: chapter
+rooms on the map, puzzle, Signal Leech, teaser; enemies are native sewer types.
+
 ## v0.6.0 - 2026-10-07 - Midnight Line: first station (exploration slice)
 
 Published through Play Spider-Man.cmd's stable ROM. SHA256

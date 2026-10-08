@@ -109,11 +109,19 @@ research. The complete earlier gameplay/engine notes are preserved in the archiv
 The world is 75 rooms (Downtown, Hive, Pier, Residential, Sewer, plus test rooms)
 joined by edge doors: walking into an edge loads the neighbour and places Spidey
 beside its matching door, facing into the room (side doors walk him a few steps
-in; overhead doors drop him). Part of the Sewer is an underground subway
+in; overhead doors drop him). Connections keep direction: a left door leads to
+the neighbour's right door, and a ceiling hatch to its floor grate. Part of the Sewer is an underground subway
 station (Sewer_Map02 station and timetable, Sewer_Map03 tracks, Sewer_Map13
 stairs). Each room marks itself visited on entry; certain first entries advance
 the mission counter (Sewer_Map01 and Sewer_Map03 do). Some rooms run one-time
-ambushes that lock their doors while enemies are alive.
+ambushes that lock their doors while enemies are alive. Hive ambushes seal the
+doors with purple ichor: after the wave, smash the ichor block to reopen them.
+Mini-boss rooms (e.g. Downtown_Map14's rooftop arena) show a boss health bar
+across the top; the boss's reward orb is a collectible that grants a story
+ability (Downtown_Map14: Sledgehammer Slam, which breaks ichor floors).
+
+The touch screen shows the current area's map: rooms appear once visited
+(the current one lit), save rooms as S icons, and the mission marker "!".
 
 Save rooms hold a save sphere: X opens Save Options (Save, Buy Upgrades, Test
 Upgrades, Continue); Save asks "Do you want to save your progress?" then shows

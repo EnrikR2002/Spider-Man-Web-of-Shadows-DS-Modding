@@ -75,6 +75,19 @@ PROFILE_INFO = {
                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                     'arm9_sha256': 'efab33e0f8154f6ad76fcf453c70d9d7146165b83e04ee1d4ea2cfd6b1b7b621'},
+    # Player feedback fixes: matching door kinds, visible entrance doorway, Platform
+    # train-roof fight, Sewer map in chapter rooms (CHANGES v0.6.1). v0.6.0 stays
+    # identified by its published ROM; current chapter code builds v0.6.1 only.
+    'tasm-v0.6.1': {'version': '0.6.1', 'date': '2026-10-07', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': '817c23a4de435e0333f9b120e6a7f16e7e16a2b7408da7f89f711c2a29d3aab3'},
+    # The Nest: nine more chapter rooms (Hive clones + Venom's rooftop boss arena),
+    # the chapter drawn on the Sewer touch-screen map (CHANGES v0.7.0).
+    'tasm-v0.7.0': {'version': '0.7.0', 'date': '2026-10-07', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': 'a19896dbcc2d62889eaf787d6d7900c9ed803d25847fcf8b99da959d48b692a9'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

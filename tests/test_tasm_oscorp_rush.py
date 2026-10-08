@@ -65,6 +65,7 @@ class LocalRushTests(unittest.TestCase):
 
     def test_text_preserves_other_composed_slots_and_is_idempotent(self):
         from tools.oscorp_resources import EXTRA_NAMES
+        from tools.qol_suits_menu import decode_grown     # v0.7.0 strings carry a grown tree
         overlays=mod.overlay_files(mod.ROOT/'mods',list(self.entries),added_names=(*EXTRA_NAMES,*KIT_NAMES))
         # Test this release's historical prerequisite text, not a later full
         # choreography release's revised instructions.
@@ -75,7 +76,7 @@ class LocalRushTests(unittest.TestCase):
         for name in ('English.strings','American.strings'):
             slots=StringSlots(self.clean(name))
             for i in range(len(slots.texts)):
-                self.assertEqual(slots.decode(overlays[name],i),r.TEXT_EDITS.get(i,slots.decode(before[name],i)))
+                self.assertEqual(decode_grown(overlays[name],i),r.TEXT_EDITS.get(i,decode_grown(before[name],i)))
         for name in set(overlays)-{'English.strings','American.strings'}:
             self.assertEqual(overlays[name],before[name])
 

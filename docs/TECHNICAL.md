@@ -244,12 +244,18 @@ round-trip; unknown prefix and untouched slot tails survive. Same-slot localized
 names/input/prerequisite edits are supported, other languages unproved. Native
 FONT/canvas/UTF16 rendering is traced, no font-file editor. Archived
 `FORMAT_NOTES.md` section `Bounded English/American text slots`, `QOL_CLARITY.md`.
+The 0x1064-byte prefix is zero; at 0x1064 sit u32 tree size (4 + 4*nodes),
+the tree, 1,049 offsets relative to 0x1064, then slots. The tree only codes
+bytes the original text uses (no '7'). `StringSlots.grown` splits the least
+used leaf into (leaf, new byte), re-encodes every slot and rebuilds the
+offsets; the game reads the grown tree (v0.7.0 title shows "v0.7.0").
+Use `decode_grown` for any variant.
 
 Two hash-identified minimap sheets have coherent4bpp tiled previews and exact
 round trips. DAT first two bytes fit those two dimension candidates; other DAT
 fields/palette ownership are unknown. The mission palette's original red is
-restored.153 UI families/142 CBMP files are inventoried; no general UI schema
-or CBMP editor. Archive section `Minimap investigation`.
+restored.153 UI families/142 CBMP files are inventoried. 4bpp CBMP screens
+(all minimaps) are decoded and editable: "Minimap screens and area room lists".
 
 All75 BSP envelopes parse losslessly: `BSP\0`, LE u32@4=7/@8=2 (meanings
 unknown), @12=file length, @16=table end, bounded monotonic even offsets,
@@ -1465,27 +1471,41 @@ before assigning storage or clearing the persistence publication gate.
 Source validation at that point: 199/199 on 2026-10-06. Current status (215/215,
 release v0.6.0) is in "Midnight Line chapter build (v0.6.0)".
 
-### Midnight Line chapter build (v0.6.0)
+### Midnight Line chapter build (v0.6.0, layout v0.6.1)
 
 `tools/midnight_chapter.py` (`apply_rom`; tests `tests/test_midnight_chapter.py`)
 is the final verified stage of `mod.create_build` for profiles with
-`'chapter': True` (`tasm-v0.6.0`). It requires the pinned kit ARM9 and clean
-native sources, and proves every other resource byte-identical. Dev candidate:
-`python tools/midnight_chapter.py` (from stable v0.5.0, `build/midnight-line/`).
+`'chapter': True` (`tasm-v0.6.x`). It requires the pinned kit ARM9 and clean
+native sources, and proves every other resource byte-identical. `ARM9_SHA256`
+pins the current release only (v0.6.0's chapter bytes are not rebuildable
+from current code). Dev candidate: `python tools/midnight_chapter.py` (from the
+kept v0.5.0 ROM in `build/releases/fd7e4420.../`, output `build/midnight-line/`).
 
-- **Rooms 76..80** (75 stays the native invalid sentinel): ML_Platform <-
-  Sewer_Map03 (tracks), ML_Refuge <- Sewer_Save03, ML_Service <- Sewer_Map02
-  (station, timetable), ML_Switching <- Sewer_Map13 (stairs), ML_Gallery <-
-  Sewer_Map01. Models, BSP, texture animation and minimaps are shared native
+- **Rooms 76..80** (75 stays the native invalid sentinel), v0.6.1: 76
+  ML_Entry <- Sewer_Map01 (arrival), 77 ML_Refuge <- Sewer_Save04 (save sphere
+  in record 0), 78 ML_Station <- Sewer_Map02 (timetable), 79 ML_Stairs <-
+  Sewer_Map13, 80 ML_Platform <- Sewer_Map03 (tracks, parked train). v0.6.0
+  used Platform/Refuge(Save03)/Service/Switching/Gallery for 76..80. Models, BSP, texture animation and minimaps are shared native
   indices; each room appends `zz_<room>_app.obj` and a palette-graded
   `zz_<room>Textures.nsbtx` (cold "midnight" grade; amber "emergency" in the
   Refuge; only palette bytes change). `zz_ml_alignment.bin` keeps appends
   word-aligned.
-- **Room table.** Kit autoload grows from 0x5C00 to 0x6800: the kit's unused
-  reserve tail (zeros) plus a 0x800 chapter block at `0x02155420` holding an
-  81-entry lookup (native 0..74, 0, chapter 76..80), five descriptors cloned
-  from the sources (name, texture, OBJ, model-array pointer changed), model
-  arrays and names. Arena lower moves to `0x02155C20` (2 KiB less heap).
+- **Room table.** Kit autoload grows from 0x5C00 to 0x7000 (v0.6.x: 0x6800):
+  the kit's unused reserve tail (zeros) plus a 0x1000 chapter block at
+  `0x02155420` holding the lookup (native 0..74, 0, chapter 76..89), one
+  descriptor per room cloned from its source (name, texture, OBJ, model-array
+  pointer changed), model arrays, names and (v0.7.0) the relocated Sewer
+  area room list. Arena lower moves to `0x02156420` (4 KiB less heap).
+  Descriptors +0x28..+0x48 are zero in ROM and filled at boot for native rooms
+  only: area id (Pier 0, Residential 1, Sewer 2, Downtown 3, Hive 4), map piece
+  position, size and room bounds. Unfilled (zero) chapter descriptors showed an
+  empty "Pier" map; v0.6.1 pre-fills the sources' runtime values
+  (`MAP_FIELDS`), so the Sewer map appears. The map only draws (and highlights)
+  rooms from a list not yet found, so chapter pieces/position are not drawn;
+  a different position was tried and ignored. Area table: static init at
+  `0x02117F74` writes RAM `0x0213B834` (16-byte rows: map CBMP, unlock var).
+  `0x02137xxx` byte lists ending below 0x49 are per-mission *ability* unlock
+  lists (`0x020D1334`, bitset `0x0205721C`), not room lists.
   Patches: lookup literal `0x02084AC8`, Glob count `0x020077F8`, and both
   current-room guards `cmp r1,#75` -> `#81`.
 - **Sanitized clones.** Record 0 keeps Spidey, exits, camera and ambience;
@@ -1493,21 +1513,31 @@ native sources, and proves every other resource byte-identical. Dev candidate:
   dropped (reads kept: they only gate the dropped groups); upgrade orbs move
   4000 units below the floor. Record 1 is either the empty Test_Surfaces01
   state record plus the visited flag (Platform, Refuge) or the source's
-  encounter record with flags remapped (Service ambush flag 0x42 -> 268,
-  Switching's three spawners, Gallery). Gallery's mini-boss/silhouette stay
-  dormant outside their story beat.
-- **Links.** Arrival facing right means the door back is on the left; links
-  join right-side exits to left-side arrivals so a held direction does not
-  bounce Spidey back out. Loop Platform -> Service -> Switching -> Gallery ->
-  Platform alcove; Refuge up the Platform's top-right stairs; Gallery's
-  overhead exit is the one left-to-left pair.
-- **Entrance.** Sewer_Save02 gains trigger (61, 4) size 12x24 -> room 76
-  spawn 1, and return spawn id 2 at (44, 2) facing left. Its native exit
-  and record 1 are unchanged. It fired at x=51.9 when walking right.
+  encounter record with flags remapped (v0.6.1: Station ambush 0x42 -> 268;
+  Platform 0x27/0x62/0x11c -> 269/270/271, so its boiler/ambush logic starts
+  fresh and a crowd incl. red suits fights on the train roof; native story
+  state blocks Spidey at the train instead). Entry's mini-boss/silhouette stay
+  dormant outside their story beat. Spawner byte +22 is an area enemy-table id
+  (Sewer 0x0D..0x0F); strength also follows global difficulty 0x125.
+- **Links (v0.6.1).** Door kind (`room_doors.door_kind`): trigger offset from
+  its nearest spawn; agrees with >=95% of native pairs. Every link joins
+  opposite kinds (left/right, up/down), checked by tests. Native pairs reused:
+  Entry up<->Station down, Station right<->Platform left, Stairs left<->Refuge
+  right; also Entry up<->Platform floor grate, Platform left alcove<->Stairs
+  right, Platform top trapdoor<->Stairs floor. v0.6.0 joined mismatched kinds
+  (player: trapdoors came out of side doors).
+- **Entrance.** Sewer_Save02 gains trigger (61, 4) size 12x24 -> ML_Entry
+  spawn 3 (its left door), return spawn id 2 at (44, 2) facing left, and
+  (v0.6.1) a copy of its native record-1 "Door (empty)" doorway at x=54 (grey
+  door behind the desk). Native exit, entities and events otherwise unchanged.
+  It fired at x=51.9 when walking right.
 - **Flags.** 252..256 visited (0xB0+room), 257 main power, 258 completed,
   259 teaser seen, 260..267 puzzle state, 268..275 remapped encounter flags;
   251 unassigned. Discovered = flag 252.
 
+v0.6.1 release `c3010cba`: tour 14/14, Refuge save/Continue, ambush seeds 11
+(ambush completed, flag 268, exit works) and 12, kit 31/31, crash hunt 12/12
+(`work/kit/v0.6.1/`), native Save02 exit unchanged. v0.6.0 evidence follows.
 Agent-tested on release `36aa52f8` and dev candidate `a023350e` (same chapter
 bytes): `midnight_line.py tour` rides all 14 directed links once
 (lab warp into Sewer_Save02, teleport onto each trigger): correct rooms,
@@ -1527,6 +1557,121 @@ Sewer_Save02 left exit still reaches Sewer_Map07 record 2, title v0.6.0.
 Evidence: `work/midnight-line/chapter-{build,tour,save}*.json`, frames under
 `build/boot-tests/chapter-*`. Rollback caveat: a save made inside the chapter
 is rejected by any ROM without the guard patch (battery bytes stay intact).
+
+### Minimap screens and area room lists (v0.7.0)
+
+Confirmed 2026-10-07 (`tools/minimap_cbmp.py`, tests; in-game captures).
+
+- **CBMP 4bpp screens** (98 of 142 files, every minimap; `*_8`/HUD/BlackBG UI
+  screens use another layout): u16 121, u16 tile count, 256 BGR555 colours
+  (16 palettes), u16 width/height in tiles (32x24 = the whole touch screen,
+  frame included), width*height NDS text-BG entries, u32 body length, a
+  Griptonite 0x60 PuCrunch body *without* its 4-byte type/size word (params,
+  RLE table, bitstream; `grip_compression.decode` after prefixing
+  `0x60 | tiles*32 << 8`), 2 trailing bytes. All 98 round-trip; a re-encoded
+  body (`encode_backrefs`) loads in game (Sewer screen 6150 -> 7694 bytes).
+- **Area rows** at `0x0213B840` (ARM9 data, 16 bytes per area 0..4): screen
+  resource, map variable, room-list pointer, entry count. Sewer row 2: list
+  `0x0211FE38`, 18 entries. Static init `0x02117F74` writes screen/var only.
+- **Room-list entry** (20 bytes): u32 room, u32 OBJ record selector, u8 type
+  (0 room, 1 save room), u8 first/last palette index of the room's 5-colour
+  slot, u8 x4 colour sources `B6 BA BB BF` in every entry, u8 x/y map pixel
+  (mission markers, `0x020E1A5C`), 3 zero bytes. Code (`0x020E1858`,
+  `0x020E19A4`) tests visited flag 0xB0+room (room <= 114) and copies the
+  visited (`0xB6..0xBA`), hidden or current-room colours into the slot; the
+  slot's first colour is the background and never changes. Room shapes are
+  pixels of those slot colours in the area screen itself.
+- **Free slots in MMSewer.cbmp:** palettes 1..3 (magenta fill), `0xAB`,
+  palette 0 beyond colour 0, palette 13. Palette 11 holds the colour sources;
+  4/5 colours 1..11 are the S icons. Using palettes 0/1..3/13 showed no
+  other touch-screen change in captures.
+- **Descriptor +0x28..+0x48** (area, piece position, world size, bounds) feed
+  the room-detail view (`0x020E56F8`, with descriptor +0x4C screen) when the
+  area's map variable is owned (`0x020E361C`). The chapter sets area 2 and
+  keeps the source room's other values.
+- **Chapter diagram:** 14 rooms drawn as a subway diagram in the empty
+  lower-left cells (cols 3..12, rows 15..18) of MMSewer.cbmp, one free slot
+  per room; list relocated to the chapter block with 18 + 14 entries
+  (patches row +8/+0xC). Visited chapter rooms appear, the current one is
+  highlighted (frames: `build/boot-tests/nest-c-*/ml-visit-*`).
+
+### The Nest and the boss room (v0.7.0)
+
+- **Cross-area clones work.** Warping into native Hive/Pier rooms with a
+  Sewer-era save spawns their own enemy types; cloned Hive rooms keep their
+  symbiote crowds (HP 80k..107k at difficulty 11 vs ~45k sewer red suits).
+  Area-specific enemy assets load per room; the descriptor's area id can be 2.
+- **Event semantics found:** `0x15` message operand +4 = 1-based event group
+  that runs after the dialogue (dropping the message must keep that chain:
+  the chapter turns it into a 0-frame `0x1C`); `0x1C` = u16 delay, +4 action
+  group, +5 event group (1-based); `0x1F` = "<ability> obtained!" story
+  ability grant (Downtown_Map14 grants Sledgehammer Slam); `0x07` spawns a
+  pickup (+26 = group run on pickup; the boss reward orb is a native
+  collectible: "You found a Collectible!").
+- **Per-room scratch bytes** 0x127..0x130 drive room logic such as the
+  Venom room's platforms/timer; the chapter keeps their writes.
+- **Downtown_Map14 boss**: Mini-Boss 06 (orange symbiote brute, HP 2,048,000
+  at `0x022AD460`-style (hp,max) pairs, no NormalEnemy vtable). Its trigger
+  needs flag 0xAA (Sewer_Map06 mini-boss beaten); the clone reads it as its
+  own visited flag. Boss death runs the reward group directly (no grant,
+  no collectible), setting the "completed" flag; exits work afterwards.
+- **Flags:** visited 252..265 (rooms 76..89), locals from 268..275, 266, 267,
+  251..245 (first-use order; Station/Platform keep 268..271). Flags 138..165
+  have no event/code reference and are unset in the player's save (mission
+  28) but are not in the verified-free list; orb entities use ids 19..72.
+
+### Content toolbox research (2026-10-07, after v0.7.0)
+
+Lab-only (scripts `work/midnight-line/scratch/{msg_test,variant}.py`; dev ROMs `build/midnight-line/{msg,mix,timer}-*`; frames in
+`build/boot-tests/*/{msg,mix,timer,dev}-*`; sheets in `work/midnight-line/`).
+Nothing below is shipped yet.
+
+- **More flags.** Save slot = "SpidermanWoS" + 4-byte checksum + the 0x58
+  block (flags at block +0x1C, mission byte +0x48). 21 distinct slots in
+  `work/save-backups` and the player battery (missions up to 47, past the
+  final boss's 41) never set 138..165 (nor 245..251, 257..267, 269..282
+  outside the chapter). Flag writes only come from event opcodes and the
+  shop's ability bits (`0x020F1B20`/`0x020F1BC8`, via `0x020D24D8`); no code
+  constant targets 138..165. They are a safe 28-flag extension pool.
+  Unreferenced low flags (21..49 etc.) overlap the orb id range 19..72: avoid.
+- **Dialogue.** Opcode 0x15 operand: u16 display time (0 = default ~8 s;
+  tutorial lines use 5), u8 message id, u8 alternate-lookup flag, u8
+  continuation group. Message table `0x0211C214`: 196 entries x 44 bytes
+  (u32 string index, u16 x2 voice ids or -1, 9 x u32 extra ids or 0x7FFFFFFF),
+  reached only through accessor `0x020D0F64` (literal `0x020D0F84`). Two
+  bounds `cmp r1,#0xC4` at `0x020DFCFC`/`0x020DFDD8` reject higher ids
+  (blank touch screen). Recipe proven in game: copy the table with new
+  entries into the chapter block, patch the literal, raise both bounds to
+  0xFF (59 new ids 0xC4..0xFE), append strings. Strings: the 0x1064-byte zero
+  prefix is 1049*4 (count literal `0x020069AC` = 0x419; loader `0x0200694C`,
+  decoder `0x0200C4A8`); appended strings displayed with and without growing
+  prefix+count; grow both in production. `StringSlots.grown(..., appended=)`,
+  `slot_count`, `decode_grown` handle variants. Shown: "Midnight Line: the
+  power is out. Find the breaker." on the touch-screen panel.
+- **Enemy mixing.** Spawner byte +22 (area table) can be any area's: the
+  Sewer Station clone spawned Hive symbiotes (0x05, ~90k HP) or Pier gang
+  (0x08, ~50k HP). Tables: Downtown 1..3, Hive 4..6, Pier 7..9, Residential
+  0xA..0xC/0x13, Sewer 0xD..0xF.
+- **Puzzle objects.** Switch = Object (Switch) + Trigger (Button Press) (trigger
+  +26 mode 0 = press, 2 = touch; +27 group). Sewer_Map04 switch: anim via 0x01
+  on the switch entity, INC flag 0x27 (drains the sewer), read by Sewer_Map03
+  ("ElecBoilerCheck") whose 11 Hazard_Electric floors are powered by a
+  Liftable boiler (Lift_Object_Die INC 0x62). Opcode 0x0F toggles door/gate
+  entity state (block/unblock, grate open/close). Cross-room puzzles need one
+  chapter flag shared by several clones (the cloner maps flags per room today).
+- **Timers.** Opcode 0x23 u8 N: on-screen countdown of N minutes (0 resets);
+  TimerWatcher entity (type 11, 20 bytes) +16 = 1-based group run on timeout.
+- **Debug rooms.** proto01 (74) is a textured prototype night pier/warehouse
+  (rooftop y~88, floor y~5, x -207..7) with crates, ichor, liftables, an ichor
+  switch and a normal switch (per-room bytes 0x127/0x128), pickup spawners and
+  orbs that grant real abilities (lab run: "Tarantula Strength obtained!") and
+  collectibles. Test_Challenge01/Collision01/Surfaces01/02 are grey or grid
+  debug boxes. All load and play via the lab warp; no exits or spawn table
+  (Spidey in record 1). To use one: copy an exit trigger template from another
+  room (add_exit needs one in-room today), add spawns, hide orbs, drop 0x07/0x1F.
+- **Room limit.** Room ids are bytes; the map code asserts 0xB0+room < 0x123
+  (`0x020E15A8`, `0x020E187C`), so rooms above 114 must stay off the map list;
+  otherwise only the two save/reload guards limit the count.
 
 ## Research workflow and pitfalls (Red kit sessions)
 

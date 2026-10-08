@@ -50,6 +50,31 @@ class RoomDoorTests(unittest.TestCase):
         self.assertEqual(missing, [])
         self.assertEqual(defaults, 5)
 
+    def test_door_kinds_agree_with_native_pairs(self):
+        rom, _, manifest = mod.load_clean()
+        from tools import room_catalog
+        at, _, _, size = struct.unpack_from('<4I', rom, 0x20)
+        names = {r.index: r.name for r in room_catalog.parse(rom[at:at + size], [e['name'] for e in manifest['entries']])}
+        agree = total = 0
+        for name, raw in self.objects.items():
+            for x in doors.exits(raw):
+                if x.record: continue
+                dest = self.objects[names[x.room]]
+                back = [b for b in doors.exits(dest) if b.record == 0 and names[b.room] == name]
+                try:
+                    kinds = {doors.door_kind(dest, b.group) for b in back}
+                    kind = doors.door_kind(raw, x.group)
+                except ValueError:          # exit fired by a non-trigger entity/event
+                    continue
+                if not kinds: continue
+                total += 1
+                agree += doors.OPPOSITE[kind] in kinds
+        self.assertGreaterEqual(total, 170)
+        self.assertGreaterEqual(agree / total, 0.95)
+        self.assertEqual(doors.door_kind(self.objects['Sewer_Map03'], 4), 'up')
+        self.assertEqual(doors.door_kind(self.objects['Sewer_Map03'], 2), 'down')
+        self.assertEqual(doors.door_kind(self.objects['Sewer_Save02'], 1), 'left')
+
     def test_noop_retarget_is_byte_exact_and_retarget_changes_one_operand(self):
         raw = self.objects['Sewer_Map07']
         self.assertEqual(doors.retarget(raw, {}), raw)

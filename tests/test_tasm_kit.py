@@ -121,11 +121,33 @@ class TasmKitTests(unittest.TestCase):
             Clip('bad', 4, {'not_a_channel': [(0, 0.)]})
 
     def test_release_text_is_encodable_and_roundtrips(self):
+        from tools.qol_suits_menu import COUNT, decode_grown
         slots = StringSlots(self.clean('English.strings'))
         changed = slots.repack(self.clean('English.strings'), kit.TEXT_EDITS)
-        for index, text in kit.TEXT_EDITS.items():
-            self.assertEqual(slots.decode(changed, index), text)
-        self.assertEqual(slots.repack(changed, {}), changed)
+        for index in range(COUNT):      # a grown tree (e.g. digit 7) re-encodes every slot
+            self.assertEqual(decode_grown(changed, index), kit.TEXT_EDITS.get(index, slots.texts[index]))
+        self.assertEqual(slots.repack(changed, kit.TEXT_EDITS), changed)
+
+    def test_appended_slots_follow_the_native_ones(self):
+        from tools.qol_suits_menu import COUNT, decode_grown, slot_count
+        clean = self.clean('English.strings')
+        slots = StringSlots(clean)
+        grown = slots.grown(clean, {}, appended=['Midnight Line: the power is out.', 'Second line'])
+        self.assertEqual(slot_count(grown), COUNT + 2)
+        self.assertEqual([decode_grown(grown, i) for i in (COUNT, COUNT + 1)], ['Midnight Line: the power is out.', 'Second line'])
+        self.assertEqual(decode_grown(grown, 50), slots.texts[50])
+        slots.check_grown(grown)
+
+    def test_grown_tree_adds_only_missing_bytes(self):
+        from tools.qol_suits_menu import BASE, decode_grown
+        clean = self.clean('English.strings')
+        slots = StringSlots(clean)
+        self.assertEqual(slots.missing_bytes({1: 'v0.7.0'}), [0x37])
+        grown = slots.repack(clean, {1: 'v0.7.0'})
+        self.assertEqual(grown[:BASE], clean[:BASE])
+        self.assertEqual(w.u32(grown, BASE), w.u32(clean, BASE) + 4)        # one extra tree node
+        self.assertEqual(decode_grown(grown, 1), 'v0.7.0')
+        self.assertEqual(decode_grown(grown, 2), slots.texts[2])
 
 
 if __name__ == '__main__':

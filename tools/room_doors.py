@@ -69,6 +69,29 @@ def exits(raw):
     return tuple(out)
 
 
+OPPOSITE = {'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left'}
+
+
+def door_kind(raw, group):
+    """'up', 'down', 'left' or 'right': trigger centre relative to its nearest spawn.
+
+    A spawn sits beside each door (the arrival point for the way back), so the
+    trigger's offset from it says which way Spidey leaves. Agrees with 169 of
+    175 native door pairs; the rest are diagonal shafts.
+    """
+    record = RoomObjects.parse(raw).records[0]
+    trigger = next((e for e in Entities.parse(record.sections[0]).records if len(e) == 28
+                    and struct.unpack_from('<I', e, 12)[0] == TRIGGER_TYPE and e[27] == group + 1), None)
+    if trigger is None: raise ValueError('No exit trigger for that group')
+    tx, ty = struct.unpack_from('<2i', trigger)
+    table = spawns(raw)
+    if not table: raise ValueError('Room has no spawns')
+    near = min(table, key=lambda s: (s.x - tx) ** 2 + (s.y - ty) ** 2)
+    dx, dy = tx - near.x, ty - near.y
+    if abs(dy) > abs(dx) and abs(dy) > 6 * 4096: return 'up' if dy > 0 else 'down'
+    return 'right' if dx > 0 else 'left'
+
+
 def _byte(value, label):
     if type(value) is not int or not 0 <= value <= 255: raise ValueError(f'{label} must be a byte')
     return value
@@ -129,6 +152,39 @@ def add_spawn(raw, spawn_id, xyz, facing):
     result = _assemble(room, [r.raw for r in room.records], [n.raw for n in room.names], header)
     if spawns(result)[:-1] != table: raise ValueError('Existing spawns changed')
     return result
+
+
+def append_entity(raw, record, entity, name):
+    """Append one entity to a record's last batch and its name to category 0.
+
+    Existing entity indices (and so every event reference) keep their meaning.
+    """
+    parsed = RoomObjects.parse(raw)
+    if type(record) is not int or not 0 <= record < len(parsed.records): raise ValueError('Record out of range')
+    rec, names = parsed.records[record], parsed.names[record]
+    entities = Entities.parse(rec.sections[0])
+    if names.category_ends[0] != len(entities.records): raise ValueError('Entity names do not match entities')
+    if not entities.batches: raise ValueError('Record has no entity batch to extend')
+    last = entities.batches[-1]
+    lengths = [len(r) for r in last.records] + [len(entity)]
+    if len(lengths) > 255 or not 0 < len(entity) < 256: raise ValueError('Entity batch limits exceeded')
+    header_size = (4 + len(lengths) + 3) // 4 * 4
+    body = b''.join(last.records) + bytes(entity)
+    batch = struct.pack('<HBB', header_size + len(body), header_size, len(lengths)) + bytes(lengths)
+    batch += bytes(header_size - len(batch)) + body
+    section0 = b''.join(b.header + b''.join(b.records) for b in entities.batches[:-1]) + batch
+    if Entities.parse(section0).records != entities.records + (bytes(entity),): raise ValueError('Entity append failed')
+    records = [r.raw for r in parsed.records]
+    records[record] = rec.replace_section(0, section0)
+    slots = list(names.slots)
+    slots.insert(names.category_ends[0], _slot(name))
+    block = bytearray(names.raw[:20])
+    struct.pack_into('<I', block, 0, 20 + 32 * len(slots))
+    struct.pack_into('<7H', block, 6, *(e + 1 for e in names.category_ends))
+    block += b''.join(slots)
+    blocks = [n.raw for n in parsed.names]
+    blocks[record] = bytes(block)
+    return _assemble(parsed, records, blocks)
 
 
 def add_exit(raw, *, center, size, room, selector, spawn, trigger_name, group_name):

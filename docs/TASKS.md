@@ -6,36 +6,42 @@ knowledge: [TECHNICAL](TECHNICAL.md); combat design: [TASM_ROADMAP](TASM_ROADMAP
 
 ## Current work
 
-**v0.6.0 stable `36aa52f8`: Midnight Line first station (exploration slice).**
-Authorized 2026-10-06 and prioritized over new combat mechanics. Entrance:
-Sewer_Save02's far right wall. Five rooms 76-80 (sanitized native subway
-clones, midnight palette grade), loop Platform -> Service -> Switching ->
-Gallery -> Platform, Refuge with a working save sphere, encounters in Service
-and Switching. Persistence uses native flags 252..275 (visited 252..256,
-milestones 257..259, puzzle 260..267, remapped encounters 268..275).
-Agent-tested: 14/14 doors, Refuge save/Continue, death minigame, kit 31/31,
-crash hunt 12/12, 215 unit tests. Not player-confirmed. Spec:
-`reference/midnight_line.json`; build: TECHNICAL "Midnight Line chapter build
-(v0.6.0)"; formats: "Native doors, spawns and game variables".
+**v0.7.0 stable `c56095be`: Midnight Line + The Nest + boss + map.**
+Player (2026-10-07, v0.6.1 untested): keep building as much content as
+possible. v0.7.0: 8 Hive-room clones under the tracks (rooms 81..88, two
+saves, symbiote crowds, ichor-lock ambushes), boss arena from Downtown_Map14
+(room 89, reward withheld, death = completed flag), chapter diagram on the
+Sewer touch-screen map, message continuations kept, text tree grown for
+digit 7. Rooms 76..89; visited flags 252..265; locals from the 245..275 pool
+(build report). Agent-tested (CHANGES v0.7.0); not player-confirmed.
+Spec `reference/midnight_line.json`; TECHNICAL "Midnight Line chapter build",
+"Minimap screens and area room lists", "The Nest and the boss room".
 
-Next (in order): 1) player feedback on route feel, discoverability and fights;
-2) power puzzle (Switching House: native switch/gate entities and `0x1D`/`0x26`
-on flags 257/260+, objective board in the Refuge); 3) Signal Leech (original
-model/texture on an existing rig, ceiling charge/discharge, defeatable with
-native attacks); 4) Conductor teaser (light blackout + silhouette; Sewer_Map01's
-route-following silhouette NPC is a candidate); 5) chapter minimap/area label
-(bottom screen shows the source rooms' maps, Refuge says "Pier"). Gallery's
-mini-boss stays dormant outside its story beat.
+Next (in order): 1) player verdict on v0.7.0 (difficulty of Nest/boss, map
+readability, Hive spoiler OK?); 2) power puzzle on the Platform (native
+boiler/electric hazards) and objective board in the Refuge; 3) Signal Leech
+(original art, ceiling charge/discharge); 4) Conductor teaser. Flag budget is
+nearly spent (1 spare): verify 138..165 before adding stateful rooms.
+Roadmap/feature/XP-sink proposals sent 2026-10-07 await the player's picks
+(TASM_ROADMAP "Proposals awaiting the player"). Research done 2026-10-07
+(TECHNICAL "Content toolbox research"): flags 138..165 safe; custom dialogue
+proven (message table relocation + bounds + appended strings); spawner byte
+mixes any area's enemies; switch/boiler/electric puzzle wiring and timers
+(0x23) understood; proto01 is a playable textured prototype level. Build
+order when approved: shared cross-room flags + 138..165 pool, dialogue
+pipeline, power puzzle, proto01 as a chapter room.
 
 ### Handoff commands
 
-Run `python -m unittest discover -s tests` (215/215). Chapter dev candidate from
-stable v0.5.0: `python tools/midnight_chapter.py` (`build/midnight-line/
+Run `python -m unittest discover -s tests` (222/222). Chapter dev candidate from
+stable v0.5.0: `python tools/midnight_chapter.py` (from the kept v0.5.0 ROM; `build/midnight-line/
 chapter.nds`). Release: `python tools/tasm_kit.py` composes kit + chapter
 (`mod.create_build` applies `midnight_chapter.apply_rom` for profiles with
 `chapter`). Lab checks (copied saves; add `--rom R`): `python
-tools/midnight_line.py tour`, `save-test`, `ambush [--native] [--seed N]`.
-Evidence: `work/midnight-line/chapter-*.json`, `work/kit/v0.6.0/`. The older
+tools/midnight_line.py tour`, `save-test [--room R]`, `ambush [--native] [--seed N]`,
+`visit ROOM [--spawn S --goto X Y --weak --boss-max N --leave X Y]` (any room,
+fights, exits). Map screens: `tools/minimap_cbmp.py`. Evidence:
+`work/midnight-line/{chapter-*,weak-*,venom-*}.json`, `work/kit/v0.{6,7}.*/`. The older
 `stage-platform`/`probe-room` shells and the padding-bit codec
 (`midnight_progress.py`) are superseded research; do not ship them.
 
@@ -82,7 +88,7 @@ crowd-backend work are approved but unpublished; Midnight Line now takes priorit
 
 - Kit: source `tools/tasm_kit.{py,s,hex}`, `tools/kit_choreography.py`,
   `tools/kit_clips.py`, `tools/training_room.py`; candidate
-  `build/version-0.6.0` (regenerate: `python tools/tasm_kit.py`). Constants only via the `lit_` table (TECHNICAL
+  `build/version-0.6.1` (regenerate: `python tools/tasm_kit.py`). Constants only via the `lit_` table (TECHNICAL
   pitfalls); `assemble_tasm_kit.py` checks literals and native branches. Kit code
   checks other actors with `kit_alive`; remaining Skyjack position drift has
   the separate velocity-only candidate above.
@@ -94,7 +100,7 @@ crowd-backend work are approved but unpublished; Midnight Line now takes priorit
   `python tools/crash_hunt.py batch FIRST LAST --rom R` (outputs work/crash/),
   `regs STATE --ram RAM` decodes aborts. Workflow: TECHNICAL "Research workflow".
 - Prior releases (candidate mods + recipe in build/version-X, ROM rollback in
-  build/releases/<sha>/): v0.5.0 `fd7e4420`, v0.4.1 `da324b3c`, v0.4.0 `5e6465d8` (freeze bug), v0.3.0 `34736eeb`,
+  build/releases/<sha>/): v0.6.1 `c3010cba`, v0.6.0 `36aa52f8`, v0.5.0 `fd7e4420`, v0.4.1 `da324b3c`, v0.4.0 `5e6465d8` (freeze bug), v0.3.0 `34736eeb`,
   v0.2.1 `00ca471c`, v0.2.0 `935d486b`, v0.1.1 `bcc6974a`. All kit releases before
   v0.4.1 carry the Sense heap bug; do not roll back to them.
 - Real Battery path: work/playtest.json. Re-read the latest save while DeSmuME is

@@ -16,6 +16,30 @@ TEXT_HASH = '19474ce9a50c25538515e585727e4ad5878bc3bb7bb11dd987b72a7c1d556088'
 DEST = mod.ROOT / 'build/qol-suits-menu'
 
 
+def slot_count(raw):
+    """Slots in any variant: the first offset follows the offset table."""
+    size = w.u32(raw, BASE)
+    return (w.u32(raw, BASE + size) - size) // 4
+
+
+def decode_grown(raw, index):
+    """Decode a slot of any variant, reading the tree stored in the variant itself."""
+    size = w.u32(raw, BASE)
+    tree = [struct.unpack_from('<HH', raw, i) for i in range(BASE + 4, BASE + size, 4)]
+    start = BASE + w.u32(raw, BASE + size + 4 * index)
+    end = BASE + w.u32(raw, BASE + size + 4 * (index + 1)) if index + 1 < slot_count(raw) else len(raw)
+    output, node = bytearray(), 0
+    for byte in raw[start:end]:
+        for k in range(8):
+            value = tree[node][(byte >> k) & 1]
+            if value > 256: node = value - 256
+            else:
+                output.append(value); node = 0
+                if len(output) % 2 == 0 and output[-2:] == b'\0\0':
+                    return output[:-2].decode('utf-16le')
+    raise ValueError(f'Unterminated string slot {index}')
+
+
 class StringSlots:
     """Verified English/American profile only; unknown prefix and slot tails retained."""
     def __init__(self, raw):
@@ -83,6 +107,9 @@ class StringSlots:
         Oversized replacements retain the complete former slot after the new
         terminated stream, preserving unknown trailing bytes. No-op is exact.
         """
+        table = BASE + w.u32(self.raw, BASE)
+        if self.missing_bytes(edits) or current[:table] != self.raw[:table]:
+            return self.grown(current, edits)          # needs or already has a grown tree
         offsets = self.variant_offsets(current)
         chunks = [current[a:b] for a, b in zip(offsets, offsets[1:] + (len(current),))]
         for index, text in edits.items():
@@ -109,6 +136,74 @@ class StringSlots:
                 a, b = new_offsets[index], new_offsets[index + 1] if index + 1 < COUNT else len(result)
                 if result[a:b] != chunks[index]:
                     raise ValueError('Untouched text slot changed')
+        return result
+
+    def missing_bytes(self, edits):
+        return sorted({b for t in edits.values() for b in t.encode('utf-16le')} - set(self.codes))
+
+    def check_grown(self, current):
+        """Current is the clean tree, or it with leaves split into appended (leaf, byte) nodes."""
+        if current[:BASE] != self.raw[:BASE]: raise ValueError('String prefix differs from the confirmed profile')
+        size = w.u32(current, BASE)
+        count = (size - 4) // 4
+        if size % 4 or count < len(self.tree) or BASE + size + 4 * COUNT > len(current):
+            raise ValueError('Invalid grown string tree')
+        tree = [struct.unpack_from('<HH', current, BASE + 4 + 4 * i) for i in range(count)]
+        for i, (old, new) in enumerate(zip(self.tree, tree)):
+            for a, b in zip(old, new):
+                if a != b and not (b - 256 >= len(self.tree) and tree[b - 256][0] == a):
+                    raise ValueError('String tree differs from the confirmed profile')
+        if any(n[0] > 256 or n[1] > 256 for n in tree[len(self.tree):]): raise ValueError('Invalid grown string tree')
+        slots = (w.u32(current, BASE + size) - size) // 4         # >= COUNT: appended slots allowed
+        if slots < COUNT or BASE + size + 4 * slots > len(current): raise ValueError('Invalid string slot bounds')
+        offsets = [w.u32(current, BASE + size + 4 * i) for i in range(slots)]
+        if offsets[0] != size + 4 * slots or offsets != sorted(offsets) or BASE + offsets[-1] >= len(current):
+            raise ValueError('Invalid string slot bounds')
+
+    def grown(self, current, edits, appended=()):
+        """Variant whose Huffman tree gains the bytes its texts need (e.g. digit 7).
+
+        Each missing byte splits the leaf of the least used byte into a node
+        (that byte, new byte); every string is re-encoded and the offset table
+        rebuilt after the larger tree. The prefix before BASE is kept.
+        """
+        self.check_grown(current)
+        texts = [edits.get(i, decode_grown(current, i)) for i in range(slot_count(current))] + list(appended)
+        tree = [list(node) for node in self.tree]
+        counts = {b: 0 for b in self.codes}
+        for text in texts:
+            for b in text.encode('utf-16le') + b'\0\0':
+                if b in counts: counts[b] += 1
+        needed = {b for text in texts for b in text.encode('utf-16le')} - set(self.codes)
+        for byte in sorted(needed):
+            if byte > 255: raise ValueError('Text byte out of range')
+            leaf = min((b for b in counts if b not in (0, 256)), key=lambda b: (counts[b], b))
+            node, bit = next((n, k) for n, pair in enumerate(tree) for k, v in enumerate(pair) if v == leaf)
+            tree[node][bit] = len(tree) + 256
+            tree.append([leaf, byte])
+            counts[byte] = counts[leaf] = 10 ** 9              # never split the new leaves again
+        codes = {}
+        def visit(node, bits):
+            for bit, value in enumerate(tree[node]):
+                if value > 256: visit(value - 256, bits + (bit,))
+                else: codes[value] = bits + (bit,)
+        visit(0, ())
+        def encode(text):
+            bits = [b for byte in text.encode('utf-16le') + b'\0\0' for b in codes[byte]]
+            out = bytearray((len(bits) + 7) // 8)
+            for i, bit in enumerate(bits): out[i // 8] |= bit << (i % 8)
+            return bytes(out)
+        chunks = [encode(t) for t in texts]
+        size = 4 + 4 * len(tree)
+        head = current[:BASE] + struct.pack('<I', size) + b''.join(struct.pack('<HH', *n) for n in tree)
+        at = size + 4 * len(texts)
+        table = b''
+        for chunk in chunks:
+            table += struct.pack('<I', at)
+            at += len(chunk)
+        result = head + table + b''.join(chunks)
+        if [decode_grown(result, i) for i in range(len(texts))] != texts:
+            raise ValueError('Grown text round-trip failed')
         return result
 
     def encode(self, text):

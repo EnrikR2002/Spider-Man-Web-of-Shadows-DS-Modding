@@ -129,13 +129,14 @@ class LocalChoreographyTests(unittest.TestCase):
     def test_new_input_text_preserves_every_other_current_slot(self):
         overlays=mod.overlay_files(mod.ROOT/'mods',self.names,added_names=(*resources.EXTRA_NAMES,*KIT_NAMES));before=dict(overlays)
         from tools import tasm_kit
+        from tools.qol_suits_menu import decode_grown     # v0.7.0 grew the tree (digit 7)
         # Current text layers: historical flow/Rush, numbered release, then the v0.2.0 kit.
         edits=combat_flow.TEXT_EDITS | tasm_oscorp_rush.TEXT_EDITS | release.TEXT_EDITS | tasm_kit.TEXT_EDITS
         q.compose(self.glob,self.manifest,overlays,edits)
         for name in ('English.strings','American.strings'):
             slots=StringSlots(self.clean(name))
             for index in range(len(slots.texts)):
-                self.assertEqual(slots.decode(overlays[name],index),edits.get(index,slots.decode(before[name],index)))
+                self.assertEqual(decode_grown(overlays[name],index),edits.get(index,decode_grown(before[name],index)))
         for name in set(overlays)-{'English.strings','American.strings'}:self.assertEqual(overlays[name],before[name])
 
 if __name__=='__main__':unittest.main()

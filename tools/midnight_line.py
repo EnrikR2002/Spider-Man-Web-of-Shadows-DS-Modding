@@ -2,7 +2,7 @@
 
 Chapter checks on a built ROM (default build/midnight-line/chapter.nds; the
 build itself is tools/midnight_chapter.py): `tour` rides every door once,
-`save-test` saves in the Refuge and Continues, `ambush` fights in ML_Service
+`save-test` saves in the Refuge and Continues, `ambush` fights in ML_Station
 (`--native` runs the Sewer_Map02 control). They use copied batteries, a lab
 warp through the Test Upgrades entry and teleports; stage-platform/probe-room
 are superseded research. Nothing here publishes or edits a real battery.
@@ -419,7 +419,7 @@ def tour_child(rom_path):
 
 
 def ambush_child(rom_path, seed=11, native=False):
-    """ML_Service ambush: starts once, its chapter flag persists, the doors reopen.
+    """ML_Station ambush: starts once, its chapter flag persists, the doors reopen.
 
     Lab fixtures: warp, Spidey placed at the ambush trigger, Spidey kept alive
     and enemy HP capped at 1 so random kit fighting finishes the wave.
@@ -428,7 +428,8 @@ def ambush_child(rom_path, seed=11, native=False):
     from tools import crash_hunt, kit_lab as k, midnight_chapter as ch, player_trace as p
     rom = Path(rom_path)
     source_hash = w.sha256(rom.read_bytes())
-    service, switching = ch.BY_NAME['ML_Service'].index, ch.BY_NAME['ML_Switching'].index
+    service = ch.BY_NAME['ML_Station'].index
+    switching = ch.BY_NAME[ch.LINKS[('ML_Station', 2)][0]].index    # room beyond the right exit
     flag = 268                                     # Sewer_Map02 ambush flag 0x42, remapped
     if native:                                     # control: the source room itself
         service, switching, flag = 52, 53, 0x42
@@ -439,7 +440,7 @@ def ambush_child(rom_path, seed=11, native=False):
                         {'addr': 0x020ED7DC, 'hex': m(2, 1), 'expect': m(2, 2)},
                         {'addr': 0x020ED7E0, 'hex': m(3, 1), 'expect': m(3, 0)}])
     exit_door = [int(341.2 * 4096), int(-75.7 * 4096)] if native else next(
-        s for s in tour_plan(rom) if s['room'] == 'ML_Service' and s['group'] == 2)['trigger']
+        s for s in tour_plan(rom) if s['room'] == 'ML_Station' and s['group'] == 2)['trigger']
     fight = 3600
     inputs = OUT / 'ambush-inputs.json'
     w.write_json(inputs, crash_hunt.fight_script(seed, fight))
@@ -508,14 +509,83 @@ def ambush_child(rom_path, seed=11, native=False):
     print('ML_ROOM_REPORT ' + str(OUT / f'{name}.json'), flush=True)
 
 
-def refuge_save_child(rom_path, label):
+def visit_child(rom_path, room, selector=1, spawn=0, seed=11, frames=1800, alive=True, label=None, goto=None, rams=(), boss_max=None, leave=None, weak=False, idle=False, every=120):
+    """Warp into any room (native or chapter), fight with crash-hunt inputs, log enemies.
+
+    Survey fixture for borrowing rooms/encounters: records the live enemy count,
+    enemy vtables seen near Spidey and captures; Spidey is kept alive by default.
+    """
+    import ctypes as c
+    from tools import crash_hunt, kit_lab as k, player_trace as p
+    rom = Path(rom_path)
+    source_hash = w.sha256(rom.read_bytes())
+    m = lambda reg, v: struct.pack('<I', 0xE3A00000 | (reg << 12) | v).hex()
+    label = label or f'ml-visit-{room}-{selector}-{spawn}-{seed}'
+    warp = OUT / f'{label}-warp.json'            # per label: visits may run in parallel
+    w.write_json(warp, [{'addr': 0x020ED7AC, 'hex': m(1, 0), 'expect': m(1, 1)},
+                        {'addr': 0x020ED7B4, 'hex': m(2, room), 'expect': m(2, 0x46)},
+                        {'addr': 0x020ED7DC, 'hex': m(2, selector), 'expect': m(2, 2)},
+                        {'addr': 0x020ED7E0, 'hex': m(3, spawn), 'expect': m(3, 0)}])
+    inputs = OUT / f'{label}-inputs.json'
+    w.write_json(inputs, [] if idle else crash_hunt.fight_script(seed, frames))
+    state = {'rooms': [], 'enemy_counts': {}, 'max_enemies': 0, 'player_frames': 0, 'hp_min': None, 'positions': {}}
+    def hook(frame, lib):
+        if frame < 0: return
+        ptr, ram = k.ram_of(lib)
+        stats = struct.unpack_from('<I', ram, k.STATS_POINTER - p.BASE)[0] - p.BASE
+        if not 0 <= stats < len(ram) - 0x98: return
+        current = struct.unpack_from('<I', ram, stats)[0]
+        if not state['rooms'] or state['rooms'][-1][1] != current: state['rooms'].append((frame, current))
+        try: sample = p.sample(ram)
+        except ValueError: return
+        state['player_frames'] += 1
+        if goto and frame == 20 and current == room:     # lab fixture: step onto a trigger
+            k.teleport(ptr, ram, sample['motion_address'] - p.BASE, int(goto[0] * 4096), int(goto[1] * 4096))
+        if boss_max and frame % 30 == 0 and frame > 300:  # lab fixture: boss (hp, max) pair, hp -> 1
+            needle, at = struct.pack('<i', boss_max), 0
+            while (at := ram.find(needle, at + 1)) > 0:
+                if at % 4 == 0 and 1 < struct.unpack_from('<i', ram, at - 4)[0] <= boss_max:
+                    c.memmove(ptr + at - 4, struct.pack('<i', 1), 4)
+                    state.setdefault('boss_capped', frame)
+        if leave and frame >= frames - 600 and frame % 120 == 0 and current == room:   # try an exit
+            k.teleport(ptr, ram, sample['motion_address'] - p.BASE, int(leave[0] * 4096), int(leave[1] * 4096))
+        live = [e for e in k.enemies(ram) if e['hp'] > 0 and e['state'] != 6]
+        state['max_enemies'] = max(state['max_enemies'], len(live))
+        if weak and frame % 10 == 0:                      # lab fixture: one hit finishes each enemy
+            for e in live:
+                if e['hp'] > 1: c.memmove(ptr + e['actor'] - p.BASE + 0x44, struct.pack('<i', 1), 4)
+        if frame % 60 == 0:
+            state['enemy_counts'][frame] = [(e['hp'], e['max']) for e in live]
+            state['positions'][frame] = sample['position_q12_candidate']
+        hp = struct.unpack_from('<I', ram, sample['actor_address'] - p.BASE + 0xE4)[0] - p.BASE
+        if 0 <= hp < len(ram) - 0x90:
+            now, top = struct.unpack_from('<2i', ram, hp + 0x84)
+            state['hp_min'] = now if state['hp_min'] is None else min(state['hp_min'], now)
+            if alive and frame % 10 == 0: c.memmove(ptr + hp + 0x84, struct.pack('<i', top), 4)
+    dest, rows = k._run(rom, label, str(inputs), frames=frames, bits=0xFEF00, patch=str(warp),
+                        caps=tuple(range(0, frames, every)), rams=(*rams, frames - 10), extra_hook=hook,
+                        core_options=k.NO_JIT, sparring=True)
+    captures = sorted(dest.glob('frame-*.png'))
+    final = (dest / f'ram-{k.TRAINING_START + frames - 10:05d}.bin').read_bytes()
+    stats = struct.unpack_from('<I', final, k.STATS_POINTER - p.BASE)[0] - p.BASE
+    flags = int.from_bytes(final[stats + 0x1C:stats + 0x44], 'little')
+    state['chapter_flags'] = [i for i in range(245, 276) if flags >> i & 1]
+    report = {'schema_version': 1, 'rom_sha256': source_hash, 'room': room, 'selector': selector, 'spawn': spawn,
+              'seed': seed, **state, 'rom_unchanged': w.sha256(rom.read_bytes()) == source_hash,
+              'captures_not_black': sum(capture_not_black(x) for x in captures), 'captures': [str(x) for x in captures],
+              'limit': 'Lab warp; Spidey kept alive unless --mortal; NormalEnemy vtable only'}
+    w.write_json(OUT / f'{label}.json', report)
+    print('ML_ROOM_REPORT ' + str(OUT / f'{label}.json'), flush=True)
+
+
+def refuge_save_child(rom_path, label, room_name='ML_Refuge'):
     """Save at the ML_Refuge save point (copied battery), then boot it and Continue."""
     import ctypes as c
     from tools import emulator_smoke as emu, kit_lab as k, player_trace as p
     from tools import midnight_chapter as ch
     rom = Path(rom_path)
     source_hash = w.sha256(rom.read_bytes())
-    refuge = ch.BY_NAME['ML_Refuge'].index
+    refuge = ch.BY_NAME[room_name].index
     m = lambda reg, v: struct.pack('<I', 0xE3A00000 | (reg << 12) | v).hex()
     warp = [{'addr': 0x020ED7AC, 'hex': m(1, 0), 'expect': m(1, 1)},
             {'addr': 0x020ED7B4, 'hex': m(2, refuge), 'expect': m(2, 0x46)},
@@ -571,11 +641,25 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
     sub.add_parser('survey')
-    for name in ('tour', '_tour-child', 'save-test', '_save-child', 'ambush', '_ambush-child'):
+    for name in ('tour', '_tour-child', 'save-test', '_save-child', 'ambush', '_ambush-child', 'visit', '_visit-child'):
         lab = sub.add_parser(name)
         lab.add_argument('--rom', default=str(BUILD / 'chapter.nds'))
         lab.add_argument('--native', action='store_true', help='ambush: control in native Sewer_Map02')
-        lab.add_argument('--seed', type=int, default=11, help='ambush: fight input seed')
+        lab.add_argument('--seed', type=int, default=11, help='ambush/visit: fight input seed')
+        if 'save' in name: lab.add_argument('--room', default='ML_Refuge', help='chapter save room')
+        if 'visit' in name:
+            lab.add_argument('room', type=int)
+            lab.add_argument('--selector', type=int, default=1)
+            lab.add_argument('--spawn', type=int, default=0)
+            lab.add_argument('--frames', type=int, default=1800)
+            lab.add_argument('--mortal', action='store_true', help='do not refill Spidey HP')
+            lab.add_argument('--label', default=None)
+            lab.add_argument('--goto', type=float, nargs=2, default=None, help='teleport to X Y (units) at frame 20')
+            lab.add_argument('--boss-max', type=int, default=None, help='cap the boss whose max HP is N to 1 HP')
+            lab.add_argument('--leave', type=float, nargs=2, default=None, help='exit trigger X Y tried in the last 600 frames')
+            lab.add_argument('--weak', action='store_true', help='cap normal enemies at 1 HP')
+            lab.add_argument('--idle', action='store_true', help='no inputs (watch scripted messages)')
+            lab.add_argument('--every', type=int, default=120, help='capture interval in frames')
     sub.add_parser('stage-collision')
     platform = sub.add_parser('stage-platform')
     platform.add_argument('--native-model', action='store_true')
@@ -610,11 +694,24 @@ def main():
     elif args.command == '_room-child': room_probe_child(args.authored,args.exercise_return,args.mode,args.story_context)
     elif args.command == '_tour-child': tour_child(args.rom)
     elif args.command == '_save-child':
-        refuge_save_child(args.rom, 'chapter-save' if Path(args.rom).name == 'chapter.nds' else 'chapter-save-' + Path(args.rom).stem)
+        label = 'chapter-save' if Path(args.rom).name == 'chapter.nds' else 'chapter-save-' + Path(args.rom).stem
+        refuge_save_child(args.rom, label if args.room == 'ML_Refuge' else f'{label}-{args.room}', args.room)
     elif args.command == '_ambush-child': ambush_child(args.rom, args.seed, native=args.native)
-    elif args.command in ('tour', 'save-test', 'ambush'):
-        child = {'tour': '_tour-child', 'save-test': '_save-child', 'ambush': '_ambush-child'}[args.command]
-        done = subprocess.run([sys.executable, str(Path(__file__)), child, '--rom', args.rom,
+    elif args.command == '_visit-child':
+        visit_child(args.rom, args.room, args.selector, args.spawn, args.seed, args.frames, not args.mortal, args.label,
+                    args.goto, boss_max=args.boss_max, leave=args.leave, weak=args.weak, idle=args.idle,
+                    every=args.every)
+    elif args.command in ('tour', 'save-test', 'ambush', 'visit'):
+        child = {'tour': '_tour-child', 'save-test': '_save-child', 'ambush': '_ambush-child', 'visit': '_visit-child'}[args.command]
+        extra = (['--room', args.room] if args.command == 'save-test' else []) + ([str(args.room), '--selector', str(args.selector), '--spawn', str(args.spawn), '--frames', str(args.frames),
+                  *(['--mortal'] if args.mortal else []), *(['--label', args.label] if args.label else []),
+                  *(['--goto', *map(str, args.goto)] if args.goto else []),
+                  *(['--boss-max', str(args.boss_max)] if args.boss_max else []),
+                  *(['--leave', *map(str, args.leave)] if args.leave else []),
+                  *(['--weak'] if args.weak else []), *(['--idle'] if args.idle else []),
+                  '--every', str(args.every)]
+                 if args.command == 'visit' else [])
+        done = subprocess.run([sys.executable, str(Path(__file__)), child, '--rom', args.rom, *extra,
                                *(['--native'] if args.native else []), '--seed', str(args.seed)],
                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, cwd=ROOT)
         lines = [s[s.index('ML_ROOM_REPORT '):] for s in done.stdout.splitlines() if 'ML_ROOM_REPORT ' in s]
@@ -622,7 +719,8 @@ def main():
             w.atomic_write(OUT / f'chapter-{args.command}-error.log', done.stdout.encode('utf-8'))
             raise ValueError(f'Chapter {args.command} failed; inspect work/midnight-line/chapter-{args.command}-error.log')
         report = json.loads(Path(lines[-1][15:]).read_text())
-        print(json.dumps({key: report.get(key) for key in ('rom_sha256', 'checks', 'passed', 'error')}, indent=2))
+        keys = ('rom_sha256', 'rooms', 'max_enemies', 'player_frames', 'hp_min', 'enemy_counts', 'positions', 'captures_not_black')             if args.command == 'visit' else ('rom_sha256', 'checks', 'passed', 'error')
+        print(json.dumps({key: report.get(key) for key in keys}))
     elif args.command == 'probe-room':
         done = subprocess.run([sys.executable, str(Path(__file__)), '_room-child',
                               *(['--authored'] if args.authored else []),

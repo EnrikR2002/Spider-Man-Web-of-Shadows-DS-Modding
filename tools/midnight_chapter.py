@@ -18,7 +18,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from tools import room_catalog, room_doors, tasm_kit as kit, wos_tool as w
+from tools import minimap_cbmp, room_catalog, room_doors, tasm_kit as kit, wos_tool as w
 from tools.nitro_texture import TextureArchive
 from tools.room_entities import Entities
 from tools.room_events import Command, EventGroup, Events
@@ -26,7 +26,7 @@ from tools.room_objects import RoomObjects
 
 BASE = 0x02000000
 ML_BASE = kit.TARGET + kit.RESERVE          # 02155420, after the kit's reserve
-ML_SPACE = 0x800                            # autoloaded; main arena starts after it
+ML_SPACE = 0x1000                           # autoloaded; main arena starts after it
 FIRST = room_catalog.COUNT + 1              # 75 stays the native invalid sentinel
 LOOKUP_LITERAL = 0x02084AC8                 # literal of lookup 0x02084AB4
 SAVE_ROOM_CHECK = 0x02085720                # cmp r1,#75 in saved-block validation
@@ -35,16 +35,28 @@ CMP_R1 = 0xE3510000
 GLOB_COUNT = 0x77F8                         # ARM9 Glob resource count
 VISITED_BASE = 0xB0                         # native rule: room r sets flag 0xB0+r
 FLAG_LIMIT = 0x123                          # flags 0..0x122; higher ids are scalars
-FREE_FLAGS = range(251, 276)                # no event/code reference, unset in 62 saves
-# Chapter allocation: 252..256 visited (0xB0 + room, the native rule);
-# 257..259 milestones; 260..267 puzzle state; 268..275 remapped room-local
-# flags of cloned encounters. 251 stays unassigned.
-MILESTONE_FLAGS = {'main_power_restored': 257, 'completed': 258, 'teaser_seen': 259}
-LOCAL_FLAGS = range(268, 276)
+# Flags with no event or code reference that no save sets. 251..275 sit
+# after the native visited flags (0xB0+room); 245..250 are the visited flags
+# of the unreachable debug rooms 69..74, whose OBJs never set them.
+FREE_FLAGS = range(245, 276)
+# Chapter allocation: visited 0xB0+room (252..265 for rooms 76..89, the native
+# rule the map relies on); LOCAL_FLAGS hold room-local flags of cloned
+# encounters, allocated in first-use order (Station/Platform keep 268..271
+# from v0.6.1). The Venom room's reward flag doubles as "chapter completed".
+LOCAL_FLAGS = (*range(268, 276), 266, 267, 251, 250, 249, 248, 247, 246, 245)
+# Per-room scratch bytes (0x127..0x130, e.g. the Venom room's platform and
+# timer states): writes are kept, like the native room's.
+ROOM_SCRATCH = range(0x127, 0x131)
+# Story prerequisites of a boss trigger, read as "already met": the variable
+# maps to the room's own visited flag, which its init sets first.
+PREREQUISITES = {('ML_Venom', 0xAA)}      # Sewer_Map06 mini-boss defeated
 SET_VAR, INC_VAR, DEC_VAR, IF_VAR = 0x26, 0x25, 0x24, 0x1D
 MESSAGE = 0x15
+DELAY = 0x1C                                # u16 frames, u8 action group (+4), u8 event group (+5), 1-based
+GRANT = 0x1F                                # "<ability> obtained!": grants a native story ability
+SPAWN_PICKUP = 0x07                         # spawns a pickup; operand +26 = 1-based group run on pickup
 STABLE_SHA256 = 'fd7e4420f97645dd55011504843ce62f068d1276234c3cd781931c85bb1eb193'
-ARM9_SHA256 = 'efab33e0f8154f6ad76fcf453c70d9d7146165b83e04ee1d4ea2cfd6b1b7b621'   # chapter over the kit ARM9
+ARM9_SHA256 = 'a19896dbcc2d62889eaf787d6d7900c9ed803d25847fcf8b99da959d48b692a9'   # chapter over the kit ARM9 (pinned per release)
 ENTRANCE = 'Sewer_Save02'
 STATE_TEMPLATE = 'Test_Surfaces01'
 
@@ -59,43 +71,210 @@ class Room:
 
 
 ROOMS = (
-    Room(76, 'ML_Platform', 'Sewer_Map03', 'midnight', False),   # tracks: quiet arrival
-    Room(77, 'ML_Refuge', 'Sewer_Save03', 'emergency', False),   # combat-free save room
-    Room(78, 'ML_Service', 'Sewer_Map02', 'midnight', True),     # station: ambush
-    Room(79, 'ML_Switching', 'Sewer_Map13', 'midnight', True),   # stairs: three spawners
-    Room(80, 'ML_Gallery', 'Sewer_Map01', 'midnight', True),     # upper route: mini-boss
+    Room(76, 'ML_Entry', 'Sewer_Map01', 'midnight', True),       # arrival from the sewer
+    Room(77, 'ML_Refuge', 'Sewer_Save04', 'emergency', False),   # combat-free save room
+    Room(78, 'ML_Station', 'Sewer_Map02', 'midnight', True),     # station hall: ambush
+    Room(79, 'ML_Stairs', 'Sewer_Map13', 'midnight', True),      # stairs: three spawners
+    Room(80, 'ML_Platform', 'Sewer_Map03', 'midnight', True),    # tracks: red suits, hazards
+    # The Nest (v0.7.0): symbiote rooms under the line, reached through the
+    # tracks' floor grate and climbing out into the Stairs. Native Hive pairs.
+    Room(81, 'ML_NestShaft', 'Hive_Map07', 'nest', True),       # drop-in shaft: fliers
+    Room(82, 'ML_NestRest', 'Hive_Save02', 'nest', True),       # save point
+    Room(83, 'ML_NestThroat', 'Hive_Map06', 'nest', True),      # climb: fliers, ichor locks
+    Room(84, 'ML_NestSpan', 'Hive_Map05', 'nest', True),        # long hall: two waves
+    Room(85, 'ML_NestHollow', 'Hive_Map04', 'nest', True),      # ambush, ichor locks
+    Room(86, 'ML_NestGallery', 'Hive_Map03', 'nest', False),    # quiet climb (Venom scene removed)
+    Room(87, 'ML_NestShrine', 'Hive_Save02', 'nest', True),     # second save point
+    Room(88, 'ML_NestGate', 'Hive_Map02', 'nest', True),        # ambush, then up to the Stairs
+    Room(89, 'ML_Venom', 'Downtown_Map14', 'nest', True),       # boss: Venom, ichor gates, platforms
 )
 BY_NAME = {r.name: r for r in ROOMS}
 # (room, record-0 exit group) -> (destination, spawn id). A spawn is the arrival
-# point beside the door that leads back. Arrival facing right means that door
-# is on the left; links join right-side exits to left-side arrivals so a held
-# direction carries Spidey into the room instead of straight back out.
-# Loop: Platform -> Service -> Switching -> Gallery -> Platform alcove;
-# the Refuge is up the Platform's top-right stairs. Gallery group 3 is an
-# overhead exit, the one left-to-left pairing.
+# point beside the destination's door back. Every link joins opposite door
+# kinds (left<->right, up<->down; tests check this from trigger/spawn geometry),
+# so leaving through a ceiling hatch always arrives through a floor grate.
+# Station<->Entry, Station<->Platform, Stairs<->Refuge and every link inside
+# the Nest are native pairs.
 LINKS = {
-    ('ML_Platform', 1): (ENTRANCE, 2),
-    ('ML_Platform', 2): ('ML_Service', 1), ('ML_Service', 1): ('ML_Platform', 2),
-    ('ML_Platform', 3): ('ML_Gallery', 2), ('ML_Gallery', 1): ('ML_Platform', 3),
-    ('ML_Platform', 4): ('ML_Refuge', 1), ('ML_Refuge', 1): ('ML_Platform', 5),
-    ('ML_Service', 2): ('ML_Switching', 1), ('ML_Switching', 1): ('ML_Service', 2),
-    ('ML_Switching', 3): ('ML_Gallery', 3), ('ML_Gallery', 2): ('ML_Switching', 3),
-    ('ML_Switching', 2): ('ML_Gallery', 1), ('ML_Gallery', 3): ('ML_Switching', 2),
+    ('ML_Entry', 2): (ENTRANCE, 2),
+    ('ML_Entry', 1): ('ML_Station', 1), ('ML_Station', 1): ('ML_Entry', 2),
+    ('ML_Station', 2): ('ML_Platform', 1), ('ML_Platform', 1): ('ML_Station', 2),
+    ('ML_Platform', 3): ('ML_Stairs', 3), ('ML_Stairs', 3): ('ML_Platform', 3),
+    ('ML_Stairs', 2): ('ML_Refuge', 1), ('ML_Refuge', 1): ('ML_Stairs', 2),
+    # Tracks floor grate down into the Nest shaft; the Gate's ceiling exit
+    # comes back up through the Stairs' floor grate.
+    ('ML_Platform', 2): ('ML_NestShaft', 2), ('ML_NestShaft', 1): ('ML_Platform', 2),
+    ('ML_NestShaft', 2): ('ML_NestRest', 1), ('ML_NestRest', 1): ('ML_NestShaft', 1),
+    ('ML_NestRest', 2): ('ML_NestThroat', 2), ('ML_NestThroat', 1): ('ML_NestRest', 2),
+    ('ML_NestThroat', 2): ('ML_NestSpan', 2), ('ML_NestSpan', 2): ('ML_NestThroat', 1),
+    ('ML_NestSpan', 1): ('ML_NestHollow', 2), ('ML_NestHollow', 1): ('ML_NestSpan', 1),
+    ('ML_NestHollow', 2): ('ML_NestGallery', 2), ('ML_NestGallery', 1): ('ML_NestHollow', 1),
+    ('ML_NestGallery', 2): ('ML_NestShrine', 2), ('ML_NestShrine', 2): ('ML_NestGallery', 1),
+    # Venom's arena sits between the Shrine and the Gate (its upper-left exit is sealed).
+    ('ML_NestShrine', 1): ('ML_Venom', 2), ('ML_Venom', 1): ('ML_NestShrine', 1),
+    ('ML_Venom', 2): ('ML_NestGate', 2), ('ML_NestGate', 1): ('ML_Venom', 1),
+    ('ML_NestGate', 2): ('ML_Stairs', 1), ('ML_Stairs', 1): ('ML_NestGate', 1),
 }
-# Lab route that takes every directed link exactly once, entrance to exit.
-TOUR = ((ENTRANCE, 2), ('ML_Platform', 2), ('ML_Service', 2), ('ML_Switching', 3), ('ML_Gallery', 1),
-        ('ML_Platform', 4), ('ML_Refuge', 1), ('ML_Platform', 3), ('ML_Gallery', 3), ('ML_Switching', 2),
-        ('ML_Gallery', 2), ('ML_Switching', 1), ('ML_Service', 1), ('ML_Platform', 1))
+# Surplus native exits (both ceiling hatches whose floor partners now lead into
+# the Nest): the trigger moves out of reach, so the door is a dead hatch.
+SEALED = {('ML_Entry', 3), ('ML_Platform', 4), ('ML_Venom', 3)}
+
+
+def _tour():
+    """Lab route taking every directed link once, entrance to entrance (Hierholzer)."""
+    out = {}
+    for (room, group), (dest, _) in sorted(LINKS.items()):
+        out.setdefault(room, []).append((group, dest))
+    out.setdefault(ENTRANCE, []).append((2, 'ML_Entry'))
+    stack, walk = [(ENTRANCE, None)], []
+    while stack:
+        room, via = stack[-1]
+        if out.get(room):
+            group, dest = out[room].pop(0)
+            stack.append((dest, (room, group)))
+        else:
+            walk.append(via)
+            stack.pop()
+    return tuple(x for x in reversed(walk) if x)
+
+
+TOUR = _tour()
+
+
 # Sewer_Save02: right wall reaches x=56.47; mirrors the native left exit.
-ENTRANCE_DOOR = {'center': (61 * 4096, 4 * 4096, 0), 'size': (12, 24), 'spawn': 1,
+ENTRANCE_DOOR = {'center': (61 * 4096, 4 * 4096, 0), 'size': (12, 24), 'room': 'ML_Entry', 'spawn': 3,
                  'trigger_name': 'Trigger (Main|Exit_Midnight)', 'group_name': 'Exit_Midnight_Line'}
 RETURN_SPAWN = {'spawn_id': 2, 'xyz': (44 * 4096, 2 * 4096, 0), 'facing': 'left'}
+# A copy of the room's native "Door (empty)" doorway (record 1) marks the way in.
+DOORWAY = {'x': 54 * 4096, 'name': 'Door (empty) Midnight'}
 # Unreachable placement for pickups that must not be duplicated.
 REMOVED_PICKUP_Y = -4000 * 4096
 PICKUP_TYPE = 13
+# Minimap fields at descriptor +0x28..+0x48 (area, piece position, size, room
+# bounds), filled at boot for native rooms 0..74 only. Values read from RAM of
+# the sources in a running game; the chapter's own block keeps static copies.
+MAP_FIELDS = {
+    'Sewer_Map01': (2, 221184, 180224, 917504, 548864, -122880, -40960, 1105920, -696320),
+    'Sewer_Map02': (2, 4096, 131072, 966656, 466944, -573440, 327680, 1310720, -327680),
+    'Sewer_Map03': (2, 81920, 421888, 991232, 442368, -20480, 122880, 1761280, 81920),
+    'Sewer_Map13': (2, 172032, 176128, 737280, 323584, -81920, 614400, 1024000, 327680),
+    'Sewer_Save04': (2, 450560, 323584, 589824, 393216, 0, 102400, 245760, 0),
+    'Hive_Map02': (4, 454656, 167936, 548864, 622592, -163840, 798720, 0, 0),
+    'Hive_Map03': (4, 368640, 217088, 716800, 438272, 122880, 389120, 737280, 0),
+    'Hive_Map04': (4, 516096, 102400, 610304, 544768, -81920, 798720, 81920, 20480),
+    'Hive_Map05': (4, 106496, 262144, 942080, 409600, -1638400, 163840, 0, -122880),
+    'Hive_Map06': (4, 479232, 102400, 569344, 561152, -163840, 798720, 0, 0),
+    'Hive_Map07': (4, 450560, 163840, 540672, 618496, 0, 798720, 163840, 0),
+    'Hive_Save02': (4, 450560, 323584, 589824, 393216, 0, 102400, 245760, 0),
+    'Downtown_Map14': (3, 335872, 237568, 704512, 446464, 40960, 450560, 696320, 81920),
+}
+# --- Touch-screen map (v0.7.0) ---------------------------------------------
+# The Sewer area screen gains a subway-style diagram of the chapter in its empty
+# lower-left corner; the Sewer area room list (20-byte entries) is relocated
+# into the chapter block with one entry per chapter room so the native code
+# shows visited/current rooms. See TECHNICAL "Minimap screens and area room lists".
+MAP_SCREEN = 'MMSewer.cbmp'
+SEWER_AREA = 2
+AREA_ROWS = 0x0213B840                     # 16-byte rows: screen, map var, list, count
+SEWER_LIST, SEWER_COUNT = 0x0211FE38, 18
+ENTRY_SIZE = 20
+STATE_COLORS = bytes((0xB6, 0xBA, 0xBB, 0xBF))   # every native entry: state colour sources
+# 5-colour room slots (first colour = background) that no Sewer screen tile
+# uses: palettes 1..3 (magenta fill), Sewer_Map13's spare third slot 0xAB,
+# palette 0 beyond its backdrop colour, and one slot of the grey palette 13.
+MAP_SLOTS = (0x11, 0x16, 0x1B, 0x21, 0x26, 0x2B, 0x31, 0x36, 0x3B, 0xAB, 0x06, 0x0B, 0xD6, 0xDB)
+SLOT_DEFAULT = (0x1042, 0x3D89, 0xE6B2, 0x4E0E, 0xCA52)   # native slot colours in the file
+# Diagram cells (screen tile column, row) per room; links join cell edges.
+DIAGRAM = {
+    'ML_Entry': ((3, 15), (4, 15)), 'ML_Station': ((5, 15),), 'ML_Platform': ((6, 15),),
+    'ML_Stairs': ((11, 15), (7, 15), (8, 15), (9, 15), (10, 15)), 'ML_Refuge': ((12, 15),),
+    'ML_NestShaft': ((6, 16),), 'ML_NestRest': ((6, 17),), 'ML_NestThroat': ((6, 18),),
+    'ML_NestSpan': ((7, 18), (8, 18)), 'ML_NestHollow': ((9, 18),), 'ML_NestGallery': ((10, 18),),
+    'ML_NestShrine': ((11, 18),), 'ML_Venom': ((11, 17),), 'ML_NestGate': ((11, 16),),
+}
+SAVE_ROOMS = {'ML_Refuge', 'ML_NestRest', 'ML_NestShrine'}
+DIAGRAM_TRACK = {(7, 15), (8, 15), (9, 15), (10, 15)}   # Platform<->Stairs line drawn as Stairs
+BOSS_ROOMS = {'ML_Venom'}
+DIAGRAM_STUB = (3, 15)                            # line out to the Sewer (drawn as Entry)
+
+
+def _diagram_tiles():
+    """{cell: 64 pixel roles (0 background, 2 fill, 4 edge/line)} for the chapter diagram."""
+    cells = {cell: room for room, cs in DIAGRAM.items() for cell in cs}
+    linked = {frozenset((room, dest)) for (room, _), (dest, _) in LINKS.items()}
+    out = {}
+    for (x, y), room in cells.items():
+        px = [0] * 64
+        def put(i, j, role): px[j * 8 + i] = role
+        line = (x, y) in DIAGRAM_TRACK or (x, y) == DIAGRAM_STUB
+        wide = len(DIAGRAM[room]) == 2 and not line
+        if line:
+            for i in range(2 if (x, y) == DIAGRAM_STUB else 0, 8):
+                put(i, 3, 4); put(i, 4, 4)
+            if (x, y) == DIAGRAM_STUB:           # arrow head pointing back to the Sewer
+                for i, j in ((0, 3), (0, 4), (1, 2), (1, 3), (1, 4), (1, 5), (2, 1), (2, 6)): put(i, j, 4)
+        else:
+            left_open = wide and cells.get((x - 1, y)) == room
+            right_open = wide and cells.get((x + 1, y)) == room
+            lo, hi = (0 if left_open else 1), (7 if right_open else 6)
+            for j in range(1, 7):
+                for i in range(lo, hi + 1):
+                    edge = j in (1, 6) or (i == 1 and not left_open) or (i == 6 and not right_open)
+                    put(i, j, 4 if edge else 2)
+            if room in SAVE_ROOMS:                # save point: a dot in the middle
+                for i, j in ((3, 3), (4, 3), (3, 4), (4, 4)): put(i, j, 4)
+            if room in BOSS_ROOMS:                # boss: a cross
+                for k in range(2, 6): put(k, k, 4); put(7 - k, k, 4)
+            for dx, dy, at in ((1, 0, 7), (-1, 0, 0), (0, 1, 7), (0, -1, 0)):
+                other = cells.get((x + dx, y + dy))
+                if other is None or other == room and wide: continue
+                if other != room and frozenset((room, other)) not in linked and (x + dx, y + dy) not in DIAGRAM_TRACK:
+                    continue
+                for w in (3, 4):
+                    if dx: put(at, w, 4)
+                    else: put(w, at, 4)
+        out[(x, y)] = px
+    return out
+
+
+def map_screen(raw):
+    """MMSewer.cbmp with the chapter diagram; native cells/colours elsewhere unchanged."""
+    screen = minimap_cbmp.Cbmp.parse(raw)
+    background = screen.screen[DIAGRAM_STUB[1] * screen.width + DIAGRAM_STUB[0]]
+    tiles, cells, colors = [], {}, {}
+    slot_of = dict(zip(DIAGRAM, MAP_SLOTS))
+    for room, slot in slot_of.items():
+        for i, value in enumerate(SLOT_DEFAULT): colors[slot + i] = value
+    for (x, y), roles in sorted(_diagram_tiles().items(), key=lambda t: (t[0][1], t[0][0])):
+        if screen.screen[y * screen.width + x] != background: raise ValueError(f'Map cell {x},{y} is not empty')
+        room = next(r for r, cs in DIAGRAM.items() if (x, y) in cs)
+        slot = slot_of[room]
+        base = slot & 0x0F                          # colour index of the slot's background
+        cells[(x, y)] = len(tiles)
+        tiles.append([base + r for r in roles])
+    used = {(e >> 12) * 16 + c for e in screen.screen for c in set(screen.tile(e & 0x3FF)) if c}
+    if used & set(colors) or {i for i in colors if i >> 4 == 0xB}:
+        raise ValueError('Map colour slot is in use')
+    screen, first = screen.with_tiles(tiles)
+    entries = {xy: (slot_of[next(r for r, cs in DIAGRAM.items() if xy in cs)] >> 4) << 12 | first + n
+               for xy, n in cells.items()}
+    return screen.with_screen(entries).with_colors(colors).to_bytes()
+
+
+def map_entries():
+    """Area-list entries (20 bytes) for the chapter rooms, in DIAGRAM order."""
+    out = b''
+    for room, slot in zip(DIAGRAM, MAP_SLOTS):
+        x, y = DIAGRAM[room][0]
+        out += (struct.pack('<2I', BY_NAME[room].index, 1) + bytes((0, slot, slot + 4)) + STATE_COLORS
+                + bytes((x * 8 + 4, y * 8 + 4, 0, 0, 0)))
+    return out
+
+
 GRADES = {   # (desaturation, (r, g, b) gain, lift in 5-bit units)
     'midnight': (0.55, (0.42, 0.58, 0.82), (0.0, 0.3, 0.9)),
     'emergency': (0.45, (0.85, 0.60, 0.36), (0.6, 0.2, 0.0)),
+    'nest': (0.30, (0.62, 0.80, 0.86), (0.2, 0.5, 0.7)),
 }
 
 
@@ -124,9 +303,12 @@ def _var_target(var, room, source_index, local):
     Visited flags follow the native 0xB0+room rule. Any other flag becomes a
     chapter-private flag (LOCAL_FLAGS, allocated in first-use order), so cloned
     ambushes persist without touching native progress. Ids >= 0x123 are
-    mission/difficulty scalars and ability bits: callers drop writes to them.
+    mission/difficulty scalars and ability bits: callers drop writes to them;
+    per-room scratch bytes pass through.
     """
-    if var == VISITED_BASE + source_index: return VISITED_BASE + room.index
+    if var == VISITED_BASE + source_index or (room.name, var) in PREREQUISITES:
+        return VISITED_BASE + room.index
+    if var in ROOM_SCRATCH: return var
     if var >= FLAG_LIMIT: return None
     if local is None: raise ValueError(f'{room.name}: unexpected story flag {var:#x} in record 0')
     if (room.name, var) not in local:
@@ -146,12 +328,23 @@ def sanitize(events, room, source_index, names, local=None):
             op, operand = command.opcode, command.operand
             if op == room_doors.GO_TO_ROOM:
                 if local is not None: raise ValueError(f'{room.name}: exit outside record 0')
-                if (room.name, g) not in LINKS: raise ValueError(f'{room.name} exit group {g} has no link')
-                dest, spawn = LINKS[(room.name, g)]
+                if (room.name, g) in SEALED: dest, spawn = ENTRANCE, RETURN_SPAWN['spawn_id']   # unreachable trigger
+                elif (room.name, g) not in LINKS: raise ValueError(f'{room.name} exit group {g} has no link')
+                else: dest, spawn = LINKS[(room.name, g)]
                 index = BY_NAME[dest].index if dest in BY_NAME else names.index(dest)
                 commands.append(Command(op, bytes([index, 1, spawn]) + operand[3:]))
-            elif op == MESSAGE:
+            elif op == GRANT:
+                dropped.append((g, op))           # native story ability/collectible reward: never granted here
+            elif op == SPAWN_PICKUP:
+                # A boss's reward orb is a native collectible (taking it would mark
+                # the real one collected). Run its pickup group directly instead.
                 dropped.append((g, op))
+                commands.append(Command(DELAY, bytes((0, 0, 0, 0, 0, operand[26], 0, 0))))
+            elif op == MESSAGE:
+                # Dialogue/VO is story text; operand +4 is the 1-based group
+                # the dialogue continues with, so keep that as a 0-frame delay.
+                dropped.append((g, op))
+                if operand[4]: commands.append(Command(DELAY, bytes((0, 0, 0, 0, 0, operand[4], 0, 0))))
             elif op in (SET_VAR, INC_VAR, DEC_VAR, IF_VAR):
                 target = _var_target(struct.unpack_from('<H', operand)[0], room, source_index, local)
                 if target is not None:
@@ -191,6 +384,21 @@ def _hide_pickups(section0):
     return section0, moved
 
 
+def _seal_exits(section0, room):
+    """Move the triggers of SEALED exit groups out of reach (record 0)."""
+    sealed = {g for r, g in SEALED if r == room.name}
+    moved = []
+    for i, entity in enumerate(Entities.parse(section0).records):
+        if (len(entity) == 28 and struct.unpack_from('<I', entity, 12)[0] == room_doors.TRIGGER_TYPE
+                and entity[27] - 1 in sealed):
+            changed = bytearray(entity)
+            struct.pack_into('<i', changed, 4, REMOVED_PICKUP_Y)
+            section0 = Entities.parse(section0).replace_record(i, bytes(changed))
+            moved.append(entity[27] - 1)
+    if sorted(moved) != sorted(sealed): raise ValueError(f'{room.name}: sealed exits {sealed} not found')
+    return section0, moved
+
+
 def build_room(source_obj, template_raw, room, source_index, names, local):
     """Record 0 sanitized; record 1 sanitized (encounters) or the empty state record."""
     parsed = RoomObjects.parse(source_obj)
@@ -201,9 +409,11 @@ def build_room(source_obj, template_raw, room, source_index, names, local):
         events, dropped = sanitize(Events.parse(record.sections[1], record.raw[3]), room, source_index,
                                    names, local if r else None)
         section0, moved = _hide_pickups(record.sections[0])
+        sealed = []
+        if r == 0: section0, sealed = _seal_exits(section0, room)
         result = RoomObjects.parse(result).replace_section(r, 0, section0)
         result = RoomObjects.parse(result).replace_section(r, 1, events.to_bytes())
-        report[f'record{r}'] = {'dropped_commands': dropped, 'moved_pickups': moved}
+        report[f'record{r}'] = {'dropped_commands': dropped, 'moved_pickups': moved, 'sealed_exits': sealed}
     if not room.encounters:
         base = RoomObjects.parse(result)
         state, state_names = state_record(template_raw, room)
@@ -217,15 +427,24 @@ def build_room(source_obj, template_raw, room, source_index, names, local):
 
 
 def entrance_obj(raw, names):
-    platform = BY_NAME['ML_Platform']
     door = dict(ENTRANCE_DOOR)
-    spawn = door.pop('spawn')
-    result = room_doors.add_exit(raw, room=platform.index, selector=1, spawn=spawn, **door)
-    return room_doors.add_spawn(result, **RETURN_SPAWN)
+    spawn, room = door.pop('spawn'), BY_NAME[door.pop('room')]
+    result = room_doors.add_exit(raw, room=room.index, selector=1, spawn=spawn, **door)
+    result = room_doors.add_spawn(result, **RETURN_SPAWN)
+    native = RoomObjects.parse(raw)
+    names = native.names[1].labels
+    template = next(e for i, e in enumerate(Entities.parse(native.records[1].sections[0]).records)
+                    if names[i].startswith('Door (empty)'))
+    doorway = bytearray(template)
+    struct.pack_into('<i', doorway, 0, DOORWAY['x'])
+    return room_doors.append_entity(result, 1, bytes(doorway), DOORWAY['name'])
 
 
 def room_table(arm9, names, resources):
-    """Extended lookup + descriptors + model arrays + names at ML_BASE."""
+    """Extended lookup + descriptors + model arrays + names + Sewer map list at ML_BASE.
+
+    Returns (data, address of the relocated Sewer area room list).
+    """
     native = room_catalog.parse(arm9, names)
     by_name = {r.name: r for r in native}
     descriptors_at = ML_BASE + 4 * (FIRST + len(ROOMS))
@@ -244,19 +463,26 @@ def room_table(arm9, names, resources):
         struct.pack_into('<4I', raw, 0, labels_at + len(labels), resources[room.name]['texture'],
                          source.bsp, resources[room.name]['objects'])
         struct.pack_into('<I', raw, 0x20, models_at + len(models))
+        if room.source in MAP_FIELDS:    # Sewer area: the chapter is drawn on the Sewer screen
+            struct.pack_into('<9i', raw, 0x28, SEWER_AREA, *MAP_FIELDS[room.source][1:])
         models += struct.pack('<I', model)
         labels += room.name.encode('ascii') + b'\0'
         lookup.append(descriptors_at + len(descriptors))
         descriptors += raw
     data = struct.pack(f'<{len(lookup)}I', *lookup) + descriptors + models + labels
     data += bytes(-len(data) % 4)
+    list_at = ML_BASE + len(data)
+    native = arm9[SEWER_LIST - BASE:SEWER_LIST - BASE + ENTRY_SIZE * SEWER_COUNT]
+    if [struct.unpack_from('<I', native, i * ENTRY_SIZE)[0] for i in (0, SEWER_COUNT - 1)] != [51, 67]:
+        raise ValueError('Sewer area list moved')
+    data += native + map_entries()
     if len(data) > ML_SPACE: raise ValueError('Chapter tables exceed reserved space')
-    return data + bytes(ML_SPACE - len(data))
+    return data + bytes(ML_SPACE - len(data)), list_at
 
 
 
 
-def extend_arm9(rom, table, glob_count, *, save_rooms=True):
+def extend_arm9(rom, table, glob_count, *, save_rooms=True, map_list=None):
     """Grow the kit autoload by ML_SPACE, redirect the room lookup, count appended resources."""
     h = w.parse_header(rom)
     raw = rom[h['arm9_offset']:h['arm9_offset'] + h['arm9_size']]
@@ -272,6 +498,9 @@ def extend_arm9(rom, table, glob_count, *, save_rooms=True):
     struct.pack_into('<2I', new, kit.TABLE_POINTERS, BASE + new_table, BASE + new_table + 36)
     struct.pack_into('<I', new, kit.ARENA_LOWER, kit.TARGET + len(image))
     patches = [(BASE + GLOB_COUNT, *glob_count), (LOOKUP_LITERAL, room_catalog.LOOKUP, ML_BASE)]
+    if map_list:
+        row = AREA_ROWS + 16 * SEWER_AREA
+        patches += [(row + 8, SEWER_LIST, map_list), (row + 12, SEWER_COUNT, SEWER_COUNT + len(ROOMS))]
     if save_rooms:
         limit = FIRST + len(ROOMS)
         patches += [(SAVE_ROOM_CHECK, CMP_R1 | 0x4B, CMP_R1 | limit),
@@ -297,7 +526,7 @@ def apply_rom(rom, *, save_rooms=True):
     native = room_catalog.parse(arm9, names)
     room_names = [r.name for r in native]
     clean = {e['name']: e['sha256'] for e in mod.load_clean()[2]['entries']}
-    used = {ENTRANCE + '_app.obj', STATE_TEMPLATE + '_app.obj'}
+    used = {ENTRANCE + '_app.obj', STATE_TEMPLATE + '_app.obj', MAP_SCREEN}
     for room in ROOMS:
         src = next(r for r in native if r.name == room.source)
         used |= {room.source + '_app.obj', names[src.texture]}
@@ -313,6 +542,8 @@ def apply_rom(rom, *, save_rooms=True):
         report['rooms'][room.name] = {'index': room.index, 'source': room.source, **info}
     entrance = names.index(ENTRANCE + '_app.obj')
     blobs[entrance] = entrance_obj(asset(ENTRANCE + '_app.obj'), room_names)
+    map_index = names.index(MAP_SCREEN)
+    blobs[map_index] = map_screen(asset(MAP_SCREEN))
     # Appended models/textures need a word-aligned start; keep the padding in
     # its own unreferenced resource rather than inside an asset.
     padding = -len(glob) % 4
@@ -321,8 +552,9 @@ def apply_rom(rom, *, save_rooms=True):
     resources = {room.name: {'objects': out_names.index(f'zz_{room.name}_app.obj'),
                              'texture': out_names.index(f'zz_{room.name}Textures.nsbtx')} for room in ROOMS}
     staged = w.rebuild_rom(rom, {'Glob.bin': w.pack_glob(out_names, out_blobs)})
-    result, patches = extend_arm9(staged, room_table(arm9, out_names, resources),
-                                  (len(names), len(out_names)), save_rooms=save_rooms)
+    table, map_list = room_table(arm9, out_names, resources)
+    result, patches = extend_arm9(staged, table, (len(names), len(out_names)), save_rooms=save_rooms,
+                                  map_list=map_list)
     check = w.validate_rom(result, target=True)
     fs = next(e for e in check['nitrofs'] if e['name'] == 'Glob.bin')
     out_glob = result[fs['start']:fs['end']]
@@ -330,7 +562,7 @@ def apply_rom(rom, *, save_rooms=True):
     if checked_names != out_names: raise ValueError('Chapter archive names changed')
     for i, blob in enumerate(out_blobs):
         if out_glob[out_offsets[i]:out_offsets[i + 1]] != blob: raise ValueError(f'Resource mismatch: {out_names[i]}')
-        if i < len(names) and i not in (entrance, table_index) and blob != originals[i]:
+        if i < len(names) and i not in (entrance, map_index, table_index) and blob != originals[i]:
             raise ValueError(f'Native resource changed: {names[i]}')
     h = w.parse_header(result)
     digest = w.sha256(result[h['arm9_offset']:h['arm9_offset'] + h['arm9_size']])
@@ -343,8 +575,8 @@ def apply_rom(rom, *, save_rooms=True):
 
 
 def build(source=None, output=None, *, save_rooms=True):
-    """Development candidate from the pinned stable v0.5.0 ROM (build/midnight-line/)."""
-    source = Path(source or ROOT / 'build/Spider-Man-WoS-modded.nds')
+    """Development candidate from the kept v0.5.0 kit ROM (build/midnight-line/)."""
+    source = Path(source or ROOT / 'build/releases' / STABLE_SHA256 / 'Spider-Man-WoS-modded.nds')
     rom = source.read_bytes()
     if w.sha256(rom) != STABLE_SHA256: raise ValueError('Chapter build requires the pinned v0.5.0 ROM')
     result, report = apply_rom(rom, save_rooms=save_rooms)

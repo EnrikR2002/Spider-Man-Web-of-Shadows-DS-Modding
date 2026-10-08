@@ -222,3 +222,26 @@ These need extra shop rows (research): web tags shared across tools, Clap,
 bowling-spread tags, Reel/Net, Orbit tetherball, tier-5 Cocoon. Wall/ceiling
 pounce dive. *Stop Hitting Yourself* (redirecting an enemy's swing into his
 friend). Later suits stay in reference/suit_roadmap.json.
+
+## Proposals awaiting the player (2026-10-07, not approved)
+
+Asked for while away from the game: a Midnight Line roadmap, later areas,
+features and XP sinks (player has ~3000 unspent XP). Proposed, nothing built:
+
+- **Midnight Line limits.** Room ids are bytes (<= 255); the map/visited rule
+  works up to room 114 (25 more rooms) without code changes; ~8.5 MiB free in
+  the 64 MiB cart (~80 KB per cloned room); flags are the binding limit (1
+  spare; 138..165 need a backup-save scan). New geometry beyond clones,
+  mirrors or the debug rooms is unproven research.
+- **Next chapter content.** Power puzzle (native switches, electric hazards,
+  boilers), objective board, Signal Leech, Conductor teaser, then a "Midnight
+  Express" network: station doors to save rooms in every district (fast travel),
+  a Lost Lab built from the unused proto01/Test rooms (every object type),
+  boss gauntlet from the mini-boss rooms, timed escape rooms (TimerWatcher).
+- **Features.** Difficulty option via variable 0x125, elite enemies (kit-side
+  HP scaling), finishers, crowd backend publication, suit unlocks.
+- **XP sinks.** Gate: expanded shop rows and free ownership bits (research).
+  Fallback without new rows: a Refuge workbench (Button Press trigger sets a
+  chapter flag; kit tick spends XP and grants stat/kit upgrades), Mk II tiers
+  for the seven Red skills, the parked Red skills, repeatable health/damage
+  training, suit unlocks.
