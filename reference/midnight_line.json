@@ -16,13 +16,14 @@
     "refuge_save_continue": "6/6 on 36aa52f8; control without guard patch leaves Continue on the title",
     "release_0_6_1": "c3010cba: tour 14/14, refuge save/continue, ambush seeds 11/12 exits work (11 completed ambush), kit 31/31, crash hunt 12/12",
     "release_0_7_0": "c56095be: tour 30/30, saves+Continue in Refuge/NestRest/NestShrine, fights end with working exits (Station, Shaft, Throat, Span, Hollow, Gate; enemy HP capped), boss start/death/completed flag/exit, map diagram in game, title v0.7.0, crash hunt 12/12",
+    "release_0_8_0": "d84ae539: power puzzle chain (breaker -> Platform -> lift/throw boiler -> grate -> Nest Shaft, real presses), v0.7.0 control blocked, hint/breaker/objective lines render, tour 0..22 (bc3aa3a1) + --start 24 + Gate exit after fights (30/30 links), saves+Continue Refuge/Rest/Shrine, kit 31/31, crash hunt 12/12",
     "room_object_roundtrips": 75,
     "shell_checks": "6/6: appended entry 76, ongoing updates, movement, frames, return to native room 64",
     "shell_hash_prefix": "edf0521b",
     "source_tests": "199 full-suite tests passed; focused Midnight Line/document tests pass"
   },
   "authorization": "2026-10-06: implement the approved Midnight Line first-station plan",
-  "current_research_gate": "Puzzle, Signal Leech and Conductor teaser not built; Nest wing, boss and map diagram agent-tested in v0.7.0",
+  "current_research_gate": "Power puzzle, dialogue and objective board shipped in v0.8.0; Signal Leech and Conductor teaser not built",
   "deferred": [
     "moving_train",
     "full_conductor_boss",
@@ -85,7 +86,12 @@
     "relocated_sewer_area_room_list",
     "message_continuation_preserved",
     "boss_reward_without_native_grant",
-    "grown_text_huffman_tree"
+    "grown_text_huffman_tree",
+    "room_scripting_batches_and_actions",
+    "shared_cross_room_flag",
+    "power_puzzle_breaker",
+    "chapter_dialogue_message_ids",
+    "refuge_objective_board"
   ],
   "objectives": [
     "find_emergency_power",
@@ -135,6 +141,9 @@
           245
         ]
       },
+      "shared_flags": {
+        "track_power_cut (ML_Platform 0x27, set by the ML_Stairs breaker)": 269
+      },
       "visited": {
         "ML_Entry": 252,
         "ML_NestGallery": 262,
@@ -167,10 +176,16 @@
       "date": "2026-10-07",
       "summary": "Not tested yet; asked to keep building as much content as possible ('a kid on christmas')",
       "version": "0.6.1"
+    },
+    {
+      "addressed_in": "0.8.0: lab found the Platform grate blocked in v0.7.0; power puzzle fixes it",
+      "date": "2026-10-08",
+      "summary": "About to playtest v0.7.0; work on whatever is worthwhile meanwhile",
+      "version": "0.7.0"
     }
   ],
   "player_kit": "Preserve accepted Red, Black and shared abilities and purchases",
-  "published": false,
+  "published": true,
   "release_gates": [
     "room_collision_and_reversible_exit",
     "namespaced_asset_registration",
@@ -181,7 +196,6 @@
     "performance_and_crash_qualification"
   ],
   "remaining_implementation": [
-    "power_puzzle_and_objective_board",
     "signal_leech_art_and_behaviour",
     "conductor_teaser",
     "player_feedback_iteration"
@@ -198,7 +212,7 @@
     {
       "id": "ml_refuge",
       "name": "Maintenance Refuge",
-      "role": "Combat-free save room; future objective board",
+      "role": "Combat-free save room; objective board on entry (v0.8.0)",
       "room_index": 77,
       "source": "Sewer_Save04"
     },
@@ -212,14 +226,14 @@
     {
       "id": "ml_stairs",
       "name": "Switchback Stairs",
-      "role": "Between Platform and Refuge; floor grate up from the Nest Gate; three enemy groups",
+      "role": "Between Platform and Refuge; track-power breaker on the landing (v0.8.0); floor grate up from the Nest Gate; three enemy groups",
       "room_index": 79,
       "source": "Sewer_Map13"
     },
     {
       "id": "ml_platform",
       "name": "Last Platform",
-      "role": "Tracks and parked train; train-roof fight; floor grate down into the Nest (top trapdoor sealed); future power puzzle",
+      "role": "Tracks and parked train; train-roof fight; live tracks and an electrified boiler on the floor grate down into the Nest until the Stairs breaker is thrown (v0.8.0); top trapdoor sealed",
       "room_index": 80,
       "source": "Sewer_Map03"
     },

@@ -18,7 +18,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from tools import minimap_cbmp, room_catalog, room_doors, tasm_kit as kit, wos_tool as w
+from tools import minimap_cbmp, room_catalog, room_doors, room_script, tasm_kit as kit, wos_tool as w
 from tools.nitro_texture import TextureArchive
 from tools.room_entities import Entities
 from tools.room_events import Command, EventGroup, Events
@@ -56,7 +56,7 @@ DELAY = 0x1C                                # u16 frames, u8 action group (+4), 
 GRANT = 0x1F                                # "<ability> obtained!": grants a native story ability
 SPAWN_PICKUP = 0x07                         # spawns a pickup; operand +26 = 1-based group run on pickup
 STABLE_SHA256 = 'fd7e4420f97645dd55011504843ce62f068d1276234c3cd781931c85bb1eb193'
-ARM9_SHA256 = 'a19896dbcc2d62889eaf787d6d7900c9ed803d25847fcf8b99da959d48b692a9'   # chapter over the kit ARM9 (pinned per release)
+ARM9_SHA256 = 'dc4911d7774bfbbc5f4a6cc7d7e6f4d679657926b94c2abf5acffe6da4310263'   # chapter over the kit ARM9 (pinned per release)
 ENTRANCE = 'Sewer_Save02'
 STATE_TEMPLATE = 'Test_Surfaces01'
 
@@ -118,6 +118,72 @@ LINKS = {
 # Surplus native exits (both ceiling hatches whose floor partners now lead into
 # the Nest): the trigger moves out of reach, so the door is a dead hatch.
 SEALED = {('ML_Entry', 3), ('ML_Platform', 4), ('ML_Venom', 3)}
+# --- Power puzzle (v0.8.0) --------------------------------------------------
+# The Platform clone keeps the native ElecBoilerCheck: while the flag cloned
+# from Sewer_Map04's switch (0x27) is clear, the boiler sitting on the Nest
+# grate is electrified and cannot be lifted, so the grate stays locked. A
+# breaker in the Stairs (Sewer_Map04's Switch + Button Press pair, the room
+# the Platform's trapdoor leads to, as natively) sets that shared flag; then
+# lifting/throwing the boiler unlocks the grate (native Lift_Object_Die) and
+# X on the grate drops into the Nest. See TECHNICAL "Power puzzle".
+TRACK_POWER = 269                           # set = track power cut (breaker thrown)
+SHARED_FLAGS = {('ML_Platform', 0x27): TRACK_POWER}
+BREAKER_SOURCE = 'Sewer_Map04'
+BREAKER = {'room': 'ML_Stairs', 'switch': (211 * 4096, 87 * 4096 + 2048, 0), 'trigger_dx': 4 * 4096,
+           'trigger_dy': -3 * 4096, 'trigger_size': (8, 10)}
+SWITCH_THROW, SWITCH_THROWN = 0x19, 0x64    # native switch animations (Sewer_Map04 Switch_Throw/Thrown)
+SOUND = 0x22                                # one-shot sound effect (u16 id)
+BREAKER_SOUND = 0xBC                        # native switch-throw sound
+# --- Chapter dialogue (v0.8.0) ----------------------------------------------
+# Touch-screen messages with new ids from 0xC4 (the native table at 0x0211C214
+# has 196 entries of 44 bytes). The accessor 0x020D0F64 (table + id * 44) is
+# rewritten in place, same size, to read ids >= 0xC4 from a short table in the
+# chapter block, and both id bounds rise to cover the new ids. Each line is an
+# appended slot of English/American.strings; the 1049-word zero prefix stays
+# (the loader 0x0200694C only skips it). See TECHNICAL "Chapter dialogue".
+MESSAGE_TABLE, MESSAGE_FIRST, MESSAGE_SIZE = 0x0211C214, 0xC4, 44
+MESSAGE_ACCESSOR = 0x020D0F64
+ACCESSOR_NATIVE = (0xE92D000F, 0xE59D2004, 0xE59F3010, 0xE3A0102C, 0xE0213192, 0xE5801000, 0xE28DD010,
+                   0xE12FFF1E, MESSAGE_TABLE)
+MESSAGE_BOUNDS = (0x020DFCFC, 0x020DFDD8)   # cmp r1,#0xC4 before blt/bhs: valid ids are below it
+STRING_FILES = ('English.strings', 'American.strings')
+LINES = {
+    'live_tracks': 'The tracks are live. Cut the power before touching that boiler.',
+    'breaker': 'Track power cut. The boiler on the tracks can be moved now.',
+    # Refuge objective board, one line by progress (shown on entering the Refuge).
+    'goal_power': 'Objective: cut the track power. The breaker is on the Stairs.',
+    'goal_nest': 'Objective: something nests under the tracks. Move the boiler and go down.',
+    'goal_done': 'The Midnight Line is quiet. For now.',
+}
+OBJECTIVE_ROOM = 'ML_Refuge'
+COMPLETED = ('ML_Venom', 0xAB)              # boss reward flag (local allocation) = chapter completed
+
+
+def message_id(key):
+    return MESSAGE_FIRST + list(LINES).index(key)
+
+
+def say(key, frames=0):
+    """0x15 operand: u16 display time (0 = native default), message id, lookup flag, continuation group."""
+    return Command(MESSAGE, struct.pack('<HBBBxxx', frames, message_id(key), 0, 0))
+
+
+def message_accessor(chapter_table):
+    """Same-size accessor: ids below 0xC4 read the native table, others the chapter table."""
+    return (0xE35100C4,                     # cmp   r1, #0xC4
+            0x359F3010,                     # ldrlo r3, [pc, #0x10]  native table
+            0x259F3010,                     # ldrhs r3, [pc, #0x10]  chapter table - 0xC4 * 44
+            0xE3A0202C,                     # mov   r2, #0x2C
+            0xE0223291,                     # mla   r2, r1, r2, r3
+            0xE5802000,                     # str   r2, [r0]
+            0xE12FFF1E,                     # bx    lr
+            MESSAGE_TABLE, chapter_table - MESSAGE_FIRST * MESSAGE_SIZE)
+
+
+def message_entries(first_string):
+    """44-byte entries: string index, no voice (-1, -1), nine unused extra ids."""
+    return b''.join(struct.pack('<IHH', first_string + i, 0xFFFF, 0xFFFF) + struct.pack('<9I', *[0x7FFFFFFF] * 9)
+                    for i in range(len(LINES)))
 
 
 def _tour():
@@ -426,6 +492,69 @@ def build_room(source_obj, template_raw, room, source_index, names, local):
     return result, report
 
 
+def add_breaker(raw, switch_room, breaker=None):
+    """Append the track-power breaker to a built room's record 1.
+
+    New AG 'Breaker' = copies of the native switch and its Button Press trigger
+    (pressing it runs Breaker_Throw); the init shows the thrown pose once the
+    flag is set. Existing AG/entity/EG indices are unchanged (append only).
+    """
+    breaker = breaker or BREAKER
+    native = RoomObjects.parse(switch_room)
+    labels = native.names[1].labels
+    entities = Entities.parse(native.records[1].sections[0]).records
+    switch = bytearray(next(e for i, e in enumerate(entities) if labels[i] == 'Object (Switch)'))
+    trigger = bytearray(next(e for i, e in enumerate(entities) if labels[i] == 'Trigger (Button Press)'))
+    if trigger[26] != 0 or struct.unpack_from('<I', trigger, 12)[0] != room_doors.TRIGGER_TYPE:
+        raise ValueError('Breaker trigger template changed')
+    _, groups = room_script.counts(raw, 1)
+    x, y, z = breaker['switch']
+    struct.pack_into('<3i', switch, 0, x, y, z)
+    struct.pack_into('<3i', trigger, 0, x + breaker['trigger_dx'], y + breaker['trigger_dy'], z)
+    struct.pack_into('<2H', trigger, 20, *breaker['trigger_size'])
+    trigger[27] = groups + 1                                  # Breaker_Throw (1-based)
+    raw, ag = room_script.append_batch(raw, 1, [(bytes(switch), 'Object (Switch) Breaker'),
+                                                (bytes(trigger), 'Trigger (Breaker Press)')], 'Breaker')
+    throw = EventGroup((room_script.animate(ag, 1, SWITCH_THROW), room_script.set_var(TRACK_POWER, 1),
+                        Command(SOUND, struct.pack('<HH', BREAKER_SOUND, 0)), say('breaker')))
+    thrown = EventGroup((room_script.animate(ag, 1, SWITCH_THROWN),))
+    raw, first = room_script.append_groups(raw, 1, [(throw, 'Breaker_Throw'), (thrown, 'Breaker_Thrown')])
+    # As Sewer_Map04's init: the switch always; its trigger only while the
+    # power is on, otherwise the thrown pose.
+    return room_script.extend_group(raw, 1, 0, [
+        room_script.activate(entity=(ag, 1)),
+        room_script.if_var(TRACK_POWER, '==', 0, then=room_script.action(entity=(ag, 2)),
+                           otherwise=room_script.action(eg=first + 1))])
+
+
+HINT_ROOM = 'ML_Platform'
+
+
+def add_power_hint(raw):
+    """Platform record 1: while the track power is on, entering shows the live-tracks hint."""
+    raw, eg = room_script.append_groups(raw, 1, [(EventGroup((say('live_tracks'),)), 'Live_Tracks_Hint')])
+    return room_script.extend_group(raw, 1, 0, [room_script.if_var(TRACK_POWER, '==', 0,
+                                                                   then=room_script.action(eg=eg))])
+
+
+def add_objectives(raw, completed):
+    """Refuge record 1: on entry, one objective line chosen by the completion and power flags.
+
+    Completion is tested first: v0.7.0 players could beat the boss through the
+    Stairs grate without ever cutting the power.
+    """
+    _, groups = room_script.counts(raw, 1)
+    power, nest, done, check = range(groups + 1, groups + 5)
+    raw, _ = room_script.append_groups(raw, 1, [
+        (EventGroup((say('goal_power'),)), 'Goal_Power'),
+        (EventGroup((say('goal_nest'),)), 'Goal_Nest'),
+        (EventGroup((say('goal_done'),)), 'Goal_Done'),
+        (EventGroup((room_script.if_var(TRACK_POWER, '==', 0, then=room_script.action(eg=power),
+                                        otherwise=room_script.action(eg=nest)),)), 'Goal_Check')])
+    return room_script.extend_group(raw, 1, 0, [room_script.if_var(completed, '==', 0, then=room_script.action(eg=check),
+                                                                   otherwise=room_script.action(eg=done))])
+
+
 def entrance_obj(raw, names):
     door = dict(ENTRANCE_DOOR)
     spawn, room = door.pop('spawn'), BY_NAME[door.pop('room')]
@@ -440,10 +569,11 @@ def entrance_obj(raw, names):
     return room_doors.append_entity(result, 1, bytes(doorway), DOORWAY['name'])
 
 
-def room_table(arm9, names, resources):
-    """Extended lookup + descriptors + model arrays + names + Sewer map list at ML_BASE.
+def room_table(arm9, names, resources, first_string=None):
+    """Extended lookup + descriptors + model arrays + names + Sewer map list (+ chapter messages) at ML_BASE.
 
-    Returns (data, address of the relocated Sewer area room list).
+    Returns (data, address of the relocated Sewer area room list, address of
+    the chapter message entries or None without `first_string`).
     """
     native = room_catalog.parse(arm9, names)
     by_name = {r.name: r for r in native}
@@ -476,14 +606,20 @@ def room_table(arm9, names, resources):
     if [struct.unpack_from('<I', native, i * ENTRY_SIZE)[0] for i in (0, SEWER_COUNT - 1)] != [51, 67]:
         raise ValueError('Sewer area list moved')
     data += native + map_entries()
+    messages_at = None
+    if first_string is not None:
+        messages_at = ML_BASE + len(data)
+        data += message_entries(first_string)
     if len(data) > ML_SPACE: raise ValueError('Chapter tables exceed reserved space')
-    return data + bytes(ML_SPACE - len(data)), list_at
+    return data + bytes(ML_SPACE - len(data)), list_at, messages_at
 
 
+def extend_arm9(rom, table, glob_count, *, save_rooms=True, map_list=None, messages=None):
+    """Grow the kit autoload by ML_SPACE, redirect the room lookup, count appended resources.
 
-
-def extend_arm9(rom, table, glob_count, *, save_rooms=True, map_list=None):
-    """Grow the kit autoload by ML_SPACE, redirect the room lookup, count appended resources."""
+    `messages` (chapter message entries address) rewrites the message accessor
+    and raises both message-id bounds to cover LINES.
+    """
     h = w.parse_header(rom)
     raw = rom[h['arm9_offset']:h['arm9_offset'] + h['arm9_size']]
     if w.sha256(raw) != kit.ARM9_SHA256: raise ValueError('Chapter requires the pinned kit ARM9')
@@ -505,6 +641,11 @@ def extend_arm9(rom, table, glob_count, *, save_rooms=True, map_list=None):
         limit = FIRST + len(ROOMS)
         patches += [(SAVE_ROOM_CHECK, CMP_R1 | 0x4B, CMP_R1 | limit),
                     (RELOAD_ROOM_CHECK, CMP_R1 | 0x4B, CMP_R1 | limit)]
+    if messages:
+        if MESSAGE_FIRST + len(LINES) > 0xFF: raise ValueError('Message ids are bytes')
+        patches += [(MESSAGE_ACCESSOR + 4 * i, old, value)
+                    for i, (old, value) in enumerate(zip(ACCESSOR_NATIVE, message_accessor(messages)))]
+        patches += [(at, CMP_R1 | MESSAGE_FIRST, CMP_R1 | (MESSAGE_FIRST + len(LINES))) for at in MESSAGE_BOUNDS]
     for address, old, value in patches:
         if w.u32(new, address - BASE) != old: raise ValueError(f'Patch site differs: {address:08X}')
         struct.pack_into('<I', new, address - BASE, value)
@@ -525,25 +666,48 @@ def apply_rom(rom, *, save_rooms=True):
     arm9 = rom[h['arm9_offset']:h['arm9_offset'] + h['arm9_size']]
     native = room_catalog.parse(arm9, names)
     room_names = [r.name for r in native]
-    clean = {e['name']: e['sha256'] for e in mod.load_clean()[2]['entries']}
-    used = {ENTRANCE + '_app.obj', STATE_TEMPLATE + '_app.obj', MAP_SCREEN}
+    _, clean_glob, manifest = mod.load_clean()
+    clean = {e['name']: e['sha256'] for e in manifest['entries']}
+    used = {ENTRANCE + '_app.obj', STATE_TEMPLATE + '_app.obj', MAP_SCREEN, BREAKER_SOURCE + '_app.obj'}
     for room in ROOMS:
         src = next(r for r in native if r.name == room.source)
         used |= {room.source + '_app.obj', names[src.texture]}
     for name in sorted(used):
         if w.sha256(asset(name)) != clean[name]: raise ValueError(f'Chapter source is not the clean native: {name}')
-    extras, report, local = {}, {'rooms': {}}, {}
+    extras, report, local = {}, {'rooms': {}}, dict(SHARED_FLAGS)
     template = asset(STATE_TEMPLATE + '_app.obj')
     for room in ROOMS:
         src = next(r for r in native if r.name == room.source)
         obj, info = build_room(asset(room.source + '_app.obj'), template, room, src.index, room_names, local)
+        if room.name == BREAKER['room']:
+            obj = add_breaker(obj, asset(BREAKER_SOURCE + '_app.obj'))
+            info['breaker'] = {'flag': TRACK_POWER, 'switch_units': [v / 4096 for v in BREAKER['switch']]}
+        if room.name == HINT_ROOM:
+            obj = add_power_hint(obj)
+            info['hint'] = 'live_tracks'
         extras[f'zz_{room.name}_app.obj'] = obj
         extras[f'zz_{room.name}Textures.nsbtx'] = graded_textures(originals[src.texture], room.grade)
         report['rooms'][room.name] = {'index': room.index, 'source': room.source, **info}
+    # The objective board needs the completion flag, allocated with the boss room.
+    key = f'zz_{OBJECTIVE_ROOM}_app.obj'
+    extras[key] = add_objectives(extras[key], local[COMPLETED])
+    report['rooms'][OBJECTIVE_ROOM]['objectives'] = {'power': TRACK_POWER, 'completed': local[COMPLETED]}
     entrance = names.index(ENTRANCE + '_app.obj')
     blobs[entrance] = entrance_obj(asset(ENTRANCE + '_app.obj'), room_names)
     map_index = names.index(MAP_SCREEN)
     blobs[map_index] = map_screen(asset(MAP_SCREEN))
+    # Chapter lines: appended string slots (same index in both languages).
+    from tools.qol_suits_menu import StringSlots, slot_count
+    string_indices, firsts = [], set()
+    for name in STRING_FILES:
+        e = next(x for x in manifest['entries'] if x['name'] == name)
+        index = names.index(name)
+        firsts.add(slot_count(originals[index]))
+        blobs[index] = StringSlots(clean_glob[e['offset']:e['offset'] + e['size']]).grown(
+            originals[index], {}, appended=list(LINES.values()))
+        string_indices.append(index)
+    if len(firsts) != 1: raise ValueError('String files differ in slot count')
+    first_string, = firsts
     # Appended models/textures need a word-aligned start; keep the padding in
     # its own unreferenced resource rather than inside an asset.
     padding = -len(glob) % 4
@@ -552,9 +716,9 @@ def apply_rom(rom, *, save_rooms=True):
     resources = {room.name: {'objects': out_names.index(f'zz_{room.name}_app.obj'),
                              'texture': out_names.index(f'zz_{room.name}Textures.nsbtx')} for room in ROOMS}
     staged = w.rebuild_rom(rom, {'Glob.bin': w.pack_glob(out_names, out_blobs)})
-    table, map_list = room_table(arm9, out_names, resources)
+    table, map_list, messages = room_table(arm9, out_names, resources, first_string)
     result, patches = extend_arm9(staged, table, (len(names), len(out_names)), save_rooms=save_rooms,
-                                  map_list=map_list)
+                                  map_list=map_list, messages=messages)
     check = w.validate_rom(result, target=True)
     fs = next(e for e in check['nitrofs'] if e['name'] == 'Glob.bin')
     out_glob = result[fs['start']:fs['end']]
@@ -562,7 +726,7 @@ def apply_rom(rom, *, save_rooms=True):
     if checked_names != out_names: raise ValueError('Chapter archive names changed')
     for i, blob in enumerate(out_blobs):
         if out_glob[out_offsets[i]:out_offsets[i + 1]] != blob: raise ValueError(f'Resource mismatch: {out_names[i]}')
-        if i < len(names) and i not in (entrance, map_index, table_index) and blob != originals[i]:
+        if i < len(names) and i not in (entrance, map_index, table_index, *string_indices) and blob != originals[i]:
             raise ValueError(f'Native resource changed: {names[i]}')
     h = w.parse_header(result)
     digest = w.sha256(result[h['arm9_offset']:h['arm9_offset'] + h['arm9_size']])
@@ -570,6 +734,8 @@ def apply_rom(rom, *, save_rooms=True):
     report.update({'schema_version': 1, 'arm9_sha256': digest, 'resources': resources,
                    'arm9_patches': [{'address': hex(a), 'old': hex(o), 'new': hex(n)} for a, o, n in patches],
                    'save_rooms': save_rooms, 'added_resources': list(extras),
+                   'messages': {key: {'id': message_id(key), 'string': first_string + i, 'text': text}
+                                for i, (key, text) in enumerate(LINES.items())},
                    'local_flags': {f'{room}:{var:#x}': flag for (room, var), flag in sorted(local.items())}})
     return result, report
 

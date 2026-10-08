@@ -65,6 +65,12 @@
       "previous_rom_sha256": "c3010cba9255a30645ad9f020d3af284550f42da26b98f728e93b4c94f8ef590",
       "rom_sha256": "c56095be2dfd999adb475c93f5238bd916289dbfe9dce1eb9b3cf4f8563d43b8",
       "version": "0.7.0"
+    },
+    {
+      "date": "2026-10-08",
+      "previous_rom_sha256": "c56095be2dfd999adb475c93f5238bd916289dbfe9dce1eb9b3cf4f8563d43b8",
+      "rom_sha256": "d84ae5393d2e3f5cf0c82c3aaa346e087f7804b31f2b6e4a0b67bb8098f2557b",
+      "version": "0.8.0"
     }
   ],
   "schema_version": 1

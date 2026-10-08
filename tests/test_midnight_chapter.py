@@ -20,7 +20,7 @@ class MidnightChapterTests(unittest.TestCase):
         cls.arm9 = rom[at:at + size]
         cls.native = room_catalog.parse(cls.arm9, cls.names)
         cls.room_names = [r.name for r in cls.native]
-        cls.local = {}
+        cls.local = dict(ch.SHARED_FLAGS)
         cls.built = {}
         template = cls.blobs[ch.STATE_TEMPLATE + '_app.obj']
         for room in ch.ROOMS:
@@ -146,8 +146,10 @@ class MidnightChapterTests(unittest.TestCase):
         resources = {r.name: {'objects': 4000 + 2 * i, 'texture': 4001 + 2 * i} for i, r in enumerate(ch.ROOMS)}
         names = self.names + [f'x{i}' for i in range(4000 - len(self.names))]
         names += [n for r in ch.ROOMS for n in (f'zz_{r.name}_app.obj', f'zz_{r.name}Textures.nsbtx')]
-        table, list_at = ch.room_table(self.arm9, names, resources)
+        table, list_at, messages_at = ch.room_table(self.arm9, names, resources, 1049)
         self.assertEqual(len(table), ch.ML_SPACE)
+        entries = table[messages_at - ch.ML_BASE:messages_at - ch.ML_BASE + ch.MESSAGE_SIZE * len(ch.LINES)]
+        self.assertEqual(entries, ch.message_entries(1049))
         entries = table[list_at - ch.ML_BASE:list_at - ch.ML_BASE + ch.ENTRY_SIZE * (ch.SEWER_COUNT + len(ch.ROOMS))]
         native = self.arm9[ch.SEWER_LIST - ch.BASE:ch.SEWER_LIST - ch.BASE + ch.ENTRY_SIZE * ch.SEWER_COUNT]
         self.assertEqual(entries[:len(native)], native)                   # native Sewer rooms kept in order
@@ -189,6 +191,89 @@ class MidnightChapterTests(unittest.TestCase):
         changed = {i for i, (a, b) in enumerate(zip(old.palette, new.palette)) if a != b}
         self.assertTrue(changed <= {s + k for s in ch.MAP_SLOTS for k in range(5)})
         self.assertEqual(set(ch.DIAGRAM), set(ch.BY_NAME))
+
+    def test_breaker_cuts_the_platform_flag_and_appends_only(self):
+        from tools import room_script as s
+        self.assertEqual(self.local[('ML_Platform', 0x27)], ch.TRACK_POWER)
+        self.assertIn(ch.TRACK_POWER, ch.FREE_FLAGS)
+        built = self.obj(ch.BREAKER['room'])
+        raw = ch.add_breaker(built, self.blobs[ch.BREAKER_SOURCE + '_app.obj'])
+        old, new = RoomObjects.parse(built), RoomObjects.parse(raw)
+        sizes, groups = s.counts(built, 1)
+        self.assertEqual(s.counts(raw, 1), (sizes + (2,), groups + 2))
+        self.assertEqual(new.records[0].raw, old.records[0].raw)
+        old_e, new_e = (Entities.parse(x.records[1].sections[0]).records for x in (old, new))
+        self.assertEqual(new_e[:-2], old_e)
+        native = RoomObjects.parse(self.blobs[ch.BREAKER_SOURCE + '_app.obj'])
+        labels = native.names[1].labels
+        source = {labels[i]: e for i, e in enumerate(Entities.parse(native.records[1].sections[0]).records)}
+        switch, trigger = new_e[-2:]
+        self.assertEqual(switch[12:], source['Object (Switch)'][12:])
+        self.assertEqual((trigger[12:20], trigger[24:27]), (source['Trigger (Button Press)'][12:20],
+                                                            source['Trigger (Button Press)'][24:27]))
+        self.assertEqual(trigger[27], groups + 1)                    # pressing runs Breaker_Throw
+        self.assertEqual(struct.unpack_from('<3i', switch), ch.BREAKER['switch'])
+        events = Events.parse(new.records[1].sections[1], new.records[1].raw[3]).groups
+        old_events = Events.parse(old.records[1].sections[1], old.records[1].raw[3]).groups
+        self.assertEqual(events[1:groups], old_events[1:])
+        throw, thrown = events[groups].commands, events[groups + 1].commands
+        self.assertIn(s.set_var(ch.TRACK_POWER, 1), throw)
+        self.assertIn(ch.say('breaker'), throw)
+        self.assertEqual(thrown, (s.animate(len(sizes), 1, ch.SWITCH_THROWN),))
+        self.assertEqual(events[0].commands[:-2], old_events[0].commands)
+        self.assertEqual(events[0].commands[-2:], (
+            s.activate(entity=(len(sizes), 1)),
+            s.if_var(ch.TRACK_POWER, '==', 0, then=s.action(entity=(len(sizes), 2)), otherwise=s.action(eg=groups + 2))))
+
+    def test_power_hint_runs_only_while_the_tracks_are_live(self):
+        from tools import room_script as s
+        built = self.obj(ch.HINT_ROOM)
+        raw = ch.add_power_hint(built)
+        _, groups = s.counts(built, 1)
+        events = Events.parse(*(lambda r: (r.sections[1], r.raw[3]))(RoomObjects.parse(raw).records[1])).groups
+        self.assertEqual(events[groups].commands, (ch.say('live_tracks'),))
+        self.assertEqual(events[0].commands[-1], s.if_var(ch.TRACK_POWER, '==', 0, then=s.action(eg=groups + 1)))
+        # The Platform's own boiler logic reads the same shared flag.
+        reads = {struct.unpack_from('<H', c.operand)[0] for g in events for c in g.commands if c.opcode == ch.IF_VAR}
+        self.assertIn(ch.TRACK_POWER, reads)
+
+    def test_objective_board_picks_one_line_by_progress(self):
+        from tools import room_script as s
+        built = self.obj(ch.OBJECTIVE_ROOM)
+        completed = self.local[ch.COMPLETED]
+        self.assertIn(completed, ch.FREE_FLAGS)
+        raw = ch.add_objectives(built, completed)
+        _, groups = s.counts(built, 1)
+        events = Events.parse(*(lambda r: (r.sections[1], r.raw[3]))(RoomObjects.parse(raw).records[1])).groups
+        power, nest, done, check = range(groups + 1, groups + 5)
+        self.assertEqual([events[g - 1].commands for g in (power, nest, done)],
+                         [(ch.say('goal_power'),), (ch.say('goal_nest'),), (ch.say('goal_done'),)])
+        self.assertEqual(events[check - 1].commands, (s.if_var(ch.TRACK_POWER, '==', 0, then=s.action(eg=power),
+                                                               otherwise=s.action(eg=nest)),))
+        self.assertEqual(events[0].commands[-1], s.if_var(completed, '==', 0, then=s.action(eg=check),
+                                                          otherwise=s.action(eg=done)))   # completion first
+        self.assertTrue(all(len(text) <= 80 for text in ch.LINES.values()))
+
+    def test_message_accessor_keeps_native_ids_and_adds_chapter_ids(self):
+        at = ch.MESSAGE_ACCESSOR - ch.BASE
+        self.assertEqual(struct.unpack_from('<9I', self.arm9, at), ch.ACCESSOR_NATIVE)
+        for address in ch.MESSAGE_BOUNDS:
+            self.assertEqual(struct.unpack_from('<I', self.arm9, address - ch.BASE)[0], ch.CMP_R1 | ch.MESSAGE_FIRST)
+        words = ch.message_accessor(0x02155800)
+        self.assertEqual(len(words), len(ch.ACCESSOR_NATIVE))
+        self.assertEqual(words[7], ch.MESSAGE_TABLE)
+        self.assertEqual(words[8] + ch.MESSAGE_FIRST * ch.MESSAGE_SIZE, 0x02155800)
+        # Both ldr literals are pc + 8 + 0x10 away from their instruction.
+        self.assertEqual([(w & 0x0FFFFFFF, i) for i, w in enumerate(words[1:3], 1)], [(0x059F3010, 1), (0x059F3010, 2)])
+        self.assertEqual(ch.MESSAGE_ACCESSOR + 4 * 1 + 8 + 0x10, ch.MESSAGE_ACCESSOR + 4 * 7)
+        self.assertEqual(ch.MESSAGE_ACCESSOR + 4 * 2 + 8 + 0x10, ch.MESSAGE_ACCESSOR + 4 * 8)
+        entry = ch.message_entries(1049)[:ch.MESSAGE_SIZE]
+        native = self.arm9[ch.MESSAGE_TABLE - ch.BASE:ch.MESSAGE_TABLE - ch.BASE + ch.MESSAGE_SIZE * ch.MESSAGE_FIRST]
+        for native_id in (0x0E, 0x29):          # voiceless one-page natives (district text, tutorial)
+            self.assertEqual(native[native_id * 44 + 4:native_id * 44 + 44], entry[4:])
+        self.assertEqual(struct.unpack_from('<I', entry)[0], 1049)
+        self.assertEqual(ch.say('breaker').operand, bytes((0, 0, ch.MESSAGE_FIRST + 1, 0, 0, 0, 0, 0)))
+        self.assertLessEqual(ch.MESSAGE_FIRST + len(ch.LINES), 0xFF)
 
     def test_grade_keeps_texture_bytes_and_alpha_bit(self):
         source = self.blobs['Sewer_Map03Textures.nsbtx']

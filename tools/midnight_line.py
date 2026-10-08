@@ -338,19 +338,24 @@ def tour_plan(rom_path):
     return steps
 
 
-def tour_child(rom_path):
-    """One run: warp into the entrance room, then ride every chapter door once."""
+def tour_child(rom_path, start=0):
+    """One run: warp into the entrance room, then ride every chapter door once.
+
+    `start` resumes the route at that step (warp into its room, default
+    placement), e.g. after an ambush room sealed its doors mid-tour.
+    """
     import ctypes as c
     from tools import kit_lab as k, player_trace as p
     rom = Path(rom_path)
     source_hash = w.sha256(rom.read_bytes())
-    steps = tour_plan(rom)
+    steps = tour_plan(rom)[start:]
     warp = OUT / 'tour-warp.json'
     m = lambda reg, v: struct.pack('<I', 0xE3A00000 | (reg << 12) | v).hex()
+    first, spawn = (65, 1) if not start else (steps[0]['room_index'], 0)   # Sewer_Save02 spawn 1
     w.write_json(warp, [{'addr': 0x020ED7AC, 'hex': m(1, 0), 'expect': m(1, 1)},     # story context
-                        {'addr': 0x020ED7B4, 'hex': m(2, 65), 'expect': m(2, 0x46)},  # Sewer_Save02
+                        {'addr': 0x020ED7B4, 'hex': m(2, first), 'expect': m(2, 0x46)},
                         {'addr': 0x020ED7DC, 'hex': m(2, 1), 'expect': m(2, 2)},      # record 1
-                        {'addr': 0x020ED7E0, 'hex': m(3, 1), 'expect': m(3, 0)}])     # spawn 1
+                        {'addr': 0x020ED7E0, 'hex': m(3, spawn), 'expect': m(3, 0)}])
     state = {'step': 0, 'since': None, 'teleported': False, 'arrivals': [], 'error': None, 'last': None}
     def room_of(ram):
         stats = struct.unpack_from('<I', ram, k.STATS_POINTER - p.BASE)[0] - p.BASE
@@ -406,16 +411,18 @@ def tour_child(rom_path):
     stats = struct.unpack_from('<I', final, k.STATS_POINTER - p.BASE)[0] - p.BASE
     flags = int.from_bytes(final[stats + 0x1C:stats + 0x44], 'little')
     from tools import midnight_chapter as ch
-    checks['visited_flags_set'] = all(flags >> (ch.VISITED_BASE + r.index) & 1 for r in ch.ROOMS)
+    toured = {s['room_index'] for s in steps} | {s['dest_index'] for s in steps}
+    checks['visited_flags_set'] = all(flags >> (ch.VISITED_BASE + r.index) & 1 for r in ch.ROOMS if r.index in toured)
     checks['no_other_chapter_flags'] = not any(flags >> f & 1 for f in ch.FREE_FLAGS
                                                if f not in {ch.VISITED_BASE + r.index for r in ch.ROOMS})
-    report = {'schema_version': 1, 'rom_sha256': source_hash, 'source_rom_unchanged': True,
+    report = {'schema_version': 1, 'rom_sha256': source_hash, 'source_rom_unchanged': True, 'start_step': start,
               'checks': checks, 'passed': all(checks.values()), 'error': state['error'], 'steps': results,
               'trace': str(dest / 'observations.json'), 'captures': [str(x) for x in captures],
               'limit': 'Lab warp into the entrance room and teleports onto door triggers; walking routes are separate'}
-    w.write_json(OUT / 'chapter-tour.json', report)
-    w.write_json(OUT / f'chapter-tour-{source_hash[:8]}.json', report)
-    print('ML_ROOM_REPORT ' + str(OUT / 'chapter-tour.json'), flush=True)
+    suffix = f'-from{start}' if start else ''
+    w.write_json(OUT / f'chapter-tour{suffix}.json', report)
+    w.write_json(OUT / f'chapter-tour-{source_hash[:8]}{suffix}.json', report)
+    print('ML_ROOM_REPORT ' + str(OUT / f'chapter-tour{suffix}.json'), flush=True)
 
 
 def ambush_child(rom_path, seed=11, native=False):
@@ -637,16 +644,98 @@ def refuge_save_child(rom_path, label, room_name='ML_Refuge'):
     print('ML_ROOM_REPORT ' + str(OUT / f'{label}.json'), flush=True)
 
 
+def puzzle_child(rom_path):
+    """Power puzzle in one run: Stairs breaker -> Platform -> lift/throw the boiler -> X on the grate -> Nest.
+
+    Lab teleports only place Spidey (at the breaker, on the Stairs' Platform
+    exit, beside the boiler); every puzzle step is a real button press.
+    """
+    from tools import kit_lab as k, player_trace as p
+    from tools import midnight_chapter as ch
+    rom = Path(rom_path)
+    source_hash = w.sha256(rom.read_bytes())
+    stairs, platform, shaft = (ch.BY_NAME[n].index for n in ('ML_Stairs', 'ML_Platform', 'ML_NestShaft'))
+    boiler_flag = next(f for (room, var), f in ch_local_flags().items() if (room, var) == ('ML_Platform', 0x62))
+    x, y, _ = ch.BREAKER['switch']
+    at_breaker = (x + ch.BREAKER['trigger_dx'] + 2 * 4096, y + ch.BREAKER['trigger_dy'] + 4096 + 2048)
+    plan = {20: (stairs, at_breaker), 200: (stairs, (376 * 4096, 128 * 4096)),   # Stairs exit back to the Platform
+            500: (platform, (272 * 4096, 3 * 4096))}                             # floor left of the boiler
+    rows = [(50, 53, 'Left'), (90, 96, 'X'),                                    # face and pull the breaker
+            (540, 546, 'Right'), (580, 586, 'X'), (690, 705, 'Left'), (720, 726, 'X'),   # lift, carry, throw
+            (790, 808, 'Right'), (830, 836, 'X'), (890, 896, 'X')]             # onto the grate, open it
+    frames = 1100
+    m = lambda reg, v: struct.pack('<I', 0xE3A00000 | (reg << 12) | v).hex()
+    warp = OUT / 'chapter-puzzle-warp.json'
+    w.write_json(warp, [{'addr': 0x020ED7AC, 'hex': m(1, 0), 'expect': m(1, 1)},
+                        {'addr': 0x020ED7B4, 'hex': m(2, stairs), 'expect': m(2, 0x46)},
+                        {'addr': 0x020ED7DC, 'hex': m(2, 1), 'expect': m(2, 2)},
+                        {'addr': 0x020ED7E0, 'hex': m(3, 3), 'expect': m(3, 0)}])
+    inputs = OUT / 'chapter-puzzle-inputs.json'
+    w.write_json(inputs, [{'start': a, 'end': z, 'buttons': [b]} for a, z, b in rows])
+    state = {'rooms': [], 'flags': {}, 'teleports': []}
+    def hook(frame, lib):
+        if frame < 0: return
+        ptr, ram = k.ram_of(lib)
+        stats = struct.unpack_from('<I', ram, k.STATS_POINTER - p.BASE)[0] - p.BASE
+        if not 0 <= stats < len(ram) - 0x98: return
+        current = struct.unpack_from('<I', ram, stats)[0]
+        if not state['rooms'] or state['rooms'][-1][1] != current: state['rooms'].append((frame, current))
+        flags = int.from_bytes(ram[stats + 0x1C:stats + 0x44], 'little')
+        for f in (ch.TRACK_POWER, boiler_flag):
+            if flags >> f & 1: state['flags'].setdefault(f, frame)
+        if frame in plan and plan[frame][0] == current:
+            try: sample = p.sample(ram)
+            except ValueError: return
+            k.teleport(ptr, ram, sample['motion_address'] - p.BASE, *plan[frame][1])
+            state['teleports'].append(frame)
+    dest, _ = k._run(rom, 'ml-puzzle', str(inputs), frames=frames, bits=0xFEF00, patch=str(warp),
+                     caps=tuple(range(0, frames, 60)), rams=(frames - 10,), extra_hook=hook,
+                     core_options=k.NO_JIT, sparring=True)
+    rooms = [r for _, r in state['rooms']]
+    power, boiler = state['flags'].get(ch.TRACK_POWER), state['flags'].get(boiler_flag)
+    checks = {'breaker_cuts_track_power': power is not None,
+              'reached_platform': platform in rooms,
+              'boiler_destroyed_after_breaker': boiler is not None and power is not None and boiler > power,
+              'grate_drops_into_the_nest': bool(rooms) and rooms[-1] == shaft,
+              'rom_unchanged': w.sha256(rom.read_bytes()) == source_hash}
+    report = {'schema_version': 1, 'rom_sha256': source_hash, 'checks': checks, 'passed': all(checks.values()),
+              **state, 'boiler_flag': boiler_flag, 'captures': [str(x) for x in sorted(dest.glob('frame-*.png'))],
+              'limit': 'Lab warp; teleports only place Spidey, every puzzle step is a real press'}
+    w.write_json(OUT / 'chapter-puzzle.json', report)
+    w.write_json(OUT / f'chapter-puzzle-{source_hash[:8]}.json', report)
+    print('ML_ROOM_REPORT ' + str(OUT / 'chapter-puzzle.json'), flush=True)
+
+
+def ch_local_flags():
+    """Chapter local flag allocation {(room, source var): flag}, as the build assigns it."""
+    import mod
+    from tools import midnight_chapter as ch
+    rom, glob, manifest = mod.load_clean()
+    blobs = {e['name']: glob[e['offset']:e['offset'] + e['size']] for e in manifest['entries']}
+    at, _, _, size = struct.unpack_from('<4I', rom, 0x20)
+    from tools import room_catalog
+    native = room_catalog.parse(rom[at:at + size], [e['name'] for e in manifest['entries']])
+    names, local = [r.name for r in native], dict(ch.SHARED_FLAGS)
+    for room in ch.ROOMS:
+        if room.encounters:
+            src = next(r for r in native if r.name == room.source)
+            ch.build_room(blobs[room.source + '_app.obj'], blobs[ch.STATE_TEMPLATE + '_app.obj'], room, src.index,
+                          names, local)
+    return local
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
     sub.add_parser('survey')
-    for name in ('tour', '_tour-child', 'save-test', '_save-child', 'ambush', '_ambush-child', 'visit', '_visit-child'):
+    for name in ('tour', '_tour-child', 'save-test', '_save-child', 'ambush', '_ambush-child', 'visit', '_visit-child',
+                 'puzzle', '_puzzle-child'):
         lab = sub.add_parser(name)
         lab.add_argument('--rom', default=str(BUILD / 'chapter.nds'))
         lab.add_argument('--native', action='store_true', help='ambush: control in native Sewer_Map02')
         lab.add_argument('--seed', type=int, default=11, help='ambush/visit: fight input seed')
         if 'save' in name: lab.add_argument('--room', default='ML_Refuge', help='chapter save room')
+        if 'tour' in name: lab.add_argument('--start', type=int, default=0, help='tour: resume at this step')
         if 'visit' in name:
             lab.add_argument('room', type=int)
             lab.add_argument('--selector', type=int, default=1)
@@ -692,18 +781,20 @@ def main():
         print(json.dumps(stage_platform(args.native_model,args.object_source=='native',args.challenge_group1,
                                         args.omit_dummy,args.empty_dummy,args.object_source=='save',args.repair_empty_init),indent=2))
     elif args.command == '_room-child': room_probe_child(args.authored,args.exercise_return,args.mode,args.story_context)
-    elif args.command == '_tour-child': tour_child(args.rom)
+    elif args.command == '_tour-child': tour_child(args.rom, args.start)
     elif args.command == '_save-child':
         label = 'chapter-save' if Path(args.rom).name == 'chapter.nds' else 'chapter-save-' + Path(args.rom).stem
         refuge_save_child(args.rom, label if args.room == 'ML_Refuge' else f'{label}-{args.room}', args.room)
     elif args.command == '_ambush-child': ambush_child(args.rom, args.seed, native=args.native)
+    elif args.command == '_puzzle-child': puzzle_child(args.rom)
     elif args.command == '_visit-child':
         visit_child(args.rom, args.room, args.selector, args.spawn, args.seed, args.frames, not args.mortal, args.label,
                     args.goto, boss_max=args.boss_max, leave=args.leave, weak=args.weak, idle=args.idle,
                     every=args.every)
-    elif args.command in ('tour', 'save-test', 'ambush', 'visit'):
-        child = {'tour': '_tour-child', 'save-test': '_save-child', 'ambush': '_ambush-child', 'visit': '_visit-child'}[args.command]
-        extra = (['--room', args.room] if args.command == 'save-test' else []) + ([str(args.room), '--selector', str(args.selector), '--spawn', str(args.spawn), '--frames', str(args.frames),
+    elif args.command in ('tour', 'save-test', 'ambush', 'visit', 'puzzle'):
+        child = {'tour': '_tour-child', 'save-test': '_save-child', 'ambush': '_ambush-child', 'visit': '_visit-child',
+                 'puzzle': '_puzzle-child'}[args.command]
+        extra = (['--room', args.room] if args.command == 'save-test' else []) + (['--start', str(args.start)] if args.command == 'tour' else []) + ([str(args.room), '--selector', str(args.selector), '--spawn', str(args.spawn), '--frames', str(args.frames),
                   *(['--mortal'] if args.mortal else []), *(['--label', args.label] if args.label else []),
                   *(['--goto', *map(str, args.goto)] if args.goto else []),
                   *(['--boss-max', str(args.boss_max)] if args.boss_max else []),

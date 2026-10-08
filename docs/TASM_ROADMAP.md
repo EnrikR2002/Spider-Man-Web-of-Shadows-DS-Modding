@@ -233,8 +233,8 @@ features and XP sinks (player has ~3000 unspent XP). Proposed, nothing built:
   the 64 MiB cart (~80 KB per cloned room); flags are the binding limit (1
   spare; 138..165 need a backup-save scan). New geometry beyond clones,
   mirrors or the debug rooms is unproven research.
-- **Next chapter content.** Power puzzle (native switches, electric hazards,
-  boilers), objective board, Signal Leech, Conductor teaser, then a "Midnight
+- **Next chapter content.** Power puzzle and objective board (shipped in
+  v0.8.0, CHANGES), Signal Leech, Conductor teaser, then a "Midnight
   Express" network: station doors to save rooms in every district (fast travel),
   a Lost Lab built from the unused proto01/Test rooms (every object type),
   boss gauntlet from the mini-boss rooms, timed escape rooms (TimerWatcher).

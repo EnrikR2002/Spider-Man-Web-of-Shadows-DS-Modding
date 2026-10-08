@@ -1269,10 +1269,11 @@ and in the emulator (2026-10-07):
 - **Inter-record table** after the records is `08000000 00000000` in all 156
   records; nothing in the envelope stores absolute offsets, so appending
   spawns/entities/groups only moves the +4/+8 boundaries.
-- **Record header** byte +2 = action-group count, +3 = event-group count.
-  Conditional `0x1D`: u16 var, u16 delay?, op at +4 (0 ==, 1 !=, 2 <, 3 <=,
-  4 >, 5 >=), value +5; then-targets +6..+9, else +10..+13, groups 1-based
-  in the same bank. `0x26` set (u16 var, u8 value), `0x25` increment,
+- **Record header** byte +2 = action-group (entity batch) count, +3 =
+  event-group count. Conditional `0x1D`: u16 var, u16 frames, op at +4 (0 ==,
+  1 !=, 2 <, 3 <=, 4 >, 5 >=, unsigned), value +5; then-action +6..+9, else
+  +10..+13 (layout in "Room scripting and the power puzzle"; the older
+  "groups at +6..+9" reading was wrong). `0x26` set (u16 var, u8 value), `0x25` increment,
   `0x24` decrement, `0x15` message/VO, `0x19` music, `0x1B` Spidey binding
   (1-based entity).
 - **Game variables** (`0x020D22AC` get, `0x020D24D8` set): ids 0..0x122 are
@@ -1531,9 +1532,10 @@ kept v0.5.0 ROM in `build/releases/fd7e4420.../`, output `build/midnight-line/`)
   (v0.6.1) a copy of its native record-1 "Door (empty)" doorway at x=54 (grey
   door behind the desk). Native exit, entities and events otherwise unchanged.
   It fired at x=51.9 when walking right.
-- **Flags.** 252..256 visited (0xB0+room), 257 main power, 258 completed,
-  259 teaser seen, 260..267 puzzle state, 268..275 remapped encounter flags;
-  251 unassigned. Discovered = flag 252.
+- **Flags (v0.6.x plan, superseded).** Since v0.7.0 252..265 are the visited
+  flags of rooms 76..89 (Discovered = 252); locals come from 268..275, 266,
+  267, 251..245 in first-use order (build report `local_flags`), with
+  269 = track power cut (v0.8.0 shared flag) and 246 = completed.
 
 v0.6.1 release `c3010cba`: tour 14/14, Refuge save/Continue, ambush seeds 11
 (ambush completed, flag 268, exit works) and 12, kit 31/31, crash hunt 12/12
@@ -1624,7 +1626,8 @@ Confirmed 2026-10-07 (`tools/minimap_cbmp.py`, tests; in-game captures).
 
 Lab-only (scripts `work/midnight-line/scratch/{msg_test,variant}.py`; dev ROMs `build/midnight-line/{msg,mix,timer}-*`; frames in
 `build/boot-tests/*/{msg,mix,timer,dev}-*`; sheets in `work/midnight-line/`).
-Nothing below is shipped yet.
+Dialogue and switch wiring shipped in v0.8.0 (sections below); the rest is
+not shipped yet.
 
 - **More flags.** Save slot = "SpidermanWoS" + 4-byte checksum + the 0x58
   block (flags at block +0x1C, mission byte +0x48). 21 distinct slots in
@@ -1672,6 +1675,86 @@ Nothing below is shipped yet.
 - **Room limit.** Room ids are bytes; the map code asserts 0xB0+room < 0x123
   (`0x020E15A8`, `0x020E187C`), so rooms above 114 must stay off the map list;
   otherwise only the two save/reload guards limit the count.
+
+### Room scripting and the power puzzle (v0.8.0)
+
+Confirmed 2026-10-08 from the handlers, all 156 native records
+(`tools/room_script.py`, `tests/test_room_script.py`) and lab runs on dev ROMs
+`build/midnight-line/pz-*` (frames `build/boot-tests/pz-*`, scripts
+`work/midnight-line/scratch/{dump_room,lift_probe,puzzle_chain}.py`).
+
+- **Action groups are entity batches.** Record header +2 = batch count; name
+  category 2 names them (`<AG_INIT>`, `EnemySpawners`, `Switch`, ...),
+  category 0 the entities in batch order, category 1 the event groups. AG 0
+  is live from the start; an appended batch's entities (switch model, trigger)
+  stay invisible/inert until activated (lab: no switch, no prompt).
+- **Entity reference** = (AG 0-based, entity 1-based in that batch): all 419
+  native `0x01` targets (one proto01 outlier) are then characters or objects.
+  `0x01` = animate (AG, entity, anim, extra); the switch uses anim 0x19
+  (throw) and 0x64 (thrown pose).
+- **Action** (4 bytes; delay handler `0x02039DE0`, conditional `0x02039F3C`):
+  activate one entity (AG 0-based, entity 1-based; calls `0x0203CAD4`),
+  activate a whole AG (1-based; `0x0203CBE4`), run an EG (1-based;
+  `0x0203C948`); 0 = none. Delay `0x1C` = u16 frames + action + 2 zero bytes;
+  conditional `0x1D` = u16 var, u16 frames, op, value, then-action,
+  else-action. A non-zero frames field queues the actions instead. An
+  out-of-range entity in an action froze the room load (black screen).
+  Natively only ops 0, 2, 4 occur (flags: `== 0`, `== 1`, `> 0`).
+- **Native subway puzzle decoded.** Sewer_Map03 record 1 init: `0x27 == 0`
+  -> activate AG `Electricity` (rail hazards); `0x62 == 0` (boiler intact)
+  -> EG `ElecBoilerCheck` = `0x27 == 0` ? activate `Electric Boiler Object`
+  + run `ElectricBoiler` : activate `Lift Object` (the liftable boiler);
+  `0x62 == 0` -> `Lock_Grate` (`0x0F`, AG 0 entity 3 = the floor grate under
+  the boiler). Destroying the thrown boiler runs `Lift_Object_Die`: INC 0x62,
+  unlock that grate; X on the grate drops through it (its exit trigger).
+  Sewer_Map04's lever (`Switch` + `Switch_Trigger` AGs, Button Press trigger
+  mode 0 = X prompt) INCs 0x27; its init activates the trigger only while
+  0x27 is clear, else the switch with its thrown pose.
+- **v0.7.0 bug (lab, `c56095be`).** The Platform clone maps 0x27 -> 269,
+  which nothing set: the boiler stayed electrified (HP 24576 -> 8192,
+  knock-back, never lifted) and the grate locked, so the Nest was only
+  reachable backwards through the Stairs grate (Gate, boss first).
+- **Fix: shared flag + breaker.** `SHARED_FLAGS` seeds `('ML_Platform', 0x27)`
+  -> `TRACK_POWER` 269 before allocation (other locals unchanged). The Stairs
+  record 1 gains AG `Breaker` = copies of Sewer_Map04's Switch and Button
+  Press trigger at x 211/215, y 87.5/84.5 (landing left of the trashcan, which
+  X otherwise grabs at x 236), EGs `Breaker_Throw` (anim 0x19, SET 269, sound
+  0xBC, message) and `Breaker_Thrown` (anim 0x64); init: activate the switch
+  entity, then `269 == 0` ? activate the trigger : thrown pose (running the
+  pose before activation, or via a flag test with op `!=`, showed nothing).
+  `midnight_line.py puzzle --rom R` (release `d84ae539`): breaker sets 269,
+  Platform has no shock, X lifts the boiler, throw sets 270, X on the grate
+  enters room 81. Teleports only place Spidey; presses are real.
+- **Tour vs ambush rooms.** The door tour teleports onto triggers without
+  fighting; on `bc3aa3a1` the Gate's ambush sealed its ceiling exit before
+  the teleport (timing shifts with any ROM change). Resume with
+  `tour --start N` and check sealed exits with `visit ROOM --weak --leave X Y
+  --frames 3600` (Gate: exit at x -20, y 218).
+
+### Chapter dialogue (v0.8.0)
+
+- **Message ids >= 0xC4** without copying the 196-entry table: the accessor
+  `0x020D0F64` (`table + id * 44`, 8 instructions + literal) is rewritten in
+  place: `cmp r1,#0xC4; ldrlo r3,=0x0211C214; ldrhs r3,=chapter-0xC4*44;
+  mov r2,#0x2C; mla r2,r1,r2,r3; str r2,[r0]; bx lr` + two literals. Both
+  bounds `cmp r1,#0xC4` (`0x020DFCFC` blt, `0x020DFDD8` bhs) rise to 0xC4 +
+  line count. Native message 41 (training) renders identically. Entries live
+  after the Sewer map list in the chapter block: u32 string, u16 voice x2 =
+  0xFFFF, nine u32 0x7FFFFFFF (same as natives 0x0E/0x29; other natives use
+  the nine ids for extra pages).
+- **Strings.** Lines are appended slots (1049+) of both strings files via
+  `StringSlots.grown(..., appended=)`. The 1049-word zero prefix is *not*
+  grown: loader `0x0200694C` only uses count 0x419 to find the Huffman block
+  (file + 0x419*4) and no other code reads the file holder `0x0213FE00`
+  (literals at `0x02006948`/`9A8`/`9BC`/`9E8`); decoding indexes the offset
+  table, which grows. This supersedes "grow both in production" above.
+- **0x15 operand** as authored: u16 display frames (0 = native default),
+  message id, lookup flag 0, continuation group 0. Shown on the touch-screen
+  panel without pausing play (~8 s).
+- **Lines (v0.8.0):** Platform entry while 269 is clear (`live_tracks`),
+  breaker thrown (`breaker`), Refuge entry objective board: `269 == 0` ?
+  `goal_power` : (`completed == 0` ? `goal_nest` : `goal_done`), completed =
+  the Venom room's remapped reward flag (246).
 
 ## Research workflow and pitfalls (Red kit sessions)
 

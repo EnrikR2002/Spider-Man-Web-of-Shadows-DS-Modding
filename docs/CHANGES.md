@@ -14,6 +14,43 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.8.0 - 2026-10-08 - Midnight Line: the power puzzle, hints and an objective board
+
+Published through Play Spider-Man.cmd's stable ROM. SHA256
+`d84ae5393d2e3f5cf0c82c3aaa346e087f7804b31f2b6e4a0b67bb8098f2557b`
+(ARM9 `dc4911d7...`; kit code unchanged). Title and Options show v0.8.0.
+Player (2026-10-08) was about to playtest v0.7.0 and asked the agent to work
+on whatever it found worthwhile; the lab then found the Nest blocker below.
+The player's battery was last saved before v0.7.0 shipped.
+
+- **Fix: the way into the Nest works.** In v0.7.0 the boiler sitting on the
+  Last Platform's floor grate stayed electrified forever (it shocks and knocks
+  Spidey back), so the grate never opened and the Nest could only be entered
+  backwards through the Stairs' floor grate, reaching the boss first.
+- **Power puzzle.** The Platform's tracks are live. On the Stairs landing
+  (left of the trash can) there is now a wall breaker: stand at it and press
+  X to pull the lever and cut the track power for good. Back on the tracks,
+  X lifts the boiler, throw it to smash it, then X on the striped grate drops
+  into the Nest. This is the game's own switch/boiler/grate chain, rebuilt
+  across chapter rooms; after the breaker is thrown the lever stays down.
+- **Hints and objective board.** Short lines on the touch screen (play keeps
+  going): entering the Platform while the power is on, pulling the breaker,
+  and on entering the Refuge the current objective (cut the power -> go down
+  into the Nest -> "The Midnight Line is quiet. For now." after the boss).
+  The board checks completion first, so a v0.7.0 player who beat the boss
+  through the back way sees "quiet", not "cut the power".
+
+Agent-tested on `d84ae539` (and candidate `bc3aa3a1`, identical except the
+Refuge OBJ): `midnight_line.py puzzle` (breaker -> Platform -> lift, throw ->
+grate -> Nest Shaft, real presses) passes; v0.7.0 control shocks and never
+lifts; thrown-lever pose and no prompt on re-entry; hint, breaker and the
+objective lines (incl. completed-without-power) render; native training
+message unchanged; door tour steps 0..22 on `bc3aa3a1` (step 23 hit the
+Gate's ambush seal mid-run) plus `tour --start 24` on `d84ae539`, and the
+Gate -> Stairs exit after fights (seeds 11, 12), i.e. all 30 links;
+save/Continue in Refuge, Rest and Shrine; kit qualification 31/31; crash hunt
+12/12 (`work/kit/v0.8.0/`); 230 unit tests. Not player-confirmed.
+
 ## v0.7.0 - 2026-10-07 - Midnight Line: The Nest, a boss, and the chapter on the map
 
 Published through Play Spider-Man.cmd's stable ROM. SHA256

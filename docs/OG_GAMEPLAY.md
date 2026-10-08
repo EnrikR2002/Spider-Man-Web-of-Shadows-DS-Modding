@@ -116,6 +116,12 @@ stairs). Each room marks itself visited on entry; certain first entries advance
 the mission counter (Sewer_Map01 and Sewer_Map03 do). Some rooms run one-time
 ambushes that lock their doors while enemies are alive. Hive ambushes seal the
 doors with purple ichor: after the wave, smash the ichor block to reopen them.
+Rooms also hold small switch puzzles. On the subway tracks (Sewer_Map03) the
+rails and a boiler sitting on a floor grate are electrified: touching them
+shocks and knocks Spidey back. A wall switch in the room above (Sewer_Map04,
+X at the lever) cuts that power for good; then X lifts the boiler, throwing it
+smashes it and unlocks the grate, and X on the grate drops through it.
+Liftable objects and grates show an X prompt when Spidey stands at them.
 Mini-boss rooms (e.g. Downtown_Map14's rooftop arena) show a boss health bar
 across the top; the boss's reward orb is a collectible that grants a story
 ability (Downtown_Map14: Sledgehammer Slam, which breaks ichor floors).

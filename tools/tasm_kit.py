@@ -80,8 +80,8 @@ CLIP_SOURCES = {
     'zz_tasm_RushFinish.sca': ('spd_GroundAttack17.sca', 'split_sweep'),
 }
 PROFILE = 'tasm-kit'
-VERSION = '0.7.0'
-RELEASE_DATE = '2026-10-07'
+VERSION = '0.8.0'
+RELEASE_DATE = '2026-10-08'
 RELEASE_PROFILE = f'tasm-v{VERSION}'
 PARENT_RELEASE = 'tasm-v0.1.1'
 # Red purchase names (menu/list) and instructions; boot and Options version.

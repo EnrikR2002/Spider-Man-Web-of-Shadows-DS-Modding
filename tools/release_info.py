@@ -88,6 +88,13 @@ PROFILE_INFO = {
                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                     'arm9_sha256': 'a19896dbcc2d62889eaf787d6d7900c9ed803d25847fcf8b99da959d48b692a9'},
+    # Power puzzle (Stairs breaker cuts the Platform's track power so the boiler
+    # can be lifted off the Nest grate), chapter dialogue and the Refuge
+    # objective board (CHANGES v0.8.0). v0.7.0's chapter bytes stay identified by its ROM.
+    'tasm-v0.8.0': {'version': '0.8.0', 'date': '2026-10-08', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': 'dc4911d7774bfbbc5f4a6cc7d7e6f4d679657926b94c2abf5acffe6da4310263'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'
