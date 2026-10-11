@@ -37,7 +37,8 @@ movement and form-specific barrier interactions protect progression.
 
 ## Native purchases
 
-Bought/refunded with XP at save points; Test Upgrades allows practice in a bare
+Bought/refunded with XP at save points (the list shows four rows, scrolls and
+wraps; A on an owned row refunds it); Test Upgrades allows practice in a bare
 room (Test_Combat01) against one passive Brute dummy that never attacks, has 1
 health unit and cannot die (a lethal hit leaves it at a sliver). Existing
 ownership is native ability bits, also used by gameplay and saved by the game.
@@ -79,6 +80,8 @@ These are **original prices**, not the current mod prices.
 | Enhanced Dodge | 800 | Hold R, steer Left/Right; Successive directional dodges |
 | Quick Recovery | 800 | R after hit or knockdown; Prompt recovery and counterattack opportunity |
 
+The two speed boosts play Red attack animations at 1.15 and 1.3 times normal
+speed (run-time tuning values, read 2026-10-11).
 Spider Dance is the parent of Scissor-Kick Special; Amazing Speed Boost is the
 parent of Ultimate Speed Boost. An owned child prevents refunding its parent.
 Other surrounding story/menu availability may add conditions. Shared Air Dodge,
@@ -92,8 +95,10 @@ five tiers. Crossing100 advances a tier and subtracts75. Grace expires into deca
 losing a tier resets gauge to75 and speeds up decay. The HUD initially appears
 only at tier>0 or gauge>30, so an early credited attack can have no visible meter.
 
-The meter improves XP rewards. Exact reward multipliers, all penalty triggers,
-damage scaling and several target/contact categories remain unresolved. Attack
+The meter improves XP rewards and damage: measured 2026-10-11 on the Red
+ground string against the training dummy, each tier adds 10% (tier 5 hits for
+1.5 times tier 0). Exact reward multipliers, all penalty triggers and several
+target/contact categories remain unresolved. Attack
 response strength, credit and actual HP loss are distinct values; only measured
 HP changes establish damage. Update counts are not verified seconds.
 

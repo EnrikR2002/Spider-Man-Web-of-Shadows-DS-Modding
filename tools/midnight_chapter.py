@@ -61,7 +61,7 @@ DELAY = 0x1C                                # u16 frames, u8 action group (+4), 
 GRANT = 0x1F                                # "<ability> obtained!": grants a native story ability
 SPAWN_PICKUP = 0x07                         # spawns a pickup; operand +26 = 1-based group run on pickup
 STABLE_SHA256 = 'fd7e4420f97645dd55011504843ce62f068d1276234c3cd781931c85bb1eb193'
-ARM9_SHA256 = 'e54fa1aaf4cd27ad68f72188c8377c2f44c158c448e71c512503df11ac6b9534'   # chapter over the kit ARM9 (pinned per release)
+ARM9_SHA256 = 'c6e2992a21cb365d00e3575ae89a46933241aa99f86bd975efec16d902c96b2c'   # chapter over the kit ARM9 (pinned per release)
 ENTRANCE = 'Sewer_Save02'
 STATE_TEMPLATE = 'Test_Surfaces01'
 

@@ -810,6 +810,45 @@ Controller states, animation action IDs, GMB IDs and contact/credit categories
 are different namespaces. Position getters use signed motion+0x7C/+0x160 and
 +0x80/+0x164; geometry dimensions+0x88/+0x8C/+0x90 are not position.
 
+### Shop tables, menu and free ownership bits (v0.10.0)
+
+Confirmed 2026-10-11 by disassembly, RAM and real-menu runs (`work/shop/`).
+
+- **Six purchase tables.** Pointer list `0x02120170` / counts `0x02120188`:
+  Both Suits `0x02120260` (7), Red `0x02120340` (7), Black `0x02120420` (7),
+  base moves `0x02120680` (12, price 0, bits 56..67), story abilities
+  `0x021201A0` (6, bits 0..5), collectibles/stats `0x02120500` (12, some
+  with 2..18 levels; events 306..308 are not ability bits). Only the list
+  references a table, so a table can move: v0.10.0 points Red at ten rows in
+  the kit's second block.
+- **Menu.** Object +0x104 category, +0x10C cursor, +0x108 first visible row.
+  Four rows show; Down/Up (`0x020F12A4`/`0x020F1388`) scroll and wrap by the
+  category's count, so a longer list needs no menu change. Buy, refund and
+  "Clear All Upgrades" are table-driven (all three exercised on new rows).
+- **Events.** Query `0x020D22AC` / setter `0x020D24D8`: ids below 0x123 are
+  game flags (stats+0x1C), 291..308 scalars/special cases, 309..381 ability
+  bits 0..72 (asserted `< 0x49`), 382 and up nothing; 382 is the menu's "no
+  event" value. The notifier `0x020D2704` only acts on 0x114..0x11A and 0x123.
+- **Free bits.** Ability words are stats+0xC/+0x10/+0x14. Every bit 0..72 is
+  owned by a table row except 55, which saves carry set and gameplay queries
+  (`0x020B4C94`, `0x020B7630`, `0x020B9DBC`): not free. Bits 73..95 (third
+  word, bits 9..31) are unused, and a native save + Continue keeps them
+  (`work/shop/bits_save_lab.py`: `0xFFFFFE0F` before and after). stats+0x18 is
+  a running counter (it changed between save and reload): never use it.
+- **v0.10.0 bounds.** `add rX,#0x5b` -> `#0x72` at `0x020D2460`/`0x020D2634`
+  and `cmp #0x49` -> `#0x60` at `0x020D2478`/`0x020D2658`/`0x020D26A8` make
+  events 383..404 ability bits 74..95. Bit 73 (event 382) stays never set.
+  Used: 383/384/385 = bits 74/75/76 (third-word masks 0x400/0x800/0x1000) for Web
+  Rush, Ricochet, Momentum. 19 bits (77..95) remain for later rows and suits.
+- **Texts.** Row name/title/description ids may be appended string slots
+  (1049+); the chapter appends its lines after whatever the kit ROM holds.
+  The kit overlay in `mods/` therefore has 1058 slots: `StringSlots.repack`
+  re-encodes through `grown()` when the slot count is not the native 1049
+  (it used to reject such an overlay), and `tasm_kit.shop_strings` rewrites
+  the nine slots instead of appending again.
+- Bought, refunded, re-bought and cleared through the real menu; bought rows
+  survive save + Continue (third word `0x1C0F`, XP 1000): `work/shop/shop-*.json`.
+
 ### Combo resource and HP are different
 
 Native combo model pointer cell `0x02145C44`; heap addresses vary. Model offsets:
@@ -904,8 +943,8 @@ All 141 source tests pass against the published files, including the historical
 v0.1.0 reconstruction. Log: work/shared-economy/full-tests.log.
 
 These findings prove the existing shared purchase routes only. Additional rows,
-scroll/menu limits, spare persistent flags, save checksums and migration remain
-unproved. Event query/setter support 309..381 is not evidence that any unassigned
+the menu scroll and spare ability bits were proved in v0.10.0 ("Shop tables,
+menu and free ownership bits"); save checksums and migration remain unproved. Event query/setter support 309..381 is not evidence that any unassigned
 looking bit is safe. The 26-tool catalog requires separately qualified ownership
 and crowd controller work; no new targeting/evasion/crowd mechanics are claimed.
 
@@ -1115,6 +1154,12 @@ the enemy; the control drifts beyond the room boundary). This is a reproduced
 movement/collision fix, not a speedup. Both wall runs still have an active juggle
 at frame 219; this check establishes bounds, not completed recovery or player feel.
 
+2026-10-11: v0.10.0 changed the published kit (6940 bytes plus the second
+block), so the validations above describe candidates over the v0.9.0 kit.
+`crowd_backend.py stage` still assembles all three over the new source
+(anchors intact); requalify before publishing one. Ricochet (v0.10.0) is its
+own scan in the second block, not `kit_area_hit`.
+
 ### Kit extension contract
 
 The kit is appended after the HUD/flow image: code at `0x02152C20`, route table
@@ -1138,6 +1183,86 @@ emulator RAM, 332 of 651 arena pages were never written in the sewer arena at
 frame 200 and 324 after a 25 s combo fight (largest untouched runs 748/724 KiB),
 so the reserve is small next to the observed headroom. Caveats: zero pages can be
 allocated-but-unwritten; bosses/other levels are unmeasured.
+v0.10.0: the first block had 1132 of 7936 code bytes left, so a second block
+follows the old reserve: KIT2 `0x02155420` (TARGET+0x6000), 8 KiB: code up to
+0x1800, the ten Red shop rows at +0x1800, zeroed state at +0x1C00
+(`0x02157020`). IMAGE = RESERVE = 0x8000, Glob count 3736 + 8; the main arena
+and the chapter block (`kit.TARGET + kit.RESERVE`) now start at `0x02157420`.
+The lab phantom area (`0x02155020`, KIT_STATE+0x400) is unchanged.
+
+### Second kit block: Web Rush, Ricochet, Momentum (v0.10.0)
+
+Source `tools/tasm_kit2.s` (2140 bytes), assembled with the first block by
+`tools/assemble_tasm_kit.py` (same literal/branch checks; `lit2_` table).
+The blocks call each other only through fixed entry tables: kit1 exports
+`kit_owned`, `kit_keys`, `kit_face`, `kit_alive`, `kit_fresh`,
+`kit_replay_hit` at KIT_BASE+0x38..+0x4C; KIT2+0x00 per update, +0x04 string
+blocker, +0x08 node start, +0x0C route flag, +0x10 native hook `0x020B21B8`
+(`HOOKS2`). Ownership is the third ability word (stats+0x14, `[[actor+0xE8]+8]`): 0x400 Web Rush,
+0x800 Ricochet, 0x1000 Momentum, Red form only. State offsets are listed at
+the top of the source. Lab: `kit_lab trace --bits2 0x1C00 --tier N`; rows
+carry `k2` (rush phase, dash step, Ricochet count, Momentum doubled steps).
+
+- **Input queue.** Command 5 is A (suit power; peeked by the grapple and Black
+  power transitions), next to 1 Y, 2 B, 3 R, 4 X. In a non-cancelable string
+  node A does nothing natively; in a cancelable one it cancels into the grapple.
+- **State 46 entry.** The blocker's state-46 arm starts at `0x020B5334` (kit
+  hook +04) and runs every update of the state. Returning 46 with controller
+  +4 = 1 re-enters: entry `0x020C2F94` advances the node, then `0x020C31E4`
+  requests `table[node].action` through the slot at sp+0x18. The kit's node
+  hook can swap that action and put the node back, which is how a move is
+  inserted into a string without spending a node.
+- **Web Rush.** A queued in a Red ground string picks the nearest standing
+  enemy 7..56 units away on the same level (6 units; a held Left/Right picks
+  the side; states 41/48/49/51 are skipped). State 46 re-enters and plays
+  action 58 with the routed clip (kind 9) while the node stays the cancelled
+  one (a spin's 16 becomes 15), so the next Y continues after it: from node 11
+  the pause branch (15) with bit 16, else 12. The request is committed after
+  the per-update hook, so the first update still shows the old action and
+  clock: test `motion+0x258` (requested), not `+0x254`. Dash: velocity =
+  remaining / (6 - clock) toward a point 4.5 units short of him, one last step
+  when the clock reaches 6, kicks at 7, 9, 10. **The engine moves Spidey at
+  most 5 units per update in state 46** whatever the velocity says, so for far
+  targets the rate getter returns 1 (clock held on sample 2, the laid-out
+  dive) until 15 units are left, at most 16 updates. A second A chains from
+  clock 10. Same-action requests skip the resource lookup, so the node hook
+  sets motion+0x2FC bit 1 when the rush starts and once more on the next
+  node (node 13 also plays 58). No guard frames.
+- **Ricochet.** Per Spidey update: a registry enemy in state 41/48/49 with
+  |actor+0x18| >= 1 unit per update is a flying body (the string finisher
+  throws one 22 units at 1.5 per update). Every other live enemy within 3.5
+  units (5 vertically) that is not itself in 41/48/49/51 gets
+  `kit_replay_hit` with kind 0x1F and flies the same way; 24-tick cooldown
+  per registry slot, template at most 150 ticks old. Measured: four Brutes in
+  a line all go down from one finisher (two natively, two by Ricochet, 4096
+  Q12 each).
+- **Animation rate and contacts.** `0x020B2098` is Spidey's per-update rate
+  getter (r6 controller, r7 &rate Q12). Actions 1, 2, 3, 5, 32, 56..62, 130
+  (4 after an extra test) take the Red branch at `0x020B21B8`: 1.0, or with
+  bit 18 `[0x021341F4+0x230]` = 0x1266 (1.15), with bit 19 `[+0x22C]` =
+  0x14CC (1.3); the block is filled at run time. Without bit 18, state 46
+  with controller+0x64 bit 0x4000 returns 0 (string freeze). `0x020B33F4`
+  separately shortens a per-attack byte (actor+0x20) for bits 18/19. **The
+  engine tests the attack box of the GMB sample the clock lands on.** Attack
+  channel word 5 marks active samples: G11 [4,5], G12 [2,3], G13 [7..10],
+  G14 [4,5], G15 [4,5,9,10] (Snap plays this payload), G16
+  [5,6,12,13,18,19], G17 [6,7]; air attacks have single samples (5, 2, 3, 5).
+  Two-sample windows survive any rate below 2; G13's four samples are a
+  multi-hit by duration. Measured string hits on action 58 at a constant
+  rate: 1.3 -> 3, 1.37 -> 2, 1.44 -> 3, 1.51 -> 3, 1.58 -> 2, 1.65 -> 1.
+  Never raise the rate through an active window.
+- **Momentum.** Therefore it only doubles a step: the clock stays on the
+  native grid and skips one grid point, and only where the samples that point
+  can fall in (clock+1, clock+2) are inactive (`momentum_blocked`, checked
+  against the GMBs by a unit test). An accumulator gains the combo tier per
+  free step and doubles at 5 (tier t doubles t of 5). Ground string actions
+  56..62 only; native during the Spider-Sense counter and a Web Rush dash.
+  Measured Y,Y,Y,Y on the dummy: identical hits at every tier (56: 2, 57: 1,
+  58: 3, 59: 1); the string ends at frame 113/105/99/93/91/87 for tiers 0..5.
+- **Combo tier damage.** The same runs show the native meter scaling damage
+  by 10% per tier (22528 Q12 at tier 0, 33777 at tier 5 for the same hits).
+- **Lab note.** `--place` in the training room needs dy 0.06 (the floor is at
+  5.03; at 0 the sparring Brutes sink through it once they move).
 
 ### Kit animation authoring
 
@@ -1991,11 +2116,16 @@ observations.json (state, action, node, facing, position, enemies).
 - After room transitions a freed copy of Spidey's actor can stay in RAM;
   `player_trace.sample` keeps the candidate whose motion object points back
   at it (`[motion+0]`), otherwise traces stopped after a few rooms.
+- Scratch scripts with backslashes or nested quotes: write them as files. A
+  shell heredoc changed `\n` and broke quoting twice on 2026-10-11.
 - Strings: no `;` in the text Huffman table. Button glyphs: `` B, ``
   Y, `` A, `` X, `` R, `` L. Keep them as escapes in
   source (editors may write raw private-use characters).
-- Kit change loop: edit `tools/tasm_kit.s` → `python tools/assemble_tasm_kit.py`
-  → update `CODE_SHA256`/`ARM9_SHA256` in tasm_kit.py and the profile's
+- Kit change loop: edit `tools/tasm_kit.s` / `tasm_kit2.s` → `python
+  tools/assemble_tasm_kit.py` (both blocks) → while iterating, `python
+  work/shop/dev_build.py NAME` builds `build/dev-kit/NAME` without pins and
+  prints the hashes → update `CODE_SHA256`/`CODE2_SHA256`/`ARM9_SHA256` in
+  tasm_kit.py, `ARM9_SHA256` in midnight_chapter.py and the profile's
   `arm9_sha256` in release_info.py → bump VERSION/TEXT_EDITS for a new release
   (a published version never changes bytes) → `python tools/tasm_kit.py` →
   `python tools/kit_lab.py qualify build/version-X/Versioned.nds` → tests →

@@ -98,6 +98,10 @@ def observe_row(ram, frame, start, probe=None):
                     'f64': struct.unpack_from('<I', ram, ca + 0x64)[0], 'lock': list(struct.unpack_from('<8b', ram, ca + 0x88)),
                     'cancel': ram[actor + 0x28], 'repeats': struct.unpack_from('<b', ram, ca + 0x93)[0],
                     'target': struct.unpack_from('<I', ram, ca + 0x54)[0]})
+    k2 = KIT2_STATE - p.BASE
+    row['k2'] = {'rush': struct.unpack_from('<I', ram, k2)[0], 'dash': struct.unpack_from('<I', ram, k2 + 0x1C)[0],
+                 'rico': struct.unpack_from('<I', ram, k2 + 0x50)[0], 'rate': struct.unpack_from('<I', ram, k2 + 0x58)[0],
+                 'doubled': struct.unpack_from('<I', ram, k2 + 0x60)[0]}
     if probe:
         address, length = probe
         row['probe'] = list(struct.unpack_from(f'<{length // 4}i', ram, address - p.BASE))
@@ -130,14 +134,14 @@ PHANTOM_ACTOR, PHANTOM_MOTION = 0x02155020, 0x02155100   # unused kit reserve ta
 KIT_STATE, KIT_REGISTRY_LAST = 0x02154C20, 0x02154C20 + 0x20 + 11 * 16
 
 
-def put_phantom(lib, dx):
+def put_phantom(lib, dx, at=None):
     """Training-room fixture: a fake second enemy the kit's registry sees (last slot),
     standing dx (Q12) right of the dummy on its floor. It has no AI, HP or hitbox;
     it only tests kit targeting/movement (e.g. Perch head-hops) deterministically."""
     ptr, ram = ram_of(lib)
     live = enemies(ram)
     if not live: return
-    x, y = live[0]['position'][0] + dx, live[0]['position'][1]
+    x, y = (live[0]['position'][0] + dx if at is None else at), live[0]['position'][1]   # `at`: fixed absolute x
     tick = struct.unpack_from('<I', ram, KIT_STATE - p.BASE)[0]
     c.memmove(ptr + PHANTOM_ACTOR - p.BASE, struct.pack('<I', ENEMY_VTABLE), 4)   # kit_alive checks the class
     c.memmove(ptr + PHANTOM_ACTOR - p.BASE + 0x30, struct.pack('<I', PHANTOM_MOTION), 4)
@@ -163,11 +167,28 @@ def teleport(ptr, ram, mot, x, y):
         c.memmove(ptr + mot + off, struct.pack('<2i', x, y + (py - (by + ly))), 8)
 
 
-def set_bits(lib, bits, clear):
+def set_bits(lib, bits, clear, bits2=0):
+    """OR Red ability bits in (word 0; bits2 = word 2, the v0.10.0 shop rows: 0x400 Web Rush,
+    0x800 Ricochet, 0x1000 Momentum)."""
     ptr, ram = ram_of(lib)
     stats = struct.unpack_from('<I', ram, STATS_POINTER - p.BASE)[0] - p.BASE
     old = struct.unpack_from('<I', ram, stats + 0xC)[0]
     c.memmove(ptr + stats + 0xC, struct.pack('<I', (old | bits) & ~clear), 4)
+    if bits2:
+        old = struct.unpack_from('<I', ram, stats + 0x14)[0]
+        c.memmove(ptr + stats + 0x14, struct.pack('<I', old | bits2), 4)
+
+
+COMBO_MODEL = 0x02145C44            # pointer cell: model +0 tier (0..5), +4 gauge (Q12)
+KIT2_STATE = 0x02157020             # v0.10.0 second block state (tools/tasm_kit2.s)
+
+
+def set_tier(lib, tier):
+    """Hold the combo meter tier (Momentum fixtures); disposable RAM only."""
+    ptr, ram = ram_of(lib)
+    model = struct.unpack_from('<I', ram, COMBO_MODEL - p.BASE)[0] - p.BASE
+    if 0 < model < len(ram) - 0x20 and model % 4 == 0:
+        c.memmove(ptr + model, struct.pack('<i', tier), 4)
 
 
 def solo_rom(rom):
@@ -216,7 +237,7 @@ def run(rom, label, inputs, **options):
 
 def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=None, patch=None, probe=None,
         caps=(), rams=(), arena=False, tx=120000, ty=40922, save=None, near=None, place=(), phantom=None, start_x=None, refill=False, extra_hook=None,
-        sparring=False, timing=False, core_options=None, live_buttons=None):
+        sparring=False, timing=False, core_options=None, live_buttons=None, bits2=0, tier=None, phantom_x=None):
     """One disposable emulator run; returns (output directory, observation rows)."""
     rom = Path(rom).resolve()
     rel = rows_from(inputs) if not isinstance(inputs, list) else inputs
@@ -243,8 +264,10 @@ def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=N
             ptr, ram = ram_of(lib)
             stats = struct.unpack_from('<I', ram, STATS_POINTER - p.BASE)[0] - p.BASE
             c.memmove(ptr + stats + 0x44, struct.pack('<I', 2000), 4)
+        if tier is not None and frame >= start - 20:
+            set_tier(lib, tier)
         if frame == start - 20:
-            set_bits(lib, bits, clear)
+            set_bits(lib, bits, clear, bits2)
             ptr, ram = ram_of(lib)
             dest = (tx, ty)
             if not arena:
@@ -277,8 +300,8 @@ def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=N
                 hp, top = struct.unpack_from('<2i', ram, a - p.BASE + 0x44)
                 if 0 < hp < top < 0x1000000:
                     c.memmove(ptr + a - p.BASE + 0x44, struct.pack('<i', top), 4)
-        if phantom is not None and frame >= start - 20:
-            put_phantom(lib, phantom)
+        if (phantom is not None or phantom_x is not None) and frame >= start - 20:
+            put_phantom(lib, phantom, phantom_x)
         stop = None
         if extra_hook is not None:   # in-process callers only (tools/crash_hunt.py)
             stop = extra_hook(frame - start, lib)
@@ -331,7 +354,7 @@ def first(rows, cond):
 
 def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a31b005e201c7c4e276fc46dbf3e5d842/Spider-Man-WoS-modded.nds',
             *, patch=None, label_prefix='', out=None, progress=None):
-    """Measured expectations for the kit (v0.2.0 .. v0.4.1); parent = v0.1.1 for native parity."""
+    """Measured expectations for the kit (v0.2.0 .. v0.10.0); parent = v0.1.1 for native parity."""
     published_evidence = ROOT / 'work/kit/evidence.json'
     if patch and (not out or not label_prefix or Path(out).resolve() == published_evidence.resolve()):
         raise ValueError('Patched qualification needs separate output and trace labels')
@@ -425,6 +448,70 @@ def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a3
     o = go('q_reflex_neutral', 'reflex', 80, probe=(0x02154C20 + 0x368, 4))
     dodge = [r for r in o if r['st'] == 53]
     ck['reflex_neutral_plays_back_tuck'] = bool(dodge) and all(r['probe'][0] == 1 for r in dodge[1:]) and         o[-1]['probe'][0] == 0
+    # v0.10.0 shop rows (ability word 2): Web Rush 0x400, Ricochet 0x800, Momentum 0x1000.
+    def rush_rows(o):
+        return [i for i, r in enumerate(o) if r['st'] == 46 and r['act'] == 58 and r['node'] == 11]
+    def rush_report(o):
+        """(rush row indices, kicks landed, largest move per frame, gap to the enemy at the end)."""
+        idx = rush_rows(o)
+        if not idx: return idx, 0, 0, None
+        kicks = sum(1 for i in idx[1:] if o[i]['en'][0][0] < o[i - 1]['en'][0][0])
+        step = max(abs(o[i]['pos'][0] - o[i - 1]['pos'][0]) for i in idx)
+        return idx, kicks, step, abs(o[idx[-1]]['en'][0][1][0] - o[idx[-1]]['pos'][0])
+    o = go('q_rush', 'rush', 200, near=22 * 4096, bits2=0x400)
+    idx, kicks, step, gap = rush_report(o)
+    ck['rush_zips_to_the_enemy'] = bool(idx and o[idx[0]]['f'] <= 34 and gap < 7 * 4096)
+    ck['rush_lands_three_kicks'] = kicks == 3
+    ck['rush_moves_by_velocity'] = bool(idx) and step <= 0x5000 + 0x800
+    after = first(o, lambda r: idx and r['f'] > o[idx[-1]]['f'] and r['st'] == 46 and r['act'] not in (58, 99))
+    ck['rush_string_continues_after_the_cancelled_node'] = bool(after and after['node'] in (12, 15))
+    ck['rush_unowned_is_native'] = not rush_rows(go('q_rush_off', 'rush', 120, near=22 * 4096))
+    ck['rush_ignores_an_enemy_in_reach'] = not rush_rows(go('q_rush_near', 'rush', 120, near=5 * 4096, bits2=0x400))
+    idx, kicks, step, gap = rush_report(go('q_rush_far', 'rush', 160, near=54 * 4096, bits2=0x400))
+    ck['rush_far_target_glides_and_lands'] = kicks == 3 and step <= 0x5000 + 0x800 and len(idx) > 40
+    o = go('q_rush_chain', 'rushchain', 200, near=22 * 4096, phantom=20 * 4096, bits2=0x400)
+    idx = rush_rows(o)
+    end = o[idx[-1]] if idx else o[-1]
+    stop = end['en'][0][1][0] + 20 * 4096 - 0x4800        # 4.5 units short of the phantom
+    ck['rush_chains_to_the_next_enemy'] = abs(end['pos'][0] - stop) < 4 * 4096 and len(idx) > 60
+    def string_report(o):
+        hits = {}
+        for x, y in zip(o, o[1:]):
+            if y['en'][0][0] < x['en'][0][0]: hits[y['act']] = hits.get(y['act'], 0) + 1
+        return hits, next((r['f'] for r in o if r['f'] > 60 and r['st'] == 0), 999)
+    kw = {'near': 5 * 4096}
+    slow, slow_end = string_report(go('q_momentum_0', 'string4', 140, bits2=0x1000, tier=0, **kw))
+    o = go('q_momentum_5', 'string4', 140, bits2=0x1000, tier=5, **kw)
+    fast, fast_end = string_report(o)
+    ck['momentum_keeps_every_hit'] = slow == fast == {56: 2, 57: 1, 58: 3, 59: 1}
+    ck['momentum_tier_5_string_is_faster'] = fast_end <= slow_end - 16 and o[-1]['k2']['doubled'] >= 10
+    o = go('q_momentum_off', 'string4', 140, tier=5, **kw)
+    ck['momentum_unowned_is_native'] = o[-1]['k2']['doubled'] == 0 and string_report(o) == (slow, slow_end)
+    o = go('q_momentum_sense', 'sense', 160, enemy_state=(60, 76, 15), bits2=0x1000, tier=5)
+    s = first(o, lambda r: r['st'] == 46 and r['node'] == 14)
+    ck['momentum_leaves_the_sense_counter'] = bool(s and (s['pos'][0] > s['en'][0][1][0]) == (s['face'] == 0)
+                                                  and o[-1]['en'][0][0] < 65536)
+    o = go('q_momentum_spin', 'spinreach', 330, near=6 * 4096, bits2=0x1000, tier=5)
+    spin = [r for r in o if r['node'] == 16 and r['f64'] & 0x8000]
+    ck['momentum_spin_contacts_still_hit'] = len(spin) > 40 and spin_hits(spin) >= 12
+    # Ricochet. Deterministic: the finisher throws the lone dummy 22 units past a
+    # fixed phantom 12 units behind it; the scan must fire exactly once (a phantom
+    # cannot take the hit: native result 0).
+    kw = {'near': 5 * 4096, 'phantom_x': 153 * 4096}
+    ck['ricochet_flying_body_meets_a_bystander_once'] = go('q_ricochet', 'string4', 200, bits2=0x800, **kw)[-1]['k2']['rico'] == 1
+    ck['ricochet_unowned_is_native'] = go('q_ricochet_off', 'string4', 200, **kw)[-1]['k2']['rico'] == 0
+    # Real bodies: four sparring Brutes in a line, held idle until just before the
+    # finisher (frame 85; their AI wanders differently between builds, so only one
+    # far Brute is required). The near two go down natively; a flying body must
+    # floor at least one more with a taken hit (result 4).
+    kw = {'sparring': True, 'start_x': 100 * 4096, 'place': tuple((d * 4096, 246) for d in (5, 11, 17, 23)),
+          'enemy_state': (-20, 80, 0)}
+    def floored(o):
+        return len({i for r in o for i, e in enumerate(r['en']) if e[2] in (41, 48)})
+    o = go('q_ricochet_crowd', 'string4', 220, bits2=0x800, **kw)
+    count = o[-1]['k2']['rico'] & 0xFF
+    ck['ricochet_floors_a_real_bystander'] = count >= 1 and o[-1]['k2']['rico'] >> 8 == 4 * count and floored(o) >= 3
+    ck['ricochet_unowned_crowd_is_native'] = floored(go('q_ricochet_crowd_off', 'string4', 220, **kw)) <= 2
     for label, name, frames, kw in (('q_gate', 'gate', 260, {'bits': 0, 'clear': 0xFE000}),
                                     ('q_snare_off', 'snare', 200, {'bits': 0, 'clear': 0xFE000}),
                                     ('q_black', 'black', 300, {})):
@@ -599,6 +686,8 @@ def main(argv=None):
         s.add_argument('--phantom', type=float, default=None, help='training: fake second enemy DX units from the dummy')
         s.add_argument('--at', type=float, default=None, help='training: start at this absolute x (units); walls ~3.5/236.5')
         s.add_argument('--sparring', action='store_true', help='training: keep the v0.5.0 sparring Brutes and native HP')
+        s.add_argument('--bits2', default='0', help='ability word 2: 0x400 Web Rush, 0x800 Ricochet, 0x1000 Momentum')
+        s.add_argument('--tier', type=int, default=None, help='hold the combo meter tier (0..5)')
     s = sub.add_parser('_child'); s.add_argument('request')
     s = sub.add_parser('qualify'); s.add_argument('rom'); s.add_argument('--parent', default=None)
     s.add_argument('--patch'); s.add_argument('--label-prefix', default=''); s.add_argument('--out')
@@ -625,7 +714,8 @@ def main(argv=None):
                              place=tuple(None if xy == 'skip' else tuple(round(float(v) * 4096) for v in xy.split(':'))
                                          for xy in a.place.split(',') if xy),
                              phantom=None if a.phantom is None else round(a.phantom * 4096),
-                             start_x=None if a.at is None else round(a.at * 4096), sparring=a.sparring)
+                             start_x=None if a.at is None else round(a.at * 4096), sparring=a.sparring,
+                             bits2=int(a.bits2, 0), tier=a.tier)
             print(dest / 'trace.txt')
         elif a.cmd == '_child':
             req = json.loads(a.request)

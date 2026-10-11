@@ -108,6 +108,12 @@ PROFILE_INFO = {
                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                     'arm9_sha256': 'e54fa1aaf4cd27ad68f72188c8377c2f44c158c448e71c512503df11ac6b9534'},
+    # Three new Red shop rows on free ability bits 74..76: Web Rush, Ricochet, Momentum, in a
+    # second kit code block (CHANGES v0.10.0). v0.9.0's bytes stay identified by its ROM.
+    'tasm-v0.10.0': {'version': '0.10.0', 'date': '2026-10-11', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                     'arm9_sha256': 'c6e2992a21cb365d00e3575ae89a46933241aa99f86bd975efec16d902c96b2c'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

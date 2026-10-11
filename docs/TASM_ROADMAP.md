@@ -211,14 +211,15 @@ cancels. Real HP is telemetry, not a target yet.
 
 ## Parked for later Red skills
 
-2026-10-06: the player wants combat left steady while learning it; authorized
-Midnight Line chapter work takes priority (reference/midnight_line.json).
-Previously offered slot extensions remain deferred: air Reflex web-zip hops
+2026-10-06: the player wanted combat left steady while learning it. Superseded
+2026-10-11: the kit is mastered and more skills are wanted ("Spice pack"
+below). Previously offered slot extensions: air Reflex web-zip hops
 between enemies, wall-rebound flying kick, Split sweep-to-juggle, steerable
 Skyjack spike and Perch spring-to-dive-kick. Additional web spray/crowd stun and
-object/crate yanks need shop/ownership research alongside the tools below.
+object/crate yanks can now be their own shop rows.
 
-These need extra shop rows (research): web tags shared across tools, Clap,
+Extra shop rows exist since v0.10.0 (19 free ability bits left). Candidates
+that wanted them: web tags shared across tools, Clap,
 bowling-spread tags, Reel/Net, Orbit tetherball, tier-5 Cocoon. Wall/ceiling
 pounce dive. *Stop Hitting Yourself* (redirecting an enemy's swing into his
 friend). Later suits stay in reference/suit_roadmap.json.
@@ -245,8 +246,53 @@ features and XP sinks (player has ~3000 unspent XP). Proposed, nothing built:
   boss gauntlet from the mini-boss rooms, timed escape rooms (TimerWatcher).
 - **Features.** Difficulty option via variable 0x125, elite enemies (kit-side
   HP scaling), finishers, crowd backend publication, suit unlocks.
-- **XP sinks.** Gate: expanded shop rows and free ownership bits (research).
-  Fallback without new rows: a Refuge workbench (Button Press trigger sets a
-  chapter flag; kit tick spends XP and grants stat/kit upgrades), Mk II tiers
-  for the seven Red skills, the parked Red skills, repeatable health/damage
-  training, suit unlocks.
+- **XP sinks.** New shop rows work since v0.10.0 (three Red rows, 1000 XP in
+  total; rows may also have several levels like the native collectible
+  table). Still open: Mk II tiers for the seven Red skills, the parked Red
+  skills, repeatable health/damage training, suit unlocks, a Refuge workbench.
+
+## Spice pack (2026-10-11): three new Red shop skills in v0.10.0
+
+Player, 2026-10-11: enjoys the seven skills a lot but has mastered them;
+everything now feels "bread and butter basic" and they want "a bit more
+spice". Of eight ideas they picked **Web Rush, Ricochet and Momentum** ("most
+interesting right now"), asked for **real new Red shop slots** ("we will need
+it for future suits anyways") and added: "your suggestions are good but none
+really blew me away much". Lab work may run in the background while they play.
+
+Shipped in v0.10.0 as first versions (CHANGES; engine facts in TECHNICAL
+"Second kit block" and "Shop tables, menu and free ownership bits"). Agent-
+tested, not player-confirmed.
+
+| Skill (ability bit, XP) | Input | First version | Next iteration from play |
+|---|---|---|---|
+| **Web Rush** (74, 300) | A during a Red ground string | Zips to the nearest standing enemy 7..56 units away (held Left/Right picks the side), three bicycle kicks, back tuck; the string continues after the node he left; A again after the kicks chains to the next enemy | Guard frames or not; air and wall targets; rush from Y+back and air strings; reach |
+| **Ricochet** (75, 300) | Passive | An enemy sent flying (1 unit per update or more) floors every standing enemy within 3.5 units of his path, who then flies too | Radius, damage, a boost to flight distance; Leapfrog's pop (0.75 units per update) and pulled or launched bodies do not count yet |
+| **Momentum** (76, 400) | Passive | Each combo tier doubles more of the free animation steps of ground string attacks (tier t: t of 5), never across an active hit window: wind-up and recovery shrink, hits and hit timing do not change | Air strings and Perch; a visible cue; whether tier 5 is too fast to read |
+
+The rows cost 300/300/400 XP, have no prerequisites and can be refunded like
+native ones. Prices are placeholders (balance is deferred).
+
+Still only proposals (unapproved, nothing built):
+
+| Idea | Input (unproven) | What it does | Prove first |
+|---|---|---|---|
+| **Web Blitz** | X with combo tier >= 1, away from liftables | Spends combo tiers: pinball between enemies, one flip-kick each | Whether queue command 4 (X) is free without a liftable; writing the tier |
+| **Tetherball** | Down while holding a grapple | Swing the webbed enemy overhead as a flail, release to throw him (Ricochet) | Native `spd_GrapplePullDown.sca` suggests Down is bound; moving an enemy on an arc by velocity |
+| **Wall Pounce / ceiling hoist** | Y or A from a wall cling or ceiling hang | Spring off into a dive that lands in Perch; yank an enemy up from the ceiling | Wall, ceiling and swing controller states are unmapped |
+| **Sense chain + tingle** | R timing | Back-to-back counters escalate; marker over an enemy winding up behind or off-screen | HUD marker drawing; anticipation timing |
+| **Air extensions** | Parked list above | Dive kick after the Perch spring, Split sweep-to-juggle, steerable spike | Per move |
+
+Garnish: a quip/taunt that tops up the combo gauge (native `spd_Taunt.sca`
+exists; whether any state plays it is unknown).
+
+For the next round (agent's note): the player wants something that blows them
+away, so bring bigger fantasies than slot extensions. The pieces now exist:
+new shop rows are cheap (19 free ability bits, table and texts in the second
+block), a move can be inserted into a string without spending a node, any
+enemy can be hit by replay, and the rate getter can hold or skip animation.
+Native clip names in `reference/format_survey.json` (`spd_WebSwingKick`,
+`spd_DiveKick`, `spd_DiveSlantKick`, `spd_WebHangIdle`, `spd_WallRunBackflip`,
+`spd_DuckAttack`) hint at native bindings: check before claiming an input.
+Every new move needs an authored clip, travels by velocity and uses no
+slow-motion.

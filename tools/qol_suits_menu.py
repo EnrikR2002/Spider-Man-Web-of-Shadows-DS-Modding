@@ -108,8 +108,8 @@ class StringSlots:
         terminated stream, preserving unknown trailing bytes. No-op is exact.
         """
         table = BASE + w.u32(self.raw, BASE)
-        if self.missing_bytes(edits) or current[:table] != self.raw[:table]:
-            return self.grown(current, edits)          # needs or already has a grown tree
+        if self.missing_bytes(edits) or current[:table] != self.raw[:table] or slot_count(current) != COUNT:
+            return self.grown(current, edits)          # needs or already has a grown tree, or appended slots
         offsets = self.variant_offsets(current)
         chunks = [current[a:b] for a, b in zip(offsets, offsets[1:] + (len(current),))]
         for index, text in edits.items():

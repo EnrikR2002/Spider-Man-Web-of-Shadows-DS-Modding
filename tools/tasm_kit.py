@@ -1,9 +1,11 @@
 """TASM "never stand still" Red kit: guarded ARM9 extension over the v0.1.1 parent.
 
-Rewrites the behavior of the seven Red purchase slots only. Native abilities,
-purchase records, Black form and unowned play keep their original routes.
-Own code is stored as pinned text hex (tools/tasm_kit.hex); reassemble from
-tools/tasm_kit.s with tools/assemble_tasm_kit.py (Keystone, research libs).
+Rewrites the behavior of the seven Red purchase slots and, since v0.10.0, adds
+three Red rows on unused ability bits (Web Rush, Ricochet, Momentum). Native
+abilities, the native purchase records, Black form and unowned play keep their
+original routes. Own code is stored as pinned text hex (tools/tasm_kit.hex and
+tasm_kit2.hex); reassemble from tools/tasm_kit.s and tasm_kit2.s with
+tools/assemble_tasm_kit.py (Keystone, research libs).
 See docs/TASM_ROADMAP.md (design) and docs/TECHNICAL.md (engine evidence).
 """
 from __future__ import annotations
@@ -22,8 +24,16 @@ CODE_SPACE = 0x2000
 ROUTE_OFFSET = 0x1F00                      # animation route table inside code space
 STATE_SPACE = 0x400
 KIT_STATE = KIT_BASE + CODE_SPACE          # 02154C20
-IMAGE = OLD_STATE_END + CODE_SPACE + STATE_SPACE
-RESERVE = 0x6000
+# v0.10.0: second block after the old 24 KiB reserve (the 1 KiB before it stays
+# the lab's phantom area): code, the grown Red shop table, zeroed state.
+KIT2_OFFSET = 0x6000                       # from TARGET
+KIT2_BASE = TARGET + KIT2_OFFSET           # 02155420
+KIT2_CODE = 0x1800
+SHOP_OFFSET = 0x1800                       # Red purchase rows inside the block
+KIT2_STATE = KIT2_BASE + 0x1C00            # 02157020
+KIT2_SPACE = 0x2000
+IMAGE = KIT2_OFFSET + KIT2_SPACE
+RESERVE = 0x8000
 PARENT_ARM9_SHA256 = release_info.ARM9_SHA256
 SOURCE = 0x1439A0                          # extension image start in the ARM9 file
 TABLE_POINTERS = 0xB64
@@ -46,6 +56,36 @@ HOOKS = {
     0x02078628: (0x30, 0xE12FFF34),  # blx r4: hit dispatch to the victim's ReceiveHit
     0x0205F420: (0x34, 0xE5823084),  # str r3,[r2,#0x84]: player HP store (training floor)
 }
+# site: (second-block entry offset, parent instruction word)
+HOOKS2 = {
+    0x020B21B8: (0x10, 0xE5960044),  # ldr r0,[r6,#0x44]  Red attack animation rate (Momentum)
+}
+# Ownership events 309..381 are ability bits 0..72 (three words at stats+0xC).
+# Bits 73..95 of the third word are unused and survive a native save/reload
+# (work/shop/bits_save_lab.py): the query/setter bounds rise so events up to
+# 404 reach them. 382 stays the menu's "no event" sentinel (bit 73 is never set).
+EVENT_BOUNDS = {
+    0x020D2460: (0xE282005B, 0xE2820072),  # query: add r0,r2,#0x5b -> #0x72
+    0x020D2478: (0xE3550049, 0xE3550060),  # query: cmp r5,#0x49 -> #0x60
+    0x020D2634: (0xE283005B, 0xE2830072),  # setter: add r0,r3,#0x5b -> #0x72
+    0x020D2658: (0xE3540049, 0xE3540060),  # setter: cmp r4,#0x49 -> #0x60
+    0x020D26A8: (0xE3540049, 0xE3540060),
+}
+RED_TABLE = 0x120340                       # seven native 32-byte purchase rows
+RED_POINTER, RED_COUNT = 0x120174, 0x12018C
+NO_EVENT = 382
+STRING_COUNT = 1049                        # native string slots; shop texts are appended after them
+# New Red rows: (key, ownership event, price, name, title, description). Event - 309 = ability bit.
+SHOP_ROWS = (
+    ('web_rush', 383, 300, 'Web Rush', 'Web Rush (Combo)',
+     'In a ground combo, press \ue602: zip to\nthe next enemy. \ue601 continues the combo.'),
+    ('ricochet', 384, 300, 'Ricochet', 'Ricochet',
+     'Passive. Enemies you send flying\nknock down the enemies they hit.'),
+    ('momentum', 385, 400, 'Momentum', 'Momentum',
+     'Passive. Every combo meter tier\nshortens the wind-up and recovery\nof your ground combos.'),
+)
+SHOP_BITS = {row[0]: row[1] - 309 for row in SHOP_ROWS}     # 74, 75, 76
+SHOP_TEXTS = tuple(text for row in SHOP_ROWS for text in row[3:])
 # Spider Perch replaces Sling Strike in the Mid-Air Snare slot: restore the
 # native action-queue and contact instructions Sling had redirected.
 RESTORE = {0x0209515C: (0xEB02EFEF, 0xEBFED051)}
@@ -56,15 +96,16 @@ COUNT_OFFSET = 0x77F8
 PARENT_COUNT = 3736
 EXTRA_NAMES: tuple[str, ...] = ('zz_kit_ReflexFlip.sca', 'zz_kit_Spin.sca', 'zz_kit_PerchPound.sca',
                                    'zz_kit_LeapKick.sca', 'zz_kit_SkyAxe.sca', 'zz_kit_SenseCounter.sca',
-                                   'zz_kit_ReflexBackflip.sca')
+                                   'zz_kit_ReflexBackflip.sca', 'zz_kit_RushKick.sca')
 # Route rows: (action, kind, appended name). Kinds: 1 Spin Cycle repeat, 2 Reflex
 # roll, 3 Perch stomp, 4 owned Red web kick (Leapfrog), 5 Skyjack juggle,
-# 6 Spider-Sense counter, 7 Perch hop/spring flip, 8 Reflex neutral back tuck.
+# 6 Spider-Sense counter, 7 Perch hop/spring flip, 8 Reflex neutral back tuck,
+# 9 Web Rush kick.
 # Native actions keep their bindings when unrouted.
 ROUTES: tuple[tuple[int, int, str], ...] = ((133, 2, 'zz_kit_ReflexFlip.sca'), (60, 1, 'zz_kit_Spin.sca'), (130, 3, 'zz_kit_PerchPound.sca'),
                                              (50, 4, 'zz_kit_LeapKick.sca'), (4, 5, 'zz_kit_SkyAxe.sca'),
                                              (59, 6, 'zz_kit_SenseCounter.sca'), (133, 7, 'zz_kit_ReflexFlip.sca'),
-                                             (139, 8, 'zz_kit_ReflexBackflip.sca'))
+                                             (139, 8, 'zz_kit_ReflexBackflip.sca'), (58, 9, 'zz_kit_RushKick.sca'))
 # Authored clips: overlay name -> (native SCA with the same sample count, clip).
 # The Split Decision clips overwrite the dedicated Rush resources (actions 61/60/62).
 CLIP_SOURCES = {
@@ -75,12 +116,13 @@ CLIP_SOURCES = {
     'zz_kit_LeapKick.sca': ('spd_GrapplePullAttackKick.sca', 'leap_kick'),
     'zz_kit_SkyAxe.sca': ('spd_AirAttack4.sca', 'sky_axe'),
     'zz_kit_SenseCounter.sca': ('spd_GroundAttack14.sca', 'sense_counter'),
+    'zz_kit_RushKick.sca': ('spd_GroundAttack13.sca', 'rush_kick'),
     'zz_tasm_RushEntry.sca': ('spd_GroundAttack16.sca', 'split_corkscrew'),
     'zz_tasm_RushBridge.sca': ('spd_GroundAttack15.sca', 'split_kick'),
     'zz_tasm_RushFinish.sca': ('spd_GroundAttack17.sca', 'split_sweep'),
 }
 PROFILE = 'tasm-kit'
-VERSION = '0.9.0'
+VERSION = '0.10.0'
 RELEASE_DATE = '2026-10-11'
 RELEASE_PROFILE = f'tasm-v{VERSION}'
 PARENT_RELEASE = 'tasm-v0.1.1'
@@ -107,21 +149,46 @@ TEXT_EDITS = {
 
 def uses_kit(profile):
     return profile == PROFILE or bool(release_info.PROFILE_INFO.get(profile, {}).get('kit'))
-CODE_SHA256 = '395e9bfad75552cc45e7d0e5b6b7bd08981600556dcc62ce028790cc90d234c3'
-ARM9_SHA256 = '88328d560f095a0f46fe07a2476922fb957e4933cb429ca831105113ed650f97'
+CODE_SHA256 = '66ed96538d9a8c6a78fba4b062363a9dc951f0cfe9d13a11eda1ce762209f2d8'
+CODE2_SHA256 = '466a990525abc930708d9f1b8d4de031294ad0a2955ed987cd5b5722086e7127'
+ARM9_SHA256 = '7200e357887e366de790bf5672a3c4818eded962c3ebe31f2e7003dacb07242c'
 
 
 def branch(source, target):
     return combat_feedback.branch(source, target)
 
 
-def code_bytes():
-    raw = bytes.fromhex(Path(__file__).with_suffix('.hex').read_text(encoding='utf-8'))
-    if not raw or len(raw) > ROUTE_OFFSET or len(raw) % 4:
+def code_bytes(block=1):
+    path, limit, digest = ((Path(__file__).with_suffix('.hex'), ROUTE_OFFSET, CODE_SHA256) if block == 1 else
+                           (Path(__file__).with_name('tasm_kit2.hex'), KIT2_CODE, CODE2_SHA256))
+    raw = bytes.fromhex(path.read_text(encoding='utf-8'))
+    if not raw or len(raw) > limit or len(raw) % 4:
         raise ValueError('Kit code exceeds its fixed space')
-    if CODE_SHA256 and w.sha256(raw) != CODE_SHA256:
+    if digest and w.sha256(raw) != digest:
         raise ValueError('Kit code differs from validated source')
     return raw
+
+
+def shop_table(raw):
+    """The seven parent Red rows (current prices) followed by the new rows."""
+    rows = bytearray(raw[RED_TABLE:RED_TABLE + 7 * 32])
+    if struct.unpack_from('<I', rows)[0] != 322 or w.u32(raw, RED_POINTER) != BASE + RED_TABLE or w.u32(raw, RED_COUNT) != 7:
+        raise ValueError('Native Red purchase table differs')
+    for index, (_, event, price, *_texts) in enumerate(SHOP_ROWS):
+        first = STRING_COUNT + 3 * index
+        rows += struct.pack('<8I', event, NO_EVENT, NO_EVENT, first, first + 1, first + 2, 1, price)
+    return bytes(rows)
+
+
+def shop_strings(slots, current):
+    """Append the shop texts after the native slots (or rewrite them in a previous kit overlay)."""
+    from tools.qol_suits_menu import slot_count
+    count = slot_count(current)
+    if count == STRING_COUNT:
+        return slots.grown(current, {}, appended=SHOP_TEXTS)
+    if count == STRING_COUNT + len(SHOP_TEXTS):
+        return slots.grown(current, {STRING_COUNT + i: text for i, text in enumerate(SHOP_TEXTS)})
+    raise ValueError('Unexpected string slot count for the shop texts')
 
 
 def route_table():
@@ -198,6 +265,24 @@ def apply_rom(rom):
         word = branch(site, KIT_BASE + offset)
         struct.pack_into('<I', changed, at, word)
         log.append({'field': 'red_kit_hook', 'address': site, 'old': original, 'new': word})
+    for site, (offset, original) in sorted(HOOKS2.items()):
+        at = site - BASE
+        if w.u32(raw, at) != original:
+            raise ValueError(f'Kit hook site differs: {site:08X}')
+        word = branch(site, KIT2_BASE + offset)
+        struct.pack_into('<I', changed, at, word)
+        log.append({'field': 'red_kit_hook', 'address': site, 'old': original, 'new': word})
+    for site, (original, word) in sorted(EVENT_BOUNDS.items()):
+        at = site - BASE
+        if w.u32(raw, at) != original:
+            raise ValueError(f'Ownership event bound differs: {site:08X}')
+        struct.pack_into('<I', changed, at, word)
+        log.append({'field': 'ownership_event_bound', 'address': site, 'old': original, 'new': word})
+    table = shop_table(raw)
+    struct.pack_into('<I', changed, RED_POINTER, KIT2_BASE + SHOP_OFFSET)
+    struct.pack_into('<I', changed, RED_COUNT, len(table) // 32)
+    log.append({'field': 'red_purchase_rows', 'table': KIT2_BASE + SHOP_OFFSET, 'rows': len(table) // 32,
+                'new': {row[0]: {'event': row[1], 'ability_bit': row[1] - 309, 'price': row[2]} for row in SHOP_ROWS}})
     for site, (parent, native) in sorted(RESTORE.items()):
         at = site - BASE
         if w.u32(raw, at) != parent:
@@ -220,14 +305,20 @@ def apply_rom(rom):
     if ROUTES:
         rows = route_table()
         space[ROUTE_OFFSET:ROUTE_OFFSET + len(rows)] = rows
-    kit_image = bytes(OLD_STATE_END - OLD_CODE) + bytes(space) + bytes(STATE_SPACE)
+    block = bytearray(KIT2_SPACE)
+    code2 = code_bytes(2)
+    block[:len(code2)] = code2
+    block[SHOP_OFFSET:SHOP_OFFSET + len(table)] = table
+    kit_image = (bytes(OLD_STATE_END - OLD_CODE) + bytes(space) + bytes(STATE_SPACE)
+                 + bytes(KIT2_OFFSET - OLD_STATE_END - CODE_SPACE - STATE_SPACE) + bytes(block))
     result, delta = grow_extension(rom, bytes(changed), kit_image)
     nh = w.parse_header(result)
     digest = w.sha256(result[start:start + nh['arm9_size']])
     if ARM9_SHA256 and digest != ARM9_SHA256:
         raise ValueError(f'Unexpected kit ARM9: {digest}')
     log.append({'field': 'red_kit_extension', 'kit_base': KIT_BASE, 'code_size': len(code),
-                'code_sha256': w.sha256(code), 'image_size': OLD_CODE + len(kit_image),
+                'code_sha256': w.sha256(code), 'kit2_base': KIT2_BASE, 'code2_size': len(code2),
+                'code2_sha256': w.sha256(code2), 'image_size': OLD_CODE + len(kit_image),
                 'reserve': RESERVE, 'rom_relocation_bytes': delta, 'arm9_sha256': digest})
     return result, log
 
@@ -271,7 +362,8 @@ def generate(output=None):
     overlays[training_room.NAME] = training_room.with_sparring(glob[e['offset']:e['offset'] + e['size']])
     for name in ('English.strings', 'American.strings'):
         e = entries[name]
-        overlays[name] = StringSlots(glob[e['offset']:e['offset'] + e['size']]).repack(overlays[name], TEXT_EDITS)
+        slots = StringSlots(glob[e['offset']:e['offset'] + e['size']])
+        overlays[name] = shop_strings(slots, slots.repack(overlays[name], TEXT_EDITS))
     for name, data in overlays.items():
         w.atomic_write(dest / 'mods' / name, data, (mod.DEFAULT_ROM,))
     new_recipe = {'schema_version': 1, 'profile': RELEASE_PROFILE, 'release_version': VERSION,

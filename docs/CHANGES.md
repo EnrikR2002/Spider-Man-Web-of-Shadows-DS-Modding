@@ -14,6 +14,64 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.10.0 - 2026-10-11 - Three new Red skills: Web Rush, Ricochet, Momentum
+
+Published through Play Spider-Man.cmd's stable ROM (DeSmuME closed, battery
+unchanged since 2026-10-07). SHA256
+`a928843cb520d82568e703b3710f4177da4160addab5f8a61dbddd78ca7ae271`
+(ARM9 `c6e2992a...`, kit ARM9 `7200e357...`). Title and Options show v0.10.0.
+Player (2026-10-11): has mastered the seven skills, "everything feels very
+bread and butter basic", wants "a bit more spice"; picked these three from
+eight ideas and asked for real new Red shop slots. The Midnight Line is the
+same as in v0.9.0.
+
+- **Three new rows in the Red upgrade list**, below Spider-Sense (scroll
+  down): Web Rush 300 XP, Ricochet 300, Momentum 400. They are bought and
+  refunded like the others. Nothing is given for free and your purchases, XP
+  and prices are untouched. Prices are placeholders.
+- **Web Rush.** In a ground combo press A. Spidey fires a line and flies to
+  the nearest enemy he cannot already reach (hold Left or Right to choose a
+  side), runs three bicycle kicks up his chest and back-flips off. Y then
+  carries the combo on where you left it; after the first hit that is Split
+  Decision if you own it. A again after the kicks zips to the next enemy. It
+  works out of Split Decision and Spin Cycle (the spin restarts with Y), R
+  still cancels it, and with an enemy already in reach A does what it always
+  did. Up to 56 units away (about two thirds of the screen), same floor.
+- **Ricochet** (passive). An enemy you send flying knocks down and hurts
+  everyone standing in his path, and they go flying too. It needs a real
+  throw (1 unit per update sideways or more): the string finisher and the
+  Sense counter throw at 1.5. Leapfrog's kick only pops him at 0.75 and a
+  Skyjack spike goes straight down, so those do not count yet.
+- **Momentum** (passive). Each combo meter tier shortens the wind-up and
+  recovery of your ground combo attacks. Hits land exactly when they did
+  before, so nothing whiffs: a Y,Y,Y,Y string that takes 113 frames at tier 0
+  takes 99 at tier 2 and 87 at tier 5 with fixed button timing.
+
+How: a second kit code block (the first was nearly full), a Red purchase
+table of ten rows, and three ownership bits in unused space the game already
+saves (TECHNICAL "Shop tables, menu and free ownership bits", "Second kit
+block"). Unowned, Black-suit and native behavior are unchanged.
+
+Known limits: Web Rush has no invulnerability and only targets enemies on
+about the same level; R during the dash always rolls forward; Ricochet hits
+with the strength of your last hit; Momentum leaves air strings, Perch and
+the Spider-Sense counter at native speed.
+
+Agent-tested on `a928843c`: kit qualification 48/48 (the 31 earlier
+checks plus Web Rush near/far/chain/unowned/in-reach, Ricochet with a fixed
+bystander and with four real Brutes, Momentum hit counts and speed at tier 0
+and 5, with Spin Cycle and the Sense counter); the three rows bought, refunded,
+re-bought and cleared in the real menu, and kept across save and Continue;
+crash hunt 12/12 with the three skills owned; chapter walk routes 6/6 on the
+first try (75 checks), power puzzle, save/Continue in Refuge, Rest and Shrine;
+door tour 32/32 on a second run (the first, run beside six other emulator
+jobs, missed one Nest door; alone it passes); 252 unit tests; frames reviewed
+(shop rows and texts, the rush near and far). Rush out of the spin and a
+Reflex cancel during the dash were traced once each. Not measured: bosses,
+walls between Spidey and the target, enemies above or below him. Feel,
+prices and whether tier 5 is too fast are untested by the player. Evidence:
+`work/kit/v0.10.0/`, `work/kit/evidence.json`.
+
 ## v0.9.0 - 2026-10-11 - Midnight Line: the Yard
 
 Published through Play Spider-Man.cmd's stable ROM. SHA256

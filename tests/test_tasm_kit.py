@@ -33,6 +33,12 @@ class TasmKitTests(unittest.TestCase):
         for site, (offset, _) in kit.HOOKS.items():
             word = struct.unpack_from('<I', code, offset)[0]
             self.assertEqual(word >> 24, 0xEA, hex(site))
+        # v0.10.0: the second block is pinned too and its hooks land on its table.
+        code2 = kit.code_bytes(2)
+        self.assertEqual(w.sha256(code2), kit.CODE2_SHA256)
+        self.assertLessEqual(len(code2), kit.KIT2_CODE)
+        for site, (offset, _) in kit.HOOKS2.items():
+            self.assertEqual(struct.unpack_from('<I', code2, offset)[0] >> 24, 0xEA, hex(site))
 
     def test_kit_arm9_is_pinned_and_release_profile_matches(self):
         self.assertEqual(w.sha256(self.arm9(self.kit)), kit.ARM9_SHA256)
@@ -44,8 +50,10 @@ class TasmKitTests(unittest.TestCase):
     def test_arm9_changes_are_confined_to_hooks_and_tables(self):
         old, new = self.arm9(self.parent), self.arm9(self.kit)
         allowed = set()
-        for site in (*kit.HOOKS, *kit.RESTORE):
+        for site in (*kit.HOOKS, *kit.HOOKS2, *kit.RESTORE, *kit.EVENT_BOUNDS):
             allowed |= set(range(site - kit.BASE, site - kit.BASE + 4))
+        for at in (kit.RED_POINTER, kit.RED_COUNT):
+            allowed |= set(range(at, at + 4))
         for at in kit.IMPULSES:
             allowed |= set(range(at, at + 8))
         allowed |= set(range(kit.COUNT_OFFSET, kit.COUNT_OFFSET + 4))
@@ -62,6 +70,99 @@ class TasmKitTests(unittest.TestCase):
         self.assertEqual(new[start:start + len(kit.code_bytes())], kit.code_bytes())
         self.assertEqual(w.u32(new, kit.ARENA_LOWER), kit.TARGET + kit.RESERVE)
         self.assertEqual(w.u32(new, kit.COUNT_OFFSET), kit.PARENT_COUNT + len(kit.EXTRA_NAMES))
+        for site, (_, original) in kit.HOOKS2.items():
+            self.assertEqual(w.u32(old, site - kit.BASE), original)
+            self.assertEqual(w.u32(new, site - kit.BASE), kit.branch(site, kit.KIT2_BASE + kit.HOOKS2[site][0]))
+        # Second block: code, then zeros up to the shop rows; state stays zero.
+        block = new[kit.SOURCE + kit.KIT2_OFFSET:kit.SOURCE + kit.KIT2_OFFSET + kit.KIT2_SPACE]
+        code2 = kit.code_bytes(2)
+        self.assertEqual(block[:len(code2)], code2)
+        self.assertEqual(block[len(code2):kit.SHOP_OFFSET], bytes(kit.SHOP_OFFSET - len(code2)))
+        self.assertEqual(block[kit.SHOP_OFFSET + 10 * 32:], bytes(kit.KIT2_SPACE - kit.SHOP_OFFSET - 10 * 32))
+        self.assertEqual(kit.KIT2_STATE - kit.KIT2_BASE, 0x1C00)
+        self.assertEqual(kit.IMAGE, kit.RESERVE)
+
+    def test_red_shop_gains_three_rows_on_free_ability_bits(self):
+        old, new = self.arm9(self.parent), self.arm9(self.kit)
+        self.assertEqual(w.u32(new, kit.RED_POINTER), kit.KIT2_BASE + kit.SHOP_OFFSET)
+        self.assertEqual(w.u32(new, kit.RED_COUNT), 10)
+        table = kit.SOURCE + kit.KIT2_OFFSET + kit.SHOP_OFFSET
+        self.assertEqual(new[table:table + 7 * 32], old[kit.RED_TABLE:kit.RED_TABLE + 7 * 32])
+        self.assertEqual(new[kit.RED_TABLE:kit.RED_TABLE + 7 * 32], old[kit.RED_TABLE:kit.RED_TABLE + 7 * 32])
+        native = {struct.unpack_from('<I', old, base + 32 * row)[0] + level
+                  for base, count in ((0x120260, 7), (0x120340, 7), (0x120420, 7), (0x120680, 12), (0x1201A0, 6), (0x120500, 12))
+                  for row in range(count) for level in range(struct.unpack_from('<I', old, base + 32 * row + 24)[0])}
+        for index, (key, event, price, *texts) in enumerate(kit.SHOP_ROWS):
+            row = struct.unpack_from('<8I', new, table + (7 + index) * 32)
+            first = kit.STRING_COUNT + 3 * index
+            self.assertEqual(row, (event, kit.NO_EVENT, kit.NO_EVENT, first, first + 1, first + 2, 1, price))
+            # Above the native 73 ability bits (and the sentinel), inside the third word.
+            self.assertTrue(kit.NO_EVENT < event <= 404 and event not in native, key)
+            self.assertEqual(kit.SHOP_BITS[key], event - 309)
+            self.assertEqual(kit.SHOP_TEXTS[3 * index:3 * index + 3], tuple(texts))
+        self.assertEqual(sorted(kit.SHOP_BITS.values()), [74, 75, 76])
+        # Bounds: events below 405 reach bits below 96; the fourth word (a counter) is never addressed.
+        for site, (original, word) in kit.EVENT_BOUNDS.items():
+            self.assertEqual((w.u32(old, site - kit.BASE), w.u32(new, site - kit.BASE)), (original, word))
+        self.assertEqual({word & 0xFF for _, word in kit.EVENT_BOUNDS.values()}, {0x72, 0x60})
+        self.assertEqual(0x123 + 0x72 - 309, 96)
+
+    def test_shop_texts_are_appended_once(self):
+        from tools.qol_suits_menu import decode_grown, slot_count
+        clean = self.clean('English.strings')
+        slots = StringSlots(clean)
+        first = kit.shop_strings(slots, slots.repack(clean, kit.TEXT_EDITS))
+        self.assertEqual(slot_count(first), kit.STRING_COUNT + len(kit.SHOP_TEXTS))
+        self.assertEqual([decode_grown(first, kit.STRING_COUNT + i) for i in range(len(kit.SHOP_TEXTS))], list(kit.SHOP_TEXTS))
+        self.assertEqual(decode_grown(first, 74), kit.TEXT_EDITS[74])
+        self.assertEqual(kit.shop_strings(slots, first), first)      # a previous kit overlay is rewritten, not grown
+        # The next release repacks this overlay first: appended slots must survive an edit.
+        again = slots.repack(first, {74: 'Options v9.9.9'})
+        self.assertEqual(slot_count(again), kit.STRING_COUNT + len(kit.SHOP_TEXTS))
+        self.assertEqual(decode_grown(again, kit.STRING_COUNT), kit.SHOP_TEXTS[0])
+        self.assertEqual(decode_grown(again, 74), 'Options v9.9.9')
+        with self.assertRaises(ValueError):
+            kit.shop_strings(slots, slots.grown(first, {}, appended=['extra']))
+
+    def test_blocks_only_call_each_other_through_their_entry_tables(self):
+        import re
+        folder = kit.Path(kit.__file__).parent
+        one, two = ((folder / name).read_text(encoding='utf-8') for name in ('tasm_kit.s', 'tasm_kit2.s'))
+
+        def calls(text, low, high):
+            found = {int(x, 16) for x in re.findall(r'^\s*b\w*\s+0x([0-9a-fA-F]{8})', text, re.M)}
+            return {x for x in found if low <= x < high}
+        self.assertEqual(calls(one, kit.KIT2_BASE, kit.KIT2_BASE + kit.KIT2_SPACE),
+                         {kit.KIT2_BASE + offset for offset in (0x00, 0x04, 0x08, 0x0C)})
+        exports = calls(two, kit.KIT_BASE, kit.KIT_BASE + kit.CODE_SPACE)
+        self.assertTrue(exports and exports <= {kit.KIT_BASE + offset for offset in range(0x38, 0x50, 4)})
+        code = kit.code_bytes()
+        for address in exports:
+            self.assertEqual(struct.unpack_from('<I', code, address - kit.KIT_BASE)[0] >> 24, 0xEA)
+
+    def test_momentum_only_skips_samples_without_an_active_attack_box(self):
+        # Doubling a step at clock c skips a point in samples c+1..c+2 (rates up to 1.3).
+        import re
+        from pathlib import Path
+        from tools import grip_compression, gmb
+        source = (kit.Path(kit.__file__).with_name('tasm_kit2.s')).read_text(encoding='utf-8')
+        words = re.search(r'^momentum_blocked:\s*\.word\s+(.+)$', source, re.M).group(1)
+        table = [int(x, 0) for x in words.split(',')]
+        # Action 56 (Snap Sweep) plays GroundAttack15's payload; 57..62 their own.
+        clips = (15, 12, 13, 14, 15, 16, 17)
+        self.assertEqual(len(table), len(clips))
+        for mask, number in zip(table, clips):
+            name = f'spd_GroundAttack{number}.gmb'
+            overlay = Path(mod.ROOT) / 'mods' / name
+            data = gmb.Gmb.parse(grip_compression.decode(overlay.read_bytes() if overlay.exists() else self.clean(name)))
+            active = set()
+            for channel in data.channels:
+                flags = [channel.words(f)[5] == 1 for f in range(data.record_count)] if channel.kind == 3 else []
+                if any(flags) and not all(flags):       # the attack box; body boxes are always on
+                    active |= {f for f, on in enumerate(flags) if on}
+            self.assertTrue(active, name)
+            wanted = sum(1 << c for c in range(32) if {c + 1, c + 2} & active)
+            self.assertEqual(mask, wanted, name)
 
     def test_route_rows_name_appended_resources(self):
         from tools import oscorp_resources as rush

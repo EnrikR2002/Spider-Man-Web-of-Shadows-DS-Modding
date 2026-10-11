@@ -1,9 +1,9 @@
 {
-  "profile": "tasm-v0.9.0",
-  "release_version": "0.9.0",
+  "profile": "tasm-v0.10.0",
+  "release_version": "0.10.0",
   "required_overlays": {
-    "American.strings": "4382fe06dfe2c8393faf242889d418023a485d46b944ad67e44fcdc07ca77e97",
-    "English.strings": "4382fe06dfe2c8393faf242889d418023a485d46b944ad67e44fcdc07ca77e97",
+    "American.strings": "ce2837a4deace55500165b2b47c5bb39485c18d7e2d23e1c8421552cdb8ed322",
+    "English.strings": "ce2837a4deace55500165b2b47c5bb39485c18d7e2d23e1c8421552cdb8ed322",
     "MissionMiniMapIcon.pal": "5072156a663205facf22310c98913e01febb028c74edd1c196e7db26985b5787",
     "Test_Combat01_app.obj": "7db7d05399354e194d4af191780e47360bf3764a3e4c7d63349536369d3db30d",
     "spd.nsbmd": "8ddbdac95ba919b50d4c107f491936b10eea2ae65b2117ed1a6d9fa0ce6f5ad0",
@@ -21,6 +21,7 @@
     "zz_kit_PerchPound.sca": "eca9171e99aada96da200f66a4f808cb37e1627ba580e0ab8eae5fe509e6a584",
     "zz_kit_ReflexBackflip.sca": "80e485b7d2a073ea0914b432fbb56c72bc518a0dd224a2eb62cbb790e260c214",
     "zz_kit_ReflexFlip.sca": "916dd4f17d8c7476a5250809f96d8eb24e41a217af80df00221292f632f9bf25",
+    "zz_kit_RushKick.sca": "7e62de5de5b0b0e93b184030f778ddc3917ebd708e87aa2fab8262e8823410ea",
     "zz_kit_SenseCounter.sca": "7214f69a311cf5d0f6b02182c5039babd8fe6ab020ecafbfd84394b56a60856b",
     "zz_kit_SkyAxe.sca": "e3b58921800bc6c423305bc8e37ec018cfeef6cde87f6dce1e9f843007c37b66",
     "zz_kit_Spin.sca": "6e810d537873a0cfeff6273a3836eba6820c6daccc5293a090a96c7c7bc82d67",

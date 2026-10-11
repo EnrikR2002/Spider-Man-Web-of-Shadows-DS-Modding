@@ -34,7 +34,7 @@ python tools/playtest.py build
 Red kit (v0.2.0+) and emulator research:
 
 ```powershell
-python tools/assemble_tasm_kit.py            # after editing tools/tasm_kit.s (then re-pin hashes)
+python tools/assemble_tasm_kit.py            # after editing tools/tasm_kit.s or tasm_kit2.s (then re-pin hashes)
 python tools/tasm_kit.py                     # candidate build/version-<VERSION>
 python tools/kit_lab.py qualify build/version-0.2.0/Versioned.nds
 python tools/kit_lab.py trace <rom> <label> reflex --frames 300 --cap 30,40

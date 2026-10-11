@@ -17,6 +17,13 @@
   b h_action              // +2C from 020728F0  action request (Perch substitution)
   b h_hit_capture         // +30 from 02078628  hit dispatch (blx to victim ReceiveHit)
   b h_train_floor         // +34 from 0205F420  player HP store (training: no lethal hits)
+// Exports for the second code block (tools/tasm_kit2.s, KIT2 = 02155420): fixed offsets.
+  b kit_owned             // +38
+  b kit_keys              // +3C
+  b kit_face              // +40
+  b kit_alive             // +44
+  b kit_fresh             // +48
+  b kit_replay_hit        // +4C
 
 // ---------------------------------------------------------------- Reflex
 // Bit 18 (Amazing Speed slot): R cancels Red attack states immediately.
@@ -29,11 +36,21 @@ h_reflex_generic:
   b 0x020b573c
 h_reflex_string:
   mov r0,r8
+  bl 0x02155424             // KIT2 Web Rush: A in a ground string set up a rush?
+  cmp r0,#0
+  bne rush_enter
+  mov r0,r8
   bl reflex_ok
   cmp r0,#0
   bne reflex_pass
   ldr r1,[r8,#0x80]
   b 0x020b5338
+rush_enter:                 // re-enter state 46: the node hook plays the rush
+  mov r0,#1
+  strb r0,[r8,#4]
+  add sp,sp,#0x58
+  mov r0,#46
+  pop {r4,r5,r6,r7,r8,pc}
 reflex_pass:
   // Let the later evade transition consume R this update.
   add sp,sp,#0x58
@@ -131,10 +148,20 @@ reflex_ok_out:
 h_string_node:
   push {r0,r1,r2,r3,lr}
   mov r0,r7
+  bl 0x02155428             // KIT2: r0 = Web Rush action (node restored) or 0
+  cmp r0,#0
+  bne string_rush
+  mov r0,r7
   bl split_face
   pop {r0,r1,r2,r3,lr}
   ldr r2,[r7,#0x80]
   b 0x020c31e8
+string_rush:                // request the rush action instead of the node's
+  str r0,[sp,#0x2c]         // native action slot sp+0x18 (20 bytes pushed)
+  pop {r0,r1,r2,r3,lr}
+  add r1,sp,#0x18
+  ldr r0,[r7,#0x44]
+  b 0x020c31fc
 
 split_face:                 // r0=controller
   push {r4,r5,r6,lr}
@@ -269,6 +296,8 @@ h_update:
   bl sky_update
   mov r0,r4
   bl sense_update
+  mov r0,r4
+  bl 0x02155420             // KIT2 per-update (Web Rush dash, Ricochet)
 update_done:
   pop {r12}
   msr cpsr_f,r12
@@ -1946,6 +1975,15 @@ route_kind2f:
   bne route_take
   b route_next
 route_kind2g:
+  cmp r0,#9                 // kind 9: Web Rush kick (KIT2 keeps the flag)
+  bne route_kind2h
+  push {r1,r2,r3}
+  bl 0x0215542c
+  pop {r1,r2,r3}
+  cmp r0,#0
+  bne route_take
+  b route_next
+route_kind2h:
   cmp r0,#2                 // kind 2: Reflex roll
   bne route_next
   ldr r0,lit_02154c20
