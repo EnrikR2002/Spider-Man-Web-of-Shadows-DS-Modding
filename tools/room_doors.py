@@ -136,14 +136,19 @@ def retarget(raw, changes):
     return _assemble(room, records, [n.raw for n in room.names])
 
 
-def add_spawn(raw, spawn_id, xyz, facing):
-    """Append a spawn cloned from the first native one (unknown bytes kept)."""
+def add_spawn(raw, spawn_id, xyz, facing, template=None):
+    """Append a spawn cloned from the first native one (unknown bytes kept).
+
+    `template`: a Spawn of another room, for rooms without a spawn table
+    (debug rooms); their envelope has the same 16-byte prefix and no spawns.
+    """
     room = RoomObjects.parse(raw)
     table = spawns(raw)
-    if not table: raise ValueError('Room has no spawn template')
+    if not table and template is None: raise ValueError('Room has no spawn template')
     if _byte(spawn_id, 'Spawn id') in {s.spawn_id for s in table}: raise ValueError('Duplicate spawn id')
     if len(table) >= 255: raise ValueError('Too many spawns')
-    record = bytearray(table[0].raw)
+    if len(room.header) != 16 + 20 * len(table): raise ValueError('Unexpected envelope header size')
+    record = bytearray(table[0].raw if table else template.raw)
     struct.pack_into('<3iH', record, 0, *xyz, FACING[facing])
     record[18] = spawn_id
     header = bytearray(room.header[:16 + 20 * len(table)] + bytes(record))
@@ -187,11 +192,22 @@ def append_entity(raw, record, entity, name):
     return _assemble(parsed, records, blocks)
 
 
-def add_exit(raw, *, center, size, room, selector, spawn, trigger_name, group_name):
+def exit_trigger(raw):
+    """The first record-0 exit trigger of a room (28 bytes), or None."""
+    record = RoomObjects.parse(raw).records[0]
+    events = Events.parse(record.sections[1], record.raw[3])
+    exit_groups = {g for g, group in enumerate(events.groups) if any(c.opcode == GO_TO_ROOM for c in group.commands)}
+    return next((e for e in Entities.parse(record.sections[0]).records
+                 if len(e) == 28 and struct.unpack_from('<I', e, 12)[0] == TRIGGER_TYPE and e[26] == 2
+                 and e[27] - 1 in exit_groups), None)
+
+
+def add_exit(raw, *, center, size, room, selector, spawn, trigger_name, group_name, template=None):
     """Append a player-collide trigger and a go-to-room group to record 0.
 
     The trigger is a copy of the room's first native exit trigger with a new
-    centre (x, y, z) Q12, box size (w, h) and group reference.
+    centre (x, y, z) Q12, box size (w, h) and group reference; `template` is
+    another room's exit trigger (`exit_trigger`) for rooms that have none.
     """
     parsed = RoomObjects.parse(raw)
     record, names = parsed.records[0], parsed.names[0]
@@ -199,11 +215,11 @@ def add_exit(raw, *, center, size, room, selector, spawn, trigger_name, group_na
     events = Events.parse(record.sections[1], record.raw[3])
     if names.category_ends[0] != len(entities.records) or names.category_ends[1] - names.category_ends[0] != len(events.groups):
         raise ValueError('Record 0 names do not match entities/event groups')
-    exit_groups = {g for g, group in enumerate(events.groups)
-                   if any(c.opcode == GO_TO_ROOM for c in group.commands)}
-    template = next((e for e in entities.records if len(e) == 28 and struct.unpack_from('<I', e, 12)[0] == TRIGGER_TYPE
-                     and e[26] == 2 and e[27] - 1 in exit_groups), None)
+    template = exit_trigger(raw) or template
     if template is None: raise ValueError('Room has no native exit trigger to copy')
+    if len(template) != 28 or struct.unpack_from('<I', template, 12)[0] != TRIGGER_TYPE or template[26] != 2:
+        raise ValueError('Exit trigger template is not a touch trigger')
+    if not entities.batches: raise ValueError('Record 0 has no entity batch to extend')
     if len(events.groups) >= 254: raise ValueError('Too many event groups')
     trigger = bytearray(template)
     struct.pack_into('<3i', trigger, 0, *center)

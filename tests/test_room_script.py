@@ -79,6 +79,40 @@ class RoomScriptTests(unittest.TestCase):
         self.assertEqual(new.records[0].raw, old.records[0].raw)
         self.assertEqual(new.names[0].raw, old.names[0].raw)
 
+    def test_door_deactivate_and_trigger_builders_reproduce_native_bytes(self):
+        raw = self.rooms['Hive_Map02']
+        entities, groups, batches = s.names(raw, 1)
+        self.assertEqual(batches, ('<AG_INIT>', 'Enemy Spawners', 'Smashables', 'Hammer Object', 'Door Locks', 'Ambush Trigger'))
+        self.assertEqual(entities[4], ('Ichor Door Block (Untokenized)', 'Object (Gate_Ichor_Floor)'))
+        lock, unlock, block_die = (self.groups(raw, 1)[groups.index(n)].commands
+                                   for n in ('Door_Lock', 'Door_Unlock', 'Ichor_Block_Die'))
+        self.assertEqual(lock[0], s.door((0, 1), True))
+        self.assertEqual(block_die[2], s.door((0, 1), False))
+        self.assertEqual(lock[5], s.deactivate(entity=(5, 1)))          # the one-shot ambush trigger removes itself
+        self.assertEqual(block_die[0], s.deactivate(ag=4))
+        self.assertEqual(self.groups(self.rooms['Sewer_Map03'], 1)[9].commands, (s.door((0, 3), True),))   # Lock_Grate
+        trigger = Entities.parse(RoomObjects.parse(raw).records[1].sections[0]).batches[5].records[0]
+        x, y, z = struct.unpack_from('<3i', trigger)
+        self.assertEqual(trigger, s.trigger(x, y, (0x2D, 5), groups.index('Ambush Trigger') + 1, z))
+        self.assertEqual(s.actions(lock[5]), (bytes((5, 1, 0, 0)),))
+        self.assertEqual(s.targets(bytes((5, 1, 0, 0))), {5})
+        self.assertEqual(s.targets(bytes((0, 0, 4, 2))), {3})
+        self.assertEqual(s.actions(s.set_var(1, 1)), ())
+
+    def test_drop_commands_removes_whole_commands_and_keeps_every_index(self):
+        raw = self.rooms['Hive_Map02']
+        _, groups, batches = s.names(raw, 1)
+        hammer = batches.index('Hammer Object')
+        out, removed = s.drop_commands(raw, 1, lambda g, c: any(hammer in s.targets(a) for a in s.actions(c)))
+        self.assertEqual([g for g, _ in removed], [0])
+        self.assertEqual(s.counts(out, 1), s.counts(raw, 1))
+        self.assertEqual(s.names(out, 1), s.names(raw, 1))
+        old, new = self.groups(raw, 1), self.groups(out, 1)
+        self.assertEqual(new[1:], old[1:])
+        self.assertEqual(new[0].commands, tuple(c for c in old[0].commands if c != removed[0][1]))
+        same, nothing = s.drop_commands(raw, 1, lambda g, c: False)
+        self.assertEqual((same, nothing), (raw, []))
+
 
 if __name__ == '__main__':
     unittest.main()

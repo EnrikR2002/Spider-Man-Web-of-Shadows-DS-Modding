@@ -17,13 +17,16 @@
     "release_0_6_1": "c3010cba: tour 14/14, refuge save/continue, ambush seeds 11/12 exits work (11 completed ambush), kit 31/31, crash hunt 12/12",
     "release_0_7_0": "c56095be: tour 30/30, saves+Continue in Refuge/NestRest/NestShrine, fights end with working exits (Station, Shaft, Throat, Span, Hollow, Gate; enemy HP capped), boss start/death/completed flag/exit, map diagram in game, title v0.7.0, crash hunt 12/12",
     "release_0_8_0": "d84ae539: power puzzle chain (breaker -> Platform -> lift/throw boiler -> grate -> Nest Shaft, real presses), v0.7.0 control blocked, hint/breaker/objective lines render, tour 0..22 (bc3aa3a1) + --start 24 + Gate exit after fights (30/30 links), saves+Continue Refuge/Rest/Shrine, kit 31/31, crash hunt 12/12",
+    "release_0_8_1": "f68a082e: walk routes with real inputs and doors 5/5 (67 checks: sealed Stairs grate + hint, breaker, boiler, grate; Shaft/Rest/Throat descent on foot; Span red walls by Bulldozer Dash; Hollow gap; Gallery; Shrine; boss room corridor safe, walls rise with the fight, boss, exits; Gate gap, unsealed top, neck exit by wall crawl; Stairs grate shortcut), tour 30/30, puzzle, saves+Continue Refuge/Rest/Shrine",
+    "release_0_9_0": "f109a525: walk routes 6/6 first try (75 checks, incl. Yard: Refuge door, tunnel, floor, gang, back out), tour 32/32, puzzle, saves+Continue Refuge/Rest/Shrine, kit 31/31, crash hunt 12/12",
     "room_object_roundtrips": 75,
     "shell_checks": "6/6: appended entry 76, ongoing updates, movement, frames, return to native room 64",
     "shell_hash_prefix": "edf0521b",
-    "source_tests": "199 full-suite tests passed; focused Midnight Line/document tests pass"
+    "source_tests": "199 full-suite tests passed; focused Midnight Line/document tests pass",
+    "walkability_before_0_8_1": "v0.7.0/v0.8.0 door tours teleported onto exit triggers: the Hollow, the boss room and the Gate could not be crossed on foot (Sledgehammer Slam floors), Nest door seals could strand the player"
   },
   "authorization": "2026-10-06: implement the approved Midnight Line first-station plan",
-  "current_research_gate": "Power puzzle, dialogue and objective board shipped in v0.8.0; Signal Leech and Conductor teaser not built",
+  "current_research_gate": "v0.9.0 adds the Yard (proto01) off the Refuge; Signal Leech and Conductor teaser not built",
   "deferred": [
     "moving_train",
     "full_conductor_boss",
@@ -91,7 +94,16 @@
     "shared_cross_room_flag",
     "power_puzzle_breaker",
     "chapter_dialogue_message_ids",
-    "refuge_objective_board"
+    "refuge_objective_board",
+    "room_collision_tree",
+    "walk_routes_with_real_doors",
+    "no_sledgehammer_floors",
+    "unsealed_nest_fights",
+    "boss_arena_from_exit_corridor",
+    "stairs_grate_one_way_until_gate",
+    "authored_doors_with_foreign_templates",
+    "debug_room_as_chapter_room",
+    "cross_area_spawner_in_appended_batch"
   ],
   "objectives": [
     "find_emergency_power",
@@ -141,6 +153,7 @@
           245
         ]
       },
+      "retired_locals": "Span seal flag and Hollow red-floor flag (never written since v0.8.1) moved from 266/267 to 138/139; other allocations unchanged",
       "shared_flags": {
         "track_power_cut (ML_Platform 0x27, set by the ML_Stairs breaker)": 269
       },
@@ -158,7 +171,8 @@
         "ML_Refuge": 253,
         "ML_Stairs": 255,
         "ML_Station": 254,
-        "ML_Venom": 265
+        "ML_Venom": 265,
+        "ML_Yard": 266
       }
     },
     "temporary_circuit": "Restore a safe configuration on re-entry"
@@ -182,6 +196,12 @@
       "date": "2026-10-08",
       "summary": "About to playtest v0.7.0; work on whatever is worthwhile meanwhile",
       "version": "0.7.0"
+    },
+    {
+      "addressed_in": "0.8.1: red floors removed, Nest fights never seal doors, boss arena staged for the corridor entrance, Stairs grate locked until the Gate is reached, grate hint; 0.9.0: the Yard (map extension)",
+      "date": "2026-10-11",
+      "summary": "Went into the hive section; top entrance locked by venom goo, could not break the red platform without the power-up; had to quit and lost a little progress",
+      "version": "0.8.0"
     }
   ],
   "player_kit": "Preserve accepted Red, Black and shared abilities and purchases",
@@ -200,6 +220,10 @@
     "conductor_teaser",
     "player_feedback_iteration"
   ],
+  "requirements": {
+    "release_rule": "Every room passes a tools/midnight_walk.py route (real doors, real movement) before release",
+    "story_abilities": "Bulldozer Dash for the Span walls (player owns bits 0..4); never Sledgehammer Slam (bit 5)"
+  },
   "research_evidence": "work/midnight-line/",
   "rooms": [
     {
@@ -212,7 +236,7 @@
     {
       "id": "ml_refuge",
       "name": "Maintenance Refuge",
-      "role": "Combat-free save room; objective board on entry (v0.8.0)",
+      "role": "Combat-free save room; objective board on entry; left door to the Yard (v0.9.0)",
       "room_index": 77,
       "source": "Sewer_Save04"
     },
@@ -226,21 +250,21 @@
     {
       "id": "ml_stairs",
       "name": "Switchback Stairs",
-      "role": "Between Platform and Refuge; track-power breaker on the landing (v0.8.0); floor grate up from the Nest Gate; three enemy groups",
+      "role": "Between Platform and Refuge; track-power breaker on the landing; floor grate = way out of the Nest, locked until the Gate is reached from below (v0.8.1), then a shortcut down; three enemy groups",
       "room_index": 79,
       "source": "Sewer_Map13"
     },
     {
       "id": "ml_platform",
       "name": "Last Platform",
-      "role": "Tracks and parked train; train-roof fight; live tracks and an electrified boiler on the floor grate down into the Nest until the Stairs breaker is thrown (v0.8.0); top trapdoor sealed",
+      "role": "Tracks and parked train; live tracks and an electrified boiler on the floor grate until the Stairs breaker is thrown; grate hint when the boiler breaks (v0.8.1); top trapdoor sealed",
       "room_index": 80,
       "source": "Sewer_Map03"
     },
     {
       "id": "ml_nest_shaft",
       "name": "Nest Shaft",
-      "role": "Drop-in from the tracks' floor grate; fliers",
+      "role": "Drop-in from the tracks grate; fliers; doors never seal (v0.8.1)",
       "room_index": 81,
       "source": "Hive_Map07"
     },
@@ -254,21 +278,21 @@
     {
       "id": "ml_nest_throat",
       "name": "Nest Throat",
-      "role": "Climb; fliers; ichor locks",
+      "role": "Descent; fliers; doors never seal (v0.8.1)",
       "room_index": 83,
       "source": "Hive_Map06"
     },
     {
       "id": "ml_nest_span",
       "name": "Nest Span",
-      "role": "Long hall; two waves; ichor walls",
+      "role": "Long hall; two chambers joined by a corridor behind two red walls (Bulldozer Dash); doors never seal (v0.8.1)",
       "room_index": 84,
       "source": "Hive_Map05"
     },
     {
       "id": "ml_nest_hollow",
       "name": "Nest Hollow",
-      "role": "Ambush; ichor locks",
+      "role": "Climb; ground symbiotes; red floor removed, doors never seal (v0.8.1)",
       "room_index": 85,
       "source": "Hive_Map04"
     },
@@ -289,16 +313,23 @@
     {
       "id": "ml_nest_gate",
       "name": "Nest Gate",
-      "role": "Ambush, then up through the Stairs' floor grate",
+      "role": "Climb out after the boss; red floor removed, top never seals (v0.8.1); ceiling exit through the neck to the Stairs grate",
       "room_index": 88,
       "source": "Hive_Map02"
     },
     {
       "id": "ml_venom",
       "name": "Rooftop Arena",
-      "role": "Boss: Mini-Boss 06 with ichor gates and platforms; completion; native reward withheld",
+      "role": "Boss: Mini-Boss 06; entered from the lower-right exit corridor, walls rise when Spidey is inside the arena (v0.8.1); completion; native reward withheld",
       "room_index": 89,
       "source": "Downtown_Map14"
+    },
+    {
+      "id": "ml_yard",
+      "name": "Freight Yard",
+      "role": "Side room behind a new door in the Refuge left wall: warehouse yard, Pier gang camp, liftables on the roof walkway; no ability needed or given",
+      "room_index": 90,
+      "source": "proto01"
     }
   ],
   "schema_version": 1,

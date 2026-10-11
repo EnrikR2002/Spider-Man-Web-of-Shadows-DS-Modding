@@ -95,6 +95,19 @@ PROFILE_INFO = {
                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                     'arm9_sha256': 'dc4911d7774bfbbc5f4a6cc7d7e6f4d679657926b94c2abf5acffe6da4310263'},
+    # Walkable Nest (player softlock in the Gate): no Sledgehammer Slam floors, no ichor door
+    # seals, boss arena entered from its exit corridor, Stairs grate locked until the loop is
+    # done (CHANGES v0.8.1). v0.8.0's chapter bytes stay identified by its ROM.
+    'tasm-v0.8.1': {'version': '0.8.1', 'date': '2026-10-11', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': '4bdceb45a69e77cea7f1e1688c552d97734ea46f4466a0aa09c8089ef32ce384'},
+    # The Yard: the unused prototype warehouse (proto01) as room 90 behind a new Refuge door,
+    # with a Pier gang camp (CHANGES v0.9.0). v0.8.1's chapter bytes stay identified by its ROM.
+    'tasm-v0.9.0': {'version': '0.9.0', 'date': '2026-10-11', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': 'e54fa1aaf4cd27ad68f72188c8377c2f44c158c448e71c512503df11ac6b9534'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

@@ -216,7 +216,7 @@ def run(rom, label, inputs, **options):
 
 def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=None, patch=None, probe=None,
         caps=(), rams=(), arena=False, tx=120000, ty=40922, save=None, near=None, place=(), phantom=None, start_x=None, refill=False, extra_hook=None,
-        sparring=False, timing=False, core_options=None):
+        sparring=False, timing=False, core_options=None, live_buttons=None):
     """One disposable emulator run; returns (output directory, observation rows)."""
     rom = Path(rom).resolve()
     rel = rows_from(inputs) if not isinstance(inputs, list) else inputs
@@ -279,13 +279,15 @@ def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=N
                     c.memmove(ptr + a - p.BASE + 0x44, struct.pack('<i', top), 4)
         if phantom is not None and frame >= start - 20:
             put_phantom(lib, phantom)
+        stop = None
         if extra_hook is not None:   # in-process callers only (tools/crash_hunt.py)
-            extra_hook(frame - start, lib)
+            stop = extra_hook(frame - start, lib)
         if enemy_state and start + enemy_state[0] <= frame < start + enemy_state[1]:
             ptr, ram = ram_of(lib)
             for e in enemies(ram):
                 if e['controller']:
                     c.memmove(ptr + e['controller'] - p.BASE + 0x14, struct.pack('<I', enemy_state[2]), 4)
+        return stop
 
     def observe(frame, lib):
         if frame < start - 20: return None
@@ -293,7 +295,7 @@ def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=N
 
     dest = emu.run(rom, start + frames, {start + x for x in caps}, save_path=save, script=script, label=label,
                    frame_hook=hook, observer=observe, ram_captures={start + x for x in rams}, core_options=options,
-                   timing_start=start if timing else None)
+                   timing_start=start if timing else None, live_buttons=live_buttons)
     path = dest / 'observations.json'
     rows = json.loads(path.read_text()) if path.exists() else []
     write_trace(dest, rows)

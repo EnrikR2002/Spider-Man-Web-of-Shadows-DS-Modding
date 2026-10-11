@@ -116,7 +116,8 @@ def touch_schedule(rows):
     return result
 
 
-def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, ram_captures=(), trace_frames=(), battery_captures=(), frame_hook=None, observer=None, core_options=None, timing_start=None):
+def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, ram_captures=(), trace_frames=(), battery_captures=(), frame_hook=None, observer=None, core_options=None, timing_start=None, live_buttons=None):
+    """`live_buttons`: a mutable set of button names a frame_hook may change; they are held in addition to the script."""
     if os.name != 'nt' or c.sizeof(c.c_void_p) != 8: raise ValueError('Pinned emulator harness requires Windows x64')
     if w.sha256(CORE_PATH.read_bytes()) != CORE_SHA256: raise ValueError('Emulator core integrity check failed')
     rom_data = rom_path.read_bytes(); report = w.validate_rom(rom_data, target=True)
@@ -188,6 +189,8 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
             point = next((xy for start, end, xy in touches if start <= frame < end), None)
             if point is None: return 0
             return point[0] if button == POINTER_X else point[1] if button == POINTER_Y else int(button == POINTER_PRESSED)
+        if live_buttons and device == 1 and port == 0 and any(BUTTONS[b] == button for b in live_buttons):
+            return 1
         if schedule is not None:
             return int(device == 1 and port == 0 and any(start <= frame < end and button in buttons
                        for start, end, buttons in schedule))
@@ -230,8 +233,8 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
                 timings.append(elapsed / 1000000)
             # Optional research callbacks operate only on this disposable core.
             # No state is loaded and source battery files are never written.
-            if frame_hook is not None:
-                frame_hook(frame, library)
+            if frame_hook is not None and frame_hook(frame, library) == 'stop':
+                break                                    # research hooks may end a run early
             if observer is not None:
                 value = observer(frame, library)
                 if value is not None: observations.append(value)

@@ -38,12 +38,17 @@ FLAG_LIMIT = 0x123                          # flags 0..0x122; higher ids are sca
 # Flags with no event or code reference that no save sets. 251..275 sit
 # after the native visited flags (0xB0+room); 245..250 are the visited flags
 # of the unreachable debug rooms 69..74, whose OBJs never set them.
-FREE_FLAGS = range(245, 276)
+# 138..165 have no event or code reference either and are unset in 21 save
+# slots up to mission 47 (TECHNICAL "Content toolbox research").
+FREE_FLAGS = (*range(138, 166), *range(245, 276))
 # Chapter allocation: visited 0xB0+room (252..265 for rooms 76..89, the native
 # rule the map relies on); LOCAL_FLAGS hold room-local flags of cloned
 # encounters, allocated in first-use order (Station/Platform keep 268..271
 # from v0.6.1). The Venom room's reward flag doubles as "chapter completed".
-LOCAL_FLAGS = (*range(268, 276), 266, 267, 251, 250, 249, 248, 247, 246, 245)
+# 266/267 held the Span's seal flag and the Hollow's red-floor flag, which
+# nothing writes since v0.8.1; those two now take 138/139 so that 266/267 are
+# the visited flags of rooms 90/91. Every other allocation keeps its number.
+LOCAL_FLAGS = (*range(268, 276), 138, 139, 251, 250, 249, 248, 247, 246, 245, *range(140, 166))
 # Per-room scratch bytes (0x127..0x130, e.g. the Venom room's platform and
 # timer states): writes are kept, like the native room's.
 ROOM_SCRATCH = range(0x127, 0x131)
@@ -56,7 +61,7 @@ DELAY = 0x1C                                # u16 frames, u8 action group (+4), 
 GRANT = 0x1F                                # "<ability> obtained!": grants a native story ability
 SPAWN_PICKUP = 0x07                         # spawns a pickup; operand +26 = 1-based group run on pickup
 STABLE_SHA256 = 'fd7e4420f97645dd55011504843ce62f068d1276234c3cd781931c85bb1eb193'
-ARM9_SHA256 = 'dc4911d7774bfbbc5f4a6cc7d7e6f4d679657926b94c2abf5acffe6da4310263'   # chapter over the kit ARM9 (pinned per release)
+ARM9_SHA256 = 'e54fa1aaf4cd27ad68f72188c8377c2f44c158c448e71c512503df11ac6b9534'   # chapter over the kit ARM9 (pinned per release)
 ENTRANCE = 'Sewer_Save02'
 STATE_TEMPLATE = 'Test_Surfaces01'
 
@@ -87,6 +92,8 @@ ROOMS = (
     Room(87, 'ML_NestShrine', 'Hive_Save02', 'nest', True),     # second save point
     Room(88, 'ML_NestGate', 'Hive_Map02', 'nest', True),        # ambush, then up to the Stairs
     Room(89, 'ML_Venom', 'Downtown_Map14', 'nest', True),       # boss: Venom, ichor gates, platforms
+    # The Yard (v0.9.0): the unused prototype warehouse, behind a new door in the Refuge.
+    Room(90, 'ML_Yard', 'proto01', 'dusk', True),               # side room: gang camp, crates to throw
 )
 BY_NAME = {r.name: r for r in ROOMS}
 # (room, record-0 exit group) -> (destination, spawn id). A spawn is the arrival
@@ -114,7 +121,10 @@ LINKS = {
     ('ML_NestShrine', 1): ('ML_Venom', 2), ('ML_Venom', 1): ('ML_NestShrine', 1),
     ('ML_Venom', 2): ('ML_NestGate', 2), ('ML_NestGate', 1): ('ML_Venom', 1),
     ('ML_NestGate', 2): ('ML_Stairs', 1), ('ML_Stairs', 1): ('ML_NestGate', 1),
+    # Authored doors (no native pair): Refuge left wall <-> the Yard's right tunnel.
+    ('ML_Refuge', 2): ('ML_Yard', 1), ('ML_Yard', 1): ('ML_Refuge', 2),
 }
+AUTHORED_EXITS = {('ML_Refuge', 2), ('ML_Yard', 1)}        # built by add_yard_door/stage_yard, not by sanitize
 # Surplus native exits (both ceiling hatches whose floor partners now lead into
 # the Nest): the trigger moves out of reach, so the door is a dead hatch.
 SEALED = {('ML_Entry', 3), ('ML_Platform', 4), ('ML_Venom', 3)}
@@ -154,9 +164,70 @@ LINES = {
     'goal_power': 'Objective: cut the track power. The breaker is on the Stairs.',
     'goal_nest': 'Objective: something nests under the tracks. Move the boiler and go down.',
     'goal_done': 'The Midnight Line is quiet. For now.',
+    'sealed_grate': 'Sealed from below. The way down must be somewhere on the tracks.',
+    'grate_clear': 'The grate is clear. Stand on it, open it with X and drop in with Down.',
+    'way_up': 'The nest falls silent. Take the left passage: a shaft climbs back to the Stairs.',
+    'yard': 'A freight yard above the line. Someone made camp here, and they have seen you.',
 }
+# --- The Yard (v0.9.0) -------------------------------------------------------
+# proto01 is a textured prototype warehouse yard no story room leads to: one
+# model, its own BSP and textures, no spawn table or exits, Spidey and every
+# object in record 1's first batch. The clone gains a spawn and an exit in the
+# tunnel at its right end, loses its test orbs/pickups and the two red test
+# objects standing in that tunnel, and gets a Pier gang spawner. The Refuge
+# gains the matching door in its left wall. See TECHNICAL "The Yard".
+YARD = {
+    'room': 'ML_Yard', 'hub': 'ML_Refuge',
+    'spawn': {'spawn_id': 1, 'xyz': (160 * 4096, 42 * 4096, 0), 'facing': 'left'},
+    # The tunnel wall is at x 175 and Spidey stops 3.5 short of it: the box must reach in to 172.
+    'exit': {'center': (178 * 4096, 48 * 4096, 0), 'size': (12, 24),
+             'trigger_name': 'Trigger (Main|Exit_Refuge)', 'group_name': 'Exit_Refuge'},
+    # Refuge wall at x 0.5: Spidey stands at 4 against it, so the box reaches to x 2 (touched below 5.5).
+    'hub_spawn': {'spawn_id': 2, 'xyz': (10 * 4096, 2 * 4096, 0), 'facing': 'right'},
+    'hub_exit': {'center': (-4 * 4096, 6 * 4096, 0), 'size': (12, 24),
+                 'trigger_name': 'Trigger (Main|Exit_Yard)', 'group_name': 'Exit_Yard'},
+    'hub_door': {'source': 'Sewer_Map13', 'label': 'Door (Misc) 1', 'xyz': (-2048, 0, 0)},   # a native left sewer door
+    # Object kinds moved away: red test floor and wall in the exit tunnel, two ichor test gates on the
+    # floor, the electric and fire hazard test objects by the left wall.
+    'removed_kinds': (0x09, 0x30, 0x0C, 0x0D, 0x11, 0x13),
+    'removed_triggers': 'Ichor Test',                       # the X prompts that dissolved those gates
+    'pickup_chain': 'New Event',                            # test groups that respawn ability pickups
+    'gang': {'source': 'Pier_Map04', 'table': 0x08, 'xyz': (-110 * 4096, 2 * 4096, 0), 'box': (300, 120)},
+}
+SPAWNER_TYPE = 4
 OBJECTIVE_ROOM = 'ML_Refuge'
 COMPLETED = ('ML_Venom', 0xAB)              # boss reward flag (local allocation) = chapter completed
+# --- Walkable routes (v0.8.1) ------------------------------------------------
+# The Nest runs the Hive rooms against their native direction and the boss
+# arena from its exit side, and the chapter never grants the boss's native
+# reward, Sledgehammer Slam (story ability 314, bit 5). So no clone may need
+# it: the red ichor floors only that ability breaks are never activated (the
+# room's own "already smashed" state). Player 2026-10-11: sealed in the Gate
+# between its ichor ceiling and such a floor. See TECHNICAL "Chapter routes".
+OBJECT_TYPE = 14
+SLEDGEHAMMER_FLOOR = 0x09                   # object kind (entity +22): Floor_Smashable/Floor_SmashableIchor
+# Hive ambushes seal both doors with ichor crystals until the wave is dead and
+# the cracked crystal is hit. Walked for real, that strands Spidey: enemies
+# reposition into the door corridor behind a crystal (Throat, lab), a seal that
+# starts at the native entrance comes after the enemies are gone (Gate), and
+# the wave stays below a floor he could not pass (Gate, the player's report).
+# The Nest keeps every fight but never runs the sealing group; the boss arena
+# is the one sealed fight.
+SEAL_GROUP = 'Door_Lock'
+UNSEALED = ('ML_NestShaft', 'ML_NestThroat', 'ML_NestSpan', 'ML_NestHollow', 'ML_NestGate')
+# The boss arena is entered from a lower exit corridor instead of the upper
+# door: its ichor walls rise when the fight starts (natively at room load,
+# closing the corridors), the fight starts when Spidey is inside the arena
+# (natively also on a 450-frame timer, which sealed him in the corridor).
+BOSS = {'room': 'ML_Venom', 'walls': 'Ichor Walls', 'route': 'Route 1', 'start': 'Boss Trigger',
+        'fight': 'Gate_Spawn', 'reward': 'Reward_Pickup', 'timer_frames': 450,
+        'trigger': (90 * 4096, 65 * 4096), 'trigger_size': (90, 140)}
+GATE_GROW = 0x8D                            # native ichor gate/wall rise animation (Door_Lock, Gate_Spawn)
+# The Stairs' floor grate is the way *out* of the Nest (the Gate's ceiling
+# exit). It stays locked until the Gate has been reached from below, so the
+# Nest is always entered through the tracks and the boss cannot be skipped to.
+GRATE = {'room': 'ML_Stairs', 'door': 'Door (Sewer Grate Floor)', 'opened_by': 'ML_NestGate',
+         'trigger': (-10 * 4096, 6 * 4096), 'trigger_size': (16, 12)}
 
 
 def message_id(key):
@@ -233,6 +304,9 @@ MAP_FIELDS = {
     'Hive_Map07': (4, 450560, 163840, 540672, 618496, 0, 798720, 163840, 0),
     'Hive_Save02': (4, 450560, 323584, 589824, 393216, 0, 102400, 245760, 0),
     'Downtown_Map14': (3, 335872, 237568, 704512, 446464, 40960, 450560, 696320, 81920),
+    # proto01 has no native values (area 5, zeros): the Refuge's map piece, its own collision bounds
+    # as (x min, y max, x max, y min), the layout Sewer_Save04's values show.
+    'proto01': (5, 450560, 323584, 589824, 393216, -270 * 4096, 110 * 4096, 175 * 4096, 0),
 }
 # --- Touch-screen map (v0.7.0) ---------------------------------------------
 # The Sewer area screen gains a subway-style diagram of the chapter in its empty
@@ -248,7 +322,7 @@ STATE_COLORS = bytes((0xB6, 0xBA, 0xBB, 0xBF))   # every native entry: state col
 # 5-colour room slots (first colour = background) that no Sewer screen tile
 # uses: palettes 1..3 (magenta fill), Sewer_Map13's spare third slot 0xAB,
 # palette 0 beyond its backdrop colour, and one slot of the grey palette 13.
-MAP_SLOTS = (0x11, 0x16, 0x1B, 0x21, 0x26, 0x2B, 0x31, 0x36, 0x3B, 0xAB, 0x06, 0x0B, 0xD6, 0xDB)
+MAP_SLOTS = (0x11, 0x16, 0x1B, 0x21, 0x26, 0x2B, 0x31, 0x36, 0x3B, 0xAB, 0x06, 0x0B, 0xD6, 0xDB, 0x01)
 SLOT_DEFAULT = (0x1042, 0x3D89, 0xE6B2, 0x4E0E, 0xCA52)   # native slot colours in the file
 # Diagram cells (screen tile column, row) per room; links join cell edges.
 DIAGRAM = {
@@ -257,6 +331,7 @@ DIAGRAM = {
     'ML_NestShaft': ((6, 16),), 'ML_NestRest': ((6, 17),), 'ML_NestThroat': ((6, 18),),
     'ML_NestSpan': ((7, 18), (8, 18)), 'ML_NestHollow': ((9, 18),), 'ML_NestGallery': ((10, 18),),
     'ML_NestShrine': ((11, 18),), 'ML_Venom': ((11, 17),), 'ML_NestGate': ((11, 16),),
+    'ML_Yard': ((12, 16), (13, 16)),
 }
 SAVE_ROOMS = {'ML_Refuge', 'ML_NestRest', 'ML_NestShrine'}
 DIAGRAM_TRACK = {(7, 15), (8, 15), (9, 15), (10, 15)}   # Platform<->Stairs line drawn as Stairs
@@ -341,6 +416,7 @@ GRADES = {   # (desaturation, (r, g, b) gain, lift in 5-bit units)
     'midnight': (0.55, (0.42, 0.58, 0.82), (0.0, 0.3, 0.9)),
     'emergency': (0.45, (0.85, 0.60, 0.36), (0.6, 0.2, 0.0)),
     'nest': (0.30, (0.62, 0.80, 0.86), (0.2, 0.5, 0.7)),
+    'dusk': (0.45, (0.56, 0.68, 0.92), (0.5, 0.7, 1.3)),      # the Yard: night blue, lifted so its dark tunnel reads
 }
 
 
@@ -527,6 +603,152 @@ def add_breaker(raw, switch_room, breaker=None):
                            otherwise=room_script.action(eg=first + 1))])
 
 
+def _index(labels, name, what):
+    if labels.count(name) != 1: raise ValueError(f'Expected one {what} named {name!r}')
+    return labels.index(name)
+
+
+def _drop_activations(raw, batches):
+    """Record 1 without any command that only activates one of `batches` (AG indices)."""
+    def drop(_, command):
+        if command.opcode == room_script.DEACTIVATE: return False        # switching it off stays harmless
+        hits = [a for a in room_script.actions(command) if room_script.targets(a) & batches]
+        if not hits: return False
+        others = [a for a in room_script.actions(command) if a not in hits and any(a)]
+        if others or any(a[3] or len(room_script.targets(a)) != 1 for a in hits):
+            raise ValueError('Activation is combined with other actions')
+        return True
+    return room_script.drop_commands(raw, 1, drop)
+
+
+def open_hammer_floors(raw):
+    """Record 1 with its Sledgehammer Slam floors never activated; returns (raw, floors removed)."""
+    batches = Entities.parse(RoomObjects.parse(raw).records[1].sections[0]).batches
+    def floor(e): return len(e) >= 24 and struct.unpack_from('<I', e, 12)[0] == OBJECT_TYPE and e[22] == SLEDGEHAMMER_FLOOR
+    floors = {b for b, batch in enumerate(batches) if any(floor(e) for e in batch.records)}
+    if any(not floor(e) for b in floors for e in batches[b].records): raise ValueError('Mixed hammer-floor batch')
+    count = sum(len(batches[b].records) for b in floors)
+    if not floors: return raw, 0
+    raw, removed = _drop_activations(raw, floors)
+    if len(removed) not in (len(floors), count): raise ValueError('Hammer floor activations changed')
+    return raw, count
+
+
+def unseal(raw, group=SEAL_GROUP):
+    """Record 1 without any command that runs the door-sealing group; its enemies still spawn."""
+    seal = _index(room_script.names(raw, 1)[1], group, 'event group') + 1
+    def drop(_, command):
+        runs = [a for a in room_script.actions(command) if command.opcode != room_script.DEACTIVATE and a[3] == seal]
+        if runs and any(a[3] not in (0, seal) for a in room_script.actions(command)):
+            raise ValueError('Seal is combined with another event group')
+        return bool(runs)
+    raw, removed = room_script.drop_commands(raw, 1, drop)
+    if len(removed) != 1: raise ValueError('Door seal call changed')
+    return raw
+
+
+def stage_boss(raw, boss=None):
+    """Boss arena entered from an exit corridor: walls rise with the fight, which starts inside the arena."""
+    boss = boss or BOSS
+    _, egs, ags = room_script.names(raw, 1)
+    walls, route, start, fight, reward = (_index(labels, boss[key], key) for labels, key in (
+        (ags, 'walls'), (egs, 'route'), (egs, 'start'), (egs, 'fight'), (egs, 'reward')))
+    wall_count = room_script.counts(raw, 1)[0][walls]
+    raise_walls = room_script.activate(ag=walls)
+    def drop(g, command):
+        if g == route and command == raise_walls: return True
+        return (g == start and command.opcode == IF_VAR
+                and struct.unpack_from('<H', command.operand, 2)[0] == boss['timer_frames'])
+    raw, removed = room_script.drop_commands(raw, 1, drop)
+    if sorted(g for g, _ in removed) != sorted((route, start)): raise ValueError('Boss room script changed')
+    x, y = boss['trigger']
+    raw, arena = room_script.append_batch(raw, 1, [(room_script.trigger(x, y, boss['trigger_size'], fight + 1),
+                                                    'Trigger (Arena Entered)')], 'Arena Trigger')
+    raw = room_script.extend_group(raw, 1, start, [room_script.activate(ag=arena)])
+    raw = room_script.extend_group(raw, 1, fight, [
+        room_script.deactivate(ag=arena), raise_walls,
+        *(room_script.animate(walls, n + 1, GATE_GROW) for n in range(wall_count))])
+    return room_script.extend_group(raw, 1, reward, [say('way_up')])
+
+
+def seal_grate(raw, opened, grate=None):
+    """Stairs record 1: the floor grate stays locked until flag `opened`; standing on it shows a hint once."""
+    grate = grate or GRATE
+    entities, _, _ = room_script.names(raw, 1)
+    door = (0, _index(entities[0], grate['door'], 'door') + 1)
+    _, groups = room_script.counts(raw, 1)
+    sealed, hint = groups + 1, groups + 2
+    x, y = grate['trigger']
+    raw, ag = room_script.append_batch(raw, 1, [(room_script.trigger(x, y, grate['trigger_size'], hint),
+                                                 'Trigger (Sealed Grate)')], 'Sealed Grate')
+    raw, _ = room_script.append_groups(raw, 1, [
+        (EventGroup((room_script.door(door, True), room_script.activate(ag=ag))), 'Grate_Sealed'),
+        (EventGroup((say('sealed_grate'), room_script.deactivate(entity=(ag, 1)))), 'Grate_Hint')])
+    return room_script.extend_group(raw, 1, 0, [room_script.if_var(opened, '==', 0, then=room_script.action(eg=sealed))])
+
+
+def _entity(raw, record, label):
+    """The entity named `label` in a native room record."""
+    parsed = RoomObjects.parse(raw)
+    labels = parsed.names[record].labels
+    entities = Entities.parse(parsed.records[record].sections[0]).records
+    return entities[_index(list(labels[:len(entities)]), label, 'entity')]
+
+
+def stage_yard(raw, hub_native, gang_native, visited, yard=None):
+    """proto01 as a chapter room: arrival and exit in the right tunnel, no test objects, a gang, a visited flag."""
+    yard = yard or YARD
+    parsed = RoomObjects.parse(raw)
+    section0, moved = parsed.records[1].sections[0], []
+    for i, entity in enumerate(Entities.parse(section0).records):
+        if len(entity) >= 24 and struct.unpack_from('<I', entity, 12)[0] == OBJECT_TYPE and entity[22] in yard['removed_kinds']:
+            changed = bytearray(entity)
+            struct.pack_into('<i', changed, 4, REMOVED_PICKUP_Y)
+            section0 = Entities.parse(section0).replace_record(i, bytes(changed))
+            moved.append(i)
+    if len(moved) != len(yard['removed_kinds']): raise ValueError('Yard test objects changed')
+    _, egs, _ = room_script.names(raw, 1)
+    prompts = {g + 1 for g, name in enumerate(egs) if name.startswith(yard['removed_triggers'])}
+    for i, entity in enumerate(Entities.parse(section0).records):
+        if len(entity) == 28 and struct.unpack_from('<I', entity, 12)[0] == room_doors.TRIGGER_TYPE and entity[27] in prompts:
+            changed = bytearray(entity)
+            struct.pack_into('<i', changed, 4, REMOVED_PICKUP_Y)
+            section0 = Entities.parse(section0).replace_record(i, bytes(changed))
+            moved.append(i)
+    if len(moved) != len(yard['removed_kinds']) + len(prompts) or len(prompts) != 2: raise ValueError('Yard test prompts changed')
+    raw = parsed.replace_section(1, 0, section0)
+    chain = {g + 1 for g, name in enumerate(egs) if name.startswith(yard['pickup_chain'])}
+    raw, removed = room_script.drop_commands(raw, 1, lambda g, c: g == 0 and any(a[3] in chain for a in room_script.actions(c)))
+    if len(removed) != 1: raise ValueError('Yard pickup chain changed')
+    raw = room_doors.add_spawn(raw, template=room_doors.spawns(hub_native)[0], **yard['spawn'])
+    hub = BY_NAME[yard['hub']]
+    raw = room_doors.add_exit(raw, room=hub.index, selector=1, spawn=yard['hub_spawn']['spawn_id'],
+                              template=room_doors.exit_trigger(hub_native), **yard['exit'])
+    gang = yard['gang']
+    spawner = bytearray(next(e for e in Entities.parse(RoomObjects.parse(gang_native).records[1].sections[0]).records
+                             if len(e) == 28 and struct.unpack_from('<I', e, 12)[0] == SPAWNER_TYPE
+                             and e[22] == gang['table'] and not any(e[23:])))
+    struct.pack_into('<3i', spawner, 0, *gang['xyz'])
+    struct.pack_into('<2H', spawner, 16, *gang['box'])
+    raw, ag = room_script.append_batch(raw, 1, [(bytes(spawner), 'EnemySpawner (Yard Gang)')], 'Yard Gang')
+    raw, hint = room_script.append_groups(raw, 1, [(EventGroup((say('yard'),)), 'Yard_Seen')])
+    return room_script.extend_group(raw, 1, 0, [
+        room_script.activate(ag=ag), room_script.if_var(visited, '==', 0, then=room_script.action(eg=hint)),
+        room_script.set_var(visited, 1)])
+
+
+def add_yard_door(raw, door_native, yard=None):
+    """Refuge: an exit and arrival point at its left wall, and a native sewer door standing there."""
+    yard = yard or YARD
+    raw = room_doors.add_exit(raw, room=BY_NAME[yard['room']].index, selector=1, spawn=yard['spawn']['spawn_id'],
+                              **yard['hub_exit'])
+    raw = room_doors.add_spawn(raw, **yard['hub_spawn'])
+    door = bytearray(_entity(door_native, 1, yard['hub_door']['label']))
+    struct.pack_into('<3i', door, 0, *yard['hub_door']['xyz'])
+    raw, ag = room_script.append_batch(raw, 1, [(bytes(door), 'Door (Yard)')], 'Yard Door')
+    return room_script.extend_group(raw, 1, 0, [room_script.activate(ag=ag)])
+
+
 HINT_ROOM = 'ML_Platform'
 
 
@@ -535,6 +757,15 @@ def add_power_hint(raw):
     raw, eg = room_script.append_groups(raw, 1, [(EventGroup((say('live_tracks'),)), 'Live_Tracks_Hint')])
     return room_script.extend_group(raw, 1, 0, [room_script.if_var(TRACK_POWER, '==', 0,
                                                                    then=room_script.action(eg=eg))])
+
+
+BOILER_GROUP = 'Lift_Object_Die'            # native: runs when the thrown boiler breaks; unlocks the grate
+
+
+def add_grate_hint(raw):
+    """Platform record 1: smashing the boiler also says how the grate works (9-unit pit, see TECHNICAL)."""
+    group = _index(room_script.names(raw, 1)[1], BOILER_GROUP, 'event group')
+    return room_script.extend_group(raw, 1, group, [say('grate_clear')])
 
 
 def add_objectives(raw, completed):
@@ -668,7 +899,8 @@ def apply_rom(rom, *, save_rooms=True):
     room_names = [r.name for r in native]
     _, clean_glob, manifest = mod.load_clean()
     clean = {e['name']: e['sha256'] for e in manifest['entries']}
-    used = {ENTRANCE + '_app.obj', STATE_TEMPLATE + '_app.obj', MAP_SCREEN, BREAKER_SOURCE + '_app.obj'}
+    used = {ENTRANCE + '_app.obj', STATE_TEMPLATE + '_app.obj', MAP_SCREEN, BREAKER_SOURCE + '_app.obj',
+            YARD['gang']['source'] + '_app.obj', YARD['hub_door']['source'] + '_app.obj'}
     for room in ROOMS:
         src = next(r for r in native if r.name == room.source)
         used |= {room.source + '_app.obj', names[src.texture]}
@@ -679,12 +911,31 @@ def apply_rom(rom, *, save_rooms=True):
     for room in ROOMS:
         src = next(r for r in native if r.name == room.source)
         obj, info = build_room(asset(room.source + '_app.obj'), template, room, src.index, room_names, local)
+        if room.encounters and room.name != YARD['room']:       # the Yard's red test objects are moved away instead
+            obj, info['hammer_floors_removed'] = open_hammer_floors(obj)
+        if room.name in UNSEALED:
+            obj = unseal(obj)
+            info['unsealed'] = SEAL_GROUP
+        if room.name == BOSS['room']:
+            obj = stage_boss(obj)
+            info['boss'] = {'arena_trigger_units': [v / 4096 for v in BOSS['trigger']], 'size': list(BOSS['trigger_size'])}
+        if room.name == YARD['room']:
+            obj = stage_yard(obj, asset(BY_NAME[YARD['hub']].source + '_app.obj'), asset(YARD['gang']['source'] + '_app.obj'),
+                             VISITED_BASE + room.index)
+            info['yard'] = {'gang_table': YARD['gang']['table'], 'spawn_units': [v / 4096 for v in YARD['spawn']['xyz']]}
+        if room.name == YARD['hub']:
+            obj = add_yard_door(obj, asset(YARD['hub_door']['source'] + '_app.obj'))
+            info['yard_door'] = True
+        if room.name == GRATE['room']:
+            opened = VISITED_BASE + BY_NAME[GRATE['opened_by']].index
+            obj = seal_grate(obj, opened)
+            info['grate'] = {'locked_until_flag': opened}
         if room.name == BREAKER['room']:
             obj = add_breaker(obj, asset(BREAKER_SOURCE + '_app.obj'))
             info['breaker'] = {'flag': TRACK_POWER, 'switch_units': [v / 4096 for v in BREAKER['switch']]}
         if room.name == HINT_ROOM:
-            obj = add_power_hint(obj)
-            info['hint'] = 'live_tracks'
+            obj = add_grate_hint(add_power_hint(obj))
+            info['hint'] = ['live_tracks', 'grate_clear']
         extras[f'zz_{room.name}_app.obj'] = obj
         extras[f'zz_{room.name}Textures.nsbtx'] = graded_textures(originals[src.texture], room.grade)
         report['rooms'][room.name] = {'index': room.index, 'source': room.source, **info}

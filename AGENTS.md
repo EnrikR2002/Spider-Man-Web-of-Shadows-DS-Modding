@@ -50,9 +50,10 @@ TASM_ROADMAP. Always distinguish implemented, agent-tested and player-confirmed.
   and scriptable in Windows PowerShell; prefer Python standard library.
 - Every parser/repacker needs lossless round-trip tests. Preserve unknown bytes;
   call unknown fields unknown. Test one empirical change at a time with a control.
-- Emulator research: `python tools/kit_lab.py` (training-room traces, story
-  arena, qualification, clip previews, disassembly) with copied saves and
-  disposable RAM. Check results numerically and look at captured frames.
+- Emulator research: `python tools/kit_lab.py` (traces, arena, qualification,
+  previews, disassembly), copied saves, disposable RAM. Check numbers, frames.
+- Chapter rooms must pass `tools/midnight_walk.py all` (real doors);
+  teleport tours prove links only.
 - Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.
   Agent manages builds/checkpoints; keep build/Spider-Man-WoS-modded.nds stable.
 - Use the actual Battery directory in ignored work/playtest.json. Keep DeSmuME

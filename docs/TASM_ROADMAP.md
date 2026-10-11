@@ -232,11 +232,16 @@ features and XP sinks (player has ~3000 unspent XP). Proposed, nothing built:
   works up to room 114 (25 more rooms) without code changes; ~8.5 MiB free in
   the 64 MiB cart (~80 KB per cloned room); flags are the binding limit (1
   spare; 138..165 need a backup-save scan). New geometry beyond clones,
-  mirrors or the debug rooms is unproven research.
+  mirrors or the debug rooms is unproven research. 2026-10-11: room collision
+  is decoded (TECHNICAL "Room collision tree"), so collision can be read and,
+  later, authored. Rule since v0.8.1: a cloned room ships only after a walk
+  route crosses it with real doors (`tools/midnight_walk.py`) and it needs no
+  story ability the player lacks.
 - **Next chapter content.** Power puzzle and objective board (shipped in
   v0.8.0, CHANGES), Signal Leech, Conductor teaser, then a "Midnight
   Express" network: station doors to save rooms in every district (fast travel),
-  a Lost Lab built from the unused proto01/Test rooms (every object type),
+  a Lost Lab built from the unused proto01/Test rooms (proto01 shipped as the
+  Yard in v0.9.0, cleaned of its test objects; the grey Test rooms remain),
   boss gauntlet from the mini-boss rooms, timed escape rooms (TimerWatcher).
 - **Features.** Difficulty option via variable 0x125, elite enemies (kit-side
   HP scaling), finishers, crowd backend publication, suit unlocks.

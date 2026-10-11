@@ -115,16 +115,28 @@ station (Sewer_Map02 station and timetable, Sewer_Map03 tracks, Sewer_Map13
 stairs). Each room marks itself visited on entry; certain first entries advance
 the mission counter (Sewer_Map01 and Sewer_Map03 do). Some rooms run one-time
 ambushes that lock their doors while enemies are alive. Hive ambushes seal the
-doors with purple ichor: after the wave, smash the ichor block to reopen them.
+doors with purple ichor crystals: when the wave is dead the crystals crack and
+must be hit to reopen the door (running into one does nothing). Enemies spawn
+around the room's spawner, not at the doors, and may stand behind a crystal.
 Rooms also hold small switch puzzles. On the subway tracks (Sewer_Map03) the
 rails and a boiler sitting on a floor grate are electrified: touching them
 shocks and knocks Spidey back. A wall switch in the room above (Sewer_Map04,
 X at the lever) cuts that power for good; then X lifts the boiler, throwing it
-smashes it and unlocks the grate, and X on the grate drops through it.
+smashes it and unlocks the grate, and X on the grate opens it. The pit under a
+grate is barely wider than Spidey: he drops in when he stands on its centre as
+it opens, otherwise he stays on the rim and Down drops him in.
 Liftable objects and grates show an X prompt when Spidey stands at them.
 Mini-boss rooms (e.g. Downtown_Map14's rooftop arena) show a boss health bar
 across the top; the boss's reward orb is a collectible that grants a story
-ability (Downtown_Map14: Sledgehammer Slam, which breaks ichor floors).
+ability. The six story abilities, one per mini-boss, gate progress: Ichor Crawl
+(Sewer_Map06), Ichor Web (Downtown_Map05), Tarantula Strength
+(Residential_Map08), Reinforced Web (Sewer_Map09), Bulldozer Dash (Pier_Map08:
+black suit, dash with A through red ichor walls) and Sledgehammer Slam
+(Downtown_Map14: black suit, Down + A in the air through red ichor floors).
+Without the ability a red wall or floor cannot be broken at all.
+Hive rooms are tall shafts climbed by wall crawl (run or jump into a wall,
+then Up; Up also follows the ceiling) and repeated jumps (B again in the air);
+B on a wall jumps off it.
 
 The touch screen shows the current area's map: rooms appear once visited
 (the current one lit), save rooms as S icons, and the mission marker "!".

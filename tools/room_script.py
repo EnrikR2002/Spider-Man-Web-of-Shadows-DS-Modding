@@ -11,9 +11,13 @@ Grounded in all 75 clean rooms (TECHNICAL "OBJ event commands and room scripting
   entity (AG 0-based, entity 1-based) to activate, AG to activate (1-based),
   EG to run (1-based); 0 = none. Delay 0x1C = u16 frames + one action;
   conditional 0x1D = u16 var, u16 frames, op, value, then-action, else-action.
-  An appended AG's entities stay inert until activated.
-Only appending is supported, so every existing AG, entity and EG index keeps its
-meaning. Results are re-parsed; unknown bytes are preserved.
+  An appended AG's entities stay inert until activated. 0x03 takes the same
+  entity/AG bytes and deactivates them (one-shot triggers remove themselves).
+- 0x0F locks/unlocks a door entity; an object's byte +23 is the EG run when it
+  is destroyed; a player-collide trigger runs the EG in its last byte.
+Entities, AGs and EGs are only appended, so every existing index keeps its
+meaning; `drop_commands` removes whole commands (no index moves). Results are
+re-parsed; unknown bytes are preserved.
 """
 from __future__ import annotations
 
@@ -24,6 +28,8 @@ from tools.room_events import Command, EventGroup, Events
 from tools.room_objects import RoomObjects
 
 SET_VAR, INC_VAR, IF_VAR, DELAY, ANIMATE = 0x26, 0x25, 0x1D, 0x1C, 0x01
+DEACTIVATE, DOOR = 0x03, 0x0F
+TRIGGER_TYPE = 7
 COMPARE = {'==': 0, '!=': 1, '<': 2, '<=': 3, '>': 4, '>=': 5}
 
 
@@ -131,6 +137,48 @@ def append_groups(raw, record, groups):
     return result, count + 1
 
 
+def names(raw, record):
+    """(entity names per AG, EG names, AG names) of a record, checked by `counts`."""
+    sizes, _ = counts(raw, record)
+    block = RoomObjects.parse(raw).names[record]
+    labels, ends = block.labels, block.category_ends
+    entities, at = [], 0
+    for size in sizes:
+        entities.append(tuple(labels[at:at + size])); at += size
+    return tuple(entities), tuple(labels[ends[0]:ends[1]]), tuple(labels[ends[1]:ends[2]])
+
+
+def actions(command):
+    """The 4-byte actions of a delay, conditional or deactivate command (else none)."""
+    o = command.operand
+    if command.opcode == DELAY: return (o[2:6],)
+    if command.opcode == IF_VAR: return (o[6:10], o[10:14])
+    if command.opcode == DEACTIVATE: return (o[0:4],)
+    return ()
+
+
+def targets(act):
+    """AG indices (0-based) an action's entity and AG parts refer to."""
+    a, entity, ag, _ = act
+    return ({a} if entity else set()) | ({ag - 1} if ag else set())
+
+
+def drop_commands(raw, record, drop):
+    """Remove every command for which drop(group index, command) is true; returns (raw, removed)."""
+    parsed = RoomObjects.parse(raw)
+    rec = parsed.records[record]
+    events = Events.parse(rec.sections[1], rec.raw[3])
+    groups, removed = [], []
+    for g, group in enumerate(events.groups):
+        keep = []
+        for command in group.commands:
+            if drop(g, command): removed.append((g, command))
+            else: keep.append(command)
+        groups.append(EventGroup(tuple(keep)))
+    if not removed: return raw, removed
+    return parsed.replace_section(record, 1, _events_bytes(groups)), removed
+
+
 def extend_group(raw, record, group, commands, *, prepend=False):
     """Add commands to an existing EG (0-based index); names and counts unchanged."""
     parsed = RoomObjects.parse(raw)
@@ -162,6 +210,25 @@ def action(ag=None, eg=0, entity=None):
 def activate(ag=None, eg=0, frames=0, entity=None):
     """0x1C: after `frames`, run one action (see `action`)."""
     return Command(DELAY, struct.pack('<H', frames) + action(ag, eg, entity) + bytes(2))
+
+
+def deactivate(ag=None, entity=None):
+    """0x03: deactivate an AG (0-based index) or one entity (AG 0-based, entity 1-based)."""
+    return Command(DEACTIVATE, action(ag, 0, entity))
+
+
+def door(entity, locked):
+    """0x0F: lock or unlock a door entity (AG 0-based, entity 1-based); native Lock_Grate/Door_Lock."""
+    return Command(DOOR, bytes((_byte(entity[0], 'AG'), _byte(entity[1], 'Entity'), 1, 1 if locked else 0, 0, 1, 0, 0)))
+
+
+def trigger(x, y, size, group, z=0):
+    """Player-collide trigger entity (28 bytes, Q12 centre, box in units) running EG `group` (1-based).
+
+    Same bytes as the native ambush/one-shot triggers of record 1 (word +16 = -1,
+    mode 2 = touch); exits in record 0 use word 0 instead.
+    """
+    return struct.pack('<3i2I3H2B', x, y, z, TRIGGER_TYPE, 0xFFFFFFFF, size[0], size[1], 0x0A, 2, _byte(group, 'EG'))
 
 
 def if_var(var, op, value, then=b'\0' * 4, otherwise=b'\0' * 4, frames=0):

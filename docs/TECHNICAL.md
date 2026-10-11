@@ -267,6 +267,17 @@ whole file; individual audio editing is untested. Archive section `BSP + paired 
 
 ### Engine / saves / qualification
 
+Source-language evidence: the ROM contains ARM9/ARM7 machine code, not source or
+compiler metadata. The state-machine and actor dispatch use vtable-like layouts
+and virtual calls (see "Player state machine and Red kit hooks"), strong evidence
+that the original gameplay engine is C++-style, but not proof of the exact source
+language, compiler, or whether some modules were C/assembly. Our Red kit logic is
+ARM-state assembly in `tools/tasm_kit.s`, placed in the ARM9; `tools/tasm_kit.py`
+and the other Python tools build/patch the ROM and bake animation resources,
+they do not run on the DS. `tools/assemble_tasm_kit.py` is optional reassembly;
+normal builds use the pinned `tools/tasm_kit.hex`. Confidence: likely C++ for at
+least the native object-oriented engine; exact language/toolchain unknown.
+
 Native21 purchase records, flags, costs and dependencies are mapped; read
 [GAMEPLAY](OG_GAMEPLAY.md) before paid route changes. Current recipe is guarded by
 `reference/gameplay_profile.json` (now tasm-v0.2.0: v0.1.1 parent + Red kit;
@@ -1313,7 +1324,8 @@ record counts equal each name block's first category end. The bounded named
 the empirically tested training type 50; high words in other placements must not
 be presented as simple character IDs.
 
-`tools/room_collision.py` adds framing to the BSP envelope: between table_end
+`tools/room_collision.py` adds framing to the BSP envelope (node and tree
+meaning: "Room collision tree" below): between table_end
 and first listed region lie 12-byte nodes {i32 unknown_word0, u32 unknown_word1,
 u16 unknown2, u16 unknown3}. Every listed region is u16 count followed by count
 {u16 node_index, u16 unknown} entries. All 75 reconstruct exactly: 8,789 nodes,
@@ -1606,17 +1618,20 @@ Confirmed 2026-10-07 (`tools/minimap_cbmp.py`, tests; in-game captures).
 - **Event semantics found:** `0x15` message operand +4 = 1-based event group
   that runs after the dialogue (dropping the message must keep that chain:
   the chapter turns it into a 0-frame `0x1C`); `0x1C` = u16 delay, +4 action
-  group, +5 event group (1-based); `0x1F` = "<ability> obtained!" story
-  ability grant (Downtown_Map14 grants Sledgehammer Slam); `0x07` spawns a
-  pickup (+26 = group run on pickup; the boss reward orb is a native
-  collectible: "You found a Collectible!").
+  group, +5 event group (1-based); `0x1F` was read as the "<ability>
+  obtained!" grant (Downtown_Map14: Sledgehammer Slam) but is probably the
+  reward jingle (see "Chapter routes on foot"); `0x07` spawns a
+  pickup (+25 = story ability index, +26 = group run on pickup; the boss
+  reward orb is a native collectible: "You found a Collectible!").
 - **Per-room scratch bytes** 0x127..0x130 drive room logic such as the
   Venom room's platforms/timer; the chapter keeps their writes.
 - **Downtown_Map14 boss**: Mini-Boss 06 (orange symbiote brute, HP 2,048,000
   at `0x022AD460`-style (hp,max) pairs, no NormalEnemy vtable). Its trigger
   needs flag 0xAA (Sewer_Map06 mini-boss beaten); the clone reads it as its
   own visited flag. Boss death runs the reward group directly (no grant,
-  no collectible), setting the "completed" flag; exits work afterwards.
+  no collectible), setting the "completed" flag. "Exits work afterwards" was
+  only checked by teleport in v0.7.0; on foot the arena was unreachable from
+  the chapter's doors until v0.8.1 ("Chapter routes on foot").
 - **Flags:** visited 252..265 (rooms 76..89), locals from 268..275, 266, 267,
   251..245 (first-use order; Station/Platform keep 268..271). Flags 138..165
   have no event/code reference and are unset in the player's save (mission
@@ -1755,6 +1770,164 @@ Confirmed 2026-10-08 from the handlers, all 156 native records
   breaker thrown (`breaker`), Refuge entry objective board: `269 == 0` ?
   `goal_power` : (`completed == 0` ? `goal_nest` : `goal_done`), completed =
   the Venom room's remapped reward flag (246).
+
+### Room collision tree (2026-10-11)
+
+Decoded from all 75 rooms and confirmed with Spidey in Hive_Map02
+(`tools/room_collision.py`: `solid_at`, `floor_below`, `check_tree`, `map_png`;
+`python tools/room_collision.py ROOM --out PNG` draws the z=0 slice with
+entities; tests). This supersedes "node meanings unknown" above.
+
+- **Node** (12 bytes): i32 word0 = plane distance (Q12) with two flags in bits
+  0..1; u32 word1 = normal; u16 unknown; u16 link. Normal `0x4000000N`: axis
+  N & 3 (x, y, z), negated when N & 4. Any other word1 is two s16 (Q12) holding
+  the *negated* (x, y) normal of a slanted wall. Front = normal . p >= distance.
+  Bits 2..3 of word0 are distance fraction, not flags.
+- **Tree in preorder.** Flag 1: the front child is a solid leaf whose list
+  index is `link`. Flag 2: the back child is empty space. A child that is
+  neither is the next node; with two node children the front one follows and
+  the back one is node `link`. Each list is the solid leaf of exactly one
+  node in every room. List entries (node, 0/10/...) and the u16 at +8 remain
+  unknown (probably the leaf's faces and surface types).
+- **Measured against the game:** walls at x 0/-40 beside the Gate's pedestal
+  (Spidey stops 3.5 units from a wall), pedestal top 180, wedge top 60 under a
+  slanted plane, the ledge gap at x -9.5..-0.5. Sampled position = feet + 5.
+- **Not in the tree:** doors, ichor gates/crystals, smashable floors and walls,
+  liftables and blobs are objects with their own collision.
+- **Hive shaft template** (Hive_Map02/04/06/07, 40 wide): neck 9 wide from 200
+  up to the ceiling exit (trigger 218); chamber 160..198 with a pedestal
+  (top 180, 20 wide); funnel floor at 160 with a 9-wide centre hole;
+  platforms at 130 and 34 (centre +-10, an ichor blob on the lower one); a
+  ledge at 96..100 with one 9-wide gap at a side wall; a wedge (top 62) under
+  that gap; floor 0 with the door corridor. Hive_Map02/04 close the ledge gap
+  with a red floor object.
+- **9-wide pits and a 7-wide Spidey.** He only drops into such a pit (opened
+  floor grate, removed red floor) within about a unit of its centre; walking
+  or jumping across carries him over and he stands on the rim. Down drops
+  him into an opened grate from the rim; X only opens the grate.
+- **Movement seen in the lab:** B again in the air jumps again (three jumps
+  reach a neck); holding a direction into a wall in the air clings (state 7),
+  then Up crawls up and along the ceiling into a neck; B on a wall jumps off.
+
+### Chapter routes on foot (v0.8.1)
+
+Player 2026-10-11 (v0.8.0): dropped through the Stairs grate into the Gate and
+was sealed between its ichor ceiling and a red floor "I don't have the power
+up" for. Walking the chapter with real inputs found more of the same; v0.7.0
+and v0.8.0 were never walkable past the Span.
+
+- **Story abilities** are ability bits 0..5 (events 309..314, records at
+  `0x0212018C..`): Ichor Crawl 0, Ichor Web 1, Tarantula Strength 2,
+  Reinforced Web 3, Bulldozer Dash 4, Sledgehammer Slam 5. Each mini-boss
+  reward pickup (`0x07` operand +25) names one: Sewer_Map06 0, Downtown_Map05
+  1, Residential_Map08 2, Sewer_Map09 3, Pier_Map08 4, Downtown_Map14 5. The
+  player's battery (mission 28, word `0x180FFFDF`) has 0..4: Sledgehammer Slam
+  is the native reward of the boss the chapter clones and withholds. `0x1F`
+  also runs in Test_Combat01's "Music Selection" groups, so it is probably the
+  reward jingle, not the grant (unverified).
+- **Object kinds** (type 14, byte +22; byte +23 = event group run when it is
+  destroyed): `0x09` Floor_Smashable(Ichor) = red floor, Sledgehammer Slam
+  only; `0x30` Wall_Smashable/Ichor Wall = red wall, Bulldozer Dash (black
+  suit, A on the ground; walking into it with A tapped breaks it from either
+  side); `0x0A`/`0x0B`/`0x10` ichor door/floor/wall crystals; `0x21`
+  Smashable_IchorBlob (solid, sits on the low platform); `0x16..0x1A`
+  liftables. Red floors are raised by the room init while their flag is clear
+  (`IF flag == 0 ? AG[Hammer Object]`), so never activating them is the room's
+  own "already smashed" state.
+- **Red floors in the chapter:** Gate (y 95, the only gap), Hollow (same) and
+  two in the boss room's exit alcoves. With the Nest run against the native
+  direction (Hollow and Gate are climbed, the boss room is entered from an
+  exit corridor) they closed the route in both directions.
+- **Hive ambush.** The spawner (type 4) holds a zone box at +16/+18 (width,
+  height in units around it; the heap object stores the half sizes), enemy
+  table +22, and at +25 the group run when its wave is dead (`Door_Check`).
+  `Door_Lock` (called by `AmbushINIT`, or by a trigger at the native entrance in
+  Hive_Map02) locks the doors and raises ichor crystals; when the wave is dead
+  the crystals crack (anim `0x1B`) and must be *hit* to open
+  (`Ichor_Block_Die`: flag, unlock). Walking into a crystal never opens it.
+- **Seal softlocks seen in the lab** (weak enemies, real doors): in the Throat
+  the last fliers repositioned into the exit corridor behind the crystal
+  (1,700 frames, never reachable); in the Gate the trigger at the top seals a
+  chamber the ground wave never enters (it spawns below the ledge) and, coming
+  from below, would seal after the wave is gone. An earlier lab warp showed a
+  ground enemy standing in a door corridor behind a crystal in the Hollow.
+- **Fixes** (`tools/midnight_chapter.py`): `open_hammer_floors` (every clone;
+  3 rooms, 4 floors), `unseal` (Shaft, Throat, Span, Hollow, Gate: the one
+  command calling `Door_Lock` is dropped; spawners, crystals' groups and all
+  indices stay), `stage_boss`, `seal_grate`, `add_grate_hint`.
+- **Boss arena** (Downtown_Map14): octagon x 30.5..149.5 with four pillars; each
+  lower door corridor (y 20..32) rises through an alcove (red floor at y 40)
+  to a wall opening (x 24.5..30.5 / 149.5..155.5, y 43..58) into the arena.
+  Natively the ichor walls stand in those openings from room load (`Route 1`)
+  and the fight starts by triggers near the top or a 450-frame timer: entering
+  from a corridor, the timer sealed Spidey outside with the boss inside (lab).
+  Now: walls rise in `Gate_Spawn`; `Gate_Spawn` is run by a new trigger box
+  x 45..135 inside the arena; no timer. Lab: 500 frames in the corridor
+  change nothing, walls rise behind him, the reward group dissolves them.
+- **Stairs grate** locks (`0x0F`, like the native `Lock_Grate`) until the Gate's
+  visited flag 264: the Nest is entered through the tracks, the boss cannot
+  be skipped to, and the grate becomes a shortcut afterwards. A one-shot
+  trigger on it shows the "sealed from below" line.
+- **Sealed hatches are harmless:** Spidey crawls into the Entry's dead chimney
+  and the pocket above the Platform's trapdoor and comes back down.
+- **Why earlier checks passed.** The door tour and `visit --leave` teleport
+  onto exit triggers, which fire behind locked doors and crystals; `visit`
+  used spawn 0 (the native entrance side); a lab warp is not a door arrival
+  (no walk-in, spawns can sit inside a trigger). Only real doors and real
+  movement show whether a room can be crossed.
+- **Walk harness** (`tools/midnight_walk.py`, tests): routes of steps driven
+  from the frame hook with live inputs (`emulator_smoke.run(live_buttons=)`;
+  a hook returning `'stop'` ends the run). Each route warps into one room and
+  takes real doors from there; steps wait on conditions. Fixtures: enemies
+  at 1 HP, enemies parked away during a traversal check, boss at 1 HP,
+  Spidey's health refilled, ability word = the player's. Pitfalls: runs are
+  not deterministic (fights); a placed Spidey keeps his stance (standing in
+  the air, clinging to nothing) until a real jump; moving enemies onto him
+  broke wave counting; suit form is stats +0x53 (0 red, 1 black). v0.8.1
+  `f68a082e`: 5/5 routes, 67 checks, first try (`work/midnight-line/walk-*`).
+- **Needs from the player's kit:** Bulldozer Dash for the Span's two red walls
+  (owned). Whether Hive walls need Ichor Crawl/Web was not isolated (owned).
+
+### The Yard: proto01 as a chapter room (v0.9.0)
+
+- **proto01** (room 74, never linked natively): one model, own BSP and
+  textures, `MMPlaceholder.cbmp`, runtime map fields all zero with area 5.
+  OBJ: no spawn table, no exits; record 0 holds one ambient sound, record 1's
+  only batch holds Spidey (`0x1B` binds entity 1 there) and 33 test entities.
+  Collision: floor 0 for x -264..50, a step and slope up to a tunnel at the
+  right end (x 135..174.5, floor 40, ceiling 64), a roof slab at 70..88 with
+  liftables and two dead switches, ceiling 145: closed on every side.
+- **Authored doors work without a native pair.** `room_doors.add_spawn` and
+  `add_exit` take a `template` from another room (`spawns(...)[0]`,
+  `exit_trigger(...)`); a room with selector 1 and Spidey in record 1 loads
+  through a normal door. A touch trigger fires when Spidey's box (half width
+  3.5) overlaps it: the box must reach at least a unit past where a wall
+  stops him (first try ended exactly at the reachable 171.5 and never fired).
+- **Cleaning** (`stage_yard`): five upgrade orbs (incl. LiftObjectLarge =
+  Tarantula Strength) and the ability-pickup chain (`New Event 9..12`) are
+  removed; object kinds `0x09`/`0x30` (red test floor and wall standing in the
+  tunnel), `0x0C`/`0x0D` (ichor floor gates across the yard, with their two X
+  prompts) and `0x11`/`0x13` (electric and fire hazards) are moved out of
+  reach. proto01 never sets a visited flag: the clone's init does.
+- **Enemies from another area in an appended batch.** A Pier_Map04 spawner
+  (table `0x08`, plain) with its zone box set to 300 x 120 spawns the Pier
+  gang in the yard (lab: up to three at once, on the floor).
+- **Refuge door** (`add_yard_door`): exit box at the left wall, arrival spawn
+  2, and Sewer_Map13's left sewer door entity in an appended batch that the
+  init activates (visible as a grey door). Objective board and save sphere
+  are unchanged; save/Continue in the Refuge still passes.
+- **Flags.** Room 90's visited flag is 266. 266/267 belonged to the Span's
+  seal flag and the Hollow's red-floor flag, which nothing writes since
+  v0.8.1; those two locals now take 138/139 and every other allocation keeps
+  its number (`LOCAL_FLAGS`; completed stays 246). 267 is free for room 91.
+- **Map.** Slot `0x01` (palette 0, colours 1..5) is a 15th free slot; cells
+  (12,16),(13,16) under the Refuge. Fields: Sewer_Save04's piece values and
+  proto01's own bounds as (x min, y max, x max, y min).
+- **Chapter lines stay up.** In the lab every chapter line (display time 0 or
+  60) stayed on the touch screen until the room changed (1,200 frames
+  checked in the Stairs and the Yard); the "~8 s" above was not re-measured.
+- Lab `f109a525`: walk route `yard` (Refuge door, tunnel, floor, gang,
+  back out, on to the Stairs) and the 32-link tour pass.
 
 ## Research workflow and pitfalls (Red kit sessions)
 

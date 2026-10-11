@@ -14,7 +14,88 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.9.0 - 2026-10-11 - Midnight Line: the Yard
+
+Published through Play Spider-Man.cmd's stable ROM. SHA256
+`f109a5255b82f57e5290795e566a8f16ec1fbd8711b7c4b6a142a090dbd7432f`
+(ARM9 `e54fa1aa...`; kit code unchanged). Title and Options show v0.9.0.
+Player (2026-10-11): "keep advancing the map as much as you can and make sure
+everything works well". Includes every v0.8.1 fix.
+
+- **New room: the Yard.** The Refuge has a grey door in its left wall. Behind
+  it is a freight yard above the line: a warehouse front with shutters, a
+  wooden dock, a roof walkway with crates and boilers to throw, and a gang
+  that has made camp there (the Pier's thugs). This is a room the game ships
+  but never uses, so you have not seen it anywhere. You arrive in a rock
+  tunnel at its right end; walk down into the yard. The same tunnel leads
+  back. It is right next to the Refuge's save point, with no boss or puzzle
+  in the way: a place to fight and use the kit.
+- The Yard is on the touch-screen diagram under the Refuge.
+- Its test leftovers are gone (ability orbs, red ichor floor and wall, ichor
+  gates, hazards), so nothing in it gives or needs a story ability.
+
+Agent-tested on `f109a525`: walk routes 6/6 on the first try, 75 checks (the
+five v0.8.1 routes plus the Yard: Refuge door, tunnel arrival, down into the
+yard, gang appears, back out, on to the Stairs), door tour 32/32, power
+puzzle, save/Continue in Refuge, Rest and Shrine, kit qualification 31/31,
+crash hunt 12/12, 248 unit tests; frames reviewed (door in the Refuge, Yard
+at night, diagram). Gang strength and count were not balance-tested; not
+player-confirmed. Evidence: `work/midnight-line/walk-*`, `work/kit/v0.9.0/`.
+
+## v0.8.1 - 2026-10-11 - Midnight Line: a Nest you can actually walk through
+
+Published through Play Spider-Man.cmd's stable ROM. SHA256
+`f68a082e1829a97d2b2d0b4238050918e7c875d80e745c9569b615232385ce1b`
+(ARM9 `4bdceb45...`; kit code unchanged). Title and Options show v0.8.1.
+Player report (2026-10-11, v0.8.0): went down "this hive section", the top
+entrance was sealed by goo, could not break "the red platform thing" without
+the power-up, had to quit and lost a little progress. That was the Gate,
+entered backwards through the Stairs grate. Walking the chapter with real
+inputs showed the Nest could not be finished at all in v0.7.0/v0.8.0.
+
+- **Fix: no room needs Sledgehammer Slam.** The red ichor floors in the Gate,
+  the Hollow and the boss room only break to Sledgehammer Slam, the story
+  ability of the very boss this chapter borrows and never grants. They are
+  gone (the rooms' own "already smashed" state).
+- **Fix: Nest fights no longer seal the doors.** Shaft, Throat, Span, Hollow
+  and Gate keep their enemies, but the purple crystals never close the exits.
+  With the rooms run against their native direction a seal could leave you
+  with enemies you cannot reach (the lab reproduced it in the Throat and
+  in the Gate). Fight or run; the boss arena is the one sealed fight.
+- **Fix: the boss can be reached and fought.** You arrive in the arena's
+  lower-right exit corridor. Climb the alcove and step into the arena: the
+  ichor walls rise behind you and the fight starts. Before, the walls and a
+  hidden timer locked you in the corridor with the boss on the other side.
+  When the boss falls the walls and both lower doors open; the touch screen
+  says to take the left passage, whose shaft (the Gate) climbs to the Stairs.
+- **The Stairs grate is the way out, then a shortcut.** It is locked until
+  you have reached the Gate from below; standing on it says so. After the
+  loop it drops you straight back to the Gate.
+- **Grate hint.** Breaking the boiler now also says how the grate works: stand
+  on it, X opens it, Down drops in (the pit is barely wider than Spidey, so X
+  alone only drops you when you stand dead centre).
+- Needs from your save: Bulldozer Dash for the Span's two red walls (black
+  suit, A); you own it.
+
+Agent-tested on `f68a082e` with the new walk routes (`tools/midnight_walk.py`:
+real inputs and real doors; lab fixtures: warp into the first room, enemies at
+1 HP or parked, boss at 1 HP, health refilled, your ability bits): way in
+(sealed grate and hint, breaker, boiler, grate), descent on foot through Shaft,
+Rest and Throat into the Span, both red walls dashed, Hollow open where the red
+floor was, Gallery, Shrine, boss room (500 frames in the corridor change
+nothing; walls rise with the fight; boss; walls gone; left alcove open), Gate
+(gap open, top never seals, out through the neck by wall crawl), Stairs,
+grate back down: 5/5 routes, 67 checks. Door tour 30/30, power puzzle,
+save/Continue in Refuge, Rest and Shrine, kit qualification 31/31, crash
+hunt 12/12, 246 unit tests. The two dead
+hatches (Entry chimney, Platform trapdoor) cannot trap Spidey. Fights were
+not balance-tested; not player-confirmed. Evidence:
+`work/midnight-line/walk-*`, `work/kit/v0.8.1/`.
+
 ## v0.8.0 - 2026-10-08 - Midnight Line: the power puzzle, hints and an objective board
+
+*Superseded by v0.8.1: the "way into the Nest works" claim below held, but the
+Nest itself could not be crossed on foot (red floors, door seals, boss room).*
 
 Published through Play Spider-Man.cmd's stable ROM. SHA256
 `d84ae5393d2e3f5cf0c82c3aaa346e087f7804b31f2b6e4a0b67bb8098f2557b`
