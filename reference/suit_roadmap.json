@@ -37,9 +37,13 @@
     },
     {
       "id": "2099-classic",
-      "kit": "Talons, aerial pursuit, glide and venom research",
+      "kit": "Catch, carry, crash, chase: talon pursuit, charged purchased strikes, launches and slam rebounds around unchanged native A dash/spike/slam. Seven-skill theorycraft in docs/TASM_ROADMAP.md; glide and fangs are later possibilities.",
       "name": "Spider-Man 2099 - classic",
-      "status": "selected-backlog"
+      "status": "player-selected-future-black-slot-theorycraft-only",
+      "selection_date": "2026-10-11",
+      "replaces_form": "black",
+      "implementation_order": "After the TASM Red kit is more fleshed out",
+      "design_reference": "../docs/TASM_ROADMAP.md#spider-man-2099-future-black-kit-2026-10-11-theorycraft"
     },
     {
       "id": "scarlet-kaine",
@@ -66,7 +70,7 @@
       "status": "identity-merged-into-tasm1"
     }
   ],
-  "updated": "2026-10-05",
+  "updated": "2026-10-11",
   "upgrade_plan": "tasm_upgrade_plan.json",
   "upgrade_plan_status": "fun-first-core-prototype-proposed-progression-deferred",
   "user_verified": [

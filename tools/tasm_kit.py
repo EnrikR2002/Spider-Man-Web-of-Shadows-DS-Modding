@@ -30,6 +30,9 @@ KIT2_OFFSET = 0x6000                       # from TARGET
 KIT2_BASE = TARGET + KIT2_OFFSET           # 02155420
 KIT2_CODE = 0x1800
 SHOP_OFFSET = 0x1800                       # Red purchase rows inside the block
+BOTH_OFFSET = 0x1940                       # Both Suits purchase rows (v0.11.0)
+DIAL_OFFSET = 0x1B00                       # chapter strength dial: two bytes per room 76..115 (zeros here)
+DIAL_ROOMS = 40
 KIT2_STATE = KIT2_BASE + 0x1C00            # 02157020
 KIT2_SPACE = 0x2000
 IMAGE = KIT2_OFFSET + KIT2_SPACE
@@ -73,6 +76,8 @@ EVENT_BOUNDS = {
 }
 RED_TABLE = 0x120340                       # seven native 32-byte purchase rows
 RED_POINTER, RED_COUNT = 0x120174, 0x12018C
+BOTH_TABLE = 0x120260                      # seven native Both Suits rows
+BOTH_POINTER, BOTH_COUNT = 0x120170, 0x120188
 NO_EVENT = 382
 STRING_COUNT = 1049                        # native string slots; shop texts are appended after them
 # New Red rows: (key, ownership event, price, name, title, description). Event - 309 = ability bit.
@@ -84,8 +89,20 @@ SHOP_ROWS = (
     ('momentum', 385, 400, 'Momentum', 'Momentum',
      'Passive. Every combo meter tier\nshortens the wind-up and recovery\nof your ground combos.'),
 )
-SHOP_BITS = {row[0]: row[1] - 309 for row in SHOP_ROWS}     # 74, 75, 76
-SHOP_TEXTS = tuple(text for row in SHOP_ROWS for text in row[3:])
+# New Both Suits rows (v0.11.0): Vitality I..III, each needing the one before
+# (required event) and blocking its refund while the next is owned (dependent).
+# Damage to Spidey is divided by 1.25 / 1.5 / 1.75 (tools/tasm_kit2.s k2_damage).
+BOTH_ROWS = (
+    ('vitality1', 386, 500, 'Vitality I', 'Vitality I',
+     'Passive. Your health bar holds\n25% more health. The red bar\nturns orange.'),
+    ('vitality2', 387, 750, 'Vitality II', 'Vitality II',
+     'Needs Vitality I. Your health\nbar holds 50% more. The red bar\nturns gold.'),
+    ('vitality3', 388, 1000, 'Vitality III', 'Vitality III',
+     'Needs Vitality II. Your health\nbar holds 75% more. The red bar\nturns green.'),
+)
+SHOP_BITS = {row[0]: row[1] - 309 for row in (*SHOP_ROWS, *BOTH_ROWS)}     # 74..76, 77..79
+SHOP_TEXTS = tuple(text for row in (*SHOP_ROWS, *BOTH_ROWS) for text in row[3:])
+PREVIOUS_TEXTS = 3 * len(SHOP_ROWS)        # shop texts in a v0.10.0 kit overlay
 # Spider Perch replaces Sling Strike in the Mid-Air Snare slot: restore the
 # native action-queue and contact instructions Sling had redirected.
 RESTORE = {0x0209515C: (0xEB02EFEF, 0xEBFED051)}
@@ -122,8 +139,8 @@ CLIP_SOURCES = {
     'zz_tasm_RushFinish.sca': ('spd_GroundAttack17.sca', 'split_sweep'),
 }
 PROFILE = 'tasm-kit'
-VERSION = '0.10.0'
-RELEASE_DATE = '2026-10-11'
+VERSION = '0.11.0'
+RELEASE_DATE = '2026-10-12'
 RELEASE_PROFILE = f'tasm-v{VERSION}'
 PARENT_RELEASE = 'tasm-v0.1.1'
 # Red purchase names (menu/list) and instructions; boot and Options version.
@@ -149,9 +166,9 @@ TEXT_EDITS = {
 
 def uses_kit(profile):
     return profile == PROFILE or bool(release_info.PROFILE_INFO.get(profile, {}).get('kit'))
-CODE_SHA256 = '66ed96538d9a8c6a78fba4b062363a9dc951f0cfe9d13a11eda1ce762209f2d8'
-CODE2_SHA256 = '466a990525abc930708d9f1b8d4de031294ad0a2955ed987cd5b5722086e7127'
-ARM9_SHA256 = '7200e357887e366de790bf5672a3c4818eded962c3ebe31f2e7003dacb07242c'
+CODE_SHA256 = '87b68be09574e0e44d41079ab7c8f51359d7cbfd4715a65c9584cfb7b99aa5de'
+CODE2_SHA256 = 'a0d76f922465c9bb8f09e1ea305ea3f41046b94c2c6bcb1c5250f624d320d0b8'
+ARM9_SHA256 = '3c6a34e02d38cdfc696f35b576dd2c4f0fcda3512a1c2ea23f876a47e116614c'
 
 
 def branch(source, target):
@@ -180,15 +197,28 @@ def shop_table(raw):
     return bytes(rows)
 
 
+def both_table(raw):
+    """The seven parent Both Suits rows followed by the Vitality chain."""
+    rows = bytearray(raw[BOTH_TABLE:BOTH_TABLE + 7 * 32])
+    if w.u32(raw, BOTH_POINTER) != BASE + BOTH_TABLE or w.u32(raw, BOTH_COUNT) != 7:
+        raise ValueError('Native Both Suits purchase table differs')
+    first = STRING_COUNT + 3 * len(SHOP_ROWS)
+    for index, (_, event, price, *_texts) in enumerate(BOTH_ROWS):
+        required = BOTH_ROWS[index - 1][1] if index else NO_EVENT
+        dependent = BOTH_ROWS[index + 1][1] if index + 1 < len(BOTH_ROWS) else NO_EVENT
+        text = first + 3 * index
+        rows += struct.pack('<8I', event, required, dependent, text, text + 1, text + 2, 1, price)
+    return bytes(rows)
+
+
 def shop_strings(slots, current):
     """Append the shop texts after the native slots (or rewrite them in a previous kit overlay)."""
     from tools.qol_suits_menu import slot_count
-    count = slot_count(current)
-    if count == STRING_COUNT:
-        return slots.grown(current, {}, appended=SHOP_TEXTS)
-    if count == STRING_COUNT + len(SHOP_TEXTS):
-        return slots.grown(current, {STRING_COUNT + i: text for i, text in enumerate(SHOP_TEXTS)})
-    raise ValueError('Unexpected string slot count for the shop texts')
+    held = slot_count(current) - STRING_COUNT
+    if held not in (0, PREVIOUS_TEXTS, len(SHOP_TEXTS)):
+        raise ValueError('Unexpected string slot count for the shop texts')
+    return slots.grown(current, {STRING_COUNT + i: text for i, text in enumerate(SHOP_TEXTS[:held])},
+                       appended=SHOP_TEXTS[held:])
 
 
 def route_table():
@@ -283,6 +313,13 @@ def apply_rom(rom):
     struct.pack_into('<I', changed, RED_COUNT, len(table) // 32)
     log.append({'field': 'red_purchase_rows', 'table': KIT2_BASE + SHOP_OFFSET, 'rows': len(table) // 32,
                 'new': {row[0]: {'event': row[1], 'ability_bit': row[1] - 309, 'price': row[2]} for row in SHOP_ROWS}})
+    both = both_table(raw)
+    if SHOP_OFFSET + len(table) > BOTH_OFFSET or BOTH_OFFSET + len(both) > DIAL_OFFSET:
+        raise ValueError('Purchase tables overlap')
+    struct.pack_into('<I', changed, BOTH_POINTER, KIT2_BASE + BOTH_OFFSET)
+    struct.pack_into('<I', changed, BOTH_COUNT, len(both) // 32)
+    log.append({'field': 'both_purchase_rows', 'table': KIT2_BASE + BOTH_OFFSET, 'rows': len(both) // 32,
+                'new': {row[0]: {'event': row[1], 'ability_bit': row[1] - 309, 'price': row[2]} for row in BOTH_ROWS}})
     for site, (parent, native) in sorted(RESTORE.items()):
         at = site - BASE
         if w.u32(raw, at) != parent:
@@ -309,6 +346,7 @@ def apply_rom(rom):
     code2 = code_bytes(2)
     block[:len(code2)] = code2
     block[SHOP_OFFSET:SHOP_OFFSET + len(table)] = table
+    block[BOTH_OFFSET:BOTH_OFFSET + len(both)] = both
     kit_image = (bytes(OLD_STATE_END - OLD_CODE) + bytes(space) + bytes(STATE_SPACE)
                  + bytes(KIT2_OFFSET - OLD_STATE_END - CODE_SPACE - STATE_SPACE) + bytes(block))
     result, delta = grow_extension(rom, bytes(changed), kit_image)

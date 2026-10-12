@@ -52,7 +52,7 @@ class TasmKitTests(unittest.TestCase):
         allowed = set()
         for site in (*kit.HOOKS, *kit.HOOKS2, *kit.RESTORE, *kit.EVENT_BOUNDS):
             allowed |= set(range(site - kit.BASE, site - kit.BASE + 4))
-        for at in (kit.RED_POINTER, kit.RED_COUNT):
+        for at in (kit.RED_POINTER, kit.RED_COUNT, kit.BOTH_POINTER, kit.BOTH_COUNT):
             allowed |= set(range(at, at + 4))
         for at in kit.IMPULSES:
             allowed |= set(range(at, at + 8))
@@ -78,7 +78,11 @@ class TasmKitTests(unittest.TestCase):
         code2 = kit.code_bytes(2)
         self.assertEqual(block[:len(code2)], code2)
         self.assertEqual(block[len(code2):kit.SHOP_OFFSET], bytes(kit.SHOP_OFFSET - len(code2)))
-        self.assertEqual(block[kit.SHOP_OFFSET + 10 * 32:], bytes(kit.KIT2_SPACE - kit.SHOP_OFFSET - 10 * 32))
+        self.assertEqual(kit.BOTH_OFFSET, kit.SHOP_OFFSET + 10 * 32)        # the Both Suits rows follow the Red rows
+        self.assertEqual(block[kit.BOTH_OFFSET + 10 * 32:], bytes(kit.KIT2_SPACE - kit.BOTH_OFFSET - 10 * 32))
+        # The chapter's strength dial is empty in a kit ROM (tools/midnight_chapter.py fills it).
+        self.assertLessEqual(kit.BOTH_OFFSET + 10 * 32, kit.DIAL_OFFSET)
+        self.assertLessEqual(kit.DIAL_OFFSET + 2 * kit.DIAL_ROOMS, kit.KIT2_STATE - kit.KIT2_BASE)
         self.assertEqual(kit.KIT2_STATE - kit.KIT2_BASE, 0x1C00)
         self.assertEqual(kit.IMAGE, kit.RESERVE)
 
@@ -100,7 +104,24 @@ class TasmKitTests(unittest.TestCase):
             self.assertTrue(kit.NO_EVENT < event <= 404 and event not in native, key)
             self.assertEqual(kit.SHOP_BITS[key], event - 309)
             self.assertEqual(kit.SHOP_TEXTS[3 * index:3 * index + 3], tuple(texts))
-        self.assertEqual(sorted(kit.SHOP_BITS.values()), [74, 75, 76])
+        self.assertEqual(sorted(kit.SHOP_BITS.values()), [74, 75, 76, 77, 78, 79])
+        # v0.11.0: the Both Suits list moves too and gains the Vitality chain.
+        self.assertEqual(w.u32(new, kit.BOTH_POINTER), kit.KIT2_BASE + kit.BOTH_OFFSET)
+        self.assertEqual(w.u32(new, kit.BOTH_COUNT), 10)
+        table = kit.SOURCE + kit.KIT2_OFFSET + kit.BOTH_OFFSET
+        self.assertEqual(new[table:table + 7 * 32], old[kit.BOTH_TABLE:kit.BOTH_TABLE + 7 * 32])
+        self.assertEqual(new[kit.BOTH_TABLE:kit.BOTH_TABLE + 7 * 32], old[kit.BOTH_TABLE:kit.BOTH_TABLE + 7 * 32])
+        events = [row[1] for row in kit.BOTH_ROWS]
+        for index, (key, event, price, *texts) in enumerate(kit.BOTH_ROWS):
+            row = struct.unpack_from('<8I', new, table + (7 + index) * 32)
+            first = kit.STRING_COUNT + 3 * (len(kit.SHOP_ROWS) + index)
+            required = events[index - 1] if index else kit.NO_EVENT              # each level needs the one before
+            dependent = events[index + 1] if index + 1 < len(events) else kit.NO_EVENT   # and cannot be refunded under the next
+            self.assertEqual(row, (event, required, dependent, first, first + 1, first + 2, 1, price))
+            self.assertTrue(kit.NO_EVENT < event <= 404 and event not in native, key)
+            self.assertEqual(kit.SHOP_BITS[key], event - 309)
+        self.assertEqual(events, sorted(events))
+        self.assertEqual([row[2] for row in kit.BOTH_ROWS], sorted(row[2] for row in kit.BOTH_ROWS))
         # Bounds: events below 405 reach bits below 96; the fourth word (a counter) is never addressed.
         for site, (original, word) in kit.EVENT_BOUNDS.items():
             self.assertEqual((w.u32(old, site - kit.BASE), w.u32(new, site - kit.BASE)), (original, word))
@@ -116,6 +137,9 @@ class TasmKitTests(unittest.TestCase):
         self.assertEqual([decode_grown(first, kit.STRING_COUNT + i) for i in range(len(kit.SHOP_TEXTS))], list(kit.SHOP_TEXTS))
         self.assertEqual(decode_grown(first, 74), kit.TEXT_EDITS[74])
         self.assertEqual(kit.shop_strings(slots, first), first)      # a previous kit overlay is rewritten, not grown
+        # A v0.10.0 overlay holds only the Red rows' nine texts: they are rewritten and the rest appended.
+        older = slots.grown(slots.repack(clean, kit.TEXT_EDITS), {}, appended=['old'] * kit.PREVIOUS_TEXTS)
+        self.assertEqual(kit.shop_strings(slots, older), first)
         # The next release repacks this overlay first: appended slots must survive an edit.
         again = slots.repack(first, {74: 'Options v9.9.9'})
         self.assertEqual(slot_count(again), kit.STRING_COUNT + len(kit.SHOP_TEXTS))
@@ -133,7 +157,10 @@ class TasmKitTests(unittest.TestCase):
             found = {int(x, 16) for x in re.findall(r'^\s*b\w*\s+0x([0-9a-fA-F]{8})', text, re.M)}
             return {x for x in found if low <= x < high}
         self.assertEqual(calls(one, kit.KIT2_BASE, kit.KIT2_BASE + kit.KIT2_SPACE),
-                         {kit.KIT2_BASE + offset for offset in (0x00, 0x04, 0x08, 0x0C)})
+                         {kit.KIT2_BASE + offset for offset in (0x00, 0x04, 0x08, 0x0C, 0x14, 0x18)})
+        code2 = kit.code_bytes(2)
+        for offset in (0x00, 0x04, 0x08, 0x0C, 0x14, 0x18):
+            self.assertEqual(struct.unpack_from('<I', code2, offset)[0] >> 24, 0xEA)
         exports = calls(two, kit.KIT_BASE, kit.KIT_BASE + kit.CODE_SPACE)
         self.assertTrue(exports and exports <= {kit.KIT_BASE + offset for offset in range(0x38, 0x50, 4)})
         code = kit.code_bytes()
@@ -151,6 +178,7 @@ class TasmKitTests(unittest.TestCase):
         # Action 56 (Snap Sweep) plays GroundAttack15's payload; 57..62 their own.
         clips = (15, 12, 13, 14, 15, 16, 17)
         self.assertEqual(len(table), len(clips))
+        lasts = []
         for mask, number in zip(table, clips):
             name = f'spd_GroundAttack{number}.gmb'
             overlay = Path(mod.ROOT) / 'mods' / name
@@ -163,6 +191,36 @@ class TasmKitTests(unittest.TestCase):
             self.assertTrue(active, name)
             wanted = sum(1 << c for c in range(32) if {c + 1, c + 2} & active)
             self.assertEqual(mask, wanted, name)
+            lasts.append(data.record_count - 1)
+        # v0.11.0: the last sample is never skipped either (the string blocker decides repeat/end on it).
+        last = re.search(r'^momentum_last:\s*\.byte\s+([0-9, ]+)', source, re.M).group(1)
+        self.assertEqual([int(x) for x in last.replace(' ', '').split(',') if x][:len(clips)], lasts)
+        self.assertIn('sub r0,r0,#2', source)
+
+    def test_v0_11_tuning_lives_in_the_second_block(self):
+        # Reflex/Sense attack speed 1.10/1.20 (native 1.15/1.3), Vitality damage 1/1.25, 1/1.5, 1/1.75,
+        # bar tint in BG palette colours 25..28, dial table at its fixed address.
+        import re
+        source = (kit.Path(kit.__file__).with_name('tasm_kit2.s')).read_text(encoding='utf-8')
+        literals = {name: int(value, 16) for name, value in re.findall(r'^(lit2_\w+):\s*\.word\s+0x([0-9A-Fa-f]+)', source, re.M)}
+        self.assertEqual(literals['lit2_0000119a'] / 4096, 4506 / 4096)
+        self.assertAlmostEqual(literals['lit2_0000119a'] / 4096, 1.10, 3)
+        self.assertAlmostEqual(literals['lit2_00001333'] / 4096, 1.20, 3)
+        # With Momentum owned, combo tier 3 and up restores the native 1.15 / 1.3 (the tuning block's own values).
+        self.assertEqual((literals['lit2_00001266'], literals['lit2_000014cc']), (0x1266, 0x14CC))
+        self.assertIn('cmp r3,#3\n  ldrge r1,lit2_00001266\n  ldrge r2,lit2_000014cc', source)
+        self.assertEqual(literals['lit2_02156f20'], kit.KIT2_BASE + kit.DIAL_OFFSET)
+        self.assertEqual(literals['lit2_05000032'], 0x05000000 + 2 * 25)
+        for level, scale in zip((1.25, 1.5, 1.75), (205, 171, 146)):
+            self.assertAlmostEqual(256 / scale, level, 1)
+            self.assertIn(f'movne r2,#{scale}', source)
+        colors = [int(x, 16) for x in re.search(r'^vit_colors:.*\n((?:\s+\.word .*\n){4})', source, re.M).group(1).replace('.word', '').replace(',', ' ').split()]
+        self.assertEqual(len(colors), 8)
+        self.assertEqual((colors[0] & 0x7FFF, colors[0] >> 16, colors[1] & 0xFFFF, colors[1] >> 16),
+                         (0x000D, 0x0C77, 0x18DA, 0x253D))                   # level 0: HUDTop_8's own reds
+        self.assertTrue(all((word >> 25) & 7 != 5 for word in colors))       # no word reads as a branch (assembler check)
+        self.assertEqual(kit.DIAL_ROOMS, 40)
+        self.assertIn('cmp r1,#40', source)
 
     def test_route_rows_name_appended_resources(self):
         from tools import oscorp_resources as rush

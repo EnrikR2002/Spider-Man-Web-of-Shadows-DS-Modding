@@ -149,6 +149,115 @@ class RoomCollision:
         return bytes(result)
 
 
+INF = float('inf')
+PLAIN = 10                                  # list entry value of an ordinary face (every face of Test_Combat01)
+
+
+def compile_boxes(solids, slab=25.0):
+    """Collision file for axis-aligned solid boxes: research prototype of a room compiler.
+
+    solids: (x0, y0, x1, y1[, surface]) in world units; an extent may be +-INF.
+    Everything outside the boxes is empty space, so a closed room needs boxes
+    reaching to infinity around it. Like native rooms the tree first makes
+    |z| >= slab solid. Face lists follow the native layout: the planes that
+    bound a solid leaf, front-side ancestors deepest first, then back-side
+    ones, each with the box's surface value (PLAIN unless given). The node u16
+    at +8 is written as 0. Lab 2026-10-12: see TECHNICAL "Room compiler research".
+    """
+    boxes = [(float(b[0]), float(b[1]), float(b[2]), float(b[3]), int(b[4]) if len(b) > 4 else PLAIN) for b in solids]
+    if any(not (b[0] < b[2] and b[1] < b[3]) for b in boxes): raise ValueError('Solid box has no area')
+    nodes, lists = [], []
+
+    def clip(region, box):
+        x0, y0, x1, y1 = max(region[0], box[0]), max(region[1], box[1]), min(region[2], box[2]), min(region[3], box[3])
+        return (x0, y0, x1, y1, box[4]) if x0 < x1 and y0 < y1 else None
+
+    def state(region, inside):
+        """'empty', ('solid', surface) or 'mixed' for a region and the boxes clipped to it."""
+        if not inside: return 'empty'
+        for b in inside:
+            if b[:4] == tuple(region): return ('solid', b[4])
+        return 'mixed'
+
+    def leaf(path, surface):
+        """List of a solid leaf: ancestors whose plane is the tightest bound of its cell on that side."""
+        best = {}
+        for index, (axis, upper, front) in path:            # upper: this side keeps values <= the plane
+            value = nodes[index]['at']
+            key = (axis, upper)
+            tighter = key not in best or (value < best[key][1] if upper else value > best[key][1]) or (
+                value == best[key][1] and index > best[key][0])
+            if tighter: best[key] = (index, value, front)
+        faces = sorted(best.values(), key=lambda f: (not f[2], -f[0]))
+        lists.append([(index, PLAIN if nodes[index]['axis'] == 2 else surface) for index, _, _ in faces])
+        return len(lists) - 1
+
+    def emit(axis, at, front_upper):
+        """Append a node whose front side is values <= at (front_upper) or >= at."""
+        nodes.append({'axis': axis, 'at': at, 'upper': front_upper, 'flags': 0, 'link': 0})
+        return len(nodes) - 1
+
+    def build(region, inside, path):
+        # Candidate planes: box edges strictly inside the region.
+        options = []
+        for axis in (0, 1):
+            lo, hi = region[axis], region[axis + 2]
+            for at in sorted({b[axis] for b in inside} | {b[axis + 2] for b in inside}):
+                if not lo < at < hi: continue
+                low = tuple(at if i == axis + 2 else v for i, v in enumerate(region))
+                high = tuple(at if i == axis else v for i, v in enumerate(region))
+                parts = []
+                for part in (low, high):
+                    part_boxes = [c for c in (clip(part, b) for b in inside) if c]
+                    parts.append((part, part_boxes, state(part, part_boxes)))
+                kinds = [p[2] if isinstance(p[2], str) else 'solid' for p in parts]
+                rank = {('solid', 'empty'): 0, ('empty', 'solid'): 0}.get(tuple(kinds), 1 if 'solid' in kinds else 2 if 'empty' in kinds else 3)
+                balance = abs(len(parts[0][1]) - len(parts[1][1]))
+                options.append((rank, balance, axis, at, parts, kinds))
+        if not options: raise ValueError('Overlapping or degenerate solid boxes')
+        _, _, axis, at, (low, high), kinds = min(options, key=lambda o: o[:4])
+        # Front must be solid or mixed, back empty or mixed.
+        if kinds[0] == 'solid' or kinds[1] == 'empty': front, back, upper = low, high, True
+        else: front, back, upper = high, low, False
+        if (front[2] == 'empty') or (not isinstance(back[2], str)):       # solid back / empty front cannot be encoded
+            front, back, upper = back, front, not upper
+        index = emit(axis, at, upper)
+        if not isinstance(front[2], str):
+            nodes[index]['flags'] |= FRONT_SOLID
+            nodes[index]['link'] = leaf(path + [(index, (axis, upper, True))], front[2][1])
+        else:
+            build(front[0], front[1], path + [(index, (axis, upper, True))])
+        if back[2] == 'empty': nodes[index]['flags'] |= BACK_EMPTY
+        else:
+            if not nodes[index]['flags'] & FRONT_SOLID: nodes[index]['link'] = len(nodes)
+            build(back[0], back[1], path + [(index, (axis, not upper, False))])
+
+    # |z| >= slab is solid (two chained nodes), then the plan below them.
+    back = emit(2, slab, False)
+    nodes[back]['flags'], nodes[back]['link'] = FRONT_SOLID, leaf([(back, (2, False, True))], PLAIN)
+    front = emit(2, -slab, True)
+    nodes[front]['flags'], nodes[front]['link'] = FRONT_SOLID, leaf([(back, (2, True, False)), (front, (2, True, True))], PLAIN)
+    region = (-INF, -INF, INF, INF)
+    inside = [b for b in boxes]
+    if state(region, inside) != 'mixed': raise ValueError('A room needs both solid and empty space')
+    build(region, inside, [(back, (2, True, False)), (front, (2, False, False))])
+    raw_nodes = []
+    for n in nodes:
+        distance = round((-n['at'] if n['upper'] else n['at']) * 4096)
+        if distance & 3 or not -(1 << 31) <= distance < (1 << 31): raise ValueError('Plane is not on the 1/1024 grid')
+        raw_nodes.append(struct.pack('<iIHH', distance | n['flags'], 0x40000000 | n['axis'] | (4 if n['upper'] else 0), 0, n['link']))
+    table_end = 24 + 4 * len(lists)
+    at, offsets, body = table_end + 12 * len(raw_nodes), [], b''
+    for entries in lists:
+        offsets.append(at + len(body))
+        body += struct.pack('<H', len(entries)) + b''.join(struct.pack('<HH', *e) for e in entries)
+    raw = b''.join(raw_nodes) + body
+    head = b'BSP\0' + struct.pack('<4I', 7, 2, table_end + len(raw), table_end) + struct.pack(f'<{len(offsets)}I', *offsets)
+    result = head + struct.pack('<I', 0x01000000) + raw
+    RoomCollision.parse(result).check_tree()
+    return result
+
+
 MARK_COLOURS = {7: (0, 150, 0), 14: (210, 0, 0), 3: (0, 0, 220), 4: (200, 0, 200), 2: (255, 140, 0), 10: (0, 200, 200)}
 
 

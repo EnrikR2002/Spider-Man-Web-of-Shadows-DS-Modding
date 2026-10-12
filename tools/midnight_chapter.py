@@ -61,7 +61,7 @@ DELAY = 0x1C                                # u16 frames, u8 action group (+4), 
 GRANT = 0x1F                                # "<ability> obtained!": grants a native story ability
 SPAWN_PICKUP = 0x07                         # spawns a pickup; operand +26 = 1-based group run on pickup
 STABLE_SHA256 = 'fd7e4420f97645dd55011504843ce62f068d1276234c3cd781931c85bb1eb193'
-ARM9_SHA256 = 'c6e2992a21cb365d00e3575ae89a46933241aa99f86bd975efec16d902c96b2c'   # chapter over the kit ARM9 (pinned per release)
+ARM9_SHA256 = 'caa8403335641e6faa60d2f5b10ca5f2ade05f4ca15dd2277a9efc17d7fcda6a'   # chapter over the kit ARM9 (pinned per release)
 ENTRANCE = 'Sewer_Save02'
 STATE_TEMPLATE = 'Test_Surfaces01'
 
@@ -308,108 +308,188 @@ MAP_FIELDS = {
     # as (x min, y max, x max, y min), the layout Sewer_Save04's values show.
     'proto01': (5, 450560, 323584, 589824, 393216, -270 * 4096, 110 * 4096, 175 * 4096, 0),
 }
-# --- Touch-screen map (v0.7.0) ---------------------------------------------
-# The Sewer area screen gains a subway-style diagram of the chapter in its empty
-# lower-left corner; the Sewer area room list (20-byte entries) is relocated
-# into the chapter block with one entry per chapter room so the native code
-# shows visited/current rooms. See TECHNICAL "Minimap screens and area room lists".
-MAP_SCREEN = 'MMSewer.cbmp'
-SEWER_AREA = 2
-AREA_ROWS = 0x0213B840                     # 16-byte rows: screen, map var, list, count
-SEWER_LIST, SEWER_COUNT = 0x0211FE38, 18
+# --- Touch-screen map (v0.11.0) --------------------------------------------
+# The chapter has its own map screen. The game's area table (16-byte rows at
+# 0x0213B840: screen resource, area name string, room-list pointer, entry
+# count) has a sixth row, area 5, that no room uses: screen GenericBGBot_4,
+# name string 20 (' '), no list. Static init 0x02117F74 writes +0/+4 from two
+# literals; +8/+12 are data. Chapter rooms carry area 5, the row names a new
+# screen (the Sewer screen's frame and palettes, interior redrawn), the title
+# "Midnight Line" and a room list in the chapter block. A room may have several
+# list entries, one per palette its cells use (as the native Sewer_Map07 has).
+# v0.7.0..v0.10.0 drew a small diagram into the Sewer screen instead (player
+# 2026-10-11: it did not show how the rooms connect). See TECHNICAL "Chapter map".
+MAP_SOURCE = 'MMSewer.cbmp'
+MAP_SCREEN = 'zz_MMMidnight.cbmp'
+MAP_TITLE = 'Midnight Line'
+MAP_AREA = 5
+AREA_ROWS = 0x0213B840                     # 16-byte rows: screen, name string, list, count
+AREA_LITERALS = (0x0211802C, 0x02118030)   # row 5 screen resource and name string (static init)
+AREA_NATIVE = (0x320, 0x14)                # GenericBGBot_4.cbmp, string 20
+# The game gives areas above 4 no map: 0x020E3480 refuses the map views (modes
+# 6..8) and 0x020E2194 opens the touch screen on the objectives page when the
+# room's area is >= 5, and 0x020E361C ("is this area's map locked?", one
+# map-item event per area 0..4) says "locked" for any other area. Lab
+# 2026-10-12: with area 5 the Mini-Map button did nothing. Both bounds rise to
+# 6 and the default arm answers "not locked", so area 5 always shows its map.
+MAP_AREA_BOUNDS = ((0x020E21CC, 0xE3500005, 0xE3500006), (0x020E34B8, 0xE3500005, 0xE3500006))   # cmp r0,#5 -> #6
+MAP_LOCKED_DEFAULT = (0x020E3724, 0xE3A00001, 0xE3A00000)   # mov r0,#1 -> mov r0,#0
 ENTRY_SIZE = 20
 STATE_COLORS = bytes((0xB6, 0xBA, 0xBB, 0xBF))   # every native entry: state colour sources
-# 5-colour room slots (first colour = background) that no Sewer screen tile
-# uses: palettes 1..3 (magenta fill), Sewer_Map13's spare third slot 0xAB,
-# palette 0 beyond its backdrop colour, and one slot of the grey palette 13.
-MAP_SLOTS = (0x11, 0x16, 0x1B, 0x21, 0x26, 0x2B, 0x31, 0x36, 0x3B, 0xAB, 0x06, 0x0B, 0xD6, 0xDB, 0x01)
 SLOT_DEFAULT = (0x1042, 0x3D89, 0xE6B2, 0x4E0E, 0xCA52)   # native slot colours in the file
-# Diagram cells (screen tile column, row) per room; links join cell edges.
-DIAGRAM = {
-    'ML_Entry': ((3, 15), (4, 15)), 'ML_Station': ((5, 15),), 'ML_Platform': ((6, 15),),
-    'ML_Stairs': ((11, 15), (7, 15), (8, 15), (9, 15), (10, 15)), 'ML_Refuge': ((12, 15),),
-    'ML_NestShaft': ((6, 16),), 'ML_NestRest': ((6, 17),), 'ML_NestThroat': ((6, 18),),
-    'ML_NestSpan': ((7, 18), (8, 18)), 'ML_NestHollow': ((9, 18),), 'ML_NestGallery': ((10, 18),),
-    'ML_NestShrine': ((11, 18),), 'ML_Venom': ((11, 17),), 'ML_NestGate': ((11, 16),),
-    'ML_Yard': ((12, 16), (13, 16)),
+MAP_INTERIOR = (3, 3, 28, 19)              # cells inside the panel border (x0, y0, x1, y1), 200 x 128 pixels
+MAP_BORDER_SAMPLES = {'top': (6, 2), 'left': (2, 12), 'right': (28, 12), 'outer': (29, 12), 'bottom': (10, 19)}   # plain border cells
+# Palettes whose free 5-colour slots (colours 1, 6, 11) may hold rooms: 1..3 and 0 (free in the Sewer screen) and
+# the native Sewer rooms' own 6..10. Lab 2026-10-12, every room marked visited: rooms in palettes 14 and 15
+# came out magenta or black and a visited room in palette 13 dark grey (it only looked right while current).
+MAP_PALETTES = (1, 2, 3, 0, 8, 9, 10, 7, 6)
+MAP_SLOTS_EXCLUDED = ()
+FILL, EDGE = 2, 4                          # pixel roles inside a slot (0 = background)
+# Room shapes in interior pixels, x right, y down: rectangles (x0, y0, x1, y1)
+# and door links (drawn in the first-named room's colours). Every link leaves
+# its two rooms on the sides their doors are on. The Gate's ceiling exit and
+# the Stairs' floor grate are a matched pair of dotted arrows: the chapter's
+# native door pairs do not fit one flat plan (TECHNICAL "Chapter map").
+MAP_ROOMS = {
+    'ML_Yard': [(3, 14, 31, 30)],
+    'ML_Refuge': [(35, 18, 45, 28)],
+    'ML_Stairs': [(49, 18, 103, 28), (49, 27, 57, 40)],
+    'ML_Platform': [(63, 52, 123, 64), (107, 20, 123, 53)],
+    'ML_Station': [(9, 50, 57, 64)],
+    'ML_Entry': [(9, 72, 27, 84)],
+    'ML_NestShaft': [(98, 66, 106, 98)],
+    'ML_NestRest': [(108, 90, 116, 98)],
+    'ML_NestThroat': [(118, 88, 126, 120)],
+    'ML_NestSpan': [(128, 112, 190, 120)],
+    'ML_NestHollow': [(192, 86, 200, 120)],
+    'ML_NestGallery': [(174, 82, 190, 96)],
+    'ML_NestShrine': [(164, 88, 172, 96)],
+    'ML_Venom': [(144, 80, 162, 96)],
+    'ML_NestGate': [(134, 66, 142, 96)],
+}
+MAP_LINKS = (                               # (room, other room, strip)
+    ('ML_Yard', 'ML_Refuge', (31, 22, 35, 26)), ('ML_Refuge', 'ML_Stairs', (45, 22, 49, 26)),
+    ('ML_Stairs', 'ML_Platform', (103, 21, 107, 25)), ('ML_Station', 'ML_Platform', (57, 58, 63, 62)),
+    ('ML_Entry', 'ML_Station', (21, 64, 25, 72)), ('ML_NestShaft', 'ML_Platform', (100, 64, 104, 66)),
+    ('ML_NestShaft', 'ML_NestRest', (106, 93, 108, 97)), ('ML_NestRest', 'ML_NestThroat', (116, 91, 118, 95)),
+    ('ML_NestThroat', 'ML_NestSpan', (126, 115, 128, 119)), ('ML_NestSpan', 'ML_NestHollow', (190, 115, 192, 119)),
+    ('ML_NestGallery', 'ML_NestHollow', (190, 91, 192, 95)), ('ML_NestShrine', 'ML_NestGallery', (172, 91, 174, 95)),
+    ('ML_Venom', 'ML_NestShrine', (162, 91, 164, 95)), ('ML_NestGate', 'ML_Venom', (142, 91, 144, 95)),
+)
+MAP_SHAFT_LINK = ('ML_NestGate', 'ML_Stairs')    # drawn as two dotted arrows, not as a line
+MAP_ARROWS = {                              # (room, pixels): dotted stub with an arrow head
+    'ML_NestGate': [(138, 63), (138, 60), (138, 57), (137, 58), (139, 58), (136, 59), (140, 59)],     # up, above the Gate
+    'ML_Stairs': [(53, 42), (53, 45), (53, 48), (52, 47), (54, 47), (51, 46), (55, 46)],             # down, under the stairwell
+    'ML_Entry': [(8, 80), (7, 80), (6, 80), (5, 80), (4, 80), (5, 79), (5, 81), (6, 78), (6, 82)],     # left, to the Sewer
 }
 SAVE_ROOMS = {'ML_Refuge', 'ML_NestRest', 'ML_NestShrine'}
-DIAGRAM_TRACK = {(7, 15), (8, 15), (9, 15), (10, 15)}   # Platform<->Stairs line drawn as Stairs
 BOSS_ROOMS = {'ML_Venom'}
-DIAGRAM_STUB = (3, 15)                            # line out to the Sewer (drawn as Entry)
 
 
-def _diagram_tiles():
-    """{cell: 64 pixel roles (0 background, 2 fill, 4 edge/line)} for the chapter diagram."""
-    cells = {cell: room for room, cs in DIAGRAM.items() for cell in cs}
-    linked = {frozenset((room, dest)) for (room, _), (dest, _) in LINKS.items()}
+def _map_pixels():
+    """{(x, y): (room, role)} in interior pixels: outlined rooms, links, arrows, save dots, the boss cross."""
     out = {}
-    for (x, y), room in cells.items():
-        px = [0] * 64
-        def put(i, j, role): px[j * 8 + i] = role
-        line = (x, y) in DIAGRAM_TRACK or (x, y) == DIAGRAM_STUB
-        wide = len(DIAGRAM[room]) == 2 and not line
-        if line:
-            for i in range(2 if (x, y) == DIAGRAM_STUB else 0, 8):
-                put(i, 3, 4); put(i, 4, 4)
-            if (x, y) == DIAGRAM_STUB:           # arrow head pointing back to the Sewer
-                for i, j in ((0, 3), (0, 4), (1, 2), (1, 3), (1, 4), (1, 5), (2, 1), (2, 6)): put(i, j, 4)
-        else:
-            left_open = wide and cells.get((x - 1, y)) == room
-            right_open = wide and cells.get((x + 1, y)) == room
-            lo, hi = (0 if left_open else 1), (7 if right_open else 6)
-            for j in range(1, 7):
-                for i in range(lo, hi + 1):
-                    edge = j in (1, 6) or (i == 1 and not left_open) or (i == 6 and not right_open)
-                    put(i, j, 4 if edge else 2)
-            if room in SAVE_ROOMS:                # save point: a dot in the middle
-                for i, j in ((3, 3), (4, 3), (3, 4), (4, 4)): put(i, j, 4)
-            if room in BOSS_ROOMS:                # boss: a cross
-                for k in range(2, 6): put(k, k, 4); put(7 - k, k, 4)
-            for dx, dy, at in ((1, 0, 7), (-1, 0, 0), (0, 1, 7), (0, -1, 0)):
-                other = cells.get((x + dx, y + dy))
-                if other is None or other == room and wide: continue
-                if other != room and frozenset((room, other)) not in linked and (x + dx, y + dy) not in DIAGRAM_TRACK:
-                    continue
-                for w in (3, 4):
-                    if dx: put(at, w, 4)
-                    else: put(w, at, 4)
-        out[(x, y)] = px
+    for room, rects in MAP_ROOMS.items():
+        inside = {(x, y) for x0, y0, x1, y1 in rects for x in range(x0, x1) for y in range(y0, y1)}
+        for x, y in inside:
+            edge = any((x + dx, y + dy) not in inside for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+            if (x, y) in out: raise ValueError(f'Map rooms overlap at {x},{y}')
+            out[(x, y)] = (room, EDGE if edge else FILL)
+        x0, y0, x1, y1 = rects[0]
+        cx, cy = (x0 + x1) // 2, (y0 + y1) // 2
+        if room in SAVE_ROOMS:
+            for dx, dy in ((-1, -1), (0, -1), (-1, 0), (0, 0)): out[(cx + dx, cy + dy)] = (room, EDGE)
+        if room in BOSS_ROOMS:
+            for k in range(-4, 4): out[(cx + k, cy + k)] = out[(cx - 1 - k, cy + k)] = (room, EDGE)
+    for room, other, (x0, y0, x1, y1) in MAP_LINKS:
+        for x in range(x0, x1):
+            for y in range(y0, y1):
+                if (x, y) in out: raise ValueError(f'Map link {room}-{other} overlaps a room at {x},{y}')
+                out[(x, y)] = (room, EDGE)
+    for room, pixels in MAP_ARROWS.items():
+        for xy in pixels:
+            if xy in out: raise ValueError(f'Map arrow of {room} overlaps at {xy}')
+            out[xy] = (room, EDGE)
     return out
 
 
-def map_screen(raw):
-    """MMSewer.cbmp with the chapter diagram; native cells/colours elsewhere unchanged."""
+def _map_slots(screen, kept):
+    """Free 5-colour slots (palette index of the first colour) per palette: unused by every kept cell."""
+    used = {(e >> 12) * 16 + c for e in kept for c in set(screen.tile(e & 0x3FF)) if c}
+    return {p: [p * 16 + b for b in (1, 6, 11) if not used & set(range(p * 16 + b, p * 16 + b + 5))
+                and p * 16 + b not in MAP_SLOTS_EXCLUDED] for p in MAP_PALETTES}
+
+
+def map_layout(raw):
+    """(screen bytes, [(room name, slot, marker x, marker y)]) for the chapter map built from the Sewer screen."""
     screen = minimap_cbmp.Cbmp.parse(raw)
-    background = screen.screen[DIAGRAM_STUB[1] * screen.width + DIAGRAM_STUB[0]]
-    tiles, cells, colors = [], {}, {}
-    slot_of = dict(zip(DIAGRAM, MAP_SLOTS))
-    for room, slot in slot_of.items():
-        for i, value in enumerate(SLOT_DEFAULT): colors[slot + i] = value
-    for (x, y), roles in sorted(_diagram_tiles().items(), key=lambda t: (t[0][1], t[0][0])):
-        if screen.screen[y * screen.width + x] != background: raise ValueError(f'Map cell {x},{y} is not empty')
-        room = next(r for r, cs in DIAGRAM.items() if (x, y) in cs)
-        slot = slot_of[room]
-        base = slot & 0x0F                          # colour index of the slot's background
-        cells[(x, y)] = len(tiles)
-        tiles.append([base + r for r in roles])
-    used = {(e >> 12) * 16 + c for e in screen.screen for c in set(screen.tile(e & 0x3FF)) if c}
-    if used & set(colors) or {i for i in colors if i >> 4 == 0xB}:
-        raise ValueError('Map colour slot is in use')
+    cx0, cy0, cx1, cy1 = MAP_INTERIOR
+    background = screen.screen[15 * screen.width + 3]
+    cells = {(x, y): background for x in range(cx0, cx1) for y in range(cy0, cy1)}
+    # Sewer rooms reach into the panel border: restore plain border cells.
+    def sample(key): return screen.screen[MAP_BORDER_SAMPLES[key][1] * screen.width + MAP_BORDER_SAMPLES[key][0]]
+    for x in range(cx0, cx1): cells[(x, cy0 - 1)], cells[(x, cy1)] = sample('top'), sample('bottom')
+    for y in range(cy0, cy1): cells[(cx0 - 1, y)], cells[(cx1, y)], cells[(cx1 + 1, y)] = sample('left'), sample('right'), sample('outer')
+    kept = [e for i, e in enumerate(screen.screen) if (i % screen.width, i // screen.width) not in cells] + [
+        e for xy, e in cells.items() if not (cx0 <= xy[0] < cx1 and cy0 <= xy[1] < cy1)] + [background]
+    free = _map_slots(screen, kept)
+    pixels = _map_pixels()
+    by_cell = {}
+    for (x, y), (room, role) in pixels.items():
+        if not (0 <= x < 8 * (cx1 - cx0) and 0 <= y < 8 * (cy1 - cy0)): raise ValueError('Map pixel outside the panel')
+        by_cell.setdefault((cx0 + x // 8, cy0 + y // 8), {})[(x % 8, y % 8)] = (room, role)
+    held = {p: {} for p in free}                 # palette -> {room: slot}
+    tiles, entries = [], {}
+    for cell in sorted(by_cell, key=lambda c: (c[1], c[0])):
+        rooms = sorted({room for room, _ in by_cell[cell].values()})
+        fits = [p for p in free if len(set(held[p]) | set(rooms)) <= len(free[p])]
+        if not fits: raise ValueError(f'No map palette for cell {cell}: {rooms}')
+        palette = max(fits, key=lambda p: (len(set(held[p]) & set(rooms)), -len(held[p])))
+        for room in rooms:
+            if room not in held[palette]: held[palette][room] = free[palette][len(held[palette])]
+        ground = held[palette][rooms[0]] & 15       # a slot's first colour is the background and never changes
+        tile = [ground] * 64
+        for (px, py), (room, role) in by_cell[cell].items(): tile[py * 8 + px] = (held[palette][room] & 15) + role
+        entries[cell] = (palette, len(tiles))
+        tiles.append(tile)
     screen, first = screen.with_tiles(tiles)
-    entries = {xy: (slot_of[next(r for r, cs in DIAGRAM.items() if xy in cs)] >> 4) << 12 | first + n
-               for xy, n in cells.items()}
-    return screen.with_screen(entries).with_colors(colors).to_bytes()
+    colors = {slot + i: value for rooms in held.values() for slot in rooms.values() for i, value in enumerate(SLOT_DEFAULT)}
+    cells.update({cell: palette << 12 | first + n for cell, (palette, n) in entries.items()})
+    listing = []
+    for room in MAP_ROOMS:
+        x0, y0, x1, y1 = MAP_ROOMS[room][0]
+        for palette in sorted(p for p in held if room in held[p]):
+            listing.append((room, held[palette][room], cx0 * 8 + (x0 + x1) // 2, cy0 * 8 + (y0 + y1) // 2))
+    return screen.with_screen(cells).with_colors(colors).to_bytes(), listing
 
 
-def map_entries():
-    """Area-list entries (20 bytes) for the chapter rooms, in DIAGRAM order."""
-    out = b''
-    for room, slot in zip(DIAGRAM, MAP_SLOTS):
-        x, y = DIAGRAM[room][0]
-        out += (struct.pack('<2I', BY_NAME[room].index, 1) + bytes((0, slot, slot + 4)) + STATE_COLORS
-                + bytes((x * 8 + 4, y * 8 + 4, 0, 0, 0)))
-    return out
+def map_entries(listing):
+    """Area-list entries (20 bytes): room, record selector, type 0, slot first/last colour, colour sources, marker pixel."""
+    return b''.join(struct.pack('<2I', BY_NAME[room].index, 1) + bytes((0, slot, slot + 4)) + STATE_COLORS
+                    + bytes((x, y, 0, 0, 0)) for room, slot, x, y in listing)
+
+
+# --- Strength dial (v0.11.0) -------------------------------------------------
+# Kit table (tools/tasm_kit2.s k2_observe/k2_damage): per room, enemy health and
+# damage-to-Spidey scale in 1/64ths. Lab 2026-10-11 (research save, stable
+# a928843c): chapter sewer rooms hold enemies of 22k..37k health hitting for
+# 4096; the Nest's symbiotes have 74k..106k and hit for 8192..9554. The Nest
+# now ramps from about 0.6 to 0.8 of that instead of starting at the full gap
+# (player 2026-10-11: "got my ass kicked"). The boss room keeps native values.
+STRENGTH = {
+    'ML_NestShaft': (38, 35), 'ML_NestThroat': (42, 38), 'ML_NestSpan': (45, 42),
+    'ML_NestHollow': (48, 45), 'ML_NestGate': (51, 48),
+}
+
+
+def strength_dial():
+    """Bytes for the kit's dial table: (enemy health, damage) per room 76..115; 0 = native."""
+    out = bytearray(2 * kit.DIAL_ROOMS)
+    for name, (health, damage) in STRENGTH.items():
+        index = BY_NAME[name].index - FIRST
+        if not (0 <= index < kit.DIAL_ROOMS and 0 < health < 256 and 0 < damage < 256): raise ValueError('Strength dial range')
+        out[2 * index:2 * index + 2] = bytes((health, damage))
+    return bytes(out)
 
 
 GRADES = {   # (desaturation, (r, g, b) gain, lift in 5-bit units)
@@ -687,6 +767,27 @@ def seal_grate(raw, opened, grate=None):
     return room_script.extend_group(raw, 1, 0, [room_script.if_var(opened, '==', 0, then=room_script.action(eg=sealed))])
 
 
+# The Entry's first ceiling grate and the Platform's top trapdoor led to rooms
+# the chapter does not have (their exit triggers are in SEALED). Spidey could
+# still crawl in and find nothing (player 2026-10-11): both native grates are
+# now locked shut, and the zone that opened the trapdoor from below is gone.
+HATCHES = {'ML_Entry': {'door': 'Door (Sewer Grate Ceiling)'},
+           'ML_Platform': {'door': 'Door (Sewer Grate Floor) 1', 'opener': 'Trigger (Main|Grate_Open)'}}
+
+
+def close_hatch(raw, hatch):
+    """Record 1: a dead hatch's grate locked from room load; its opening zone moved out of reach."""
+    labels = list(room_script.names(raw, 1)[0][0])
+    door = (0, _index(labels, hatch['door'], 'door') + 1)
+    if 'opener' in hatch:
+        parsed = RoomObjects.parse(raw)
+        at = _index(labels, hatch['opener'], 'trigger')
+        entity = bytearray(Entities.parse(parsed.records[1].sections[0]).records[at])
+        struct.pack_into('<i', entity, 4, REMOVED_PICKUP_Y)
+        raw = parsed.replace_section(1, 0, Entities.parse(parsed.records[1].sections[0]).replace_record(at, bytes(entity)))
+    return room_script.extend_group(raw, 1, 0, [room_script.door(door, True)])
+
+
 def _entity(raw, record, label):
     """The entity named `label` in a native room record."""
     parsed = RoomObjects.parse(raw)
@@ -800,11 +901,18 @@ def entrance_obj(raw, names):
     return room_doors.append_entity(result, 1, bytes(doorway), DOORWAY['name'])
 
 
-def room_table(arm9, names, resources, first_string=None):
-    """Extended lookup + descriptors + model arrays + names + Sewer map list (+ chapter messages) at ML_BASE.
+# Rooms with their own collision file (appended as zz_<room>.bsp) instead of the
+# source room's: {room name: bytes}. Nothing ships with one yet; the lab proved
+# a compiled tree this way (tools/room_collision.compile_boxes, TECHNICAL
+# "Room compiler research").
+COLLISION = {}
 
-    Returns (data, address of the relocated Sewer area room list, address of
-    the chapter message entries or None without `first_string`).
+
+def room_table(arm9, names, resources, first_string=None, listing=()):
+    """Extended lookup + descriptors + model arrays + names + chapter map list (+ chapter messages) at ML_BASE.
+
+    Returns (data, address of the chapter's area room list, address of the
+    chapter message entries or None without `first_string`).
     """
     native = room_catalog.parse(arm9, names)
     by_name = {r.name: r for r in native}
@@ -822,10 +930,10 @@ def room_table(arm9, names, resources, first_string=None):
         model = struct.unpack_from('<I', arm9, model_array - BASE)[0]
         if not names[model].endswith('.nsbmd'): raise ValueError('Model array mismatch')
         struct.pack_into('<4I', raw, 0, labels_at + len(labels), resources[room.name]['texture'],
-                         source.bsp, resources[room.name]['objects'])
+                         resources[room.name].get('bsp', source.bsp), resources[room.name]['objects'])
         struct.pack_into('<I', raw, 0x20, models_at + len(models))
-        if room.source in MAP_FIELDS:    # Sewer area: the chapter is drawn on the Sewer screen
-            struct.pack_into('<9i', raw, 0x28, SEWER_AREA, *MAP_FIELDS[room.source][1:])
+        if room.source in MAP_FIELDS:    # the chapter's own map area; the other fields only feed the owned-map view
+            struct.pack_into('<9i', raw, 0x28, MAP_AREA, *MAP_FIELDS[room.source][1:])
         models += struct.pack('<I', model)
         labels += room.name.encode('ascii') + b'\0'
         lookup.append(descriptors_at + len(descriptors))
@@ -833,10 +941,7 @@ def room_table(arm9, names, resources, first_string=None):
     data = struct.pack(f'<{len(lookup)}I', *lookup) + descriptors + models + labels
     data += bytes(-len(data) % 4)
     list_at = ML_BASE + len(data)
-    native = arm9[SEWER_LIST - BASE:SEWER_LIST - BASE + ENTRY_SIZE * SEWER_COUNT]
-    if [struct.unpack_from('<I', native, i * ENTRY_SIZE)[0] for i in (0, SEWER_COUNT - 1)] != [51, 67]:
-        raise ValueError('Sewer area list moved')
-    data += native + map_entries()
+    data += map_entries(listing)
     messages_at = None
     if first_string is not None:
         messages_at = ML_BASE + len(data)
@@ -845,11 +950,13 @@ def room_table(arm9, names, resources, first_string=None):
     return data + bytes(ML_SPACE - len(data)), list_at, messages_at
 
 
-def extend_arm9(rom, table, glob_count, *, save_rooms=True, map_list=None, messages=None):
+def extend_arm9(rom, table, glob_count, *, save_rooms=True, map_area=None, messages=None):
     """Grow the kit autoload by ML_SPACE, redirect the room lookup, count appended resources.
 
-    `messages` (chapter message entries address) rewrites the message accessor
-    and raises both message-id bounds to cover LINES.
+    `map_area` = (room list address, entry count, screen resource, title string)
+    fills area row 5; `messages` (chapter message entries address) rewrites the
+    message accessor and raises both message-id bounds to cover LINES. The
+    kit's strength dial (zeros in the kit image) receives the chapter's values.
     """
     h = w.parse_header(rom)
     raw = rom[h['arm9_offset']:h['arm9_offset'] + h['arm9_size']]
@@ -858,16 +965,23 @@ def extend_arm9(rom, table, glob_count, *, save_rooms=True, map_list=None, messa
     if (struct.unpack_from('<3I', raw, table_at + 24) != (kit.TARGET, kit.IMAGE, 0)
             or w.u32(raw, kit.ARENA_LOWER) != kit.TARGET + kit.RESERVE or len(raw) != table_at + 36):
         raise ValueError('Unexpected kit autoload layout')
-    image = raw[kit.SOURCE:table_at] + bytes(kit.RESERVE - kit.IMAGE) + table
+    dial_at = kit.KIT2_OFFSET + kit.DIAL_OFFSET
+    image = bytearray(raw[kit.SOURCE:table_at] + bytes(kit.RESERVE - kit.IMAGE) + table)
+    dial = strength_dial()
+    if any(image[dial_at:dial_at + len(dial)]): raise ValueError('Kit strength dial is not empty')
+    image[dial_at:dial_at + len(dial)] = dial
+    image = bytes(image)
     new = bytearray(raw[:kit.SOURCE] + image + raw[table_at:table_at + 24]
                     + struct.pack('<3I', kit.TARGET, len(image), 0))
     new_table = kit.SOURCE + len(image)
     struct.pack_into('<2I', new, kit.TABLE_POINTERS, BASE + new_table, BASE + new_table + 36)
     struct.pack_into('<I', new, kit.ARENA_LOWER, kit.TARGET + len(image))
     patches = [(BASE + GLOB_COUNT, *glob_count), (LOOKUP_LITERAL, room_catalog.LOOKUP, ML_BASE)]
-    if map_list:
-        row = AREA_ROWS + 16 * SEWER_AREA
-        patches += [(row + 8, SEWER_LIST, map_list), (row + 12, SEWER_COUNT, SEWER_COUNT + len(ROOMS))]
+    if map_area:
+        row = AREA_ROWS + 16 * MAP_AREA
+        list_at, count, screen, title = map_area
+        patches += [(row + 8, 0, list_at), (row + 12, 0, count), MAP_LOCKED_DEFAULT, *MAP_AREA_BOUNDS,
+                    (AREA_LITERALS[0], AREA_NATIVE[0], screen), (AREA_LITERALS[1], AREA_NATIVE[1], title)]
     if save_rooms:
         limit = FIRST + len(ROOMS)
         patches += [(SAVE_ROOM_CHECK, CMP_R1 | 0x4B, CMP_R1 | limit),
@@ -899,7 +1013,7 @@ def apply_rom(rom, *, save_rooms=True):
     room_names = [r.name for r in native]
     _, clean_glob, manifest = mod.load_clean()
     clean = {e['name']: e['sha256'] for e in manifest['entries']}
-    used = {ENTRANCE + '_app.obj', STATE_TEMPLATE + '_app.obj', MAP_SCREEN, BREAKER_SOURCE + '_app.obj',
+    used = {ENTRANCE + '_app.obj', STATE_TEMPLATE + '_app.obj', MAP_SOURCE, BREAKER_SOURCE + '_app.obj',
             YARD['gang']['source'] + '_app.obj', YARD['hub_door']['source'] + '_app.obj'}
     for room in ROOMS:
         src = next(r for r in native if r.name == room.source)
@@ -936,6 +1050,9 @@ def apply_rom(rom, *, save_rooms=True):
         if room.name == HINT_ROOM:
             obj = add_grate_hint(add_power_hint(obj))
             info['hint'] = ['live_tracks', 'grate_clear']
+        if room.name in HATCHES:
+            obj = close_hatch(obj, HATCHES[room.name])
+            info['hatch_closed'] = HATCHES[room.name]['door']
         extras[f'zz_{room.name}_app.obj'] = obj
         extras[f'zz_{room.name}Textures.nsbtx'] = graded_textures(originals[src.texture], room.grade)
         report['rooms'][room.name] = {'index': room.index, 'source': room.source, **info}
@@ -945,8 +1062,9 @@ def apply_rom(rom, *, save_rooms=True):
     report['rooms'][OBJECTIVE_ROOM]['objectives'] = {'power': TRACK_POWER, 'completed': local[COMPLETED]}
     entrance = names.index(ENTRANCE + '_app.obj')
     blobs[entrance] = entrance_obj(asset(ENTRANCE + '_app.obj'), room_names)
-    map_index = names.index(MAP_SCREEN)
-    blobs[map_index] = map_screen(asset(MAP_SCREEN))
+    extras[MAP_SCREEN], listing = map_layout(asset(MAP_SOURCE))
+    for name, collision in COLLISION.items():           # last: collision files need no alignment, models and textures do
+        extras[f'zz_{BY_NAME[name].name}.bsp'] = bytes(collision)
     # Chapter lines: appended string slots (same index in both languages).
     from tools.qol_suits_menu import StringSlots, slot_count
     string_indices, firsts = [], set()
@@ -955,7 +1073,7 @@ def apply_rom(rom, *, save_rooms=True):
         index = names.index(name)
         firsts.add(slot_count(originals[index]))
         blobs[index] = StringSlots(clean_glob[e['offset']:e['offset'] + e['size']]).grown(
-            originals[index], {}, appended=list(LINES.values()))
+            originals[index], {}, appended=[*LINES.values(), MAP_TITLE])
         string_indices.append(index)
     if len(firsts) != 1: raise ValueError('String files differ in slot count')
     first_string, = firsts
@@ -965,11 +1083,14 @@ def apply_rom(rom, *, save_rooms=True):
     if padding: extras = {'zz_ml_alignment.bin': bytes(padding), **extras}
     out_names, out_blobs = oscorp_resources.append_resources(names, blobs, extras)
     resources = {room.name: {'objects': out_names.index(f'zz_{room.name}_app.obj'),
-                             'texture': out_names.index(f'zz_{room.name}Textures.nsbtx')} for room in ROOMS}
+                             'texture': out_names.index(f'zz_{room.name}Textures.nsbtx'),
+                             **({'bsp': out_names.index(f'zz_{room.name}.bsp')} if room.name in COLLISION else {})}
+                 for room in ROOMS}
     staged = w.rebuild_rom(rom, {'Glob.bin': w.pack_glob(out_names, out_blobs)})
-    table, map_list, messages = room_table(arm9, out_names, resources, first_string)
+    table, map_list, messages = room_table(arm9, out_names, resources, first_string, listing)
     result, patches = extend_arm9(staged, table, (len(names), len(out_names)), save_rooms=save_rooms,
-                                  map_list=map_list, messages=messages)
+                                  map_area=(map_list, len(listing), out_names.index(MAP_SCREEN), first_string + len(LINES)),
+                                  messages=messages)
     check = w.validate_rom(result, target=True)
     fs = next(e for e in check['nitrofs'] if e['name'] == 'Glob.bin')
     out_glob = result[fs['start']:fs['end']]
@@ -977,7 +1098,7 @@ def apply_rom(rom, *, save_rooms=True):
     if checked_names != out_names: raise ValueError('Chapter archive names changed')
     for i, blob in enumerate(out_blobs):
         if out_glob[out_offsets[i]:out_offsets[i + 1]] != blob: raise ValueError(f'Resource mismatch: {out_names[i]}')
-        if i < len(names) and i not in (entrance, map_index, table_index, *string_indices) and blob != originals[i]:
+        if i < len(names) and i not in (entrance, table_index, *string_indices) and blob != originals[i]:
             raise ValueError(f'Native resource changed: {names[i]}')
     h = w.parse_header(result)
     digest = w.sha256(result[h['arm9_offset']:h['arm9_offset'] + h['arm9_size']])
@@ -985,6 +1106,8 @@ def apply_rom(rom, *, save_rooms=True):
     report.update({'schema_version': 1, 'arm9_sha256': digest, 'resources': resources,
                    'arm9_patches': [{'address': hex(a), 'old': hex(o), 'new': hex(n)} for a, o, n in patches],
                    'save_rooms': save_rooms, 'added_resources': list(extras),
+                   'map': {'area': MAP_AREA, 'screen': MAP_SCREEN, 'title': MAP_TITLE, 'entries': len(listing)},
+                   'strength': {name: {'enemy_health': h / 64, 'damage': d / 64} for name, (h, d) in STRENGTH.items()},
                    'messages': {key: {'id': message_id(key), 'string': first_string + i, 'text': text}
                                 for i, (key, text) in enumerate(LINES.items())},
                    'local_flags': {f'{room}:{var:#x}': flag for (room, var), flag in sorted(local.items())}})

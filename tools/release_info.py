@@ -114,6 +114,13 @@ PROFILE_INFO = {
                      'red_prices': (50, 100, 150, 150, 200, 250, 350),
                      'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                      'arm9_sha256': 'c6e2992a21cb365d00e3575ae89a46933241aa99f86bd975efec16d902c96b2c'},
+    # Player feedback on v0.10.0: Reflex/Sense speed 1.10/1.20, Momentum one tier earlier, three
+    # Vitality rows (Both Suits, bits 77..79), the chapter's own map screen (area 5), closed dead
+    # hatches, a strength dial for the Nest (CHANGES v0.11.0). v0.10.0's bytes stay identified by its ROM.
+    'tasm-v0.11.0': {'version': '0.11.0', 'date': '2026-10-12', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                     'arm9_sha256': 'caa8403335641e6faa60d2f5b10ca5f2ade05f4ca15dd2277a9efc17d7fcda6a'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

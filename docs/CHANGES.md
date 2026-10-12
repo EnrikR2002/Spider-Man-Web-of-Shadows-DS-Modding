@@ -14,6 +14,84 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.11.0 - 2026-10-12 - Feedback pass: speed, Vitality, a chapter map, closed hatches, a gentler Nest
+
+Published through Play Spider-Man.cmd's stable ROM (DeSmuME closed; the build
+does not touch the battery). SHA256
+`4f387a21821cf071c08a797d0daa997814b50b335c9da4e6e088c24610163ca5`
+(ARM9 `caa84033...`, kit ARM9 `3c6a34e0...`). Title and Options show v0.11.0.
+Player (2026-10-11, after finishing the Midnight Line on v0.10.0; verdict
+under v0.10.0 below): do the quick fixes before bigger work, and of the
+proposed stat upgrades "just vitality for now".
+
+- **Speed rebalance.** Spider Reflex now speeds Red attacks by 10% (was 15%)
+  and Spider-Sense by 20% (was 30%). Momentum starts a tier earlier (tier 1
+  shortens two of five free steps, tier 4 all of them; still nothing at tier
+  0) and from combo tier 3 up gives the old 15% / 30% back. Measured Y,Y,Y,Y
+  with Sense and Momentum: 122, 106, 100, 88, 86, 86 frames at tiers 0..5
+  (v0.10.0: 113, 105, 99, 93, 91, 87), the same hits at every tier. With no
+  combo you are a little slower than before, from tier 3 a little faster, and
+  Momentum's swing is 36 frames instead of 26.
+- **Vitality I, II, III.** Buy Upgrades, Both Suits list, below Quick
+  Recovery: 500, 750 and 1000 XP. Each needs the one before; refund them in
+  reverse order. Your health bar holds 25%, 50%, 75% more: every hit takes
+  that much less of it. The bar keeps its length; in the Red suit the bar
+  and the spider emblem turn orange, gold, green. Healing is unchanged.
+- **The Midnight Line has its own map.** In chapter rooms the touch screen
+  shows a screen titled "Midnight Line": rooms drawn by their shape and
+  joined on the side their doors are on, save rooms with a dot, the boss
+  with a cross, an arrow back to the Sewer. The Gate's climb into the
+  Stairs' floor grate is two dotted arrows (those rooms cannot sit next to
+  each other on a flat plan). The zoom button's third step now shows the
+  detailed room map in chapter rooms. The Sewer map is the original again.
+- **Dead hatches closed.** The Entry's first ceiling grate and the
+  Platform's top trapdoor are locked shut: nothing to crawl into.
+- **A gentler Nest.** Enemy health / the damage they deal, as a share of
+  native: Shaft 59% / 55%, Throat 66% / 59%, Span 70% / 66%, Hollow 75% /
+  70%, Gate 80% / 75%. The boss room is unchanged. Measured before, in the
+  lab's save: chapter sewer enemies 22k..37k health and 4,096 per hit, Nest
+  enemies 74k..106k and 8,192..9,554.
+
+How: the second kit block and the chapter build (TECHNICAL "Second kit
+block", "Player health and the top-screen HUD", "Chapter map, closed hatches
+and the strength dial"). Vitality is three chained rows on free ownership
+bits 77..79 and scales the health Spidey loses, not his maximum, so the HUD
+needs no change. The map uses the game's spare sixth area.
+
+Found by the lab before release, never shipped: with the new speeds
+Momentum jumped over the last sample of the Spin Cycle loop, so the spin
+never ended (it now never skips an attack's last sample); the first map
+build stayed locked on the objectives page (the game gives its sixth area
+no map: three small patches) and a later one drew two rooms magenta and
+black (three of the screen's palettes cannot hold rooms); a scaled enemy at
+full health now stays exactly full.
+
+Known limits: the Vitality colours show in the Red suit only (the Black
+suit's purple is shared with the combo meter) and were seen in the lab's
+emulator, not in DeSmuME; the shop shows no level number; rooms appear on
+the map as you visit them, like native ones; the world view (zoom x2) has no
+"you are here" for the chapter; the Yard's detailed map is a placeholder; a
+chapter message covers the map until you change rooms (as before); B pressed
+in the two updates between Perch stomp cycles still fires the native web
+swing (older than this release); only chapter rooms have a strength dial;
+Momentum does not show its tier.
+
+Agent-tested on `4f387a21`: kit qualification 48/48 (the Perch spring check
+now presses B ten frames earlier, off the gap between stomp cycles); the
+three Vitality rows bought in order in the real menu, level I not refundable
+under level II, level III refunded (XP 3000 -> 2500 -> 1750 -> 750 -> 1750);
+a sparring Brute's hit 4,096 -> 3,280 / 2,736 / 2,336 with levels I..III; bar
+colours and the map views x1, x2, x3 reviewed in frames (the whole map with
+every room marked visited, from Gate, Hollow and Yard); crash hunt 12/12
+with every new skill and Vitality III owned; chapter walk routes 6/6 on the
+first try (75 checks); door tour 32/32 in two runs (links 0..16, then from
+17: the tour's teleport dropped a knocked-back Spidey out of bounds in the
+Throat, a lab artifact); power puzzle; save and Continue in Refuge, Rest and
+Shrine; neither hatch can be crawled into; Span enemies 90,112 -> 63,361
+(x 45/64), Hollow 81,108 -> 60,831 (x 48/64); 260 unit tests. Feel, prices,
+colours and the Nest's new strength are untested by the player. Evidence:
+`work/kit/v0.11.0/`, `work/kit/evidence.json`, `work/midnight-line/walk-*.json`.
+
 ## v0.10.0 - 2026-10-11 - Three new Red skills: Web Rush, Ricochet, Momentum
 
 Published through Play Spider-Man.cmd's stable ROM (DeSmuME closed, battery
@@ -71,6 +149,17 @@ Reflex cancel during the dash were traced once each. Not measured: bosses,
 walls between Spidey and the target, enemies above or below him. Feel,
 prices and whether tier 5 is too fast are untested by the player. Evidence:
 `work/kit/v0.10.0/`, `work/kit/evidence.json`.
+
+Player verdict (2026-10-11, after playing `a928843c`): Web Rush "was cool",
+the passives "nice". Spider Reflex and Spider-Sense still carry the native
+speed bonuses, so total speed is high and Momentum is hard to notice: the
+player wants those two slightly slower and Momentum slightly stronger. The
+chapter (v0.9.0 content) was finished on foot, boss included: that it can be
+completed is player-confirmed. Complaints: the boss is one of the game's own;
+the diagram does not show how rooms connect; some hatches can be crawled into
+and lead nowhere; the terrain reads as recoloured sewers plus a hive section;
+Nest enemies are far stronger than the sewer ones. The Yard was not
+mentioned. Follow-up proposals: TASM_ROADMAP "Round two (2026-10-11)".
 
 ## v0.9.0 - 2026-10-11 - Midnight Line: the Yard
 

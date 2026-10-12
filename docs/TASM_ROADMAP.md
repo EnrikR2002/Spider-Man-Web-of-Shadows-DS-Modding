@@ -296,3 +296,270 @@ Native clip names in `reference/format_survey.json` (`spd_WebSwingKick`,
 `spd_DuckAttack`) hint at native bindings: check before claiming an input.
 Every new move needs an authored clip, travels by velocity and uses no
 slow-motion.
+
+## Round two (2026-10-11): verdict on v0.10.0 and proposals
+
+Player, 2026-10-11 (second session; finished the Midnight Line, beat its
+boss, used the new skills): Web Rush "was cool", the passives "nice", but "I
+still want way more new moves" (3-5, "get as creative as you want ... impress
+me"). Spider Reflex and Spider-Sense "already give huge move speed boosts":
+slightly nerf them and slightly buff Momentum so it is "more noticeable and
+more rewarding". Stat upgrades in the shop are welcome and may cost more: max
+health shown by the bar changing colour per upgrade instead of a new bar;
+unsure about damage or tankiness because enemies would then need buffs. Wants
+a new section in each main area after improving the Midnight Line ("without
+more stuff to do the base game moves way too fast"), a boss that is really
+new, a clearer map, no dead hatches, terrain that is not recoloured sewers
+and a smaller sewer/hive enemy gap. They asked to brainstorm first:
+**everything below is proposed; nothing is approved or built.** Answered
+2026-10-11, see "Round three": the five moves were rejected, only Vitality
+was chosen of the stat rows, and the speed rebalance, map, hatches and Nest
+ramp shipped in v0.11.0.
+
+**Speed rebalance.** Reflex 1.15 -> 1.10 and Sense 1.30 -> 1.20 (kit side, in
+the rate getter); Momentum one tier earlier (tier t doubles t+1 of 5 free
+steps, full at tier 4) and on air strings, with a visible cue. Re-measure
+string hit counts at the new rates (TECHNICAL "Second kit block").
+
+| Move | Input (unproven) | Fantasy | Prove first |
+|---|---|---|---|
+| **Slingshot** | Hold Down + A on the ground | Two lines to the sides, he walks back stretching them, release fires him across the room through every enemy in the lane and he sticks to the far wall; also crosses gaps, so rooms can be built around it | Speed cap outside state 46; hand-off into wall cling (state 7); whether Down + A is free |
+| **Head Banger** | A toward a second enemy during a grapple | A second line; both are yanked together while he back-flips up, they collide under him and he lands on the pile | Moving two enemies by velocity |
+| **Pendulum** | Passive on the native web swing (states 26..28) | Swinging through a crowd kicks everyone in the arc flying (Ricochet); B at the top releases into a flip | Swing speed and position in those states; `spd_WebSwingKick` binding |
+| **Cat's Cradle** | Second A held on a grappled enemy | Over, under, over: three wraps cocoon him; three wraps hold even a web-resistant boss for a short window | Long stun on bosses; whether a grapple attaches to them (else from Perch) |
+| **Paddle Ball** | Hold A in the air after Skyjack | Hanging from a line he bounces the launched enemy on a web; Y on each return hits harder, the last one spikes him into the crowd | Rhythm window without slow-motion; vertical enemy velocity |
+
+Agent's order: Slingshot, Head Banger and Pendulum first; Cat's Cradle with
+the new boss; Paddle Ball as the toy. A section can unlock its move's shop
+row (the purchase record's required event may be a game flag: one lab run).
+
+**Stat rows** (Both Suits list; rows may have several levels natively, one
+ownership bit per level, 19 free): Vitality (+1 health unit per level; bar
+recoloured per level, or layered so the new colour drains first: the player
+bar's drawing is unmapped); Flow (slower combo decay per level: damage and
+Momentum speed are earned through the meter, +10% per tier, instead of a
+flat damage stat); Second Wind (the near-death minigame restores more);
+Adrenaline (a new combo tier heals a sliver). No flat damage or armour. The
+story stays native; chapter rooms get a per-room enemy strength dial (also
+the fix for the Nest gap, and later elites and a hard mode via 0x125).
+
+**New places.** Lesson: recoloured clones of known rooms read as the same
+place. Options: unused or unseen rooms (nearly spent, or spoilers), remixes
+(mirrors, props from other districts, repainted textures) and original rooms.
+Original rooms need a spike first: the collision tree is decoded and authored
+quads rendered in the lab, but no room has been built from nothing. Budget:
+about 24 more mapped rooms (ids up to 114), 26 spare flags. Sections, one
+mechanic, move and boss each: Midnight Line 2.0 as the hub (stations to the
+others, own map screen); Pier "Crane Row" (Slingshot); Downtown "The Grid"
+(electrified floor patterns, breakers; boss of generator cores); Residential
+rooftop chase (timer); Hive only after the story (spoilers).
+
+**Bosses.** Machine/arena bosses from room script (hazards, timed platforms,
+throwables, breakers) are new fights within reach. A new character boss
+(model, animation, AI) is research; wild option: a rival on Spidey's own
+skeleton who uses the kit against him, if an enemy can bind the player rig.
+
+**Other ideas.** Danger Room terminals (wave and time-attack medals paying
+XP), bounty elites roaming old story rooms, tokens hidden in native rooms
+that only new moves reach (paying stat levels), a style rank on the HUD.
+
+## Round three (2026-10-12): the player's answers, v0.11.0, new move ideas
+
+Player, 2026-10-11 (answering "Round two"): 1) "I'm not really that impressed
+by any of these new moves you suggested, come up with new ones"; 2) "Let's do
+just vitality for now"; 3) quick fixes before the bigger work: yes; 4) spend
+whatever time is needed mapping things out, "don't create anything yet": do
+the research so that a later session can do the work fast.
+
+**Built in v0.11.0** (CHANGES): Reflex 1.10 and Sense 1.20, Momentum one tier
+earlier and giving the native 1.15 / 1.3 back from combo tier 3 (string of
+four: 122 frames at tier 0, 86 at tier 5; v0.10.0 113 and 87), Vitality
+I..III, the chapter's own map, closed hatches, the Nest strength ramp. Not built: Flow, Second Wind and Adrenaline (not chosen),
+Momentum on air strings and a visible cue, sections and bosses (research
+only: TECHNICAL "Room compiler research", "Script boss research").
+
+Agent's reading of the two rejections (an interpretation, not the player's
+words): the picks so far (Web Rush, Ricochet, Momentum) all deepen the combo
+itself, while the rejected ideas were set pieces that need a setup (a
+grapple, a charge, a swing). Round three puts new answers inside the string
+and adds one headline that changes what a fight looks like. **All
+unapproved; none built.**
+
+| Idea | Input (unproven) | What happens | Prove first |
+|---|---|---|---|
+| **Rodeo** | On a Perch: hold a direction, Y, B | Spidey steers the enemy he rides: the D-pad runs him through the crowd, Y makes him swing at whoever is in front (his own attack, hits replayed on his friends), B jumps off and sends him stumbling into the rest (Ricochet) | Driving an enemy by velocity while perched; forcing his attack state on demand (the lab already forces state 15); whether his hit can land on enemies or must be replayed |
+| **Combo wheel: Kickflip and Flapjack** | B and X in a ground string (A is Web Rush) | B: a flip kick that launches the enemy and carries Spidey up with him, straight into the air string. X: a web suplex that throws the enemy overhead onto whoever stands behind. With A, every face button has an answer mid-combo | Whether B and X (queue commands 2 and 4) are free in non-cancelable nodes; an overhead arc for an enemy by velocity |
+| **Wall Bounce** | Passive (Ricochet upgrade) | A flying enemy who hits a wall bounces back toward Spidey instead of sliding down; hit him before he lands and he flies again | Seeing a flying body stop at a wall (velocity clamps); re-launching by hit replay |
+| **Thwip Barrage** | Hold A on the ground | Rapid web shots walk the target backward; at a wall he is pinned there for a few seconds, and so is everyone in the lane (the car-thief scene) | Hold versus tap on A; a pinned state (the native grapple hold); the native grapple line as the shot |
+| **Live Wire** | Passive at combo tier 3+ | Charged web-shooters (TASM2): grapple, Web Rush and Thwip hits arc to two nearby enemies and stun them, drawn with the game's own electric effects | Spawning a native effect actor (`ElecShock`, `ElectricLg`) from kit code |
+| **Ceiling Stalk** | A while hanging from a ceiling above an enemy | Drops a line, hauls him up and leaves him stuck there for a few seconds | Wall and ceiling states (7 cling, crawl and ceiling hang, 9 wall run: seen 2026-10-12); holding an enemy at ceiling height by velocity |
+
+Agent's order: Rodeo (headline), the combo wheel and Wall Bounce (cheap, and
+they feed Ricochet and Momentum), then Thwip Barrage. Live Wire and Ceiling
+Stalk need the most research. Known Perch limit to fix with Rodeo: B pressed
+in the two updates between stomp cycles fires the native web swing instead of
+the spring (TECHNICAL "Second kit block", qualification note).
+
+## Spider-Man 2099: future Black kit (2026-10-11, theorycraft)
+
+**Player chose 2099:** "alright 2099 it is. Just theorycraft it" and requested
+in-depth play/combo design. He is the future replacement for the existing Black
+slot, after TASM Red is more fleshed out. Selection is confirmed; the mechanics
+below are agent proposals, not approved implementation, agent-tested or shipped.
+The player describes the current recolour as Anti-Venom, done for fun. Earlier
+alternatives Miles, Kaine and Superior were considered; 2099 won this slot.
+
+### Identity and foundation
+
+**Catch -> carry -> crash -> chase.** A fast aerial hunter with coiled anticipation,
+low pounces, crossing talon strikes, scissors kicks and abrupt diving finishes.
+TASM creates new angles around enemies; Miguel drives the engagement through a
+chosen line, then changes its height. Each impact should offer a next decision:
+keep the target close, launch, drop it into the crowd, or disengage. Weight comes
+from pose, contact and follow-through, never long freezes or slow-motion.
+
+Character grounding: retractable talons, venomous fangs and a glide airfoil in
+[Marvel's Miguel profile](https://www.marvel.com/characters/spider-man-2099-miguel-o-hara)
+and [Marvel's Spider-Verse overview](https://www.marvel.com/amp/articles/comics/most-powerful-spider-verse-characters).
+The seven-slot core prioritizes physical pursuit over a poison/bleed system.
+
+**A remains native:** ground Power Dash, airborne Hammer Spike, airborne Down+A
+Hammer Slam retain input, baseline movement and story barrier/unlock behavior.
+Neither a charge nor a combat target is required to use them. Extra purchased
+effects happen on enemy contacts/follow-up choices; do not intercept traversal
+slams or dash-to-barrier use. No airborne A reinterpretation as a claw pursuit.
+Ordinary B jump, base Y strings and unowned/native R behavior remain intact.
+New moves live behind Black-form/purchase gates; preserve existing ownership,
+refund/dependency rules, shared upgrades and progress. Prices/balance deferred.
+
+### Seven purchased skills
+
+| Native purchase | Proposed replacement | Main job |
+|---|---|---|
+| Webbed Fury | Hunter's Return | Recover a target after dash contact |
+| Power Launch | Talon Lift | Choose grounded pressure or an aerial route |
+| Ground Rebound | Predator Rebound | Turn a slam landing into another opening |
+| Black Widowmaker | Raking Cross | New mobile string with front/back coverage |
+| Poison Pummel | Talon Cyclone | Short crowd extension that exits into air |
+| Super Charge | Predator Wind-Up | Charge purchased strikes during action |
+| Quick Charge | Relentless Pursuit | Faster charge and one carried charged strike |
+
+**Hunter's Return.** Native starting trigger: grounded A again after a successful
+Power Dash hit, with a finite follow-up window. Miguel plants low, webs the struck
+enemy back and rakes upward as it returns. Player chooses Y to start close pressure
+or Up+A for Talon Lift; waiting leaves the original knockback useful. Aim/facing
+selects the struck target, not an arbitrary distant enemy. For a recall-resistant
+enemy, proposed fallback is a short visible pouncing strike toward it, without
+moving the enemy or granting invulnerability. The attack must still connect in
+range. Reject stale/dead targets; no auto-follow into a wall or off a platform.
+
+**Talon Lift.** Native starting trigger: grounded Up+A. A crouched upward rake and
+twisting shoulder lift launch a susceptible enemy. Miguel stays grounded unless
+the player presses ordinary B to follow. At close range, the first purchased
+aerial Y follow-up is a reaching rake; aim can favour the near side or pass across
+the target. Then use normal air attacks, A spike, or Down+A slam as appropriate.
+Against an unlaunchable enemy the rake still lands a direct attack; optional B
+jumps Miguel, not the boss. Keep normal jump height/traversal available.
+
+**Predator Rebound.** Keep the native purchased slam bounce as the starting role.
+Down+A executes the normal slam; qualifying enemy contacts bounce susceptible
+targets. Miguel does not automatically jump back up: B jumps manually, then a
+timely Y can perform an angled catch/rake on a nearby rebound target. Staying
+grounded allows Raking Cross instead. A hit against an immovable boss can open
+the same short aerial follow-up opportunity, without bouncing that boss or giving
+free airtime to Miguel. A floor/barrier impact alone never starts target pursuit.
+Crowd slams provide multiple candidates; direction prefers one, with no unlimited
+air magnetism. Rebounds create a route, not a promise of infinite stun.
+
+**Raking Cross.** Native late-pause branch: Y,Y,Y, pause, Y,Y. New choreography:
+low outside rake, passing heel kick, then a planted turn/back rake. Forward input
+favours advancing across a close enemy; neutral stays compact; opposite direction
+turns toward the threat behind. Both sides need real contacts. Ordinary enemies
+can receive a modest pop at the end for manual jump pursuit; resistant enemies
+receive close strikes with Miguel moving around them. Travel is short, collision
+resolved and interruptible with R; avoid mandatory long lunges on ledges.
+
+**Talon Cyclone.** Native late-pause repeated-Y extension of the purchased string.
+A short travelling corkscrew claw/kick sequence sweeps front and rear, then ends
+in a rising scissors kick that puts Miguel into a small, bounded airborne exit.
+From there choose air Y to continue, A to spike, Down+A to slam, or owned air R
+to leave. End after a compact sequence rather than indefinite mashing/spinning.
+It differs from TASM Spin Cycle through forward travel, a defined rising exit
+and its link into slam/rebound; no stationary handstand loop. Extra enemies can
+be swept, but walls/bosses never have to move for the attack to function.
+
+**Predator Wind-Up.** Keep hold-Y charging as the starting interaction, with
+charged purchased strikes rather than a standing charge meter. Miguel coils as
+the preceding motion completes; the next appropriate strike releases the charge.
+The proposed charged version depends on the purchased move: Return gains a
+pronounced pouncing rake; Lift gains an emphatic rising strike; Cross gains a
+longer, still capped crossing attack; Cyclone gains a stronger sweeping finale.
+The aim is a different attack shape/rhythm, not simply a scalar damage buff.
+Quick uncharged attacks remain complete routes. R can abandon a charge; no
+mandatory full wind-up, baseline dash/slam charging, blanket armour or new A hold.
+
+**Relentless Pursuit.** Shorter charge time plus permission to carry one completed
+charge through a brief evade or manual pursuit jump. Clear talon/pose cue shows
+the next purchased strike is primed. The next eligible attack attempt consumes
+it (even a miss); it expires after a short gap, getting hit, form/room change,
+or a finished disengagement. Charging again replaces it; no stacked charges.
+This enables wind-up -> R dodge -> charged Cross, or wind-up -> R dodge -> B
+manual jump -> charged aerial rake against a target within reach. A charged
+Lift spends the stored charge itself; it cannot also give a free charged catch.
+Native A dash/spike/slam do not consume it, while their eligible purchased
+follow-up strikes can. No perfect-dodge automatic counters, time slowing,
+or permanent global move-speed buff. It rewards carrying an attack opportunity,
+distinct from TASM's whole-string resume identity.
+
+### How the complete kit connects
+
+Proposed routes below require the named purchases and close-enough targets.
+Inputs beyond native entry triggers, windows and movement remain unproven.
+
+- **First chase:** ground A dash -> A Return -> Up+A Lift -> B normal jump ->
+  Y aerial rake/normal air hits -> Down+A native slam -> rebound -> B,Y catch.
+  At the rebound, staying down instead starts the next ground string. Air A spike
+  is an alternative ender, not a guarantee that another slam is available.
+- **Crowd lane:** dash a flank enemy -> Return -> Y,Y,Y,pause into Cross ->
+  repeated Y Cyclone -> small airborne exit -> Down+A slam -> choose a bounced
+  target with B/Y, or stay down and turn Cross toward the next threat.
+- **Charged re-entry:** charge during purchased pressure -> complete/bank ->
+  R out of a telegraphed attack -> short reposition -> next eligible Cross/Return
+  strike spends the charge. Normal dodges still need timing; no automatic hit.
+- **Resistant boss:** dash contact -> Return's short pursuit fallback -> compact
+  Cross/direct charged rake -> R escape when the boss retaliates -> native A dash
+  re-entry. Use manual jump/rakes/slam when an actual opening permits. No forced
+  launches/recalls/rebounds, permanent stagger, or unproved boss armour breaks.
+- **Mob beside boss:** use the mob's launch/Cyclone as an air entry toward the
+  boss, strike within reach, and slam nearby enemies during its recovery. Target
+  switching never teleports Miguel; closing the distance still matters.
+
+Every purchased sequence should offer R exits, with ordinary dodge behavior and
+ownership requirements retained (especially shared Air Dodge). Cancelling before
+contact gives up the hit; after contact it can cut recovery. Hunter's Return is
+optional, Lift never auto-jumps and Rebound never auto-catches. Steering, target
+eligibility, geometry and enemy retaliation keep the player involved. Repeated
+relaunches may need reduced lift/rebound on ordinary enemies to prevent one-button
+locks, without imposing long waits or killing varied combos. Details await play.
+
+### Presentation, growth and later possibilities
+
+New purchased clips need continuous motion, anticipation, overlap and matched
+contacts (TECHNICAL "Kit animation authoring"). Silhouette: low crouch and splayed
+hands on entry, body stretching through a pounce, torso leading a crossing rake,
+feet leading the downward finish. Cape/airfoil trails motion if feasible; subdued
+talon trails and distinct contact cues should remain readable at DS resolution.
+Do not reuse generic native punches with claw effects and call them new moves.
+
+Early Return+Lift teaches dash -> recall -> ground/air choice. Rebound completes
+the vertical loop; Cross+Cyclone gives crowd routing; Wind-Up+Relentless adds
+charge decisions while moving. Existing owned slots migrate only in a later
+qualified release, no free paid moves or loss of story progress. Both Suits
+Kick-Off/Drill Kick/air evade/recovery can bridge routes when separately owned.
+
+Possible later skills, outside these seven: a purchased short glide-to-rake,
+wall/ceiling pounce, or a close fang finisher during an earned enemy opening.
+Glide must not hijack B jumps or A spike/slam; fangs must not require bosses to
+accept paralysis. All are optional research; core fun should work without them.
+First eventual prototype should prove native A parity plus Return -> Lift ->
+slam/Rebound and a resistant-boss direct-contact route before extra effects.

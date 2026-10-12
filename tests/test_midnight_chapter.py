@@ -147,18 +147,18 @@ class MidnightChapterTests(unittest.TestCase):
         resources = {r.name: {'objects': 4000 + 2 * i, 'texture': 4001 + 2 * i} for i, r in enumerate(ch.ROOMS)}
         names = self.names + [f'x{i}' for i in range(4000 - len(self.names))]
         names += [n for r in ch.ROOMS for n in (f'zz_{r.name}_app.obj', f'zz_{r.name}Textures.nsbtx')]
-        table, list_at, messages_at = ch.room_table(self.arm9, names, resources, 1049)
+        listing = ch.map_layout(self.blobs[ch.MAP_SOURCE])[1]
+        table, list_at, messages_at = ch.room_table(self.arm9, names, resources, 1049, listing)
         self.assertEqual(len(table), ch.ML_SPACE)
         entries = table[messages_at - ch.ML_BASE:messages_at - ch.ML_BASE + ch.MESSAGE_SIZE * len(ch.LINES)]
         self.assertEqual(entries, ch.message_entries(1049))
-        entries = table[list_at - ch.ML_BASE:list_at - ch.ML_BASE + ch.ENTRY_SIZE * (ch.SEWER_COUNT + len(ch.ROOMS))]
-        native = self.arm9[ch.SEWER_LIST - ch.BASE:ch.SEWER_LIST - ch.BASE + ch.ENTRY_SIZE * ch.SEWER_COUNT]
-        self.assertEqual(entries[:len(native)], native)                   # native Sewer rooms kept in order
-        added = [entries[i:i + ch.ENTRY_SIZE] for i in range(len(native), len(entries), ch.ENTRY_SIZE)]
-        self.assertEqual([struct.unpack_from('<2I', e) for e in added], [(ch.BY_NAME[r].index, 1) for r in ch.DIAGRAM])
-        slots = [e[9] for e in added]
-        self.assertEqual(len(set(slots)), len(ch.ROOMS))
-        self.assertTrue(all(e[10] == e[9] + 4 and e[11:15] == native[11:15] for e in added))
+        entries = table[list_at - ch.ML_BASE:list_at - ch.ML_BASE + ch.ENTRY_SIZE * len(listing)]
+        self.assertEqual(entries, ch.map_entries(listing))
+        added = [entries[i:i + ch.ENTRY_SIZE] for i in range(0, len(entries), ch.ENTRY_SIZE)]
+        self.assertEqual({struct.unpack_from('<2I', e) for e in added}, {(r.index, 1) for r in ch.ROOMS})
+        self.assertEqual(len({e[9] for e in added}), len(added))          # one colour slot per entry
+        native = self.arm9[0x0211FE38 - ch.BASE:0x0211FE38 - ch.BASE + ch.ENTRY_SIZE]     # a native Sewer entry
+        self.assertTrue(all(e[8] == 0 and e[10] == e[9] + 4 and e[11:15] == native[11:15] == ch.STATE_COLORS for e in added))
         lookup = struct.unpack_from(f'<{ch.FIRST + len(ch.ROOMS)}I', table)
         self.assertEqual(lookup[:75], tuple(r.address for r in self.native))
         self.assertEqual(lookup[75], 0)
@@ -174,24 +174,110 @@ class MidnightChapterTests(unittest.TestCase):
             self.assertEqual(raw[0x24:0x28], src.raw[0x24:0x28])   # texture animation
             self.assertEqual(raw[0x4C:], src.raw[0x4C:])           # map piece and later fields
             self.assertEqual(struct.unpack_from('<8i', raw, 0x2C), ch.MAP_FIELDS[room.source][1:])
-            self.assertEqual(struct.unpack_from('<i', raw, 0x28)[0], ch.SEWER_AREA)   # drawn on the Sewer screen
+            self.assertEqual(struct.unpack_from('<i', raw, 0x28)[0], ch.MAP_AREA)     # the chapter's own map screen
 
-    def test_map_screen_draws_each_room_in_its_own_free_slot(self):
+    def test_chapter_map_draws_every_room_in_free_slots_on_a_clean_panel(self):
         from tools.minimap_cbmp import Cbmp
-        raw = self.blobs[ch.MAP_SCREEN]
-        old, new = Cbmp.parse(raw), Cbmp.parse(ch.map_screen(raw))
+        raw = self.blobs[ch.MAP_SOURCE]
+        old = Cbmp.parse(raw)
+        data, listing = ch.map_layout(raw)
+        new = Cbmp.parse(data)
         self.assertEqual(new.tiles[:len(old.tiles)], old.tiles)
-        cells = {c: r for r, cs in ch.DIAGRAM.items() for c in cs}
-        for i, (a, b) in enumerate(zip(old.screen, new.screen)):
-            xy = (i % old.width, i // old.width)
-            if xy not in cells: self.assertEqual(a, b)
-            else:
-                slot = dict(zip(ch.DIAGRAM, ch.MAP_SLOTS))[cells[xy]]
-                self.assertEqual(b >> 12, slot >> 4)
-                self.assertTrue(set(new.tile(b & 0x3FF)) <= {0} | set(range(slot & 15, (slot & 15) + 5)))
+        self.assertEqual({room for room, *_ in listing}, set(ch.BY_NAME))
+        self.assertEqual(set(ch.MAP_ROOMS), set(ch.BY_NAME))
+        self.assertEqual(len({slot for _, slot, _, _ in listing}), len(listing))
+        # Rooms in palettes 13..15 drew dark, magenta or black in game (lab 2026-10-12).
+        self.assertTrue({slot >> 4 for _, slot, _, _ in listing} <= set(ch.MAP_PALETTES))
+        self.assertFalse({13, 14, 15} & set(ch.MAP_PALETTES))
+        owner = {slot + role: (room, role) for room, slot, _, _ in listing for role in range(5)}
+        x0, y0, x1, y1 = ch.MAP_INTERIOR
+        pixels = ch._map_pixels()
+        background = old.palette[old.pixel_index(3 * 8, 15 * 8)]
+        for py in range(8 * (y1 - y0)):
+            for px in range(8 * (x1 - x0)):
+                index = new.pixel_index(x0 * 8 + px, y0 * 8 + py)
+                if (px, py) in pixels: self.assertEqual(owner[index], pixels[(px, py)])
+                else: self.assertEqual(new.palette[index], background, (px, py))      # empty panel
+        for i, (a, b) in enumerate(zip(old.screen, new.screen)):       # only the panel and its border ring change
+            x, y = i % old.width, i // old.width
+            if not (x0 - 1 <= x <= x1 + 1 and y0 - 1 <= y <= y1): self.assertEqual(a, b)
         changed = {i for i, (a, b) in enumerate(zip(old.palette, new.palette)) if a != b}
-        self.assertTrue(changed <= {s + k for s in ch.MAP_SLOTS for k in range(5)})
-        self.assertEqual(set(ch.DIAGRAM), set(ch.BY_NAME))
+        self.assertTrue(changed <= set(owner))
+        kept = {(e >> 12) * 16 + c for i, e in enumerate(new.screen) for c in set(new.tile(e & 0x3FF)) if c
+                and not (x0 <= i % new.width < x1 and y0 <= i // new.width < y1)}
+        self.assertFalse(kept & set(owner))                             # the frame uses no room slot
+        for room, slot, x, y in listing:                                # marker pixel inside the room
+            self.assertEqual(pixels[(x - x0 * 8, y - y0 * 8)][0], room)
+
+    def test_chapter_map_links_leave_rooms_on_their_door_sides(self):
+        def side(room, strip):
+            """Which side of `room` the strip touches (screen y grows downwards)."""
+            sx0, sy0, sx1, sy1 = strip
+            for x0, y0, x1, y1 in ch.MAP_ROOMS[room]:
+                if sx0 == x1 and sy0 < y1 and sy1 > y0: return 'right'
+                if sx1 == x0 and sy0 < y1 and sy1 > y0: return 'left'
+                if sy1 == y0 and sx0 < x1 and sx1 > x0: return 'up'
+                if sy0 == y1 and sx0 < x1 and sx1 > x0: return 'down'
+        def kind(room, other):
+            group, = [g for (r, g), (dest, _) in ch.LINKS.items() if r == room and dest == other]
+            return doors.door_kind(self.final(room), group)
+        drawn = set()
+        for room, other, strip in ch.MAP_LINKS:
+            self.assertEqual(side(room, strip), kind(room, other), (room, other))
+            self.assertEqual(side(other, strip), kind(other, room), (other, room))
+            drawn.add(frozenset((room, other)))
+        low, high = ch.MAP_SHAFT_LINK                                   # dotted arrows instead of a line
+        self.assertEqual((kind(low, high), kind(high, low)), ('up', 'down'))
+        self.assertTrue(all(y < min(r[1] for r in ch.MAP_ROOMS[low]) for _, y in ch.MAP_ARROWS[low]))
+        self.assertTrue(all(y >= max(r[3] for r in ch.MAP_ROOMS[high]) for _, y in ch.MAP_ARROWS[high]))
+        drawn.add(frozenset(ch.MAP_SHAFT_LINK))
+        self.assertEqual(drawn, {frozenset((room, dest)) for (room, _), (dest, _) in ch.LINKS.items() if dest in ch.BY_NAME})
+        entry = ch.ENTRANCE_DOOR['room']                                # the way back to the Sewer: an arrow to the left
+        self.assertEqual(kind(entry, ch.ENTRANCE), 'left')
+        self.assertTrue(all(x < ch.MAP_ROOMS[entry][0][0] for x, _ in ch.MAP_ARROWS[entry]))
+
+    def test_map_area_patches_sit_on_the_native_instructions(self):
+        word = lambda address: struct.unpack_from('<I', self.arm9, address - ch.BASE)[0]
+        for address, old, new in (ch.MAP_LOCKED_DEFAULT, *ch.MAP_AREA_BOUNDS):
+            self.assertEqual(word(address), old, hex(address))
+            self.assertNotEqual(old, new)
+        row = ch.AREA_ROWS + 16 * ch.MAP_AREA
+        self.assertEqual((word(row + 8), word(row + 12)), (0, 0))                 # the spare area has no room list
+        self.assertEqual(tuple(word(a) for a in ch.AREA_LITERALS), ch.AREA_NATIVE)
+        self.assertEqual(self.names[ch.AREA_NATIVE[0]], 'GenericBGBot_4.cbmp')
+        sewer = ch.AREA_ROWS + 16 * 2                                              # the Sewer row stays native
+        self.assertEqual((word(sewer + 8), word(sewer + 12)), (0x0211FE38, 18))
+
+    def test_dead_hatches_are_locked_and_never_opened(self):
+        from tools import room_script as s
+        for name, hatch in ch.HATCHES.items():
+            before = self.finished(name)
+            raw = ch.close_hatch(before, hatch)
+            (entities, *_), groups = self.record1(raw)
+            door = (0, entities[0].index(hatch['door']) + 1)
+            self.assertEqual(groups[0].commands[-1], s.door(door, True))                 # locked at room load
+            self.assertEqual(groups[0].commands[:-1], self.record1(before)[1][0].commands)
+            self.assertEqual(s.counts(raw, 1), s.counts(before, 1))                      # nothing is renumbered
+            old, new = (Entities.parse(RoomObjects.parse(x).records[1].sections[0]).records for x in (before, raw))
+            moved = [i for i, (a, b) in enumerate(zip(old, new)) if a != b]
+            if 'opener' in hatch:
+                at, = moved
+                self.assertEqual(entities[0][at], hatch['opener'])
+                self.assertEqual(struct.unpack_from('<i', new[at], 4)[0], ch.REMOVED_PICKUP_Y)
+            else: self.assertEqual(moved, [])
+            self.assertTrue(any(room == name for room, _ in ch.SEALED))                  # a hatch whose exit is sealed
+
+    def test_strength_dial_ramps_the_nest_and_leaves_other_rooms_native(self):
+        from tools import tasm_kit as kit
+        dial = ch.strength_dial()
+        self.assertEqual(len(dial), 2 * kit.DIAL_ROOMS)
+        ramp = [ch.STRENGTH[name] for name in ('ML_NestShaft', 'ML_NestThroat', 'ML_NestSpan', 'ML_NestHollow', 'ML_NestGate')]
+        self.assertEqual(ramp, sorted(ramp))                            # rooms in walking order get harder
+        self.assertTrue(all(32 <= v < 64 for pair in ramp for v in pair))               # between half and native
+        for room in ch.ROOMS:
+            pair = tuple(dial[2 * (room.index - ch.FIRST):2 * (room.index - ch.FIRST) + 2])
+            self.assertEqual(pair, ch.STRENGTH.get(room.name, (0, 0)), room.name)
+        self.assertNotIn(ch.BOSS['room'], ch.STRENGTH)
 
     def test_breaker_cuts_the_platform_flag_and_appends_only(self):
         from tools import room_script as s

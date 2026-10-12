@@ -1656,6 +1656,7 @@ h_observer:
   cmp r5,r6
   bne obs_done
   bl train_observe
+  bl 0x02155434             // KIT2 strength dial (chapter rooms; keeps every register)
   ldr r5,[r0,#0x44]
   cmp r5,#0
   ble obs_done
@@ -1775,7 +1776,10 @@ train_store:
 train_out:
   pop {r4,r5,pc}
 
-h_train_floor:              // r2=stats, r3=new HP (0 if lethal); native str r3,[r2,#0x84]
+h_train_floor:              // r1=HP, r2=stats, r3=new HP (0 if lethal); native str r3,[r2,#0x84]
+  push {lr}
+  bl 0x02155438             // KIT2 damage scale (chapter room dial, Vitality) -> r3
+  pop {lr}
   push {r0}
   ldr r0,lit_02154c20
   ldr r0,[r0,#0x2f4]

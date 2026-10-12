@@ -97,8 +97,8 @@ def run(seed, rom, frames=4000, at=LEDGE):
         name.with_suffix('.ram').write_bytes(ram)
         print('STALL', st['since'], state, name.with_suffix('.state'), flush=True)
 
-    kit_lab._run(str(rom), f'crash_{seed}', str(inputs), frames=frames, bits=0xFEF00, bits2=0x1C00, arena=True,
-                 tx=at[0], ty=at[1], refill=True, extra_hook=hook, caps=[frames - 1])   # bits2: v0.10.0 shop rows
+    kit_lab._run(str(rom), f'crash_{seed}', str(inputs), frames=frames, bits=0xFEF00, bits2=0xFC00, arena=True,
+                 tx=at[0], ty=at[1], refill=True, extra_hook=hook, caps=[frames - 1])   # bits2: v0.10.0 shop rows + Vitality I..III
     print('DONE', seed, flush=True)
 
 

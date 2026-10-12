@@ -848,6 +848,24 @@ Confirmed 2026-10-11 by disassembly, RAM and real-menu runs (`work/shop/`).
   the nine slots instead of appending again.
 - Bought, refunded, re-bought and cleared through the real menu; bought rows
   survive save + Continue (third word `0x1C0F`, XP 1000): `work/shop/shop-*.json`.
+- **v0.11.0: Both Suits rows.** The Both Suits list (pointer `0x02120170`,
+  count `0x02120188`) moves to block +0x1940 with ten rows: the seven parent
+  rows and Vitality I..III on events 386..388 (bits 77..79, third-word masks
+  0x2000/0x4000/0x8000; 500/750/1000 XP). Each needs the row before (required
+  event) and names the next as dependent, the native Spider Dance/Scissor
+  rule. Bits 80..95 remain free (16). Real menu on `ea5376f7`
+  (`work/shop/vit_shop_lab.py`, frames `work/shop/vit-shop.png`): bought in
+  order (third word 0x200F, 0x600F, 0xE00F; XP 3000 -> 2500 -> 1750 -> 750),
+  refunding level I under level II is refused, level III refunds.
+- **Multi-level rows are not safe in the three shop lists.** Buy
+  (`0x020F1AA0`) and refund (`0x020F1B4C`) count owned levels with
+  `0x020F123C` (consecutive events from the first) and A buys the next level
+  until the row is full, then refunds one. But the row predicate
+  (`0x020F1150`) only tests "can afford" while the *first* event is unowned,
+  so a second level could be bought without the XP. Use chained one-level
+  rows. The native stat pickups (resources `OrbUpHP`, `OrbUpLP`, `OrbUpDam`,
+  `OrbUpDef`, `OrbUpMap`; table `0x02120500`) are the game's own levelled
+  stats and were not studied.
 
 ### Combo resource and HP are different
 
@@ -1263,6 +1281,70 @@ carry `k2` (rush phase, dash step, Ricochet count, Momentum doubled steps).
   by 10% per tier (22528 Q12 at tier 0, 33777 at tier 5 for the same hits).
 - **Lab note.** `--place` in the training room needs dy 0.06 (the floor is at
   5.03; at 0 the sparring Brutes sink through it once they move).
+- **v0.11.0 additions** (2700 bytes; entries +0x14 `k2_observe`, +0x18
+  `k2_damage`, called by the first block's enemy observer and player-HP store
+  hook). *Speed:* `k2_update` writes 1.10 (0x119A) and 1.20 (0x1333) into the
+  tuning block `+0x230`/`+0x22C` every update; the native getter and Momentum
+  read them there (only `0x020B2218`/`0x020B222C` read those two words).
+  With Momentum owned and the combo tier at 3 or more it writes the native
+  1.15/1.3 instead. Actions 1, 2, 3, 5, 32, 56..62 and 130 follow, so Perch's
+  stomp cycle is 41 frames instead of 37 below tier 3. *Momentum:* the
+  accumulator gains tier + 1 (0 at tier 0), so tier t doubles t+1 of 5 free
+  steps and tier 4 doubles all. Y,Y,Y,Y with Sense and Momentum (kit ARM9
+  `3c6a34e0`, the release's): 122 / 106 / 100 / 88 / 86 / 86 frames at tiers
+  0..5 (v0.10.0: 113 / 105 / 99 / 93 / 91 / 87), hits 2, 1, 3, 1 per action
+  at every tier; Sense without Momentum 122 at any tier.
+- **Momentum must not skip an action's last sample.** The string blocker
+  (`0x020B53F8`: clip length - 1 > clock means "stay") only decides "repeat or
+  end" on the last sample. At rate 1.2 a doubled step (2.4) from clock 10 of
+  the spin loop (12 samples) jumped over sample 11 every loop: the spin never
+  set its repeat flag and never ended (lab, tier 5; at 1.3 the grid happened
+  to land on 11). `momentum_last` (last sample per action 56..62) now blocks
+  doubling from clocks >= last - 2. After the fix: 190 repeat rows and 25
+  hits at tier 5, 150 and 19 at tier 3, then the sweep and idle when the
+  mashing stops.
+- **Perch and the cycle gap.** B during a stomp cycle springs; B in the two
+  updates between cycles (state 19; frame 160 of the qualification script at
+  1.2, 156 at 1.3) goes to the native web swing (state 26). Older than
+  v0.11.0; the qualification now presses B at frame 150.
+- **Strength dial.** Table at `0x02156F20` (block +0x1B00, zero in a kit
+  ROM): two bytes per room 76..115, enemy health and damage-to-Spidey scale in
+  1/64ths (0 or 64 = native). `k2_observe` scales a common-health enemy's
+  health and max once (max >= 0x4000; a scaled max is odd, native values are
+  not; an enemy at full health stays exactly full, so no health bar appears
+  over an untouched one) and `k2_damage` scales the health Spidey loses in
+  the store hook
+  (`0x0205F420`: r1 old, r3 new). The chapter build fills the table
+  (`midnight_chapter.STRENGTH`). Lab on `4f387a21`: Span enemies 90,112 ->
+  63,361 (x 45/64), Hollow 81,108 -> 60,831 (x 48/64); a native 8,192 hit
+  takes 5,760 in the Hollow (x 45/64).
+- **Vitality.** `k2_damage` also multiplies by 205, 171 or 146 /256 for bits
+  77/78/79 (health worth 1.25, 1.5, 1.75 times): lab sparring Brute hit 4,096
+  -> 3,280 / 2,736 / 2,336. Health and max are untouched, so the bar keeps its
+  length. `vit_update` writes four BGR555 colours to the main-screen BG
+  palette `0x05000032` (colours 25..28) every update: see "Player health and
+  the top-screen HUD".
+
+### Player health and the top-screen HUD (v0.11.0)
+
+- **Health calls.** Spidey's vtable (`0x0212E3F0`) +0x15C `0x0205F388` sets
+  health (clamped to 0..max), +0x160 `0x0205F3F0` subtracts damage, +0x170 /
+  +0x174 (`0x02060178`/`0x02060188`) read health and max; the interface vtable
+  at actor+8 (`0x0212E40C`) has the same three at +0x5C/+0x60/+0x64 through
+  this-8 thunks. Health and max live at stats +0x84/+0x88, outside the 0x58
+  bytes a save stores: max is rebuilt after loading (where is unknown).
+- **Bar.** One segment per health unit (4096): the lab save shows six. The
+  blue pips under it are a second resource (unstudied; resources `OrbLP`).
+- **`HUDTop_8.cbmp`** is an 8bpp CBMP: u16 249 (4bpp files: 121), u16 tile
+  count, 256 colours, 16 x 28 tiles, 64-byte tiles in the same PuCrunch body.
+  It holds the red and the purple (Black suit) emblem and bar, the pips and
+  the combo-meter art. Colours: 25 bar shade, 26 bar and emblem, 27 emblem
+  light, 28 bar light (reds `0x000D 0x0C77 0x18DA 0x253D`); 29..31 purple,
+  shared by the Black bar and the combo meter.
+- **Palette at run time:** the main engine's BG palette RAM, colour n at
+  `0x05000000 + 2n`. Writing 25..28 there every update recolours the Red bar
+  and emblem at once (lab frames `work/shop/vit-hud.png`: orange, gold,
+  green; melonDS). The purple bar cannot be tinted without tinting the meter.
 
 ### Kit animation authoring
 
@@ -1641,7 +1723,7 @@ kept v0.5.0 ROM in `build/releases/fd7e4420.../`, output `build/midnight-line/`)
   (`MAP_FIELDS`), so the Sewer map appears. The map only draws (and highlights)
   rooms from a list not yet found, so chapter pieces/position are not drawn;
   a different position was tried and ignored. Area table: static init at
-  `0x02117F74` writes RAM `0x0213B834` (16-byte rows: map CBMP, unlock var).
+  `0x02117F74` writes RAM `0x0213B834` (16-byte rows: map CBMP, area name string).
   `0x02137xxx` byte lists ending below 0x49 are per-mission *ability* unlock
   lists (`0x020D1334`, bitset `0x0205721C`), not room lists.
   Patches: lookup literal `0x02084AC8`, Glob count `0x020077F8`, and both
@@ -1709,9 +1791,15 @@ Confirmed 2026-10-07 (`tools/minimap_cbmp.py`, tests; in-game captures).
   RLE table, bitstream; `grip_compression.decode` after prefixing
   `0x60 | tiles*32 << 8`), 2 trailing bytes. All 98 round-trip; a re-encoded
   body (`encode_backrefs`) loads in game (Sewer screen 6150 -> 7694 bytes).
-- **Area rows** at `0x0213B840` (ARM9 data, 16 bytes per area 0..4): screen
-  resource, map variable, room-list pointer, entry count. Sewer row 2: list
-  `0x0211FE38`, 18 entries. Static init `0x02117F74` writes screen/var only.
+- **Area rows** at `0x0213B840` (ARM9 data, 16 bytes per area 0..5): screen
+  resource, area name string (379 Downtown, 380 Hive, 381 Pier, 382
+  Residential, 383 Sewer: printed under the map; read as a "map variable"
+  before 2026-10-12), room-list pointer, entry count. Sewer row 2: list
+  `0x0211FE38`, 18 entries. Static init `0x02117F74` writes screen and name
+  from literals. **Row 5 is a spare area**: screen `GenericBGBot_4.cbmp`
+  (0x320), name string 20 (' '), no list (literals `0x0211802C`/`0x02118030`,
+  list/count words `0x0213B898`/`9C`); native proto01 carries area 5. The
+  chapter owns it since v0.11.0 ("Chapter map" below).
 - **Room-list entry** (20 bytes): u32 room, u32 OBJ record selector, u8 type
   (0 room, 1 save room), u8 first/last palette index of the room's 5-colour
   slot, u8 x4 colour sources `B6 BA BB BF` in every entry, u8 x/y map pixel
@@ -1725,14 +1813,25 @@ Confirmed 2026-10-07 (`tools/minimap_cbmp.py`, tests; in-game captures).
   4/5 colours 1..11 are the S icons. Using palettes 0/1..3/13 showed no
   other touch-screen change in captures.
 - **Descriptor +0x28..+0x48** (area, piece position, world size, bounds) feed
-  the room-detail view (`0x020E56F8`, with descriptor +0x4C screen) when the
-  area's map variable is owned (`0x020E361C`). The chapter sets area 2 and
-  keeps the source room's other values.
+  the room-detail view (`0x020E56F8`, with descriptor +0x4C screen; the x3
+  zoom of the touch screen) unless the area's map is locked. `0x020E361C`
+  answers "locked" from one map-item event per area (0x17B Pier, 0x17C
+  Residential, 0x17D Sewer, 0x179 Downtown, 0x17A Hive: ability bits 68..72)
+  and for every other area; a locked area shows `MMLocked.cbmp` (resource
+  0x4FE, "Detailed Mini-Map unavailable"). v0.7.0..v0.10.0 set area 2 on
+  chapter rooms and kept the source room's other values; v0.11.0 sets 5.
+- **Areas above 4 have no map natively:** `0x020E3480` refuses the map views
+  (modes 6..8) and `0x020E2194` opens the touch screen on the objectives page
+  when the room's area is >= 5 (`cmp r0,#5` at `0x020E34B8`, `0x020E21CC`);
+  `0x020E1558` ("nothing visited in this area") returns early for areas >= 5
+  and the world view (x2 zoom, loop `0x020E6CD8`) draws areas 0..4 only.
 - **Chapter diagram:** 14 rooms drawn as a subway diagram in the empty
   lower-left cells (cols 3..12, rows 15..18) of MMSewer.cbmp, one free slot
   per room; list relocated to the chapter block with 18 + 14 entries
   (patches row +8/+0xC). Visited chapter rooms appear, the current one is
-  highlighted (frames: `build/boot-tests/nest-c-*/ml-visit-*`).
+  highlighted (frames: `build/boot-tests/nest-c-*/ml-visit-*`). Superseded in
+  v0.11.0 by the chapter's own screen; the Sewer screen and list are native
+  again.
 
 ### The Nest and the boss room (v0.7.0)
 
@@ -1911,9 +2010,25 @@ entities; tests). This supersedes "node meanings unknown" above.
 - **Tree in preorder.** Flag 1: the front child is a solid leaf whose list
   index is `link`. Flag 2: the back child is empty space. A child that is
   neither is the next node; with two node children the front one follows and
-  the back one is node `link`. Each list is the solid leaf of exactly one
-  node in every room. List entries (node, 0/10/...) and the u16 at +8 remain
-  unknown (probably the leaf's faces and surface types).
+  the back one is node `link` (a node with only an empty back has link 0).
+  Each list is the solid leaf of exactly one node in every room.
+- **Lists are the faces of a solid leaf** (2026-10-12): every entry names a
+  node above the leaf (26,105 of 26,105), the planes that bound its cell and
+  are not made redundant by a tighter one; front-side ancestors come first,
+  deepest first, then back-side ones. The second u16 is the face's **surface
+  value**. The node u16 at +8 (0 in 57%, 2, 3, 8, 24 and stray values such as
+  15668) can be written as 0 ("Room compiler research").
+- **Surface values**, measured in the two debug rooms built for them
+  (Test_Surfaces01/02, rooms 71/72: 80-unit cells at x 100, 200, 300, 500,
+  600, 700, 800 whose floor, ceiling, walls above y 20 and back wall carry
+  one value; `work/midnight-line/scratch/surface_exp.py`, lab save with the
+  player's abilities): **10** ordinary (87% of all entries; every face of
+  Test_Combat01; clings and crawls), **9** clings and crawls, **0** clings
+  only with the ichor story abilities (bits 0/1 cleared: he slides off; 2,895
+  faces in the game: the Ichor Crawl gating), **1, 2, 6** never cling, **7**
+  hurts (4,096 and a knock-back from floor or wall). 4 and 5 (10 faces in
+  real rooms) are untested. What separates 1/2/6 and 9/10 (sound, web
+  attachment?) is unknown.
 - **Measured against the game:** walls at x 0/-40 beside the Gate's pedestal
   (Spidey stops 3.5 units from a wall), pedestal top 180, wedge top 60 under a
   slanted plane, the ledge gap at x -9.5..-0.5. Sampled position = feet + 5.
@@ -1933,6 +2048,10 @@ entities; tests). This supersedes "node meanings unknown" above.
 - **Movement seen in the lab:** B again in the air jumps again (three jumps
   reach a neck); holding a direction into a wall in the air clings (state 7),
   then Up crawls up and along the ceiling into a neck; B on a wall jumps off.
+  2026-10-12: a jump beside a wall while holding toward it runs up it (state
+  9) to the ceiling and hangs there (state 7 again, position = ceiling - 5);
+  7 is also the ceiling crawl. States 8 and 13 were seen on another wall,
+  67/74/75/77/79 after touching a hurting surface.
 
 ### Chapter routes on foot (v0.8.1)
 
@@ -2053,6 +2172,189 @@ and v0.8.0 were never walkable past the Span.
   checked in the Stairs and the Yard); the "~8 s" above was not re-measured.
 - Lab `f109a525`: walk route `yard` (Refuge door, tunnel, floor, gang,
   back out, on to the Stairs) and the 32-link tour pass.
+
+### Chapter map, closed hatches and the strength dial (v0.11.0)
+
+Player 2026-10-11: the diagram on the Sewer screen did not show how the rooms
+connect; hatches could be crawled into and led nowhere; the Nest's enemies
+were far above the sewer ones.
+
+- **Own map screen** (`midnight_chapter.map_layout`, `MAP_ROOMS`, `MAP_LINKS`).
+  Chapter rooms carry area 5; row 5 gets a new screen `zz_MMMidnight.cbmp`, an
+  appended title string "Midnight Line" and a room list in the chapter block
+  (patches: row +8/+0xC, the two literals, `cmp r0,#5` -> `#6` at
+  `0x020E21CC`/`0x020E34B8`, `mov r0,#1` -> `#0` at `0x020E3724`). Without the
+  three code patches the touch screen stayed on the objectives page and the
+  Mini-Map button did nothing (lab, candidate `ec02ef05`).
+- **Screen.** The Sewer screen's frame and palettes with the panel (cells
+  3..27 x 3..18, 200 x 128 pixels) cleared and the border cells the Sewer
+  rooms reached into restored from plain neighbours. Rooms are outlined
+  rectangles at about 1 pixel per 6..8 units; every link strip leaves both
+  rooms on the side `room_doors.door_kind` reports (test). A tile has one
+  palette, so each cell gets a palette in which every room it shows has a
+  5-colour slot; a room spanning palettes has one list entry per palette
+  (19 entries for 15 rooms; the native Sewer_Map07 has two). Slots: the free
+  ones of palettes 0..3 and 6..10 (those no kept cell uses). **Palettes
+  13..15 cannot hold rooms:** with every room marked visited, a room in 14
+  drew magenta, one in 15 black and a visited one in 13 dark grey; it only
+  looked right while it was the current room (candidates `dfeb84ea`,
+  `0fbb62a3`; `scratch/map_view.py ROM NAME ROOM --visited`).
+- **The door pairs do not fit one flat plan.** The Platform alcove enters the
+  Stairs' right end going left, the Gate rises into the Stairs' left end, and
+  the Nest hangs from the Platform's grate: at true scale the Stairs would
+  have to be on both sides of the Platform. The Gate <-> Stairs grate pair is
+  therefore two dotted arrows, like the native stubs to other areas.
+- **What the views show now** (lab `4f387a21`, touch on the buttons): x1 the
+  chapter screen with its title, visited rooms, the current one lit; x2 the
+  world view (areas 0..4, no "you are here" for area 5); x3 the *source
+  room's* detailed map (Sewer_Map01, Hive_Map05 ...), which v0.10.0 showed as
+  "unavailable" in the lab save. The Yard's detail screen is `MMPlaceholder`.
+  A chapter line shown on entry covers the panel until the room changes.
+- **Hatches.** Sewer_Map01's first 'Door (Sewer Grate Ceiling)' (kind 0x09 at
+  (0, 0.8)) and Sewer_Map03's 'Door (Sewer Grate Floor) 1' at (435, 165.8)
+  with its type-5 zone 'Trigger (Main|Grate_Open)' are the dead hatches.
+  `close_hatch` locks the grate from the room init (`0x0F`, as
+  `Lock_Grate`) and moves the zone away. Lab `4f387a21`
+  (`scratch/hatch_exp.py entry-wall | platform-cling`): he no longer gets
+  above either grate (before: crawled in and came back).
+- **Strength dial** values and lab numbers: "Second kit block". Research
+  save, stable `a928843c`: chapter sewer rooms 22k..37k health and 4,096 per
+  hit; Nest 74k..106k and 8,192..9,554; Yard gang 52k (one 131k) and 2,187.
+  `scratch/damage_probe.py ROM ROOM [--fight] [--bits2 B]` logs both.
+- **The door tour can lose Spidey.** On `dfeb84ea` `midnight_line.py tour`
+  stopped after step 17 and, in a second run, after step 19 with no error:
+  `player_trace.sample` no longer found him after a room change while the
+  game kept running (captured frames kept changing). Resume with `tour
+  --start N`; the walk routes are the real gate.
+- **`COLLISION`** (`midnight_chapter`): a room may ship its own collision file
+  (appended last as `zz_<room>.bsp`; collision files need no alignment).
+  Empty in the release.
+
+### Room compiler research (2026-10-12)
+
+Goal set by the player: sections that do not look like recoloured sewers,
+built later by another session from this research. Nothing here ships.
+
+**Proven in the running game**
+
+- *Collision from boxes.* `room_collision.compile_boxes(solids, slab)` turns
+  axis-aligned boxes (x0, y0, x1, y1[, surface value], infinite extents
+  allowed) into a collision file: two z nodes (|z| >= slab solid), then a
+  k-d split on box edges with native flags, links and face lists. Tests: the
+  training room from four boxes is 204 bytes like the native file and agrees
+  on 20,000 points; Sewer_Save04 agrees too with fewer nodes (8 vs 11).
+  Lab (`scratch/bsp_proof_build.py`, `bsp_proof_walk.py`, ROMs
+  `build/dev-kit/bsp0|bsp1`): the Refuge with a compiled copy of its native
+  shape gives the same walk trace as the native file in every phase; with a
+  12 x 8 block added at x 24..36 Spidey stops at 20.47 and 39.53 (3.5 from
+  each side) and stands on it at 12.98 (top 8 + 5). Surface value 10 and
+  node u16 0 are enough for floors and walls.
+- *Visible geometry.* `model_geometry.replace_streams` + `quads_stream` put
+  authored flat-colour quads into the two shapes of Test_Combat01's model
+  (vertex scale 64: coordinates up to +-512 units; `platform_model`, frames
+  reviewed in the v0.5.0 lab, "Native room lookup and namespace probes").
+- *Rooms without native links.* proto01 became the Yard with authored spawn,
+  exit, entities and a visited flag ("The Yard").
+
+**Not proven: do these in order**
+
+1. *Textured quads.* A shape draws with its material's texture, so a room
+   with N looks needs a template model with N shapes: Test_Surfaces01 (10
+   shapes, 10 textures of 128 x 128, 6,908 bytes) or proto01 (25 shapes, 23
+   textures). Add TEXCOORD (GPU command 0x22: s | t << 16, 1/16 texel) per
+   vertex and white vertex colour; check which face is front (the camera
+   looks from +z; geometry in front of z 0 hides Spidey).
+2. *New pictures.* 82% of textures, and every room texture sampled, are
+   format 5 (4x4 block compression; 4,096 bytes per 128 x 128). Options:
+   palette regrade (shipped), a format-5 encoder (4 colours per block from a
+   palette pool), or paletted replacements (format 3 = 8 KB, format 4 = 16 KB
+   per 128 x 128; texture memory is unmeasured). `nitro_texture.TextureArchive`
+   only replaces palettes today.
+3. *One box list for both.* Emit collision and quads from the same boxes so
+   they cannot disagree; then slopes (the collision format has slanted
+   planes: two s16 of the negated (x, y) normal; the compiler is axis-aligned).
+4. *Descriptor and room file.* Clone a debug room's descriptor (texture,
+   collision, objects, model array, texture animation at +0x24) as the
+   chapter does; a `MODEL` hook like `COLLISION` is missing. Objects: the
+   empty Test_Surfaces01 state record plus `room_doors.add_spawn/add_exit`
+   and `room_script.append_batch` (enemies, switches, hazards).
+5. *Camera and bounds.* Unknown where the camera limits come from. The
+   descriptor's bounds (+0x3C..+0x48) are filled at boot for native rooms
+   from an unknown source; the Yard uses hand-made ones. Entity type 6
+   ('EnterExitTwoWayTrigger', 'Cam Lock Switch Trigger') exists in Downtown
+   and Pier rooms.
+6. *Surface values.* Use 10 everywhere, 0 for walls that should need Ichor
+   Crawl, 1 for walls nobody may climb, 7 for hurting floors (table in "Room
+   collision tree"). Pits, doors, gates and breakable floors are objects,
+   not collision.
+7. *Walk it.* A route in `tools/midnight_walk.py` through real doors before
+   anything ships (release rule).
+
+### Script boss research (2026-10-12)
+
+Goal: a boss that is not one of the game's own, built from room script
+(a machine or arena that attacks), ahead of any new character boss.
+
+- **Pieces that exist** (object type 14, kind at +22, event group run on
+  destruction at +23; counts over all rooms): hazards `0x11` Hazard_Electric
+  (12, Sewer_Map03) and `0x13` Hazard_Fire (proto01); `0x31` Bomb_Symbiote
+  (Downtown_Map06, Pier_Map01 x3, Residential_Map06, Sewer_Map11); `0x08`
+  Crane (Pier_Map06) and `0x06` Boss_Floor (Residential_Map08), both
+  unstudied; liftables `0x16..0x1A` (boiler, copier, dumpster, file cabinet,
+  fridge); smashables `0x1F` box, `0x23` metal barrel, `0x21` ichor blob,
+  `0x27` trash can, `0x29` water cooler and more; ichor gates and walls
+  `0x0A..0x10`; switches `0x2A..0x2C`. Unused effect resources: `Explosion2`,
+  `Explosion_Burst`, `Explosion_Cloud`, `Tnt`, `ExpUnstable`, `PumpBomb`,
+  `Homing`, `ElecShock`, `ElectricLg`, `Fire`, `Smoke0`, `Bamf`, `WebBrake`.
+- **Script verbs proven in the chapter:** activate one entity or a batch
+  after a delay (`0x1C`), deactivate (`0x03`), compare a variable and branch
+  (`0x1D`), set/increment (`0x26`/`0x25`), animate (`0x01`), lock a door or
+  raise a gate (`0x0F`), sound (`0x22`), message (`0x15`), on-screen timer
+  (`0x23`) with a TimerWatcher (type 11; Hive_Map01/08/09/10), spawners with
+  a "wave dead" group (+25), touch triggers (type 7) and **zone triggers
+  (type 5, 24 bytes: width, height, 0x0A, group on entering, group on
+  leaving)**.
+- **How the native arena uses them** (Downtown_Map14, dump in
+  `work/midnight-line/scratch/Downtown_Map14.txt`): three zones set scratch
+  bytes 0x127..0x129 while Spidey stands on the left, middle or right
+  platform (read by the boss's AI, not by the script: "timed platforms" was
+  a misreading); the mini-boss character's +23 names `Reward_Spawn`; the two
+  red floors increment flags when they break; delays chain groups (`Trigger
+  Delete` -> 2 frames -> `Ambush` -> `Gate_Spawn`).
+- **Plan for a script boss.** *Health:* destructible cores (objects with a
+  destruction group) counted in a scratch byte; when the count reaches N the
+  reward group runs. *Attacks:* batches of hazards switched on and off by two
+  groups that call each other through delays, the delay shortening by phase
+  (`0x1D` on the core count); warn with a short on/off flicker and a sound.
+  *Adds:* spawner batches per phase. *Arena:* zone triggers to punish
+  camping, liftables to throw at cores, a breaker to cut power for a few
+  seconds. *Bar:* none without a boss actor; show "2 of 3" lines instead.
+- **Lab: a script loop switches hazards on and off** (2026-10-12,
+  `scratch/boss_loop_build.py NAME --period N`, `boss_loop_walk.py`; ROMs
+  `build/dev-kit/loop90|loop300`). The Platform gets two groups: `Loop_On` =
+  activate the `Electricity` batch, then after N frames run `Loop_Off`;
+  `Loop_Off` = deactivate it (`0x03`), then after N frames run `Loop_On`; the
+  init starts `Loop_On`. With the track power cut (so natively the rails are
+  dead): control without the loop, 24 walks over the rails, never hurt;
+  native power on, hurt on every walk; loop of 300 frames, hurt at about
+  frame 110 and 1330 and not at 643, 969 and 1654 (one on/off cycle is 600
+  frames); loop of 90, not hurt at 81..143, hurt at 163. So a delayed group
+  call from another group works, a deactivated hazard batch can be activated
+  again, and the loop was still cycling after 1,600 frames. The exact phase
+  was not pinned down (the walk fixture is crude: after a shock Spidey lies
+  in state 75 for a long time, and a teleport keeps that state). A hazard
+  only hurts on contact while moving: standing still on a live rail after a
+  teleport did nothing.
+- **Still to prove (lab, one test room):** 1) which attacks damage which
+  smashable kinds and their health; 2) what Bomb_Symbiote, Crane and
+  Boss_Floor do; 3) whether a spawner can be re-armed; 4) how many active
+  hazards a room carries; 5) a warning before a batch goes live (a short
+  flicker or a sound).
+- **A new character boss** stays research: enemy models are separate rigs
+  (`m6`, `brt`, `bzkr`, `hLpr` ...), the animation tools are proven on
+  Spidey's 37 bones only, and the mini-boss AI is unmapped (no NormalEnemy
+  vtable; health pairs near `0x022AD460`). Open question for the "rival"
+  idea: whether an enemy actor can bind `spd.nsbmd`.
 
 ## Research workflow and pitfalls (Red kit sessions)
 

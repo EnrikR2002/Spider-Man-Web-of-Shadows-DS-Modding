@@ -81,7 +81,8 @@ These are **original prices**, not the current mod prices.
 | Quick Recovery | 800 | R after hit or knockdown; Prompt recovery and counterattack opportunity |
 
 The two speed boosts play Red attack animations at 1.15 and 1.3 times normal
-speed (run-time tuning values, read 2026-10-11).
+speed (run-time tuning values, read 2026-10-11); this covers the air string,
+the back attack, the ground string and the rapid stomp.
 Spider Dance is the parent of Scissor-Kick Special; Amazing Speed Boost is the
 parent of Ultimate Speed Boost. An owned child prevents refunding its parent.
 Other surrounding story/menu availability may add conditions. Shared Air Dodge,
@@ -144,7 +145,24 @@ then Up; Up also follows the ceiling) and repeated jumps (B again in the air);
 B on a wall jumps off it.
 
 The touch screen shows the current area's map: rooms appear once visited
-(the current one lit), save rooms as S icons, and the mission marker "!".
+(the current one lit), save rooms as S icons, and the mission marker "!",
+with the area's name under it. A button switches between this Mini-Map page
+and the Objectives page. A zoom button cycles three views: x1 the area, x2
+the world (the five districts as blocks), x3 the detailed map of the current
+room with its door arrows, which says "Detailed Mini-Map unavailable" until
+the area's map item is owned. Rooms of the unused sixth area (the debug rooms)
+get no map at all: the page stays on Objectives.
+
+Wall crawling depends on the surface (measured in the game's own surface test
+rooms, 2026-10-12): most walls and ceilings can be climbed; black ichor
+surfaces only with the ichor story abilities; some surfaces can never be
+climbed; some hurt on touch (one health unit and a knock-back). A jump beside
+a climbable wall while holding toward it runs up it to the ceiling.
+
+The top-screen HUD shows a spider emblem, a health bar with one segment per
+health unit (red in the Red suit, purple in the Black suit) and a row of blue
+pips under it. Pickup orbs for health, damage, defence and the map exist as
+resources (levelled natively; not studied).
 
 Save rooms hold a save sphere: X opens Save Options (Save, Buy Upgrades, Test
 Upgrades, Continue); Save asks "Do you want to save your progress?" then shows

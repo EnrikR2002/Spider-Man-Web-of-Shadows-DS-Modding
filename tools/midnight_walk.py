@@ -126,7 +126,8 @@ class Walker:
         if not 0 <= stats < len(ram) - 0x98: return None
         s = SimpleNamespace(frame=frame, room=struct.unpack_from('<I', ram, stats)[0],
                             flags=int.from_bytes(ram[stats + 0x1C:stats + 0x44], 'little'),
-                            pos=None, sample=None, enemies=[], state=None, black=ram[stats + 0x53])
+                            pos=None, sample=None, enemies=[], state=None, black=ram[stats + 0x53],
+                            hp=struct.unpack_from('<i', ram, stats + 0x84)[0])       # Spidey's health (Q12)
         try: sample = p.sample(ram)
         except ValueError: return s
         s.sample = sample

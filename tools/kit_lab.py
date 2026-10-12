@@ -433,10 +433,12 @@ def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a3
     ck['sense_dash_stops_at_wall'] = (max(r['pos'][0] for r in o) <= 968577 + 64
                                       and min(r['en'][0][0] for r in o) < 65536)
     o = go('q_perch_spring', 'perchspring', 220)
-    b = first(o, lambda r: r['f'] >= 160 and r['act'] == 133)
+    # B at 150: inside the first stomp cycle at attack speed 1.2 and 1.3 (the two-update gap between cycles,
+    # frame 160 at 1.2 and 156 at 1.3, hands a B to the native web swing: known limit, CHANGES v0.11.0).
+    b = first(o, lambda r: r['f'] >= 150 and r['act'] == 133)
     after = [r for r in o if b and b['f'] <= r['f'] <= b['f'] + 30]
     ck['perch_b_springs_high_without_swing'] = bool(
-        b and b['f'] <= 163 and max(r['pos'][1] for r in after) - b['pos'][1] > 6 * 4096
+        b and b['f'] <= 153 and max(r['pos'][1] for r in after) - b['pos'][1] > 6 * 4096
         and not any(r['st'] in (26, 27, 28) for r in after))
     o = go('q_perch_hop', 'perchhop', 200, phantom=12 * 4096)
     hop = [r for r in o if r['f'] >= 134 and r['act'] == 133]

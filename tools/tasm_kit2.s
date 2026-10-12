@@ -1,14 +1,18 @@
 // TASM kit, second code block at 02155420 (KIT2), v0.10.0. tools/tasm_kit.s
-// calls entries +00..+0C; tools/tasm_kit.py branches native sites to the rest.
-// New Red shop rows live in ability word 2 (stats+0x14): Web Rush 0x400
-// (ability bit 74), Ricochet 0x800 (75), Momentum 0x1000 (76).
+// calls entries +00..+0C, +14 and +18; tools/tasm_kit.py branches native sites
+// to the rest. New shop rows live in ability word 2 (stats+0x14): Web Rush
+// 0x400 (ability bit 74), Ricochet 0x800 (75), Momentum 0x1000 (76), Vitality
+// I..III 0x2000/0x4000/0x8000 (77..79, Both Suits list, v0.11.0).
 // State K2 = 02157020 (zero image): +0 rush phase (1 armed, 2 playing),
 // +4 target, +8 node to resume, +0xC stop x, +0x10 side (1 = target right),
 // +0x14 armed age, +0x18 rush clip loaded, +0x1C dash step (1 dashing, 2 last
 // step done); +0x20..+0x4F Ricochet cooldown tick per registry slot, +0x50
 // Ricochet count + 256 * native results, +0x54 last victim; +0x58 Momentum
 // rate of this call (0 = native), +0x5C its accumulator, +0x60 doubled steps,
-// +0x64 rush glide updates.
+// +0x64 rush glide updates, +0x68 health bar tinted by Vitality.
+// Strength dial (v0.11.0): 02156F20 (block +0x1B00, zero in the kit image; the
+// chapter build fills it) holds two bytes per room 76..115: enemy health scale
+// and damage-to-Spidey scale in 1/64ths (0 or 64 = native).
 // Kit exports: 02152C58 kit_owned, 5C kit_keys, 60 kit_face,
 // 64 kit_alive, 68 kit_fresh, 6C kit_replay_hit.
   b k2_update             // +00 r0=Spidey actor, once per update
@@ -16,6 +20,8 @@
   b k2_node               // +08 r0=controller at a string node start -> r0=action or 0
   b k2_route              // +0C -> r0=1 while the rush clip is routed
   b h_momentum            // +10 from 020B21B8  Red attack animation rate
+  b k2_observe            // +14 r0=common-health enemy, every update (keeps all registers)
+  b k2_damage             // +18 r1=Spidey HP, r3=HP after a hit -> r3 (keeps r0, r2)
 
 k2_update:
   push {r4,lr}
@@ -23,6 +29,28 @@ k2_update:
   bl rush_update
   mov r0,r4
   bl rico_update
+  mov r0,r4
+  bl vit_update
+  ldr r0,lit2_021341f4      // Red attack speed of the Reflex/Sense slots (native
+  ldr r1,lit2_0000119a      // 1.15 and 1.3): 1.10 and 1.20 since v0.11.0. With
+  ldr r2,lit2_00001333      // Momentum owned, combo tier 3 and up restores the
+  ldr r3,[r4,#0xe8]         // native values: speed is earned through the meter.
+  ldr r3,[r3,#8]
+  tst r3,#0x1000
+  beq speed_write
+  ldr r3,lit2_02145c44
+  ldr r3,[r3]
+  cmp r3,#0x02000000
+  blo speed_write
+  cmp r3,#0x02400000
+  bhs speed_write
+  ldr r3,[r3]
+  cmp r3,#3
+  ldrge r1,lit2_00001266
+  ldrge r2,lit2_000014cc
+speed_write:
+  str r1,[r0,#0x230]
+  str r2,[r0,#0x22c]
   pop {r4,pc}
 
 k2_owned:                   // r0=actor, r1=mask in ability word 2 -> r0=1 if Red and owned
@@ -330,6 +358,134 @@ lit2_021341f4: .word 0x021341F4
 lit2_02145c44: .word 0x02145C44
 lit2_7fffffff: .word 0x7FFFFFFF
 lit2_ffff4000: .word 0xFFFF4000
+lit2_02145c5c: .word 0x02145C5C
+lit2_02156f20: .word 0x02156F20
+lit2_05000032: .word 0x05000032
+lit2_0000119a: .word 0x0000119A
+lit2_00001333: .word 0x00001333
+lit2_00001266: .word 0x00001266
+lit2_000014cc: .word 0x000014CC
+
+// ---------------------------------------------------------------- strength dial
+// Chapter rooms scale enemy health and the damage Spidey takes (table at
+// 02156F20, see the top). A scaled enemy's max health is odd (native values
+// are whole multiples of 16), which marks it as done.
+k2_observe:                 // r0=enemy actor (common-health ABI checked by the caller)
+  push {r1,r2,r3,r12,lr}
+  ldr r1,lit2_02145c5c
+  ldr r1,[r1]
+  cmp r1,#0x02000000
+  blo observe_out
+  ldr r1,[r1]               // current room
+  sub r1,r1,#76
+  cmp r1,#40
+  bhs observe_out
+  ldr r2,lit2_02156f20
+  ldrb r2,[r2,r1,lsl #1]
+  cmp r2,#0
+  cmpne r2,#64
+  beq observe_out
+  ldr r1,[r0,#0x48]         // max health
+  tst r1,#1
+  bne observe_out
+  cmp r1,#0x4000            // fighters only (the floating room object has about 1 unit)
+  blt observe_out
+  ldr r3,[r0,#0x44]
+  cmp r3,#0
+  ble observe_out
+  cmp r3,r1                 // full health stays exactly full (flags survive to the beq)
+  mul r12,r1,r2
+  mov r1,r12,lsr #6
+  orr r1,r1,#1
+  str r1,[r0,#0x48]
+  streq r1,[r0,#0x44]
+  beq observe_out
+  mul r12,r3,r2
+  movs r3,r12,lsr #6
+  moveq r3,#1
+  str r3,[r0,#0x44]
+observe_out:
+  pop {r1,r2,r3,r12,pc}
+
+// Damage to Spidey = native * room scale * Vitality (1/1.25, 1/1.5, 1/1.75 for
+// levels I..III: each bar segment absorbs more), never less than 1 Q12.
+k2_damage:                  // r1=HP before, r3=HP after (>= 0) -> r3
+  push {r0,r2,r4,r5,lr}
+  subs r4,r1,r3
+  ble damage_out
+  ldr r0,lit2_02145c5c
+  ldr r0,[r0]
+  cmp r0,#0x02000000
+  blo damage_out
+  mov r5,#256
+  ldr r2,[r0]               // current room
+  sub r2,r2,#76
+  cmp r2,#40
+  bhs damage_vitality
+  ldr r12,lit2_02156f20
+  add r12,r12,r2,lsl #1
+  ldrb r2,[r12,#1]
+  cmp r2,#0
+  movne r5,r2,lsl #2        // 1/64ths -> 1/256ths
+damage_vitality:
+  ldr r0,[r0,#0x14]         // ability word 2
+  mov r2,#256
+  tst r0,#0x2000
+  movne r2,#205
+  tst r0,#0x4000
+  movne r2,#171
+  tst r0,#0x8000
+  movne r2,#146
+  mul r12,r5,r2
+  mov r5,r12,lsr #8
+  cmp r5,#256
+  beq damage_out
+  mul r12,r4,r5
+  movs r4,r12,lsr #8
+  moveq r4,#1
+  subs r3,r1,r4
+  movmi r3,#0
+damage_out:
+  pop {r0,r2,r4,r5,pc}
+
+// Vitality tints the Red health bar (top-screen BG palette colours 25..28 of
+// HUDTop_8: bar shade, bar and emblem, emblem light, bar light): orange, gold,
+// green. Written every update; the native reds return once after a refund.
+vit_update:                 // r0=Spidey actor
+  ldr r1,[r0,#0xe8]
+  ldr r1,[r1,#8]
+  mov r2,#0
+  tst r1,#0x2000
+  movne r2,#1
+  tst r1,#0x4000
+  movne r2,#2
+  tst r1,#0x8000
+  movne r2,#3
+  ldr r3,lit2_02157020
+  cmp r2,#0
+  bne vit_write
+  ldr r1,[r3,#0x68]
+  cmp r1,#0
+  bxeq lr
+vit_write:
+  str r2,[r3,#0x68]
+  adr r1,vit_colors
+  add r1,r1,r2,lsl #3
+  ldr r3,lit2_05000032
+  ldrh r2,[r1]
+  strh r2,[r3]
+  ldrh r2,[r1,#2]
+  strh r2,[r3,#2]
+  ldrh r2,[r1,#4]
+  strh r2,[r3,#4]
+  ldrh r2,[r1,#6]
+  strh r2,[r3,#6]
+  bx lr
+vit_colors:                 // BGR555 x4 per level 0..3 (no word may look like a branch: bits 27..25 != 101)
+  .word 0x0C77800D, 0x253D18DA
+  .word 0x09BB00CF, 0x2EBF1A3D
+  .word 0x0EBA014D, 0x339F1B1C
+  .word 0x26C30D60, 0x47AC3326
 
 // ---------------------------------------------------------------- Ricochet
 // Passive. A registry enemy knocked down and still travelling at 1 unit per
@@ -477,9 +633,11 @@ k2_down:                    // r0=live enemy -> r0=1 in a knockdown or get-up st
 // skips one grid point, and only where the two samples that point can fall in
 // (clock+1, clock+2) have no active attack box. momentum_blocked holds those
 // clocks per ground string action 56..62 (bit = clock; from the GMB windows,
-// tests/test_tasm_kit2.py). Per call the accumulator +0x5C gains the combo
-// tier ([02145C44] -> +0 tier 0..5) and a step doubles at 5, so tier t doubles
-// t of 5 free steps. Left native: other actions, the Spider-Sense counter and
+// tests/test_tasm_kit.py); momentum_last also keeps the clock from jumping over
+// an action's last sample (v0.11.0). Per call the accumulator +0x5C gains the combo
+// tier + 1 ([02145C44] -> +0 tier 1..5; nothing at tier 0) and a step doubles
+// at 5, so tier t doubles t+1 of 5 free steps and tier 4 doubles them all
+// (v0.10.0: t of 5). Left native: other actions, the Spider-Sense counter and
 // a Web Rush dash (both timed to the native clock), and without bit 18 the
 // native string freeze (state 46, controller+0x64 bit 0x4000).
 h_momentum:                 // r6=controller, r7=&rate; native: ldr r0,[r6,#0x44]
@@ -565,6 +723,11 @@ momentum_rate:              // r0=actor, r1=controller -> r0 = doubled rate (Q12
   cmp r3,#7
   blt momentum_none
 momentum_window:
+  adr r0,momentum_last      // never skip an action's last sample: the string blocker
+  ldrb r0,[r0,r2]           // (020B53F8) only decides "repeat or end" on it, and a spin
+  sub r0,r0,#2              // whose loop jumps over it never stops (lab, rate 1.2 doubled)
+  cmp r3,r0
+  bge momentum_none
   cmp r3,#31
   bhi momentum_free
   adr r0,momentum_blocked
@@ -582,6 +745,7 @@ momentum_free:
   ldr r2,[r2]
   cmp r2,#0
   ble momentum_none
+  add r2,r2,#1              // v0.11.0: tier t doubles t+1 of 5 free steps
   cmp r2,#5
   movgt r2,#5
   ldr r0,[r5,#0x5c]
@@ -620,4 +784,5 @@ momentum_none:
   str r0,[r5,#0x58]
   pop {r4,r5,pc}
 momentum_blocked: .word 0x39C, 0x7, 0x3E0, 0x1C, 0x39C, 0x71C38, 0x70
+momentum_last: .byte 11, 16, 25, 18, 11, 38, 19, 0      // last sample of actions 56..62 (GMB record count - 1)
 .ltorg
