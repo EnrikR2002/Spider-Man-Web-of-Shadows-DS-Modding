@@ -412,9 +412,9 @@ def tour_child(rom_path, start=0):
     flags = int.from_bytes(final[stats + 0x1C:stats + 0x44], 'little')
     from tools import midnight_chapter as ch
     toured = {s['room_index'] for s in steps} | {s['dest_index'] for s in steps}
-    checks['visited_flags_set'] = all(flags >> (ch.VISITED_BASE + r.index) & 1 for r in ch.ROOMS if r.index in toured)
+    checks['visited_flags_set'] = all(flags >> (ch.visited(r.index)) & 1 for r in ch.ROOMS if r.index in toured)
     checks['no_other_chapter_flags'] = not any(flags >> f & 1 for f in ch.FREE_FLAGS
-                                               if f not in {ch.VISITED_BASE + r.index for r in ch.ROOMS})
+                                               if f not in {ch.visited(r.index) for r in ch.ROOMS})
     report = {'schema_version': 1, 'rom_sha256': source_hash, 'source_rom_unchanged': True, 'start_step': start,
               'checks': checks, 'passed': all(checks.values()), 'error': state['error'], 'steps': results,
               'trace': str(dest / 'observations.json'), 'captures': [str(x) for x in captures],
@@ -503,7 +503,7 @@ def ambush_child(rom_path, seed=11, native=False):
     # (incrementing the ambush flag) varies between runs, natively too.
     checks = {'enemies_spawned': state['max_enemies'] > 0,
               'exit_works_after_fight': state['room_after'] == switching,
-              'only_chapter_flags_written': native or set(chapter) <= {flag, *(ch.VISITED_BASE + r.index for r in ch.ROOMS)},
+              'only_chapter_flags_written': native or set(chapter) <= {flag, *(ch.visited(r.index) for r in ch.ROOMS)},
               'rom_unchanged': w.sha256(rom.read_bytes()) == source_hash}
     report = {'schema_version': 1, 'rom_sha256': source_hash, 'seed': seed, 'checks': checks,
               'passed': all(checks.values()), **state, 'ambush_flag_set': state['flag_frame'] is not None,
@@ -633,7 +633,7 @@ def refuge_save_child(rom_path, label, room_name='ML_Refuge'):
     checks = {'saved_in_refuge': saved_room == refuge,
               'continue_restores_refuge': rows[2300]['room'] == refuge,
               'player_after_continue': rows[2300]['player'],
-              'refuge_visited_flag_saved': ch.VISITED_BASE + refuge in rows[2300]['chapter_flags'],
+              'refuge_visited_flag_saved': ch.visited(refuge) in rows[2300]['chapter_flags'],
               'source_battery_unchanged': w.sha256(save.read_bytes()) == save_hash,
               'rom_unchanged': w.sha256(rom.read_bytes()) == source_hash}
     report = {'schema_version': 1, 'rom_sha256': source_hash, 'checks': checks, 'passed': all(checks.values()),

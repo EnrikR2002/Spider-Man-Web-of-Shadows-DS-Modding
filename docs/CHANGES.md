@@ -14,6 +14,67 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.12.0 - 2026-10-12 - The Substation: three rooms built from nothing
+
+Published through Play Spider-Man.cmd's stable ROM (DeSmuME closed; the build does not touch the battery). SHA256
+`0ede04222aa250e97c4348551ae61fdc5c4b586072088768bef8c8d7692dc812`
+(ARM9 `a212585a...`, kit ARM9 `3c6a34e0...`: the combat kit is unchanged).
+Title and Options show v0.12.0. Player (2026-10-11): the Midnight Line was
+"basically just the sewers with different colors", wanted "new map assets"
+and more places; (2026-10-12): go ahead with the planned changes.
+
+- **A new door at the far left of the Yard.** From the Refuge take the left
+  door into the Yard and cross it to its left wall: a grey door leads to the
+  Substation, three rooms that are not copies of any room in the game. Their
+  walls, floors, platforms, collision and camera are built from a box plan
+  by a new room compiler; the pictures on them are borrowed from Pier,
+  Downtown and Residential rooms you have already seen.
+- **Switchyard.** An open yard at dusk with the skyline behind a fence: a
+  loading dock, two stacked containers, a transformer, a steel gantry
+  overhead, a fire escape on each building, pylons and wires. A crew appears
+  once you walk in. Two barrels and a trash can to throw. Doors at both ends.
+- **Relay Hall.** A tall machine hall. Its outer walls are smooth steel that
+  Spidey cannot hold on to, so the way up is five catwalks: a held jump
+  (keep B down) reaches the next one, a tap does not. Electric arcs run along
+  four of them, the two on the left and the two on the right in turn: 1.5 s
+  live, then just under a second with nothing live. The lowest catwalk and
+  the ledge by the upper door are never live. A small crew waits on the
+  floor. The door out is at the top left.
+- **Control Roof.** A roof at night. Three waves, each from another district
+  (Pier, Sewer, Residential enemies): the next starts when the one before is
+  beaten, or after 90 seconds at the latest. Beating the third shows a
+  line. Leave and come back and it starts over: it is meant as a sparring
+  arena with real enemies. Two barrels.
+- **Map.** The three rooms are drawn in the lower left of the Midnight Line
+  screen; the Yard door and the Switchyard door are a pair of arrows.
+- **Yard.** The metal barrel by its left wall now stands further along the
+  floor (it stood where you arrive from the Switchyard).
+
+How: `tools/nitro_build.py`, `tools/room_compiler.py`, `tools/room_author.py`
+and `tools/midnight_rooms.py` (TECHNICAL "Room compiler", "The Substation").
+Rooms 91..93; visited flags 267, 165, 164 and flag 150 for the cleared roof;
+one instruction of the map's visited test now calls a stub so that rooms
+above 91 can have a visited flag. Two things the original game needs in a
+room were found on the way: camera regions and anchor points for spawners.
+
+Agent-tested on this ROM, not player-confirmed:
+279 unit tests; kit qualification 48/48; crash hunt 12/12; 10/10 walk
+routes on the first try (four new ones: real doors both ways between the
+Yard and all three rooms, a real held jump onto the first catwalk, a live
+catwalk shocks, all three waves beaten sets the flag); eight further roof
+fights started seconds apart all cleared; the door tour (every link, the
+visited flags, no other chapter flag), the power puzzle, save and Continue
+in the Refuge, the Vitality shop run. Evidence: `work/kit/v0.12.0/`,
+`work/midnight-line/walk-*-0ede0422.json`, frames under
+`build/boot-tests/Versioned-0ede0422/`.
+Limits: the climb is scripted for the first hop only (the rest is placed;
+a human climb follows from the measured jump heights); in the lab one roof
+fight in about a dozen never reported its second wave beaten (cause not
+found), which is why a wave also starts after 90 s; enemies have native
+strength (no dial); the zoom's third step shows the debug placeholder in
+these rooms; the nearest save point is the Refuge, two rooms back; a fall
+from the catwalks only costs the climb.
+
 ## v0.11.0 - 2026-10-12 - Feedback pass: speed, Vitality, a chapter map, closed hatches, a gentler Nest
 
 Published through Play Spider-Man.cmd's stable ROM (DeSmuME closed; the build

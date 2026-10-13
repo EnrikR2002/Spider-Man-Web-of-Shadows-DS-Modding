@@ -3,7 +3,7 @@ import struct
 import unittest
 
 import mod
-from tools import midnight_chapter as ch, midnight_walk as walk, room_catalog
+from tools import midnight_chapter as ch, midnight_rooms, midnight_walk as walk, room_catalog
 from tools.room_collision import RoomCollision
 
 
@@ -17,7 +17,9 @@ class MidnightWalkTests(unittest.TestCase):
         cls.native = room_catalog.parse(rom[at:at + size], names)
         cls.room_names = [r.name for r in cls.native]
         cls.routes = walk.routes()
-        cls.collision = {r.name: RoomCollision.parse(cls.blobs[r.source + '.bsp']) for r in ch.ROOMS}
+        cls.collision = {r.name: RoomCollision.parse(midnight_rooms.compiled(r.name, cls.blobs.__getitem__).collision
+                                                     if r.name in midnight_rooms.AUTHORED else cls.blobs[r.source + '.bsp'])
+                         for r in ch.ROOMS}
 
     def test_routes_cover_the_whole_loop_through_chapter_links(self):
         linked = {(room, dest) for (room, _), (dest, _) in ch.LINKS.items()}
@@ -35,6 +37,8 @@ class MidnightWalkTests(unittest.TestCase):
                 'ML_NestGallery', 'ML_NestShrine', 'ML_Venom', 'ML_NestGate', 'ML_Stairs']
         self.assertTrue(set(zip(loop, loop[1:])) <= seen)
         self.assertIn(('ML_Stairs', 'ML_NestGate'), seen)                 # the grate as a shortcut after the loop
+        substation = ['ML_Yard', 'ML_Switchyard', 'ML_RelayHall', 'ML_Roof']    # every authored door, both ways
+        self.assertTrue({*zip(substation, substation[1:]), *zip(substation[1:], substation)} <= seen)
 
     def test_lab_placements_are_in_open_space_of_their_room(self):
         placed = 0

@@ -121,6 +121,13 @@ PROFILE_INFO = {
                      'red_prices': (50, 100, 150, 150, 200, 250, 350),
                      'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                      'arm9_sha256': 'caa8403335641e6faa60d2f5b10ca5f2ade05f4ca15dd2277a9efc17d7fcda6a'},
+    # The Substation: three rooms built from nothing with the room compiler (Switchyard, Relay Hall,
+    # Control Roof), a door at the Yard's left wall, the map's visited test for rooms above 91
+    # (CHANGES v0.12.0). Kit code unchanged. v0.11.0's bytes stay identified by its ROM.
+    'tasm-v0.12.0': {'version': '0.12.0', 'date': '2026-10-12', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                     'arm9_sha256': 'a212585a168ec9757b737ed0ebaf006ffcfb1273c4c40e0ac7586ba43b49f474'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

@@ -376,7 +376,10 @@ earlier and giving the native 1.15 / 1.3 back from combo tier 3 (string of
 four: 122 frames at tier 0, 86 at tier 5; v0.10.0 113 and 87), Vitality
 I..III, the chapter's own map, closed hatches, the Nest strength ramp. Not built: Flow, Second Wind and Adrenaline (not chosen),
 Momentum on air strings and a visible cue, sections and bosses (research
-only: TECHNICAL "Room compiler research", "Script boss research").
+only: TECHNICAL "Room compiler", "Script boss research"). 2026-10-12, later
+the same day: the player turned Round three down as well ("they weren't that
+interesting"), except Thwip Barrage ("did sound kinda cool ... give me more
+web based ideas"): see "Round four".
 
 Agent's reading of the two rejections (an interpretation, not the player's
 words): the picks so far (Web Rush, Ricochet, Momentum) all deepen the combo
@@ -399,6 +402,44 @@ they feed Ricochet and Momentum), then Thwip Barrage. Live Wire and Ceiling
 Stalk need the most research. Known Perch limit to fix with Rodeo: B pressed
 in the two updates between stomp cycles fires the native web swing instead of
 the spring (TECHNICAL "Second kit block", qualification note).
+
+## Round four (2026-10-12): web-shooter ideas
+
+Player, 2026-10-12 (answering "Round three"): "they weren't that interesting
+so try again"; Thwip Barrage "did sound kinda cool so give me more web based
+ideas. Don't implement just theory craft". **Everything below is proposed;
+nothing is approved or built.**
+
+Agent's reading (an interpretation): three rounds of set pieces and
+passives were turned down; the two things that landed are Web Rush and Thwip
+Barrage. Both are the web-shooters used as a weapon in the middle of a
+fight, with no setup. So this round is one suite: **every button gets a web
+answer, and webs leave a mark.** The mark is a shared status, **Webbed**: an
+enemy hit by any web move wears strands for a few seconds; a Webbed enemy
+who is knocked into a wall or the floor sticks there for a moment (a free
+combo starter). That one rule makes the moves below feed each other and
+Ricochet.
+
+| Idea | Input (unproven) | What happens | Prove first |
+|---|---|---|---|
+| **Thwip Barrage** | Hold A, ground or air; D-pad aims | Rapid web shots, each a small hit that shoves the target and marks him Webbed; the fourth on one enemy pastes him to whatever is behind him. In the air every shot kicks Spidey up a little, so he hovers over the crowd while he fires | Tap versus hold on A (A is readable on ARM9); an enemy pushed by velocity while staggered; a held "stuck" state (what state a grappled enemy sits in) |
+| **Face Full of Web** | A just as an enemy swings (the Spider-Sense moment, with A instead of R) | A web to the face: he finishes the swing blind and it lands on his nearest friend; blinded for a few seconds he keeps hitting whoever is beside him. R still dodges: R is the safe answer, A the greedy one | The Sense detection exists; replaying the attacker's own hit on another enemy (the kit replays Spidey's hits today) |
+| **Yoink** | A during an air string, or A + away from the target in a ground string | The mirror of Web Rush: a line to the farthest enemy in front and he is ripped across the room into the next hit; anyone in his way goes down (Ricochet). Rush goes to them, Yoink brings them | An enemy moved by velocity over 40+ units; which input is free in the air string |
+| **Fastball** | X with nothing to lift nearby | Webs the nearest loose thing (a barrel, a crate, or an enemy who is on the floor) and whips it at the enemy in the held direction. A downed goon is always there to throw | Whether X (queue command 4) is free away from liftables; throwing a native object by velocity and breaking it on contact |
+| **Flypaper** | Down + A on the ground | Sprays a web patch on the floor for about six seconds: anyone who steps in is rooted and Webbed. One patch at a time. The answer to a dogpile | Whether Down + A is free (`spd_GrapplePullDown.sca` hints at a native use); a floor mark (the unused `WebBrake` effect resource, or a scenery quad) |
+| **Vortex** | Hold A during Spin Cycle | Every turn of the helicopter throws a line and drags everyone within about 30 units a step closer: the spin becomes a blender that fills itself | Enemy velocity toward a point each update; whether it stays readable with six enemies |
+| **String 'Em Up** | A in the air above a staggered or downed enemy who is nearly beaten | The finisher from every comic: he is hauled up and left hanging from the ceiling, out of the fight, for bonus XP and a combo tier. Uses the ceiling anchor points every room carries | Finding "nearly beaten" (health is readable); lifting an enemy to an anchor by velocity; removing him cleanly |
+| **Overclock** | Passive at combo tier 5 | The web-shooters run hot: every Y hit also fires a web shot at a second enemy, who is staggered and Webbed. Tier 5 becomes a state you fight to keep | A second hit replay per contact without the freeze the v0.4.0 lab patch showed |
+
+Agent's order: **Thwip Barrage** and **Face Full of Web** first (the pick
+plus the cheapest strong one: its detection and hit replay already exist),
+then **Yoink** and **Vortex** (both are "move an enemy by velocity", one
+proof), then **Fastball**. Flypaper, String 'Em Up and Overclock after
+play. One lab session can settle the shared unknowns: enemy velocity, the
+stuck state, hold-A, and whether X and Down + A are free. New rooms help
+here: the Control Roof and the Switchyard have barrels to throw and walls
+to paste people on. Rules unchanged: authored clips, velocity only, no
+slow-motion.
 
 ## Spider-Man 2099: future Black kit (2026-10-11, theorycraft)
 

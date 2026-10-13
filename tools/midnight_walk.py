@@ -13,6 +13,9 @@ locks and spawns behave as for the player. Lab fixtures are named as such:
 - fight: enemies are capped at 1 HP and Spidey mashes Y, turning to the nearest one
   (gather=True also moves them onto him; it broke wave counting in the lab);
 - park: enemies are held at a far point while one move is tested;
+- chase: Spidey is put beside the nearest enemy every 40 frames (wave fights:
+  enemies are never moved, which broke wave counting; fliers and enemies on
+  blocks are out of the masher's reach otherwise);
 - boss: the mini-boss (hp, max) pair is capped at 1 HP;
 - Spidey's health is refilled and his ability word mirrors the player's
   battery (story abilities 0..4, no Sledgehammer Slam).
@@ -115,7 +118,7 @@ class Walker:
         self.i = self.t = 0
         self.buttons = set()
         self.report = {'checks': [], 'arrivals': [], 'marks': [], 'steps': [], 'trace': [], 'aborted': None}
-        self.on = {'fight': True, 'alive': True, 'gather': False, 'park': None}
+        self.on = {'fight': True, 'alive': True, 'gather': False, 'park': None, 'chase': False}
         self.boss_max = None
         self.scratch = {}
 
@@ -184,6 +187,13 @@ class Walker:
                 if self.on['gather']: self.move(e, s.pos, ptr, ram)   # optional: also move them onto Spidey
         if self.on['park'] and s.frame % 6 == 0:             # lab fixture: enemies held away from a move under test
             for e in s.enemies: self.move(e, self.on['park'], ptr, ram)
+        # A half-freed actor shows wild coordinates and no state: chasing one threw Spidey out of the level (lab).
+        real = [e for e in s.enemies if e['state'] is not None and all(abs(v) < 4000 * U for v in e['position'])]
+        if self.on['chase'] and real and s.frame % 40 == 0:  # lab fixture: Spidey goes to the nearest enemy
+            near = min(real, key=lambda e: abs(e['position'][0] / U - s.pos[0]) + abs(e['position'][1] / U - s.pos[1]))
+            ex, ey = near['position'][0] / U, near['position'][1] / U
+            if abs(ex - s.pos[0]) > 6 or abs(ey - s.pos[1]) > 6:
+                k.teleport(ptr, ram, s.sample['motion_address'] - p.BASE, int((ex - 4) * U), int((ey + 1) * U))
         if self.boss_max and s.frame % 12 == 0:              # mini-boss: (hp, max) pair like NormalEnemy +0x44
             needle, at, alive = struct.pack('<i', self.boss_max), 0, False
             while (at := ram.find(needle, at + 1)) > 0:
@@ -427,6 +437,49 @@ def routes():
         until('yard_to_refuge', in_room('ML_Refuge'), 400, 'Right'), fixtures(park=None), wait(SETTLE), mark('refuge-back'),
         check('refuge_arrival_at_the_new_door', lambda s: s.pos is not None and s.pos[0] < 25),
         until('refuge_to_stairs', in_room('ML_Stairs'), 600, 'Right'),
+    ])
+    # The Substation (authored rooms). Four short routes: the harness can lose Spidey after several
+    # room changes. In: the Yard's new left door, the Switchyard's crew, on to the Relay Hall.
+    hurt = lambda s: s.state in (67, 74, 75, 77, 79)
+    cleared = ch.ROOM_FLAGS['substation_cleared']
+    out['substation-in'] = ('ML_Yard', 1, (), [
+        wait(60), fixtures(fight=False, park=(100, 60)), *put(-240, 5), wait(20),
+        until('yard_to_switchyard', in_room('ML_Switchyard'), 400, 'Left'), fixtures(park=None), wait(SETTLE), mark('switchyard'),
+        check('switchyard_arrival_in_the_right_doorway', lambda s: s.pos is not None and 230 < s.pos[0] < 246 and s.pos[1] < 8),
+        walk('switchyard_out_of_the_doorway', 205, 300), until('switchyard_crew_appears', lambda s: bool(s.enemies), 600),
+        wait(120), mark('switchyard-crew'), fixtures(park=(120, 76)), wait(30), *put(12, 5),
+        until('switchyard_to_relay', in_room('ML_RelayHall'), 400, 'Left'), fixtures(park=None), wait(SETTLE), mark('relay'),
+        check('relay_arrival_at_the_lower_door', lambda s: s.pos is not None and s.pos[0] > 100 and s.pos[1] < 8),
+        until('relay_crew_appears', lambda s: bool(s.enemies), 600, fatal=False),
+    ])
+    # Climb: a real held jump onto the first catwalk, a live catwalk shocks, the upper door leads to
+    # the roof and its first wave starts. The other hops are lab placements.
+    out['substation-climb'] = ('ML_RelayHall', 1, (), [
+        wait(60), fixtures(fight=False, park=(100, 132)), *put(53, 5), wait(20),
+        hold('B', 14), hold('B+Right', 26), hold('Right', 14), wait(40),
+        check('held_jump_reaches_the_first_catwalk', lambda s: s.pos is not None and s.pos[1] > 24 and s.state == 0),
+        *put(25, 43), until('live_catwalk_shocks', hurt, 600, 'tapRight'), wait(200), mark('shocked'),
+        *put(20, 115), wait(30), until('relay_to_roof', in_room('ML_Roof'), 400, 'Left'), fixtures(park=None), wait(SETTLE),
+        mark('roof'), check('roof_arrival_in_the_passage', lambda s: s.pos is not None and s.pos[0] > 190 and s.pos[1] < 8),
+        walk('roof_out_of_the_passage', 170, 300), until('roof_first_wave_appears', lambda s: bool(s.enemies), 600),
+    ])
+    # Roof: three waves, each starting when the one before is beaten, then the flag; and out again.
+    out['substation-roof'] = ('ML_RelayHall', 2, (), [
+        wait(60), fixtures(fight=False), until('relay_to_roof', in_room('ML_Roof'), 400, 'Left'), wait(SETTLE),
+        fixtures(fight=True, chase=True), walk('roof_out_of_the_passage', 170, 300),
+        until('roof_first_wave_appears', lambda s: bool(s.enemies), 600), mark('roof-wave'),
+        until('roof_waves_beaten', flag(cleared), 5400), wait(120), mark('roof-clear'),
+        fixtures(fight=False, chase=False), *put(200, 5),
+        until('roof_to_relay', in_room('ML_RelayHall'), 400, 'Right'), wait(SETTLE), mark('relay-top'),
+        check('relay_arrival_on_the_upper_ledge', lambda s: s.pos is not None and s.pos[1] > 110 and s.pos[0] < 30),
+    ])
+    # Out: Relay Hall's lower door to the Switchyard's left doorway, across (placement) and back into the Yard.
+    out['substation-out'] = ('ML_RelayHall', 1, (), [
+        wait(60), fixtures(fight=False, park=(100, 132)),
+        until('relay_to_switchyard', in_room('ML_Switchyard'), 400, 'Right'), fixtures(park=(120, 76)), wait(SETTLE), mark('switchyard'),
+        check('switchyard_arrival_in_the_left_doorway', lambda s: s.pos is not None and s.pos[0] < 12 and s.pos[1] < 8),
+        *put(225, 5), until('switchyard_to_yard', in_room('ML_Yard'), 400, 'Right'), wait(SETTLE), mark('yard'),
+        check('yard_arrival_at_the_left_wall', lambda s: s.pos is not None and s.pos[0] < -250 and s.pos[1] < 8),
     ])
     return out
 

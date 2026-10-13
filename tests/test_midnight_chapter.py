@@ -3,7 +3,7 @@ import struct
 import unittest
 
 import mod
-from tools import midnight_chapter as ch, room_catalog, room_doors as doors
+from tools import midnight_chapter as ch, midnight_rooms, room_catalog, room_doors as doors
 from tools.nitro_texture import TextureArchive
 from tools.room_entities import Entities
 from tools.room_events import Events
@@ -89,7 +89,7 @@ class MidnightChapterTests(unittest.TestCase):
         self.assertEqual(rooms[-1], ch.ENTRANCE)
 
     def test_flag_allocation_stays_inside_the_unreferenced_range(self):
-        visited = {ch.VISITED_BASE + r.index for r in ch.ROOMS}
+        visited = {ch.visited(r.index) for r in ch.ROOMS}
         local = set(ch.LOCAL_FLAGS)
         free = set(ch.FREE_FLAGS)
         self.assertTrue(visited | local <= free)
@@ -121,7 +121,7 @@ class MidnightChapterTests(unittest.TestCase):
             shipped = RoomObjects.parse(self.final(room.name)).records[1]    # proto01 marks nothing natively
             init = Events.parse(shipped.sections[1], shipped.raw[3]).groups[0]
             sets = [struct.unpack_from('<H', c.operand)[0] for c in init.commands if c.opcode == ch.SET_VAR]
-            self.assertIn(ch.VISITED_BASE + room.index, sets, room.name)
+            self.assertIn(ch.visited(room.index), sets, room.name)
             if not room.encounters:
                 self.assertEqual(Entities.parse(parsed.records[1].sections[0]).records, ())
         self.assertEqual(self.local[('ML_Station', 0x42)], 268)
@@ -147,8 +147,11 @@ class MidnightChapterTests(unittest.TestCase):
         resources = {r.name: {'objects': 4000 + 2 * i, 'texture': 4001 + 2 * i} for i, r in enumerate(ch.ROOMS)}
         names = self.names + [f'x{i}' for i in range(4000 - len(self.names))]
         names += [n for r in ch.ROOMS for n in (f'zz_{r.name}_app.obj', f'zz_{r.name}Textures.nsbtx')]
+        for i, name in enumerate(midnight_rooms.AUTHORED):     # authored rooms bring their own model and collision
+            resources[name].update(model=len(names) + 2 * i, bsp=len(names) + 2 * i + 1)
+        names += [n for name in midnight_rooms.AUTHORED for n in (f'zz_{name}.nsbmd', f'zz_{name}.bsp')]
         listing = ch.map_layout(self.blobs[ch.MAP_SOURCE])[1]
-        table, list_at, messages_at = ch.room_table(self.arm9, names, resources, 1049, listing)
+        table, list_at, messages_at, stub_call = ch.room_table(self.arm9, names, resources, 1049, listing)
         self.assertEqual(len(table), ch.ML_SPACE)
         entries = table[messages_at - ch.ML_BASE:messages_at - ch.ML_BASE + ch.MESSAGE_SIZE * len(ch.LINES)]
         self.assertEqual(entries, ch.message_entries(1049))
@@ -166,15 +169,30 @@ class MidnightChapterTests(unittest.TestCase):
             raw = table[address - ch.ML_BASE:address - ch.ML_BASE + room_catalog.SIZE]
             src = next(r for r in self.native if r.name == room.source)
             name_at, tex, bsp, obj = struct.unpack_from('<4I', raw)
-            self.assertEqual((tex, bsp, obj), (resources[room.name]['texture'], src.bsp, resources[room.name]['objects']))
+            authored = room.name in midnight_rooms.AUTHORED
+            self.assertEqual((tex, bsp, obj), (resources[room.name]['texture'], resources[room.name].get('bsp', src.bsp),
+                                               resources[room.name]['objects']))
             label = table[name_at - ch.ML_BASE:].split(b'\0', 1)[0].decode()
             self.assertEqual(label, room.name)
             model = struct.unpack_from('<I', table, struct.unpack_from('<I', raw, 0x20)[0] - ch.ML_BASE)[0]
-            self.assertEqual(self.names[model], room.source + '.nsbmd')
-            self.assertEqual(raw[0x24:0x28], src.raw[0x24:0x28])   # texture animation
+            self.assertEqual(names[model], f'zz_{room.name}.nsbmd' if authored else room.source + '.nsbmd')
+            self.assertEqual(raw[0x24:0x28], src.raw[0x24:0x28])   # texture animation (none in the authored rooms' source)
             self.assertEqual(raw[0x4C:], src.raw[0x4C:])           # map piece and later fields
-            self.assertEqual(struct.unpack_from('<8i', raw, 0x2C), ch.MAP_FIELDS[room.source][1:])
+            self.assertEqual(struct.unpack_from('<8i', raw, 0x2C), ch.MAP_FIELDS[room.name if authored else room.source][1:])
             self.assertEqual(struct.unpack_from('<i', raw, 0x28)[0], ch.MAP_AREA)     # the chapter's own map screen
+        # The map's visited test: one patched instruction calls a stub that reads rooms 92.. from a table.
+        site, old, call = stub_call
+        self.assertEqual(struct.unpack_from('<I', self.arm9, site - ch.BASE)[0], old)       # add r5, r7, #0xB0
+        stub_at = site + 8 + ((call & 0xFFFFFF) << 2)
+        self.assertEqual(call >> 24, 0xEB)
+        stub, _ = ch.visited_stub(stub_at)
+        self.assertEqual(table[stub_at - ch.ML_BASE:stub_at - ch.ML_BASE + len(stub)], stub)
+        high = [r for r in ch.ROOMS if r.index >= ch.VISITED_HIGH_FIRST]
+        self.assertEqual(list(stub[28:28 + len(high)]), [ch.visited(r.index) for r in high])
+        self.assertEqual([ch.visited(r.index) for r in high], [165 - i for i in range(len(high))])
+        self.assertTrue(all(ch.visited(r.index) == ch.VISITED_BASE + r.index for r in ch.ROOMS if r.index < 92))
+        self.assertFalse({ch.visited(r.index) for r in ch.ROOMS} & {*ch.LOCAL_FLAGS, *ch.ROOM_FLAGS.values()})
+        self.assertTrue(set(ch.ROOM_FLAGS.values()) <= set(ch.FREE_FLAGS) - set(ch.LOCAL_FLAGS))
 
     def test_chapter_map_draws_every_room_in_free_slots_on_a_clean_panel(self):
         from tools.minimap_cbmp import Cbmp
@@ -231,6 +249,13 @@ class MidnightChapterTests(unittest.TestCase):
         self.assertTrue(all(y < min(r[1] for r in ch.MAP_ROOMS[low]) for _, y in ch.MAP_ARROWS[low]))
         self.assertTrue(all(y >= max(r[3] for r in ch.MAP_ROOMS[high]) for _, y in ch.MAP_ARROWS[high]))
         drawn.add(frozenset(ch.MAP_SHAFT_LINK))
+        for a, b in ch.MAP_DOOR_ARROWS:                                 # side doors that do not fit the panel: an arrow each
+            for room, other in ((a, b), (b, a)):
+                xs = [x for x, _ in ch.MAP_ARROWS[room]]
+                x0, x1 = min(r[0] for r in ch.MAP_ROOMS[room]), max(r[2] for r in ch.MAP_ROOMS[room])
+                self.assertTrue(all(x < x0 for x in xs) if kind(room, other) == 'left' else all(x >= x1 for x in xs), room)
+            self.assertEqual({kind(a, b), kind(b, a)}, {'left', 'right'})
+            drawn.add(frozenset((a, b)))
         self.assertEqual(drawn, {frozenset((room, dest)) for (room, _), (dest, _) in ch.LINKS.items() if dest in ch.BY_NAME})
         entry = ch.ENTRANCE_DOOR['room']                                # the way back to the Sewer: an arrow to the left
         self.assertEqual(kind(entry, ch.ENTRANCE), 'left')
@@ -367,17 +392,21 @@ class MidnightChapterTests(unittest.TestCase):
         record = RoomObjects.parse(raw).records[1]
         return s.names(raw, 1), Events.parse(record.sections[1], record.raw[3]).groups
 
-    def finished(self, name):
+    def finished(self, name, substation=True):
         """The room as apply_rom ships it, without its breaker/hint/objective appends."""
         raw = self.obj(name)
         if ch.BY_NAME[name].encounters and name != ch.YARD['room']: raw = ch.open_hammer_floors(raw)[0]
         if name in ch.UNSEALED: raw = ch.unseal(raw)
         if name == ch.BOSS['room']: raw = ch.stage_boss(raw)
-        if name == ch.GRATE['room']: raw = ch.seal_grate(raw, ch.VISITED_BASE + ch.BY_NAME[ch.GRATE['opened_by']].index)
+        if name == ch.GRATE['room']: raw = ch.seal_grate(raw, ch.visited(ch.BY_NAME[ch.GRATE['opened_by']].index))
         if name == ch.YARD['room']:
             raw = ch.stage_yard(raw, self.blobs[ch.BY_NAME[ch.YARD['hub']].source + '_app.obj'],
-                                self.blobs[ch.YARD['gang']['source'] + '_app.obj'], ch.VISITED_BASE + ch.BY_NAME[name].index)
+                                self.blobs[ch.YARD['gang']['source'] + '_app.obj'], ch.visited(ch.BY_NAME[name].index))
         if name == ch.YARD['hub']: raw = ch.add_yard_door(raw, self.blobs[ch.YARD['hub_door']['source'] + '_app.obj'])
+        if name == ch.SUBSTATION['hub'] and substation:
+            raw = ch.add_substation_door(raw, self.blobs[ch.SUBSTATION['hub_door']['source'] + '_app.obj'],
+                                         ch.door_templates(self.blobs.__getitem__)[0])
+        if name in midnight_rooms.AUTHORED: raw = ch.stage_authored(raw, ch.BY_NAME[name], self.blobs.__getitem__)
         return raw
 
     def final(self, name):
@@ -455,7 +484,7 @@ class MidnightChapterTests(unittest.TestCase):
     def test_stairs_grate_opens_only_after_the_gate(self):
         from tools import room_script as s
         raw, built = self.finished('ML_Stairs'), self.obj('ML_Stairs')
-        opened = ch.VISITED_BASE + ch.BY_NAME['ML_NestGate'].index
+        opened = ch.visited(ch.BY_NAME['ML_NestGate'].index)
         (entities, egs, ags), groups = self.record1(raw)
         sizes, count = s.counts(built, 1)
         self.assertEqual(s.counts(raw, 1), (sizes + (1,), count + 2))
@@ -481,7 +510,7 @@ class MidnightChapterTests(unittest.TestCase):
         from tools import room_script as s
         from tools.room_collision import RoomCollision
         yard, hub = ch.BY_NAME[ch.YARD['room']], ch.BY_NAME[ch.YARD['hub']]
-        raw, native = self.finished(yard.name), RoomObjects.parse(self.blobs['proto01_app.obj'])
+        raw, native = self.finished(yard.name, substation=False), RoomObjects.parse(self.blobs['proto01_app.obj'])
         self.assertEqual((doors.spawns(self.blobs['proto01_app.obj']), doors.exits(self.blobs['proto01_app.obj'])), ((), ()))
         self.assertEqual([(x.group, x.room, x.selector, x.spawn) for x in doors.exits(raw)], [(1, hub.index, 1, 2)])
         spawn, = doors.spawns(raw)
@@ -511,7 +540,7 @@ class MidnightChapterTests(unittest.TestCase):
         gang = entities.batches[-1].records[0]
         self.assertEqual((struct.unpack_from('<I', gang, 12)[0], gang[22], bytes(gang[23:])), (ch.SPAWNER_TYPE, 0x08, bytes(5)))
         self.assertEqual(struct.unpack_from('<2H', gang, 16), ch.YARD['gang']['box'])
-        visited = ch.VISITED_BASE + yard.index
+        visited = ch.visited(yard.index)
         self.assertEqual(visited, 266)
         self.assertNotIn(visited, self.local.values())                        # freed by the 138/139 substitution
         self.assertEqual(groups[0].commands[-3:], (s.activate(ag=len(ags) - 1),
@@ -543,6 +572,41 @@ class MidnightChapterTests(unittest.TestCase):
         self.assertEqual(s.counts(raw, 1), (sizes + (1,), groups))
         door = Entities.parse(RoomObjects.parse(raw).records[1].sections[0]).batches[-1].records[0]
         self.assertEqual(struct.unpack_from('<I', door, 12)[0], 3)             # a door entity
+        self.assertEqual(self.record1(raw)[1][0].commands[-1], s.activate(ag=len(sizes)))
+
+    def test_yard_gains_the_substation_door_and_loses_nothing(self):
+        from tools import room_script as s
+        from tools.room_collision import RoomCollision
+        sub = ch.SUBSTATION
+        before, raw = self.finished(sub['hub'], substation=False), self.finished(sub['hub'])
+        self.assertEqual(doors.exits(raw)[:-1], doors.exits(before))
+        self.assertEqual(doors.spawns(raw)[:-1], doors.spawns(before))
+        new = doors.exits(raw)[-1]
+        self.assertEqual((new.record, new.group, new.room, new.selector, new.spawn), (0, 2, ch.BY_NAME[sub['room']].index, 1, 1))
+        arrival = doors.spawns(raw)[-1]
+        self.assertEqual((arrival.spawn_id, arrival.angle), (2, doors.FACING['right']))
+        bsp = RoomCollision.parse(self.blobs['proto01.bsp'])
+        wall = next(v / 4 for v in range(-960, -1200, -1) if bsp.solid_at(v / 4, 5) is not None) + 0.25
+        self.assertAlmostEqual(wall, sub['door'].wall, delta=0.3)              # the wall the door stands in
+        (tx, _), = [xy for g, xy in self.triggers(raw).items() if g == 2]
+        edge = tx / 4096 + 6
+        self.assertGreaterEqual(edge - wall, 2.5)                              # the exit box reaches into the yard
+        self.assertGreater(arrival.x / 4096 - 3.5 - edge, 2)                   # arriving does not leave again
+        self.assertAlmostEqual(bsp.floor_below(arrival.x / 4096, arrival.y / 4096 + 3), 0.25, delta=0.3)
+        # Nothing stands within reach of the arrival point: the native barrel moved along the floor.
+        old = Entities.parse(RoomObjects.parse(before).records[1].sections[0]).records
+        now = Entities.parse(RoomObjects.parse(raw).records[1].sections[0]).records
+        moved = [i for i, (a, b) in enumerate(zip(old, now)) if a != b]
+        self.assertEqual(len(moved), 1)
+        self.assertEqual((old[moved[0]][22], now[moved[0]][4:]), (sub['barrel']['kind'], old[moved[0]][4:]))
+        self.assertEqual(struct.unpack_from('<i', now[moved[0]])[0], sub['barrel']['x'])
+        near = [e for e in now[:len(old)] if len(e) >= 24 and struct.unpack_from('<I', e, 12)[0] == ch.OBJECT_TYPE
+                and abs(struct.unpack_from('<i', e)[0] - arrival.x) < 8 * 4096 and abs(struct.unpack_from('<i', e, 4)[0]) < 20 * 4096]
+        self.assertEqual(near, [])
+        sizes, groups = s.counts(before, 1)
+        self.assertEqual(s.counts(raw, 1), (sizes + (1,), groups))
+        door = now[-1]
+        self.assertEqual(struct.unpack_from('<I', door, 12)[0], 3)             # a door entity, started by the init group
         self.assertEqual(self.record1(raw)[1][0].commands[-1], s.activate(ag=len(sizes)))
 
     def test_grade_keeps_texture_bytes_and_alpha_bit(self):

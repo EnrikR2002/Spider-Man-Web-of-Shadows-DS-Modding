@@ -2017,7 +2017,7 @@ entities; tests). This supersedes "node meanings unknown" above.
   are not made redundant by a tighter one; front-side ancestors come first,
   deepest first, then back-side ones. The second u16 is the face's **surface
   value**. The node u16 at +8 (0 in 57%, 2, 3, 8, 24 and stray values such as
-  15668) can be written as 0 ("Room compiler research").
+  15668) can be written as 0 ("Room compiler").
 - **Surface values**, measured in the two debug rooms built for them
   (Test_Surfaces01/02, rooms 71/72: 80-unit cells at x 100, 200, 300, 500,
   600, 700, 800 whose floor, ceiling, walls above y 20 and back wall carry
@@ -2230,65 +2230,148 @@ were far above the sewer ones.
   (appended last as `zz_<room>.bsp`; collision files need no alignment).
   Empty in the release.
 
-### Room compiler research (2026-10-12)
+### Room compiler (v0.12.0)
 
-Goal set by the player: sections that do not look like recoloured sewers,
-built later by another session from this research. Nothing here ships.
+A room built from nothing is three files and an object script, all made from
+one plan. Tools: `tools/nitro_build.py` (file writers), `tools/room_compiler.py`
+(plan -> model, textures, collision), `tools/room_author.py` (camera, anchor
+points), `tools/midnight_rooms.py` (the shipped plans and their scripts);
+tests `test_nitro_build`, `test_room_compiler`, `test_room_author`,
+`test_midnight_rooms`. Lab scripts and contact sheets: `work/rooms/`.
 
-**Proven in the running game**
+- **Writers checked against the game's own files.** `dictionary_bytes` builds
+  a Nitro name dictionary; the search tree is the standard insertion with the
+  nodes then numbered in preorder, left child first (bit n of a name = byte
+  n >> 3, bit n & 7; root bit 127). `texture_archive` lays the pools out as
+  natives do (plain, 4x4-compressed, its index words, palettes); `room_model`
+  writes a one-node model: node, SBC (`26 00 00 00 00 02 00 01 0B`, a
+  `04 mat 05 shape` pair per shape, `2B 01`), materials with their
+  texture/palette name dictionaries, shapes. Rebuilding from parsed parts is
+  byte-identical for 259 of 272 texture archives (the rest share data or use
+  4-colour palettes) and all 69 one-node room models but BoxRoom.
+- **Model conventions (native).** One shape per material, one texture per
+  material (bound by name at load: palette `<texture>_pl`). Material record
+  44 bytes: polygon attribute `0x001F0080` (front faces only, no light),
+  diffuse `0xE739` with the vertex-colour bit, repeat on both axes. A quad is
+  counter-clockwise for its viewer (e1 x e2 points at him); a face wound the
+  other way is culled and shows black. Stream commands used: `0x40` quads,
+  `0x20` colour, `0x22` texture coordinate (s | t << 16, 1/16 texel, origin
+  top left), `0x23` vertex, `0x41`. Vertex scale 64 holds +-512 units.
+  x right, y up, the camera looks from +z; the play space is |z| < 25.
+- **Plan** (`room_compiler.Room`): `bounds` of the interior, `Solid` boxes
+  with a collision surface value and looks per face, back-wall `Panel`s,
+  scenery quads/boxes (drawn only). Everything outside the bounds is solid.
+  The same boxes give the collision tree (`compile_boxes`) and the faces: top,
+  underside and sides where a solid meets empty space, a face toward the
+  camera, a back wall behind empty space. `depth` below 25 makes a solid
+  stand free (its body ends at that z and the floor it stands on continues in
+  front): at full depth a tall block is a black slab across the foreground.
+  `hidden` solids collide and are never drawn (an outdoor room's ceiling).
+  Texture coordinates are anchored to the world, so repeats line up across
+  quads; long faces are cut to stay inside +-2048 texels.
+- **Textures.** `borrow(archive, name)` copies a native texture and palette
+  as they are (296 distinct room textures; sheets by `work/rooms/tex_sheet.py`
+  and `tex_big.py`). `paint` makes 16- or 256-colour textures from pixels
+  (formats 3 and 4; tested, not used in a shipped room). Appended models and
+  texture archives must start on a word: `midnight_chapter.aligned` inserts
+  padding resources (the strings and the map screen are not word multiples,
+  so one fixed pad was only right by luck).
+- **Camera regions** live in the object file: record 0, section 4. One u16
+  offset per polygon, one u8 point count per polygon, zero padding to a word,
+  then 20-byte points (x, y, three zero words). 67 native rooms have one to
+  three polygons; the debug rooms have none (free camera). The camera object
+  (vtable `0x02130684`; found at `0x022AD9D4` in the Refuge) holds its
+  look-at point at +0xC: Spidey's x and y + 4 clamped into the polygon, z 60;
+  +0x50 points at the polygon copy, +0x54 is its point count. Native rule for
+  a box room: the room narrowed by 20 units left and right, full height. The
+  view is about 58 x 43.5 units at z 0 and 82 x 62 at the back wall. The
+  descriptor's bounds at +0x3C..+0x48 do **not** steer the camera (changing
+  them changed nothing).
+- **Anchor points** are record 0, section 3: 20-byte points (x, y, z, 0,
+  kind) in entity-batch framing. Kinds as the training room lays them out:
+  1 on a floor (2 above it, every 20 units), 2 beside a left wall, 3 beside a
+  right wall, 4 under a ceiling, 5 in open air. **Enemy spawners place their
+  enemies on them: a room without any spawns nobody** (the first Switchyard;
+  the native debug geometry behaved the same, so it was not the compiled
+  files). `plan_anchors` derives them from the plan; floor points only on low
+  floors, because a gang put on a platform stays there.
+- **Spawners** (lab, authored rooms). A spawner starts once Spidey stands
+  well inside its zone box (6 units inside was not enough, 10 was). Byte +24
+  = 1 with +25 = an event group (1-based): that group runs when the wave is
+  beaten, with +23 = 0 or 2 alike; chained that way three spawners ran one
+  after another (Pier `0x08`, Sewer `0x0E`, Residential `0x0C`) and the last
+  group set a flag. Sewer `0x0F` ("Medium Red Suit", byte +26 = 1) spawned
+  nobody in the lab save. A spawner batch activated while Spidey is already
+  inside its zone starts about 95 frames later. What +23 and +26 select is
+  unknown. Record 1 of the empty debug room has one empty batch (AG 0, live
+  from the start), so every appended batch must be started by the init group.
+- **Movement numbers** (lab, flat floor): a tapped B rises 10.3 units, B
+  held 25 frames 27.0; B again in the air starts the native web swing
+  (state 26), which carried him 66 units. After a jump into a catwalk's edge
+  he hung in state 16 (probably a ledge grab; not studied).
+- **Harness limits.** `player_trace.sample` can lose Spidey after the third
+  room change of one run (the game keeps running): keep routes to two or
+  three doors. The mash fixture cannot reach fliers or enemies on blocks:
+  `fixtures(chase=True)` puts Spidey beside the nearest enemy instead (moving
+  enemies breaks wave counting). The enemy list can hold a half-freed actor
+  (health 1, no state, wild coordinates): chasing one threw Spidey out of
+  the level, so the fixture skips those. Runs started in the same second
+  play out identically (the fights follow the clock): start repeats a few
+  seconds apart to sample different fights.
 
-- *Collision from boxes.* `room_collision.compile_boxes(solids, slab)` turns
-  axis-aligned boxes (x0, y0, x1, y1[, surface value], infinite extents
-  allowed) into a collision file: two z nodes (|z| >= slab solid), then a
-  k-d split on box edges with native flags, links and face lists. Tests: the
-  training room from four boxes is 204 bytes like the native file and agrees
-  on 20,000 points; Sewer_Save04 agrees too with fewer nodes (8 vs 11).
-  Lab (`scratch/bsp_proof_build.py`, `bsp_proof_walk.py`, ROMs
-  `build/dev-kit/bsp0|bsp1`): the Refuge with a compiled copy of its native
-  shape gives the same walk trace as the native file in every phase; with a
-  12 x 8 block added at x 24..36 Spidey stops at 20.47 and 39.53 (3.5 from
-  each side) and stands on it at 12.98 (top 8 + 5). Surface value 10 and
-  node u16 0 are enough for floors and walls.
-- *Visible geometry.* `model_geometry.replace_streams` + `quads_stream` put
-  authored flat-colour quads into the two shapes of Test_Combat01's model
-  (vertex scale 64: coordinates up to +-512 units; `platform_model`, frames
-  reviewed in the v0.5.0 lab, "Native room lookup and namespace probes").
-- *Rooms without native links.* proto01 became the Yard with authored spawn,
-  exit, entities and a visited flag ("The Yard").
+### The Substation (v0.12.0)
 
-**Not proven: do these in order**
+Three authored rooms behind a door in the Yard's left wall (x -264.75 at
+floor height; a copy of Sewer_Map13's left door stands there). Source of
+their descriptor and object file: the empty debug room Test_Surfaces01
+(`midnight_rooms.SOURCE`); Spidey's entity stays in record 0.
 
-1. *Textured quads.* A shape draws with its material's texture, so a room
-   with N looks needs a template model with N shapes: Test_Surfaces01 (10
-   shapes, 10 textures of 128 x 128, 6,908 bytes) or proto01 (25 shapes, 23
-   textures). Add TEXCOORD (GPU command 0x22: s | t << 16, 1/16 texel) per
-   vertex and white vertex colour; check which face is front (the camera
-   looks from +z; geometry in front of z 0 hides Spidey).
-2. *New pictures.* 82% of textures, and every room texture sampled, are
-   format 5 (4x4 block compression; 4,096 bytes per 128 x 128). Options:
-   palette regrade (shipped), a format-5 encoder (4 colours per block from a
-   palette pool), or paletted replacements (format 3 = 8 KB, format 4 = 16 KB
-   per 128 x 128; texture memory is unmeasured). `nitro_texture.TextureArchive`
-   only replaces palettes today.
-3. *One box list for both.* Emit collision and quads from the same boxes so
-   they cannot disagree; then slopes (the collision format has slanted
-   planes: two s16 of the negated (x, y) normal; the compiler is axis-aligned).
-4. *Descriptor and room file.* Clone a debug room's descriptor (texture,
-   collision, objects, model array, texture animation at +0x24) as the
-   chapter does; a `MODEL` hook like `COLLISION` is missing. Objects: the
-   empty Test_Surfaces01 state record plus `room_doors.add_spawn/add_exit`
-   and `room_script.append_batch` (enemies, switches, hazards).
-5. *Camera and bounds.* Unknown where the camera limits come from. The
-   descriptor's bounds (+0x3C..+0x48) are filled at boot for native rooms
-   from an unknown source; the Yard uses hand-made ones. Entity type 6
-   ('EnterExitTwoWayTrigger', 'Cam Lock Switch Trigger') exists in Downtown
-   and Pier rooms.
-6. *Surface values.* Use 10 everywhere, 0 for walls that should need Ichor
-   Crawl, 1 for walls nobody may climb, 7 for hurting floors (table in "Room
-   collision tree"). Pits, doors, gates and breakable floors are objects,
-   not collision.
-7. *Walk it.* A route in `tools/midnight_walk.py` through real doors before
-   anything ships (release rule).
+- **Rooms.** 91 `ML_Switchyard`: outdoor yard at dusk, 260 x 84 (Pier
+  skyline trio, brick and window facades, loading dock, two stacked
+  containers, a transformer, a gantry at 42, pylons and wires as scenery);
+  Pier gang spawner, two barrels and a trash can. 92 `ML_RelayHall`: 130 x
+  140 machine hall whose outer walls have surface value 1 (no cling); five
+  catwalks 18 apart and a ledge at 110 by the upper left door; two batches of
+  `Hazard_Electric` objects (proto01's, a point every 10 units, 1 above the
+  catwalk) take turns: 90 frames live, 50 frames with nothing live. 93
+  `ML_Roof`: 214 x 90 roof at night (Residential skyline, every second tile
+  mirrored), two vent blocks, a 34-unit passage to the door; three waves.
+- **Doors** (`midnight_rooms.Door`): a doorway is a 10-unit alcove under a
+  solid; the exit box is centred 3.5 units behind the wall and 12 wide (it
+  reaches 2.5 units into the doorway), the arrival point 12 units in front
+  of the wall (10 in the Yard). In a doorway Spidey stopped 4.4 to 4.65 units
+  from the wall, not 3.5: a box reaching only 1.5 overlapped him by 0.6 and
+  one walk of about a dozen never fired (candidate `f8761be4`). The Yard's
+  native metal barrel stood 11 units from its left wall and pushed an
+  arriving Spidey 2 units back toward the door: it moves to x -165. Exits
+  are record-0 groups 1.. in door order.
+- **Waves** (`midnight_rooms.stage`): each spawner names a guard group
+  (`Wave_2`, `Wave_3`, `Waves_Clear`) that runs its go group once: a scratch
+  byte (0x12A..0x12C, cleared by the init group) is tested with `== 0` and
+  set by the go group. A go group starts the next spawner batch 45 frames
+  later and calls the next guard again after 5,400 frames, so a wave also
+  starts 90 s after the one before. Reason: on `f8761be4` one roof fight of
+  about a dozen stopped after the second wave (five enemies instead of the
+  usual eight to twelve, the last one beaten against the left wall, nothing
+  for the next 4,000 frames; cause not found). The clear step has no timer.
+- **Flags.** Visited: room 91 = 267 (the native rule), rooms 92.. take 165
+  downwards (`midnight_chapter.visited`); `LOCAL_FLAGS` now ends at 149 and
+  150 = `substation_cleared`. The map's visited test `add r5, r7, #0xB0` at
+  `0x020E1878` becomes a `bl` to a 7-instruction stub in the chapter block
+  that reads rooms 92.. from a byte table after it (`visited_stub`).
+- **Map.** The three rooms sit in the panel's lower left; the Yard's left
+  door and the Switchyard's right door are a pair of arrows
+  (`MAP_DOOR_ARROWS`), like the Gate/Stairs shaft.
+- **Lab** (release ROM `0ede0422`): routes `substation-in`, `-climb`, `-roof`,
+  `-out` of `tools/midnight_walk.py` (real doors both ways, a real held jump
+  onto the first catwalk, a live catwalk shocks, all three waves beaten sets
+  flag 150). The other hops of the climb are placements: a human climb is
+  expected from the jump numbers, not scripted. Wave experiments:
+  `work/rooms/wave_exp.py` (`midnight_rooms.LAB` switches, never set in a
+  build).
+- **Open.** Player feel of all three rooms; whether the arcs read well and
+  the 50-frame rest is fair; enemy strength on the roof (native values, no
+  dial); the rooms' detail map screen is the debug placeholder.
 
 ### Script boss research (2026-10-12)
 
@@ -2345,11 +2428,14 @@ Goal: a boss that is not one of the game's own, built from room script
   in state 75 for a long time, and a teleport keeps that state). A hazard
   only hurts on contact while moving: standing still on a live rail after a
   teleport did nothing.
+- **Proven since (v0.12.0, "Room compiler" and "The Substation"):** hazard
+  batches cycling in an authored room (two batches of 8 and 6 arcs), waves
+  chained through a spawner's beaten-group, a flag set by the last one.
 - **Still to prove (lab, one test room):** 1) which attacks damage which
   smashable kinds and their health; 2) what Bomb_Symbiote, Crane and
-  Boss_Floor do; 3) whether a spawner can be re-armed; 4) how many active
-  hazards a room carries; 5) a warning before a batch goes live (a short
-  flicker or a sound).
+  Boss_Floor do; 3) whether a beaten spawner can be re-armed without leaving
+  the room; 4) a warning before a batch goes live (a short flicker or a
+  sound); 5) a smashable's destruction group (+23) in an authored batch.
 - **A new character boss** stays research: enemy models are separate rigs
   (`m6`, `brt`, `bzkr`, `hLpr` ...), the animation tools are proven on
   Spidey's 37 bones only, and the mini-boss AI is unmapped (no NormalEnemy

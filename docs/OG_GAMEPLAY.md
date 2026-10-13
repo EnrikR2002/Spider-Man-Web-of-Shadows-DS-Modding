@@ -153,6 +153,21 @@ room with its door arrows, which says "Detailed Mini-Map unavailable" until
 the area's map item is owned. Rooms of the unused sixth area (the debug rooms)
 get no map at all: the page stays on Objectives.
 
+A tapped jump rises about 10 units, a held one (B for about 25 frames) 27;
+Spidey himself stands about 10 tall. B again in the air throws a web line
+and swings (it does not jump again on open ground); the swing carried him 66
+units along a flat roof (lab 2026-10-12).
+
+Each room carries, in its object file, the regions its camera stays in
+(one to three polygons; the camera looks at Spidey's x and 4 units above him
+and stops at the polygon's edge) and a list of anchor points: on floors, on
+walls, under ceilings and in open air. Enemy spawners put their enemies on
+those points: where a room has none, nobody appears. A spawner starts when
+Spidey is well inside its zone box and can name an event group that runs
+when its wave is beaten (how ambush rooms open their doors). The debug rooms
+have no camera region (the camera follows freely) and only some have points.
+Formats: TECHNICAL "Room compiler".
+
 Wall crawling depends on the surface (measured in the game's own surface test
 rooms, 2026-10-12): most walls and ceilings can be climbed; black ichor
 surfaces only with the ichor story abilities; some surfaces can never be

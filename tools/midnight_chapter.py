@@ -18,7 +18,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from tools import minimap_cbmp, room_catalog, room_doors, room_script, tasm_kit as kit, wos_tool as w
+from tools import midnight_rooms, minimap_cbmp, room_catalog, room_doors, room_script, tasm_kit as kit, wos_tool as w
 from tools.nitro_texture import TextureArchive
 from tools.room_entities import Entities
 from tools.room_events import Command, EventGroup, Events
@@ -48,7 +48,13 @@ FREE_FLAGS = (*range(138, 166), *range(245, 276))
 # 266/267 held the Span's seal flag and the Hollow's red-floor flag, which
 # nothing writes since v0.8.1; those two now take 138/139 so that 266/267 are
 # the visited flags of rooms 90/91. Every other allocation keeps its number.
-LOCAL_FLAGS = (*range(268, 276), 138, 139, 251, 250, 249, 248, 247, 246, 245, *range(140, 166))
+LOCAL_FLAGS = (*range(268, 276), 138, 139, 251, 250, 249, 248, 247, 246, 245, *range(140, 150))
+# Rooms above 91 cannot follow 0xB0+room (268.. are locals): their visited
+# flags come from the top of the free pool, 165 downwards, and the map's
+# visited test reads them through a stub (`visited_stub`). 150..165 are
+# reserved for that and for flags authored rooms name themselves (ROOM_FLAGS).
+VISITED_HIGH_FIRST, VISITED_HIGH = 92, 165
+ROOM_FLAGS = {'substation_cleared': 150}    # the Control Roof's last wave is beaten
 # Per-room scratch bytes (0x127..0x130, e.g. the Venom room's platform and
 # timer states): writes are kept, like the native room's.
 ROOM_SCRATCH = range(0x127, 0x131)
@@ -61,9 +67,17 @@ DELAY = 0x1C                                # u16 frames, u8 action group (+4), 
 GRANT = 0x1F                                # "<ability> obtained!": grants a native story ability
 SPAWN_PICKUP = 0x07                         # spawns a pickup; operand +26 = 1-based group run on pickup
 STABLE_SHA256 = 'fd7e4420f97645dd55011504843ce62f068d1276234c3cd781931c85bb1eb193'
-ARM9_SHA256 = 'caa8403335641e6faa60d2f5b10ca5f2ade05f4ca15dd2277a9efc17d7fcda6a'   # chapter over the kit ARM9 (pinned per release)
+ARM9_SHA256 = 'a212585a168ec9757b737ed0ebaf006ffcfb1273c4c40e0ac7586ba43b49f474'   # chapter over the kit ARM9 (pinned per release)
 ENTRANCE = 'Sewer_Save02'
 STATE_TEMPLATE = 'Test_Surfaces01'
+
+
+def visited(index):
+    """Visited flag of a chapter room: the native 0xB0+room rule up to room 91, then 165 downwards."""
+    if index < VISITED_HIGH_FIRST: return VISITED_BASE + index
+    flag = VISITED_HIGH - (index - VISITED_HIGH_FIRST)
+    if flag <= max(ROOM_FLAGS.values(), default=149): raise ValueError('Visited flags exhausted')
+    return flag
 
 
 @dataclass(frozen=True)
@@ -94,6 +108,10 @@ ROOMS = (
     Room(89, 'ML_Venom', 'Downtown_Map14', 'nest', True),       # boss: Venom, ichor gates, platforms
     # The Yard (v0.9.0): the unused prototype warehouse, behind a new door in the Refuge.
     Room(90, 'ML_Yard', 'proto01', 'dusk', True),               # side room: gang camp, crates to throw
+    # The Substation (v0.12.0): authored rooms (tools/midnight_rooms), behind a new door at the Yard's left end.
+    Room(91, 'ML_Switchyard', midnight_rooms.SOURCE, 'authored', True),   # open yard at dusk: crew, containers, gantry
+    Room(92, 'ML_RelayHall', midnight_rooms.SOURCE, 'authored', True),    # timed climb: catwalks that take turns being live
+    Room(93, 'ML_Roof', midnight_rooms.SOURCE, 'authored', True),         # arena at night: three waves, replayable
 )
 BY_NAME = {r.name: r for r in ROOMS}
 # (room, record-0 exit group) -> (destination, spawn id). A spawn is the arrival
@@ -123,8 +141,14 @@ LINKS = {
     ('ML_NestGate', 2): ('ML_Stairs', 1), ('ML_Stairs', 1): ('ML_NestGate', 1),
     # Authored doors (no native pair): Refuge left wall <-> the Yard's right tunnel.
     ('ML_Refuge', 2): ('ML_Yard', 1), ('ML_Yard', 1): ('ML_Refuge', 2),
+    # The Substation: Yard left wall <-> the Switchyard's right doorway.
+    ('ML_Yard', 2): ('ML_Switchyard', 1), ('ML_Switchyard', 1): ('ML_Yard', 2),
+    ('ML_Switchyard', 2): ('ML_RelayHall', 1), ('ML_RelayHall', 1): ('ML_Switchyard', 2),
+    ('ML_RelayHall', 2): ('ML_Roof', 1), ('ML_Roof', 1): ('ML_RelayHall', 2),
 }
-AUTHORED_EXITS = {('ML_Refuge', 2), ('ML_Yard', 1)}        # built by add_yard_door/stage_yard, not by sanitize
+# Exits built by add_yard_door/stage_yard/add_substation_door/midnight_rooms.stage, not by sanitize.
+AUTHORED_EXITS = {('ML_Refuge', 2), ('ML_Yard', 1), ('ML_Yard', 2), ('ML_Switchyard', 1), ('ML_Switchyard', 2),
+                  ('ML_RelayHall', 1), ('ML_RelayHall', 2), ('ML_Roof', 1)}
 # Surplus native exits (both ceiling hatches whose floor partners now lead into
 # the Nest): the trigger moves out of reach, so the door is a dead hatch.
 SEALED = {('ML_Entry', 3), ('ML_Platform', 4), ('ML_Venom', 3)}
@@ -168,6 +192,7 @@ LINES = {
     'grate_clear': 'The grate is clear. Stand on it, open it with X and drop in with Down.',
     'way_up': 'The nest falls silent. Take the left passage: a shaft climbs back to the Stairs.',
     'yard': 'A freight yard above the line. Someone made camp here, and they have seen you.',
+    **midnight_rooms.lines(),               # authored rooms: '<room>' on the first visit, '<room>_clear'
 }
 # --- The Yard (v0.9.0) -------------------------------------------------------
 # proto01 is a textured prototype warehouse yard no story room leads to: one
@@ -193,6 +218,16 @@ YARD = {
     'removed_triggers': 'Ichor Test',                       # the X prompts that dissolved those gates
     'pickup_chain': 'New Event',                            # test groups that respawn ability pickups
     'gang': {'source': 'Pier_Map04', 'table': 0x08, 'xyz': (-110 * 4096, 2 * 4096, 0), 'box': (300, 120)},
+}
+# --- The Substation (v0.12.0) -------------------------------------------------
+# The Yard's left wall (x -264.75 at floor height) gains a door to the first
+# authored room. The native metal barrel that stood 11 units from that wall
+# pushed an arriving Spidey back toward the door: it moves along the floor.
+SUBSTATION = {
+    'room': 'ML_Switchyard', 'hub': 'ML_Yard',
+    'door': midnight_rooms.Door('left', -264.75, 0.25, 2, 'Substation', inset=10),
+    'barrel': {'kind': 0x23, 'x': round(-165 * 4096)},     # proto01's Smashable_MetalBarrel, from x -253.4
+    'hub_door': {'source': 'Sewer_Map13', 'label': 'Door (Misc) 1', 'xyz': (round(-265.75 * 4096), 1024, 0)},
 }
 SPAWNER_TYPE = 4
 OBJECTIVE_ROOM = 'ML_Refuge'
@@ -307,6 +342,10 @@ MAP_FIELDS = {
     # proto01 has no native values (area 5, zeros): the Refuge's map piece, its own collision bounds
     # as (x min, y max, x max, y min), the layout Sewer_Save04's values show.
     'proto01': (5, 450560, 323584, 589824, 393216, -270 * 4096, 110 * 4096, 175 * 4096, 0),
+    # Authored rooms (keyed by room name): the same piece, the plan's bounds.
+    'ML_Switchyard': (5, 450560, 323584, 589824, 393216, -10 * 4096, 84 * 4096, 250 * 4096, 0),
+    'ML_RelayHall': (5, 450560, 323584, 589824, 393216, -10 * 4096, 140 * 4096, 120 * 4096, 0),
+    'ML_Roof': (5, 450560, 323584, 589824, 393216, 0, 90 * 4096, 214 * 4096, 0),
 }
 # --- Touch-screen map (v0.11.0) --------------------------------------------
 # The chapter has its own map screen. The game's area table (16-byte rows at
@@ -351,7 +390,7 @@ FILL, EDGE = 2, 4                          # pixel roles inside a slot (0 = back
 # the Stairs' floor grate are a matched pair of dotted arrows: the chapter's
 # native door pairs do not fit one flat plan (TECHNICAL "Chapter map").
 MAP_ROOMS = {
-    'ML_Yard': [(3, 14, 31, 30)],
+    'ML_Yard': [(7, 14, 31, 30)],
     'ML_Refuge': [(35, 18, 45, 28)],
     'ML_Stairs': [(49, 18, 103, 28), (49, 27, 57, 40)],
     'ML_Platform': [(63, 52, 123, 64), (107, 20, 123, 53)],
@@ -366,6 +405,10 @@ MAP_ROOMS = {
     'ML_NestShrine': [(164, 88, 172, 96)],
     'ML_Venom': [(144, 80, 162, 96)],
     'ML_NestGate': [(134, 66, 142, 96)],
+    # The Substation, lower left: roof | relay hall | switchyard, as its doors run.
+    'ML_Roof': [(14, 92, 42, 102)],
+    'ML_RelayHall': [(46, 92, 58, 120)],
+    'ML_Switchyard': [(62, 108, 94, 120)],
 }
 MAP_LINKS = (                               # (room, other room, strip)
     ('ML_Yard', 'ML_Refuge', (31, 22, 35, 26)), ('ML_Refuge', 'ML_Stairs', (45, 22, 49, 26)),
@@ -375,12 +418,18 @@ MAP_LINKS = (                               # (room, other room, strip)
     ('ML_NestThroat', 'ML_NestSpan', (126, 115, 128, 119)), ('ML_NestSpan', 'ML_NestHollow', (190, 115, 192, 119)),
     ('ML_NestGallery', 'ML_NestHollow', (190, 91, 192, 95)), ('ML_NestShrine', 'ML_NestGallery', (172, 91, 174, 95)),
     ('ML_Venom', 'ML_NestShrine', (162, 91, 164, 95)), ('ML_NestGate', 'ML_Venom', (142, 91, 144, 95)),
+    ('ML_Roof', 'ML_RelayHall', (42, 95, 46, 99)), ('ML_RelayHall', 'ML_Switchyard', (58, 114, 62, 118)),
 )
 MAP_SHAFT_LINK = ('ML_NestGate', 'ML_Stairs')    # drawn as two dotted arrows, not as a line
+# The Substation hangs off the Yard's left wall, where the panel ends: that door pair is two arrows as well
+# (left of the Yard, right of the Switchyard).
+MAP_DOOR_ARROWS = (('ML_Yard', 'ML_Switchyard'),)
 MAP_ARROWS = {                              # (room, pixels): dotted stub with an arrow head
     'ML_NestGate': [(138, 63), (138, 60), (138, 57), (137, 58), (139, 58), (136, 59), (140, 59)],     # up, above the Gate
     'ML_Stairs': [(53, 42), (53, 45), (53, 48), (52, 47), (54, 47), (51, 46), (55, 46)],             # down, under the stairwell
     'ML_Entry': [(8, 80), (7, 80), (6, 80), (5, 80), (4, 80), (5, 79), (5, 81), (6, 78), (6, 82)],     # left, to the Sewer
+    'ML_Yard': [(6, 22), (5, 22), (4, 22), (3, 22), (2, 22), (3, 21), (3, 23), (4, 20), (4, 24)],     # left, to the Substation
+    'ML_Switchyard': [(94, 114), (95, 114), (96, 114), (97, 114), (98, 114), (97, 113), (97, 115), (96, 112), (96, 116)],   # right, to the Yard
 }
 SAVE_ROOMS = {'ML_Refuge', 'ML_NestRest', 'ML_NestShrine'}
 BOSS_ROOMS = {'ML_Venom'}
@@ -529,7 +578,7 @@ def _var_target(var, room, source_index, local):
     per-room scratch bytes pass through.
     """
     if var == VISITED_BASE + source_index or (room.name, var) in PREREQUISITES:
-        return VISITED_BASE + room.index
+        return visited(room.index)
     if var in ROOM_SCRATCH: return var
     if var >= FLAG_LIMIT: return None
     if local is None: raise ValueError(f'{room.name}: unexpected story flag {var:#x} in record 0')
@@ -588,7 +637,7 @@ def state_record(template_raw, room):
     record, names = parsed.records[1], parsed.names[1]
     if Entities.parse(record.sections[0]).records or record.raw[3] != 1 or names.category_ends[:2] != (0, 1):
         raise ValueError('State template changed')
-    flag = VISITED_BASE + room.index
+    flag = visited(room.index)
     if flag not in FREE_FLAGS: raise ValueError('Visited flag outside the chapter allocation')
     events = Events((EventGroup((Command(SET_VAR, struct.pack('<HBB', flag, 1, 0)),)),), b'')
     return record.replace_section(1, events.to_bytes()), names.raw
@@ -850,6 +899,41 @@ def add_yard_door(raw, door_native, yard=None):
     return room_script.extend_group(raw, 1, 0, [room_script.activate(ag=ag)])
 
 
+def add_substation_door(raw, door_native, spawn_template, sub=None):
+    """Yard: an exit and arrival point at its left wall and a native door standing there."""
+    sub = sub or SUBSTATION
+    door = sub['door']
+    raw = room_doors.add_exit(raw, room=BY_NAME[sub['room']].index, selector=1,
+                              spawn=LINKS[(sub['hub'], 2)][1], **door.exit)
+    raw = room_doors.add_spawn(raw, template=spawn_template, **door.spawn)
+    parsed = RoomObjects.parse(raw)
+    section0 = parsed.records[1].sections[0]
+    barrels = [i for i, e in enumerate(Entities.parse(section0).records)
+               if len(e) >= 24 and struct.unpack_from('<I', e, 12)[0] == OBJECT_TYPE and e[22] == sub['barrel']['kind']]
+    if len(barrels) != 1: raise ValueError('Yard barrel changed')
+    moved = bytearray(Entities.parse(section0).records[barrels[0]])
+    struct.pack_into('<i', moved, 0, sub['barrel']['x'])
+    raw = parsed.replace_section(1, 0, Entities.parse(section0).replace_record(barrels[0], bytes(moved)))
+    entity = bytearray(_entity(door_native, 1, sub['hub_door']['label']))
+    struct.pack_into('<3i', entity, 0, *sub['hub_door']['xyz'])
+    raw, ag = room_script.append_batch(raw, 1, [(bytes(entity), 'Door (Substation)')], 'Substation Door')
+    return room_script.extend_group(raw, 1, 0, [room_script.activate(ag=ag)])
+
+
+def door_templates(asset):
+    """(spawn, exit trigger) copied by rooms that have none of their own: the Refuge's native ones."""
+    hub = asset(BY_NAME[YARD['hub']].source + '_app.obj')
+    return room_doors.spawns(hub)[0], room_doors.exit_trigger(hub)
+
+
+def stage_authored(raw, room, asset):
+    """An authored room's object file (tools/midnight_rooms.stage with the chapter's links, flags and lines)."""
+    spawn_template, exit_template = door_templates(asset)
+    return midnight_rooms.stage(raw, room.name, asset, room_of=lambda n: BY_NAME[n].index, visited=visited(room.index),
+                                spawn_template=spawn_template, exit_template=exit_template, links=LINKS, flags=ROOM_FLAGS,
+                                say=lambda key: say(key) if key in LINES else None)
+
+
 HINT_ROOM = 'ML_Platform'
 
 
@@ -906,6 +990,46 @@ def entrance_obj(raw, names):
 # a compiled tree this way (tools/room_collision.compile_boxes, TECHNICAL
 # "Room compiler research").
 COLLISION = {}
+# Rooms with their own model (zz_<room>.nsbmd) and texture archive instead of
+# the source room's model and graded textures: {room name: bytes}. Compiled
+# rooms fill all three (tools/room_compiler, TECHNICAL "Room compiler").
+MODELS = {}
+TEXTURES = {}
+
+
+MAP_VISITED_SITE = (0x020E1878, 0xE28750B0)  # add r5, r7, #0xB0: the map's visited flag of a listed room
+
+
+def visited_stub(at):
+    """(code + table bytes, replacement instruction) for the map's visited test.
+
+    r5 = 0xB0 + r7 for rooms below 92, else a byte from the table that follows
+    the code (one flag per room 92..). Called by `bl` from MAP_VISITED_SITE.
+    """
+    high = [visited(r.index) for r in ROOMS if r.index >= VISITED_HIGH_FIRST]
+    code = (0xE3570000 | VISITED_HIGH_FIRST,      # cmp   r7, #92
+            0x328750B0,                           # addlo r5, r7, #0xB0
+            0x312FFF1E,                           # bxlo  lr
+            0xE28F5008,                           # add   r5, pc, #8      (the table)
+            0xE0855007,                           # add   r5, r5, r7
+            0xE5555000 | VISITED_HIGH_FIRST,      # ldrb  r5, [r5, #-92]
+            0xE12FFF1E)                           # bx    lr
+    table = bytes(high) + bytes(-len(high) % 4)
+    offset = (at - (MAP_VISITED_SITE[0] + 8)) >> 2
+    return struct.pack(f'<{len(code)}I', *code) + table, 0xEB000000 | (offset & 0xFFFFFF)
+
+
+def aligned(extras, start):
+    """`extras` with a padding resource before each model or texture archive that would not start on a word."""
+    out, at = {}, start
+    for name, blob in extras.items():
+        if name.endswith(('.nsbmd', '.nsbtx')) and at % 4:
+            pad = bytes(-at % 4)
+            out['zz_ml_alignment.bin' if not out else f'zz_ml_alignment{len(out)}.bin'] = pad
+            at += len(pad)
+        out[name] = blob
+        at += len(blob)
+    return out
 
 
 def room_table(arm9, names, resources, first_string=None, listing=()):
@@ -932,9 +1056,10 @@ def room_table(arm9, names, resources, first_string=None, listing=()):
         struct.pack_into('<4I', raw, 0, labels_at + len(labels), resources[room.name]['texture'],
                          resources[room.name].get('bsp', source.bsp), resources[room.name]['objects'])
         struct.pack_into('<I', raw, 0x20, models_at + len(models))
-        if room.source in MAP_FIELDS:    # the chapter's own map area; the other fields only feed the owned-map view
-            struct.pack_into('<9i', raw, 0x28, MAP_AREA, *MAP_FIELDS[room.source][1:])
-        models += struct.pack('<I', model)
+        fields = MAP_FIELDS.get(room.name) or MAP_FIELDS.get(room.source)
+        if fields:                       # the chapter's own map area; the other fields only feed the owned-map view
+            struct.pack_into('<9i', raw, 0x28, MAP_AREA, *fields[1:])
+        models += struct.pack('<I', resources[room.name].get('model', model))
         labels += room.name.encode('ascii') + b'\0'
         lookup.append(descriptors_at + len(descriptors))
         descriptors += raw
@@ -946,11 +1071,15 @@ def room_table(arm9, names, resources, first_string=None, listing=()):
     if first_string is not None:
         messages_at = ML_BASE + len(data)
         data += message_entries(first_string)
+    data += bytes(-len(data) % 4)
+    stub, call = visited_stub(ML_BASE + len(data))
+    stub_call = (MAP_VISITED_SITE[0], MAP_VISITED_SITE[1], call)
+    data += stub
     if len(data) > ML_SPACE: raise ValueError('Chapter tables exceed reserved space')
-    return data + bytes(ML_SPACE - len(data)), list_at, messages_at
+    return data + bytes(ML_SPACE - len(data)), list_at, messages_at, stub_call
 
 
-def extend_arm9(rom, table, glob_count, *, save_rooms=True, map_area=None, messages=None):
+def extend_arm9(rom, table, glob_count, *, save_rooms=True, map_area=None, messages=None, extra=()):
     """Grow the kit autoload by ML_SPACE, redirect the room lookup, count appended resources.
 
     `map_area` = (room list address, entry count, screen resource, title string)
@@ -976,7 +1105,7 @@ def extend_arm9(rom, table, glob_count, *, save_rooms=True, map_area=None, messa
     new_table = kit.SOURCE + len(image)
     struct.pack_into('<2I', new, kit.TABLE_POINTERS, BASE + new_table, BASE + new_table + 36)
     struct.pack_into('<I', new, kit.ARENA_LOWER, kit.TARGET + len(image))
-    patches = [(BASE + GLOB_COUNT, *glob_count), (LOOKUP_LITERAL, room_catalog.LOOKUP, ML_BASE)]
+    patches = [(BASE + GLOB_COUNT, *glob_count), (LOOKUP_LITERAL, room_catalog.LOOKUP, ML_BASE), *extra]
     if map_area:
         row = AREA_ROWS + 16 * MAP_AREA
         list_at, count, screen, title = map_area
@@ -1015,13 +1144,17 @@ def apply_rom(rom, *, save_rooms=True):
     clean = {e['name']: e['sha256'] for e in manifest['entries']}
     used = {ENTRANCE + '_app.obj', STATE_TEMPLATE + '_app.obj', MAP_SOURCE, BREAKER_SOURCE + '_app.obj',
             YARD['gang']['source'] + '_app.obj', YARD['hub_door']['source'] + '_app.obj'}
+    used.add(SUBSTATION['hub_door']['source'] + '_app.obj')
     for room in ROOMS:
         src = next(r for r in native if r.name == room.source)
         used |= {room.source + '_app.obj', names[src.texture]}
+        if room.name in midnight_rooms.AUTHORED: used |= midnight_rooms.sources(room.name)
     for name in sorted(used):
         if w.sha256(asset(name)) != clean[name]: raise ValueError(f'Chapter source is not the clean native: {name}')
     extras, report, local = {}, {'rooms': {}}, dict(SHARED_FLAGS)
     template = asset(STATE_TEMPLATE + '_app.obj')
+    models, textures, collisions = dict(MODELS), dict(TEXTURES), dict(COLLISION)
+    spawn_template, _ = door_templates(asset)
     for room in ROOMS:
         src = next(r for r in native if r.name == room.source)
         obj, info = build_room(asset(room.source + '_app.obj'), template, room, src.index, room_names, local)
@@ -1035,13 +1168,24 @@ def apply_rom(rom, *, save_rooms=True):
             info['boss'] = {'arena_trigger_units': [v / 4096 for v in BOSS['trigger']], 'size': list(BOSS['trigger_size'])}
         if room.name == YARD['room']:
             obj = stage_yard(obj, asset(BY_NAME[YARD['hub']].source + '_app.obj'), asset(YARD['gang']['source'] + '_app.obj'),
-                             VISITED_BASE + room.index)
+                             visited(room.index))
             info['yard'] = {'gang_table': YARD['gang']['table'], 'spawn_units': [v / 4096 for v in YARD['spawn']['xyz']]}
         if room.name == YARD['hub']:
             obj = add_yard_door(obj, asset(YARD['hub_door']['source'] + '_app.obj'))
             info['yard_door'] = True
+        if room.name == SUBSTATION['hub']:
+            obj = add_substation_door(obj, asset(SUBSTATION['hub_door']['source'] + '_app.obj'), spawn_template)
+            info['substation_door'] = True
+        if room.name in midnight_rooms.AUTHORED:
+            built = midnight_rooms.compiled(room.name, asset)
+            models.setdefault(room.name, built.model)
+            textures.setdefault(room.name, built.textures)
+            collisions.setdefault(room.name, built.collision)
+            obj = stage_authored(obj, room, asset)
+            info['authored'] = {'quads': built.quads, 'textures': built.by_texture, 'model_bytes': len(built.model),
+                                'texture_bytes': len(built.textures), 'collision_bytes': len(built.collision)}
         if room.name == GRATE['room']:
-            opened = VISITED_BASE + BY_NAME[GRATE['opened_by']].index
+            opened = visited(BY_NAME[GRATE['opened_by']].index)
             obj = seal_grate(obj, opened)
             info['grate'] = {'locked_until_flag': opened}
         if room.name == BREAKER['room']:
@@ -1054,7 +1198,8 @@ def apply_rom(rom, *, save_rooms=True):
             obj = close_hatch(obj, HATCHES[room.name])
             info['hatch_closed'] = HATCHES[room.name]['door']
         extras[f'zz_{room.name}_app.obj'] = obj
-        extras[f'zz_{room.name}Textures.nsbtx'] = graded_textures(originals[src.texture], room.grade)
+        extras[f'zz_{room.name}Textures.nsbtx'] = (bytes(textures[room.name]) if room.name in textures
+                                                   else graded_textures(originals[src.texture], room.grade))
         report['rooms'][room.name] = {'index': room.index, 'source': room.source, **info}
     # The objective board needs the completion flag, allocated with the boss room.
     key = f'zz_{OBJECTIVE_ROOM}_app.obj'
@@ -1063,7 +1208,9 @@ def apply_rom(rom, *, save_rooms=True):
     entrance = names.index(ENTRANCE + '_app.obj')
     blobs[entrance] = entrance_obj(asset(ENTRANCE + '_app.obj'), room_names)
     extras[MAP_SCREEN], listing = map_layout(asset(MAP_SOURCE))
-    for name, collision in COLLISION.items():           # last: collision files need no alignment, models and textures do
+    for name, model in models.items():
+        extras[f'zz_{BY_NAME[name].name}.nsbmd'] = bytes(model)
+    for name, collision in collisions.items():          # last: collision files need no alignment, models and textures do
         extras[f'zz_{BY_NAME[name].name}.bsp'] = bytes(collision)
     # Chapter lines: appended string slots (same index in both languages).
     from tools.qol_suits_menu import StringSlots, slot_count
@@ -1077,20 +1224,27 @@ def apply_rom(rom, *, save_rooms=True):
         string_indices.append(index)
     if len(firsts) != 1: raise ValueError('String files differ in slot count')
     first_string, = firsts
-    # Appended models/textures need a word-aligned start; keep the padding in
-    # its own unreferenced resource rather than inside an asset.
-    padding = -len(glob) % 4
-    if padding: extras = {'zz_ml_alignment.bin': bytes(padding), **extras}
+    # Appended models and textures need a word-aligned start (the offset table
+    # and the file list grow by whole words): padding goes into unreferenced
+    # resources of its own, never into an asset. The strings and the map
+    # screen are not word multiples, so the need changes with every new line.
+    extras = aligned(extras, sum(map(len, blobs)))
     out_names, out_blobs = oscorp_resources.append_resources(names, blobs, extras)
     resources = {room.name: {'objects': out_names.index(f'zz_{room.name}_app.obj'),
                              'texture': out_names.index(f'zz_{room.name}Textures.nsbtx'),
-                             **({'bsp': out_names.index(f'zz_{room.name}.bsp')} if room.name in COLLISION else {})}
+                             **({'bsp': out_names.index(f'zz_{room.name}.bsp')} if room.name in collisions else {}),
+                             **({'model': out_names.index(f'zz_{room.name}.nsbmd')} if room.name in models else {})}
                  for room in ROOMS}
+    at = 4 * (len(out_names) + 1)
+    for name, blob in zip(out_names, out_blobs):        # the engine reads models and textures as words
+        if name.startswith('zz_') and name.endswith(('.nsbmd', '.nsbtx')) and at % 4:
+            raise ValueError(f'Appended resource is not word-aligned: {name}')
+        at += len(blob)
     staged = w.rebuild_rom(rom, {'Glob.bin': w.pack_glob(out_names, out_blobs)})
-    table, map_list, messages = room_table(arm9, out_names, resources, first_string, listing)
+    table, map_list, messages, stub_call = room_table(arm9, out_names, resources, first_string, listing)
     result, patches = extend_arm9(staged, table, (len(names), len(out_names)), save_rooms=save_rooms,
                                   map_area=(map_list, len(listing), out_names.index(MAP_SCREEN), first_string + len(LINES)),
-                                  messages=messages)
+                                  messages=messages, extra=(stub_call,))
     check = w.validate_rom(result, target=True)
     fs = next(e for e in check['nitrofs'] if e['name'] == 'Glob.bin')
     out_glob = result[fs['start']:fs['end']]
