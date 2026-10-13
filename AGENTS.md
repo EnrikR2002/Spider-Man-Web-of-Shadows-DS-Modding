@@ -79,14 +79,14 @@ reposition without losing them. Leave native abilities (A web, B jump, base
 strings/evade) untouched; change behavior only by rewriting the 7 Red purchase
 slots, gated on Red form and their ownership bits. v0.2.0 ships first versions of
 Leapfrog, Skyjack, Spider Perch, Split Decision, Spin Cycle, Spider Reflex and
-Spider-Sense (TASM_ROADMAP); iterate them from player feedback. More Red
-skills/web tags later. Defer prices and balance unless the player asks.
+Spider-Sense (TASM_ROADMAP); iterate them from player feedback.
+Defer prices and balance unless the player asks.
 2026-10-05: player confirmed v0.2.1/v0.3.0. Keep the game
 super fast paced: no slow-motion or time-slowing effects (Spider-Sense included).
 2026-10-06: no teleports (felt "teleporty", clipped out of the level, froze the
 game): moves travel visibly; kit code moves Spidey by velocity only.
-2026-10-12: move ideas: web-shooter based (TASM_ROADMAP "Round four");
-new places use TECHNICAL "Room compiler".
+2026-10-13: Overclock, Dragnet, Vortex are the last skills: iterate, add
+none. New rooms: strong enemies, far backdrops (TECHNICAL "Room compiler").
 
 New moves need new, fluid, acrobatic animations (not repackaged native clips).
 The player rejected earlier per-key-eased clips as looking like dancing; follow

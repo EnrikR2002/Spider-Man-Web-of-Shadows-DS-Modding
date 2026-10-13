@@ -56,12 +56,16 @@ class Quad:
 
 @dataclass(frozen=True)
 class Panel:
-    """Back wall look for a rectangle of the plan (later panels paint over earlier ones)."""
+    """Back wall look for a rectangle of the plan (later panels paint over earlier ones).
+
+    `look` None leaves the back wall open there: scenery placed behind it (a
+    far skyline) shows through.
+    """
     x0: float
     y0: float
     x1: float
     y1: float
-    look: Look
+    look: Look | None
     shade: float = 0.7
     anchor: tuple | None = None      # world point where the texture's top-left corner sits (default: world origin)
     mirror: bool = False             # flip the texture left to right (hides the seam between repeats of a picture)
@@ -128,6 +132,30 @@ def box(x0, y0, z0, x1, y1, z1, look, shade=1.0, faces='front top left right'):
     return out
 
 
+def backdrop(look, x0, x1, y0, y1, z=-170.0, tile=90.0, shade=1.0, mirror=True, sky=0.0, ground=0.0):
+    """Scenery: a picture repeated along a far wall (native skylines stand at z -171, about 90 units a
+    tile, so they drift slowly behind the room instead of hanging on its back wall). Every second
+    tile is mirrored so the seams match. Above it the picture's top fifth (sky only) goes on for
+    `sky` units, folded back and forth so it has no seam, and below it its bottom row for `ground`
+    units: a high jump or a high platform does not show where the picture ends."""
+    out, x, n = [], x0, 0
+    while x < x1 - 1e-6:
+        a, b = (1.0, 0.0) if mirror and n % 2 else (0.0, 1.0)
+        out.append(Quad(look, ((x, y1, z), (x, y0, z), (x + tile, y0, z), (x + tile, y1, z)),
+                        ((a, 0.0), (a, 1.0), (b, 1.0), (b, 0.0)), shade))
+        band, y, fold = (y1 - y0) / 5, y1, True
+        while y < y1 + sky - 1e-6:
+            v0, v1 = (0.2, 0.0) if fold else (0.0, 0.2)        # texture v at the strip's top and bottom
+            out.append(Quad(look, ((x, y + band, z), (x, y, z), (x + tile, y, z), (x + tile, y + band, z)),
+                            ((a, v0), (a, v1), (b, v1), (b, v0)), shade))
+            y += band; fold = not fold
+        if ground:
+            out.append(Quad(look, ((x, y0, z), (x, y0 - ground, z), (x + tile, y0 - ground, z), (x + tile, y0, z)),
+                            ((a, 0.97), (a, 0.99), (b, 0.99), (b, 0.97)), shade))
+        x += tile; n += 1
+    return out
+
+
 def _cuts(lo, hi, step):
     """lo..hi split at multiples of `step` kept under the texture coordinate limit."""
     n = max(1, math.ceil((hi - lo) / step - 1e-9))
@@ -141,7 +169,11 @@ def _plan_faces(room):
     solid the face is on): a = x, b = (y0, y1); 'front'/'back': a = rectangle
     (x0, y0, x1, y1) at z1. A solid with `depth` below DEPTH stands free: its
     faces stop at that z, its front face sits there, and the surface it
-    stands on is drawn on in front of it (kind 'apron', not walkable).
+    stands on is drawn on in front of it (kind 'apron', not walkable). Where
+    it touches a deeper solid sideways or from below, that solid's side or
+    underside is drawn on in front of it too (kinds 'left_fill',
+    'right_fill', 'under_fill'): without them the gap showed the black
+    behind the room (v0.12.0 catwalk ends and doorway corners).
     """
     bx0, by0, bx1, by1 = room.bounds
     m = room.margin
@@ -190,6 +222,28 @@ def _plan_faces(room):
                     out.append((look_of(run[0], 'side'), kind, xs[i], (run[1], ys[j]), -DEPTH, depth(run[0]), shades['side'], None))
                     run = None
                 if n is not None and not run: run = (n, ys[j])
+    # Fills: two solids of different depth side by side or stacked. The deeper one's face goes on in front of the other.
+    def visible(n): return n is not None and not solids[n].hidden
+    for i in range(1, nx):
+        run = None
+        for j in range(ny + 1):
+            a, b = (grid[i - 1][j], grid[i][j]) if j < ny else (None, None)
+            key = (a, b) if visible(a) and visible(b) and a != b and depth(a) != depth(b) else None
+            if run and key != run[0]:
+                a0, b0 = run[0]
+                deep, kind = (a0, 'right_fill') if depth(a0) > depth(b0) else (b0, 'left_fill')
+                out.append((look_of(deep, 'side'), kind, xs[i], (run[1], ys[j]), min(depth(a0), depth(b0)), depth(deep), shades['side'], None))
+                run = None
+            if key and not run: run = (key, ys[j])
+    for j in range(1, ny):
+        run = None
+        for i in range(nx + 1):
+            lower, upper = (grid[i][j - 1], grid[i][j]) if i < nx else (None, None)
+            key = (lower, upper) if visible(lower) and visible(upper) and lower != upper and depth(upper) > depth(lower) else None
+            if run and key != run[0]:
+                out.append((look_of(run[0][1], 'under'), 'under_fill', (run[1], xs[i]), ys[j], depth(run[0][0]), depth(run[0][1]), shades['under'], None))
+                run = None
+            if key and not run: run = (key, xs[i])
     # Faces toward the camera and the back wall: one rectangle per row run of one solid or one panel.
     def panel_of(i, j):
         cx, cy = (xs[i] + xs[i + 1]) / 2, (ys[j] + ys[j + 1]) / 2
@@ -211,7 +265,8 @@ def _plan_faces(room):
                     else: out.append((look_of(n, 'front'), 'front', rect, None, None, DEPTH, shades['front'], None))
                 elif run[0] != 'hidden':
                     panel = None if run[0][1] is None else room.panels[run[0][1]]
-                    if panel: out.append((panel.look, 'back', rect, None, None, -DEPTH, panel.shade, panel))
+                    if panel and panel.look is None: pass
+                    elif panel: out.append((panel.look, 'back', rect, None, None, -DEPTH, panel.shade, panel))
                     elif room.theme.get('back'): out.append((room.theme['back'], 'back', rect, None, None, -DEPTH, room.back_shade, None))
                 run = None
             if key != 'end' and not run: run = (key, xs[i])
@@ -271,20 +326,20 @@ def _emit(room, sizes):
         w, h = sizes[look.texture]
         su, sv = look.size
         step_u, step_v = su * MAX_TEXELS / w, sv * MAX_TEXELS / h
-        if kind in ('top', 'under', 'apron'):
-            y = b
+        if kind in ('top', 'under', 'apron', 'under_fill'):
+            y, under = b, kind.startswith('under')
             for x0, x1 in zip(_cuts(*a, step_u), _cuts(*a, step_u)[1:]):
                 corners = ((x0, y, z0), (x0, y, z1), (x1, y, z1), (x1, y, z0))
                 texels = [(p[0] / su * w, (p[2] + D) / sv * h) for p in corners]
-                if kind == 'under': corners, texels = corners[::-1], texels[::-1]
-                add(look, corners, texels, shade, (1, -1 if kind == 'under' else 1))
-        elif kind in ('left', 'right'):
-            x = a
+                if under: corners, texels = corners[::-1], texels[::-1]
+                add(look, corners, texels, shade, (1, -1 if under else 1))
+        elif kind in ('left', 'right', 'left_fill', 'right_fill'):
+            x, right = a, kind.startswith('right')
             for y0, y1 in zip(_cuts(*b, step_v), _cuts(*b, step_v)[1:]):
                 corners = ((x, y1, z0), (x, y0, z0), (x, y0, z1), (x, y1, z1))      # faces -x (the solid is on the right)
                 texels = [((p[2] + D) / su * w, -p[1] / sv * h) for p in corners]
-                if kind == 'right': corners, texels = corners[::-1], texels[::-1]  # solid on the left: faces +x
-                add(look, corners, texels, shade, (0, 1 if kind == 'right' else -1))
+                if right: corners, texels = corners[::-1], texels[::-1]            # solid on the left: faces +x
+                add(look, corners, texels, shade, (0, 1 if right else -1))
         else:
             ox, oy = (anchor.anchor if anchor else None) or (0.0, 0.0)
             flip = -1 if anchor and anchor.mirror else 1

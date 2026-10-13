@@ -101,6 +101,12 @@
       "previous_rom_sha256": "4f387a21821cf071c08a797d0daa997814b50b335c9da4e6e088c24610163ca5",
       "rom_sha256": "0ede04222aa250e97c4348551ae61fdc5c4b586072088768bef8c8d7692dc812",
       "version": "0.12.0"
+    },
+    {
+      "date": "2026-10-13",
+      "previous_rom_sha256": "0ede04222aa250e97c4348551ae61fdc5c4b586072088768bef8c8d7692dc812",
+      "rom_sha256": "75faa3ff7759f29212b6c92c6d9d0859298a23c13d228df73c798adef032cb9d",
+      "version": "0.13.0"
     }
   ],
   "schema_version": 1

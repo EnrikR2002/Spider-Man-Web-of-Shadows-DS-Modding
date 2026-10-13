@@ -20,7 +20,7 @@ and work/kit/ (previews, sheets, qualification evidence).
       Sewer room left of the story save with live symbiotes; Spidey is teleported
       (motion position and probes) onto the floor. Spawns vary between runs; --place
       moves the nearest enemies to fixed offsets (units) from Spidey.
-  qualify ROM          kit checks (31) incl. native/Black parity vs the
+  qualify ROM          kit checks (63) incl. native/Black parity vs the
                        stable parent; writes work/kit/evidence.json.
   preview CLIP [marks] stick-figure sheet of a tools/kit_clips.py clip.
   sheet DIR [x0,y0,x1,y1 scale cols]  contact sheet of captured frames.
@@ -99,9 +99,11 @@ def observe_row(ram, frame, start, probe=None):
                     'cancel': ram[actor + 0x28], 'repeats': struct.unpack_from('<b', ram, ca + 0x93)[0],
                     'target': struct.unpack_from('<I', ram, ca + 0x54)[0]})
     k2 = KIT2_STATE - p.BASE
-    row['k2'] = {'rush': struct.unpack_from('<I', ram, k2)[0], 'dash': struct.unpack_from('<I', ram, k2 + 0x1C)[0],
-                 'rico': struct.unpack_from('<I', ram, k2 + 0x50)[0], 'rate': struct.unpack_from('<I', ram, k2 + 0x58)[0],
-                 'doubled': struct.unpack_from('<I', ram, k2 + 0x60)[0]}
+    def word(offset): return struct.unpack_from('<I', ram, k2 + offset)[0]
+    # v0.13.0: oc = Overclock shots, web = Vortex step (4 = Dragnet heave), hits = Vortex area hits (both
+    # count + 256 * native results), drag = Dragnet phase, webbed = enemies webbed by the last burst
+    row['k2'] = {'rush': word(0), 'dash': word(0x1C), 'rico': word(0x50), 'rate': word(0x58), 'doubled': word(0x60),
+                 'oc': word(0x74), 'web': word(0x7C), 'hits': word(0x90), 'drag': word(0xC0), 'webbed': word(0xC4)}
     if probe:
         address, length = probe
         row['probe'] = list(struct.unpack_from(f'<{length // 4}i', ram, address - p.BASE))
@@ -168,8 +170,8 @@ def teleport(ptr, ram, mot, x, y):
 
 
 def set_bits(lib, bits, clear, bits2=0):
-    """OR Red ability bits in (word 0; bits2 = word 2, the v0.10.0 shop rows: 0x400 Web Rush,
-    0x800 Ricochet, 0x1000 Momentum)."""
+    """OR Red ability bits in (word 0; bits2 = word 2, the shop rows: 0x400 Web Rush, 0x800 Ricochet,
+    0x1000 Momentum, 0x2000..0x8000 Vitality I..III, 0x10000 Overclock, 0x20000 Dragnet, 0x40000 Vortex)."""
     ptr, ram = ram_of(lib)
     stats = struct.unpack_from('<I', ram, STATS_POINTER - p.BASE)[0] - p.BASE
     old = struct.unpack_from('<I', ram, stats + 0xC)[0]
@@ -514,6 +516,62 @@ def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a3
     count = o[-1]['k2']['rico'] & 0xFF
     ck['ricochet_floors_a_real_bystander'] = count >= 1 and o[-1]['k2']['rico'] >> 8 == 4 * count and floored(o) >= 3
     ck['ricochet_unowned_crowd_is_native'] = floored(go('q_ricochet_crowd_off', 'string4', 220, **kw)) <= 2
+    # v0.13.0 shop rows (ability word 2): Overclock 0x10000, Dragnet 0x20000, Vortex 0x40000.
+    # Dragnet: four sparring Brutes in a line, held idle until the web is out. A kept held: the three
+    # behind the grappled one are webbed (state 46); Y yanks all four to within 14 units of Spidey, who
+    # plays the heave (action 49 in the ground string state); three more Y are the Vortex steps.
+    crowd = {'sparring': True, 'start_x': 100 * 4096, 'place': tuple((d * 4096, 246) for d in (21, 30, 38, 46)),
+             'enemy_state': (-20, 48, 0)}
+    def near(row, reach=14 * 4096):
+        return sum(1 for e in row['en'] if abs(e[1][0] - row['pos'][0]) < reach)
+    o = go('q_dragnet', 'dragnet', 260, bits2=0x60000, **crowd)
+    held = first(o, lambda r: r['k2']['drag'] == 1 and r['f'] >= 90)
+    ck['dragnet_webs_the_enemies_in_front'] = bool(held and held['k2']['webbed'] >= 2
+                                                   and sum(1 for e in held['en'] if e[2] == 46) >= 3)
+    heave = [r for r in o if r['st'] == 46 and r['act'] == 49]
+    ck['dragnet_yank_plays_the_heave'] = sum(1 for r in heave if r['k2']['web'] == 4) >= 8
+    landed = first(o, lambda r: r['f'] > 130 and near(r) >= 3)
+    ck['dragnet_yank_brings_them_to_spidey'] = bool(landed and landed['f'] <= 160)
+    steps = [next((r['act'] for r in reversed(o) if r['k2']['web'] == n and r['st'] == 46), None) for n in (1, 2, 3)]
+    ck['dragnet_yank_continues_into_vortex'] = steps == [57, 56, 59]
+    ck['dragnet_lines_let_go'] = o[-1]['k2']['drag'] == 0
+    # A again lets go (native): the lines are dropped, the enemies stay webbed, the game goes on
+    # (v0.13.0 candidate: this path hung on a mis-assembled call; the crash hunt found it).
+    o = go('q_dragnet_release', 'dragnetrelease', 220, bits2=0x60000, **crowd)
+    late = [r for r in o if r['f'] >= 150]
+    ck['dragnet_release_drops_the_lines_and_leaves_them_webbed'] = bool(
+        o[-1]['f'] >= 215 and max(r['k2']['webbed'] for r in o) >= 2 and late and all(r['k2']['drag'] == 0 for r in late)
+        and sum(1 for e in late[0]['en'] if e[2] == 46) >= 3 and any(r['st'] == 46 for r in late))
+    o = go('q_dragnet_off', 'dragnet', 200, bits2=0x40000, **crowd)
+    ck['dragnet_unowned_is_native'] = (max(r['k2']['webbed'] for r in o) == 0 and bool(first(o, lambda r: r['st'] == 42))
+                                       and not any(r['st'] == 46 and r['act'] == 49 for r in o))
+    # Vortex from a pause after the second hit: whip (57), double lash (56), slam (59); unowned the same
+    # inputs give the native third hit (58).
+    def after_pause(o): return [r['act'] for r in o if r['st'] == 46 and r['f'] >= 72]
+    o = go('q_vortex', 'vortex', 220, near=5 * 4096, bits2=0x40000)
+    acts = after_pause(o)
+    ck['vortex_pause_plays_its_three_steps'] = (58 not in acts and all(a in acts for a in (57, 56, 59))
+                                                and max(r['k2']['web'] for r in o) == 3 and o[-1]['k2']['web'] == 0)
+    ck['vortex_hits_and_floors_the_enemy'] = o[-1]['en'][0][0] <= 65536 - 6 * 3072 and any(r['en'][0][2] in (41, 48) for r in o)
+    ck['vortex_unowned_is_native'] = 58 in after_pause(go('q_vortex_off', 'vortex', 160, near=5 * 4096))
+    # A resumed string (R during hit 2, then Y) is not a pause: the native third hit plays.
+    o = go('q_vortex_resume', 'reflexres', 160, bits2=0x40000)
+    ck['vortex_leaves_a_reflex_resume'] = bool(first(o, lambda r: 67 < r['f'] < 110 and r['st'] == 46 and r['node'] == 13
+                                                     and r['act'] == 58)) and max(r['k2']['web'] for r in o) == 0
+    # Area hits: Brutes 9 and 12 units away are outside the native reach of the lash and inside the web's.
+    wide = {'sparring': True, 'start_x': 100 * 4096, 'place': tuple((d * 4096, 246) for d in (5, 9, 12, 40)),
+            'enemy_state': (-20, 200, 0)}
+    o = go('q_vortex_area', 'vortex', 200, bits2=0x40000, **wide)
+    count = o[-1]['k2']['hits'] & 0xFF
+    ck['vortex_reaches_enemies_around'] = count >= 2 and o[-1]['k2']['hits'] >> 8 == 4 * count
+    # Overclock: at tier 5 a hit on the near Brute also shoots a second one (taken hits only).
+    shots = {'sparring': True, 'start_x': 100 * 4096, 'place': tuple((d * 4096, 246) for d in (5, 21, 30, 38)),
+             'enemy_state': (-20, 150, 0)}
+    o = go('q_overclock', 'string4', 160, bits2=0x10000, tier=5, **shots)
+    count = o[-1]['k2']['oc'] & 0xFF
+    ck['overclock_shoots_a_second_enemy'] = count >= 3 and o[-1]['k2']['oc'] >> 8 == 4 * count
+    ck['overclock_needs_tier_5'] = go('q_overclock_4', 'string4', 160, bits2=0x10000, tier=4, **shots)[-1]['k2']['oc'] == 0
+    ck['overclock_unowned_is_native'] = go('q_overclock_off', 'string4', 160, tier=5, **shots)[-1]['k2']['oc'] == 0
     for label, name, frames, kw in (('q_gate', 'gate', 260, {'bits': 0, 'clear': 0xFE000}),
                                     ('q_snare_off', 'snare', 200, {'bits': 0, 'clear': 0xFE000}),
                                     ('q_black', 'black', 300, {})):
@@ -688,7 +746,8 @@ def main(argv=None):
         s.add_argument('--phantom', type=float, default=None, help='training: fake second enemy DX units from the dummy')
         s.add_argument('--at', type=float, default=None, help='training: start at this absolute x (units); walls ~3.5/236.5')
         s.add_argument('--sparring', action='store_true', help='training: keep the v0.5.0 sparring Brutes and native HP')
-        s.add_argument('--bits2', default='0', help='ability word 2: 0x400 Web Rush, 0x800 Ricochet, 0x1000 Momentum')
+        s.add_argument('--bits2', default='0', help='ability word 2: 0x400 Web Rush, 0x800 Ricochet, 0x1000 Momentum, '
+                                                    '0x10000 Overclock, 0x20000 Dragnet, 0x40000 Vortex')
         s.add_argument('--tier', type=int, default=None, help='hold the combo meter tier (0..5)')
     s = sub.add_parser('_child'); s.add_argument('request')
     s = sub.add_parser('qualify'); s.add_argument('rom'); s.add_argument('--parent', default=None)

@@ -303,6 +303,10 @@ class MidnightChapterTests(unittest.TestCase):
             pair = tuple(dial[2 * (room.index - ch.FIRST):2 * (room.index - ch.FIRST) + 2])
             self.assertEqual(pair, ch.STRENGTH.get(room.name, (0, 0)), room.name)
         self.assertNotIn(ch.BOSS['room'], ch.STRENGTH)
+        # v0.13.0: the Substation's early-story crews are stronger than native, more so room by room.
+        crews = [ch.STRENGTH[name] for name in ('ML_Yard', 'ML_Switchyard', 'ML_RelayHall', 'ML_Roof')]
+        self.assertEqual(crews, sorted(crews))
+        self.assertTrue(all(health >= 128 and 64 < damage < 128 for health, damage in crews))
 
     def test_breaker_cuts_the_platform_flag_and_appends_only(self):
         from tools import room_script as s

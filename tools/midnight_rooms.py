@@ -29,6 +29,9 @@ WAVE_GUARDS = (0x12A, 0x12B, 0x12C)         # per-room scratch bytes: wave 2 sta
 WAVE_TIMEOUT = 5400                         # frames (90 s) after which the next wave starts even if nobody reported the last one beaten
 SPAWNER_TYPE, OBJECT_TYPE = 4, 14
 NO_CLING = 1                                # collision surface value: a wall or ceiling Spidey cannot hold on to
+# Face shades of the authored rooms: ceilings and the faces turned to the camera are lit more than the
+# compiler's defaults (0.5 and 0.3), which left doorway ceilings and overhead blocks pitch black (player, 2026-10-13).
+LIT = {'top': 1.0, 'side': 0.78, 'under': 0.72, 'front': 0.34, 'body': 0.66}
 HAZARD = ('proto01', 'Object (Hazard_Electric)')   # native electric arc object (a point; hurts on contact)
 SOUND = 0x22
 SWITCH_SOUND = 0xBC                         # native switch-throw sound (the breaker uses it)
@@ -146,11 +149,12 @@ def switchyard(blob):
     plate, beam = Look('Grate', (16, 16), dusk), Look('Pbeam01', (12, 3))
     cut = Look('wcutaway01', (8, 8))
     door = Look('gdoor01', (16, 14))
+    soffit = Look('Fconcrete02', (20, 20), (26, 25, 28))               # doorway ceilings (the cutaway texture read as a black hole)
     theme = {'top': asphalt, 'side': facade, 'under': beam, 'front': cut, 'back': fence}
     solids = (
-        Solid(-10, 16, 0, 84, side=facade, under=cut, front=brick),    # building over the left doorway
-        Solid(240, 16, 250, 84, side=facade, under=cut, front=brick),  # building over the right doorway
-        Solid(22, 0, 58, 10, top=dock, side=stripe),                   # loading dock (clear of the left doorway)
+        Solid(-10, 16, 0, 84, side=facade, under=soffit, front=brick),    # building over the left doorway
+        Solid(240, 16, 250, 84, side=facade, under=soffit, front=brick),  # building over the right doorway
+        Solid(22, 0, 58, 10, top=dock, side=dock),                     # loading dock (clear of the left doorway)
         Solid(92, 0, 132, 14, top=container, side=container, depth=14),           # container
         Solid(100, 14, 124, 27, top=container2, side=container2, depth=8),         # second container on top
         Solid(172, 0, 196, 20, top=vent, side=metal, depth=10),                    # transformer
@@ -158,10 +162,14 @@ def switchyard(blob):
         Solid(0, 30, 18, 33, top=plate, side=beam, under=beam, front=beam),            # fire escape, left
         Solid(214, 34, 240, 37, top=plate, side=beam, under=beam, front=beam),         # fire escape, right
     )
-    sky = [Panel(22 + 64 * i, 20, 86 + 64 * i, 84, Look(f'skyline0{i + 1}', (64, 64)), 1.0, anchor=(22 + 64 * i, 84)) for i in range(3)]
-    panels = (Panel(-10, 20, 22, 84, brick, 0.6), Panel(214, 20, 250, 84, brick, 0.6), *sky)
+    # Above the fence the back wall is open: the skyline stands far behind the yard (as in the native
+    # Pier), so it drifts as Spidey moves. On the back wall itself it read as a painting (player, 2026-10-13).
+    panels = (Panel(-10, 20, 22, 84, brick, 0.6), Panel(214, 20, 250, 84, brick, 0.6), Panel(22, 20, 214, 200, None))
     pylon = Look('Pbeam01', (4, 16), (16, 16, 20))
     scenery = []
+    for i in range(6):                                                # the three Pier skyline pictures, twice (the model is at most 511 wide)
+        scenery += rcm.backdrop(Look(f'skyline0{i % 3 + 1}', tint=(27, 27, 31)), -96 + 72 * i, -24 + 72 * i, 6, 102, tile=72, mirror=False, sky=48, ground=70)
+    scenery += rcm.box(22, 9, 25, 58, 10, 25.2, stripe, 1.0, 'front')    # warning stripe along the dock's edge
     for x in (70, 166):                                               # pylons behind the yard, in front of the fence
         scenery += rcm.box(x - 2, 0, -23, x + 2, 76, -19, pylon, 0.9, 'front left right')
         scenery += rcm.box(x - 14, 60, -23, x + 14, 62, -19, pylon, 0.9, 'front top under')
@@ -171,7 +179,7 @@ def switchyard(blob):
         scenery.append(rcm.Quad(wire, ((x0, y + 0.3, -21), (x0, y, -21), (x1, y, -21), (x1, y + 0.3, -21))))
     scenery += [_shutter(door, -9.9, 0, True), _shutter(door, 249.9, 0, False)]
     return Room('ML_Switchyard', (-10, 0, 250, 84), theme, solids, panels, tuple(scenery), textures, palettes,
-                hidden_shell=('above',), margin=30.0)
+                hidden_shell=('above',), margin=30.0, shades=LIT)
 
 
 # --- The Substation 2: Relay Hall -----------------------------------------------
@@ -204,9 +212,9 @@ def relay_hall(blob):
     walk = dict(top=plate, side=stripe, under=steel, front=stripe, depth=14)
     top, door_floor = RELAY_HEIGHT, RELAY_TOP[3]
     solids = (
-        Solid(110, 16, 120, top, NO_CLING, side=steel, under=cut, front=steel),               # wall over the lower right doorway
-        Solid(-10, 0, 0, door_floor, NO_CLING, top=tiles, side=steel, front=steel),           # wall under the upper left doorway
-        Solid(-10, door_floor + 16, 0, top, NO_CLING, side=steel, under=cut, front=steel),    # and over it
+        Solid(110, 16, 120, top, NO_CLING, side=steel, under=steel, front=cut),               # wall over the lower right doorway
+        Solid(-10, 0, 0, door_floor, NO_CLING, top=tiles, side=steel, front=cut),             # wall under the upper left doorway
+        Solid(-10, door_floor + 16, 0, top, NO_CLING, side=steel, under=steel, front=cut),    # and over it
         *(Solid(*box, **walk) for box in RELAY_CATWALKS),
         Solid(*RELAY_TOP, **walk),
     )
@@ -223,7 +231,7 @@ def relay_hall(blob):
         scenery += rcm.box(x, 0, -25, x + 4, top, -21, look, 0.9, 'front left right')
     scenery += [_shutter(door, 119.9, 0, False), _shutter(door, -9.9, door_floor, True)]
     return Room('ML_RelayHall', (-10, 0, 120, top), theme, solids, tuple(panels), tuple(scenery), textures, palettes,
-                shell_surface=NO_CLING, margin=24.0)
+                shell_surface=NO_CLING, margin=24.0, shades=LIT)
 
 
 def _rail(box):
@@ -256,23 +264,24 @@ def control_roof(blob):
     metal, vent = Look('Metal2', (20, 12), night), Look('vent01', (10, 10), night)
     stripe, parapet = Look('WarningStrip', (8, 4)), Look('Stucco', (32, 10), (14, 16, 22))
     cut, door, beam = Look('wcutaway01', (8, 8)), Look('gdoor01', (16, 14)), Look('Pbeam01', (4, 16), (14, 14, 20))
-    theme = {'top': roof, 'side': tower, 'under': cut, 'front': cut, 'back': parapet}
+    soffit = Look('Stucco', (24, 24), (22, 23, 27))                    # the passage ceiling (the cutaway texture read as a black hole)
+    theme = {'top': roof, 'side': tower, 'under': soffit, 'front': cut, 'back': parapet}
     solids = (
-        Solid(180, 16, 214, 90, side=brick, under=cut, front=brick),   # stairwell hut: a covered passage to the door
+        Solid(180, 16, 214, 90, side=brick, under=soffit, front=brick),   # stairwell hut: a covered passage to the door
         Solid(70, 0, 110, 3, top=pad, side=stripe),                    # low pad in the middle
         Solid(30, 0, 48, 12, top=vent, side=metal, depth=10),          # vent block, left
         Solid(132, 0, 150, 12, top=vent, side=metal, depth=10),        # vent block, right
     )
-    sky = Look('skyline04', (64, 64))
-    panels = [Panel(-64 + 64 * i, 10, 64 * i, 74, sky, 1.0, anchor=(-64 + 64 * i, 74), mirror=bool(i % 2)) for i in range(5)]
-    scenery = []
+    # Above the parapet the back wall is open and the city stands far behind and below the roof.
+    panels = [Panel(-40, 10, 180, 200, None)]
+    scenery = rcm.backdrop(Look('skyline04', tint=(28, 29, 31)), -95, 305, 8, 104, tile=80, sky=48, ground=70)
     for x in (60, 120):                                               # antenna masts on the parapet
         scenery += rcm.box(x - 1, 10, -24, x + 1, 64, -22, beam, 0.9, 'front left right')
         scenery += rcm.box(x - 7, 50, -24, x + 7, 51.5, -22, beam, 0.9, 'front top under')
     scenery += rcm.box(8, 10, -25, 24, 30, -17, metal, 0.8, 'front top left right')     # water tank
     scenery.append(_shutter(door, 213.9, 0, False))
     return Room('ML_Roof', (0, 0, 214, 90), theme, solids, tuple(panels), tuple(scenery), textures, palettes,
-                hidden_shell=('above',), margin=30.0, sky=80)
+                hidden_shell=('above',), margin=30.0, sky=80, shades=LIT)
 
 
 AUTHORED = {

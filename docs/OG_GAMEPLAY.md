@@ -27,6 +27,12 @@ movement and form-specific barrier interactions protect progression.
 | Web Pull | Away from facing direction during grapple | Pull enemy into other enemies |
 | Web Zip | A + direction in air | Reach surface |
 
+Web Grapple details (lab 2026-10-13): the hold lasts as long as nothing is
+pressed; A again lets go and the enemy stays wrapped in the web for a long
+time; Web Kick only fires when the target is more than about 13 units away
+(closer, Y starts a plain string). The web line is an actor of its own and
+the cocoon is a hit reaction, as are the pull, the yank and the launch.
+
 ### Black foundation
 
 | Tool | Input | Native role |

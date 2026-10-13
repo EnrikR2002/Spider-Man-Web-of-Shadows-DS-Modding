@@ -96,6 +96,43 @@ class RoomCompilerTests(unittest.TestCase):
         self.assertGreater(plain[2][3] - plain[1][3], 0)               # texture runs left to right
         self.assertLess(flipped[2][3] - flipped[1][3], 0)              # and right to left when mirrored
 
+    def test_fills_close_the_gap_beside_a_free_standing_solid(self):
+        # A catwalk that stops at z 14 between a full-depth wall (left) and the room's own wall (right):
+        # both walls go on in front of it, and so does a deeper block's underside above a shallow one.
+        solids = (Solid(0, 0, 10, 30), Solid(10, 12, 80, 16, top=self.crate, side=self.crate, depth=14),
+                  Solid(30, 16, 50, 30), Solid(30, 8, 50, 12, depth=5))
+        room = Room('Test', (0, 0, 80, 30), self.theme, solids, textures=self.textures, palettes=self.palettes)
+        kinds = {}
+        for face in rcm._plan_faces(room): kinds.setdefault(face[1], []).append(face)
+        right = [f for f in kinds['right_fill'] if f[2] == 10]
+        self.assertEqual([(f[3], f[4], f[5]) for f in right], [((12, 16), 14, rcm.DEPTH)])
+        left = [f for f in kinds['left_fill'] if f[2] == 80]
+        self.assertEqual([(f[3], f[4], f[5]) for f in left], [((12, 16), 14, rcm.DEPTH)])
+        under = kinds['under_fill']
+        self.assertIn(((30, 50), 16, 14, rcm.DEPTH), [(f[2], f[3], f[4], f[5]) for f in under])
+        self.assertEqual({f[1] for f in rcm._plan_faces(self.room()) if f[1].endswith('_fill')}, set())   # nothing to fill
+        self.assertFalse(any(kind.endswith('fill') for kind, *_ in rcm.surfaces(room)))             # not walls for anchors
+        rcm.compile_room(room)                                           # windings are checked while emitting
+
+    def test_open_panels_and_backdrops(self):
+        # A panel without a look leaves the back wall open; a backdrop is a row of far quads, every second
+        # one mirrored, with the picture's sky folded on above and its bottom row stretched below.
+        room = self.room(panels=(Panel(10, 10, 50, 100, None),))
+        back = [f for f in rcm._plan_faces(room) if f[1] == 'back']
+        self.assertFalse(any(f[2][0] < 30 < f[2][2] and f[2][1] < 20 < f[2][3] for f in back))
+        self.assertTrue(any(f[2][0] < 5 < f[2][2] and f[2][1] < 20 < f[2][3] for f in back))
+        quads = rcm.backdrop(self.crate, -40, 120, 0, 100, tile=80, sky=40, ground=30)
+        tiles = [q for q in quads if q.corners[0][1] == 100 and q.corners[1][1] == 0]
+        self.assertEqual([q.corners[0][0] for q in tiles], [-40, 40])
+        self.assertEqual({q.corners[0][2] for q in quads}, {-170.0})
+        self.assertEqual([q.repeats[0][0] for q in tiles], [0.0, 1.0])              # the second tile is mirrored
+        sky = sorted((q.corners[1][1], q.corners[0][1], q.repeats[1][1], q.repeats[0][1]) for q in quads if q.corners[1][1] >= 100 and q.corners[0][0] == -40)
+        self.assertEqual(sky, [(100, 120, 0.0, 0.2), (120, 140, 0.2, 0.0)])         # bottom v, top v: folded, no seam
+        ground = [q for q in quads if q.corners[0][1] == 0 and q.corners[1][1] == -30]
+        self.assertEqual(len(ground), 2)
+        for q in quads: self.assertGreater(rcm._normal(q.corners)[2], 0)            # they face the camera
+        rcm.compile_room(self.room(scenery=tuple(quads), panels=(Panel(10, 10, 50, 100, None),)))
+
     def test_surfaces_and_anchor_points(self):
         room = self.room()
         surfaces = rcm.surfaces(room)

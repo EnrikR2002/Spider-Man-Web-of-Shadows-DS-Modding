@@ -148,7 +148,8 @@ reflex_ok_out:
 h_string_node:
   push {r0,r1,r2,r3,lr}
   mov r0,r7
-  bl 0x02155428             // KIT2: r0 = Web Rush action (node restored) or 0
+  ldr r1,[r6]               // the state he came from (46 = no pause)
+  bl 0x02155428             // KIT2: r0 = Web Rush or Vortex action (node set) or 0
   cmp r0,#0
   bne string_rush
   mov r0,r7
@@ -875,27 +876,6 @@ alive_no:
   mov r0,#0
   pop {r1,r2,pc}
 
-// ---------------------------------------------------------------- literals
-// One labelled table mid-code (ARM literal loads reach 4 KiB either way).
-// Do not use 'ldr rX,=value' or a mid-file .ltorg: Keystone wraps far
-// literals and shifts later absolute branches (TECHNICAL, research pitfalls).
-lit_02049304: .word 0x02049304
-lit_0207862c: .word 0x0207862C
-lit_0211bb74: .word 0x0211BB74
-lit_027e0000: .word 0x027E0000
-lit_02120000: .word 0x02120000
-lit_0212e3f0: .word 0x0212E3F0
-lit_0213df00: .word 0x0213DF00
-lit_02154b20: .word 0x02154B20
-lit_02154c20: .word 0x02154C20
-lit_7fffffff: .word 0x7FFFFFFF
-lit_ffff7000: .word 0xFFFF7000
-lit_ffffa000: .word 0xFFFFA000
-lit_ffffd800: .word 0xFFFFD800
-lit_ffffe000: .word 0xFFFFE000
-lit_ffffec00: .word 0xFFFFEC00
-lit_fffff000: .word 0xFFFFF000
-
 // ---------------------------------------------------------------- Leapfrog
 // Bit 13 (Web Kick slot): the native pull and kick connect (damage, low pop);
 // after the hit-stop Spidey front-flips over the target in six updates (kick
@@ -1063,12 +1043,37 @@ leap_clamp:                 // r0 = clamp(r0, +-6 units)
   ldrlt r0,lit_ffffa000
   bx lr
 
+// ---------------------------------------------------------------- literals
+// One labelled table mid-code (ARM literal loads reach 4 KiB either way). It sits
+// after Leapfrog since v0.13.0: the staged crowd-hit candidates add code and the
+// last loads were 49 bytes out of reach of a table before it.
+// Do not use 'ldr rX,=value' or a mid-file .ltorg: Keystone wraps far
+// literals and shifts later absolute branches (TECHNICAL, research pitfalls).
+lit_02049304: .word 0x02049304
+lit_0207862c: .word 0x0207862C
+lit_0211bb74: .word 0x0211BB74
+lit_027e0000: .word 0x027E0000
+lit_02120000: .word 0x02120000
+lit_0212e3f0: .word 0x0212E3F0
+lit_0213df00: .word 0x0213DF00
+lit_02154b20: .word 0x02154B20
+lit_02154c20: .word 0x02154C20
+lit_7fffffff: .word 0x7FFFFFFF
+lit_ffff7000: .word 0xFFFF7000
+lit_ffffa000: .word 0xFFFFA000
+lit_ffffd800: .word 0xFFFFD800
+lit_ffffe000: .word 0xFFFFE000
+lit_ffffec00: .word 0xFFFFEC00
+lit_fffff000: .word 0xFFFFF000
+
 // ---------------------------------------------------------------- hit capture
 // The native contact dispatcher calls the victim's ReceiveHit interface
 // ([[actor+8]+0x40]: r0=&result, r1=actor+8, r2=&attacker, r3=&info,
 // [sp]=0x1000). Keep a replayable copy of the latest hit Spidey deals: info
 // (0x40 bytes) at +0x380, its two pointed-to records at +0x3C0/+0x3E0 (victim
-// part pointer cleared), the attacker at +0x370 and the tick at +0x36C.
+// part pointer cleared), the attacker at +0x370 and the tick at +0x36C. The
+// victim goes to +0x37C and into a ring of the last four {victim, tick} at
+// +0x2B4 (index +0x2B0): KIT2 uses it to leave natively hit enemies alone.
 h_hit_capture:
   push {r0,r1,r2,r3,r4,r5,r12}
   mov r0,r2
@@ -1092,6 +1097,17 @@ h_hit_capture:
   str r12,[r5,#0x370]
   ldr r0,[r5]
   str r0,[r5,#0x36c]
+  ldr r0,[sp,#4]            // the victim's interface (actor+8)
+  sub r0,r0,#8
+  str r0,[r5,#0x37c]
+  ldr r1,[r5,#0x2b0]
+  add r1,r1,#1
+  and r1,r1,#3
+  str r1,[r5,#0x2b0]
+  add r1,r5,r1,lsl #3
+  str r0,[r1,#0x2b4]
+  ldr r0,[r5]
+  str r0,[r1,#0x2b8]
   add r1,r5,#0x380
   mov r4,#0
 capture_info:
@@ -1979,8 +1995,8 @@ route_kind2f:
   bne route_take
   b route_next
 route_kind2g:
-  cmp r0,#9                 // kind 9: Web Rush kick (KIT2 keeps the flag)
-  bne route_kind2h
+  cmp r0,#9                 // kinds 9+: KIT2 keeps the flags (9 Web Rush, 10..13 Vortex)
+  blo route_kind2h
   push {r1,r2,r3}
   bl 0x0215542c
   pop {r1,r2,r3}

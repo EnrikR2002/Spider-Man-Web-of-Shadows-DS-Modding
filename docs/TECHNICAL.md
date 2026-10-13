@@ -1085,6 +1085,34 @@ training Skyjack at the grapple; the kit's version (range-checked) did not.
 Guard frames (v0.4.1): the hook writes result 1 and skips the victim's
 ReceiveHit; the dispatcher then treats the hit as ignored (native path for
 get-up states). The Spider-Sense dash uses this for Spidey for 7 updates.
+**The fifth argument is the health the hit takes** (Q12; lab 2026-10-13: 0
+costs nothing, 0x800 costs 2048, 0x1000 costs 4096, whatever info +4, +0x18
+or +0x2C hold). The dispatcher passes 0x1000 and the meter's tier scaling is
+applied elsewhere; a kit replay with 0x1000 therefore always costs one unit.
+A hit can also be **built from nothing** (no captured template): info {kind,
+strength 0xC00, 3, &extent, &contact, +0x18 0x4000, +0x1C 7, +0x2C 0x1000},
+a zero extent record, contact record {motion+0x2B4, 3, 0, 5, 0, kind,
+motion+0x310, strength} (the two attacker parts are fixed offsets inside
+Spidey's motion object), attacker cell = Spidey's actor (`web_hit`, "Web
+lines, built hits and the web skills"). The web grapple and its follow-ups
+do not pass the dispatcher (nothing is captured before the web kick's 0x20):
+the state code calls ReceiveHit itself. Reactions of a standing Brute to a
+built or replayed kind (lab, sparring room; enemy state / action):
+
+| Kind | Reaction |
+|---:|---|
+| 0x04, 0x16 | stagger 37 (21 and 25 frames) |
+| 0x1F, 0x20 | knockdown 41 -> 48 -> 49, thrown about 16 units away |
+| 0x21 | **web yank**: 44 / 87, flies to Spidey at about 3.5 units per update and lands 6 to 10 units in front of him (48, then 49 for about 60 frames, get-up 51). Needs a web line on him: without one he drops where he stands (48) |
+| 0x22, 0x23 | **web hold**: 46 / 53 (the cocoon); stays for a long time after the line lets go |
+| 0x24 | thrown toward and far past Spidey (41 / 85; 70 units) |
+| 0x25 | launched 39 / 88 to about 25 units up |
+| 0x26 | pulled along the floor 45 / 87 at 4 units per update, slides on past Spidey if nothing stops him |
+
+An enemy in the air or on the floor can be hit again: 0x04 or 0x16 on a
+yanked (44/48) or lying (49) enemy gives 41 again (a small bounce, about 20
+frames), 0x14 on a flying one the air juggle 42, 0x25 launches even from the
+floor. A jumping enemy (state 4) answers 0x22 with a knockdown.
 
 ### Shared crowd-hit backend candidates
 
@@ -1207,6 +1235,15 @@ follows the old reserve: KIT2 `0x02155420` (TARGET+0x6000), 8 KiB: code up to
 (`0x02157020`). IMAGE = RESERVE = 0x8000, Glob count 3736 + 8; the main arena
 and the chapter block (`kit.TARGET + kit.RESERVE`) now start at `0x02157420`.
 The lab phantom area (`0x02155020`, KIT_STATE+0x400) is unchanged.
+v0.13.0: the second block's code space is 0x1900 (6204 bytes used), the 13
+Red rows follow at +0x1900 (to +0x1AA0), the dial stays at +0x1B00 and the
+ten Both Suits rows moved to +0x1E80, the tail of the state area (the code
+uses state offsets below 0x280: `KIT2_STATE_USED`). Glob count 3736 + 12.
+First block: capture also stores the victim (+0x37C) and a ring of the last
+four {victim, tick} at +0x2B4 (index +0x2B0); route kinds 9 and up ask the
+second block (`k2_route(kind)`); the string node hook passes the previous
+state ([r6]) to `k2_node`. Its literal table moved behind Leapfrog: the
+staged crowd-hit candidates add code and their last loads were out of reach.
 
 ### Second kit block: Web Rush, Ricochet, Momentum (v0.10.0)
 
@@ -1325,6 +1362,105 @@ carry `k2` (rush phase, dash step, Ricochet count, Momentum doubled steps).
   palette `0x05000032` (colours 25..28) every update: see "Player health and
   the top-screen HUD".
 
+### Web lines, built hits and the web skills (v0.13.0)
+
+Source: the web block at the end of `tools/tasm_kit2.s` (own literal table
+`lit3_`), hook `0x020B6030` (HOOKS2, entry +0x1C). Ownership: ability word 2
+bits 0x10000 Overclock, 0x20000 Dragnet, 0x40000 Vortex (ability bits
+80..82, events 389..391). Lab: `kit_lab trace --bits2 0x70000`; rows carry
+`k2` `oc`, `web`, `hits`, `drag`, `webbed`; scratch `work/kit/weblab.py`
+(RAM pokes, compact summary) and `work/kit/newchecks.py`.
+
+- **WebLine is an actor** (vtable `0x0212EFBC`, 0xB0 bytes) and the web
+  grapple's picture: Spidey keeps a weak link to one at actor+0x40. Spawn:
+  `0x0205F844(&out, &spidey, &from, &to, &colour)` (colour u16 0x7FFF; `from`
+  natively the hand: position + actor+0xD4/+0xD8, about +0.87, +0.54 units).
+  `0x0206632C(line, &from)` moves its start, `0x0206673C(line, &to)` its end,
+  `0x020672D0(line, &actor, 1)` ties it to an actor (state +0xA8 = 3; the end
+  then follows him; it calls his interface +0x24 with the line), `0x02067210`
+  unties, `0x02066FDC` lets go (the line retracts and deletes itself: the
+  native release `0x0205FAE8` calls it and drops the link). Fields: +0x54
+  link to Spidey, +0x5C to the target, +0x64/+0x68 from, +0x78/+0x7C to,
+  +0xA8 state (3 tied, 4..6 retracting). A line with a dead Spidey link
+  retracts by itself. Spidey's own code is `0x0205F520` (shoot: spawn or
+  re-aim, called every update of the grapple state) and `0x0205FA50` (tie).
+- **Tying a line does not web the enemy**: the hold is ReceiveHit kind 0x22
+  (see "Hit pipeline"). The kit ties a line of its own and builds that hit.
+- **Weak links.** A reference is {pointer to target+4, next} and the target
+  keeps the list head at +4; the destructor clears every referrer. Kit line
+  slots (eight 16-byte slots at K2+0x100: link, next, enemy, age) are such
+  referrers, so a line that dies (room change, retraction) empties its slot.
+  Age 0 = held by Dragnet (and released as soon as Dragnet's phase is 0),
+  otherwise the updates left ("flash" lines: 4 for a Vortex hit, 5 for an
+  Overclock shot). `web_tick` moves every line's start to (x +-0.875, y +0.5)
+  from Spidey each update.
+- **The web hold natively** (lab): A at 21 units grapples in 6 frames (state
+  37, then 38 with action 45); the hold lasts as long as nothing is pressed
+  (400 frames seen); **A again lets go and the enemy stays webbed**; Y is the
+  web kick only when the target is farther than `[0x021341F4+0x58]`
+  (`0x020B61D0`; about 13 units), otherwise a plain string starts; the Y test
+  is at `0x020B6014` (peek) / `0x020B6030`, before the ability 13 check.
+- **Dragnet.** `drag_update` counts the updates A stays held in states 37 /
+  38 (+0xC8; held keys are KIT_STATE+0x360 bit 0). At 12 in state 38 (once
+  per press) every other live fighter (max health 4 units and up, not down)
+  in front within 48 units and 10 vertically, up to four, gets a held line
+  and kind 0x22 with no damage; phase +0xC0 = 1, count +0xC4. While he
+  holds, a line whose enemy left state 46 is released (after 8 updates:
+  the reaction is committed late). Leaving 37 / 38 any other way releases
+  the lines (the enemies stay webbed). **Yank:** with phase 1 the hook
+  consumes the Y, sends kind 0x21 (half a unit) to every held enemy, arms
+  the heave (+0x94) and returns state 46. The game lets go of its own line
+  as the hold ends and a yanked enemy without a line drops in place, so the
+  first target gets a kit line and his yank one update later (+0xD0). Phase
+  2 releases each line when its enemy leaves state 44 (from 6 updates on),
+  all after 30. Measured: four Brutes 21..46 units away all lie 6..10 units
+  in front of him about 20 frames after the Y.
+- **Vortex** is a string without nodes of its own (the table ends at node
+  17; 18 and 19 are zero records). `web_node` runs in the node hook after
+  Web Rush: step +0x7C (1 whip on action 57, 2 double lash on 56, 3 slam on
+  59, 4 the Dragnet heave on 49); the node is parked on 12 (14 for the slam)
+  so the next Y arrives as node 13, which continues the step. Entry by
+  pause: node 13, previous state not 46, and the "clean" flag (+0x8C: set
+  while hit 2 plays, cleared by any state other than idle, walk, skid, run,
+  so a Reflex resume keeps the native third hit). Back on his feet after
+  hit 2 the node's keep-alive (+0x90) is raised to 16 updates once. A step
+  routes its clip by kind 10 + (step & 3) and sets motion+0x2FC bit 1
+  (hit 2 and the whip are the same action). Contacts (`web_contacts`: first
+  active sample, kind, damage / 256): whip 2 / 0x04 / 0xC00, lash 4 and 9 /
+  0x04 / 0x800, slam 4 / 0x1F / 0x1000. One update after the clock reaches
+  a contact (or when the action ends) `web_area` builds that hit for every
+  fighter within 14 units on either side (8 vertically) who is not in the
+  capture ring of the last two ticks, and gives each a flash line. **The
+  native attack box already hits every enemy inside it** (three piled
+  Brutes all took the lash natively), so the area hit is the reach beyond
+  about 6 units. The heave has no contact. Step 0 when the node dies.
+- **Overclock.** `oc_update`: a new capture (tick +0x36C differs from
+  +0x70, at most two ticks old, attacker Spidey, kind outside 0x20..0x26),
+  owned, combo tier 5: the nearest other standing fighter within 60 units
+  (10 vertically), not the victim, not shot in the last 16 ticks, takes kind
+  0x16 for half a unit and a flash line. Built hits are not captured, so
+  shots and area hits never chain.
+- **Other inputs read on the way** (`0x020B6968`, the Y transition; queue
+  direction word +4): 2 = Up (with ability 6, Launching Uppercut: state
+  50), 6 = Down at rest (state 48, as from duck 5 / run 6), 4 / 0 with the
+  facing test = back / forward. With ability 7 a Y from states 0x39, 0x3A,
+  0x19 within 3 updates gives state 49 (Drill Kick). The string entry
+  `0x020C2F94` gets the previous state in r6 and the new one in r5; its
+  pause branch needs table +8, the ability and (previous state not 46 or
+  animation time at least 12.0 Red / 16.0 Black). `spd.xbd` lists 126
+  animation groups alphabetically; action ids are another numbering (49 is
+  GrapplePullAttack, 10 samples).
+- **Not done / limits.** No Spidey gesture for the burst (he keeps the hold
+  pose); tier scaling does not apply to built hits; bosses and other actor
+  classes are untested with web hits (the registry only holds common-health
+  actors); a Vortex step does not turn him toward the crowd (the area is
+  symmetric).
+- **Gates** (ROM `75faa3ff`): qualification 63/63 (`work/kit/v0.13.0/`),
+  crash hunt 24 fights with held A, yanks, releases and pauses (odd seeds
+  at tier 5), ten walk routes. The fixtures: `reference/combat-inputs/kit/`
+  `dragnet`, `dragnetrelease`, `vortex`; four sparring Brutes placed 21,
+  30, 38, 46 units ahead and held idle until the web is out.
+
 ### Player health and the top-screen HUD (v0.11.0)
 
 - **Health calls.** Spidey's vtable (`0x0212E3F0`) +0x15C `0x0205F388` sets
@@ -1361,6 +1497,12 @@ impacts on the native contact clocks. Workflow: edit `kit_clips.py` →
 → `python tools/tasm_kit.py` (candidate) → `kit_lab trace ... --cap` + `sheet
 --box ... --scale 2` for in-game frames. Root height in a clip is visual only;
 gameplay movement comes from GMB root motion or kit code.
+v0.13.0 clips: `web_heave` (action 49's 10 samples: rip both lines back
+into a back hop), `web_whip` (57, 17: uncoil into a backhand lash at samples
+2-3, a full hopping turn), `web_lash` (56, 12: a hop with a lash from each
+arm at 4 and 9), `web_slam` (59, 19: overhead two-handed slam at 4-5; the
+native action carries him about 12 units forward). In-game sheets:
+`work/kit/web5-c.png`, `web5-d.png`.
 
 ### Freeze root cause and crash hunting (v0.4.1)
 
@@ -2269,6 +2411,25 @@ tests `test_nitro_build`, `test_room_compiler`, `test_room_author`,
   `hidden` solids collide and are never drawn (an outdoor room's ceiling).
   Texture coordinates are anchored to the world, so repeats line up across
   quads; long faces are cut to stay inside +-2048 texels.
+- **Fills (v0.13.0).** The plan is 2-D, so where a free-standing solid met
+  a deeper one sideways (a catwalk end at a wall) nothing was drawn between
+  its front and z 25: a pitch black gap (the player's "black roofs"). The
+  deeper solid's side goes on there now ('left_fill' / 'right_fill'), and
+  its underside where it sits on a shallower one ('under_fill'); fills are
+  not walls for anchor points.
+- **Far backdrops (v0.13.0).** A skyline on the back wall (z -25) reads as
+  a painting. The native Pier keeps its skyline quads at z -171 (about 90
+  units a tile, 111 tall; a floor plane even reaches z -202), so they drift
+  slowly as Spidey moves. `Panel(..., look=None)` leaves the back wall open
+  and `rcm.backdrop(look, x0, x1, y0, y1, tile, sky, ground)` puts the
+  picture there as scenery, every second tile mirrored, its top fifth
+  folded on above (a mirrored upper half showed upside-down towers) and its
+  bottom row stretched below (from a high platform the fence no longer
+  covered the picture's lower edge). View arithmetic: 58 units wide at z 0
+  and 82 at z -25 put the camera about 60.4 units in front of z 0, so at
+  z -170 it sees 221 x 166 units and a point there moves 0.26 times as far
+  on screen as one at z 0. A model is at most 511 units wide (vertex scale
+  64; the bounding box is s16): six 72-unit tiles fit behind the Switchyard.
 - **Textures.** `borrow(archive, name)` copies a native texture and palette
   as they are (296 distinct room textures; sheets by `work/rooms/tex_sheet.py`
   and `tex_big.py`). `paint` makes 16- or 256-colour textures from pixels
@@ -2369,9 +2530,24 @@ their descriptor and object file: the empty debug room Test_Surfaces01
   expected from the jump numbers, not scripted. Wave experiments:
   `work/rooms/wave_exp.py` (`midnight_rooms.LAB` switches, never set in a
   build).
-- **Open.** Player feel of all three rooms; whether the arcs read well and
-  the 50-frame rest is fair; enemy strength on the roof (native values, no
-  dial); the rooms' detail map screen is the debug placeholder.
+- **v0.13.0** (player, 2026-10-13: "super impressed with the original
+  artwork"; the background "looked like it was a painting rather than
+  real", "some roofs were pure pitch black", "the enemies were too weak
+  though is my main gripe"). Strength dial: Switchyard 144 / 90, Relay Hall
+  160 / 96, Roof 192 / 104 (health 2.25, 2.5, 3 times native; damage to
+  Spidey 1.4, 1.5, 1.6). Both skylines are far backdrops behind an open
+  back wall (the roof's city lights sit just above the parapet: lower, they
+  hid behind it and the sky looked black). The black gaps at catwalk ends
+  and doorway corners are filled; doorway ceilings use concrete or steel
+  instead of the cutaway texture; ceilings are lit 0.72 and camera-facing
+  faces 0.34 (`midnight_rooms.LIT`); the Relay Hall's door walls show the
+  cutaway pattern instead of a flat dark slab; the dock's side is concrete
+  with a warning stripe on its edge. Sheets: `work/rooms/sub13-*.png`.
+- **Lab artifact, not a hole:** the first placement in the roof at x 20
+  drops Spidey out of the level in v0.12.0 and v0.13.0 alike; the compiled
+  floor has no gap (`solid_at` along the whole width) and the walks cross it.
+- **Open.** Player verdict on strength and looks; whether the arcs read well and
+  the 50-frame rest is fair; the rooms' detail map screen is the debug placeholder.
 
 ### Script boss research (2026-10-12)
 
@@ -2505,7 +2681,19 @@ observations.json (state, action, node, facing, position, enemies).
   `player_trace.sample` keeps the candidate whose motion object points back
   at it (`[motion+0]`), otherwise traces stopped after a few rooms.
 - Scratch scripts with backslashes or nested quotes: write them as files. A
-  shell heredoc changed `\n` and broke quoting twice on 2026-10-11.
+  shell heredoc changed `\n` and broke quoting twice on 2026-10-11 (and
+  once more on 2026-10-13).
+- Keystone (2026-10-13): **a `.byte` run mid-file shifts every later
+  absolute branch by its size** (`bl 0x0205F844` assembled to +8 after an
+  8-byte table); the branch validator catches it. Tables are `.word`s, and
+  a data word must not read as a branch (bits 27..25 = 101) or the same
+  validator counts it. Literal loads reach 4 KiB: the second block has a
+  second table (`lit3_`) inside the web block. **A conditional call
+  (`bleq label`) is encoded as a branch to itself**: the first v0.13.0
+  candidates hung as soon as Dragnet dropped its lines without a yank
+  (crash hunt seeds 2 and 4, `work/crash/stall_4_3781`: pc = lr inside the
+  second block, tick stopped). `assemble_tasm_kit.py` now rejects any
+  instruction that branches to itself; write `bne skip` / `bl` instead.
 - Strings: no `;` in the text Huffman table. Button glyphs: `` B, ``
   Y, `` A, `` X, `` R, `` L. Keep them as escapes in
   source (editors may write raw private-use characters).

@@ -14,6 +14,107 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.13.0 - 2026-10-13 - Three web skills (Overclock, Dragnet, Vortex) and a tougher, better-looking Substation
+
+Published through Play Spider-Man.cmd's stable ROM (DeSmuME closed; the build does not touch the battery). SHA256
+`75faa3ff7759f29212b6c92c6d9d0859298a23c13d228df73c798adef032cb9d`
+(ARM9 `db091184...`, kit ARM9 `ccd7f003...`).
+Title and Options show v0.13.0. Player (2026-10-13), on v0.12.0: "super
+impressed with the original artwork", but the background "looked like it
+was a painting rather than real", "some roofs were pure pitch black" and
+"the enemies were too weak though is my main gripe"; of the web ideas:
+Overclock, a new web-focused ground string, and webbing about five enemies
+at once with Y to throw them all toward Spidey. "Only these 3 more and no
+more skills."
+
+Three new rows at the end of the Red list (Upgrades at a save point; scroll
+down past Momentum). Nothing is granted: each is bought with XP, can be
+refunded like any other, and works in the red suit only.
+
+- **Overclock** (400 XP). Passive. While the combo meter is at tier 5, every
+  hit you land also fires a web shot at the nearest other standing enemy
+  within about a screen: he staggers and loses half a health unit, and a web
+  line flashes out to him. One shot per hit; the same enemy at most about
+  twice a second.
+- **Dragnet** (500 XP). Web an enemy with A as usual, but **keep A held**:
+  after about 0.4 s up to four more standing enemies in front of you (within
+  48 units, on your level) are webbed too, each on a line of his own, in the
+  game's own cocoon. A tap of A is still the single web. From that hold:
+  - **Y yanks all of them**, the first one included: they fly to you and
+    land in a pile 6 to 10 units in front of you (half a health unit each)
+    while Spidey heaves the lines back with a back hop. Press Y again and
+    Vortex continues from there (if you own it; otherwise the base string).
+  - Anything else works as before for the first enemy (A again lets go, Up
+    is Skyjack, a jump leaves) and the others simply stay webbed where they
+    stand until they break out: walk up and hit them.
+- **Vortex** (500 XP). A third ground string: **Y, Y, pause, Y, Y, Y**. The
+  pause is the same idea as Split Decision's, one hit later: let the second
+  hit finish so Spidey is back on his feet, then press Y (the window is
+  about half a second). Three steps with new animations: a spinning web
+  whip, a hopping double lash, and an overhead slam that knocks everyone
+  away. Each hit also lands on every enemy within 14 units on either side
+  of you, in front and behind, and a web line flashes to each one. R cancels
+  and resumes it like any string; A still Web Rushes out of it. A fast Y, Y,
+  Y, Y is unchanged, and so is Y after an R cancel.
+
+**The Substation** (rooms behind the door at the far left of the Yard):
+
+- **Stronger crews.** Enemy health is 2.25 times native in the Switchyard,
+  2.5 times in the Relay Hall and 3 times on the Control Roof, and they hit
+  1.4, 1.5 and 1.6 times as hard. The Yard on the way there, which has the
+  same early-story gang, is 2 times and 1.3 times (the agent's addition: say
+  so if the Yard should go back).
+- **Backgrounds.** The two skylines no longer hang on the back wall. They
+  stand far behind the rooms, the way the original game places its own, so
+  they are small, distant and drift slowly as you move; above them the sky
+  continues instead of ending in a straight edge.
+- **No more black patches.** Where a catwalk or a block met a wall there was
+  a strip nothing was drawn on (pure black); those are filled. Doorway
+  ceilings were a near-black texture and are concrete or steel now; ceilings
+  and the faces turned toward you are lit a little more; the Relay Hall's
+  door walls are no longer flat dark slabs; the Switchyard dock is concrete
+  with a warning stripe on its edge instead of one huge striped block.
+
+How: the second kit block gains a web block (`tools/tasm_kit2.s`): the
+game's own WebLine actor spawned and tied to enemies by the kit, hits built
+from nothing with a chosen kind and damage (hold 0x22, yank 0x21, stagger,
+knockdown), one hook where Y is tested in the web hold, a string without
+table nodes for Vortex, four authored clips (`tools/kit_clips.py`). Ability
+bits 80..82. Room compiler: fills, open back-wall panels, far backdrops
+(TECHNICAL "Web lines, built hits and the web skills", "Room compiler",
+"The Substation").
+
+Agent-tested on this ROM, not player-confirmed:
+283 unit tests; kit qualification 63/63 (15 new checks: Dragnet webs the
+three enemies behind the first, the yank plays the heave, brings all four
+within 14 units and continues into the three Vortex steps, the lines let
+go, A again leaves them webbed, unowned is native; Vortex from the pause,
+its damage and knockdown, unowned and a Reflex resume keep the native third
+hit, area hits on Brutes 9 and 12 units away; Overclock fires at tier 5,
+not at tier 4, not unowned); crash hunt 24/24 fights (the fights now also
+hold A, yank, release and pause; odd seeds at tier 5); 10/10 walk routes
+on the first try, the roof's three waves at three times health included;
+the door tour (steps 0..18, then 19..37: it stops at the Nest Span ambush
+as it did for v0.11.0), the power puzzle, save and Continue in the Refuge;
+the shop run for the three rows (buy each, refund Vortex: 400, 500, 500 XP)
+and the Vitality shop run. **Found by the crash hunt before release:** the
+first candidates hung whenever Dragnet's lines were dropped without a yank
+(the assembler had encoded one conditional call as a branch to itself).
+Fixed; the assembler and a unit test now reject that, and a qualification
+check covers the path. Evidence: `work/kit/v0.13.0/`,
+`work/midnight-line/walk-*-75faa3ff.json`, sheets `work/kit/web5-*.png`,
+`work/kit/oc-sheet.png`, `work/shop/web-shop.png`, `work/rooms/sub13-*.png`,
+frames under `build/boot-tests/Versioned-75faa3ff/`.
+Limits: no gesture of Spidey's for the Dragnet burst (he keeps the hold
+pose); Overclock needs tier 5 exactly as proposed, which may be rare in
+normal play; the web hits do not get the meter's damage bonus; bosses,
+fliers and enemy types other than the gangs and symbiotes the lab met are
+untried with Dragnet; a Vortex step does not turn Spidey toward the crowd;
+prices are placeholders. The stronger crews were measured by the dial's
+numbers and by the walk routes, not by a human fight: the Roof may now be
+hard. The roof's left third could not be viewed by lab placement (a
+placement artifact that v0.12.0 has too), only fought across.
+
 ## v0.12.0 - 2026-10-12 - The Substation: three rooms built from nothing
 
 Published through Play Spider-Man.cmd's stable ROM (DeSmuME closed; the build does not touch the battery). SHA256

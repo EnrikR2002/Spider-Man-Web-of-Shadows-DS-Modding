@@ -10,7 +10,7 @@ from keystone import Ks, KS_ARCH_ARM, KS_MODE_ARM  # noqa: E402
 
 KIT_BASE = 0x02152C20
 # (source stem, load address, code limit): the kit and its second block (v0.10.0).
-BLOCKS = (('tasm_kit', KIT_BASE, 0x1F00), ('tasm_kit2', 0x02155420, 0x1800))
+BLOCKS = (('tasm_kit', KIT_BASE, 0x1F00), ('tasm_kit2', 0x02155420, 0x1900))
 
 
 def literal_errors(code, source):
@@ -53,10 +53,18 @@ def native_branch_errors(code, source, base=KIT_BASE):
     return [] if got == wanted else [f'outside branches {[hex(x) for x in got[:4]]} != {[hex(x) for x in wanted[:4]]}']
 
 
+def self_branch_errors(code):
+    """No instruction may branch to itself. Keystone assembles a conditional call such as 'bleq label'
+    that way (v0.13.0: Dragnet hung when its lines were dropped; the crash hunt found it)."""
+    import struct
+    return [f'branch to itself at {at:#x}' for at in range(0, len(code), 4)
+            if (struct.unpack_from('<I', code, at)[0] & 0x0EFFFFFF) == 0x0AFFFFFE and code[at + 3] >> 4 != 0xF]
+
+
 def assemble(stem, base, limit):
     source = (ROOT / f'tools/{stem}.s').read_text(encoding='utf-8')
     code = bytes(Ks(KS_ARCH_ARM, KS_MODE_ARM).asm(source, base)[0])
-    errors = literal_errors(code, source) + native_branch_errors(code, source, base)
+    errors = literal_errors(code, source) + native_branch_errors(code, source, base) + self_branch_errors(code)
     body = [line.split('//')[0].strip() for line in source.splitlines()]
     if [line for line in body if line][-1] != '.ltorg' or body.count('.ltorg') != 1:
         # Keystone mis-resolves absolute branch targets placed after a mid-file pool.

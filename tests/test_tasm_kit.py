@@ -78,18 +78,32 @@ class TasmKitTests(unittest.TestCase):
         code2 = kit.code_bytes(2)
         self.assertEqual(block[:len(code2)], code2)
         self.assertEqual(block[len(code2):kit.SHOP_OFFSET], bytes(kit.SHOP_OFFSET - len(code2)))
-        self.assertEqual(kit.BOTH_OFFSET, kit.SHOP_OFFSET + 10 * 32)        # the Both Suits rows follow the Red rows
+        # v0.13.0: 13 Red rows end before the dial; the ten Both Suits rows sit in the tail of the state
+        # area, past everything the code keeps there. All the rest is zero.
+        red_end = kit.SHOP_OFFSET + (7 + len(kit.SHOP_ROWS)) * 32
+        state = kit.KIT2_STATE - kit.KIT2_BASE
+        self.assertLessEqual(red_end, kit.DIAL_OFFSET)
+        self.assertEqual(block[red_end:kit.BOTH_OFFSET], bytes(kit.BOTH_OFFSET - red_end))   # dial, used state: zero in a kit ROM
+        self.assertGreaterEqual(kit.BOTH_OFFSET, state + kit.KIT2_STATE_USED)
         self.assertEqual(block[kit.BOTH_OFFSET + 10 * 32:], bytes(kit.KIT2_SPACE - kit.BOTH_OFFSET - 10 * 32))
+        self.assertLessEqual(kit.BOTH_OFFSET + 10 * 32, kit.KIT2_SPACE)
         # The chapter's strength dial is empty in a kit ROM (tools/midnight_chapter.py fills it).
-        self.assertLessEqual(kit.BOTH_OFFSET + 10 * 32, kit.DIAL_OFFSET)
-        self.assertLessEqual(kit.DIAL_OFFSET + 2 * kit.DIAL_ROOMS, kit.KIT2_STATE - kit.KIT2_BASE)
-        self.assertEqual(kit.KIT2_STATE - kit.KIT2_BASE, 0x1C00)
+        self.assertLessEqual(kit.DIAL_OFFSET + 2 * kit.DIAL_ROOMS, state)
+        self.assertEqual(state, 0x1C00)
+        # Every state offset the second block's source names stays below KIT2_STATE_USED.
+        import re
+        source = (kit.Path(kit.__file__).with_name('tasm_kit2.s')).read_text(encoding='utf-8')
+        used = [int(x, 16) for x in re.findall(r'\[r(?:4|5|6|10),#0x([0-9a-f]+)\]', source)]
+        self.assertLess(max(x for x in used if x < 0x400), kit.KIT2_STATE_USED)
+        self.assertIn('add r0,r0,#0x1c0', source)                          # the built hit: 0x1BC..0x23F
+        self.assertIn('add r1,r10,#0x240', source)                         # Overclock cooldowns: 0x240..0x26F
         self.assertEqual(kit.IMAGE, kit.RESERVE)
 
-    def test_red_shop_gains_three_rows_on_free_ability_bits(self):
+    def test_red_shop_gains_rows_on_free_ability_bits(self):
         old, new = self.arm9(self.parent), self.arm9(self.kit)
         self.assertEqual(w.u32(new, kit.RED_POINTER), kit.KIT2_BASE + kit.SHOP_OFFSET)
-        self.assertEqual(w.u32(new, kit.RED_COUNT), 10)
+        self.assertEqual(w.u32(new, kit.RED_COUNT), 13)
+        self.assertEqual([row[0] for row in kit.SHOP_ROWS], ['web_rush', 'ricochet', 'momentum', 'overclock', 'dragnet', 'vortex'])
         table = kit.SOURCE + kit.KIT2_OFFSET + kit.SHOP_OFFSET
         self.assertEqual(new[table:table + 7 * 32], old[kit.RED_TABLE:kit.RED_TABLE + 7 * 32])
         self.assertEqual(new[kit.RED_TABLE:kit.RED_TABLE + 7 * 32], old[kit.RED_TABLE:kit.RED_TABLE + 7 * 32])
@@ -104,7 +118,13 @@ class TasmKitTests(unittest.TestCase):
             self.assertTrue(kit.NO_EVENT < event <= 404 and event not in native, key)
             self.assertEqual(kit.SHOP_BITS[key], event - 309)
             self.assertEqual(kit.SHOP_TEXTS[3 * index:3 * index + 3], tuple(texts))
-        self.assertEqual(sorted(kit.SHOP_BITS.values()), [74, 75, 76, 77, 78, 79])
+        self.assertEqual(sorted(kit.SHOP_BITS.values()), [74, 75, 76, 77, 78, 79, 80, 81, 82])
+        # The masks the second block tests in ability word 2 (bit - 64).
+        source = (kit.Path(kit.__file__).with_name('tasm_kit2.s')).read_text(encoding='utf-8')
+        for key, needle in (('overclock', 'mov r1,#0x10000\n  bl k2_owned'), ('dragnet', 'mov r1,#0x20000\n  bl k2_owned'),
+                            ('vortex', 'ldr r1,lit3_00040000\n  bl k2_owned')):
+            self.assertIn(f'{1 << (kit.SHOP_BITS[key] - 64):#x}'[2:], needle)
+            self.assertIn(needle, source, key)
         # v0.11.0: the Both Suits list moves too and gains the Vitality chain.
         self.assertEqual(w.u32(new, kit.BOTH_POINTER), kit.KIT2_BASE + kit.BOTH_OFFSET)
         self.assertEqual(w.u32(new, kit.BOTH_COUNT), 10)
@@ -137,9 +157,10 @@ class TasmKitTests(unittest.TestCase):
         self.assertEqual([decode_grown(first, kit.STRING_COUNT + i) for i in range(len(kit.SHOP_TEXTS))], list(kit.SHOP_TEXTS))
         self.assertEqual(decode_grown(first, 74), kit.TEXT_EDITS[74])
         self.assertEqual(kit.shop_strings(slots, first), first)      # a previous kit overlay is rewritten, not grown
-        # A v0.10.0 overlay holds only the Red rows' nine texts: they are rewritten and the rest appended.
-        older = slots.grown(slots.repack(clean, kit.TEXT_EDITS), {}, appended=['old'] * kit.PREVIOUS_TEXTS)
-        self.assertEqual(kit.shop_strings(slots, older), first)
+        # A v0.10.0 overlay holds nine texts and a v0.11.0/v0.12.0 one eighteen: they are rewritten and the rest appended.
+        for held in kit.PREVIOUS_TEXTS:
+            older = slots.grown(slots.repack(clean, kit.TEXT_EDITS), {}, appended=['old'] * held)
+            self.assertEqual(kit.shop_strings(slots, older), first)
         # The next release repacks this overlay first: appended slots must survive an edit.
         again = slots.repack(first, {74: 'Options v9.9.9'})
         self.assertEqual(slot_count(again), kit.STRING_COUNT + len(kit.SHOP_TEXTS))
@@ -159,7 +180,7 @@ class TasmKitTests(unittest.TestCase):
         self.assertEqual(calls(one, kit.KIT2_BASE, kit.KIT2_BASE + kit.KIT2_SPACE),
                          {kit.KIT2_BASE + offset for offset in (0x00, 0x04, 0x08, 0x0C, 0x14, 0x18)})
         code2 = kit.code_bytes(2)
-        for offset in (0x00, 0x04, 0x08, 0x0C, 0x14, 0x18):
+        for offset in (0x00, 0x04, 0x08, 0x0C, 0x10, 0x14, 0x18, 0x1C):
             self.assertEqual(struct.unpack_from('<I', code2, offset)[0] >> 24, 0xEA)
         exports = calls(two, kit.KIT_BASE, kit.KIT_BASE + kit.CODE_SPACE)
         self.assertTrue(exports and exports <= {kit.KIT_BASE + offset for offset in range(0x38, 0x50, 4)})
@@ -193,9 +214,57 @@ class TasmKitTests(unittest.TestCase):
             self.assertEqual(mask, wanted, name)
             lasts.append(data.record_count - 1)
         # v0.11.0: the last sample is never skipped either (the string blocker decides repeat/end on it).
-        last = re.search(r'^momentum_last:\s*\.byte\s+([0-9, ]+)', source, re.M).group(1)
-        self.assertEqual([int(x) for x in last.replace(' ', '').split(',') if x][:len(clips)], lasts)
+        last = re.search(r'^momentum_last:\s*\.word\s+(0x[0-9A-Fa-f]+),\s*(0x[0-9A-Fa-f]+)', source, re.M).groups()
+        self.assertEqual(list(b''.join(struct.pack('<I', int(x, 16)) for x in last))[:len(clips)], lasts)
         self.assertIn('sub r0,r0,#2', source)
+
+    def test_no_instruction_branches_to_itself(self):
+        # Keystone encodes 'bleq label' as a branch to its own address (found by the v0.13.0 crash hunt).
+        import re
+        for block, name in ((1, 'tasm_kit.s'), (2, 'tasm_kit2.s')):
+            code = kit.code_bytes(block)
+            for at in range(0, len(code), 4):
+                word = struct.unpack_from('<I', code, at)[0]
+                self.assertFalse((word & 0x0EFFFFFF) == 0x0AFFFFFE and word >> 28 != 0xF, f'{name} {at:#x}')
+            source = re.sub(r'//.*', '', (kit.Path(kit.__file__).with_name(name)).read_text(encoding='utf-8'))
+            self.assertEqual(re.findall(r'^\s*bl(?:eq|ne|hs|cs|cc|mi|pl|vs|vc|hi|ge|gt)\s', source, re.M), [], name)
+
+    def test_vortex_steps_follow_their_actions_attack_windows(self):
+        # Each step's contacts are the first active sample of its native action's attack windows; the
+        # area hit follows one update later. Tables are words: a .byte run shifts later absolute branches.
+        import re
+        from pathlib import Path
+        from tools import grip_compression, gmb
+        source = (kit.Path(kit.__file__).with_name('tasm_kit2.s')).read_text(encoding='utf-8')
+        self.assertNotIn('.byte', re.sub(r'//.*', '', source))
+        self.assertNotIn('.byte', re.sub(r'//.*', '', (kit.Path(kit.__file__).with_name('tasm_kit.s')).read_text(encoding='utf-8')))
+        actions = [int(x) for x in re.search(r'^web_actions:\s*\.word\s+([0-9, ]+)', source, re.M).group(1).replace(' ', '').split(',') if x]
+        self.assertEqual(actions, [0, 57, 56, 59, 49])
+        words = [int(x, 16) for x in re.findall(r'0x([0-9A-Fa-f]{8})', re.search(r'^web_contacts:.*\n((?:\s+\.word .*\n){5})', source, re.M).group(1))]
+        self.assertEqual(len(words), 10)
+        self.assertTrue(all((word >> 25) & 7 != 5 for word in words))
+        payload = {57: 12, 56: 15, 59: 14}                              # action -> GroundAttack payload (Snap plays G15)
+        for step in (1, 2, 3):
+            name = f'spd_GroundAttack{payload[actions[step]]}.gmb'
+            overlay = Path(mod.ROOT) / 'mods' / name
+            data = gmb.Gmb.parse(grip_compression.decode(overlay.read_bytes() if overlay.exists() else self.clean(name)))
+            active = set()
+            for channel in data.channels:
+                flags = [channel.words(f)[5] == 1 for f in range(data.record_count)] if channel.kind == 3 else []
+                if any(flags) and not all(flags): active |= {f for f, on in enumerate(flags) if on}
+            starts = sorted(f for f in active if f - 1 not in active)
+            contacts = [words[2 * step + k] for k in range(2)]
+            self.assertEqual([c & 0xFF for c in contacts if c & 0xFF != 255], starts, name)
+            for c in contacts:
+                if c & 0xFF != 255:
+                    self.assertIn(c >> 8 & 0xFF, (0x04, 0x1F))
+                    self.assertTrue(0x800 <= (c >> 16 & 0xFF) << 8 <= 0x1000)
+        self.assertEqual(words[:2] + words[8:], [0xFF] * 4)             # no step 0; the heave has no contact
+        # Routes: the heave and the three steps each have their own clip on their action.
+        routes = {(action, kind): name for action, kind, name in kit.ROUTES}
+        for step, kind in ((4, 10), (1, 11), (2, 12), (3, 13)):
+            self.assertIn((actions[step], kind), routes)
+        self.assertIn('and r1,r0,#3', source)                           # route kind = 10 + (step & 3)
 
     def test_v0_11_tuning_lives_in_the_second_block(self):
         # Reflex/Sense attack speed 1.10/1.20 (native 1.15/1.3), Vitality damage 1/1.25, 1/1.5, 1/1.75,

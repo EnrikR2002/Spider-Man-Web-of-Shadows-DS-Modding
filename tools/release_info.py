@@ -128,6 +128,13 @@ PROFILE_INFO = {
                      'red_prices': (50, 100, 150, 150, 200, 250, 350),
                      'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                      'arm9_sha256': 'a212585a168ec9757b737ed0ebaf006ffcfb1273c4c40e0ac7586ba43b49f474'},
+    # Three more Red shop rows on ability bits 80..82: Overclock, Dragnet, Vortex (the kit's own web
+    # lines and built hits), the Substation's crews stronger and its looks reworked (far skylines,
+    # no black gaps) (CHANGES v0.13.0). v0.12.0's bytes stay identified by its ROM.
+    'tasm-v0.13.0': {'version': '0.13.0', 'date': '2026-10-13', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                     'arm9_sha256': 'db0911844f23b68bc2a9a8731415018e4a45918b5d26aeb1ad316d2b35c038fe'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

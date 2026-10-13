@@ -28,12 +28,13 @@ KIT_STATE = KIT_BASE + CODE_SPACE          # 02154C20
 # the lab's phantom area): code, the grown Red shop table, zeroed state.
 KIT2_OFFSET = 0x6000                       # from TARGET
 KIT2_BASE = TARGET + KIT2_OFFSET           # 02155420
-KIT2_CODE = 0x1800
-SHOP_OFFSET = 0x1800                       # Red purchase rows inside the block
-BOTH_OFFSET = 0x1940                       # Both Suits purchase rows (v0.11.0)
+KIT2_CODE = 0x1900                         # v0.13.0: 6400 bytes (was 0x1800)
+SHOP_OFFSET = 0x1900                       # Red purchase rows inside the block (13 rows end at 0x1AA0)
+BOTH_OFFSET = 0x1E80                       # Both Suits purchase rows: the unused tail of the state area (ten rows end at 0x1FC0)
 DIAL_OFFSET = 0x1B00                       # chapter strength dial: two bytes per room 76..115 (zeros here)
 DIAL_ROOMS = 40
 KIT2_STATE = KIT2_BASE + 0x1C00            # 02157020
+KIT2_STATE_USED = 0x280                    # zeroed state the code uses (tools/tasm_kit2.s); tables may follow
 KIT2_SPACE = 0x2000
 IMAGE = KIT2_OFFSET + KIT2_SPACE
 RESERVE = 0x8000
@@ -62,6 +63,7 @@ HOOKS = {
 # site: (second-block entry offset, parent instruction word)
 HOOKS2 = {
     0x020B21B8: (0x10, 0xE5960044),  # ldr r0,[r6,#0x44]  Red attack animation rate (Momentum)
+    0x020B6030: (0x1C, 0xE5960044),  # ldr r0,[r6,#0x44]  Y queued in the web hold (Dragnet yank)
 }
 # Ownership events 309..381 are ability bits 0..72 (three words at stats+0xC).
 # Bits 73..95 of the third word are unused and survive a native save/reload
@@ -88,6 +90,13 @@ SHOP_ROWS = (
      'Passive. Enemies you send flying\nknock down the enemies they hit.'),
     ('momentum', 385, 400, 'Momentum', 'Momentum',
      'Passive. Every combo meter tier\nshortens the wind-up and recovery\nof your ground combos.'),
+    # v0.13.0 (ability bits 80..82: the Vitality rows keep 77..79)
+    ('overclock', 389, 400, 'Overclock', 'Overclock',
+     'Passive. At combo meter tier 5\nevery hit also fires a web shot\nat a second enemy.'),
+    ('dragnet', 390, 500, 'Dragnet', 'Dragnet',
+     'Keep \ue602 held on a web grapple:\nevery enemy in front is webbed.\n\ue601 yanks them all to your feet.'),
+    ('vortex', 391, 500, 'Vortex', 'Vortex (Combo)',
+     '\ue601, \ue601, pause, \ue601, \ue601, \ue601. Web\nlashes hit every enemy around\nyou. Also after a Dragnet yank.'),
 )
 # New Both Suits rows (v0.11.0): Vitality I..III, each needing the one before
 # (required event) and blocking its refund while the next is owned (dependent).
@@ -102,7 +111,7 @@ BOTH_ROWS = (
 )
 SHOP_BITS = {row[0]: row[1] - 309 for row in (*SHOP_ROWS, *BOTH_ROWS)}     # 74..76, 77..79
 SHOP_TEXTS = tuple(text for row in (*SHOP_ROWS, *BOTH_ROWS) for text in row[3:])
-PREVIOUS_TEXTS = 3 * len(SHOP_ROWS)        # shop texts in a v0.10.0 kit overlay
+PREVIOUS_TEXTS = (9, 18)                   # shop texts in a v0.10.0 and a v0.11.0/v0.12.0 kit overlay
 # Spider Perch replaces Sling Strike in the Mid-Air Snare slot: restore the
 # native action-queue and contact instructions Sling had redirected.
 RESTORE = {0x0209515C: (0xEB02EFEF, 0xEBFED051)}
@@ -113,16 +122,21 @@ COUNT_OFFSET = 0x77F8
 PARENT_COUNT = 3736
 EXTRA_NAMES: tuple[str, ...] = ('zz_kit_ReflexFlip.sca', 'zz_kit_Spin.sca', 'zz_kit_PerchPound.sca',
                                    'zz_kit_LeapKick.sca', 'zz_kit_SkyAxe.sca', 'zz_kit_SenseCounter.sca',
-                                   'zz_kit_ReflexBackflip.sca', 'zz_kit_RushKick.sca')
+                                   'zz_kit_ReflexBackflip.sca', 'zz_kit_RushKick.sca',
+                                   'zz_kit_WebHeave.sca', 'zz_kit_WebWhip.sca', 'zz_kit_WebLash.sca',
+                                   'zz_kit_WebSlam.sca')
 # Route rows: (action, kind, appended name). Kinds: 1 Spin Cycle repeat, 2 Reflex
 # roll, 3 Perch stomp, 4 owned Red web kick (Leapfrog), 5 Skyjack juggle,
 # 6 Spider-Sense counter, 7 Perch hop/spring flip, 8 Reflex neutral back tuck,
-# 9 Web Rush kick.
+# 9 Web Rush kick, 10 Dragnet heave, 11..13 Vortex whip, double lash, slam
+# (kinds 9 and up are flags of the second block: k2_route).
 # Native actions keep their bindings when unrouted.
 ROUTES: tuple[tuple[int, int, str], ...] = ((133, 2, 'zz_kit_ReflexFlip.sca'), (60, 1, 'zz_kit_Spin.sca'), (130, 3, 'zz_kit_PerchPound.sca'),
                                              (50, 4, 'zz_kit_LeapKick.sca'), (4, 5, 'zz_kit_SkyAxe.sca'),
                                              (59, 6, 'zz_kit_SenseCounter.sca'), (133, 7, 'zz_kit_ReflexFlip.sca'),
-                                             (139, 8, 'zz_kit_ReflexBackflip.sca'), (58, 9, 'zz_kit_RushKick.sca'))
+                                             (139, 8, 'zz_kit_ReflexBackflip.sca'), (58, 9, 'zz_kit_RushKick.sca'),
+                                             (49, 10, 'zz_kit_WebHeave.sca'), (57, 11, 'zz_kit_WebWhip.sca'),
+                                             (56, 12, 'zz_kit_WebLash.sca'), (59, 13, 'zz_kit_WebSlam.sca'))
 # Authored clips: overlay name -> (native SCA with the same sample count, clip).
 # The Split Decision clips overwrite the dedicated Rush resources (actions 61/60/62).
 CLIP_SOURCES = {
@@ -134,13 +148,17 @@ CLIP_SOURCES = {
     'zz_kit_SkyAxe.sca': ('spd_AirAttack4.sca', 'sky_axe'),
     'zz_kit_SenseCounter.sca': ('spd_GroundAttack14.sca', 'sense_counter'),
     'zz_kit_RushKick.sca': ('spd_GroundAttack13.sca', 'rush_kick'),
+    'zz_kit_WebHeave.sca': ('spd_GrapplePullAttack.sca', 'web_heave'),
+    'zz_kit_WebWhip.sca': ('spd_GroundAttack12.sca', 'web_whip'),
+    'zz_kit_WebLash.sca': ('spd_GroundAttack15.sca', 'web_lash'),
+    'zz_kit_WebSlam.sca': ('spd_GroundAttack14.sca', 'web_slam'),
     'zz_tasm_RushEntry.sca': ('spd_GroundAttack16.sca', 'split_corkscrew'),
     'zz_tasm_RushBridge.sca': ('spd_GroundAttack15.sca', 'split_kick'),
     'zz_tasm_RushFinish.sca': ('spd_GroundAttack17.sca', 'split_sweep'),
 }
 PROFILE = 'tasm-kit'
-VERSION = '0.12.0'
-RELEASE_DATE = '2026-10-12'
+VERSION = '0.13.0'
+RELEASE_DATE = '2026-10-13'
 RELEASE_PROFILE = f'tasm-v{VERSION}'
 PARENT_RELEASE = 'tasm-v0.1.1'
 # Red purchase names (menu/list) and instructions; boot and Options version.
@@ -166,9 +184,9 @@ TEXT_EDITS = {
 
 def uses_kit(profile):
     return profile == PROFILE or bool(release_info.PROFILE_INFO.get(profile, {}).get('kit'))
-CODE_SHA256 = '87b68be09574e0e44d41079ab7c8f51359d7cbfd4715a65c9584cfb7b99aa5de'
-CODE2_SHA256 = 'a0d76f922465c9bb8f09e1ea305ea3f41046b94c2c6bcb1c5250f624d320d0b8'
-ARM9_SHA256 = '3c6a34e02d38cdfc696f35b576dd2c4f0fcda3512a1c2ea23f876a47e116614c'
+CODE_SHA256 = '536c6e0b798138a8a6637da0615a2dd49cf88374b2f115d56141ce189717f731'
+CODE2_SHA256 = '41772666417379e33b2b0c8a0ae5e74444d825f6029b599225bd048c161591bb'
+ARM9_SHA256 = 'ccd7f003319f13828ddba353055c65fc0880343c1ec8a16589ccfa490479fd60'
 
 
 def branch(source, target):
@@ -215,7 +233,7 @@ def shop_strings(slots, current):
     """Append the shop texts after the native slots (or rewrite them in a previous kit overlay)."""
     from tools.qol_suits_menu import slot_count
     held = slot_count(current) - STRING_COUNT
-    if held not in (0, PREVIOUS_TEXTS, len(SHOP_TEXTS)):
+    if held not in (0, *PREVIOUS_TEXTS, len(SHOP_TEXTS)):
         raise ValueError('Unexpected string slot count for the shop texts')
     return slots.grown(current, {STRING_COUNT + i: text for i, text in enumerate(SHOP_TEXTS[:held])},
                        appended=SHOP_TEXTS[held:])
@@ -314,7 +332,8 @@ def apply_rom(rom):
     log.append({'field': 'red_purchase_rows', 'table': KIT2_BASE + SHOP_OFFSET, 'rows': len(table) // 32,
                 'new': {row[0]: {'event': row[1], 'ability_bit': row[1] - 309, 'price': row[2]} for row in SHOP_ROWS}})
     both = both_table(raw)
-    if SHOP_OFFSET + len(table) > BOTH_OFFSET or BOTH_OFFSET + len(both) > DIAL_OFFSET:
+    if (SHOP_OFFSET + len(table) > DIAL_OFFSET or BOTH_OFFSET < KIT2_STATE - KIT2_BASE + KIT2_STATE_USED
+            or BOTH_OFFSET + len(both) > KIT2_SPACE):
         raise ValueError('Purchase tables overlap')
     struct.pack_into('<I', changed, BOTH_POINTER, KIT2_BASE + BOTH_OFFSET)
     struct.pack_into('<I', changed, BOTH_COUNT, len(both) // 32)

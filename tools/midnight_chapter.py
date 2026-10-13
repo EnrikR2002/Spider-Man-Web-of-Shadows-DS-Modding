@@ -67,7 +67,7 @@ DELAY = 0x1C                                # u16 frames, u8 action group (+4), 
 GRANT = 0x1F                                # "<ability> obtained!": grants a native story ability
 SPAWN_PICKUP = 0x07                         # spawns a pickup; operand +26 = 1-based group run on pickup
 STABLE_SHA256 = 'fd7e4420f97645dd55011504843ce62f068d1276234c3cd781931c85bb1eb193'
-ARM9_SHA256 = 'a212585a168ec9757b737ed0ebaf006ffcfb1273c4c40e0ac7586ba43b49f474'   # chapter over the kit ARM9 (pinned per release)
+ARM9_SHA256 = 'db0911844f23b68bc2a9a8731415018e4a45918b5d26aeb1ad316d2b35c038fe'   # chapter over the kit ARM9 (pinned per release)
 ENTRANCE = 'Sewer_Save02'
 STATE_TEMPLATE = 'Test_Surfaces01'
 
@@ -528,6 +528,10 @@ def map_entries(listing):
 STRENGTH = {
     'ML_NestShaft': (38, 35), 'ML_NestThroat': (42, 38), 'ML_NestSpan': (45, 42),
     'ML_NestHollow': (48, 45), 'ML_NestGate': (51, 48),
+    # The Substation's crews are early-story gangs: at native strength they were "too weak" (player,
+    # 2026-10-13). Health 2.25 / 2.5 / 3 times native, damage to Spidey 1.4 / 1.5 / 1.6 times. The
+    # Yard on the way there has the same Pier gang: 2 and 1.3 times (the agent's choice, one ramp).
+    'ML_Yard': (128, 84), 'ML_Switchyard': (144, 90), 'ML_RelayHall': (160, 96), 'ML_Roof': (192, 104),
 }
 
 

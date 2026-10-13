@@ -407,8 +407,10 @@ the spring (TECHNICAL "Second kit block", qualification note).
 
 Player, 2026-10-12 (answering "Round three"): "they weren't that interesting
 so try again"; Thwip Barrage "did sound kinda cool so give me more web based
-ideas. Don't implement just theory craft". **Everything below is proposed;
-nothing is approved or built.**
+ideas. Don't implement just theory craft". **Everything below was a
+proposal.** Answered 2026-10-13 ("Round five"): Overclock was built as
+proposed, Flypaper and Vortex became Dragnet and the Vortex string, the
+rest is not approved.
 
 Agent's reading (an interpretation): three rounds of set pieces and
 passives were turned down; the two things that landed are Web Rush and Thwip
@@ -440,6 +442,41 @@ stuck state, hold-A, and whether X and Down + A are free. New rooms help
 here: the Control Roof and the Switchyard have barrels to throw and walls
 to paste people on. Rules unchanged: authored clips, velocity only, no
 slow-motion.
+
+## Round five (2026-10-13): Overclock, Dragnet and Vortex in v0.13.0
+
+Player, 2026-10-13 (answering "Round four"): "let's implement overclock.
+Vortex does sound cool but i was thinking let's make a new ground string
+(right now we have the base Y spam and spin cycle) and find a way to make it
+web focused. flypaper does sound cool as well but i was thinking a different
+variant where instead of how base A lets you web one enemy ... bust a bunch
+of webs on like 5 enemies at once in front of you and then you have the
+option to Y and throw them all towards me so i can combo all of them at the
+same time. So could have something like flypaper and then vortex them, where
+the vortex is a combo designed to combo multiple enemies at once (can change
+names of everything if you want). **I think only these 3 more and no more
+skills.**"
+
+Shipped in v0.13.0 as first versions (CHANGES; engine facts in TECHNICAL
+"Web lines, built hits and the web skills"). Agent-tested, not
+player-confirmed. Names are the agent's (the player allowed renaming): the
+multi-web is **Dragnet**, the string kept the player's word **Vortex**.
+
+| Skill (ability bit, XP) | Input | First version | Next iteration from play |
+|---|---|---|---|
+| **Overclock** (80, 400) | Passive at combo tier 5 | Every hit Spidey lands also fires a web shot at the nearest other standing enemy within 60 units: a stagger for half a health unit, with a web line that flashes out to him. One shot per hit, the same enemy at most every 16 updates | Whether tier 5 is reached often enough (tier 4, or a shot every second hit below 5); shot damage; a different reaction (a short web hold instead of a stagger) |
+| **Dragnet** (81, 500) | Keep A held on the web grapple (about 0.4 s into the hold) | Up to four more standing enemies in front within 48 units get a web line and the web hold (the game's own cocoon), without damage. **Y yanks all of them and the first target**: they fly to Spidey and land 6 to 10 units in front of him (half a unit of damage) while he plays the heave. Letting go any other way (A again, a jump, Up for Skyjack) leaves them webbed where they stand | A gesture for the burst (he keeps the hold pose); reach and count; whether held is the right input (a tap stays the native single web); catching the pile in the air instead of on the floor; fliers and bosses |
+| **Vortex** (82, 500) | Y, Y, pause, Y, Y, Y (the third Y once he is back on his feet), or Y after a Dragnet yank | Three steps with their own clips: a spinning web whip, a hopping double lash, an overhead slam that sends everyone flying. Every contact also lands on each enemy within 14 units on either side, with a web line flashing to each. R cancels and resumes, A still Web Rushes out of it | The pause window (16 updates); clips from player feel; facing the crowd on each step; a pull toward Spidey on the lash (the "vortex"); its own finisher reaction (a launch) |
+
+What the three share (worth knowing for any later work): the kit can now
+draw the game's own web lines between Spidey and any enemy, and can build a
+hit of any kind from nothing (hold, yank, stagger, knockdown, launch, pull),
+with chosen damage. Left over from "Round four" and still only ideas: Thwip
+Barrage, Face Full of Web, Yoink (the yank now exists), Fastball, Flypaper's
+floor patch, String 'Em Up.
+
+**The player wants no further skills after these three.** Iterate them, and
+the ten before them, from play; do not propose new ones unless asked.
 
 ## Spider-Man 2099: future Black kit (2026-10-11, theorycraft)
 

@@ -5,8 +5,10 @@
   batch FIRST LAST [--jobs J ...]               many seeds in parallel; one line per event
   regs STATE.bin [--ram RAM.bin]                 ARM9 registers, pre-exception SP/LR, DTCM stack
 
-A fight presses random Y strings, R taps, held R (Enhanced Dodge chains), A/B/X and
-Left/Right; enemies and Spidey are refilled to max HP so the crowd never ends.
+A fight presses random Y strings, R taps, held R (Enhanced Dodge chains), A/B/X,
+held A then Y (Dragnet and its yank), Y, Y, pause, Y... (Vortex) and Left/Right;
+enemies and Spidey are refilled to max HP so the crowd never ends. Odd seeds hold
+the combo meter at tier 5 (Overclock).
 When the kit tick (one per Spidey update) stops for 60 frames outside the tutorial
 popup (Spidey state 75), the emulator state and main RAM are saved under
 work/crash/. A data abort shows as CPU mode 0x17 with PC 0xFFFF0108 (BIOS vector);
@@ -52,9 +54,18 @@ def fight_script(seed, frames):
             for k in range(f + 4, f + n, rng.randint(5, 12)):
                 rows.append({'start': k, 'end': k + 2, 'buttons': ['Y']})
             f += n + rng.randint(1, 6)
-        else:                # jump / web / object
+        elif kind < 0.94:    # jump / web / object
             rows.append({'start': f, 'end': f + 4, 'buttons': [rng.choice(['A', 'B', 'X'])] + d})
             f += rng.randint(6, 14)
+        elif kind < 0.97:    # Dragnet: A kept held, then the yank or something else, then Vortex presses
+            n = rng.randint(34, 70)
+            rows.append({'start': f, 'end': f + n, 'buttons': ['A'] + d}); f += n + rng.randint(2, 20)
+            rows.append({'start': f, 'end': f + 3, 'buttons': [rng.choice(['Y', 'Y', 'Y', 'A', 'R', 'B'])]}); f += rng.randint(16, 26)
+            for _ in range(rng.randint(0, 4)):
+                rows.append({'start': f, 'end': f + 3, 'buttons': ['Y']}); f += rng.randint(14, 30)
+        else:                # Vortex: Y, Y, pause, Y, Y, Y
+            for gap in (16, rng.randint(40, 56), rng.randint(20, 30), rng.randint(20, 30), rng.randint(20, 40)):
+                rows.append({'start': f, 'end': f + 3, 'buttons': ['Y']}); f += gap
     return rows
 
 
@@ -97,8 +108,9 @@ def run(seed, rom, frames=4000, at=LEDGE):
         name.with_suffix('.ram').write_bytes(ram)
         print('STALL', st['since'], state, name.with_suffix('.state'), flush=True)
 
-    kit_lab._run(str(rom), f'crash_{seed}', str(inputs), frames=frames, bits=0xFEF00, bits2=0xFC00, arena=True,
-                 tx=at[0], ty=at[1], refill=True, extra_hook=hook, caps=[frames - 1])   # bits2: v0.10.0 shop rows + Vitality I..III
+    kit_lab._run(str(rom), f'crash_{seed}', str(inputs), frames=frames, bits=0xFEF00, bits2=0x7FC00, arena=True,
+                 tx=at[0], ty=at[1], refill=True, extra_hook=hook, caps=[frames - 1],
+                 tier=5 if seed % 2 else None)   # bits2: every shop row of the second block; odd seeds: Overclock's tier
     print('DONE', seed, flush=True)
 
 
