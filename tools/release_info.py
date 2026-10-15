@@ -135,6 +135,30 @@ PROFILE_INFO = {
                      'red_prices': (50, 100, 150, 150, 200, 250, 350),
                      'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                      'arm9_sha256': 'db0911844f23b68bc2a9a8731415018e4a45918b5d26aeb1ad316d2b35c038fe'},
+    'tasm-v0.14.0': {'version': '0.14.0', 'date': '2026-10-13', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                     'arm9_sha256': 'f0f822458dacbc77b25a8f325bfad5144b8115c7816970e6b853a74de6c643cd'},
+    'tasm-v0.15.0': {'version': '0.15.0', 'date': '2026-10-13', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                     'arm9_sha256': 'f4b5fdc94bd3b0891b511e532937a83f559fc36fe4f82991adc0850a99518f6b'},
+    'tasm-v0.15.1': {'version': '0.15.1', 'date': '2026-10-14', 'kit': True, 'chapter': True, 'parent': 'tasm-v0.1.1',
+                     'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                     'arm9_sha256': '117c9f7c21c6b2212e95aaf021b3537128de7d6b831cc328e7620021635d6da6'},
+    # Independent Crane Row post-pass preserves the exact v0.15.1 kit/chapter
+    # composition; it owns its version strings, new rooms/maps and adapters.
+    'tasm-v0.16.0': {'version': '0.16.0', 'date': '2026-10-14', 'kit': True, 'chapter': True,
+                    'crane': True, 'compose_parent': 'tasm-v0.15.1', 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': 'abfbb1120c6e2d3237b437fefa742bb12aa0c3a1c57a08664282274c6cc0f722'},
+    'tasm-v0.16.1': {'version': '0.16.1', 'date': '2026-10-14', 'kit': True, 'chapter': True,
+                    'crane': True, 'compose_parent': 'tasm-v0.15.1', 'parent': 'tasm-v0.1.1',
+                    'red_prices': (50, 100, 150, 150, 200, 250, 350),
+                    'shared_prices': (25, 50, 100, 150, 50, 200, 150),
+                    'arm9_sha256': 'abfbb1120c6e2d3237b437fefa742bb12aa0c3a1c57a08664282274c6cc0f722'},
 }
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'

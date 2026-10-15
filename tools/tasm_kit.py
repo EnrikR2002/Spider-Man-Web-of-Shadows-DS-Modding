@@ -28,10 +28,10 @@ KIT_STATE = KIT_BASE + CODE_SPACE          # 02154C20
 # the lab's phantom area): code, the grown Red shop table, zeroed state.
 KIT2_OFFSET = 0x6000                       # from TARGET
 KIT2_BASE = TARGET + KIT2_OFFSET           # 02155420
-KIT2_CODE = 0x1900                         # v0.13.0: 6400 bytes (was 0x1800)
-SHOP_OFFSET = 0x1900                       # Red purchase rows inside the block (13 rows end at 0x1AA0)
+KIT2_CODE = 0x1A00                         # v0.15.1: code/shop/dial share the existing 8-KiB reserve
+SHOP_OFFSET = 0x1A00                       # 13 Red purchase rows end exactly at 0x1BA0
 BOTH_OFFSET = 0x1E80                       # Both Suits purchase rows: the unused tail of the state area (ten rows end at 0x1FC0)
-DIAL_OFFSET = 0x1B00                       # chapter strength dial: two bytes per room 76..115 (zeros here)
+DIAL_OFFSET = 0x1BA0                       # chapter strength dial: ends at 0x1BF0, before state +0x1C00
 DIAL_ROOMS = 40
 KIT2_STATE = KIT2_BASE + 0x1C00            # 02157020
 KIT2_STATE_USED = 0x280                    # zeroed state the code uses (tools/tasm_kit2.s); tables may follow
@@ -59,11 +59,13 @@ HOOKS = {
     0x020728F0: (0x2C, 0xEA03798A),  # Sling action-queue branch -> Perch substitution
     0x02078628: (0x30, 0xE12FFF34),  # blx r4: hit dispatch to the victim's ReceiveHit
     0x0205F420: (0x34, 0xE5823084),  # str r3,[r2,#0x84]: player HP store (training floor)
+    0x020B57A0: (0x50, 0xE3A06000),  # mov r6,#0: dodge-Y choice, preserve active owned Vortex
 }
 # site: (second-block entry offset, parent instruction word)
 HOOKS2 = {
     0x020B21B8: (0x10, 0xE5960044),  # ldr r0,[r6,#0x44]  Red attack animation rate (Momentum)
     0x020B6030: (0x1C, 0xE5960044),  # ldr r0,[r6,#0x44]  Y queued in the web hold (Dragnet yank)
+    0x020B69B8: (0x20, 0xE3A05000),  # mov r5,#0  queued Y before native Drill Kick / Down choices
 }
 # Ownership events 309..381 are ability bits 0..72 (three words at stats+0xC).
 # Bits 73..95 of the third word are unused and survive a native save/reload
@@ -96,7 +98,7 @@ SHOP_ROWS = (
     ('dragnet', 390, 500, 'Dragnet', 'Dragnet',
      'Keep \ue602 held on a web grapple:\nevery enemy in front is webbed.\n\ue601 yanks them all to your feet.'),
     ('vortex', 391, 500, 'Vortex', 'Vortex (Combo)',
-     '\ue601, \ue601, pause, \ue601, \ue601, \ue601. Web\nlashes hit every enemy around\nyou. Also after a Dragnet yank.'),
+     '\ue601, \ue601, Down + \ue601. Release Down.\nKeep pressing \ue601: seven strikes.\nAlso after a pause/Dragnet yank.'),
 )
 # New Both Suits rows (v0.11.0): Vitality I..III, each needing the one before
 # (required event) and blocking its refund while the next is owned (dependent).
@@ -157,8 +159,8 @@ CLIP_SOURCES = {
     'zz_tasm_RushFinish.sca': ('spd_GroundAttack17.sca', 'split_sweep'),
 }
 PROFILE = 'tasm-kit'
-VERSION = '0.13.0'
-RELEASE_DATE = '2026-10-13'
+VERSION = '0.15.1'
+RELEASE_DATE = '2026-10-14'
 RELEASE_PROFILE = f'tasm-v{VERSION}'
 PARENT_RELEASE = 'tasm-v0.1.1'
 # Red purchase names (menu/list) and instructions; boot and Options version.
@@ -184,9 +186,9 @@ TEXT_EDITS = {
 
 def uses_kit(profile):
     return profile == PROFILE or bool(release_info.PROFILE_INFO.get(profile, {}).get('kit'))
-CODE_SHA256 = '536c6e0b798138a8a6637da0615a2dd49cf88374b2f115d56141ce189717f731'
-CODE2_SHA256 = '41772666417379e33b2b0c8a0ae5e74444d825f6029b599225bd048c161591bb'
-ARM9_SHA256 = 'ccd7f003319f13828ddba353055c65fc0880343c1ec8a16589ccfa490479fd60'
+CODE_SHA256 = '5c3c3b49fa2f99976f26e888828b28108e3f43723b754178a4e4c0e55ec54a35'
+CODE2_SHA256 = '435f53f98276541659981749a4017aa027160f94810349ae208c2236d4eaf6a7'
+ARM9_SHA256 = '02f85aa3c96e400712d605fd4787cc6bf9838280f099035bd07072489529a424'
 
 
 def branch(source, target):

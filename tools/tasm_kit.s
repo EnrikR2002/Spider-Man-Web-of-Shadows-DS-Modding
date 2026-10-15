@@ -24,6 +24,7 @@
   b kit_alive             // +44
   b kit_fresh             // +48
   b kit_replay_hit        // +4C
+  b h_vortex_evade        // +50 from 020B57A0  native dodge-Y Drill Kick choice
 
 // ---------------------------------------------------------------- Reflex
 // Bit 18 (Amazing Speed slot): R cancels Red attack states immediately.
@@ -1058,6 +1059,7 @@ lit_0212e3f0: .word 0x0212E3F0
 lit_0213df00: .word 0x0213DF00
 lit_02154b20: .word 0x02154B20
 lit_02154c20: .word 0x02154C20
+lit_02157020: .word 0x02157020
 lit_7fffffff: .word 0x7FFFFFFF
 lit_ffff7000: .word 0xFFFF7000
 lit_ffffa000: .word 0xFFFFA000
@@ -1065,6 +1067,34 @@ lit_ffffd800: .word 0xFFFFD800
 lit_ffffe000: .word 0xFFFFE000
 lit_ffffec00: .word 0xFFFFEC00
 lit_fffff000: .word 0xFFFFF000
+
+// A Vortex cancel preserves its parked node. Native dodge-Y normally picks
+// Drill Kick before the ordinary Y transition, bypassing the node hook.
+// Skip that choice only for owned Red Vortex; the native dodge still exits
+// on its own clock and Y then resumes through the ordinary node path.
+h_vortex_evade:
+  push {r0,r1,r2,r3,lr}
+  ldr r1,[r0,#0x34]
+  cmp r1,#1
+  beq vortex_evade_native
+  ldr r1,[r0,#0xe8]
+  ldr r1,[r1,#8]
+  tst r1,#0x40000
+  beq vortex_evade_native
+  ldr r0,lit_02157020
+  ldr r1,[r0,#0x7c]
+  cmp r1,#0
+  cmpne r1,#3
+  beq vortex_evade_native
+  ldr r1,[r5,#0x80]
+  cmp r1,#12
+  bne vortex_evade_native
+  pop {r0,r1,r2,r3,lr}
+  b 0x020b589c
+vortex_evade_native:
+  pop {r0,r1,r2,r3,lr}
+  mov r6,#0
+  b 0x020b57a4
 
 // ---------------------------------------------------------------- hit capture
 // The native contact dispatcher calls the victim's ReceiveHit interface

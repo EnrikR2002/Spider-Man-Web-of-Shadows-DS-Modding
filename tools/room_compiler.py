@@ -151,7 +151,7 @@ def backdrop(look, x0, x1, y0, y1, z=-170.0, tile=90.0, shade=1.0, mirror=True, 
             y += band; fold = not fold
         if ground:
             out.append(Quad(look, ((x, y0, z), (x, y0 - ground, z), (x + tile, y0 - ground, z), (x + tile, y0, z)),
-                            ((a, 0.97), (a, 0.99), (b, 0.99), (b, 0.97)), shade))
+                            ((a, 0.97), (a, 0.99), (b, 0.99), (b, 0.97)), shade * 0.2))
         x += tile; n += 1
     return out
 

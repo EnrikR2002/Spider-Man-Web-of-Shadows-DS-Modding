@@ -137,6 +137,8 @@ class Walker:
         s.pos = tuple(v / U for v in sample['position_q12_candidate'])
         s.state = sample['controller']['state_id_candidate'] if sample['controller'] else None
         s.enemies = [e for e in k.enemies(ram) if e['hp'] > 0 and e['state'] != 6]
+        manager = struct.unpack_from('<I', ram, 0x02145C34 - p.BASE)[0] - p.BASE
+        s.room_vars = tuple(ram[manager + 0x1C0:manager + 0x1CA]) if 0 <= manager <= len(ram) - 0x1CA else ()
         return s
 
     def record(self, label, passed, s, **extra):
@@ -188,12 +190,21 @@ class Walker:
         if self.on['park'] and s.frame % 6 == 0:             # lab fixture: enemies held away from a move under test
             for e in s.enemies: self.move(e, self.on['park'], ptr, ram)
         # A half-freed actor shows wild coordinates and no state: chasing one threw Spidey out of the level (lab).
-        real = [e for e in s.enemies if e['state'] is not None and all(abs(v) < 4000 * U for v in e['position'])]
+        real=[]
+        for e in s.enemies:
+            if e['state'] is None or any(abs(v)>=4000*U for v in e['position']):continue
+            mot=struct.unpack_from('<I',ram,e['actor']-p.BASE+0x30)[0]-p.BASE
+            if not 0<mot<len(ram)-0x300 or mot%4 or struct.unpack_from('<I',ram,mot)[0]!=e['actor']:continue
+            if s.room==93 and not (-5*U<=e['position'][0]<=220*U and -4*U<=e['position'][1]<=85*U):continue
+            real.append(e)
         if self.on['chase'] and real and s.frame % 40 == 0:  # lab fixture: Spidey goes to the nearest enemy
             near = min(real, key=lambda e: abs(e['position'][0] / U - s.pos[0]) + abs(e['position'][1] / U - s.pos[1]))
             ex, ey = near['position'][0] / U, near['position'][1] / U
             if abs(ex - s.pos[0]) > 6 or abs(ey - s.pos[1]) > 6:
-                k.teleport(ptr, ram, s.sample['motion_address'] - p.BASE, int((ex - 4) * U), int((ey + 1) * U))
+                # A lab chase must not enter either Roof exit (or chase a freed
+                # actor's reused position). Room transitions remain real inputs.
+                x,y=chase_point(s.room,ex,ey)
+                k.teleport(ptr, ram, s.sample['motion_address'] - p.BASE, int(x * U), int(y * U))
         if self.boss_max and s.frame % 12 == 0:              # mini-boss: (hp, max) pair like NormalEnemy +0x44
             needle, at, alive = struct.pack('<i', self.boss_max), 0, False
             while (at := ram.find(needle, at + 1)) > 0:
@@ -302,6 +313,13 @@ class Walker:
 
 
 # --- routes ------------------------------------------------------------------
+def chase_point(room_index,x,y):
+    """Lab-only placement beside a fighter; stay inside the Roof arena."""
+    # x12 allowed native movement after the last kill to brush the Signal
+    # door (observed at x9.7). Reserve room for body width and residual speed.
+    return (min(176,max(24,x-4)),min(65,max(5,y+1))) if room_index==93 else (x-4,y+1)
+
+
 def room(name): return ch.BY_NAME[name].index
 
 
@@ -383,7 +401,7 @@ def routes():
         until('span_wall_a_dashed', flag(wall_a), 900, 'Right+tapA'),
         until('span_wall_b_dashed', flag(wall_b), 1200, 'Right+tapA'), wait(30),
         until('red_suit', red, 400, 'tapL', fatal=False), walk('span_into_the_right_chamber', -128, 600, fatal=False),
-        *put(-12, 5), fixtures(fight=True, park=None),
+        *put(-12, 5),hold('B',6),wait(90),fixtures(fight=True, park=None),
         leave('span_to_hollow', 'ML_NestHollow', 'Right'), fixtures(fight=False, park=(0, 140)), wait(SETTLE), mark('hollow'),
         check('arrived_in_the_hollow', in_room('ML_NestHollow')),
         *drop(-15, 106), fall('hollow_gap_without_red_floor', 88), wait(30), fixtures(park=(0, 8)),
@@ -459,17 +477,17 @@ def routes():
         hold('B', 14), hold('B+Right', 26), hold('Right', 14), wait(40),
         check('held_jump_reaches_the_first_catwalk', lambda s: s.pos is not None and s.pos[1] > 24 and s.state == 0),
         *put(25, 43), until('live_catwalk_shocks', hurt, 600, 'tapRight'), wait(200), mark('shocked'),
-        *put(20, 115), wait(30), until('relay_to_roof', in_room('ML_Roof'), 400, 'Left'), fixtures(park=None), wait(SETTLE),
+        *put(20, 115),hold('B',6),wait(90), until('relay_to_roof', in_room('ML_Roof'), 400, 'Left'), fixtures(park=None), wait(SETTLE),
         mark('roof'), check('roof_arrival_in_the_passage', lambda s: s.pos is not None and s.pos[0] > 190 and s.pos[1] < 8),
         walk('roof_out_of_the_passage', 170, 300), until('roof_first_wave_appears', lambda s: bool(s.enemies), 600),
     ])
     # Roof: three waves, each starting when the one before is beaten, then the flag; and out again.
     out['substation-roof'] = ('ML_RelayHall', 2, (), [
         wait(60), fixtures(fight=False), until('relay_to_roof', in_room('ML_Roof'), 400, 'Left'), wait(SETTLE),
-        fixtures(fight=True, chase=True), walk('roof_out_of_the_passage', 170, 300),
+        fixtures(fight=True, gather=False,chase=True),walk('roof_out_of_the_passage',170,300),*put(100,5),hold('B',6),wait(90),
         until('roof_first_wave_appears', lambda s: bool(s.enemies), 600), mark('roof-wave'),
-        until('roof_waves_beaten', flag(cleared), 5400), wait(120), mark('roof-clear'),
-        fixtures(fight=False, chase=False), *put(200, 5),
+        until('roof_waves_beaten', flag(cleared), 5400),fixtures(fight=False,chase=False,gather=False),
+        *put(100,5),wait(120),mark('roof-clear'),*put(200,5),
         until('roof_to_relay', in_room('ML_RelayHall'), 400, 'Right'), wait(SETTLE), mark('relay-top'),
         check('relay_arrival_on_the_upper_ledge', lambda s: s.pos is not None and s.pos[1] > 110 and s.pos[0] < 30),
     ])
@@ -480,6 +498,38 @@ def routes():
         check('switchyard_arrival_in_the_left_doorway', lambda s: s.pos is not None and s.pos[0] < 12 and s.pos[1] < 8),
         *put(225, 5), until('switchyard_to_yard', in_room('ML_Yard'), 400, 'Right'), wait(SETTLE), mark('yard'),
         check('yard_arrival_at_the_left_wall', lambda s: s.pos is not None and s.pos[0] < -250 and s.pos[1] < 8),
+    ])
+    # Reach the new checkpoint using the existing dock and a normal held jump.
+    out['substation-save'] = ('ML_Switchyard', 2, (), [
+        wait(60),fixtures(fight=False,park=(120,76)),*put(29,15),wait(30),
+        hold('B',12),hold('B+Left',24),wait(65),
+        check('jump_reaches_fire_escape',lambda s:s.pos is not None and s.pos[1]>35),
+        until('switchyard_to_service',in_room('ML_ServiceBay'),400,'Left'),fixtures(park=None),wait(SETTLE),
+        check('service_has_no_enemies',lambda s:not s.enemies),
+        walk('service_to_sphere',40,400),hold('X',6),wait(70),mark('service-save-menu'),
+        hold('B',6),wait(60),walk('service_exit',72,400),
+        until('service_to_switchyard',in_room('ML_Switchyard'),400,'Right'),wait(SETTLE),
+        check('switchyard_return_on_fire_escape',lambda s:s.pos is not None and s.pos[1]>35),
+    ])
+    # The new machine's corridor and fight seal use real inputs/doors. These
+    # routes check room flow; the dedicated boss lab checks unweakened combat.
+    out['signal-in'] = ('ML_Roof', 2, (), [
+        wait(60), fixtures(fight=False, park=(100, 70)), *put(12, 5),
+        until('roof_to_signal', in_room('ML_SignalCore'), 400, 'Left'), wait(SETTLE),
+        fixtures(park=None), until('signal_corridor_safe', lambda s: bool(s.pos) and s.pos[0] > 86
+                                  and bool(s.room_vars) and s.room_vars[0] == 0, 120),
+        walk('signal_enter_arena', 63, 300), wait(80),
+        check('signal_started_once_inside', lambda s: s.room_vars[0] == 1 and s.pos[0] < 78),
+        hold('Right', 120),
+        check('signal_locked', lambda s: s.pos[0] < 80 and s.room == 94),
+    ])
+    # A saved defeated flag exercises the actual exit and its opposite arrival.
+    out['signal-out'] = ('ML_SignalCore', 1, (ROOM_FLAG_SIGNAL := ch.ROOM_FLAGS['signal_leech_defeated'],), [
+        wait(60), fixtures(fight=False), *put(74, 5),
+        until('signal_to_roof', in_room('ML_Roof'), 400, 'Right'), wait(SETTLE),
+        check('roof_arrival_at_signal_door', lambda s: s.pos[0] < 22 and s.pos[1] < 8),
+        until('roof_to_cleared_signal', in_room('ML_SignalCore'), 400, 'Left'), wait(SETTLE),
+        check('signal_stays_cleared', lambda s: s.room_vars[0] == 0 and bool(s.flags >> ROOM_FLAG_SIGNAL & 1)),
     ])
     return out
 
@@ -512,7 +562,13 @@ def run_child(rom_path, name, spec=None, tag=''):
                 c.memmove(ptr + stats + 0x1C, flags.to_bytes(40, 'little'), 40)
                 done['preset'] = True
         walker.tick(frame, lib)
-        if done['end'] is None and (walker.i >= len(walker.steps) or walker.report['aborted']): done['end'] = frame
+        if done['end'] is None and (walker.i >= len(walker.steps) or walker.report['aborted']):
+            done['end'] = frame
+            if walker.report['aborted']:
+                _,ram=k.ram_of(lib)
+                path=OUT/f'walk-{name}{tag}-{source_hash[:8]}-aborted-ram.bin'
+                w.atomic_write(path,ram)
+                walker.report['aborted_ram']=str(path)
         if done['end'] is not None and frame >= done['end'] + 60: return 'stop'
 
     dest, _ = k._run(rom, f'walk-{name}{tag}', [], frames=budget, bits=PLAYER_ABILITIES, clear=~PLAYER_ABILITIES & 0xFFFFFFFF,

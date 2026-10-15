@@ -89,7 +89,9 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
     new_glob = w.pack_glob(names, blobs)
     result = w.rebuild_rom(rom, {'Glob.bin': new_glob})
     from tools.combat_profile import apply_rom
-    result, combat_edits = apply_rom(result, rebound if gameplay_profile is None else gameplay_profile)
+    release = release_info.PROFILE_INFO.get(gameplay_profile, {})
+    parent_profile = release.get('compose_parent', gameplay_profile)
+    result, combat_edits = apply_rom(result, rebound if gameplay_profile is None else parent_profile)
     # Re-read every resource from the resulting ROM and compare exact bytes.
     report = w.validate_rom(result, target=True)
     ge = report['nitrofs'][0]
@@ -99,11 +101,18 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
     for i, blob in enumerate(blobs):
         if checked[offsets[i]:offsets[i + 1]] != blob: raise ValueError(f'Build verification failed: {names[i]}')
     chapter = None
+    crane = None
     if release_info.PROFILE_INFO.get(gameplay_profile, {}).get('chapter'):
         # Final verified stage: Midnight Line appends its rooms and grows the
         # kit autoload; it proves every other resource unchanged itself.
         from tools import midnight_chapter
         result, chapter = midnight_chapter.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = report['nitrofs'][0]
+        new_glob = result[ge['start']:ge['end']]
+    if release.get('crane'):
+        from tools import crane_row
+        result, crane = crane_row.apply_rom(result, version=release['version'])
         report = w.validate_rom(result, target=True)
         ge = report['nitrofs'][0]
         new_glob = result[ge['start']:ge['end']]
@@ -113,7 +122,7 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
            'combat_data_edits': combat_edits,
            'header_crc16': report['header']['header_crc16'], 'nitrofs': report['nitrofs'],
            'replaced_assets': replacements, 'identical_overlays': identical,
-           'added_assets':added, 'midnight_line': chapter,
+           'added_assets':added, 'midnight_line': chapter, 'crane_row': crane,
            'verified_resource_count': len(names), 'unchanged_resource_count': len(names) - len(replacements)-len(added)}
     if gameplay_profile in release_info.PROFILES:
         release = release_info.PROFILE_INFO[gameplay_profile]

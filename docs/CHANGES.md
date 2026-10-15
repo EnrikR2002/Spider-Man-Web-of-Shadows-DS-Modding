@@ -14,6 +14,227 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.16.1 - 2026-10-14 - Crane Row visual and readability sweep
+
+Published through Play Spider-Man.cmd. ROM SHA256
+`5b0d6f552ac0da040ce0ee3f6a650e2b629614a9b73ea56ddbadc062efef705e`;
+ARM9 `abfbb112...`, byte-identical to v0.16.0. Boot and Options both show
+0.16.1 in English/American. Latest battery `3a4e7c9b...` is byte-identical,
+with wrapper/checkpoints verified; prior ROM and both compositions retained.
+Agent-tested; the player has not tested Crane Row yet.
+
+- **All twelve rooms receive an art pass.** Original riveted steel, deck,
+  hull, water, lamp, amber girder and sign textures; lattice cranes with
+  cabs/cables, boats, ship superstructure/windows, cargo fittings, power
+  pipes and shaft bracing. Three broad Pier skyline pictures form a single
+  harbor panorama rather than small repeating city tiles.
+- **Clearer routes and landings.** Steel catwalk lips, rear rails and
+  underside supports; signs for the office, power, gantry, Crown, cache and
+  hoist; shorter objective hints. Softer deck highlights keep actors legible.
+  The office gains warm walls, a desk and chart board; the finale retains
+  clear warning pads, exposed motor and green refuge marks.
+- **Exact gameplay compatibility.** Only the twelve visual models/texture
+  archives and two language string files differ from v0.16.0. All executable,
+  collision, objects, cameras, anchors, doors, encounter scripts, maps, machine
+  models and unrelated assets stay exact. Kit, native controls, purchases,
+  prices and progress are preserved.
+
+Validation:339 full-suite tests, then30 targeted checks after correcting the
+Roof lab driver; all30 Crane door cases and all13 Midnight routes pass on this
+exact ROM. Signal entry needed one rerun. The former Roof gather helper left
+fighters below melee range; the corrected fixture leaves enemy movement native,
+keeps its player chase away from doors and settles after earned victory. It
+also passes on v0.16.0; no ROM behavior was changed for this driver correction.
+Red with purchased extra kit/Vitality and Black with Vitality III beat the
+hoist without lab health refills, then pass cleanup/exit/revisit. Native health
+gains remain allowed. Office save/Continue, lever, cache, harmless-warning/live
+damage and measured refuge controls pass. All twelve rooms and extra elevated
+views were inspected in emulator captures. Performance, first-visit duration
+and player feel remain unconfirmed. Evidence and before/after preview:
+`work/crane-row/polish/`; exact publication/save proof: `publication.json`.
+
+## v0.16.0 - 2026-10-14 - Crane Row: The Hanging Harbor
+
+Published through the usual Play Spider-Man.cmd setup. ROM SHA256
+`39fcf89e46487e4cc80eed7414871891e6f0ca1a21ed86d4e3f26844f095d299`;
+ARM9 `abfbb112...`. Boot and Options both display0.16.0 in English/American.
+Agent-tested; player feel and first-visit duration remain unconfirmed.
+Latest battery `3a4e7c9b...` is byte-identical; wrapper and snapshots verified.
+The previous v0.15.1 ROM and both active compositions are retained.
+
+- **Twelve authored rooms:** Quayside, Freight Exchange, Harbor Office,
+  Container Warren, Dry Dock, Engine House, Counterweight Shaft, Gantry Spine,
+  Winch Cache, Crane Crown, Long Arm and Breakwater. Outdoor rooms reach
+  360..420 units wide; the shaft rises224. Original geometry, container
+  routes, a supported ship hull, crane silhouettes, dock lighting and distant
+  city/water layers give the branch its own architecture.
+- **Connected district:** a new right exit in Pier_Save02, native Office
+  checkpoint, cargo-power lever, maintenance return, Crown descent, optional
+  native smashable stash and victory return to Quayside. Upper hatches show
+  X markers; ground doors remain walk-in. A local overview and detailed maps
+  cover the district. Native story routes/ability gates remain intact.
+- **Long Arm:** a moving grabber commits to a warned lane, slams or sweeps,
+  then exposes one motor. Native animated hit geometry supplies actual melee
+  damage; protected motor HP is guarded. Green floor marks tested safe
+  positions. Supporting enemies spawn during the opening burst; surviving
+  adds can remain after victory, while hazards/future spawns stop and the
+  exit opens. The shaft counterweight moves behind fixed traversal landings;
+  it is scenery rather than a rideable platform.
+- **Integration:** rooms96..107, area6 and private persistent flags live in
+  an independent8KiB extension. Midnight's4KiB block and every unrelated
+  resource stay exact. Existing kit, native A/B, purchases, dependencies,
+  prices and save progress are preserved. No new skills or time slowing.
+
+Validation: 332 unit-suite checks plus3 health-window tests; all30 Crane and
+13 Midnight real-door cases;12 crash seeds. Full68-kit regression passed
+before the final hoist refinement. Final native gate/snare/Black controls
+match that baseline; an equivalence audit proves only the hoist's three
+resources/owned adapter storage changed, with unchanged collision/maps/doors
+and kit. Final gateway execution tests cover native fallback arguments in
+every other room/kind combination. Red with purchased extra kit/Vitality and
+Black with Vitality III win without lab health refills. Native health gains
+are allowed and measured separately. Actual victory survives Office save/
+reload; warning/live damage, safe coordinates, guard, return and revisit
+controls pass. Evidence: `work/crane-row/`,
+`work/area-research/crane-*.log`, `work/kit/v0.16.0/qualification.json`.
+Native health-orb recovery resumes play without granting victory. Exact
+publication/save verification: `work/crane-row/publication.json`.
+
+## v0.15.1 - 2026-10-14 - Clearer Signal Leech/Substation and smoother Vortex
+
+Published to the usual Play Spider-Man.cmd ROM. SHA256
+`160d01cbda3320bc2c70eb2ab55359263e4b64272808e2d1fde9a704296de44c`;
+ARM9 `117c9f7c...`, kit ARM9 `02f85aa3...`. Boot and Options both display
+v0.15.1 in English/American. Latest battery `3a4e7c9b...` stayed byte-identical;
+DSV wrapper/snapshots verified. Prior v0.15.0 ROM and both active compositions
+are retained. Agent-tested; revised player feel remains unconfirmed.
+
+- **Signal Leech:** each native smashable core now has a bright pink/white
+  beacon that disappears through that core's destruction callback. Break
+  any core in any order. Native core hit geometry/health and victory
+  persistence are retained. Suspended shelves are removed, leaving a flat
+  arena. Green floor marks permanent safe gaps; yellow lights illuminate
+  the incoming powered strip below the targets, then blue arcs become
+  damaging. Warning lead is longer and two arcs replace three per lane.
+  The tall entrance bulkhead still blocks a jump/swing past the seal.
+- **Substation:** brighter construction surfaces/undersides replace dark
+  cutaway or repeated light tiles. Control Roof entrances have visible
+  roof caps. Distant skyline bases are darkened to remove stretched neon
+  columns. Detailed maps follow the revised geometry.
+- **Vortex:** **Y, Y, Down+Y**, then release Down and keep pressing Y.
+  Old pause and Dragnet-yank entries remain. Whip/return lash, double lash,
+  double lash, slam provide seven contact opportunities. Authored arm
+  follow-through and matching loop poses smooth the joins. R retains the
+  web steps through the dodge/landing; an active owned Vortex prevents
+  native Drill Kick from stealing the resume. Up/A/B retain their exits.
+  Plain strings, Black/unowned behavior, purchases/prices and ownership
+  dependencies are preserved. No skills added, teleports or time slowing.
+
+Validation: 311 unit tests, 68 kit checks, 12 crash seeds and all 13 real-door
+routes passed. The Signal entry route needed one retry for a lab predicate
+that read an absent position; its corrected stable-pose run also passed.
+Red and Black each won without health refills. Boss flow/seal/victory/revisit
+and native save/reload passed. Each green control held 1,440 captured frames
+without HP loss; the warning was harmless and the live lane removed 6,656
+Q12. Evidence: `work/kit/v0.15.1/qualification.json`,
+`work/kit/cleanup-{units-final,crash}.log`,
+`work/midnight-line/walk-all-160d01cb.json`, `leech-*`,
+`cleanup-publication.json`. Source/clock/preview lessons are in TECHNICAL.
+
+Limits: seven strikes are contact opportunities, not guaranteed HP drops
+or combo-gauge counts. Maps remain static apart from the player marker.
+Actual DeSmuME performance and the revised feel need player feedback.
+Native OBJ timers run in delay units: the unchanged 300-unit breaker
+measures about ten seconds, correcting earlier five-second descriptions.
+
+## v0.15.0 - 2026-10-13 - Substation checkpoint, detailed maps and Roof wave fix
+
+Published through Play Spider-Man.cmd's usual ROM with DeSmuME closed. SHA256
+`f0e53056f04bc498dc253a1ded5ca854c0f94535f7cf7f27313d099ff9c06ae9`;
+ARM9 `f4b5fdc9...`, kit ARM9 remains `ccd7f003...`.
+Latest battery stayed byte-identical (`f9edc1cd...`); its wrapper/snapshot
+verified, and v0.14.0 plus the prior active composition were retained.
+Agent-tested; player verdict pending.
+
+- **Service Bay checkpoint:** a quiet maintenance room off the Switchyard's
+  upper-left fire escape. Jump from the dock to the ledge and enter the
+  left door. Native save sphere supplies Save, Upgrades and Test Upgrades.
+  Continue restores Spidey beside the sphere. No new abilities required.
+- **Five detailed maps:** Switchyard, Relay Hall, Control Roof, Signal Core
+  and Service Bay now show their actual layouts in the detail view.
+  Platforms, doors, electrical hazards, core locations and checkpoint are
+  marked, with the native player marker. The chapter overview gains the
+  bay's save icon and branch arrows.
+- **Roof wave stall:** a defeated NormalEnemy could retain a non-null weak
+  reference and active spawn cost forever. A small router scoped to room93
+  sends zero-HP enemies through native list cleanup. Living enemies keep
+  the wave active; there is no automatic timed win. The next crew can start
+  before the last corpse finishes fading, with the existing 45-frame gap.
+- Kit, prices, purchases and boss behavior remain unchanged. Research
+  fixtures now validate motion ownership, avoid chasing across Roof exits
+  and retain RAM on an aborted walk. The boss driver steps off a shelf
+  before attacking a ground core; this changes lab inputs only.
+
+Validation: 300 unit tests, all13 real-door routes, new checkpoint native
+save/Yes -> fresh Continue, map/player-marker captures, reproduced stalled
+wave -> fixed stress pass, living-crew/no-victory control. Boot and Options
+use v0.15.0. Kit code is identical to the v0.14.0 qualified kit; its 63 checks
+and crash qualification carry forward. Boss flow passed: full core health,
+physical seal, actual victory, exit and cleared revisit (Spidey kept alive).
+Evidence: `work/midnight-line/service-qualified-*`, `roof-live-final.log`,
+`walk-substation-roof-fixed-f0e53056.json`, TECHNICAL checkpoint/map section.
+
+Limits: the spawner stall is reproduced in the agent lab, not player-confirmed.
+Map landmarks are static; only the native player icon moves. Actual DeSmuME
+performance and human pacing remain for player feedback.
+
+## v0.14.0 - 2026-10-13 - Signal Leech, the Midnight Line machine boss
+
+Published through the usual Play Spider-Man.cmd ROM, with DeSmuME closed.
+SHA256 `7cb3933889c1185acf3d60fceebf155dbeed7e08bda90eb21193e5bcc1f40fc0`;
+ARM9 `f0f82245...`, unchanged kit ARM9 `ccd7f003...`. Boot and Options show
+v0.14.0. The actual battery stayed byte-identical (`f9edc1cd...`), its DSV
+wrapper round-tripped, and v0.13.0 plus the prior active composition were
+preserved. Agent-tested, not player-confirmed.
+
+- **Signal Core, room 94:** a new left passage from the Control Roof leads
+  to an original machine arena with a far skyline and landing shelves. The
+  Roof keeps its repeatable waves. The chapter map shows the new boss, and
+  the Refuge points to it after the Nest.
+- **Signal Leech:** three visible infected cores, 12 health units each,
+  remain hittable throughout. Destroying them advances three pressure
+  phases and then permanently disables the fight after normal saving.
+  Actual Red and Black attacks work. The machine does not use a native boss
+  health bar or require a paid move.
+- **Warned electrical lanes:** original yellow panels flash before steady
+  live arcs. Warnings are harmless. Single lanes become pairs, always
+  leaving a safe route, then outer/middle alternation. Three bounded strong
+  crews provide combo targets; health/damage use the Roof's dial.
+- **Emergency breaker:** X buys a one-use five-second power cut. Power
+  returns through another warning. Victory shuts down arcs/future spawns
+  and opens the seal immediately. Living enemies can remain until exit.
+- Native controls, purchases, kit clips, slow-motion settings and story
+  abilities are preserved. Native near-death recovery continues the current
+  attempt with partial core progress. Fresh pre-victory entry resets it.
+
+Validation: 293 unit tests, 63 kit checks, 12 crash seeds, all 12 real-door
+walk routes, tour, power puzzle and save/Continue passed. Red and Black won
+unweakened boss runs without player refills. Actual victory -> Refuge save
+-> reboot/Continue -> cleared boss revisit passed with copied SRAM. A
+physical seal check after the nearest core was destroyed, harmless/live HP
+comparison, native near-death recovery and guarded scheduler tests passed.
+The Roof route needed one retry for its known wave stall. Final help/map
+polish has identical gameplay code/assets to the qualified candidate; only
+map colour-slot ARM9 bytes differ (`final-equivalence.json`). Map source
+colours are protected, and all-visited colours were checked in the emulator.
+
+Limits: a minimal-purchase, six-health-unit driver broke two cores then lost
+after rushing overlapping crews. Player difficulty/readability and actual
+DeSmuME/JIT12 performance remain to be confirmed. Props do not acquire the
+kit's enemy-only Perch/Dragnet targeting. Evidence: `work/kit/v0.14.0/`,
+`work/midnight-line/leech-*`, `leech-publication.json`; implementation and
+reproduction details are in TECHNICAL "Signal Leech implementation".
+
 ## v0.13.0 - 2026-10-13 - Three web skills (Overclock, Dragnet, Vortex) and a tougher, better-looking Substation
 
 Published through Play Spider-Man.cmd's stable ROM (DeSmuME closed; the build does not touch the battery). SHA256

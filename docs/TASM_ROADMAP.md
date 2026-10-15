@@ -321,18 +321,6 @@ the rate getter); Momentum one tier earlier (tier t doubles t+1 of 5 free
 steps, full at tier 4) and on air strings, with a visible cue. Re-measure
 string hit counts at the new rates (TECHNICAL "Second kit block").
 
-| Move | Input (unproven) | Fantasy | Prove first |
-|---|---|---|---|
-| **Slingshot** | Hold Down + A on the ground | Two lines to the sides, he walks back stretching them, release fires him across the room through every enemy in the lane and he sticks to the far wall; also crosses gaps, so rooms can be built around it | Speed cap outside state 46; hand-off into wall cling (state 7); whether Down + A is free |
-| **Head Banger** | A toward a second enemy during a grapple | A second line; both are yanked together while he back-flips up, they collide under him and he lands on the pile | Moving two enemies by velocity |
-| **Pendulum** | Passive on the native web swing (states 26..28) | Swinging through a crowd kicks everyone in the arc flying (Ricochet); B at the top releases into a flip | Swing speed and position in those states; `spd_WebSwingKick` binding |
-| **Cat's Cradle** | Second A held on a grappled enemy | Over, under, over: three wraps cocoon him; three wraps hold even a web-resistant boss for a short window | Long stun on bosses; whether a grapple attaches to them (else from Perch) |
-| **Paddle Ball** | Hold A in the air after Skyjack | Hanging from a line he bounces the launched enemy on a web; Y on each return hits harder, the last one spikes him into the crowd | Rhythm window without slow-motion; vertical enemy velocity |
-
-Agent's order: Slingshot, Head Banger and Pendulum first; Cat's Cradle with
-the new boss; Paddle Ball as the toy. A section can unlock its move's shop
-row (the purchase record's required event may be a game flag: one lab run).
-
 **Stat rows** (Both Suits list; rows may have several levels natively, one
 ownership bit per level, 19 free): Vitality (+1 health unit per level; bar
 recoloured per level, or layered so the new colour drains first: the player
@@ -363,99 +351,7 @@ skeleton who uses the kit against him, if an enemy can bind the player rig.
 XP), bounty elites roaming old story rooms, tokens hidden in native rooms
 that only new moves reach (paying stat levels), a style rank on the HUD.
 
-## Round three (2026-10-12): the player's answers, v0.11.0, new move ideas
-
-Player, 2026-10-11 (answering "Round two"): 1) "I'm not really that impressed
-by any of these new moves you suggested, come up with new ones"; 2) "Let's do
-just vitality for now"; 3) quick fixes before the bigger work: yes; 4) spend
-whatever time is needed mapping things out, "don't create anything yet": do
-the research so that a later session can do the work fast.
-
-**Built in v0.11.0** (CHANGES): Reflex 1.10 and Sense 1.20, Momentum one tier
-earlier and giving the native 1.15 / 1.3 back from combo tier 3 (string of
-four: 122 frames at tier 0, 86 at tier 5; v0.10.0 113 and 87), Vitality
-I..III, the chapter's own map, closed hatches, the Nest strength ramp. Not built: Flow, Second Wind and Adrenaline (not chosen),
-Momentum on air strings and a visible cue, sections and bosses (research
-only: TECHNICAL "Room compiler", "Script boss research"). 2026-10-12, later
-the same day: the player turned Round three down as well ("they weren't that
-interesting"), except Thwip Barrage ("did sound kinda cool ... give me more
-web based ideas"): see "Round four".
-
-Agent's reading of the two rejections (an interpretation, not the player's
-words): the picks so far (Web Rush, Ricochet, Momentum) all deepen the combo
-itself, while the rejected ideas were set pieces that need a setup (a
-grapple, a charge, a swing). Round three puts new answers inside the string
-and adds one headline that changes what a fight looks like. **All
-unapproved; none built.**
-
-| Idea | Input (unproven) | What happens | Prove first |
-|---|---|---|---|
-| **Rodeo** | On a Perch: hold a direction, Y, B | Spidey steers the enemy he rides: the D-pad runs him through the crowd, Y makes him swing at whoever is in front (his own attack, hits replayed on his friends), B jumps off and sends him stumbling into the rest (Ricochet) | Driving an enemy by velocity while perched; forcing his attack state on demand (the lab already forces state 15); whether his hit can land on enemies or must be replayed |
-| **Combo wheel: Kickflip and Flapjack** | B and X in a ground string (A is Web Rush) | B: a flip kick that launches the enemy and carries Spidey up with him, straight into the air string. X: a web suplex that throws the enemy overhead onto whoever stands behind. With A, every face button has an answer mid-combo | Whether B and X (queue commands 2 and 4) are free in non-cancelable nodes; an overhead arc for an enemy by velocity |
-| **Wall Bounce** | Passive (Ricochet upgrade) | A flying enemy who hits a wall bounces back toward Spidey instead of sliding down; hit him before he lands and he flies again | Seeing a flying body stop at a wall (velocity clamps); re-launching by hit replay |
-| **Thwip Barrage** | Hold A on the ground | Rapid web shots walk the target backward; at a wall he is pinned there for a few seconds, and so is everyone in the lane (the car-thief scene) | Hold versus tap on A; a pinned state (the native grapple hold); the native grapple line as the shot |
-| **Live Wire** | Passive at combo tier 3+ | Charged web-shooters (TASM2): grapple, Web Rush and Thwip hits arc to two nearby enemies and stun them, drawn with the game's own electric effects | Spawning a native effect actor (`ElecShock`, `ElectricLg`) from kit code |
-| **Ceiling Stalk** | A while hanging from a ceiling above an enemy | Drops a line, hauls him up and leaves him stuck there for a few seconds | Wall and ceiling states (7 cling, crawl and ceiling hang, 9 wall run: seen 2026-10-12); holding an enemy at ceiling height by velocity |
-
-Agent's order: Rodeo (headline), the combo wheel and Wall Bounce (cheap, and
-they feed Ricochet and Momentum), then Thwip Barrage. Live Wire and Ceiling
-Stalk need the most research. Known Perch limit to fix with Rodeo: B pressed
-in the two updates between stomp cycles fires the native web swing instead of
-the spring (TECHNICAL "Second kit block", qualification note).
-
-## Round four (2026-10-12): web-shooter ideas
-
-Player, 2026-10-12 (answering "Round three"): "they weren't that interesting
-so try again"; Thwip Barrage "did sound kinda cool so give me more web based
-ideas. Don't implement just theory craft". **Everything below was a
-proposal.** Answered 2026-10-13 ("Round five"): Overclock was built as
-proposed, Flypaper and Vortex became Dragnet and the Vortex string, the
-rest is not approved.
-
-Agent's reading (an interpretation): three rounds of set pieces and
-passives were turned down; the two things that landed are Web Rush and Thwip
-Barrage. Both are the web-shooters used as a weapon in the middle of a
-fight, with no setup. So this round is one suite: **every button gets a web
-answer, and webs leave a mark.** The mark is a shared status, **Webbed**: an
-enemy hit by any web move wears strands for a few seconds; a Webbed enemy
-who is knocked into a wall or the floor sticks there for a moment (a free
-combo starter). That one rule makes the moves below feed each other and
-Ricochet.
-
-| Idea | Input (unproven) | What happens | Prove first |
-|---|---|---|---|
-| **Thwip Barrage** | Hold A, ground or air; D-pad aims | Rapid web shots, each a small hit that shoves the target and marks him Webbed; the fourth on one enemy pastes him to whatever is behind him. In the air every shot kicks Spidey up a little, so he hovers over the crowd while he fires | Tap versus hold on A (A is readable on ARM9); an enemy pushed by velocity while staggered; a held "stuck" state (what state a grappled enemy sits in) |
-| **Face Full of Web** | A just as an enemy swings (the Spider-Sense moment, with A instead of R) | A web to the face: he finishes the swing blind and it lands on his nearest friend; blinded for a few seconds he keeps hitting whoever is beside him. R still dodges: R is the safe answer, A the greedy one | The Sense detection exists; replaying the attacker's own hit on another enemy (the kit replays Spidey's hits today) |
-| **Yoink** | A during an air string, or A + away from the target in a ground string | The mirror of Web Rush: a line to the farthest enemy in front and he is ripped across the room into the next hit; anyone in his way goes down (Ricochet). Rush goes to them, Yoink brings them | An enemy moved by velocity over 40+ units; which input is free in the air string |
-| **Fastball** | X with nothing to lift nearby | Webs the nearest loose thing (a barrel, a crate, or an enemy who is on the floor) and whips it at the enemy in the held direction. A downed goon is always there to throw | Whether X (queue command 4) is free away from liftables; throwing a native object by velocity and breaking it on contact |
-| **Flypaper** | Down + A on the ground | Sprays a web patch on the floor for about six seconds: anyone who steps in is rooted and Webbed. One patch at a time. The answer to a dogpile | Whether Down + A is free (`spd_GrapplePullDown.sca` hints at a native use); a floor mark (the unused `WebBrake` effect resource, or a scenery quad) |
-| **Vortex** | Hold A during Spin Cycle | Every turn of the helicopter throws a line and drags everyone within about 30 units a step closer: the spin becomes a blender that fills itself | Enemy velocity toward a point each update; whether it stays readable with six enemies |
-| **String 'Em Up** | A in the air above a staggered or downed enemy who is nearly beaten | The finisher from every comic: he is hauled up and left hanging from the ceiling, out of the fight, for bonus XP and a combo tier. Uses the ceiling anchor points every room carries | Finding "nearly beaten" (health is readable); lifting an enemy to an anchor by velocity; removing him cleanly |
-| **Overclock** | Passive at combo tier 5 | The web-shooters run hot: every Y hit also fires a web shot at a second enemy, who is staggered and Webbed. Tier 5 becomes a state you fight to keep | A second hit replay per contact without the freeze the v0.4.0 lab patch showed |
-
-Agent's order: **Thwip Barrage** and **Face Full of Web** first (the pick
-plus the cheapest strong one: its detection and hit replay already exist),
-then **Yoink** and **Vortex** (both are "move an enemy by velocity", one
-proof), then **Fastball**. Flypaper, String 'Em Up and Overclock after
-play. One lab session can settle the shared unknowns: enemy velocity, the
-stuck state, hold-A, and whether X and Down + A are free. New rooms help
-here: the Control Roof and the Switchyard have barrels to throw and walls
-to paste people on. Rules unchanged: authored clips, velocity only, no
-slow-motion.
-
-## Round five (2026-10-13): Overclock, Dragnet and Vortex in v0.13.0
-
-Player, 2026-10-13 (answering "Round four"): "let's implement overclock.
-Vortex does sound cool but i was thinking let's make a new ground string
-(right now we have the base Y spam and spin cycle) and find a way to make it
-web focused. flypaper does sound cool as well but i was thinking a different
-variant where instead of how base A lets you web one enemy ... bust a bunch
-of webs on like 5 enemies at once in front of you and then you have the
-option to Y and throw them all towards me so i can combo all of them at the
-same time. So could have something like flypaper and then vortex them, where
-the vortex is a combo designed to combo multiple enemies at once (can change
-names of everything if you want). **I think only these 3 more and no more
-skills.**"
+## 3 new skills (2026-10-13): Overclock, Dragnet and Vortex in v0.13.0
 
 Shipped in v0.13.0 as first versions (CHANGES; engine facts in TECHNICAL
 "Web lines, built hits and the web skills"). Agent-tested, not
@@ -466,7 +362,7 @@ multi-web is **Dragnet**, the string kept the player's word **Vortex**.
 |---|---|---|---|
 | **Overclock** (80, 400) | Passive at combo tier 5 | Every hit Spidey lands also fires a web shot at the nearest other standing enemy within 60 units: a stagger for half a health unit, with a web line that flashes out to him. One shot per hit, the same enemy at most every 16 updates | Whether tier 5 is reached often enough (tier 4, or a shot every second hit below 5); shot damage; a different reaction (a short web hold instead of a stagger) |
 | **Dragnet** (81, 500) | Keep A held on the web grapple (about 0.4 s into the hold) | Up to four more standing enemies in front within 48 units get a web line and the web hold (the game's own cocoon), without damage. **Y yanks all of them and the first target**: they fly to Spidey and land 6 to 10 units in front of him (half a unit of damage) while he plays the heave. Letting go any other way (A again, a jump, Up for Skyjack) leaves them webbed where they stand | A gesture for the burst (he keeps the hold pose); reach and count; whether held is the right input (a tap stays the native single web); catching the pile in the air instead of on the floor; fliers and bosses |
-| **Vortex** (82, 500) | Y, Y, pause, Y, Y, Y (the third Y once he is back on his feet), or Y after a Dragnet yank | Three steps with their own clips: a spinning web whip, a hopping double lash, an overhead slam that sends everyone flying. Every contact also lands on each enemy within 14 units on either side, with a web line flashing to each. R cancels and resumes, A still Web Rushes out of it | The pause window (16 updates); clips from player feel; facing the crowd on each step; a pull toward Spidey on the lash (the "vortex"); its own finisher reaction (a launch) |
+| **Vortex** (82, 500) | v0.15.1: Y, Y, Down+Y, release Down and mash Y; old pause and Dragnet entries remain | Four steps: spinning whip with a return lash, double lash twice, overhead slam. Seven contact opportunities around Spidey; native range/reactions decide actual hits. Arm follow-through connects the authored clips. R preserves the steps through the native dodge/landing, avoiding Drill Kick stealing the resume; A/B/Up keep their exits | Player feel of the longer string; automatic crowd-facing; an inward lash pull; an authored launch finisher |
 
 What the three share (worth knowing for any later work): the kit can now
 draw the game's own web lines between Spidey and any enemy, and can build a
@@ -477,6 +373,269 @@ floor patch, String 'Em Up.
 
 **The player wants no further skills after these three.** Iterate them, and
 the ten before them, from play; do not propose new ones unless asked.
+
+2026-10-14 feedback: Vortex felt short/clunky and hard to enter without
+Dragnet. Published v0.15.1 adds the explicit directional entry and extra lash;
+early/late/fast entry and R resume passed among all 68 kit checks, with 12
+crash seeds. The revised feel is not player-confirmed.
+
+## Midnight Line new boss (2026-10-13, Signal Leech v0.14.0)
+
+**Implementation update, same day:** the user requested implementation.
+Signal Leech is published in v0.14.0, room 94 beyond a new Roof left
+passage. Three durable infected cores, a compact original machine backdrop,
+large harmless flashing lane panels, three guarded pressure phases, bounded
+strong crews and a one-use X breaker are implemented (about ten seconds,
+corrected by v0.15.1 timer measurements). Native
+player controls, purchases and the Roof's repeatable fight are preserved.
+Actual attacks have won the full-health Red encounter without health
+refills; kit/crash/room/save qualification passed. Native near-death recovery
+preserves partial progress. Player verdict on fun, cues and difficulty is
+pending; no more skills were added.
+Technical contracts and evidence: TECHNICAL "Signal Leech implementation".
+2026-10-14: player completed the encounter but requested visible cores,
+cleaner terrain, clear target order/safe floor/warnings, mostly in the
+Substation and boss. Published v0.15.1 makes any-order cores bright,
+removes the suspended shelves, marks green refuges and powered strips,
+and keeps warning lights below the targets. Readability/HP qualification
+is agent-tested; player feel remains pending. See TECHNICAL "Signal Leech readability".
+The earlier recommendation/design below is historical research context.
+
+**User request:** explore how to implement a new Midnight Line boss so another
+agent can implement it later. User chose **explore both machine/arena and
+new-character routes, then recommend**. This section is an agent proposal,
+not player-approved identity, mechanics or balance. Nothing was implemented
+or played in this research session. Technical evidence, exact engine entry
+points, experiment gates and file ownership are in TECHNICAL "New Midnight
+Line boss: implementation research handoff".
+
+**Recommendation: start with Signal Leech, a symbiote-infested signal machine
+in a fourth Substation room after the Control Roof.** This uses the working
+room compiler, hazards and waves to make a new encounter around movement and
+combat. Keep the Roof's repeatable fight intact. Signal Leech is a provisional
+name from the older queue; its visual identity and final name remain open.
+The recommendation is conditional on a core-damage/telegraph prototype being
+fun: three instantly broken boxes with waves around them are not enough.
+
+| Route | What can make it new | Evidence and remaining work | Recommendation |
+|---|---|---|---|
+| Machine/arena | Original arena silhouette, destructible circuits, distinct lane patterns, phase escalation, breaker opening and strong adds | Room generation, cycling hazards and waves already work; core durability/callbacks, harmless cues, locks and cleanup need small experiments | First choice for the next substantial encounter |
+| Native character with new encounter rules | Familiar body in a new arena with changed pressure/recovery | Existing native mini-boss works in the chapter; transplant/zone dependence, phase control and kit compatibility remain open | Useful prototype/control, not the promised fully new character by itself |
+| Rival on compatible rig | New authored movement/attacks and visual identity using the player-compatible animation setup | New finding: m6 binds 121 player clips at 37 joints, and MiniBossStateMachine derives from SpideyStateMachine; factory/model binding, scoped copies, AI and targeting still need proof | Best character research branch if the player prefers a mobile opponent |
+| Entirely new model/skeleton/AI | Fully original character silhouette and moves | Current animation authoring hardcodes player joints; no complete proven enemy model/rig/AI pipeline | Defer until a compatible-rig boss works |
+
+### Proposed Signal Leech fight
+
+The machine occupies the back/upper part of a compact combat space. Three
+visible infected relay cores sit within reachable foreground fighting
+positions. Cables and warning markings tie each core to its lane so the
+player can read what will happen without a dialogue box. Draw the machine
+as original room geometry initially; moving tendrils/custom effects need
+their own proof. Far skyline, lit undersides and safe floor space follow the
+Substation lessons. No unseen late-game texture set.
+
+The basic loop is **read a cue, jump or evade through a safe lane, land a
+combo or throw, break a circuit, keep moving**. Direct attacks always offer
+a victory route; throwables and the optional breaker create advantages.
+Strong, bounded add waves give Dragnet/Vortex/Overclock useful targets, with
+no new skills or purchases required. Do not promise that a machine core can
+be perched on or web-yanked: those interactions need explicit proof.
+
+| Stage | Pressure | Opening / player response |
+|---|---|---|
+| Entry | Machine is idle until Spidey is fully inside; brief readable reveal | Inspect the three cores; entry corridor remains safe before the trigger |
+| Three cores left | One clearly marked floor lane pulses after a harmless cue; small strong crew | Cross with B/R, keep a combo through repositioning, hit any reachable core |
+| Two cores left | Alternate lanes or sweep a short sequence; one fresh add batch | Use upper/lower routes and the visible safe lane; carry the pile with the kit |
+| One core left | Faster pattern transitions with a guaranteed safe route; final bounded add batch | Optional breaker gives a short power cut, then an explicit warning before power returns |
+| Victory | All damaging circuits stop, exits open, machinery stays visibly dead | Short completion line, persistent chapter flag; no stolen story ability or repeated reward |
+
+These are pattern proposals, not finalized attack timing, HP or enemy counts.
+Phases come from actual core destruction, never an elapsed-time auto-win.
+The boss must not force idle waiting for long invulnerability windows; keep
+cores hittable in the first prototype and let lane pressure create the
+openings. Do not use live arcs as a supposedly harmless warning, spawn enemies
+endlessly, stun-lock the player on landing or stack damage across every route.
+No slow motion, forced teleport, mandatory paid move, or removal of native
+A/B/R behavior. Victory must remain possible with the chapter's current
+story abilities (0..4) and without all optional kit purchases.
+
+Completion is proposed as one-time and saved normally; death before victory
+restarts the encounter. The old Roof remains repeatable. Replay terminal,
+XP payout, custom boss health bar, Conductor teaser and a nearby save room
+are separate follow-ups; they are not prerequisites quietly added to this
+boss. A three-core visual/brief progress line is honest segmented progress,
+not a fake native HP bar. If readable progress demands new UI, budget that
+work explicitly rather than interrupting every exchange with dialogue.
+
+### Order for the implementing agent
+
+1. Re-read current TASKS and the technical handoff; baseline may change.
+   Build a disposable core/cue experiment before final art or a full fight.
+2. Prove melee damage, once-only destruction credit, harmless warning,
+   hazard shutdown and death/re-entry. Test with ordinary controls; a RAM
+   kill cannot qualify core durability or fun.
+3. If those pass, build the fourth room, one pattern and three cores; walk
+   through its real entrance/exit and complete an unweakened attempt.
+4. Add guarded phases, bounded strong adds and the optional breaker. Stress
+   simultaneous core breaks, victory during a queued attack and fast re-entry.
+5. Finish presentation, map/objective and persistence, then qualify the
+   combined candidate and hand it to the player through the normal launcher.
+
+If ordinary props cannot support satisfying damage/recovery without a large
+engine patch, stop expanding this version and test the m6-compatible rival
+route. Its first deliverable is one independently bound enemy with one new
+telegraphed attack and a reliable death callback. A native mini-boss is
+excluded from today's common-enemy registry, so kit targeting and damage
+adapters belong in that prototype, before promises of riding or webbing it.
+Only choose final character identity/art after that vertical slice works.
+
+## Campaign branches outside Midnight Line (2026-10-14, Crane Row approved)
+
+**Construction approved, 2026-10-14:** "yeah sounds super cool, get building".
+Build the twelve-room Hanging Harbor pitch, including both loops, checkpoint,
+large authored spaces, maps and a crane finale; prototype machinery honestly.
+**Design direction:** Crane Row selected. Midnight felt
+"small and underwhelming"; take time to design a much bigger, more impressive
+map and riff the ideas to the player before construction. The old three-room
+Crane slice and nine-room shared first wave are superseded. This turn develops
+the pitch and checked its budget. Construction is now active in a private
+candidate; implementation/qualification status is in TASKS and TECHNICAL.
+Existing story routes and the present kit remain the foundation. Earlier
+Slingshot-dependent designs are obsolete:
+these places must work with native jump/swing/wall movement and the player's
+existing story abilities; paid TASM moves make combat more expressive rather
+than unlocking required terrain. No further skills.
+
+Machine-readable room outlines, materials, entrance candidates, provisional
+IDs/flags and research gates: `reference/area_roadmap.json`. Engine evidence:
+TECHNICAL "Campaign branch research" and `work/area-research/`. None of these
+areas is player-confirmed. Crane Row's twelve rooms, Pier entrance, checkpoint,
+two returns, local/detail maps and hoist machine are implemented in private
+candidates; qualification is active in TASKS/TECHNICAL. Other branches remain
+designs. Counterweight movement is scenery; fixed landings carry Spidey.
+
+| Branch | Proposed progression | What makes it different | Proposed entrance |
+|---|---|---|---|
+| **Pier: Crane Row** | Twelve-room district; cargo-yard loop -> upper crane loop -> Long Arm -> waterfront return | Giant crane/grounded ship landmarks, stacked routes, substantial authored spaces and a dedicated machinery finale | Pier_Save02's unused right side; its left door/save stay native |
+| **Downtown: The Grid / Lost Lab** | Cable Well -> Lost Lab -> Switchback | Vertical building-services shaft and an abandoned laboratory; redirect one power feed to change the route | A new service access inside Downtown_Save03, retaining both Map12 exits |
+| **Residential: Skyline Run** | Roofline -> Water Tower Steps -> Skyline Relay | Broad roof jumps, fire escapes, tower supports and a distant skyline; recover from falls instead of falling into death pits | New access by Residential_Map09's upper roof, or an interior access in Save02 |
+
+### Crane Row: The Hanging Harbor — expanded pitch
+
+The central idea: **enter beneath an enormous cargo crane, explore the docks
+and its machinery, then reach the arm that dominated the skyline at arrival**.
+Twelve rooms give it two connected exploration loops, a quiet native checkpoint,
+an optional maintenance discovery and a victory return. The large spaces target
+360..420 units wide, roughly six/seven camera widths; the tallest shaft targets
+224 units, about five view heights. These are authored-space goals, not filled
+rectangles. Vary architecture, levels, safe landings, camera framing and combat
+pockets. A 45–60 minute exploratory first visit is a pacing target, unmeasured.
+
+| Room | Job in the district | Approximate bounds |
+|---|---|---|
+| Quayside | Open-water arrival; show the giant crane and let the player read the route | 360x96 |
+| Freight Exchange | Recognizable central yard: dock floor, container roofs and overhead rails; strong crew | 400x176 |
+| Harbor Office | Quiet save/shop checkpoint off the hub, overlooking the docks | 112x64 |
+| Container Warren | Interlocking cargo alleys and roofs, recoverable falls and optional routes | 380x160 |
+| The Dry Dock | Grounded ship hull, service platforms and a durable crew beneath the yard | 400x144 |
+| Engine House | Winch/machinery interior; restore cargo power and open the lower loop's return | 280x144 |
+| Counterweight Shaft | Tall climb through crane supports, hanging loads and recovery landings | 176x224 |
+| Gantry Spine | Long exposed upper traverse; broad combat pockets and a view of previous routes | 420x112 |
+| Winch Cache | Optional maintenance branch with an exploration reward proposal | 160x96 |
+| Crane Crown | Upper crew encounter, panorama, final-arm reveal and return descent | 336x176 |
+| The Long Arm | Approach along the crane arm into the hoist-machine finale | 420x144 |
+| Breakwater | Victory opens a lower waterfront return with one last discovery opportunity | 320x96 |
+
+**Connections.** Entry -> Quayside -> Freight Exchange -> Container Warren ->
+Dry Dock -> Engine House -> Counterweight -> Gantry -> Crown -> Long Arm.
+Office branches from Freight; Cache branches from Engine. Engine opens a direct
+route back to Freight; Crown opens a descent to Engine. Victory opens Long Arm
+-> Breakwater -> Quayside. This is schematic topology: actual doors must join
+appropriate sides/heights with walkable arrivals and explicit unlock conditions.
+No required story bypass, unowned Slam or paid kit move. Main landings support
+Red/Black and existing native jump/swing/wall movement; paid moves enrich fights.
+
+**Memorable moments.** The opening crane silhouette becomes a navigable
+landmark. The central yard offers three actual paths at different heights.
+The ship hull changes the shape/scale of the lower route. Counterweights form
+the vertical set piece; moving loads need a native animation/collision prototype
+before being promised. Gantry views reveal the recognizable lower landmarks.
+Opening the two returns makes the district quicker to revisit. Place native
+checkpoint access before the long ascent/finale; avoid repeated mandatory crews
+once their persistent clear conditions are met.
+
+**The Long Arm boss pitch.** A huge cargo grabber/hoist machine attacks while
+Spidey closes on one clearly visible winch/motor target. Proposed attacks:
+track then visibly commit to a marked hook slam, a warned lateral sweep with a
+clear jump/evade route, and an exposed recovery window for real combos. Bound
+crew pressure and keep attacks local to visible camera space. The room's long
+approach is not permission for unseen room-wide hits. This is a prototype gate:
+prove native melee HP loss, recovery/protection, movement/collision, death
+callback, cleanup and Red/Black viability before the final art/encounter. Keep
+the native animated hit binding after the v0.15.1 core-rendering lesson. No new
+character AI, moving hook or playable boss is claimed yet.
+
+**Presentation.** Steel silhouettes, a grounded vessel, open sky, warm dock
+lights and cooler distant water/city layers. Use three depth layers where
+useful, visible supports, readable undersides and clear platform edges. Keep
+foreground beams away from Spidey's silhouette. Texture/scenery work should
+support the shipyard's distinct architecture and landmark progression. Water
+appearance, any animated machinery and custom painted surfaces need real game
+captures. Every room still needs a meaningful route or encounter, not empty
+distance added to meet a size target.
+
+**The Grid absorbs the old Lost Lab idea.** Use office walls, rails, computers
+and authored machinery instead of tinted debug boxes or another subway.
+Cable Well introduces safe maintenance pockets beside warned electrical lanes;
+Lost Lab puts a strong crew on an open floor with observation ledges. One
+branch-private power change opens Switchback and changes the safe approach to
+its machinery. A protected machine with an exposed attack window is a proposed
+encounter, not proven AI or a character boss. Keep routing quick and physical,
+not a list of switches to collect.
+
+**Skyline Run is exploration first.** The normal route always remains usable
+and reversible. A timed replay can follow only after traversal works and native
+timer survival/reset across rooms, death and exits are measured. No slow-motion.
+Use strong crews on wide landings; narrow ledges are traversal space. A mobile
+pursuit finale remains research because enemy AI and cross-room pursuit are
+unproven. Preserve Map09's ichor wall, sewer grate and Downtown connection;
+never require the unowned Sledgehammer Slam or a paid Red move to return.
+
+**Hive: Quarantine Heart is later.** Keep the earlier post-story restriction:
+an organic growth chamber and containment perimeter outside the native Hive,
+not more Nest corridors. No room IDs, flags or spoiler art are committed.
+The native-story completion gate and additional safe flag allocation must be
+proven first. Sewer already has Midnight Line as its new section.
+
+Each branch has a nearby native checkpoint, strong bounded crews, readable
+maps and a completion/return route. Normal enemy XP is established; any special
+one-time reward needs its own grant/save test. Do not tie these places to new
+skills or unchosen stat rows. Midnight Express remains a later connection idea:
+first prove direct district entrances without bypassing story gates.
+
+**Revised budget:** Crane Row alone targets rooms96..107. Proposed visits use
+161..152 then149/148, with seven progress/reward/crew flags140..146. Nineteen
+of the current 21 audited free flags are used on paper; 147/245 remain. The
+live allocator still rejects room106: an explicit visited map must preserve
+all released assignments before these two extra rooms can exist. A dry packing
+trial over v0.15.1 fits twelve placeholders in an8-KiB table with2,720 bytes
+before adapters; final dialogue, maps, names and runtime headroom remain gates.
+These are unallocated proposals. Grid/Skyline retain their designs but no
+reserved IDs; future districts need another flag audit/storage plan.
+
+The old three-room map sketch must grow too. Test a readable Pier overview
+branch and individual detailed maps. A separate local Crane overview is an
+option only after proving how it coexists with native parent/world views;
+no seventh area slot is assumed. An unreadable miniature diagram is not a
+successful twelve-room map.
+
+Next implementation slice: qualify the shared table expansion, prototype a
+Pier_Save02 -> disposable chamber -> Pier_Save02 trip with real inputs, then
+generalize parent-area/detail-map selection and author Quayside plus Freight
+Exchange as a representative visual/traversal slice. Finish Crane
+Row before starting the next branch. Moving-crane, protected-machine and timed
+pursuit prototypes are separate gates; none is a prerequisite for researching
+the fixed room layouts.
 
 ## Spider-Man 2099: future Black kit (2026-10-11, theorycraft)
 

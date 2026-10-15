@@ -254,7 +254,8 @@ class TasmKitTests(unittest.TestCase):
                 if any(flags) and not all(flags): active |= {f for f, on in enumerate(flags) if on}
             starts = sorted(f for f in active if f - 1 not in active)
             contacts = [words[2 * step + k] for k in range(2)]
-            self.assertEqual([c & 0xFF for c in contacts if c & 0xFF != 255], starts, name)
+            wanted = starts + ([8] if step == 1 else [])   # authored return lash; native GMB stays intact
+            self.assertEqual([c & 0xFF for c in contacts if c & 0xFF != 255], wanted, name)
             for c in contacts:
                 if c & 0xFF != 255:
                     self.assertIn(c >> 8 & 0xFF, (0x04, 0x1F))
@@ -278,7 +279,7 @@ class TasmKitTests(unittest.TestCase):
         # With Momentum owned, combo tier 3 and up restores the native 1.15 / 1.3 (the tuning block's own values).
         self.assertEqual((literals['lit2_00001266'], literals['lit2_000014cc']), (0x1266, 0x14CC))
         self.assertIn('cmp r3,#3\n  ldrge r1,lit2_00001266\n  ldrge r2,lit2_000014cc', source)
-        self.assertEqual(literals['lit2_02156f20'], kit.KIT2_BASE + kit.DIAL_OFFSET)
+        self.assertEqual(literals['lit2_02156fc0'], kit.KIT2_BASE + kit.DIAL_OFFSET)
         self.assertEqual(literals['lit2_05000032'], 0x05000000 + 2 * 25)
         for level, scale in zip((1.25, 1.5, 1.75), (205, 171, 146)):
             self.assertAlmostEqual(256 / scale, level, 1)

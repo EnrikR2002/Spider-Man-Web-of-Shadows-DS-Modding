@@ -12,7 +12,7 @@
 // Ricochet count + 256 * native results, +0x54 last victim; +0x58 Momentum
 // rate of this call (0 = native), +0x5C its accumulator, +0x60 doubled steps,
 // +0x64 rush glide updates, +0x68 health bar tinted by Vitality.
-// Strength dial (v0.11.0): 02156F20 (block +0x1B00, zero in the kit image; the
+// Strength dial (v0.15.1): 02156FC0 (block +0x1BA0, zero in the kit image; the
 // chapter build fills it) holds two bytes per room 76..115: enemy health scale
 // and damage-to-Spidey scale in 1/64ths (0 or 64 = native).
 // Kit exports: 02152C58 kit_owned, 5C kit_keys, 60 kit_face,
@@ -25,6 +25,7 @@
   b k2_observe            // +14 r0=common-health enemy, every update (keeps all registers)
   b k2_damage             // +18 r1=Spidey HP, r3=HP after a hit -> r3 (keeps r0, r2)
   b h_yank                // +1C from 020B6030  Y queued in the web hold
+  b h_vortex_stand        // +20 from 020B69B8  queued Y, before Drill Kick / Down
 
 k2_update:
   push {r4,lr}
@@ -87,6 +88,11 @@ k2_owned:                   // r0=actor, r1=mask in ability word 2 -> r0=1 if Re
 // clock is held on sample 2 (the laid-out dive) until 15 units are left
 // (rush_glide, at most 16 updates).
 k2_rush_try:
+  push {r0,lr}
+  bl web_try
+  cmp r0,#0
+  popne {r1,pc}
+  pop {r0,lr}
   push {r4,r5,r6,r7,r8,r9,r10,r11,lr}
   sub sp,sp,#32
   mov r4,r0
@@ -375,7 +381,7 @@ lit2_02145c44: .word 0x02145C44
 lit2_7fffffff: .word 0x7FFFFFFF
 lit2_ffff4000: .word 0xFFFF4000
 lit2_02145c5c: .word 0x02145C5C
-lit2_02156f20: .word 0x02156F20
+lit2_02156fc0: .word 0x02156FC0
 lit2_05000032: .word 0x05000032
 lit2_0000119a: .word 0x0000119A
 lit2_00001333: .word 0x00001333
@@ -396,7 +402,7 @@ k2_observe:                 // r0=enemy actor (common-health ABI checked by the 
   sub r1,r1,#76
   cmp r1,#40
   bhs observe_out
-  ldr r2,lit2_02156f20
+  ldr r2,lit2_02156fc0
   ldrb r2,[r2,r1,lsl #1]
   cmp r2,#0
   cmpne r2,#64
@@ -438,7 +444,7 @@ k2_damage:                  // r1=HP before, r3=HP after (>= 0) -> r3
   sub r2,r2,#76
   cmp r2,#40
   bhs damage_vitality
-  ldr r12,lit2_02156f20
+  ldr r12,lit2_02156fc0
   add r12,r12,r2,lsl #1
   ldrb r2,[r12,#1]
   cmp r2,#0
@@ -1360,9 +1366,9 @@ yank_next:
   pop {r4,r5,r6,r7,pc}
 
 // ---------------------------------------------------------------- Vortex
-// Ability word 2 bit 0x40000. A ground string of its own, entered by a pause
-// after the second hit (Y, Y, pause, Y, Y, Y: the Y arrives when he is back
-// on his feet and no dodge came in between) or straight from a Dragnet yank.
+// Ability word 2 bit 0x40000. Down+Y after native hit 2, its old pause entry,
+// or a Dragnet yank. Four queued Y steps: whip, lash, lash, slam. R cancels
+// retain the parked node; native dodge-Y Drill Kick is bypassed only here.
 // No string node is spent: the node hook swaps the action and parks the node
 // on 12 (14 for the last step), as Web Rush does. Steps (+0x7C): 1 whip
 // (action 57), 2 double lash (56), 3 slam (59), 4 the Dragnet heave (49).
@@ -1374,7 +1380,22 @@ yank_next:
 // +0x88 contacts seen (bits 0-1) and delivered (bits 4-5), +0x8C clean (hit 2
 // played, no dodge since), +0x90 hits (count + 256 * results), +0x94 heave
 // armed, +0x98 pause window extended, +0x9C updates to skip after a step
-// starts (its action is committed one update later).
+// starts (its action is committed one update later), +0xA0 direct entry armed,
+// +0xA4 extra lash played. Up/A/B/R keep their native exits.
+h_vortex_stand:
+  push {r1,lr}              // native r1 is the queued command pointer
+  mov r0,r8
+  bl web_try
+  cmp r0,#0
+  pop {r1,lr}
+  moveq r5,#0
+  beq 0x020b69bc
+  cmp r0,#2
+  mvneq r0,#0x80000000       // let the native dodge finish, retaining queued Y
+  movne r0,#46
+  add sp,sp,#0x30
+  pop {r4,r5,r6,r7,r8,pc}
+
 web_node:                   // r0=controller, r1=previous state -> r0=action or 0
   push {r4,r5,r6,r7,lr}
   mov r5,r0
@@ -1393,17 +1414,29 @@ web_node:                   // r0=controller, r1=previous state -> r0=action or 
   bne web_end
   cmp r0,#3
   beq web_end               // the slam was the last step
+  cmp r0,#2
+  bne web_advance
+  ldr r1,[r4,#0xa4]         // one extra double lash, with the next Y
+  cmp r1,#1
+  movlo r1,#1
+  strlo r1,[r4,#0xa4]
+  blo web_owned
+web_advance:
   movhi r0,#0               // after the heave: the whip
   add r0,r0,#1
   b web_owned
 web_pause:
   cmp r7,#13
   bne web_end
+  ldr r0,[r4,#0xa0]         // Down+Y was consumed in hit 2 by web_try
+  cmp r0,#0
+  bne web_start
   cmp r6,#46                // no pause: the Y came during hit 2
   beq web_end
   ldr r0,[r4,#0x8c]
   cmp r0,#0
   beq web_end
+web_start:
   mov r0,#1
 web_owned:
   mov r7,r0
@@ -1423,6 +1456,10 @@ web_heave:
   mov r0,#4
   mov r1,#12
 web_play:                   // r0=step, r1=node to park on
+  mov r2,#0
+  str r2,[r4,#0xa0]
+  cmp r0,#1
+  streq r2,[r4,#0xa4]
   str r0,[r4,#0x7c]
   str r1,[r5,#0x80]
   and r1,r0,#3              // route kinds: heave 10, steps 11..13
@@ -1445,11 +1482,93 @@ web_end:
   mov r0,#0
   str r0,[r4,#0x7c]
   pop {r4,r5,r6,r7,pc}
+
+// A buffered Down+Y during native hit 2 enters without waiting for idle.
+// Keep plain Y strings, the native standing Down attack and R cancels intact.
+web_try:                    // r0=controller -> 1 to re-enter state 46
+  push {r4,r5,lr}
+  sub sp,sp,#4
+  mov r4,r0
+  ldr r1,[r4,#0x80]
+  cmp r1,#12
+  bne web_try_no
+  ldr r5,lit3_02157020
+  ldr r1,[r5,#0x7c]
+  cmp r1,#3                 // the slam ends this string
+  beq web_try_no
+  ldr r0,[r4,#0x44]
+  ldr r1,lit3_00040000
+  bl k2_owned
+  cmp r0,#0
+  beq web_try_no
+  bl 0x02152c5c             // held keys, Down (0x80), R takes precedence
+  tst r0,#0x100
+  bne web_try_no
+  tst r0,#0x43              // Up/A/B keep their native exits (and A's Web Rush)
+  bne web_try_no
+  ldr r1,[r5,#0x7c]
+  cmp r1,#0
+  bne web_try_active
+  tst r0,#0x80
+  beq web_try_no
+  ldr r0,[r4,#0x44]
+  ldr r0,[r0,#0x30]
+  ldr r0,[r0,#0x178]
+  ldr r1,[r4,#0x14]
+  cmp r1,#46
+  movne r0,#4               // between hits, idle/duck clock is unrelated
+  cmp r0,#4                 // native hit 2 contact (2..3) must finish first
+  blt web_try_no
+  b web_try_consume
+web_try_active:
+  ldr r0,[r4,#0x14]
+  cmp r0,#46
+  beq web_try_window
+  cmp r0,#6                 // ground idle/movement after an attack or dodge
+  bls web_try_consume
+  cmp r0,#24                // the roll lands here before becoming idle
+  beq web_try_consume
+  cmp r0,#53
+  cmpne r0,#54
+  cmpne r0,#57
+  bne web_try_no            // never ground-enter from a jump/hurt/web hold
+  mov r0,#2                 // entry from state 57 itself would still Drill Kick
+  b web_try_out             // leave Y queued until the native idle transition
+web_try_window:
+  mov r2,#11                // lash's last sample; finish both contacts
+  cmp r1,#1
+  moveq r2,#16              // whip
+  cmp r1,#4
+  moveq r2,#9               // Dragnet heave
+  ldr r0,[r4,#0x44]
+  ldr r0,[r0,#0x30]
+  ldr r0,[r0,#0x178]
+  cmp r0,r2
+  blt web_try_no
+web_try_consume:
+  mov r2,#1
+  str r2,[sp]
+  mov r1,sp
+  add r0,r4,#0x28
+  bl 0x020cff0c
+  cmp r0,#0
+  beq web_try_no
+  mov r1,sp
+  add r0,r4,#0x28
+  bl 0x020cfc34
+  mov r0,#1
+  str r0,[r5,#0xa0]
+  b web_try_out
+web_try_no:
+  mov r0,#0
+web_try_out:
+  add sp,sp,#4
+  pop {r4,r5,pc}
 web_actions: .word 0, 57, 56, 59, 49       // words: a byte table could read as a branch to the build's checks
 // Per step two contacts: first active sample (255 = none), kind, damage / 256.
 web_contacts:               // bytes: sample, kind, strength / 256, 0
   .word 0x000000FF, 0x000000FF
-  .word 0x000C0402, 0x000000FF
+  .word 0x000C0402, 0x00080408
   .word 0x00080404, 0x00080409
   .word 0x00101F04, 0x000000FF
   .word 0x000000FF, 0x000000FF

@@ -148,7 +148,7 @@ class MidnightChapterTests(unittest.TestCase):
         names = self.names + [f'x{i}' for i in range(4000 - len(self.names))]
         names += [n for r in ch.ROOMS for n in (f'zz_{r.name}_app.obj', f'zz_{r.name}Textures.nsbtx')]
         for i, name in enumerate(midnight_rooms.AUTHORED):     # authored rooms bring their own model and collision
-            resources[name].update(model=len(names) + 2 * i, bsp=len(names) + 2 * i + 1)
+            resources[name].update(model=len(names) + 2 * i, bsp=len(names) + 2 * i + 1, detail_map=5000+i)
         names += [n for name in midnight_rooms.AUTHORED for n in (f'zz_{name}.nsbmd', f'zz_{name}.bsp')]
         listing = ch.map_layout(self.blobs[ch.MAP_SOURCE])[1]
         table, list_at, messages_at, stub_call = ch.room_table(self.arm9, names, resources, 1049, listing)
@@ -177,8 +177,15 @@ class MidnightChapterTests(unittest.TestCase):
             model = struct.unpack_from('<I', table, struct.unpack_from('<I', raw, 0x20)[0] - ch.ML_BASE)[0]
             self.assertEqual(names[model], f'zz_{room.name}.nsbmd' if authored else room.source + '.nsbmd')
             self.assertEqual(raw[0x24:0x28], src.raw[0x24:0x28])   # texture animation (none in the authored rooms' source)
-            self.assertEqual(raw[0x4C:], src.raw[0x4C:])           # map piece and later fields
-            self.assertEqual(struct.unpack_from('<8i', raw, 0x2C), ch.MAP_FIELDS[room.name if authored else room.source][1:])
+            self.assertEqual(raw[0x50:], src.raw[0x50:])           # unknown later fields
+            if authored:
+                from tools.room_minimap import projection
+                fields=projection(midnight_rooms.plan(room.name,self.blobs.__getitem__)).fields
+                self.assertEqual(struct.unpack_from('<I',raw,0x4C)[0],resources[room.name]['detail_map'])
+            else:
+                fields=ch.MAP_FIELDS[room.source]
+                self.assertEqual(raw[0x4C:0x50],src.raw[0x4C:0x50])
+            self.assertEqual(struct.unpack_from('<8i', raw, 0x2C), fields[1:])
             self.assertEqual(struct.unpack_from('<i', raw, 0x28)[0], ch.MAP_AREA)     # the chapter's own map screen
         # The map's visited test: one patched instruction calls a stub that reads rooms 92.. from a table.
         site, old, call = stub_call
@@ -200,6 +207,7 @@ class MidnightChapterTests(unittest.TestCase):
         old = Cbmp.parse(raw)
         data, listing = ch.map_layout(raw)
         new = Cbmp.parse(data)
+        self.assertEqual([new.palette[i] for i in ch.STATE_COLORS], [old.palette[i] for i in ch.STATE_COLORS])
         self.assertEqual(new.tiles[:len(old.tiles)], old.tiles)
         self.assertEqual({room for room, *_ in listing}, set(ch.BY_NAME))
         self.assertEqual(set(ch.MAP_ROOMS), set(ch.BY_NAME))
@@ -251,7 +259,7 @@ class MidnightChapterTests(unittest.TestCase):
         drawn.add(frozenset(ch.MAP_SHAFT_LINK))
         for a, b in ch.MAP_DOOR_ARROWS:                                 # side doors that do not fit the panel: an arrow each
             for room, other in ((a, b), (b, a)):
-                xs = [x for x, _ in ch.MAP_ARROWS[room]]
+                xs = [x for x, _ in ch.map_arrows(room,other)]
                 x0, x1 = min(r[0] for r in ch.MAP_ROOMS[room]), max(r[2] for r in ch.MAP_ROOMS[room])
                 self.assertTrue(all(x < x0 for x in xs) if kind(room, other) == 'left' else all(x >= x1 for x in xs), room)
             self.assertEqual({kind(a, b), kind(b, a)}, {'left', 'right'})
@@ -361,13 +369,17 @@ class MidnightChapterTests(unittest.TestCase):
         raw = ch.add_objectives(built, completed)
         _, groups = s.counts(built, 1)
         events = Events.parse(*(lambda r: (r.sections[1], r.raw[3]))(RoomObjects.parse(raw).records[1])).groups
-        power, nest, done, check = range(groups + 1, groups + 5)
+        power, nest, done, check, leech, post_nest = range(groups + 1, groups + 7)
         self.assertEqual([events[g - 1].commands for g in (power, nest, done)],
                          [(ch.say('goal_power'),), (ch.say('goal_nest'),), (ch.say('goal_done'),)])
         self.assertEqual(events[check - 1].commands, (s.if_var(ch.TRACK_POWER, '==', 0, then=s.action(eg=power),
                                                                otherwise=s.action(eg=nest)),))
         self.assertEqual(events[0].commands[-1], s.if_var(completed, '==', 0, then=s.action(eg=check),
-                                                          otherwise=s.action(eg=done)))   # completion first
+                                                          otherwise=s.action(eg=post_nest)))   # completion first
+        self.assertEqual(events[leech - 1].commands, (ch.say('goal_leech'),))
+        self.assertEqual(events[post_nest - 1].commands,
+                         (s.if_var(ch.ROOM_FLAGS['signal_leech_defeated'], '==', 0, then=s.action(eg=leech),
+                                   otherwise=s.action(eg=done)),))
         self.assertTrue(all(len(text) <= 80 for text in ch.LINES.values()))
 
     def test_message_accessor_keeps_native_ids_and_adds_chapter_ids(self):

@@ -10,7 +10,7 @@ from keystone import Ks, KS_ARCH_ARM, KS_MODE_ARM  # noqa: E402
 
 KIT_BASE = 0x02152C20
 # (source stem, load address, code limit): the kit and its second block (v0.10.0).
-BLOCKS = (('tasm_kit', KIT_BASE, 0x1F00), ('tasm_kit2', 0x02155420, 0x1900))
+BLOCKS = (('tasm_kit', KIT_BASE, 0x1F00), ('tasm_kit2', 0x02155420, 0x1A00))
 
 
 def literal_errors(code, source):

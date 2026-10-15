@@ -1,338 +1,1061 @@
 {
-  "agent_tested": {
-    "chapter_tour": "14/14 directed links, arrivals at expected spawns, visited flags 252..256 only (v0.6.0 36aa52f8 and dev a023350e)",
-    "collision_roundtrips": 75,
-    "crash_hunt": "12/12 clean on 36aa52f8",
-    "death_in_chapter": "native touch health-orb minigame, resumes in room 76",
-    "empty_shell_checks": "7/7: room 76, player, continued updates, right/left input, jump, rendering, pause return to native room 64",
-    "empty_shell_hash_prefix": "9407c67f",
-    "encounters": "ML_Switching spawns 4 like native Sewer_Map13; ML_Service fights end with working exits (seeds 11, 12; seed 13 inconclusive lab teleport), flag 268 written, native control identical",
-    "entity_batches": 586,
-    "event_commands": 2830,
-    "event_groups": 1424,
-    "kit_qualification": "31/31 on 36aa52f8",
-    "milestone_native_save_reload": "4/4, schema-1 encoding 0x004D4C78, copied battery only",
-    "normal_context_exit_checks": "8/8: empty room 76, right/left input, jump, no enemies, rendered captures, native queued return to 64, continued updates, unchanged candidate",
-    "refuge_save_continue": "6/6 on 36aa52f8; control without guard patch leaves Continue on the title",
-    "release_0_6_1": "c3010cba: tour 14/14, refuge save/continue, ambush seeds 11/12 exits work (11 completed ambush), kit 31/31, crash hunt 12/12",
-    "release_0_7_0": "c56095be: tour 30/30, saves+Continue in Refuge/NestRest/NestShrine, fights end with working exits (Station, Shaft, Throat, Span, Hollow, Gate; enemy HP capped), boss start/death/completed flag/exit, map diagram in game, title v0.7.0, crash hunt 12/12",
-    "release_0_8_0": "d84ae539: power puzzle chain (breaker -> Platform -> lift/throw boiler -> grate -> Nest Shaft, real presses), v0.7.0 control blocked, hint/breaker/objective lines render, tour 0..22 (bc3aa3a1) + --start 24 + Gate exit after fights (30/30 links), saves+Continue Refuge/Rest/Shrine, kit 31/31, crash hunt 12/12",
-    "release_0_8_1": "f68a082e: walk routes with real inputs and doors 5/5 (67 checks: sealed Stairs grate + hint, breaker, boiler, grate; Shaft/Rest/Throat descent on foot; Span red walls by Bulldozer Dash; Hollow gap; Gallery; Shrine; boss room corridor safe, walls rise with the fight, boss, exits; Gate gap, unsealed top, neck exit by wall crawl; Stairs grate shortcut), tour 30/30, puzzle, saves+Continue Refuge/Rest/Shrine",
-    "release_0_9_0": "f109a525: walk routes 6/6 first try (75 checks, incl. Yard: Refuge door, tunnel, floor, gang, back out), tour 32/32, puzzle, saves+Continue Refuge/Rest/Shrine, kit 31/31, crash hunt 12/12",
-    "room_object_roundtrips": 75,
-    "shell_checks": "6/6: appended entry 76, ongoing updates, movement, frames, return to native room 64",
-    "shell_hash_prefix": "edf0521b",
-    "source_tests": "199 full-suite tests passed; focused Midnight Line/document tests pass",
-    "walkability_before_0_8_1": "v0.7.0/v0.8.0 door tours teleported onto exit triggers: the Hollow, the boss room and the Gate could not be crossed on foot (Sledgehammer Slam floors), Nest door seals could strand the player"
-  },
-  "authorization": "2026-10-06: implement the approved Midnight Line first-station plan",
-  "current_research_gate": "v0.9.0 adds the Yard (proto01) off the Refuge; Signal Leech and Conductor teaser not built",
-  "deferred": [
-    "moving_train",
-    "full_conductor_boss",
-    "rescue_population",
-    "procedural_generation",
-    "new_paid_upgrades"
+  "added_resources": [
+    "zz_ML_Entry_app.obj",
+    "zz_ML_EntryTextures.nsbtx",
+    "zz_ML_Refuge_app.obj",
+    "zz_ML_RefugeTextures.nsbtx",
+    "zz_ML_Station_app.obj",
+    "zz_ML_StationTextures.nsbtx",
+    "zz_ML_Stairs_app.obj",
+    "zz_ML_StairsTextures.nsbtx",
+    "zz_ML_Platform_app.obj",
+    "zz_ML_PlatformTextures.nsbtx",
+    "zz_ML_NestShaft_app.obj",
+    "zz_ML_NestShaftTextures.nsbtx",
+    "zz_ML_NestRest_app.obj",
+    "zz_ML_NestRestTextures.nsbtx",
+    "zz_ML_NestThroat_app.obj",
+    "zz_ML_NestThroatTextures.nsbtx",
+    "zz_ML_NestSpan_app.obj",
+    "zz_ML_NestSpanTextures.nsbtx",
+    "zz_ML_NestHollow_app.obj",
+    "zz_ML_NestHollowTextures.nsbtx",
+    "zz_ML_NestGallery_app.obj",
+    "zz_ML_NestGalleryTextures.nsbtx",
+    "zz_ML_NestShrine_app.obj",
+    "zz_ML_NestShrineTextures.nsbtx",
+    "zz_ML_NestGate_app.obj",
+    "zz_ML_NestGateTextures.nsbtx",
+    "zz_ML_Venom_app.obj",
+    "zz_ML_VenomTextures.nsbtx",
+    "zz_ML_Yard_app.obj",
+    "zz_ML_YardTextures.nsbtx",
+    "zz_ML_Switchyard_app.obj",
+    "zz_ML_SwitchyardTextures.nsbtx",
+    "zz_ML_RelayHall_app.obj",
+    "zz_ML_RelayHallTextures.nsbtx",
+    "zz_ML_Roof_app.obj",
+    "zz_ML_RoofTextures.nsbtx",
+    "zz_ML_SignalCore_app.obj",
+    "zz_ML_SignalCoreTextures.nsbtx",
+    "zz_ML_ServiceBay_app.obj",
+    "zz_ML_ServiceBayTextures.nsbtx",
+    "zz_MMMidnight.cbmp",
+    "zz_ml_alignment41.bin",
+    "zz_ML_Switchyard.nsbmd",
+    "zz_ML_RelayHall.nsbmd",
+    "zz_ML_Roof.nsbmd",
+    "zz_ML_SignalCore.nsbmd",
+    "zz_ML_ServiceBay.nsbmd",
+    "zz_ML_Switchyard_detail.cbmp",
+    "zz_ML_RelayHall_detail.cbmp",
+    "zz_ML_Roof_detail.cbmp",
+    "zz_ML_SignalCore_detail.cbmp",
+    "zz_ML_ServiceBay_detail.cbmp",
+    "zz_ml_alignment52.bin",
+    "zz_SignalWarning.nsbmd",
+    "zz_RelayCore.nsbmd",
+    "zz_ML_Switchyard.bsp",
+    "zz_ML_RelayHall.bsp",
+    "zz_ML_Roof.bsp",
+    "zz_ML_SignalCore.bsp",
+    "zz_ML_ServiceBay.bsp"
   ],
-  "enemy": {
-    "art": "Original model and texture on a compatible existing rig",
-    "behaviour": "Ceiling dweller; marked electrical zone, charge flash, discharge, vulnerable recovery",
-    "id": "signal-leech",
-    "requirements": "Defeatable with native attacks and no required purchases"
-  },
-  "entrance": {
-    "candidate": "Sewer_Save02",
-    "placement": {
-      "destination": "ML_Entry spawn 3",
-      "doorway": "native Door (empty) copy at x=54 (grey door behind the desk)",
-      "return_spawn": {
-        "facing": "left",
-        "id": 2,
-        "units": [
-          44,
-          2
-        ]
-      },
-      "room": "Sewer_Save02",
-      "trigger_center_units": [
-        61,
-        4
-      ],
-      "trigger_size": [
-        12,
-        24
-      ]
-    },
-    "requirements": "Walk into the far right wall past the desk of the save room off Sewer_Map07; native exits untouched"
-  },
-  "id": "midnight-line",
-  "identity": "Optional eerie subway adventure, connected to the existing campaign",
-  "implemented_foundations": [
-    "lossless_room_objects",
-    "entity_batch_framing",
-    "collision_node_list_framing",
-    "native_room_lookup_catalog",
-    "namespace_asset_staging",
-    "authored_geometry_shell",
-    "candidate_versioned_progress_codec",
-    "lossless_room_event_groups",
-    "repaired_empty_room_initialization",
-    "normal_context_entry_and_native_exit_probe",
-    "native_door_spawn_and_variable_formats",
-    "production_room_table_in_kit_autoload",
-    "authored_native_entrance_door",
-    "five_sanitized_room_clones_with_palette_grade",
-    "native_flag_persistence_252_275",
-    "refuge_save_room_guard_patch",
-    "cross_area_room_clones",
-    "minimap_cbmp_codec_and_chapter_diagram",
-    "relocated_sewer_area_room_list",
-    "message_continuation_preserved",
-    "boss_reward_without_native_grant",
-    "grown_text_huffman_tree",
-    "room_scripting_batches_and_actions",
-    "shared_cross_room_flag",
-    "power_puzzle_breaker",
-    "chapter_dialogue_message_ids",
-    "refuge_objective_board",
-    "room_collision_tree",
-    "walk_routes_with_real_doors",
-    "no_sledgehammer_floors",
-    "unsealed_nest_fights",
-    "boss_arena_from_exit_corridor",
-    "stairs_grate_one_way_until_gate",
-    "authored_doors_with_foreign_templates",
-    "debug_room_as_chapter_room",
-    "cross_area_spawner_in_appended_batch"
-  ],
-  "objectives": [
-    "find_emergency_power",
-    "reach_switching_house",
-    "restore_main_power",
-    "investigate_sealed_tunnel"
-  ],
-  "persistence": {
-    "milestones": [
-      "discovered",
-      "completed"
-    ],
-    "publication_gate": "Passed for the first slice: refuge save/Continue restores room 77 and its flag; rollback ROMs without the guard patch reject chapter saves",
-    "required": true,
-    "storage": {
-      "evidence": "Flags 245..282 unset in 62 save slots; 245..275 no event or ARM9 constant reference (245..250 are visited flags of unreachable debug rooms 69..74)",
-      "kind": "native story flags (stats+0x1C, saved natively)",
-      "milestones": {
-        "completed": "ML_Venom reward flag (0xAB remapped; 246 in v0.7.0)",
-        "discovered": 252
-      },
-      "remapped_encounter_flags": {
-        "ML_Platform 0x27/0x62/0x11c": [
-          269,
-          270,
-          271
-        ],
-        "ML_Station ambush (Sewer_Map02 0x42)": 268,
-        "build_report": "work/midnight-line/chapter-build.json local_flags",
-        "pool_first_use_order": [
-          268,
-          269,
-          270,
-          271,
-          272,
-          273,
-          274,
-          275,
-          266,
-          267,
-          251,
-          250,
-          249,
-          248,
-          247,
-          246,
-          245
-        ]
-      },
-      "retired_locals": "Span seal flag and Hollow red-floor flag (never written since v0.8.1) moved from 266/267 to 138/139; other allocations unchanged",
-      "shared_flags": {
-        "track_power_cut (ML_Platform 0x27, set by the ML_Stairs breaker)": 269
-      },
-      "visited": {
-        "ML_Entry": 252,
-        "ML_NestGallery": 262,
-        "ML_NestGate": 264,
-        "ML_NestHollow": 261,
-        "ML_NestRest": 258,
-        "ML_NestShaft": 257,
-        "ML_NestShrine": 263,
-        "ML_NestSpan": 260,
-        "ML_NestThroat": 259,
-        "ML_Platform": 256,
-        "ML_Refuge": 253,
-        "ML_Stairs": 255,
-        "ML_Station": 254,
-        "ML_Venom": 265,
-        "ML_Yard": 266
-      }
-    },
-    "temporary_circuit": "Restore a safe configuration on re-entry"
-  },
-  "player_confirmed": false,
-  "player_feedback": [
+  "arm9_patches": [
     {
-      "addressed_in": "0.6.1: matching door kinds, visible doorway, train-roof fight, Sewer map; open: chapter on the map, new geometry, new enemies",
-      "date": "2026-10-07",
-      "summary": "Really cool; entrance hard to find and invisible; doors led to unexpected places (trapdoor to side door); fights low-level; recoloured native rooms recognisable; no working map was unnerving",
-      "version": "0.6.0"
+      "address": "0x20077f8",
+      "new": "0xee0",
+      "old": "0xea4"
     },
     {
-      "addressed_in": "0.7.0: Nest wing, boss, chapter on the map",
-      "date": "2026-10-07",
-      "summary": "Not tested yet; asked to keep building as much content as possible ('a kid on christmas')",
-      "version": "0.6.1"
+      "address": "0x2084ac8",
+      "new": "0x2157420",
+      "old": "0x21321f4"
     },
     {
-      "addressed_in": "0.8.0: lab found the Platform grate blocked in v0.7.0; power puzzle fixes it",
-      "date": "2026-10-08",
-      "summary": "About to playtest v0.7.0; work on whatever is worthwhile meanwhile",
-      "version": "0.7.0"
+      "address": "0x20e1878",
+      "new": "0xeb01da60",
+      "old": "0xe28750b0"
     },
     {
-      "addressed_in": "0.8.1: red floors removed, Nest fights never seal doors, boss arena staged for the corridor entrance, Stairs grate locked until the Gate is reached, grate hint; 0.9.0: the Yard (map extension)",
-      "date": "2026-10-11",
-      "summary": "Went into the hive section; top entrance locked by venom goo, could not break the red platform without the power-up; had to quit and lost a little progress",
-      "version": "0.8.0"
+      "address": "0x20d1610",
+      "new": "0xea021b32",
+      "old": "0xe92d000f"
+    },
+    {
+      "address": "0x204c2c8",
+      "new": "0x1a042fe4",
+      "old": "0x1a00001c"
+    },
+    {
+      "address": "0x213b898",
+      "new": "0x2157d20",
+      "old": "0x0"
+    },
+    {
+      "address": "0x213b89c",
+      "new": "0x19",
+      "old": "0x0"
+    },
+    {
+      "address": "0x20e3724",
+      "new": "0xe3a00000",
+      "old": "0xe3a00001"
+    },
+    {
+      "address": "0x20e21cc",
+      "new": "0xe3500006",
+      "old": "0xe3500005"
+    },
+    {
+      "address": "0x20e34b8",
+      "new": "0xe3500006",
+      "old": "0xe3500005"
+    },
+    {
+      "address": "0x211802c",
+      "new": "0xecc",
+      "old": "0x320"
+    },
+    {
+      "address": "0x2118030",
+      "new": "0x445",
+      "old": "0x14"
+    },
+    {
+      "address": "0x2085720",
+      "new": "0xe3510060",
+      "old": "0xe351004b"
+    },
+    {
+      "address": "0x20d64b8",
+      "new": "0xe3510060",
+      "old": "0xe351004b"
+    },
+    {
+      "address": "0x20d0f64",
+      "new": "0xe35100c4",
+      "old": "0xe92d000f"
+    },
+    {
+      "address": "0x20d0f68",
+      "new": "0x359f3010",
+      "old": "0xe59d2004"
+    },
+    {
+      "address": "0x20d0f6c",
+      "new": "0x259f3010",
+      "old": "0xe59f3010"
+    },
+    {
+      "address": "0x20d0f70",
+      "new": "0xe3a0202c",
+      "old": "0xe3a0102c"
+    },
+    {
+      "address": "0x20d0f74",
+      "new": "0xe0223291",
+      "old": "0xe0213192"
+    },
+    {
+      "address": "0x20d0f78",
+      "new": "0xe5802000",
+      "old": "0xe5801000"
+    },
+    {
+      "address": "0x20d0f7c",
+      "new": "0xe12fff1e",
+      "old": "0xe28dd010"
+    },
+    {
+      "address": "0x20d0f80",
+      "new": "0x211c214",
+      "old": "0xe12fff1e"
+    },
+    {
+      "address": "0x20d0f84",
+      "new": "0x2155d64",
+      "old": "0x211c214"
+    },
+    {
+      "address": "0x20dfcfc",
+      "new": "0xe35100d5",
+      "old": "0xe35100c4"
+    },
+    {
+      "address": "0x20dfdd8",
+      "new": "0xe35100d5",
+      "old": "0xe35100c4"
     }
   ],
-  "player_kit": "Preserve accepted Red, Black and shared abilities and purchases",
-  "published": true,
-  "release_gates": [
-    "room_collision_and_reversible_exit",
-    "namespaced_asset_registration",
-    "safe_persistent_storage",
-    "signal_leech",
-    "five_room_composition",
-    "save_reload_and_native_parity",
-    "performance_and_crash_qualification"
-  ],
-  "remaining_implementation": [
-    "signal_leech_art_and_behaviour",
-    "conductor_teaser",
-    "player_feedback_iteration"
-  ],
-  "requirements": {
-    "release_rule": "Every room passes a tools/midnight_walk.py route (real doors, real movement) before release",
-    "story_abilities": "Bulldozer Dash for the Span walls (player owns bits 0..4); never Sledgehammer Slam (bit 5)"
+  "arm9_sha256": "117c9f7c21c6b2212e95aaf021b3537128de7d6b831cc328e7620021635d6da6",
+  "local_flags": {
+    "ML_NestGate:0x37": 249,
+    "ML_NestGate:0x71": 250,
+    "ML_NestHollow:0x38": 251,
+    "ML_NestHollow:0x72": 139,
+    "ML_NestShaft:0x3b": 272,
+    "ML_NestSpan:0x39": 138,
+    "ML_NestSpan:0x7f": 274,
+    "ML_NestSpan:0x80": 275,
+    "ML_NestThroat:0x3a": 273,
+    "ML_Platform:0x11c": 271,
+    "ML_Platform:0x27": 269,
+    "ML_Platform:0x62": 270,
+    "ML_Station:0x42": 268,
+    "ML_Venom:0x53": 248,
+    "ML_Venom:0x54": 247,
+    "ML_Venom:0xab": 246
   },
-  "research_evidence": "work/midnight-line/",
-  "rooms": [
-    {
-      "id": "ml_entry",
-      "name": "Maintenance Entry",
-      "role": "Arrival from Sewer_Save02 and way back; ceiling exit to the Station (second hatch sealed in v0.7.0)",
-      "room_index": 76,
+  "map": {
+    "area": 5,
+    "entries": 25,
+    "screen": "zz_MMMidnight.cbmp",
+    "title": "Midnight Line"
+  },
+  "messages": {
+    "ML_RelayHall": {
+      "id": 207,
+      "string": 1087,
+      "text": "The relay hall. Steel walls give no grip. The catwalks take turns being live."
+    },
+    "ML_Roof": {
+      "id": 208,
+      "string": 1088,
+      "text": "The control roof. They knew you were coming: three crews, one after another."
+    },
+    "ML_Roof_clear": {
+      "id": 209,
+      "string": 1089,
+      "text": "Substation 7 is yours. The roof is open whenever you want another round."
+    },
+    "ML_ServiceBay": {
+      "id": 212,
+      "string": 1092,
+      "text": "Maintenance bay. A quiet checkpoint for the Substation. Save and gear up."
+    },
+    "ML_SignalCore": {
+      "id": 210,
+      "string": 1090,
+      "text": "Break any bright core. Yellow warns; blue arcs hurt. Green safe. \ue603 cuts power."
+    },
+    "ML_SignalCore_clear": {
+      "id": 211,
+      "string": 1091,
+      "text": "Signal Leech is dead. The Midnight Line is clear of its interference."
+    },
+    "ML_Switchyard": {
+      "id": 206,
+      "string": 1086,
+      "text": "Oscorp Substation 7 feeds the Midnight Line. The crew guarding it looks paid."
+    },
+    "breaker": {
+      "id": 197,
+      "string": 1077,
+      "text": "Track power cut. The boiler on the tracks can be moved now."
+    },
+    "goal_done": {
+      "id": 200,
+      "string": 1080,
+      "text": "The Midnight Line is quiet. For now."
+    },
+    "goal_leech": {
+      "id": 201,
+      "string": 1081,
+      "text": "Substation 7 is past the Yard. Shut down Signal Leech beyond the control roof."
+    },
+    "goal_nest": {
+      "id": 199,
+      "string": 1079,
+      "text": "Objective: something nests under the tracks. Move the boiler and go down."
+    },
+    "goal_power": {
+      "id": 198,
+      "string": 1078,
+      "text": "Objective: cut the track power. The breaker is on the Stairs."
+    },
+    "grate_clear": {
+      "id": 203,
+      "string": 1083,
+      "text": "The grate is clear. Stand on it, open it with X and drop in with Down."
+    },
+    "live_tracks": {
+      "id": 196,
+      "string": 1076,
+      "text": "The tracks are live. Cut the power before touching that boiler."
+    },
+    "sealed_grate": {
+      "id": 202,
+      "string": 1082,
+      "text": "Sealed from below. The way down must be somewhere on the tracks."
+    },
+    "way_up": {
+      "id": 204,
+      "string": 1084,
+      "text": "The nest falls silent. Take the left passage: a shaft climbs back to the Stairs."
+    },
+    "yard": {
+      "id": 205,
+      "string": 1085,
+      "text": "A freight yard above the line. Someone made camp here, and they have seen you."
+    }
+  },
+  "resources": {
+    "ML_Entry": {
+      "objects": 3748,
+      "texture": 3749
+    },
+    "ML_NestGallery": {
+      "objects": 3768,
+      "texture": 3769
+    },
+    "ML_NestGate": {
+      "objects": 3772,
+      "texture": 3773
+    },
+    "ML_NestHollow": {
+      "objects": 3766,
+      "texture": 3767
+    },
+    "ML_NestRest": {
+      "objects": 3760,
+      "texture": 3761
+    },
+    "ML_NestShaft": {
+      "objects": 3758,
+      "texture": 3759
+    },
+    "ML_NestShrine": {
+      "objects": 3770,
+      "texture": 3771
+    },
+    "ML_NestSpan": {
+      "objects": 3764,
+      "texture": 3765
+    },
+    "ML_NestThroat": {
+      "objects": 3762,
+      "texture": 3763
+    },
+    "ML_Platform": {
+      "objects": 3756,
+      "texture": 3757
+    },
+    "ML_Refuge": {
+      "objects": 3750,
+      "texture": 3751
+    },
+    "ML_RelayHall": {
+      "bsp": 3804,
+      "detail_map": 3796,
+      "model": 3791,
+      "objects": 3780,
+      "texture": 3781
+    },
+    "ML_Roof": {
+      "bsp": 3805,
+      "detail_map": 3797,
+      "model": 3792,
+      "objects": 3782,
+      "texture": 3783
+    },
+    "ML_ServiceBay": {
+      "bsp": 3807,
+      "detail_map": 3799,
+      "model": 3794,
+      "objects": 3786,
+      "texture": 3787
+    },
+    "ML_SignalCore": {
+      "bsp": 3806,
+      "core_model": 3802,
+      "detail_map": 3798,
+      "model": 3793,
+      "objects": 3784,
+      "texture": 3785,
+      "warning_model": 3801
+    },
+    "ML_Stairs": {
+      "objects": 3754,
+      "texture": 3755
+    },
+    "ML_Station": {
+      "objects": 3752,
+      "texture": 3753
+    },
+    "ML_Switchyard": {
+      "bsp": 3803,
+      "detail_map": 3795,
+      "model": 3790,
+      "objects": 3778,
+      "texture": 3779
+    },
+    "ML_Venom": {
+      "objects": 3774,
+      "texture": 3775
+    },
+    "ML_Yard": {
+      "objects": 3776,
+      "texture": 3777
+    }
+  },
+  "rooms": {
+    "ML_Entry": {
+      "hammer_floors_removed": 0,
+      "hatch_closed": "Door (Sewer Grate Ceiling)",
+      "index": 76,
+      "record0": {
+        "dropped_commands": [
+          [
+            6,
+            38
+          ],
+          [
+            7,
+            21
+          ],
+          [
+            7,
+            38
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": [
+          3
+        ]
+      },
+      "record1": {
+        "dropped_commands": [
+          [
+            3,
+            21
+          ],
+          [
+            3,
+            38
+          ],
+          [
+            8,
+            38
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
       "source": "Sewer_Map01"
     },
-    {
-      "id": "ml_refuge",
-      "name": "Maintenance Refuge",
-      "role": "Combat-free save room; objective board on entry; left door to the Yard (v0.9.0)",
-      "room_index": 77,
-      "source": "Sewer_Save04"
-    },
-    {
-      "id": "ml_station",
-      "name": "Midnight Station",
-      "role": "Station hall with timetable; one-time ambush",
-      "room_index": 78,
-      "source": "Sewer_Map02"
-    },
-    {
-      "id": "ml_stairs",
-      "name": "Switchback Stairs",
-      "role": "Between Platform and Refuge; track-power breaker on the landing; floor grate = way out of the Nest, locked until the Gate is reached from below (v0.8.1), then a shortcut down; three enemy groups",
-      "room_index": 79,
-      "source": "Sewer_Map13"
-    },
-    {
-      "id": "ml_platform",
-      "name": "Last Platform",
-      "role": "Tracks and parked train; live tracks and an electrified boiler on the floor grate until the Stairs breaker is thrown; grate hint when the boiler breaks (v0.8.1); top trapdoor sealed",
-      "room_index": 80,
-      "source": "Sewer_Map03"
-    },
-    {
-      "id": "ml_nest_shaft",
-      "name": "Nest Shaft",
-      "role": "Drop-in from the tracks grate; fliers; doors never seal (v0.8.1)",
-      "room_index": 81,
-      "source": "Hive_Map07"
-    },
-    {
-      "id": "ml_nest_rest",
-      "name": "Nest Rest",
-      "role": "Save point",
-      "room_index": 82,
-      "source": "Hive_Save02"
-    },
-    {
-      "id": "ml_nest_throat",
-      "name": "Nest Throat",
-      "role": "Descent; fliers; doors never seal (v0.8.1)",
-      "room_index": 83,
-      "source": "Hive_Map06"
-    },
-    {
-      "id": "ml_nest_span",
-      "name": "Nest Span",
-      "role": "Long hall; two chambers joined by a corridor behind two red walls (Bulldozer Dash); doors never seal (v0.8.1)",
-      "room_index": 84,
-      "source": "Hive_Map05"
-    },
-    {
-      "id": "ml_nest_hollow",
-      "name": "Nest Hollow",
-      "role": "Climb; ground symbiotes; red floor removed, doors never seal (v0.8.1)",
-      "room_index": 85,
-      "source": "Hive_Map04"
-    },
-    {
-      "id": "ml_nest_gallery",
-      "name": "Nest Gallery",
-      "role": "Quiet climb (Venom cameo removed)",
-      "room_index": 86,
+    "ML_NestGallery": {
+      "index": 86,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": "empty state record",
       "source": "Hive_Map03"
     },
-    {
-      "id": "ml_nest_shrine",
-      "name": "Nest Shrine",
-      "role": "Second save point",
-      "room_index": 87,
+    "ML_NestGate": {
+      "hammer_floors_removed": 1,
+      "index": 88,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [
+          [
+            7,
+            21
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Hive_Map02",
+      "unsealed": "Door_Lock"
+    },
+    "ML_NestHollow": {
+      "hammer_floors_removed": 1,
+      "index": 85,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [
+          [
+            7,
+            38
+          ],
+          [
+            8,
+            21
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Hive_Map04",
+      "unsealed": "Door_Lock"
+    },
+    "ML_NestRest": {
+      "hammer_floors_removed": 0,
+      "index": 82,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [
+          [
+            1,
+            21
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
       "source": "Hive_Save02"
     },
-    {
-      "id": "ml_nest_gate",
-      "name": "Nest Gate",
-      "role": "Climb out after the boss; red floor removed, top never seals (v0.8.1); ceiling exit through the neck to the Stairs grate",
-      "room_index": 88,
-      "source": "Hive_Map02"
+    "ML_NestShaft": {
+      "hammer_floors_removed": 0,
+      "index": 81,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [
+          [
+            6,
+            21
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Hive_Map07",
+      "unsealed": "Door_Lock"
     },
-    {
-      "id": "ml_venom",
-      "name": "Rooftop Arena",
-      "role": "Boss: Mini-Boss 06; entered from the lower-right exit corridor, walls rise when Spidey is inside the arena (v0.8.1); completion; native reward withheld",
-      "room_index": 89,
+    "ML_NestShrine": {
+      "hammer_floors_removed": 0,
+      "index": 87,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [
+          [
+            1,
+            21
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Hive_Save02"
+    },
+    "ML_NestSpan": {
+      "hammer_floors_removed": 0,
+      "index": 84,
+      "record0": {
+        "dropped_commands": [
+          [
+            3,
+            21
+          ]
+        ],
+        "moved_pickups": [
+          3
+        ],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [
+          [
+            6,
+            38
+          ],
+          [
+            9,
+            21
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Hive_Map05",
+      "unsealed": "Door_Lock"
+    },
+    "ML_NestThroat": {
+      "hammer_floors_removed": 0,
+      "index": 83,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [
+          [
+            6,
+            21
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Hive_Map06",
+      "unsealed": "Door_Lock"
+    },
+    "ML_Platform": {
+      "hammer_floors_removed": 0,
+      "hatch_closed": "Door (Sewer Grate Floor) 1",
+      "hint": [
+        "live_tracks",
+        "grate_clear"
+      ],
+      "index": 80,
+      "record0": {
+        "dropped_commands": [
+          [
+            5,
+            38
+          ],
+          [
+            6,
+            21
+          ],
+          [
+            6,
+            38
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": [
+          4
+        ]
+      },
+      "record1": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Sewer_Map03"
+    },
+    "ML_Refuge": {
+      "index": 77,
+      "objectives": {
+        "completed": 246,
+        "power": 269
+      },
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": "empty state record",
+      "source": "Sewer_Save04",
+      "yard_door": true
+    },
+    "ML_RelayHall": {
+      "authored": {
+        "collision_bytes": 852,
+        "model_bytes": 20528,
+        "quads": 316,
+        "texture_bytes": 59044,
+        "textures": {
+          "DarkConcrete": 119,
+          "FloorTileFull": 2,
+          "FuseBox": 5,
+          "Grate": 6,
+          "Metal": 24,
+          "WarningStrip": 12,
+          "WireBunch": 26,
+          "gdoor01": 2,
+          "pipe01": 6,
+          "pipe03": 6,
+          "screens01": 10,
+          "wcutaway01": 49,
+          "wirewall": 49
+        }
+      },
+      "hammer_floors_removed": 0,
+      "index": 92,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Test_Surfaces01"
+    },
+    "ML_Roof": {
+      "authored": {
+        "collision_bytes": 588,
+        "model_bytes": 7992,
+        "quads": 105,
+        "texture_bytes": 53736,
+        "textures": {
+          "Metal2": 14,
+          "Pbeam01": 12,
+          "Street": 1,
+          "Stucco": 12,
+          "TopFloor": 8,
+          "WarningStrip": 2,
+          "brick01": 27,
+          "gdoor01": 2,
+          "skyline04": 25,
+          "vent01": 2
+        }
+      },
+      "hammer_floors_removed": 0,
+      "index": 93,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Test_Surfaces01"
+    },
+    "ML_ServiceBay": {
+      "authored": {
+        "collision_bytes": 258,
+        "model_bytes": 4412,
+        "quads": 51,
+        "texture_bytes": 33324,
+        "textures": {
+          "DarkConcrete": 35,
+          "FloorTileFull": 1,
+          "FuseBox": 3,
+          "Metal": 7,
+          "WarningStrip": 1,
+          "gdoor01": 1,
+          "screens01": 3
+        }
+      },
+      "index": 95,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": "empty state record",
+      "source": "Test_Surfaces01"
+    },
+    "ML_SignalCore": {
+      "authored": {
+        "collision_bytes": 258,
+        "model_bytes": 8000,
+        "quads": 103,
+        "texture_bytes": 60760,
+        "textures": {
+          "DarkConcrete": 5,
+          "Grate": 9,
+          "Metal": 33,
+          "WarningStrip": 6,
+          "WireBunch": 9,
+          "gdoor01": 1,
+          "ich01": 10,
+          "ich03": 9,
+          "screens01": 1,
+          "skyline04": 20
+        }
+      },
+      "hammer_floors_removed": 0,
+      "index": 94,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Test_Surfaces01"
+    },
+    "ML_Stairs": {
+      "breaker": {
+        "flag": 269,
+        "switch_units": [
+          211.0,
+          87.5,
+          0.0
+        ]
+      },
+      "grate": {
+        "locked_until_flag": 264
+      },
+      "hammer_floors_removed": 0,
+      "index": 79,
+      "record0": {
+        "dropped_commands": [
+          [
+            0,
+            38
+          ],
+          [
+            4,
+            21
+          ],
+          [
+            4,
+            38
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Sewer_Map13"
+    },
+    "ML_Station": {
+      "hammer_floors_removed": 0,
+      "index": 78,
+      "record0": {
+        "dropped_commands": [
+          [
+            3,
+            21
+          ]
+        ],
+        "moved_pickups": [
+          3
+        ],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [
+          [
+            6,
+            21
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Sewer_Map02"
+    },
+    "ML_Switchyard": {
+      "authored": {
+        "collision_bytes": 1104,
+        "model_bytes": 13896,
+        "quads": 192,
+        "texture_bytes": 94220,
+        "textures": {
+          "Build2": 7,
+          "FAsph01": 10,
+          "Fconcrete02": 39,
+          "Grate": 3,
+          "Metal2": 6,
+          "Pbeam01": 34,
+          "WarningStrip": 1,
+          "brick01": 32,
+          "corugated01": 13,
+          "corugated02": 13,
+          "gdoor01": 3,
+          "skyline01": 10,
+          "skyline02": 10,
+          "skyline03": 10,
+          "vent01": 1
+        }
+      },
+      "hammer_floors_removed": 0,
+      "index": 91,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "source": "Test_Surfaces01"
+    },
+    "ML_Venom": {
+      "boss": {
+        "arena_trigger_units": [
+          90.0,
+          65.0
+        ],
+        "size": [
+          90,
+          140
+        ]
+      },
+      "hammer_floors_removed": 2,
+      "index": 89,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": [
+          3
+        ]
+      },
+      "record1": {
+        "dropped_commands": [
+          [
+            4,
+            7
+          ],
+          [
+            8,
+            31
+          ],
+          [
+            11,
+            38
+          ],
+          [
+            24,
+            21
+          ],
+          [
+            25,
+            38
+          ],
+          [
+            28,
+            38
+          ],
+          [
+            29,
+            21
+          ],
+          [
+            29,
+            38
+          ],
+          [
+            30,
+            21
+          ],
+          [
+            31,
+            21
+          ],
+          [
+            32,
+            21
+          ]
+        ],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
       "source": "Downtown_Map14"
     },
-    {
-      "id": "ml_yard",
-      "name": "Freight Yard",
-      "role": "Side room behind a new door in the Refuge left wall: warehouse yard, Pier gang camp, liftables on the roof walkway; no ability needed or given",
-      "room_index": 90,
-      "source": "proto01"
+    "ML_Yard": {
+      "index": 90,
+      "record0": {
+        "dropped_commands": [],
+        "moved_pickups": [],
+        "sealed_exits": []
+      },
+      "record1": {
+        "dropped_commands": [
+          [
+            7,
+            7
+          ],
+          [
+            8,
+            7
+          ],
+          [
+            9,
+            7
+          ],
+          [
+            10,
+            7
+          ]
+        ],
+        "moved_pickups": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "sealed_exits": []
+      },
+      "source": "proto01",
+      "substation_door": true,
+      "yard": {
+        "gang_table": 8,
+        "spawn_units": [
+          160.0,
+          42.0,
+          0.0
+        ]
+      }
     }
-  ],
+  },
+  "save_rooms": true,
   "schema_version": 1,
-  "status": "first-slice-candidate",
-  "teaser": "Sequential tunnel-light blackout, passing silhouette, distant massive sound; no forced boss or timed escape"
+  "strength": {
+    "ML_NestGate": {
+      "damage": 0.75,
+      "enemy_health": 0.796875
+    },
+    "ML_NestHollow": {
+      "damage": 0.703125,
+      "enemy_health": 0.75
+    },
+    "ML_NestShaft": {
+      "damage": 0.546875,
+      "enemy_health": 0.59375
+    },
+    "ML_NestSpan": {
+      "damage": 0.65625,
+      "enemy_health": 0.703125
+    },
+    "ML_NestThroat": {
+      "damage": 0.59375,
+      "enemy_health": 0.65625
+    },
+    "ML_RelayHall": {
+      "damage": 1.5,
+      "enemy_health": 2.5
+    },
+    "ML_Roof": {
+      "damage": 1.625,
+      "enemy_health": 3.0
+    },
+    "ML_SignalCore": {
+      "damage": 1.625,
+      "enemy_health": 3.0
+    },
+    "ML_Switchyard": {
+      "damage": 1.40625,
+      "enemy_health": 2.25
+    },
+    "ML_Yard": {
+      "damage": 1.3125,
+      "enemy_health": 2.0
+    }
+  }
 }

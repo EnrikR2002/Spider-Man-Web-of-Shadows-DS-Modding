@@ -116,8 +116,12 @@ def touch_schedule(rows):
     return result
 
 
-def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, ram_captures=(), trace_frames=(), battery_captures=(), frame_hook=None, observer=None, core_options=None, timing_start=None, live_buttons=None):
-    """`live_buttons`: a mutable set of button names a frame_hook may change; they are held in addition to the script."""
+def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, ram_captures=(), trace_frames=(), battery_captures=(), frame_hook=None, observer=None, core_options=None, timing_start=None, live_buttons=None, live_touch=None):
+    """Live buttons are held with the script. `live_touch` is [] or [x,y] in stacked pixels.
+
+    A frame hook can inspect library._wos_video = (raw frame, pixel format)
+    for an adaptive research input, such as the native health-orb minigame.
+    """
     if os.name != 'nt' or c.sizeof(c.c_void_p) != 8: raise ValueError('Pinned emulator harness requires Windows x64')
     if w.sha256(CORE_PATH.read_bytes()) != CORE_SHA256: raise ValueError('Emulator core integrity check failed')
     rom_data = rom_path.read_bytes(); report = w.validate_rom(rom_data, target=True)
@@ -147,7 +151,7 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
     state = {'frame': 0, 'last': None, 'pixel_format': 1}
     schedule = input_schedule(script) if script is not None else None
     touches = touch_schedule(script) if script is not None else []
-    if touches: variables[b'melonds_touch_mode'] = b'touch'
+    if touches or live_touch is not None: variables[b'melonds_touch_mode'] = b'touch'
 
     @ENV
     def environment(cmd, pointer):
@@ -175,6 +179,7 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
     def video(pointer, width, height, pitch):
         if pointer and pointer != c.c_void_p(-1).value:
             state['last'] = (c.string_at(pointer, height * pitch), width, height, pitch)
+            library._wos_video = (state['last'], state['pixel_format'])
 
     @AUDIO
     def audio(left, right): pass
@@ -187,6 +192,8 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
         frame = state['frame']
         if device == POINTER and port == 0 and index == 0:
             point = next((xy for start, end, xy in touches if start <= frame < end), None)
+            if point is None and live_touch:
+                point = touch_schedule([{'start':0,'end':1,'buttons':[],'touch':list(live_touch)}])[0][2]
             if point is None: return 0
             return point[0] if button == POINTER_X else point[1] if button == POINTER_Y else int(button == POINTER_PRESSED)
         if live_buttons and device == 1 and port == 0 and any(BUTTONS[b] == button for b in live_buttons):

@@ -519,7 +519,7 @@ def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a3
     # v0.13.0 shop rows (ability word 2): Overclock 0x10000, Dragnet 0x20000, Vortex 0x40000.
     # Dragnet: four sparring Brutes in a line, held idle until the web is out. A kept held: the three
     # behind the grappled one are webbed (state 46); Y yanks all four to within 14 units of Spidey, who
-    # plays the heave (action 49 in the ground string state); three more Y are the Vortex steps.
+    # plays the heave (action 49 in the ground string state); four more Y are the Vortex steps.
     crowd = {'sparring': True, 'start_x': 100 * 4096, 'place': tuple((d * 4096, 246) for d in (21, 30, 38, 46)),
              'enemy_state': (-20, 48, 0)}
     def near(row, reach=14 * 4096):
@@ -554,6 +554,26 @@ def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a3
                                                 and max(r['k2']['web'] for r in o) == 3 and o[-1]['k2']['web'] == 0)
     ck['vortex_hits_and_floors_the_enemy'] = o[-1]['en'][0][0] <= 65536 - 6 * 3072 and any(r['en'][0][2] in (41, 48) for r in o)
     ck['vortex_unowned_is_native'] = 58 in after_pause(go('q_vortex_off', 'vortex', 160, near=5 * 4096))
+    # Direct entry works both while hit 2 is playing and in its keep-alive
+    # window, including Momentum's fastest tier. Four presses give whip,
+    # double lash, double lash, slam: seven contact opportunities, not a
+    # guaranteed seven HP drops (range, native reactions and whiffs matter).
+    def web_steps(rows):
+        return [r['k2']['web'] for i,r in enumerate(rows) if r['st']==46 and r['k2']['web'] in (1,2,3)
+                and r['clock']==0 and (i==0 or rows[i-1]['clock']!=0 or rows[i-1]['st']!=46
+                                       or rows[i-1]['k2']['web']!=r['k2']['web'])]
+    for suffix, inputs, mask, tier in (('early','vortexdirect',0x40000,0),
+                                      ('late','vortexdirectlate',0x40000,0),
+                                      ('fast','vortexdirect',0x41000,5)):
+        o=go('q_vortex_direct_'+suffix,inputs,240,near=5*4096,bits2=mask,tier=tier)
+        steps=web_steps(o)
+        ck['vortex_direct_'+suffix]=steps==[1,2,2,3] and o[-1]['k2']['web']==0
+    o=go('q_vortex_cancel','vortexcancel',240,near=5*4096,bits2=0x40000)
+    ck['vortex_cancel_resumes_its_web_steps']=any(r['st']==57 and 80<=r['f']<100 for r in o) and any(
+        r['st']==46 and r['k2']['web']==2 and r['f']>96 for r in o) and 3 in web_steps(o)
+    plain=go('q_vortex_plain','string4',200,near=5*4096,bits2=0x40000)
+    off=go('q_vortex_plain_off','string4',200,near=5*4096)
+    ck['vortex_plain_string_keeps_native_order']=not any(r['k2']['web'] for r in plain) and same_behavior(seq(plain),seq(off))
     # A resumed string (R during hit 2, then Y) is not a pause: the native third hit plays.
     o = go('q_vortex_resume', 'reflexres', 160, bits2=0x40000)
     ck['vortex_leaves_a_reflex_resume'] = bool(first(o, lambda r: 67 < r['f'] < 110 and r['st'] == 46 and r['node'] == 13

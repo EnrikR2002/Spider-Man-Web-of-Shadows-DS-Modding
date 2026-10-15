@@ -897,6 +897,10 @@ byte, updates these offsets, and retains an oversized replacement's complete old
 slot after its new terminated stream. No-op variants round-trip exactly. Native
 boot/pause/Options renders confirm enlarged slot74 without label/panel corruption.
 Changed IDs50 (boot prompt),74 (Options). Other languages remain unsupported.
+For a grown variant use `decode_grown(raw, id)`: `StringSlots(clean).decode`
+uses the clean tree/table layout and can silently return another valid slot.
+Published v0.15.1 was checked with the variant decoder: both locales contain
+`TASM v0.15.1` at50 and `Options v0.15.1` at74.
 
 Seven LE u32 price words at ARM9 source0x120340 + row*32 +28 change to
 50/100/150/150/200/250/350. All other engine bytes, purchase events, prerequisites,
@@ -1461,6 +1465,43 @@ bits 0x10000 Overclock, 0x20000 Dragnet, 0x40000 Vortex (ability bits
   `dragnet`, `dragnetrelease`, `vortex`; four sparring Brutes placed 21,
   30, 38, 46 units ahead and held idle until the web is out.
 
+### Vortex entry and recovery (v0.15.1)
+
+Published `160d01cb` after the player's short/clunky/hard-to-enter feedback.
+Red ability bit82/word2 `0x40000` gates everything. Y,Y,Down+Y starts from
+native node12 after its contact clocks2..3, or during its keep-alive window;
+plain Y retains the original string. Old pause/Dragnet entries remain.
+`web_try` consumes only a queued Y and returns state46. Up/A/B/R retain
+their exits; no position/time writes or new ownership bits.
+
+Steps are 1,2,2,3: whip action57, lash56 twice, slam59. Node stays12 until
+the slam parks14. K2+0xA0 arms direct entry; +0xA4 records the extra lash.
+Seven contact opportunities: whip2 and authored return8, lash4/9 twice,
+slam4. The return is a built area hit; native GMB payloads remain unchanged.
+Native hits still exclude the same victim from area replay for two ticks.
+Whip arm follow-through and lash start/end arm/yaw poses connect the
+authored clips rather than resetting to guard between the lashes.
+
+**R/Drill Kick interaction:** native evade transition `0x020B5774` selects
+49 at `0x020B5894` before ordinary Y think runs. A hook at `0x020B57A0`
+(kit1 entry+0x50) bypasses only that choice for owned Red Vortex with a
+parked node12. The native roll finishes into landing24; the Y hook at
+`0x020B69B8` (kit2 entry+0x20) resumes state46 there. Never force entry
+directly from roll57: entry `0x020C2F94` itself recognizes57/58/25 and
+requests Drill Kick. Direct/active-step helper preserves the queue during
+those evades; landing24 is an allowed ground resume. Jump/hurt/web-hold
+states cannot ground-enter through it. Standard unowned/Black behavior
+was compared against the unchanged parent and passed.
+
+**Budget:** kit1 7,096/7,936 code bytes; kit2 6,628/6,656. Shop rows move
+to kit2+0x1A00 (13*32 bytes end1BA0); strength dial moves to +0x1BA0,
+address `0x02156FC0`, ending1BF0. State remains +0x1C00/`0x02157020`,
+used below+0x280; Both rows remain+0x1E80. The total 0x8000 reserve and
+heap boundary are unchanged. Both assembly literal/native-branch validators
+pass. Evidence: `work/kit/v0.15.1/qualification.json` (68 checks),
+`cleanup-crash.log` (12 seeds), fixtures `vortexdirect{,late}.json` and
+`vortexcancel.json`. Revised feel remains a player check.
+
 ### Player health and the top-screen HUD (v0.11.0)
 
 - **Health calls.** Spidey's vtable (`0x0212E3F0`) +0x15C `0x0205F388` sets
@@ -1954,7 +1995,7 @@ Confirmed 2026-10-07 (`tools/minimap_cbmp.py`, tests; in-game captures).
   palette 0 beyond colour 0, palette 13. Palette 11 holds the colour sources;
   4/5 colours 1..11 are the S icons. Using palettes 0/1..3/13 showed no
   other touch-screen change in captures.
-- **Descriptor +0x28..+0x48** (area, piece position, world size, bounds) feed
+- **Descriptor +0x28..+0x48** (area, map rectangle endpoints, world bounds) feed
   the room-detail view (`0x020E56F8`, with descriptor +0x4C screen; the x3
   zoom of the touch screen) unless the area's map is locked. `0x020E361C`
   answers "locked" from one map-item event per area (0x17B Pier, 0x17C
@@ -2010,8 +2051,9 @@ Lab-only (scripts `work/midnight-line/scratch/{msg_test,variant}.py`; dev ROMs `
 Dialogue and switch wiring shipped in v0.8.0 (sections below); the rest is
 not shipped yet.
 
-- **More flags.** Save slot = "SpidermanWoS" + 4-byte checksum + the 0x58
-  block (flags at block +0x1C, mission byte +0x48). 21 distinct slots in
+- **More flags.** Save slot has a 16-byte padded "SpidermanWoS" header,
+  then a 4-byte checksum and the 0x58 block at slot +20 (flags at block
+  +0x1C, mission byte +0x48). 21 distinct slots in
   `work/save-backups` and the player battery (missions up to 47, past the
   final boss's 41) never set 138..165 (nor 245..251, 257..267, 269..282
   outside the chapter). Flag writes only come from event opcodes and the
@@ -2080,7 +2122,8 @@ Confirmed 2026-10-08 from the handlers, all 156 native records
   conditional `0x1D` = u16 var, u16 frames, op, value, then-action,
   else-action. A non-zero frames field queues the actions instead. An
   out-of-range entity in an action froze the room load (black screen).
-  Natively only ops 0, 2, 4 occur (flags: `== 0`, `== 1`, `> 0`).
+  Natively only ops 0, 2, 4 occur (`==`, unsigned `<`, unsigned `>`;
+  confirmed directly in the handler during the 2026-10-13 boss research).
 - **Native subway puzzle decoded.** Sewer_Map03 record 1 init: `0x27 == 0`
   -> activate AG `Electricity` (rail hazards); `0x62 == 0` (boiler intact)
   -> EG `ElecBoilerCheck` = `0x27 == 0` ? activate `Electric Boiler Object`
@@ -2547,7 +2590,130 @@ their descriptor and object file: the empty debug room Test_Surfaces01
   drops Spidey out of the level in v0.12.0 and v0.13.0 alike; the compiled
   floor has no gap (`solid_at` along the whole width) and the walks cross it.
 - **Open.** Player verdict on strength and looks; whether the arcs read well and
-  the 50-frame rest is fair; the rooms' detail map screen is the debug placeholder.
+  the 50-frame rest is fair. Detailed maps replace the debug placeholder in v0.15.0.
+
+### Substation checkpoint and detailed maps (v0.15.0)
+
+Implemented and agent-tested; player verdict pending. Sources
+`tools/midnight_rooms.py`, `midnight_chapter.py`, `room_minimap.py`;
+`tests/test_room_minimap.py` and room tests preserve native unknown bytes.
+
+- **Service Bay:** room 95, visited flag 162, no new persistent room flag.
+  The Switchyard's upper-left fire escape at y33 has a left doorway (exit/
+  spawn 3); Bay right doorway is exit/spawn 1. Its matching wall opens only
+  y33..49. Normal jump from the existing y10 dock reaches the y33 ledge;
+  `walk-substation-save` crosses both real doors with story bits 0..4 only.
+  The bay has no gangs, waves or hazards, and uses already-seen textures.
+- **Native checkpoint:** copy the type-10, 16-byte SavePoint entity from
+  `Sewer_Save04` record 0, preserving bytes beyond XYZ; activate its appended
+  batch from record-0 init. Sphere at (40,7). **Continue uses the envelope
+  spawn table, overriding the player entity's placement**: preserve the
+  existing spawn-0 unknown bytes and change XYZ/facing to (40,2,0), right.
+  Moving only the player entity left him at x0, too far to save. Native
+  Save/Yes -> captured SRAM -> fresh Continue restores room 95 and flag162
+  with copied batteries (`chapter-save-Versioned-ML_ServiceBay-*.json`).
+- **Detailed map fields:** descriptor +2C/+30 = map top-left, +34/+38 =
+  bottom-right endpoints, **not width/height**. `0x02084ACC` subtracts them;
+  +3C/+40 = world (xmin,ymax), +44/+48 = (xmax,ymin), all Q12. Descriptor
+  +4C selects the private detailed CBMP. The five authored rooms fit their
+  collision bounds into pixels (30,30)..(218,146), preserving aspect ratio.
+  `room_minimap.Projection` is shared by raster and descriptor generation.
+- **CBMP preservation:** borrow the native MMSewer frame, keep existing tiles,
+  screen cells outside the interior and unknown/trailing bytes. Append 400
+  panel tiles using unused palette 1; only its first ten colours change.
+  Raster shows solid platforms, door markers, electric hazard positions,
+  boss core locations and save sphere. Landmarks are static; native player
+  icon moves through the projection. Native chapter overview keeps its own
+  visited/current colours and gains the bay's save icon and branch arrows.
+- **Map evidence:** `work/midnight-line/detailmap-ML_*.json` records RAM
+  positions/projected pixels; corresponding `detailmap-*` emulator captures
+  show correct horizontal and vertical orientation on all four combat rooms.
+  Bay captures `mapview-service-maps2`; save/walk captures also show its menu.
+  Marking visited in disposable RAM avoids first-visit dialogue consuming
+  map touch input. Warp to spawn 1 for Roof/Signal, since spawn 0 can put
+  Spidey into the new boss doorway. These are lab fixtures only.
+
+#### Roof wave reliability fix
+
+`work/midnight-line/roof-observe-obs1/2/3.json` traces
+three complete native fights; the scripts' three guarded callbacks all run.
+The alleged v0.14.0 stall (`walk-substation-roof-25fc42b6.json`) actually
+left room 93 for 94: the lab chase placed Spidey across the new left exit.
+Older `-u4` reached x8878/y9000 after chasing a freed actor; this also was
+a fixture failure. The older `f8761be4` report stayed at x3.5 with no traced
+enemy; its exact cause remains unproven, since spawner RAM was not captured.
+
+`midnight_walk.Walker.fixtures` validates the enemy motion back-pointer and
+rejects out-of-room Roof chase targets. Actual door use remains unmodified;
+native wave timers/guards remain, with no timed automatic victory. After a
+lab placement, a normal B hop releases stale native movement stances.
+
+**2026-10-14 fixture correction:** the former Roof gather driver stalled
+three times on art candidate `5b0d6f55`: wave2 active cost8192, two live
+HP1 actors, repeated below-melee-range positions around y-25. The gathering
+helper repeatedly rewrote those fighters' roots. Their native weak references
+were live, so the zero-HP cleanup below correctly did not declare them dead.
+Paired controls leaving enemy movement native clear the waves on both this
+candidate and original0.16.0 `39fcf89e`. The candidate then drifted through
+the Signal door during its post-win wait (last kill at x9.7), exposing the
+old x12 chase limit's insufficient margin. The corrected route uses chase,
+never gather, clamps Roof placement to x24..176/y5..65, stops combat fixtures
+immediately on the earned clear flag and settles at the explicit lab centre
+before its wait/real right-door exit. No ROM/script/AI change. Existing
+route/placement/chase tests cover the correction. Failed/paired evidence:
+`work/crane-row/polish/driver-evidence/` and `midnight-gather-failures.json`;
+final all-route qualification and baseline control live alongside them.
+
+**A separate, actual spawner stall was then reproduced:**
+`walk-substation-roof-gather-b515ab99-aborted-ram.bin` stayed in room93 with
+wave2's cumulative cost32768, active cost4096 and one non-null weak reference
+to a NormalEnemy at HP0. Native completion still waited for active0. This
+corrects the earlier interpretation that all stalls were fixture exits.
+The old enemy was unhittable, and its weak reference never became null in
+the remaining run. Player reproduction and prevalence remain unconfirmed.
+
+**v0.15.0 fix:** `tools/roof_waves.py`, 72-byte ARM router at chapter offset
+E80, hooks the non-null branch0x0204C2C8 (old1A00001C). With current room93,
+NormalEnemy vtable0x021301D0 and signed HP<=0 at actor+44, take the existing
+native null-reference cleanup0x0204C2CC. It subtracts active cost and removes
+that list node, retaining cumulative kill credit. It neither destroys nor
+modifies the enemy actor. Live actors, other classes, other rooms and null
+references keep their native paths. A last defeated enemy can therefore
+start the next wave before its corpse finishes fading. The usual 45-frame
+inter-wave delay and guarded scripts remain. No timers declare victory.
+
+`tests/test_roof_waves.py` executes the actual ARM loads/comparisons/branches
+against guarded memory: zero/negative HP, positive HP, wrong room/class,
+null stats, original conditional hook. Same gather stress passes on fixed
+ROM `f0e53056`; `walk-substation-roof-fixed-f0e53056.json`. Final living-crew
+control, full walks, boss flow and native save checks use that exact ROM.
+The helper occupies 72 of the 128 bytes before the existing core adapter;
+the room-table builder validates both budgets and the original patch word.
+Table payload is3584 bytes: 128 spare before the Roof helper, 56 between it
+and the core adapter, 40 after the latter. Another room likely needs a
+block-budget change. The chapter's runtime base is0x02157420; physical ARM9
+bytes live at `tasm_kit.SOURCE + RESERVE`, via autoload, not runtime-base
+minus0x02000000. Current map/control/save/boss evidence is ROM `f0e53056`.
+
+Boss lab lesson: a driver on a core shelf at head y25 swings above its
+ground core at y8 forever. `midnight_boss_lab.attack_core` now uses normal
+Left/Right to walk off the shelf before attacking, instead of inferring a
+boss failure from a ground-only input loop. Original failed run is in
+`service-qualified-leech.log`; corrected victory/revisit in
+`service-qualified-leech2.log`. No actor weakening or gameplay teleport.
+
+Confirmed native `EnemySpawner`: primary vtable 0x0212BDA4, interface +8
+0x0212BDC0, allocation 0x58 bytes, constructor0x0204C118 and update0x0204C27C.
++18 points at wave parameters (first words total cost / simultaneous cost),
++28/+2C center, +30/+34 half-width/half-height, +38 cumulative charged cost,
++54 active cost, +4C sentinel for a linked list of weak enemy references.
+List nodes carry next/+4 weak reference/+C cost. These are **spawn costs,
+not enemy count or HP**. Native update removes null weak refs and subtracts
+their cost; completion0x0204C3F4 requires cumulative >= target and active0,
+then calls script action0x0203C948 and removes the spawner. A non-null escape
+test0x0204A478 can subtract from both costs. Retained allocations after room
+exit are not proof of an active spawner. Disassembly/evidence:
+`work/midnight-line/spawner-{update,tail,load}.txt`, `roof-analysis1.txt`.
 
 ### Script boss research (2026-10-12)
 
@@ -2617,6 +2783,907 @@ Goal: a boss that is not one of the game's own, built from room script
   Spidey's 37 bones only, and the mini-boss AI is unmapped (no NormalEnemy
   vtable; health pairs near `0x022AD460`). Open question for the "rival"
   idea: whether an enemy actor can bind `spd.nsbmd`.
+
+### New Midnight Line boss: implementation research handoff (2026-10-13)
+
+**Scope and status.** User requested exploration/planning only, for another
+agent to implement, and explicitly chose **explore both machine/arena and
+character routes and recommend one**. No boss, ROM patch, release, save edit,
+or new skill was implemented in this session. Baseline is v0.13.0 ROM
+`75faa3ff7759f29212b6c92c6d9d0859298a23c13d228df73c798adef032cb9d`.
+Design/recommendation: TASM_ROADMAP "Midnight Line new boss". The previous
+"Script boss research" contains earlier emulator evidence; findings below
+are **static source/ROM analysis**, not fresh gameplay confirmation.
+
+#### Evidence and corrections to earlier assumptions
+
+Reproduce the bounded native inventory with
+`python work/midnight-line/boss_recon.py`: output
+`work/midnight-line/boss-recon-2026-10-13.json` includes 139 selected object
+placements across native state records, nine boss-labelled character
+placements, callback commands, RTTI references and animation bindings. These
+counts include alternate records, not distinct playable objects. Disassembly
+excerpts: `work/midnight-line/boss-disasm-2026-10-13.txt`; individual addresses
+below reproduce with `python tools/kit_lab.py disasm ADDRESS COUNT` (COUNT is
+positional). Scratch reports/scripts are ignored; the durable findings and
+reproduction addresses are in this section.
+
+- **Ordinary smashable callback exists natively.** Residential_Map02,
+  record 1, AG 4, entity 2, `Object (Smashable_Box) 1`: type 14, kind +22
+  `0x1F`, destruction EG +23 = 16, `Message_Clear` (opcode `0x15`).
+  Hive_Map03 record 1 AG 2 entity 1, ichor blob kind `0x21`, EG 16 sets
+  scratch `0x128=1`. Sewer_Map03 record 1 AG 2 entity 1, liftable kind
+  `0x16`, EG 2 increments flag `0x62` and unlocks a grate (already lab-proven
+  in the chapter). These are precise templates for testing callbacks in an
+  authored batch. Native presence does **not** establish HP, attack
+  vulnerability, callback timing or repeatability for a new core.
+- **Copying a prop copies its callback.** `midnight_rooms.stage` copies
+  native prop bytes and changes XYZ only. Any newly borrowed core, bomb or
+  liftable with nonzero +23 needs that byte explicitly rebound to its new
+  record's EG (or zero for a control). Otherwise it calls an unrelated group
+  with the same number. Entity labels are editor names, not a reliable type
+  specification: Pier_Map04's `Liftable_BigCrate` has the same kind `0x16`
+  as a boiler; Residential_Map08's label says Mini-Boss 01 but kind is `0x2E`.
+- **Bombs have script consequences.** Kind `0x31` at Downtown_Map06 has
+  `Bomb_Destroyed` EG 8: sets native flag `0x114`, runs EG 7. Other examples
+  set `0x115..0x117` (Pier_Map01/Residential_Map06/Sewer_Map11). Do not port
+  those events verbatim. Explosion/contact/fuse behavior is still unknown.
+  Crane (Pier_Map06, record 1 AG 10 entity 1, kind `0x08`) and Boss_Floor
+  (Residential_Map08, record 1 AG 5 entity 2, kind `0x06`) have +23 = 0;
+  their names alone do not make them reusable attacks or moving platforms.
+- **Conditional operators are decoded.** Handler `0x02039F3C`, jump table
+  `0x02039F74..88`: 0 `==`, 1 `!=`, 2 unsigned `<`, 3 `<=`, 4 `>`, 5 `>=`.
+  This agrees with `room_script.COMPARE`. The earlier note "2 = ==1" was
+  incorrect: on Boolean flags `flag < 1` means clear, not set.
+  The condition is evaluated when the command executes; a delayed selected
+  action is not a future condition recheck. Queue a guard EG, then test
+  running/completed/phase inside that EG at execution time.
+- **Scratch versus persistent state.** Getter `0x020D22AC`: ids below
+  `0x123` access flag bits; `0x127..0x130` access ten bytes in the game-variable
+  manager (`manager + id + 0x99`). Use these for counters and explicitly
+  initialize them on room entry; persistent flag 151 cannot store three HP
+  segments. Do not infer persistence or cleanup from the room-local name.
+
+#### Character route: concrete engine starting points
+
+Native 24-byte character placements have type 2 at +12, character kind
+at +22, and death EG at +23. Preserve unknown bytes at +16..21. Useful
+baselines (record 1; AG zero-based, entity one-based):
+
+| Room | Kind | AG/entity | Death EG |
+|---|---|---|---|
+| Sewer_Map09 | `0x29` | 1/1 | 3, Reward_Spawn |
+| Pier_Map08 | `0x2A` | 1/1 | 3, Reward_Spawn |
+| Sewer_Map06 | `0x2C` | 1/1 | 4, Reward_Spawn |
+| Downtown_Map14 | `0x2D` | 2/1 | 5, Reward_Spawn |
+
+The existing ML_Venom is the last of these: an orange mini-boss, **not
+the native Mega Venom** (Hive_Map09, kind `0x31`). Start with the already
+used `0x2D` actor in a disposable authored arena; import only its placement,
+bind a new death callback, then discover room/zone dependencies. Its native
+platform-zone reads of scratch 0x127..129 must not collide with custom logic.
+A native actor with a new texture remains an asset/AI reuse prototype, not
+proof of a new character with authored attacks.
+
+| Entry point (clean ARM9) | Static finding / next use |
+|---|---|
+| `0x02052748` | MiniBoss constructor; writes primary vtable `0x0212CE38`, interfaces at actor+8 (`0x0212CE54`) and +0x14 (`0x0212CF58`) |
+| `0x020D12A0` | Character parameter accessor: kinds 2..0x32 -> `0x02136880 + (kind-2)*0x54`, otherwise fallback `0x0213682C`. Bounds are real; inventing kind 0x33 does not create a new actor |
+| `0x020527A0..BC` | Constructor stores parameter pointer at actor+0xF8 and parameter+0x0C into actor+0xFC/+0x100; kind 0x2D's value is 2,048,000, matching earlier measured boss max HP |
+| `0x02052F50` / `0x02052F5C` | Accessors return actor+0xFC/+0x100; strong current/max-health evidence, still identify the live allocation and damage writes before patching |
+| `0x02052D70` | Maps kinds 0x29/2A/2C/2D to subtype indices 0/1/2/3; other input defaults 0. Creating another kind also needs factory/subtype/resource work |
+| `0x020A9A44` | MiniBossStateMachine constructor, calls shared constructor `0x020B1A00`, installs vtable `0x02133C18`; derived fields +0x98..A8 |
+| RTTI `0x02133BA4` | MiniBossStateMachine base RTTI is SpideyStateMachine (`0x02133BB0`). This is code reuse, not proof of player control or kit compatibility |
+| `0x020E7730`, `0x020E77B4` | HUDBossMeter construction/update; vtable `0x0213C81C`. Update gets a managed boss via `0x02063008`, reads health through actor+8 interface slots +0x5C/+0x60. A room flag alone does not feed this bar |
+
+**Targeting blocker:** `tasm_kit.s:h_observer` only registers actors whose
+primary vtable +0x150 equals `0x02049304`. MiniBoss vtable `0x0212CE38` has
+`0x0205337C` there, so it is excluded by that check. The room strength dial
+is invoked *after* this filter and assumes common enemy HP +0x44/+0x48.
+Do not add MiniBoss to the registry by deleting the filter: its health and
+other interfaces differ. Native contact damage may still work; every kit
+feature that depends on registry acquisition requires its own boss test.
+`kit_lab.enemies` likewise scans only NormalEnemy; an empty enemy list is
+not evidence that a boss failed to spawn. Build a bounded class-specific
+observer before evaluating a character candidate. Never copy the old
+max-HP-pattern search into production (it is a disposable lab shortcut).
+
+**Animation lead, stronger than the earlier separate-rigs assumption:**
+`custom_formats.Xbd.parse` plus `sca.Sca.parse`, byte-identical round trips,
+shows `m6.xbd` has **121 SCA bindings, all `spd_*`, all 37 joints**.
+`spd.xbd` has 126 at 37 joints; `brt`, `bzkr`, `hLpr` have 39/56/57 bindings
+at 28 joints. Thus m6 is the first candidate for a rival using the player
+animation pipeline. Still unproven: which factory/resource mapping selects
+m6, model bone names/order/bind matrices, action table compatibility, weapon
+and hit volumes, and attaching `spd.nsbmd` to an enemy. Joint count alone is
+insufficient. `kit_choreography.Rig` hardcodes player joint indices; don't
+run it on a 28-joint rig. Keep native m6 and shared player resources intact;
+append copies and scope any lookup redirection to the new room/actor.
+
+Character implementation gates, in dependency order:
+1. Trace unmodified native `0x2D` in its original arena and in a scratch
+   authored arena: identify actor, motion, controller, health, state/action,
+   target, death callback and bar lifecycle. Record required zone bytes.
+2. Map actor factory and character->model/XBD/action lookup, trace m6 users;
+   prove an independently bound copy without changing any native encounter.
+3. Add one clearly telegraphed attack/recovery on the compatible rig, with
+   native collision and damage. Prove it can be interrupted/countered as
+   designed, uses continuous velocity, and resets safely on defeat/re-entry.
+4. Introduce an explicit boss health/target adapter if needed; verify Perch,
+   Rush, Reflex/Sense, Vortex, Dragnet resistance and Black/native attacks.
+   Do not apply NormalEnemy health scaling to MiniBoss memory.
+5. Only then expand AI states, bespoke clips/visuals, phases and HUD. A new
+   skeletal model exporter, arbitrary new actor IDs or a generic AI framework
+   are separate research tasks, not prerequisites assumed solved here.
+
+#### Machine route: implementation boundaries and state contract
+
+Recommended first implementation is a dedicated authored fourth Substation
+room, provisional `ML_SignalCore` (94), preserving ML_Roof's repeatable waves.
+Use the room compiler for original machine geometry, foreground core
+locations and a far backdrop; geometry has no AI or damage by itself.
+Native smashables supply damage/callbacks only after the tests below.
+Ordinary strong enemies supply combo targets; machines/props are not assumed
+to support Perch, Dragnet, Web Rush or registry-based area hits.
+
+**Proposed script state, not allocated or implemented:** persistent
+`ROOM_FLAGS['signal_leech_defeated']=151`, visited(94)=163. Scratch
+0x127 running; 0x128 core count; 0x129..12B three core-dead guards;
+0x12C breaker active; 0x12D breaker used; 0x12E attack step;
+0x12F/130 phase-2/3 adds-started guards. This consumes all ten scratch bytes
+in the new room: do not also instantiate the generic wave logic using
+`WAVE_GUARDS` 0x12A..12C. These are proposed meanings only in this room.
+
+- Entry resets scratch, reads defeated flag, and chooses idle encounter or
+  cleared room. Begin only after a trigger well inside the arena; set running
+  before activating cores/adds or scheduling attacks; consume start trigger.
+- Each core has its own AG and callback guard: if not already dead, mark it
+  first, increment core count, then dispatch phase/completion. One repeated
+  callback or a simultaneous area hit must not increment twice or spawn two
+  add waves. Prefer all three cores active once; toggling a core for exposure
+  may reset health or resurrect it and is unproven. Do not base the first
+  version on destructible reactivation or spawner re-arming.
+- One attack scheduler owns progression (warning -> active lanes -> rest).
+  Every delayed destination checks running, completion and breaker state
+  **on execution**, including already queued hazard activations. Phase changes
+  select patterns at a safe cycle boundary; do not start another infinite
+  loop per destroyed core. A queued command is not canceled merely because
+  its initiating trigger was deactivated. Room-unload cancellation remains
+  a required test, especially leaving/re-entering while a timer is pending.
+- Warnings must be harmless and readable on DS screens. Use a verified
+  sound and a tested visual state; live electric flicker is damaging, not a
+  harmless telegraph. No custom effects actor/animation is presumed available
+  just because a named resource exists. If an arc/switch visual cannot warn
+  clearly, solve the cue before adding multiple patterns.
+- Breaker is optional and one-use per attempt for the first version: guard
+  its input, cut active hazards, keep the single scheduler alive, resume only
+  through another warning after its timeout. It must never be mandatory for
+  victory. Defer a reusable breaker until cooldown/retrigger behavior passes.
+- Core 3 completion sets running=0 and the persistent flag before cleanup;
+  disable hazards, pending attack guards, start/breaker triggers and future
+  spawns, then open exits and show completion. Remaining adds must not block
+  completion. Validate whether deactivating a spawner removes living enemies;
+  do not assume it does. No automatic story reward orb, new ability or skill.
+- First version is one-time completion, persistent after normal save/reload.
+  Death before completion resets the attempt. Replay terminal/reward economy
+  and mid-fight checkpoint persistence are explicitly deferred designs.
+
+**Physical locking needs its own spike.** Authored doors are currently exit
+triggers and scenery, not guaranteed lockable native door actors. A record-1
+`room_script.door((ag,e), ...)` cannot blindly refer to a record-0 exit.
+Use a tested record-1 gate/lock object with a local reference, or prove
+record-0 trigger activation/deactivation with correct start callbacks.
+Copy ML_Venom's late-start principle: the player enters before walls rise.
+Do not seal every route until death, victory and re-entry cleanup work.
+
+#### Small experiments required before building the encounter
+
+Use a disposable room/ROM under build/dev-kit, a copied save, real button
+hits and frame/HP/flag traces. Each row has an unchanged control and changes
+one variable. No experiment here has been run during this planning session.
+
+| Gate | Experiment and evidence required | Decision/fallback |
+|---|---|---|
+| Core damage | Compare box 0x1F, barrel 0x23, blob 0x21; native Y string, Black Y, air hit, A and thrown liftable separately. Identify object/HP and count native damage events, callback frame and disappearance | Select a core only if ordinary attacks work without unowned abilities; one-hit props require a durability solution or a deliberately short multi-component design, not fake HP text |
+| Core callback | Clone Residential_Map02 box with +23=0 control, then bind +23 to one EG setting scratch; repeat melee, throw, simultaneous multi-hit, reload and deactivation | Require exactly one logical credit per core; distinguish destruction from removing an entity |
+| Warning/hazard | Control silent/dead hazard, then sound cue, then visual cue, then live arc. Capture both screens and motion-crossing HP loss; verify safe lanes while moving | No unavoidable/on-contact warning damage; measure actual timing, don't inherit crude loop phase estimates |
+| Lifecycle | Trigger entry twice, destroy 2/3 cores, die, re-enter, win during warning/active/rest, wait several cycles, leave/re-enter immediately, save/reload after victory | No duplicate loops/adds, stale hazards, permanently locked door, respawned defeated boss or repeat reward |
+| Adds | Separate native spawner batches per phase; observe full unweakened fights, phase overlap, offscreen enemies and delayed wave callbacks | Progress must depend on cores, not unreliable wave-dead callbacks or the Roof's 5,400-frame fallback |
+| Optional objects | Isolate Bomb_Symbiote, Crane, Boss_Floor, then examine fuse/motion/damage/callback/deactivate | Cut from first version unless they add proven value; not a gate for the basic boss |
+| Kit/fairness | Minimal save (story abilities 0..4), no new purchases, then copied all-owned Red and Black; inspect acquisition, HP damage, hit reactions and R exits | Keep victory accessible; strong adds let the purchased kit contribute without claiming prop/boss compatibility |
+
+Do not pad boss length with mandatory long waits or an HP sponge. The damage
+matrix determines whether a core fight is substantial enough; if not, do
+the scoped durability spike or move to the compatible-character prototype
+before producing final art. Timing, HP, add count and cue choices are tuning
+hypotheses, not approved balance values.
+
+#### Integration map, budgets and final acceptance
+
+| Owner | Required implementation work |
+|---|---|
+| `tools/midnight_rooms.py` | New plan/texture sources/camera/anchors/door and dedicated boss stage; register `AUTHORED` and resource dependencies. Existing `Authored.props` has no callback field; avoid hiding callback edits in generic placement |
+| `tools/midnight_chapter.py` | Append room 94 without renumbering; `BY_NAME`, bidirectional `LINKS`, `AUTHORED_EXITS`, room flags, `MAP_FIELDS`, `MAP_ROOMS`/links, `BOSS_ROOMS`, sparse lines/objective board, optional strength entry. Derivatives built at import must see the new definition |
+| `tools/room_script.py` | Existing append/builder APIs suffice for the prototype; if adding zone/object helpers, preserve unknown bytes and add focused round-trip/target-bound tests |
+| `tools/midnight_walk.py` | Real-door routes Roof->boss and back, corridor before trigger, locked fight, victory/unlock; do not let weaken/teleport fixtures count as combat validation |
+| `tools/midnight_line.py`, lab scripts | Copied-save persistence and phase/HP observations. Dedicated observer required for MiniBoss and smashables |
+| `tests/test_midnight_rooms.py`, `test_midnight_chapter.py`, `test_midnight_walk.py` | Object/group targets, reference scope, unchanged room ids/flags, one-time guards, safe initialization/cleanup, accessible anchors/doors and map uniqueness |
+| `reference/midnight_line.json` | Refresh chapter metadata after implementation; its current_research_gate still mentions v0.9.0 and must not be treated as current authority |
+| `tools/release_info.py`, `tools/tasm_kit.py`, `mods/`, release/profile records | Only at publication: compose all accepted overlays, new minor version, exact new hashes, matching boot/Options text, CHANGES + releases.json |
+
+Source/report arithmetic at v0.13.0: chapter block **3,164/4,096 bytes**
+(932 free), 18 chapter rooms, 23 map-list entries and 13 custom messages.
+One `ML_SignalCore` descriptor/name/model pointer/lookup/map entry plus four
+44-byte lines costs roughly 300 bytes before map links and alignment; exact
+build assertion remains authoritative. Object scripts live in Glob, not
+this ARM9 table block. The kit's second code block has only 196 bytes spare;
+do not put a new boss AI there casually. Persistent flags 151 upward grow
+toward visited flags 165 downward; re-run collision checks after room growth.
+Room 94 is within the byte/map limits. Width <=511 units; arrange the local
+fight around the ~58-unit-wide camera view so an offscreen attack is not
+invisible. Reserve safe landing space and keep a readable far backdrop.
+
+After implementation: parser/room tests, then full
+`python -m unittest discover -s tests`; clean candidate boot; full-health
+boss runs without kill/chase fixtures; copied-save death/victory/revisit and
+save/reload; `python tools/midnight_walk.py all --rom R` plus the new routes;
+`python tools/midnight_line.py tour --rom R`, puzzle and save-test; kit
+qualification/crash hunts if hooks or combat assets change. Existing boss
+walks cap HP to 1 and place Spidey: they prove flow, not boss difficulty.
+Check actual DeSmuME at player-accepted JIT12, especially adds+arcs+Dragnet
+lines. Report agent-tested versus player-confirmed separately. Publish only
+through `python tools/playtest.py build`, with DeSmuME closed and the latest
+actual Battery protected, following AGENTS. None of those release actions
+is authorized as part of this research-only handoff.
+
+**Handoff checks (2026-10-13):** five inspected XBDs and all 399 referenced
+SCA bindings parsed and round-tripped byte-identically; 15 existing
+document-layout/room-script/entity/object tests passed. Only TASKS,
+TECHNICAL and TASM_ROADMAP changed in tracked files. No fresh emulator
+experiment or player test was performed; all new behavior gates remain open.
+
+### Signal Leech implementation (v0.14.0)
+
+User authorized implementation on 2026-10-13 after the research handoff.
+Published v0.14.0 `7cb39338` through playtest, battery unchanged and prior
+ROM/composition retained (`leech-publication.json`). Sources: `tools/midnight_boss.py`,
+`midnight_rooms.py`, `midnight_chapter.py`; semantic tests
+`tests/test_midnight_boss.py`. Current player kit code and native assets are
+unchanged. Room 94 `ML_SignalCore`, visited 163, defeated 151, connects to a
+new left passage on Roof 93. Refuge's post-Nest objective points there.
+
+**Core data and coordinates (emulator-proven).** World-object parameter
+accessor `0x020D1610` normally returns `0x02138FD8 + kind*64`. A room-94-only
+replacement returns a private native data copy for kind 0x21: only health
+(data+0x14) changes, from 4096 to 49152. Other kinds/rooms return their native
+pointer. Object kind is +0x10C, current HP +0x110; native damage decrement
+is `0x0206AFA8`, callback/death follows the native path. Mobile world-object
+vtable `0x0212F7A0`. An ichor blob placed at y=0 starts below collision and
+falls through; y=8 settles at about y=1.531 and is hittable. Actual Red
+melee destroyed the 8-unit spike in 194 frames (HP drops recorded, callback
+once); the final three 12-unit cores have each been destroyed by actual Y
+attacks. Boxes/barrels were too short-lived at native 1/2-unit health.
+Evidence: `work/midnight-line/core-durable.json`, `leech-flow.json`,
+`leech-combat.json`; current run labels include the candidate ROM hash.
+
+**Original scripted visual objects are possible.** Kind 0x12 has the same
+native electric parameter flags (0x4000) as live kind 0x11 and no native
+room placements. Its private data in room 94 clears environmental damage
+flags: `0x020699A0..AC` skips the hazard damage path unless flags & 0x6000.
+It uses the native static rendering path: data+4 >= 0xB6 at
+`0x02068FA0..C4`, data+8 = appended model resource. The generated
+`zz_SignalWarning.nsbmd` is an original one-node, untextured, vertex-colour
+panel (20 x 7 units, eight quads, scale 4), no texture/animation dependency.
+It round-trips through `nitro_build.model_parts/room_model`. This avoids
+global asset replacement and the tiny native switch/electric-node visual.
+The yellow panel flashes three times across the incoming lane before native
+kind-0x11 arcs become live. A copied-save movement test lost no HP during
+the warning and 6656 Q12 when the live lane contacted Spidey. Captures:
+`build/boot-tests/Versioned-4e36287e/walk-leech-cue/frame-03270.png`.
+No supposedly harmless warning uses damaging native parameters.
+
+**Lifecycle.** Ten room scratch bytes 0x127..130 implement running, core
+count, three per-core credits, breaker active/used, attack step and two add
+guards. Duplicate callbacks credit once. One scheduler chooses phase at
+cycle boundaries; every delayed destination checks running/completion and
+power as appropriate. Warning/live/rest frames: 96/60/60, 80/66/48,
+64/72/36. Phase 1 cycles single lanes; phase 2 pairs, always leaving one
+safe; phase 3 alternates outer lanes/middle. Three bounded native crews,
+same 3x health/1.625x incoming damage dial as the Roof. A one-use X breaker
+cuts power for 300 frames; the existing scheduler resumes with another full
+warning. Victory writes running=0 and flag151 before cleanup, removes the
+seal, cores/warnings/arcs and future spawns, and clears its completion line
+after 240 frames. Existing living adds survive spawner deactivation; they
+cannot hold the exit shut and disappear on room change. No custom story
+reward, new skill or boss HP bar. Native prop/enemy drops remain native.
+
+**Entry trap corrected in the lab.** Touch-trigger extents reached the
+player earlier than expected: centre74/width12 raised the gate while he was
+at x88, outside it. Centre64/width4 triggers once inside. Native ichor wall
+at x82 seals the passage; optional breaker sits inside at x60. The arrival
+at x92 is safe until entry. First-visit message is explicitly cleared when
+combat begins (native message command 0x15 with all-zero operand).
+
+**Validation limits.** An unweakened, all-owned Red run won and walked out
+without health refills (`leech-combat.json`, 25fc predecessor 8e7f73e2;
+lowest HP 129 Q12, six enemies observed). A minimal-ownership 6-health-unit
+driver broke two cores and died after rushing into overlapping crews; this
+is not a player difficulty verdict or a mandatory-purchase gate. Separate
+flow runs refill only Spidey and prove actual core damage, victory and
+revisit; do not describe them as survival tests. Final ROM regression,
+Black/minimal attack and copied-save reload checks are recorded below.
+Actual DeSmuME/JIT12 performance remains a player test.
+
+**Final qualification:** 293 unit tests, all 63 kit checks, 12 crash seeds,
+all 12 real-door walk routes, chapter tour and power puzzle passed. The Roof
+route needed one rerun for its known stalled-wave case. Red and Black each
+won an unweakened fight without player refills; actual native near-death
+minigame recovery was completed with real pen/button inputs (a lab HP-zero
+fixture starts it). **Native near-death recovery resumes this same attempt,
+keeping the core count**, as OG_GAMEPLAY describes; it does not reload a
+room. A fresh pre-victory load/room entry resets all ten scratch bytes.
+Normal save at the Refuge after actual victory, reboot/Continue and re-entry
+kept flag151 and spawned no cores (`leech-persist*.json`, copied SRAM only).
+The seal also held at x76/y12 after jumping past the destroyed nearest core.
+Reusable driver/observer: `tools/midnight_boss_lab.py run MODE --rom R`,
+tests `test_midnight_boss_lab`; its hazard observations can include retained
+allocations, so use HP/frame evidence for activity, not the raw scan count.
+
+Kit/crash/walk regression candidate was `25fc42b6`; final `7cb39338` differs
+only in the first-visit help wording and map presentation. Native/kit ARM9
+and the whole 216-byte boss adapter, all gameplay assets, room objects and
+models are byte-identical. The only ARM9 differences are five map colour-slot
+pairs. `work/midnight-line/final-equivalence.json` records the comparison.
+Source map-state colours 0xB6/BA/BB/BF must also be reserved: allocating a
+room across palette slot182 overwrote source186 (visited highlight). This
+was caught and fixed before publication; a focused test preserves all four,
+and the all-visited map capture reads correctly at
+`build/boot-tests/Versioned-7cb39338/mapview-leech-final/frame-03320.png`.
+
+**Budgets.** Chapter tables use 3396 bytes before the adapter's fixed
+offset 0xF00 (444 bytes left there). Adapter/code + two native data copies
+use 216 of the last 256 bytes (40 left); total meaningful use 3612/4096.
+The room map now also uses free palettes 11/12/4/5 after checking all kept
+UI cells; palettes 13..15 remain excluded. Roof map piece narrows so Signal
+Core can sit on its left with door directions intact. Existing room IDs and
+flags are preserved. Registry still excludes these world props/MiniBoss.
+
+### Signal Leech readability (v0.15.1)
+
+Player feedback 2026-10-14: completed Leech, but barely visible cores,
+messy terrain and unclear target order, safe footing and electrical timing.
+Roof/material issues were mostly Substation/boss (explicit clarification).
+Scope: clean those rooms; Vortex feels short/clunky and pause entry is hard
+without Dragnet. Published `160d01cb`; latest real battery `3a4e7c9b`
+unchanged and previous ROM/compositions retained (`cleanup-publication.json`).
+
+**Core rendering trap:** private core-only `2dc78726` changed core data+4/+8
+to the static-renderable path and a bright authored mesh. Cores rendered
+and retained HP, but Y never reduced their HP: the animated binding supplies
+their native hit geometry. Discarded. Keep all native core data except HP.
+The implementation uses a separate harmless kind0x13 static beacon,
+copied from the harmless warning data and scoped to room94, at the core's
+x/y with its own model. Three callbacks remove the corresponding beacons;
+victory also cleans all three. Beacons round-trip through the native model
+writer and have no texture dependency. Original kind0x13 outside room94
+retains native data. Adapter is 108 bytes plus three 64-byte data records
+(300 total) in a 320-byte tail; Roof adapter moves 64 bytes earlier. Read-only
+old-release audits retain the prior 216-byte adapter/layout when their
+resource map lacks `core_model`.
+
+**Geometry trap:** removing the three suspended combat shelves is safe;
+lowering the right entrance bulkhead to 28 allowed a real jump/swing over
+the seal (flow `99d491dc`, x100.5/y59.2). Restore the full 70-unit bulkhead;
+do not weaken the seal to fix that test. Control Roof's independent entrance
+huts have visible 32/38-unit roof caps. The release brightens solid fronts
+and undersides, uses construction textures instead of cutaway/light tiles,
+and paints distinct arena lanes/green gaps without adding collision solids.
+Warnings (108/96/84 native delay units) light the floor with side posts below the cores;
+two live arcs at x+-4 per lane replace the cluttered three at x+-8/0.
+Exact `160d01cb` clarity qualification passed: green x34/58/8 each held
+1,440 captured frames with HP unchanged at 24,576; floor x14.5 was harmless
+for 200 warning frames, then lost 6,656 Q12 on the live arc. All three
+beacons were observed before combat. Sources and report:
+`tools/midnight_boss_lab.py run clarity`, `work/midnight-line/walk-leech-clarity-160d01cb.json`.
+
+**Clock/observer corrections:** native OBJ delay units take two captured
+DS frames here (warning 108 -> 216, old breaker 300 -> 600 frames). The
+unchanged breaker is approximately ten seconds, despite the historical
+five-second description. Use measured HP/captures and STEP transitions:
+world-object allocations may survive deactivation and report capability
+without rendering. Standing on a core puts Spidey at y8 and above the
+electricity; x14.5/y5 is the adjacent-floor control. Keep the real battery
+out of all these fixtures.
+
+**Room preview correction:** `work/rooms/lab_view.py` formerly used spawn0.
+On Roof that position touched its new left door before the control frame
+and loaded Signal Core; teleports to Roof coordinates then fell outside
+the boss collision. Use an authored door's actual spawn id and verify the
+observed room before evaluating captures. Updated helper uses door1.
+Roofs are capped; far skyline ground extensions are shaded to 20% to
+avoid stretched neon columns. Relay/Switchyard/Service use brighter
+construction surfaces in place of dark cutaway or repeating light tiles.
+
+Evidence during development: `build/dev-kit/cleanup-*`,
+`work/midnight-line/{leech-flow,leech-clarity}*.json`; actual native core
+damage and all three destruction callbacks passed the beacon/flat-floor
+trial; its seal test identified the bulkhead regression above. No player
+confirmation of the revised visuals or Vortex feel yet.
+
+Final gates: 311 units, 68 kit, 12 crash seeds, all13 real doors, Red/Black
+wins without refills, boss flow/seal/revisit and save/reload. A later seal
+test falsely rejected x80.5/y65: this is the normal contact with the wall
+at84 minus Spidey's3.5 half-width, still outside the entrance. Its bound
+is now80.75 (quarter-unit probe tolerance); the actual x100.5 bypass above
+was fixed, not excused. Control report: `leech-flow-coordinate-control-160d01cb.json`.
+Signal-in also had one lab predicate read an absent pose during transition;
+it now waits for a stable pose and passed `walk-signal-in-stable-pose-160d01cb.json`.
+
+## Campaign branch research (2026-10-13, not shipped)
+
+Authority: the player requested plans/research for new sections elsewhere while
+the latest Midnight build awaits play. Design is in TASM_ROADMAP "Campaign
+branches outside Midnight Line"; machine-readable plans/ledger are in
+`reference/area_roadmap.json`. No area, new entrance or boss is implemented.
+Only private research builds under `build/area-research/` were generated;
+published ROM `f0e53056...`, composition and the actual battery stayed intact.
+
+### Native survey, entrances and materials
+
+`work/area-research/native_probe.py` reads the clean ROM through existing
+parsers; `native-survey.json` records all 75 room associations, exits, spawns,
+named entity metadata, event variable references and texture names. All 75
+OBJ/BSP/texture associations round-trip; entity/event sections round-trip and
+BSP trees pass their checks. Unsupported camera/anchor layouts are recorded as
+unknown rather than forcing the bounded authoring reader onto them. Entity
+labels and variable references alone do not prove accessibility or ability
+gates. Native descriptor area words can be zero in the file and populated at
+runtime: never infer district order from those raw words.
+
+The observed real DSV was `f9edc1cd...`, room65, mission28, ability word
+`0x180FFFDF` (story bits 0..4, no bit5/Sledgehammer Slam). It was read, not
+modified, and its bytes were rechecked. The signature occupies 16 bytes before
+the checksum: reading stats at +16 mistakes the checksum for the room number.
+Do not infer visited rooms or material permission from such a misaligned read.
+The survey's visited evidence is native saved flags, not proof of a new route.
+Previously player-confirmed Nest material use remains recorded separately.
+
+`native_controls.py` uses the existing kit lab, a copied research battery,
+disposable entry warp and the same story bits. Fresh runs in Pier_Save02 (38),
+Downtown_Save03 (16) and Residential_Map09 (48) render/update; screenshots
+were inspected. These are native-room controls, not new doors or continuous
+story-access proofs. Reports: `native-pier-save02.json`,
+`native-downtown-save03.json`, `native-residential-roof09.json` in that folder.
+
+- **Pier_Save02:** one existing left exit to Pier_Map04, save sphere, unused
+  right wall. Native input-only walking reaches x56.469 at y4.980 and stays
+  bounded. Proposed appended touch trigger at x61 with width12 follows the
+  existing Sewer_Save02 entrance pattern (inner edge55); a new return spawn2
+  near x55 is a candidate. Actual trigger/collision overlap, visible doorway
+  and input-only two-way transition still need testing. Pier_Save03 is another
+  one-sided save-room candidate; it has not been observed in this session.
+- **Downtown_Save03:** both side exits lead to Downtown_Map12 and must remain.
+  Native save area is around x30; investigate a separate rear service door with
+  a button-press trigger, away from the save prompt. The script can name a room
+  transition, but X-operated portal behavior here has not been proven.
+- **Residential_Map09:** upper arrival spawn3 is (135.685,242), observed player
+  position (135.685,244.981). Retain the original Downtown_Map09 connection,
+  sewer grate and ichor wall near (77.708,240.311). Exact new roof-access
+  geometry and return path are open. Residential_Save02 is the alternate:
+  both side doors are occupied, so do not retarget one as a shortcut.
+
+Concrete material candidates are validated dictionary entries in already-seen
+rooms: Pier_Map04/06 (`Pbeam01`, `Pcrate01`, corrugated metal, `skyline01`),
+Downtown_Map07 (`officeWall`, `tileFloor`, `officeCLights`, `computer`,
+`ElevatorDoors`) and Residential_Map04/09 (`Wbrick`, `metal01`, `vent01`,
+`skyline04`). `borrow` preserves their native formats, including format5;
+recompression/HD assets are unnecessary for the initial layouts. Room compiler,
+far backdrops, collision, cameras and anchors remain the authoring path.
+No Hive_Map08..10 or Downtown_Map13/14 material is authorized for early branches.
+
+### Shared room and flag capacity
+
+Reusable audit: `python tools/area_capacity.py --rom
+build/Spider-Man-WoS-modded.nds --build-report
+build/version-0.15.1-final/Versioned.build.json`. It checks exact ROM/report
+identity, reconstructs the published room-table block byte-for-byte, and packs
+hypothetical additions in its own process; no ROM/save/source is changed.
+Tests cover mismatched release identity, allocation collisions/occupied flags,
+the real plan ledger and current table-growth boundary.
+All eight new tests and the full 308-test suite pass; consolidated research
+checks and source/battery identity are in
+`work/area-research/research-verification.json`. Full suite output is
+`work/area-research/unit-tests.log`.
+
+At v0.15.0 there are 20 added rooms, 76..95. Tables/map/messages/visited stub
+end at **3,584 bytes**, leaving **128 bytes before the Roof adapter** in the
+4-KiB block. One placeholder room plus one list record packs with four bytes
+left; three rooms do not fit. Nine placeholders with one record each pack at
+4,668 bytes in an 8-KiB reservation, leaving 3,140 before the relocated Roof
+adapter. This omits extra dialogue, copied parent-area lists and exact final
+names/diagram entries; it is a packing result, not a runtime guarantee.
+
+The source pool minus released local/room/visit allocations leaves **21 flags**:
+140..149, 152..161 and 245. The current visited function permits rooms96..105
+(flags161..152); room106 would collide with Leech's flag151 and is rejected.
+The proposed nine-room ledger uses visits161..153, completions140..142 and
+Grid power143: 13 flags, eight left. These numbers are unallocated proposals.
+Before integration, reserve milestones out of `LOCAL_FLAGS` or the clone
+sanitizer can claim them. Any further Midnight growth requires revisiting the
+shared ledger. Do not count ability bits, scalar IDs, flag padding or unexamined
+276..290 as available storage. Hive needs further flag/allocator research.
+
+`capacity_build.py` made an unpublished **reservation-only** control
+`build/area-research/capacity-8k.nds`, SHA `d6040312...`. Its Glob is identical
+to v0.15.0; it changes the autoload reservation/arena lower bound by 4 KiB and
+relocates the Roof and Signal-core adapters, preserving their scoped hooks.
+The native SDK entries and existing room/map/message prefixes stay intact.
+The larger block boots and passes `midnight_walk run substation-save` (7
+checks), including both bay/Switchyard doors. Native Service Bay Save/Yes ->
+fresh Continue also passes all six checks, restoring room95/visited162 with
+copied batteries (`capacity-save-test.log`); the three native-room observations
+above pass. This is limited qualification: heap high-water, long combat,
+Leech/Roof adapter behavior, new rooms/maps and broad regression remain open.
+It must not be substituted for a fully qualified release. Reports:
+`capacity-build.json`, `capacity-audit.json`, `table-budget.json` and
+`work/midnight-line/walk-substation-save-d6040312.json`.
+
+### Crane Row scope check (2026-10-14, pitch only)
+
+The player selected Crane Row and requested a substantially bigger, more
+impressive design, pitched before construction. TASM_ROADMAP now owns the
+twelve-room Hanging Harbor concept; `reference/area_roadmap.json` replaces
+the unbuilt nine-room shared allocation with a Crane-only provisional ledger.
+Grid/Skyline keep their concepts but have no reserved IDs now. No new scene,
+entrance, animation or ROM was built during this pitch.
+
+`work/area-research/crane_scope_probe.py` reads exact v0.15.1 `160d01cb...` and
+its build report. It reproduces the current room table byte-for-byte: **64
+bytes free** before the current Roof/core adapters. The v0.15.0 reservation
+control `d6040312` remains historical; it does not qualify v0.15.1 adapters.
+
+Planning-only packing trial: ten placeholders use4,784 bytes; twelve use
+**5,024 bytes** in an8-KiB reservation, leaving **2,720** before the current
+448-byte adapter tail. Neither fits4KiB. Exact final names, dialogue, extra
+parent-map records, mapper code and runtime heap headroom are additional
+costs/gates. The native Pier list alone adds260 bytes; new room records were
+already counted once in the placeholder trial. Report:
+`work/area-research/crane-scope-2026-10-14.json`.
+
+The trial temporarily substitutes only a Python visited function, retaining
+every released room's assignment. Proposed rooms96..105 use161..152;
+106/107 use149/148. Seven milestones/crew/reward reservations140..146 bring
+the total to19 of the21 currently audited unused flags, leaving147/245.
+All are proposals, not writes to saves or an engine allocation. The normal
+`ch.visited(106)` still raises. Building needs an explicit mapper, matching
+init/map/save handling and exclusion of all reserved flags from LOCAL_FLAGS.
+Further districts require more flag/storage research rather than silently
+reusing the old Grid/Skyline ledger or ability bits.
+
+`area_capacity.validate_proposal(..., visit_overrides=...)` validates such
+draft mappings and reports `requires_visited_mapper_change`; it cannot alter
+released visits or excuse occupied/unaudited storage. New tests verify those
+guards and that the live allocator is unchanged afterwards. All11 area-budget
+tests pass. This is tooling/planning validation, not new-room qualification.
+
+Large-room targets are360..420 units wide and up to224 tall. The compiler's
+511-unit model width includes the full geometry/backdrop/shell bounds, not
+only the walkable interior: leave margins and check actual compiled output.
+Targets correspond roughly to six/seven camera widths or five view heights;
+they do not prove traversal time, performance or good use of the space.
+The45–60-minute first-exploration goal is unmeasured. Prototype the hub's
+multi-level camera/anchors and the grounded-ship silhouette before filling
+all twelve scenes. Individual detailed maps plus a readable district overview
+are required; a tiny twelve-node sketch in the old spare strip is not assumed
+sufficient. A dedicated local overview would need scoped map research; no
+unused seventh area row has been established.
+
+Moving counterweights, a moving grabber and its protected/recovery damage cycle
+remain unproved. Keep v0.15.1's lesson: native animated bindings provide hit
+geometry; changing a smashable to static-renderable made it invulnerable. A
+separate visible machine mesh needs a correctly aligned native hit/damage
+target and cleanup, with measured warning/live windows in real captured
+frames. A long approach can lead into local camera-sized combat pockets;
+never infer that room-wide offscreen attacks are readable because the model
+is large. A fixed-geometry route can be validated while those prototypes run.
+
+The interactive planning diagram is copied to
+`work/area-research/crane-row-pitch.html`; it is schematic, not game footage
+or a map asset. Its selection/links were checked at320 and736 pixel browser
+widths; final phone/normal layouts have no horizontal overflow. Full designs,
+roles, connections and targets remain in the repository documents/catalog.
+
+### Crane Row construction and qualification (v0.16.0)
+
+Player approved the full Hanging Harbor pitch on2026-10-14. Sources:
+`tools/crane_rooms.py` (twelve plans/scripts), `crane_row.py` (post-pass),
+`crane_boss.py` (native adapters/machinery) and `crane_walk.py` (copied-save
+lab), plus `crane_boss_lab.py` for controlled measurements. Candidate
+`39fcf89e` is published as0.16.0 and agent-qualified; no player verdict.
+Parent is v0.15.1 `160d01cb`; actual battery `3a4e7c9b` at startup.
+
+**Integration decision:** append an independent8KiB block at0x02158420,
+after the existing4KiB Midnight block; preserve that block byte-for-byte.
+Copy the96-entry lookup and append descriptors96..107; native sentinel75
+stays null. Redirect the room lookup and raise only the two save/reload
+guards to108. The new map visited stub retains native flags below92 and
+Midnight165..162, then uses161..152/149/148. Milestones140..146 are Crane
+private. Kit code/ownership stays intact; its existing room76..115 strength
+dial receives only the twelve new rows. All unrelated Glob resources remain
+exact; exceptions are appended assets, generated filename table, version/
+appended strings and the append-only Pier_Save02 entrance.
+The payload uses5008 of8192 reserved bytes. `crane_row.py` owns the full
+release generator; `tasm_kit.py` remains the exact0.15.1 parent component.
+Future kit changes must rebase the Crane parent guard/profile deliberately,
+then qualify the combined game instead of replacing it with a kit-only ROM.
+
+**Map6:** a new owned seven-row area table copies the native five rows and
+Midnight's row/list, then adds Crane's overview/list/title. Four native table
+base literals redirect to it; the two map bounds6 become7. Prepopulate the
+native screen/title fields because static initialization originally fills
+them later. Native world overview still draws its five original districts;
+Crane has its own local overview and per-room detail maps. Native map-item
+ownership bits are untouched; Crane's local map follows the chapter's
+unlocked extra-area path. The current diagram uses22 entries for12 rooms
+because of palette/cell boundaries. Do not force it into Pier's spare strip.
+Old appended message entries are copied exactly into an owned contiguous
+extension; native IDs stay native and new message bounds remain below256.
+
+**Native doors/save:** first candidate `5e1ae3d5` entered room96 but its
+return spawn55 overlapped the new Pier trigger and bounced back. Spawn44,
+facing left, fixes it. `b06cc015`/`221d4b7a` pass native Pier38 -> Quay96 ->
+Pier38 by walking, plus Quay->Freight97 across the actual container route.
+Office98 Save/Yes -> fresh Continue passes all six native checks, restoring
+room98/visited159. Reports under `work/crane-row/walk-pier-entry*.json`,
+`walk-cross-AR_CraneQuay2*.json`, `crane-office*.json`. All30 directed Crane
+door cases subsequently pass on `3624afd5`, including the Pier connection.
+Never overwrite a ROM while its lab run is
+active; keep named immutable candidates and hash-qualified reports.
+
+**Movement/runtime:** native world-object get-position is0x02069D54
+(out vec, object); set-position is0x02069CE4 (object, vec). A scoped hook
+before hazardous-object update0x02069980 moves only the custom flashing-
+hazard kind0x12 in rooms102/106, then restores registers/executes the original
+prologue. Counterweight snapshots on `221d4b7a` advance y54,60,66,72 at
+twelve-captured-frame intervals: one unit per native update/two captured
+frames. The mesh is behind the play plane; fixed catwalks provide traversal.
+This does not establish a rideable moving platform. Initial kind0x14 did not
+produce the observed mover; use an instantiated native kind, not an assumed
+spare slot. Final warnings use native electric kind0x11 with private harmless
+data only when spawned during MODE1; live-phase0x11 spawns retain native
+data. Each actor stores its selected data pointer. The motor marker uses
+harmless fire kind0x13; guard uses box0x1F. No model override changes native
+objects outside room106 (or the weight's explicit room102 scope).
+
+**Hoist:** one native animated core keeps its complete hit binding, HP36
+health units (36*4096). Separate authored motor/guard/grabber meshes avoid
+the v0.15.1 static-core hitbox failure. Native world HP subtraction entry
+0x0206AFA8 is guarded only for kind0x21 in room106: native code runs while
+room scratch0x128==1; protected hits preserve HP. Original callers elsewhere
+retain their prologue/path. Script owns one warning -> committed impact/
+sweep -> exposed recovery loop, with every delayed hazard action checking
+RUN and defeated on execution. Native delay units are two captured frames.
+The first flow candidate `a6fc0876` used player healing and did not qualify
+difficulty. Later native strikes win without lab refills; qualifications
+label purchases explicitly. Type7 player-collide boxes select a lane before
+the warning commits; a type5 experiment never changed the zone. Sweep steps
+last32 native delay units per32-unit travel, matching one unit per update.
+Native table8 support is stopped after45 delay units: an opening crew,
+with no later replacements. Living adds can survive spawner deactivation
+and victory; the exit opens immediately and room change removes them.
+A scoped weak-reference adapter
+extends the previously proven Roof zero-HP NormalEnemy cleanup to Crane;
+other rooms chain to the original Roof adapter.
+
+**Geometry/lab pitfalls:** upper catwalks touching outer walls blocked the
+climb beneath their undersides. Current plans leave12-unit side climbing
+channels and arrivals inset18 so native wall crawl reaches high doors and
+arrivals land inside ledges. All upper hatches use native button mode0/X,
+with an original painted X marker; ground exits retain walk-in mode2.
+Otherwise climbing past stacked doors or descending from an arrival can
+unintentionally return through another exit. Crown's first catwalk moved24
+to32: the former9-unit gap over its crate genuinely trapped Spidey's head.
+The navigator separately needed neutral inputs immediately after arrival,
+Down to descend a wall, and release frames between B presses. A held-B
+controller failure is not evidence that a native jump is impossible.
+Scene-view placements are
+not traversal evidence. A pose at x88 between alternating shaft platforms
+fell to the floor, so use an actual landing (e.g.100,37) for captures.
+NormalEnemy scans retain freed actors after room transitions; lab observations
+must verify motion back-pointers, live state and bounded room coordinates.
+Never change game AI/waves based on such stale observations.
+
+**Scale/horizon control:** `scale-control-e` (`4041a3bb`) changes Quay only
+to a wider far backdrop, forcing native model vertex scale128. Foreground
+scale/collision remain correct in game. The compiler supports64/128/256/512;
+the old511-unit width note was the scale64 case, not a global engine cap.
+H (`6705b394`) uses640-unit far scenery throughout the outdoor district.
+I (`b2b50dfb`) replaces the skyline's stretched black bottom row with an
+authored far water face; its ARM9 is byte-identical to H (`b0b6663d`).
+Full normal composition `integrated-h` matches standalone H exactly.
+
+#### Hoist controls and test accuracy
+
+**Combat qualification distinction:** F (`1be9fb7f`) Red wins by real
+inputs at frame2517 without refills, ending at81 Q12 HP from24576. Early
+tests labelled Black did not assert the suit and cannot qualify it. The
+previous Leech qualification used extra
+shop purchases (`bits2=0x7fc00`), including Vitality I..III. Crane now labels
+the three Vitality purchases explicitly `--purchased-vitality` (`0xe000`).
+Vitality reduces incoming damage; the observed Q12 HP maximum stays24576.
+`--purchased-kit` reproduces the prior full-kit fixture (`0x7fc00`). These
+fixtures never edit a real save. Starting-health driver failures are not
+player balance verdicts. Final Black (`39fcf89e`) with Vitality III wins
+without lab refills, then passes700-frame hazard cleanup and a real exit/
+revisit. Existing native health gains are allowed; a safety window must
+reject any observed HP drop rather than reject harmless recovery.
+Guard control H preserves147456 HP during protected strikes and loses
+2048 during exposed strikes, but the first paired control was inconclusive:
+the solid guard also prevented the test driver reaching the core. Final
+`3624afd5` paired controls invoke native HP subtraction once from a saved-
+register world tick in disposable RAM, masking exposure while the physical
+guard is open. Patched protection preserves147456; restoring the original
+native HP prologue removes exactly4096. Exposed native calls remove4096
+in both runs. The probe uses unused Crane-tail RAM, never the ROM or player
+save; physical hit binding is separately proven by actual-input victories.
+Reports: `walk-control-{guard,guard-native}-3624afd5.json`; final adapter
+relocation is rechecked on `39fcf89e`.
+
+**Placement trap, not a measured damage radius:** early nominal x328
+holds actually stood at336.6 after the setup jump retained horizontal
+movement. Their12288-Q12 loss therefore did not prove damage in the gap.
+Reducing arc count did not change that misplaced control. Correct setup:
+settle the native stance, place once more while idle, wait, and assert the
+actual coordinate before measuring. Suppress the crew using zero spawn
+costs in disposable RAM to isolate environmental damage. On `39fcf89e`,
+actual x328 and392 each retain24576 HP for1500 captured frames and remain
+at their marked coordinates. Both have green floor marks. At actual312,
+110 warning frames cause no damage; the live impact then removes6144 Q12.
+One native live arc occupies each warning centre; warnings use the native
+electric family with damage flags cleared. Do not infer active hazards
+from retained allocations, or collision widths from nominal fixture names.
+Reports: `walk-control-{safety,cues}-39fcf89e.json`.
+
+**Driver lessons:** confirm Black form after a six-frame L press; earlier
+one-frame, unasserted switches cannot qualify Black. Vitality is three
+purchases, not seven. Do not fire Y during the entire approach: native
+combos stop ordinary walking. The hoist's native core/guard blocks walking
+through it; a normal jump from x332 reaches its right side, where the driver
+faces left to hit during recovery and returns to the x392 refuge. Live
+combat HP/core reports prevent mistaking that positioning failure for
+immunity or an encounter balance problem. Native table8 has finite spawn
+cost target0x8000/simultaneous0x4000, not an infinite respawn budget.
+
+**Final regression scope:** `3624afd5` passes all30 Crane/all13 Midnight
+real-door cases and12 crash seeds. The same ARM9 on `6705b394` passes68 kit
+checks. Final `39fcf89e` changes only three Long Arm resources (model,
+textures, OBJ), the owned Crane extension and three adapter branch targets.
+All collision, map, door, kit and other resource bytes remain exact. Final
+native gate/snare/Black behavior matches that baseline. Data-gateway tests
+execute every other room/kind combination against guarded memory, preserving
+arguments and native fallback; warning/live selection and null guards are
+also exercised. Audit: `work/crane-row/final-{equivalence,native-parity}.json`.
+Office native save/Continue remains valid; actual earned flag142 is saved
+at Office98 and restored by a fresh emulator load on the final candidate.
+Final Red full-kit/Vitality and Black Vitality III victories both pass
+post-win hazard windows and real exit/revisit without lab refills. Native
+health gains do not constitute damage: `HealthWindow` samples every read,
+allows recovery and rejects any intervening decrease. Its separate three
+unit cases prevent a heal-then-hit sequence hiding above starting HP.
+Native near-death recovery also passes. The copied save's first-death
+tutorial needs a touchscreen acknowledgement, and its orb-result popup
+needs A before play resumes; an unattended popup is not a frozen level.
+Publication is byte-exact with battery `3a4e7c9b` unchanged, wrapper/snapshots
+verified and prior/active compositions retained (`publication.json`).
+Pacing45–60min remains an unmeasured design target; moving weight is scenery,
+not a rideable platform; player feel/performance remain unconfirmed.
+
+#### Crane Row visual polish (v0.16.1)
+
+User requested an ambitious visual/feel sweep before their first Crane test,
+2026-10-14. `tools/crane_art.py` owns deterministic original16-colour pixel
+materials and scenery: riveted steel, quieter deck plate, hull seams, water
+glints, practical lamps, amber girders and small signs. `crane_rooms.geometry`
+uses them without changing any solid extents/depths, anchors, camera polygons,
+door/input modes or encounter scripts. Lattice crane braces face +z at every
+slope; rails/supports and ship fittings stay behind actors, while cargo trim
+stays inside the original solid silhouettes. Scenery contributes no collision.
+
+The three visited-Pier skyline pictures now form one broad672-unit panorama
+at z-170, rather than eight small cycling tiles. Original mid-distance cranes,
+boats, hull windows/superstructure, cargo fittings, power pipes, shaft rails
+and a warm office give individual rooms landmarks. Catwalk lips, low rear
+rails and underside struts clarify landings; the hoist backdrop keeps the
+native warning/motor/refuge positions. Signage and shorter first-visit hints
+name the office, power objective, upper loop and final-arm route. No new skills,
+enemy balance, hazards, player movement or slow effects are introduced.
+
+Final candidate `5b0d6f55` at `build/version-0.16.1-qualified/Versioned.nds`
+has ARM9 **byte-identical** to0.16.0 (`abfbb112`). Resource names/IDs are
+identical; exactly24 Crane NSBMD/NSBTX resources and English/American strings
+change. All BSP/OBJ/map/machine-model/native/kit assets stay exact. Audit:
+`work/crane-row/polish/audit.json`; before/art-A/final emulator surveys are
+in the same directory. `tests/test_crane_art.py` checks deterministic lossless
+materials, brace winding, landmark depth, non-degenerate scenery and conservative
+budgets (<400 quads,128KiB texture pixels/indices,16KiB palettes per room).
+First art-A inspection led to softer deck highlights and a warmer office.
+Published exactly through playtest: `work/crane-row/polish/publication.json`
+verifies save `3a4e7c9b` unchanged, lossless wrapper/checkpoint and retained
+prior/active compositions.339 suite +30 post-driver targeted checks pass;
+all30 Crane/all13 corrected Midnight routes, Red/Black no-refill victories,
+Office save/Continue, lever/cache and warning/live/refuge controls pass.
+The corrected Roof driver also passes on the0.16.0 baseline. Original failed
+gather runs remain recorded. Player feel/performance/duration are unmeasured;
+CHANGES owns the release's explicit validation limits.
+
+**Alignment lesson:** Huffman hint lengths affect the sum of the two string
+files before appended resources. Changing its residue modulo4 can insert an
+extra alignment resource, shift later resource IDs and change descriptors/
+ARM9 despite unchanged instructions. Do not relax release pins to hide this.
+The final concise hint copy preserves the original residue and restores exact
+IDs/ARM9; intermediate art-C `21af857c` is not the release. Named candidates
+remain immutable while emulator surveys run. Visual placements prove art only;
+real-door tests separately qualify traversal.
+
+### Native parent-area maps
+
+The actual runtime order was observed from `0x0213B840`, not guessed:
+
+| Area | District / screen | Title string | Native list / entries |
+|---|---|---|---|
+| 0 | Pier / MMPier | 381 | 0x0211FD34 / 13 |
+| 1 | Residential / MMResident | 382 | 0x0211FB7C / 11 |
+| 2 | Sewer / MMSewer | 383 | 0x0211FE38 / 18 |
+| 3 | Downtown / MMDowntown | 379 | 0x0211FFA0 / 19 |
+| 4 | Hive / MMHive | 380 | 0x0211FC58 / 11 |
+| 5 | Midnight Line | appended | current chapter list / 25 |
+
+`map_probe.py` checks each proposed parent CBMP round-trip, existing list slots
+and all rendered indices; it writes all-visited private previews and
+`parent-map-survey.json`. Static blank-cell regions: Pier lower band
+(24,120)..(224,152), Downtown upper-left (24,24)..(80,88). Residential is
+tighter: only eight-pixel top/bottom bands are wholly blank. All three have
+unused five-colour slots, but the unused index scan is not live colour or UI
+qualification. Previews were inspected; do not force a tiny unreadable
+Residential diagram just because it fits. A redraw requires updating existing
+markers/room projections where relevant and validating world/detail views.
+
+Preferred integration: retain parent areas 0/3/1, copy their original 20-byte
+list records unchanged (260+380+220 = **860 bytes**) into owned table space,
+append new entries, and patch each row's list/count. Extend the corresponding
+native overview screen in unused space, preserving the frame, old room art and
+source colours. Generate individual detailed maps from each compiled plan.
+`room_table` and `room_minimap.Projection.fields` currently hard-code area5;
+generalize them with area5 as the default so Midnight remains byte-identical.
+Retain native map-item ownership (bits68..72); do not grant maps implicitly.
+The existing visited stub is shared by the parent lists and must include every
+added room. Direct branch maps are preferable to putting every district into
+Midnight's overview or assuming a seventh area slot exists.
+
+### Remaining empirical gates and workflow lessons
+
+Next gate is one appended native Pier door and a disposable chamber, walked
+both ways with existing doors/save intact. Then a parent-map colour/current/
+visited trial and a fixed Quayside plan with basic movement. Strong crews can
+use established Pier0x08/Residential0x0C recipes and the per-room dial (its
+room76..115 table covers these IDs), but counts/strength need scene tests;
+do not lower quality or enemy count as an unmeasured performance fix.
+
+Moving crane loads/platform collision, protected machinery damage and
+cross-room countdown lifetime are unproved. Opcode0x23 starts/resets a native
+minute timer and TimerWatcher can run a timeout group; that does not establish
+timer survival or clean retry across new rooms. Prototype start -> real door
+-> timeout/reset, then death/exit/revisit controls on copied saves. First make
+Skyline Run a reversible untimed route. Completion reward/grant and new-boss
+reactions each require isolated persistence/kit tests. Preserve story gates,
+avoid required paid moves, and qualify Red and Black traversal.
+
+Scratch scripts must not shadow Python's standard library: naming a script
+`inspect.py` broke `dataclasses` imports in this session; it was renamed
+`native_probe.py`. Lab input names are case-sensitive (`Right`, not `RIGHT` or
+`right`). Native core output reaches stderr too: redirect all PowerShell
+streams when retaining long lab logs. Research sources/captures stay in ignored
+work/build; only the reusable audit and its tests belong in tools/tests.
 
 ## Research workflow and pitfalls (Red kit sessions)
 

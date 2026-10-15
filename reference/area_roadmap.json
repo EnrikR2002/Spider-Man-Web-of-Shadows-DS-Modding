@@ -1,0 +1,661 @@
+{
+  "areas": [
+    {
+      "boss_pitch": {
+        "attacks": [
+          "Hook tracks, visibly commits, then slams a marked local lane.",
+          "A warned horizontal sweep leaves a clear jump/evade route.",
+          "A recovery window exposes one obvious motor target for actual combos."
+        ],
+        "fantasy": "The cargo crane attacks with its huge grabber while Spidey closes on the exposed hoist machinery.",
+        "requirements": [
+          "Physical hit/HP/death-callback proof with Red and Black basic attacks.",
+          "Hook movement, collision and warnings tested on screen; no offscreen full-room damage.",
+          "Keep native animated hit bindings after the v0.15.1 core-rendering lesson.",
+          "Bounded crew pressure, cleanup on death/exit/victory and a persistent return route."
+        ],
+        "status": "implemented: guarded native core, committed grabber attacks, bounded opening crew, victory/save persistence; agent-tested, player verdict pending",
+        "working_name": "The Long Arm"
+      },
+      "connections": [
+        {
+          "a": "quay",
+          "b": "freight",
+          "kind": "main"
+        },
+        {
+          "a": "freight",
+          "b": "containers",
+          "kind": "main"
+        },
+        {
+          "a": "containers",
+          "b": "drydock",
+          "kind": "main"
+        },
+        {
+          "a": "drydock",
+          "b": "engine",
+          "kind": "main"
+        },
+        {
+          "a": "engine",
+          "b": "counterweight",
+          "kind": "main"
+        },
+        {
+          "a": "counterweight",
+          "b": "gantry",
+          "kind": "main"
+        },
+        {
+          "a": "gantry",
+          "b": "crown",
+          "kind": "main"
+        },
+        {
+          "a": "crown",
+          "b": "arm",
+          "kind": "main"
+        },
+        {
+          "a": "arm",
+          "b": "breakwater",
+          "kind": "victory"
+        },
+        {
+          "a": "breakwater",
+          "b": "quay",
+          "kind": "return"
+        },
+        {
+          "a": "freight",
+          "b": "office",
+          "kind": "side"
+        },
+        {
+          "a": "engine",
+          "b": "cache",
+          "kind": "side"
+        },
+        {
+          "a": "engine",
+          "b": "freight",
+          "kind": "power_shortcut"
+        },
+        {
+          "a": "crown",
+          "b": "engine",
+          "kind": "upper_shortcut"
+        }
+      ],
+      "district": "Pier",
+      "entrance_candidates": [
+        {
+          "evidence": "work/area-research/native-pier-save02.json",
+          "index": 38,
+          "kind": "new right-side doorway",
+          "proposal": "Touch exit near (61, 6), box (12, 24), new return spawn 2 near (55, 2). Preserve its existing left door to Pier_Map04 and native save point.",
+          "remaining_gate": "Append-only door/model trial and an input-only round trip; no new door is proven yet.",
+          "room": "Pier_Save02",
+          "status": "native_room_observed_only"
+        },
+        {
+          "index": 39,
+          "kind": "alternate dead-end save-room wall",
+          "room": "Pier_Save03",
+          "status": "static_candidate_only"
+        }
+      ],
+      "id": "crane_row",
+      "identity": "A complete waterfront district built around a giant cargo crane: enter underneath it, explore the cargo yards and ship works, climb through its machinery, then cross its arm above places already visited.",
+      "map_strategy": "The original Pier map needs a readable district branch. Twelve rooms cannot inherit the earlier three-room sketch without a readability trial. Test an expanded Pier overview plus individual detailed maps; if necessary prototype a local Crane overview while keeping parent/world views correct. No extra native area slot is assumed.",
+      "materials": {
+        "Pier_Map04Textures.nsbtx": [
+          "Fconcrete01",
+          "Pbeam01",
+          "Pcrate01",
+          "corugated02",
+          "skyline01",
+          "wcutaway01"
+        ],
+        "Pier_Map06Textures.nsbtx": [
+          "Fconcrete02",
+          "rcorugated01"
+        ]
+      },
+      "name": "Crane Row: The Hanging Harbor",
+      "parent_map_area": 0,
+      "priority": 1,
+      "proven_building_blocks": [
+        "authored fixed geometry",
+        "far backdrop",
+        "native anchors",
+        "Pier spawner recipe 0x08",
+        "native switches/gates",
+        "nearby native saving"
+      ],
+      "research_gates": [
+        "Rebase shared table expansion and native adapters onto v0.15.1; qualify copied-save/heap behavior.",
+        "Implement and qualify explicit visits for106/107 without changing any released room flag.",
+        "Prove Pier_Save02 entry and return through actual doors, preserving its left exit/save.",
+        "Prove readable parent/local/detailed maps for a twelve-room district.",
+        "Check large-room vertex bounds, camera, scenery clipping, anchor budgets and traversal.",
+        "Prototype moving loads and the visible hoist-machine damage cycle independently; no claim that they already work."
+      ],
+      "rooms": [
+        {
+          "key": "quay",
+          "landmark": "The first distant view of the crane becomes a place the player eventually reaches.",
+          "name": "AR_CraneQuay",
+          "play": "Open waterfront approach, stacked cargo and the huge final crane visible behind the route. A lower path catches missed jumps.",
+          "role": "arrival",
+          "target_bounds": [
+            0,
+            0,
+            360,
+            96
+          ],
+          "working_title": "Quayside"
+        },
+        {
+          "key": "freight",
+          "landmark": "Recognizable cargo colours, one broken vessel and the central crane silhouette orient the whole district.",
+          "name": "AR_FreightExchange",
+          "play": "Three usable layers: dock floor, container roofs and overhead rails. A strong mixed crew occupies broad landings; routes loop back from above and below.",
+          "role": "central hub",
+          "target_bounds": [
+            0,
+            0,
+            400,
+            176
+          ],
+          "working_title": "Freight Exchange"
+        },
+        {
+          "key": "office",
+          "landmark": "A deliberate calm beat close to the main exploration junction.",
+          "name": "AR_HarbourOffice",
+          "play": "A sheltered native save/shop space off the central yard, with a clear route board and windows onto the docks.",
+          "role": "quiet checkpoint",
+          "target_bounds": [
+            0,
+            0,
+            112,
+            64
+          ],
+          "working_title": "Harbor Office"
+        },
+        {
+          "key": "containers",
+          "landmark": "Authored cargo architecture with visible supports, varied lengths and occasional open containers.",
+          "name": "AR_ContainerWarren",
+          "play": "Container stacks form climbable alleys, roofs and maintenance gaps. Several connected routes reward reading the scenery; the main route remains legible.",
+          "role": "lower loop",
+          "target_bounds": [
+            0,
+            0,
+            380,
+            160
+          ],
+          "working_title": "Container Warren"
+        },
+        {
+          "key": "drydock",
+          "landmark": "The ship hull gives the area a large structure beyond crates. Water appearance and fall recovery need a visual/collision prototype.",
+          "name": "AR_DryDock",
+          "play": "Descend around a grounded hull, cross service platforms and fight a durable dock crew beneath it before finding the machinery route up.",
+          "role": "lower loop",
+          "target_bounds": [
+            0,
+            0,
+            400,
+            144
+          ],
+          "working_title": "The Dry Dock"
+        },
+        {
+          "key": "engine",
+          "landmark": "One meaningful route change; clear machinery and native switch/gate behavior form the initial prototype.",
+          "name": "AR_EngineHouse",
+          "play": "A compact interior with belts, winch housings and a purposeful cargo-power objective. Completion opens a direct return to the central yard.",
+          "role": "machinery junction",
+          "target_bounds": [
+            0,
+            0,
+            280,
+            144
+          ],
+          "working_title": "Engine House"
+        },
+        {
+          "key": "counterweight",
+          "landmark": "A tall climbing space whose lower machinery remains visible far below; mandatory movement uses existing abilities.",
+          "name": "AR_Counterweight",
+          "play": "Climb through the crane supports with hanging loads, wall changes and roomy recovery landings. Moving cargo is a stretch mechanic until proven.",
+          "role": "vertical ascent",
+          "target_bounds": [
+            0,
+            0,
+            176,
+            224
+          ],
+          "working_title": "Counterweight Shaft"
+        },
+        {
+          "key": "gantry",
+          "landmark": "The view reveals earlier routes at a new height. Avoid large foreground beams obscuring Spidey.",
+          "name": "AR_GantrySpine",
+          "play": "Traverse a long exposed steel spine above the yard with broad combat pockets, clear takeoffs and distant harbor scenery.",
+          "role": "upper loop",
+          "target_bounds": [
+            0,
+            0,
+            420,
+            112
+          ],
+          "working_title": "Gantry Spine"
+        },
+        {
+          "key": "cache",
+          "landmark": "Reward observation and exploration; any XP grant or stored reward needs a separate save test.",
+          "name": "AR_WinchCache",
+          "play": "A maintenance branch from Engine House with a short environmental discovery and once-only reward proposal, reached without a paid move.",
+          "role": "optional discovery",
+          "target_bounds": [
+            0,
+            0,
+            160,
+            96
+          ],
+          "working_title": "Winch Cache"
+        },
+        {
+          "key": "crown",
+          "landmark": "A panoramic payoff and checkpoint shortcut before the boss; no repeated mandatory fight after clearing.",
+          "name": "AR_CraneCrown",
+          "play": "Fight a strong crew on a broad crane platform, reveal the final arm and open a return descent to Engine House.",
+          "role": "upper encounter",
+          "target_bounds": [
+            0,
+            0,
+            336,
+            176
+          ],
+          "working_title": "Crane Crown"
+        },
+        {
+          "key": "arm",
+          "landmark": "One clearly exposed winch/motor target during recovery windows. Native melee damage, moving hook collision and cleanup must be proven before committing the boss.",
+          "name": "AR_LongArm",
+          "play": "Cross the final crane arm to a large cargo-grabber/hoist-machine encounter. Local camera-sized combat pockets keep every attack warning visible.",
+          "role": "boss approach and arena",
+          "target_bounds": [
+            0,
+            0,
+            420,
+            144
+          ],
+          "working_title": "The Long Arm"
+        },
+        {
+          "key": "breakwater",
+          "landmark": "A visible change to the district and a quick return home; no forced timer or new story bypass.",
+          "name": "AR_Breakwater",
+          "play": "A newly opened waterfront return route after the finale, with a last exploration opportunity and a direct route back to Quayside.",
+          "role": "victory return",
+          "target_bounds": [
+            0,
+            0,
+            320,
+            96
+          ],
+          "working_title": "Breakwater"
+        }
+      ],
+      "status": "implemented_published_agent_tested_player_pending",
+      "target_experience": "Three stacked route layers, two major exploration loops, one quiet checkpoint, an optional maintenance discovery and a boss/victory return. Roughly 45\u201360 minutes for an exploratory first visit is a pacing goal, not measured playtime.",
+      "visual_direction": [
+        "Steel crane silhouettes, open sky, a grounded ship hull, warm dock lights and cooler distant water/city layers.",
+        "Readable solid fronts/undersides, subtle far-background ground, visible supports and clear landing edges.",
+        "The crane is visible from the arrival; later high viewpoints show recognizable lower landmarks.",
+        "Simple authored surfaces/decals can supplement already-seen Pier materials; custom textures and scenery need in-game trials."
+      ]
+    },
+    {
+      "district": "Downtown",
+      "entrance_candidates": [
+        {
+          "evidence": "work/area-research/native-downtown-save03.json",
+          "index": 16,
+          "kind": "new rear service door or lift",
+          "proposal": "An X-operated door inside the room, away from the save sphere. Both existing side exits lead to Downtown_Map12 and must survive unchanged.",
+          "remaining_gate": "Prove a button-press trigger can enter/return without consuming the save prompt or stealing a native exit.",
+          "room": "Downtown_Save03",
+          "status": "native_room_observed_only"
+        },
+        {
+          "index": 5,
+          "kind": "alternate maintenance branch",
+          "room": "Downtown_Map06",
+          "status": "static_candidate_only"
+        }
+      ],
+      "id": "the_grid",
+      "identity": "An abandoned building-services laboratory and cable shaft beneath the city, with upper maintenance paths through machinery.",
+      "map_strategy": "Investigate the native Downtown overview's blank upper-left region, pixels (24,24)..(80,88). Nineteen original list entries cost 380 bytes to copy. The branch connection must remain readable; drawing is not qualified.",
+      "materials": {
+        "Downtown_Map07Textures.nsbtx": [
+          "officeWall",
+          "tileFloor",
+          "officeCLights",
+          "Railings",
+          "computer",
+          "ElevatorDoors",
+          "cncretebrkTan"
+        ]
+      },
+      "name": "The Grid / Lost Lab",
+      "parent_map_area": 3,
+      "priority": 2,
+      "proven_building_blocks": [
+        "native lever and persistent branch-private flag",
+        "room-script guarded groups",
+        "electric warning/live separation",
+        "authored shafts and platforms",
+        "native detail maps"
+      ],
+      "research_gates": [
+        "new service-door input",
+        "parent Downtown overview map extension",
+        "cross-room branch-private power persistence",
+        "hazard cleanup on exit/death",
+        "protected machinery encounter"
+      ],
+      "rooms": [
+        {
+          "name": "AR_CableWell",
+          "play": "A vertical service shaft with staggered platforms and safe pockets; warned electrical lanes favor wall movement while the permanent path remains readable.",
+          "target_bounds": [
+            0,
+            0,
+            100,
+            144
+          ],
+          "working_title": "Cable Well"
+        },
+        {
+          "layout_rule": "Use authored architecture, not a tinted debug room or another subway tunnel.",
+          "name": "AR_LostLab",
+          "play": "Wide laboratory floor, observation ledges, machines and a strong bounded crew. Redirect one power feed rather than collect a checklist of switches.",
+          "target_bounds": [
+            0,
+            0,
+            200,
+            72
+          ],
+          "working_title": "Lost Lab"
+        },
+        {
+          "boss_direction": "A single protected machine with an exposed attack window after routing power, subject to a separate protection/damage prototype. No promise of new character AI.",
+          "name": "AR_GridReturn",
+          "play": "The changed power opens the return route and changes the safe approach to a machinery encounter.",
+          "target_bounds": [
+            0,
+            0,
+            160,
+            104
+          ],
+          "working_title": "Switchback"
+        }
+      ]
+    },
+    {
+      "district": "Residential",
+      "entrance_candidates": [
+        {
+          "evidence": "work/area-research/native-residential-roof09.json",
+          "index": 48,
+          "kind": "new roof access near the upper landing",
+          "proposal": "Choose a new upper access on the roof around y240, retaining the Downtown_Map09 door, sewer grate and ichor wall. Exact hatch/return geometry remains to be chosen.",
+          "remaining_gate": "Input-only reachability with story bits 0..4, safe ceiling arrival and a return path that never requires Sledgehammer Slam.",
+          "room": "Residential_Map09",
+          "status": "native_room_observed_only"
+        },
+        {
+          "index": 50,
+          "kind": "alternate rear roof-access door",
+          "proposal": "Keep both side exits to Residential_Map06/07; investigate a new interior access rather than retargeting either.",
+          "room": "Residential_Save02",
+          "status": "static_candidate_only"
+        }
+      ],
+      "id": "skyline_run",
+      "identity": "A fast roof route through fire escapes, water-tower supports and aerial walkways with a distant city skyline.",
+      "map_strategy": "Native Residential overview is crowded: only eight-pixel top/bottom bands are wholly blank. Eleven original list entries cost 220 bytes to copy. Trial a readable compact branch with detailed room maps; if cramped, redesign the overview and its markers before shipping instead of forcing a tiny diagram.",
+      "materials": {
+        "Residential_Map04Textures.nsbtx": [
+          "brick01",
+          "vent01",
+          "board01"
+        ],
+        "Residential_Map09Textures.nsbtx": [
+          "Wbrick",
+          "conc01",
+          "metal01",
+          "gdoor01",
+          "skyline04"
+        ]
+      },
+      "name": "Skyline Run",
+      "parent_map_area": 1,
+      "priority": 3,
+      "proven_building_blocks": [
+        "native jump/swing/wall movement",
+        "far skyline",
+        "authored fixed roof platforms",
+        "Residential crew recipe 0x0C",
+        "native countdown start/reset opcode 0x23"
+      ],
+      "research_gates": [
+        "upper entrance and return with current story abilities",
+        "parent Residential overview map extension",
+        "cross-room timer behavior and reset on death/exit",
+        "optional timer must never trap normal exploration",
+        "pursuit encounter target/AI"
+      ],
+      "rooms": [
+        {
+          "name": "AR_Roofline",
+          "play": "A roof-to-roof route with broad takeoff and landing pads; short fall-recovery paths keep the pace without turning mistakes into death pits.",
+          "target_bounds": [
+            0,
+            0,
+            240,
+            88
+          ],
+          "working_title": "Roofline"
+        },
+        {
+          "name": "AR_TowerSteps",
+          "play": "A climbing route around fixed water-tower supports and fire escapes, with small strong crews on full-sized landings.",
+          "target_bounds": [
+            0,
+            0,
+            140,
+            140
+          ],
+          "working_title": "Water Tower Steps"
+        },
+        {
+          "boss_direction": "A mobile pursuit/rooftop encounter would distinguish this branch, but target AI, cross-room pursuit and timer persistence are unproved.",
+          "name": "AR_SkylineRelay",
+          "play": "A final roof encounter and shortcut back. Optional timed traversal becomes a replay mode only after the normal route works.",
+          "target_bounds": [
+            0,
+            0,
+            220,
+            88
+          ],
+          "working_title": "Skyline Relay"
+        }
+      ]
+    },
+    {
+      "district": "Hive",
+      "id": "hive_quarantine",
+      "identity": "A late-game growth chamber and an abandoned containment perimeter, opening outward from the native Hive rather than extending the Nest.",
+      "name": "Quarantine Heart",
+      "parent_map_area": 4,
+      "play": "Organic wall/ceiling traversal, strong symbiote encounters and reversible sealed routes; specific rooms, art and encounter design await story completion.",
+      "priority": 4,
+      "research_gates": [
+        "prove final-story gate and safe native entrance",
+        "additional visited-flag allocation beyond room 105",
+        "audit extra flags without stealing existing locals or ability bits",
+        "post-story material permission; do not expose Hive_Map08..10 or Downtown_Map13/14 early"
+      ],
+      "status": "post_story_concept_no_allocations"
+    }
+  ],
+  "authority": "Player approved the twelve-room Crane Row pitch on 2026-10-14 and instructed construction. Private implementation and qualification are active; the player has not tested it.",
+  "baseline_release": "0.15.1",
+  "baseline_sha256": "160d01cbda3320bc2c70eb2ab55359263e4b64272808e2d1fde9a704296de44c",
+  "build_order": [
+    "Present this expanded pitch before beginning map construction; detailed features remain proposals.",
+    "Prove capacity, visit mapping and a reversible Pier entrance on private copies.",
+    "Build Quayside plus the Freight Exchange hub as the first representative layout/visual slice.",
+    "Prove both exploration loops and the checkpoint using existing movement before decorating all rooms.",
+    "Qualify moving cargo and the boss damage/recovery prototype; preserve the large map if those mechanics need redesign.",
+    "Complete the district, readable maps, authored scenery, encounters and persistent shortcuts.",
+    "Run real-door traversal, Red/Black combat, save/Continue, death/revisit and integrated release gates before publication."
+  ],
+  "evidence": [
+    "work/area-research/native-survey.json",
+    "work/area-research/capacity-audit.json",
+    "work/area-research/capacity-build.json",
+    "work/area-research/parent-map-survey.json",
+    "work/midnight-line/walk-substation-save-d6040312.json",
+    "work/area-research/crane-scope-2026-10-14.json",
+    "work/crane-row/publication.json",
+    "work/crane-row/final-equivalence.json",
+    "work/crane-row/final-native-parity.json",
+    "work/kit/v0.16.0/qualification.json"
+  ],
+  "first_wave": {
+    "area_ids": [
+      "crane_row"
+    ],
+    "limits": "Twelve visits and seven milestones use 19 of 21 audited free flags, leaving147/245. Independent8KiB storage owns rooms96..107, explicit visited mapping, area6 and scoped adapters. Grid/Skyline have no reserved IDs; further expansion needs another flag/storage audit.",
+    "proposed_milestones": {
+      "boss_defeated": 142,
+      "cache_claimed": 143,
+      "cargo_power": 140,
+      "crown_clear": 146,
+      "drydock_clear": 145,
+      "freight_clear": 144,
+      "upper_return": 141
+    },
+    "proposed_rooms": [
+      {
+        "name": "AR_CraneQuay",
+        "room": 96,
+        "visited_flag": 161
+      },
+      {
+        "name": "AR_FreightExchange",
+        "room": 97,
+        "visited_flag": 160
+      },
+      {
+        "name": "AR_HarbourOffice",
+        "room": 98,
+        "visited_flag": 159
+      },
+      {
+        "name": "AR_ContainerWarren",
+        "room": 99,
+        "visited_flag": 158
+      },
+      {
+        "name": "AR_DryDock",
+        "room": 100,
+        "visited_flag": 157
+      },
+      {
+        "name": "AR_EngineHouse",
+        "room": 101,
+        "visited_flag": 156
+      },
+      {
+        "name": "AR_Counterweight",
+        "room": 102,
+        "visited_flag": 155
+      },
+      {
+        "name": "AR_GantrySpine",
+        "room": 103,
+        "visited_flag": 154
+      },
+      {
+        "name": "AR_WinchCache",
+        "room": 104,
+        "visited_flag": 153
+      },
+      {
+        "name": "AR_CraneCrown",
+        "room": 105,
+        "visited_flag": 152
+      },
+      {
+        "name": "AR_LongArm",
+        "room": 106,
+        "visited_flag": 149
+      },
+      {
+        "name": "AR_Breakwater",
+        "room": 107,
+        "visited_flag": 148
+      }
+    ],
+    "proposed_visit_overrides": {
+      "106": 149,
+      "107": 148
+    },
+    "status": "crane_runtime_allocations_shipped",
+    "target_room_count": 12
+  },
+  "implementation": {
+    "arm9_sha256": "abfbb1120c6e2d3237b437fefa742bb12aa0c3a1c57a08664282274c6cc0f722",
+    "candidate": "build/version-0.16.0-qualified/Versioned.nds",
+    "map_area": 6,
+    "player_confirmed": false,
+    "published": true,
+    "qualification": "work/crane-row/publication.json",
+    "rom_sha256": "39fcf89e46487e4cc80eed7414871891e6f0ca1a21ed86d4e3f26844f095d299",
+    "sources": [
+      "tools/crane_rooms.py",
+      "tools/crane_row.py",
+      "tools/crane_boss.py",
+      "tools/crane_walk.py",
+      "tools/crane_boss_lab.py"
+    ],
+    "version": "0.16.0"
+  },
+  "parked_connections": {
+    "danger_room_and_gauntlet": "Separate repeatable-content ideas, not substitutes for the three authored campaign branches.",
+    "midnight_express": "Retain the earlier station-network idea for later. Direct district entrances come first; a hub must not bypass story ability gates."
+  },
+  "principles": [
+    "Direct optional branches of native districts; existing story paths, abilities and purchases remain intact.",
+    "Original geometry and distinct identities; borrow only already-seen materials and use far outdoor backdrops.",
+    "Existing jump, swing, wall movement and suit abilities suffice. Paid TASM moves provide advantages, never mandatory access.",
+    "Strong bounded crews, readable routes and fast combat. No further skills or time-slowing effects.",
+    "Every branch has a return route and nearby native checkpoint; native door walks, save/reload and map behavior must be qualified.",
+    "Campaign room and flag allocation must share one ledger with Midnight; provisional IDs are not an implemented contract."
+  ],
+  "qualification_limits": "v0.16.0 agent-tested; player feel and 45-60 minute pacing target unmeasured. Full68-kit pass on unchanged-kit candidate6705b394; all30 Crane/all13 Midnight doors and12 crash seeds on3624afd5. Final39fcf89e has identical kit/collision/maps/doors/other assets; only Long Arm art/script and owned adapter refinements change. Final native parity and exhaustive gateway scope tests pass. Actual Red full-kit/Vitality and Black Vitality III victories use no lab refills; native health gains allowed. Precise crew-free HP controls prove green x328/392 safe and warning/live distinction. Earned flag142 survives native Office save/reload; native orb recovery, cache, lever, Crown callback and moving scenery qualified. Counterweight is not rideable; surviving support can remain until room change.",
+  "schema_version": 1,
+  "status": "crane_row_published_agent_tested",
+  "updated": "2026-10-14"
+}

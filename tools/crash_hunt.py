@@ -63,9 +63,13 @@ def fight_script(seed, frames):
             rows.append({'start': f, 'end': f + 3, 'buttons': [rng.choice(['Y', 'Y', 'Y', 'A', 'R', 'B'])]}); f += rng.randint(16, 26)
             for _ in range(rng.randint(0, 4)):
                 rows.append({'start': f, 'end': f + 3, 'buttons': ['Y']}); f += rng.randint(14, 30)
-        else:                # Vortex: Y, Y, pause, Y, Y, Y
-            for gap in (16, rng.randint(40, 56), rng.randint(20, 30), rng.randint(20, 30), rng.randint(20, 40)):
-                rows.append({'start': f, 'end': f + 3, 'buttons': ['Y']}); f += gap
+        else:                # Vortex: pause or buffered Down+Y; four web steps
+            direct = rng.choice((False, True))
+            gaps = (16, rng.randint(16,26) if direct else rng.randint(40,56),
+                    rng.randint(20,30), rng.randint(20,30), rng.randint(20,30), rng.randint(20,40))
+            for index,gap in enumerate(gaps):
+                rows.append({'start': f, 'end': f + 3, 'buttons': ['Y','Down'] if direct and index==2 else ['Y']})
+                f += gap
     return rows
 
 

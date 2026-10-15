@@ -25,7 +25,7 @@ from tools.room_events import Command, EventGroup, Events
 from tools.room_objects import RoomObjects
 
 BASE = 0x02000000
-ML_BASE = kit.TARGET + kit.RESERVE          # 02155420, after the kit's reserve
+ML_BASE = kit.TARGET + kit.RESERVE          # 02157420, after the kit's reserve
 ML_SPACE = 0x1000                           # autoloaded; main arena starts after it
 FIRST = room_catalog.COUNT + 1              # 75 stays the native invalid sentinel
 LOOKUP_LITERAL = 0x02084AC8                 # literal of lookup 0x02084AB4
@@ -54,7 +54,7 @@ LOCAL_FLAGS = (*range(268, 276), 138, 139, 251, 250, 249, 248, 247, 246, 245, *r
 # visited test reads them through a stub (`visited_stub`). 150..165 are
 # reserved for that and for flags authored rooms name themselves (ROOM_FLAGS).
 VISITED_HIGH_FIRST, VISITED_HIGH = 92, 165
-ROOM_FLAGS = {'substation_cleared': 150}    # the Control Roof's last wave is beaten
+ROOM_FLAGS = {'substation_cleared': 150, 'signal_leech_defeated': 151}
 # Per-room scratch bytes (0x127..0x130, e.g. the Venom room's platform and
 # timer states): writes are kept, like the native room's.
 ROOM_SCRATCH = range(0x127, 0x131)
@@ -67,7 +67,7 @@ DELAY = 0x1C                                # u16 frames, u8 action group (+4), 
 GRANT = 0x1F                                # "<ability> obtained!": grants a native story ability
 SPAWN_PICKUP = 0x07                         # spawns a pickup; operand +26 = 1-based group run on pickup
 STABLE_SHA256 = 'fd7e4420f97645dd55011504843ce62f068d1276234c3cd781931c85bb1eb193'
-ARM9_SHA256 = 'db0911844f23b68bc2a9a8731415018e4a45918b5d26aeb1ad316d2b35c038fe'   # chapter over the kit ARM9 (pinned per release)
+ARM9_SHA256 = '117c9f7c21c6b2212e95aaf021b3537128de7d6b831cc328e7620021635d6da6'   # chapter over the kit ARM9 (pinned per release)
 ENTRANCE = 'Sewer_Save02'
 STATE_TEMPLATE = 'Test_Surfaces01'
 
@@ -112,6 +112,8 @@ ROOMS = (
     Room(91, 'ML_Switchyard', midnight_rooms.SOURCE, 'authored', True),   # open yard at dusk: crew, containers, gantry
     Room(92, 'ML_RelayHall', midnight_rooms.SOURCE, 'authored', True),    # timed climb: catwalks that take turns being live
     Room(93, 'ML_Roof', midnight_rooms.SOURCE, 'authored', True),         # arena at night: three waves, replayable
+    Room(94, 'ML_SignalCore', midnight_rooms.SOURCE, 'authored', True),   # Signal Leech machine boss
+    Room(95, 'ML_ServiceBay', midnight_rooms.SOURCE, 'authored', False), # quiet Substation save/shop room
 )
 BY_NAME = {r.name: r for r in ROOMS}
 # (room, record-0 exit group) -> (destination, spawn id). A spawn is the arrival
@@ -145,10 +147,13 @@ LINKS = {
     ('ML_Yard', 2): ('ML_Switchyard', 1), ('ML_Switchyard', 1): ('ML_Yard', 2),
     ('ML_Switchyard', 2): ('ML_RelayHall', 1), ('ML_RelayHall', 1): ('ML_Switchyard', 2),
     ('ML_RelayHall', 2): ('ML_Roof', 1), ('ML_Roof', 1): ('ML_RelayHall', 2),
+    ('ML_Roof', 2): ('ML_SignalCore', 1), ('ML_SignalCore', 1): ('ML_Roof', 2),
+    ('ML_Switchyard', 3): ('ML_ServiceBay', 1), ('ML_ServiceBay', 1): ('ML_Switchyard', 3),
 }
 # Exits built by add_yard_door/stage_yard/add_substation_door/midnight_rooms.stage, not by sanitize.
 AUTHORED_EXITS = {('ML_Refuge', 2), ('ML_Yard', 1), ('ML_Yard', 2), ('ML_Switchyard', 1), ('ML_Switchyard', 2),
-                  ('ML_RelayHall', 1), ('ML_RelayHall', 2), ('ML_Roof', 1)}
+                  ('ML_RelayHall', 1), ('ML_RelayHall', 2), ('ML_Roof', 1), ('ML_Roof', 2), ('ML_SignalCore', 1),
+                  ('ML_Switchyard', 3), ('ML_ServiceBay', 1)}
 # Surplus native exits (both ceiling hatches whose floor partners now lead into
 # the Nest): the trigger moves out of reach, so the door is a dead hatch.
 SEALED = {('ML_Entry', 3), ('ML_Platform', 4), ('ML_Venom', 3)}
@@ -188,6 +193,7 @@ LINES = {
     'goal_power': 'Objective: cut the track power. The breaker is on the Stairs.',
     'goal_nest': 'Objective: something nests under the tracks. Move the boiler and go down.',
     'goal_done': 'The Midnight Line is quiet. For now.',
+    'goal_leech': 'Substation 7 is past the Yard. Shut down Signal Leech beyond the control roof.',
     'sealed_grate': 'Sealed from below. The way down must be somewhere on the tracks.',
     'grate_clear': 'The grate is clear. Stand on it, open it with X and drop in with Down.',
     'way_up': 'The nest falls silent. Take the left passage: a shaft climbs back to the Stairs.',
@@ -322,7 +328,7 @@ DOORWAY = {'x': 54 * 4096, 'name': 'Door (empty) Midnight'}
 # Unreachable placement for pickups that must not be duplicated.
 REMOVED_PICKUP_Y = -4000 * 4096
 PICKUP_TYPE = 13
-# Minimap fields at descriptor +0x28..+0x48 (area, piece position, size, room
+# Minimap fields at descriptor +0x28..+0x48 (area, map rectangle endpoints, room
 # bounds), filled at boot for native rooms 0..74 only. Values read from RAM of
 # the sources in a running game; the chapter's own block keeps static copies.
 MAP_FIELDS = {
@@ -342,10 +348,13 @@ MAP_FIELDS = {
     # proto01 has no native values (area 5, zeros): the Refuge's map piece, its own collision bounds
     # as (x min, y max, x max, y min), the layout Sewer_Save04's values show.
     'proto01': (5, 450560, 323584, 589824, 393216, -270 * 4096, 110 * 4096, 175 * 4096, 0),
-    # Authored rooms (keyed by room name): the same piece, the plan's bounds.
+    # Authored rooms: retain world bounds here; room_table derives map endpoints
+    # from room_minimap's fitted collision plan, and supplies a private CBMP.
     'ML_Switchyard': (5, 450560, 323584, 589824, 393216, -10 * 4096, 84 * 4096, 250 * 4096, 0),
     'ML_RelayHall': (5, 450560, 323584, 589824, 393216, -10 * 4096, 140 * 4096, 120 * 4096, 0),
     'ML_Roof': (5, 450560, 323584, 589824, 393216, 0, 90 * 4096, 214 * 4096, 0),
+    'ML_SignalCore': (5, 450560, 323584, 589824, 393216, 0, 70 * 4096, 104 * 4096, 0),
+    'ML_ServiceBay': (5, 450560, 323584, 589824, 393216, 0, 42 * 4096, 84 * 4096, 0),
 }
 # --- Touch-screen map (v0.11.0) --------------------------------------------
 # The chapter has its own map screen. The game's area table (16-byte rows at
@@ -381,7 +390,7 @@ MAP_BORDER_SAMPLES = {'top': (6, 2), 'left': (2, 12), 'right': (28, 12), 'outer'
 # Palettes whose free 5-colour slots (colours 1, 6, 11) may hold rooms: 1..3 and 0 (free in the Sewer screen) and
 # the native Sewer rooms' own 6..10. Lab 2026-10-12, every room marked visited: rooms in palettes 14 and 15
 # came out magenta or black and a visited room in palette 13 dark grey (it only looked right while current).
-MAP_PALETTES = (1, 2, 3, 0, 8, 9, 10, 7, 6)
+MAP_PALETTES = (1, 2, 3, 0, 8, 9, 10, 7, 6, 11, 12, 4, 5)
 MAP_SLOTS_EXCLUDED = ()
 FILL, EDGE = 2, 4                          # pixel roles inside a slot (0 = background)
 # Room shapes in interior pixels, x right, y down: rectangles (x0, y0, x1, y1)
@@ -406,9 +415,11 @@ MAP_ROOMS = {
     'ML_Venom': [(144, 80, 162, 96)],
     'ML_NestGate': [(134, 66, 142, 96)],
     # The Substation, lower left: roof | relay hall | switchyard, as its doors run.
-    'ML_Roof': [(14, 92, 42, 102)],
+    'ML_Roof': [(24, 92, 42, 102)],
+    'ML_SignalCore': [(4, 90, 20, 106)],
     'ML_RelayHall': [(46, 92, 58, 120)],
     'ML_Switchyard': [(62, 108, 94, 120)],
+    'ML_ServiceBay': [(62, 94, 78, 104)],
 }
 MAP_LINKS = (                               # (room, other room, strip)
     ('ML_Yard', 'ML_Refuge', (31, 22, 35, 26)), ('ML_Refuge', 'ML_Stairs', (45, 22, 49, 26)),
@@ -419,11 +430,12 @@ MAP_LINKS = (                               # (room, other room, strip)
     ('ML_NestGallery', 'ML_NestHollow', (190, 91, 192, 95)), ('ML_NestShrine', 'ML_NestGallery', (172, 91, 174, 95)),
     ('ML_Venom', 'ML_NestShrine', (162, 91, 164, 95)), ('ML_NestGate', 'ML_Venom', (142, 91, 144, 95)),
     ('ML_Roof', 'ML_RelayHall', (42, 95, 46, 99)), ('ML_RelayHall', 'ML_Switchyard', (58, 114, 62, 118)),
+    ('ML_SignalCore', 'ML_Roof', (20, 95, 24, 99)),
 )
 MAP_SHAFT_LINK = ('ML_NestGate', 'ML_Stairs')    # drawn as two dotted arrows, not as a line
 # The Substation hangs off the Yard's left wall, where the panel ends: that door pair is two arrows as well
 # (left of the Yard, right of the Switchyard).
-MAP_DOOR_ARROWS = (('ML_Yard', 'ML_Switchyard'),)
+MAP_DOOR_ARROWS = (('ML_Yard', 'ML_Switchyard'), ('ML_Switchyard', 'ML_ServiceBay'))
 MAP_ARROWS = {                              # (room, pixels): dotted stub with an arrow head
     'ML_NestGate': [(138, 63), (138, 60), (138, 57), (137, 58), (139, 58), (136, 59), (140, 59)],     # up, above the Gate
     'ML_Stairs': [(53, 42), (53, 45), (53, 48), (52, 47), (54, 47), (51, 46), (55, 46)],             # down, under the stairwell
@@ -431,8 +443,13 @@ MAP_ARROWS = {                              # (room, pixels): dotted stub with a
     'ML_Yard': [(6, 22), (5, 22), (4, 22), (3, 22), (2, 22), (3, 21), (3, 23), (4, 20), (4, 24)],     # left, to the Substation
     'ML_Switchyard': [(94, 114), (95, 114), (96, 114), (97, 114), (98, 114), (97, 113), (97, 115), (96, 112), (96, 116)],   # right, to the Yard
 }
-SAVE_ROOMS = {'ML_Refuge', 'ML_NestRest', 'ML_NestShrine'}
-BOSS_ROOMS = {'ML_Venom'}
+MAP_BRANCH_ARROWS={('ML_Switchyard','ML_ServiceBay'):[(61,111),(60,111),(59,111),(58,111),(59,110),(59,112)],
+                   ('ML_ServiceBay','ML_Switchyard'):[(78,99),(79,99),(80,99),(81,99),(80,98),(80,100)]}
+
+
+def map_arrows(room, other): return MAP_BRANCH_ARROWS.get((room,other),MAP_ARROWS.get(room,[]))
+SAVE_ROOMS = {'ML_Refuge', 'ML_NestRest', 'ML_NestShrine','ML_ServiceBay'}
+BOSS_ROOMS = {'ML_Venom', 'ML_SignalCore'}
 
 
 def _map_pixels():
@@ -455,7 +472,8 @@ def _map_pixels():
             for y in range(y0, y1):
                 if (x, y) in out: raise ValueError(f'Map link {room}-{other} overlaps a room at {x},{y}')
                 out[(x, y)] = (room, EDGE)
-    for room, pixels in MAP_ARROWS.items():
+    arrows=list(MAP_ARROWS.items())+[(room,pixels) for (room,other),pixels in MAP_BRANCH_ARROWS.items()]
+    for room, pixels in arrows:
         for xy in pixels:
             if xy in out: raise ValueError(f'Map arrow of {room} overlaps at {xy}')
             out[xy] = (room, EDGE)
@@ -465,6 +483,7 @@ def _map_pixels():
 def _map_slots(screen, kept):
     """Free 5-colour slots (palette index of the first colour) per palette: unused by every kept cell."""
     used = {(e >> 12) * 16 + c for e in kept for c in set(screen.tile(e & 0x3FF)) if c}
+    used.update(STATE_COLORS)                 # engine reads these source colours for every room state
     return {p: [p * 16 + b for b in (1, 6, 11) if not used & set(range(p * 16 + b, p * 16 + b + 5))
                 and p * 16 + b not in MAP_SLOTS_EXCLUDED] for p in MAP_PALETTES}
 
@@ -532,6 +551,7 @@ STRENGTH = {
     # 2026-10-13). Health 2.25 / 2.5 / 3 times native, damage to Spidey 1.4 / 1.5 / 1.6 times. The
     # Yard on the way there has the same Pier gang: 2 and 1.3 times (the agent's choice, one ramp).
     'ML_Yard': (128, 84), 'ML_Switchyard': (144, 90), 'ML_RelayHall': (160, 96), 'ML_Roof': (192, 104),
+    'ML_SignalCore': (192, 104),
 }
 
 
@@ -635,13 +655,13 @@ def sanitize(events, room, source_index, names, local=None):
     return Events(tuple(groups), bytes(-count % 4)), dropped
 
 
-def state_record(template_raw, room):
+def state_record(template_raw, room, visited_flag=None):
     """Empty native state record whose init group marks the room visited."""
     parsed = RoomObjects.parse(template_raw)
     record, names = parsed.records[1], parsed.names[1]
     if Entities.parse(record.sections[0]).records or record.raw[3] != 1 or names.category_ends[:2] != (0, 1):
         raise ValueError('State template changed')
-    flag = visited(room.index)
+    flag = visited(room.index) if visited_flag is None else visited_flag
     if flag not in FREE_FLAGS: raise ValueError('Visited flag outside the chapter allocation')
     events = Events((EventGroup((Command(SET_VAR, struct.pack('<HBB', flag, 1, 0)),)),), b'')
     return record.replace_section(1, events.to_bytes()), names.raw
@@ -674,7 +694,7 @@ def _seal_exits(section0, room):
     return section0, moved
 
 
-def build_room(source_obj, template_raw, room, source_index, names, local):
+def build_room(source_obj, template_raw, room, source_index, names, local, *, visited_flag=None):
     """Record 0 sanitized; record 1 sanitized (encounters) or the empty state record."""
     parsed = RoomObjects.parse(source_obj)
     if len(parsed.records) != 2: raise ValueError(f'{room.source}: expected two records')
@@ -691,7 +711,7 @@ def build_room(source_obj, template_raw, room, source_index, names, local):
         report[f'record{r}'] = {'dropped_commands': dropped, 'moved_pickups': moved, 'sealed_exits': sealed}
     if not room.encounters:
         base = RoomObjects.parse(result)
-        state, state_names = state_record(template_raw, room)
+        state, state_names = state_record(template_raw, room, visited_flag)
         header = bytearray(base.header)
         end = len(header) + len(base.records[0].raw) + len(state)
         struct.pack_into('<2I', header, 4, end, end + len(base.between))
@@ -964,15 +984,18 @@ def add_objectives(raw, completed):
     Stairs grate without ever cutting the power.
     """
     _, groups = room_script.counts(raw, 1)
-    power, nest, done, check = range(groups + 1, groups + 5)
+    power, nest, done, check, leech, post_nest = range(groups + 1, groups + 7)
     raw, _ = room_script.append_groups(raw, 1, [
         (EventGroup((say('goal_power'),)), 'Goal_Power'),
         (EventGroup((say('goal_nest'),)), 'Goal_Nest'),
         (EventGroup((say('goal_done'),)), 'Goal_Done'),
         (EventGroup((room_script.if_var(TRACK_POWER, '==', 0, then=room_script.action(eg=power),
-                                        otherwise=room_script.action(eg=nest)),)), 'Goal_Check')])
+                                        otherwise=room_script.action(eg=nest)),)), 'Goal_Check'),
+        (EventGroup((say('goal_leech'),)), 'Goal_Leech'),
+        (EventGroup((room_script.if_var(ROOM_FLAGS['signal_leech_defeated'], '==', 0, then=room_script.action(eg=leech),
+                                        otherwise=room_script.action(eg=done)),)), 'Goal_Post_Nest')])
     return room_script.extend_group(raw, 1, 0, [room_script.if_var(completed, '==', 0, then=room_script.action(eg=check),
-                                                                   otherwise=room_script.action(eg=done))])
+                                                                   otherwise=room_script.action(eg=post_nest))])
 
 
 def entrance_obj(raw, names):
@@ -1061,8 +1084,16 @@ def room_table(arm9, names, resources, first_string=None, listing=()):
                          resources[room.name].get('bsp', source.bsp), resources[room.name]['objects'])
         struct.pack_into('<I', raw, 0x20, models_at + len(models))
         fields = MAP_FIELDS.get(room.name) or MAP_FIELDS.get(room.source)
+        if room.name in midnight_rooms.AUTHORED:
+            from tools import room_minimap
+            # Plan bounds suffice for the native position transform; no assets
+            # are consulted here, keeping table construction deterministic.
+            from types import SimpleNamespace
+            bounds=tuple(v/4096 for v in (fields[5],fields[8],fields[7],fields[6]))
+            fields=room_minimap.projection(SimpleNamespace(bounds=bounds)).fields
         if fields:                       # the chapter's own map area; the other fields only feed the owned-map view
             struct.pack_into('<9i', raw, 0x28, MAP_AREA, *fields[1:])
+        if 'detail_map' in resources[room.name]:struct.pack_into('<I',raw,0x4C,resources[room.name]['detail_map'])
         models += struct.pack('<I', resources[room.name].get('model', model))
         labels += room.name.encode('ascii') + b'\0'
         lookup.append(descriptors_at + len(descriptors))
@@ -1079,7 +1110,19 @@ def room_table(arm9, names, resources, first_string=None, listing=()):
     stub, call = visited_stub(ML_BASE + len(data))
     stub_call = (MAP_VISITED_SITE[0], MAP_VISITED_SITE[1], call)
     data += stub
-    if len(data) > ML_SPACE: raise ValueError('Chapter tables exceed reserved space')
+    # Fixed final 256 bytes hold the room-scoped core adapter and native data
+    # copy. Keep this outside the kit code/state and the map/message tables.
+    from tools import midnight_boss,roof_waves
+    adapter_space = midnight_boss.ADAPTER_SPACE if resources['ML_SignalCore'].get('core_model') is not None else 0x100
+    roof_offset=ML_SPACE-adapter_space-0x80
+    roof,_=roof_waves.adapter(arm9,ML_BASE+roof_offset)
+    if len(data)>roof_offset or len(roof)>0x80:raise ValueError('Chapter tables exceed Roof adapter space')
+    data+=bytes(roof_offset-len(data))+roof
+    boss_offset = ML_SPACE - adapter_space
+    adapter, _ = midnight_boss.core_adapter(arm9, ML_BASE + boss_offset, resources['ML_SignalCore'].get('warning_model'),
+                                           resources['ML_SignalCore'].get('core_model'))
+    if len(data) > boss_offset or len(adapter) > adapter_space: raise ValueError('Chapter tables exceed reserved space')
+    data += bytes(boss_offset - len(data)) + adapter
     return data + bytes(ML_SPACE - len(data)), list_at, messages_at, stub_call
 
 
@@ -1214,6 +1257,14 @@ def apply_rom(rom, *, save_rooms=True):
     extras[MAP_SCREEN], listing = map_layout(asset(MAP_SOURCE))
     for name, model in models.items():
         extras[f'zz_{BY_NAME[name].name}.nsbmd'] = bytes(model)
+    from tools import room_minimap
+    for name,spec in midnight_rooms.AUTHORED.items():
+        cores=((22,8),(46,8),(70,8)) if spec.boss else ()
+        extras[f'zz_{name}_detail.cbmp'],_=room_minimap.build(asset(MAP_SOURCE),midnight_rooms.plan(name,asset),spec.doors,
+                                                hazards=spec.hazards,cores=cores,save=spec.save)
+    from tools import midnight_boss
+    extras['zz_SignalWarning.nsbmd'] = midnight_boss.warning_model()
+    extras['zz_RelayCore.nsbmd'] = midnight_boss.core_model()
     for name, collision in collisions.items():          # last: collision files need no alignment, models and textures do
         extras[f'zz_{BY_NAME[name].name}.bsp'] = bytes(collision)
     # Chapter lines: appended string slots (same index in both languages).
@@ -1239,6 +1290,9 @@ def apply_rom(rom, *, save_rooms=True):
                              **({'bsp': out_names.index(f'zz_{room.name}.bsp')} if room.name in collisions else {}),
                              **({'model': out_names.index(f'zz_{room.name}.nsbmd')} if room.name in models else {})}
                  for room in ROOMS}
+    resources['ML_SignalCore']['warning_model'] = out_names.index('zz_SignalWarning.nsbmd')
+    resources['ML_SignalCore']['core_model'] = out_names.index('zz_RelayCore.nsbmd')
+    for name in midnight_rooms.AUTHORED:resources[name]['detail_map']=out_names.index(f'zz_{name}_detail.cbmp')
     at = 4 * (len(out_names) + 1)
     for name, blob in zip(out_names, out_blobs):        # the engine reads models and textures as words
         if name.startswith('zz_') and name.endswith(('.nsbmd', '.nsbtx')) and at % 4:
@@ -1246,9 +1300,14 @@ def apply_rom(rom, *, save_rooms=True):
         at += len(blob)
     staged = w.rebuild_rom(rom, {'Glob.bin': w.pack_glob(out_names, out_blobs)})
     table, map_list, messages, stub_call = room_table(arm9, out_names, resources, first_string, listing)
+    from tools import midnight_boss
+    _, core_patch = midnight_boss.core_adapter(arm9, ML_BASE + ML_SPACE - midnight_boss.ADAPTER_SPACE, resources['ML_SignalCore']['warning_model'],
+                                              resources['ML_SignalCore']['core_model'])
+    from tools import roof_waves
+    _,roof_patch=roof_waves.adapter(arm9,ML_BASE+ML_SPACE-midnight_boss.ADAPTER_SPACE-0x80)
     result, patches = extend_arm9(staged, table, (len(names), len(out_names)), save_rooms=save_rooms,
                                   map_area=(map_list, len(listing), out_names.index(MAP_SCREEN), first_string + len(LINES)),
-                                  messages=messages, extra=(stub_call,))
+                                  messages=messages, extra=(stub_call,core_patch,roof_patch))
     check = w.validate_rom(result, target=True)
     fs = next(e for e in check['nitrofs'] if e['name'] == 'Glob.bin')
     out_glob = result[fs['start']:fs['end']]

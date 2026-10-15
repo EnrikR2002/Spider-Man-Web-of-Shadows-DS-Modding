@@ -37,8 +37,9 @@ class MidnightWalkTests(unittest.TestCase):
                 'ML_NestGallery', 'ML_NestShrine', 'ML_Venom', 'ML_NestGate', 'ML_Stairs']
         self.assertTrue(set(zip(loop, loop[1:])) <= seen)
         self.assertIn(('ML_Stairs', 'ML_NestGate'), seen)                 # the grate as a shortcut after the loop
-        substation = ['ML_Yard', 'ML_Switchyard', 'ML_RelayHall', 'ML_Roof']    # every authored door, both ways
+        substation = ['ML_Yard', 'ML_Switchyard', 'ML_RelayHall', 'ML_Roof', 'ML_SignalCore']    # every authored door, both ways
         self.assertTrue({*zip(substation, substation[1:]), *zip(substation[1:], substation)} <= seen)
+        self.assertTrue({('ML_Switchyard','ML_ServiceBay'),('ML_ServiceBay','ML_Switchyard')}<=seen)
 
     def test_lab_placements_are_in_open_space_of_their_room(self):
         placed = 0
@@ -85,6 +86,12 @@ class MidnightWalkTests(unittest.TestCase):
         self.assertEqual(walk.in_room('ML_Venom').room, 'ML_Venom')
         self.assertEqual(walk.PLAYER_ABILITIES >> 5 & 1, 0)                # no Sledgehammer Slam (story ability 314)
         self.assertEqual(walk.PLAYER_ABILITIES & 0x1F, 0x1F)               # Ichor Crawl/Web, Tarantula, Reinforced Web, Bulldozer
+
+    def test_roof_chase_fixture_cannot_enter_the_boss_or_relay_door(self):
+        self.assertEqual(walk.chase_point(93,3.5,5),(24,6))
+        self.assertEqual(walk.chase_point(93,210,5),(176,6))
+        self.assertEqual(walk.chase_point(93,100,20),(96,21))
+        self.assertEqual(walk.chase_point(92,15,20),(11,21))
 
 
 if __name__ == '__main__':

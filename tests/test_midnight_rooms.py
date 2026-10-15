@@ -46,9 +46,17 @@ class MidnightRoomsTests(unittest.TestCase):
             self.assertTrue(mr.sources(name) <= set(self.blobs), name)
             bounds = mr.plan(name, self.blob).bounds
             self.assertEqual(tuple(v // 4096 for v in ch.MAP_FIELDS[name][5:]), (bounds[0], bounds[3], bounds[2], bounds[1]), name)
-        self.assertEqual(set(mr.lines()), {'ML_Switchyard', 'ML_RelayHall', 'ML_Roof', 'ML_Roof_clear'})
+        self.assertEqual(set(mr.lines()), {'ML_Switchyard', 'ML_RelayHall', 'ML_Roof', 'ML_Roof_clear', 'ML_SignalCore', 'ML_SignalCore_clear','ML_ServiceBay'})
         self.assertTrue(set(mr.lines()) <= set(ch.LINES))
         self.assertFalse(mr.LAB)                                       # lab switches are never set in a build
+
+    def test_signal_arena_is_flat_and_the_entry_bulkhead_still_blocks_a_seal_bypass(self):
+        tree=self.tree['ML_SignalCore']
+        for x in (8,22,34,46,58,70,80):
+            self.assertAlmostEqual(tree.floor_below(x,25),0,delta=.3)  # tree probe resolves to quarter-unit bounds
+            for y in (5,18,25):self.assertIsNone(tree.solid_at(x,y))
+        self.assertIsNone(tree.solid_at(90,5))
+        for y in (18,40,65):self.assertIsNotNone(tree.solid_at(90,y))
 
     def test_doors_stand_at_walls_and_arrivals_stand_on_floors(self):
         for name, spec in mr.AUTHORED.items():
@@ -85,7 +93,7 @@ class MidnightRoomsTests(unittest.TestCase):
             self.assertEqual(polygon, spec.camera[0])
             self.assertTrue(all(x0 + 20 <= x <= x1 - 20 and y0 <= y <= y1 for x, y in polygon), name)   # the native inset
             points = ra.anchors(raw)
-            self.assertGreater(len([p for p in points if p[2] == ra.FLOOR]), 3, name)
+            self.assertGreater(len([p for p in points if p[2] == ra.FLOOR]), 0 if spec.save else 3, name)
             for x, y, kind in points:
                 self.assertIsNone(tree.solid_at(x, y), (name, x, y, kind))
                 if kind == ra.FLOOR:
@@ -152,6 +160,21 @@ class MidnightRoomsTests(unittest.TestCase):
         self.assertEqual([g.table for g in spec.waves], [0x08, 0x0E, 0x0C])
         door = spec.doors[0]
         self.assertGreaterEqual(door.wall - (spec.area[2]), 30)        # the passage keeps the fight away from the exit
+
+    def test_service_bay_copies_the_native_sphere_and_has_a_safe_continue_spawn(self):
+        raw=self.staged['ML_ServiceBay'];spec=mr.AUTHORED['ML_ServiceBay']
+        native=RoomObjects.parse(self.blobs['Sewer_Save04_app.obj']).records[0]
+        sphere=next(e for e in Entities.parse(native.sections[0]).records if len(e)==16 and struct.unpack_from('<I',e,12)[0]==10)
+        record=RoomObjects.parse(raw).records[0];entities=Entities.parse(record.sections[0])
+        ag=next(i for i,batch in enumerate(entities.batches) if any(len(e)==16 and struct.unpack_from('<I',e,12)[0]==10 for e in batch.records))
+        actual=entities.batches[ag].records[0]
+        self.assertEqual(actual[8:],sphere[8:])
+        self.assertEqual(struct.unpack_from('<2i',actual),tuple(round(v*4096) for v in spec.save))
+        self.assertIn(s.activate(ag=ag),Events.parse(record.sections[1],record.raw[3]).groups[0].commands)
+        spawn=next(p for p in doors.spawns(raw) if p.spawn_id==0)
+        self.assertEqual((spawn.x,spawn.y),(40*4096,2*4096))
+        self.assertIsNone(self.tree['ML_ServiceBay'].solid_at(40,7))
+        self.assertFalse(spec.gangs or spec.waves or spec.hazards)
 
     def test_relay_arcs_take_turns_with_a_rest_between(self):
         spec = mr.AUTHORED['ML_RelayHall']

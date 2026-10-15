@@ -31,7 +31,7 @@ SPAWNER_TYPE, OBJECT_TYPE = 4, 14
 NO_CLING = 1                                # collision surface value: a wall or ceiling Spidey cannot hold on to
 # Face shades of the authored rooms: ceilings and the faces turned to the camera are lit more than the
 # compiler's defaults (0.5 and 0.3), which left doorway ceilings and overhead blocks pitch black (player, 2026-10-13).
-LIT = {'top': 1.0, 'side': 0.78, 'under': 0.72, 'front': 0.34, 'body': 0.66}
+LIT = {'top': 1.0, 'side': 0.82, 'under': 0.82, 'front': 0.50, 'body': 0.74}
 HAZARD = ('proto01', 'Object (Hazard_Electric)')   # native electric arc object (a point; hurts on contact)
 SOUND = 0x22
 SWITCH_SOUND = 0xBC                         # native switch-throw sound (the breaker uses it)
@@ -100,6 +100,8 @@ class Authored:
     hazard_period: int = 100                # frames each phase stays live
     hazard_rest: int = 0                    # frames with nothing live between two phases
     lines: tuple = ()                       # (key, text): 'first' on the first visit, 'clear' when the waves are beaten
+    boss: bool = False                      # dedicated Signal Leech script (never the generic wave scratch)
+    save: tuple = ()                        # native save sphere position, also the default Continue placement
 
 
 def _borrowed(blob, wanted):
@@ -150,9 +152,10 @@ def switchyard(blob):
     cut = Look('wcutaway01', (8, 8))
     door = Look('gdoor01', (16, 14))
     soffit = Look('Fconcrete02', (20, 20), (26, 25, 28))               # doorway ceilings (the cutaway texture read as a black hole)
-    theme = {'top': asphalt, 'side': facade, 'under': beam, 'front': cut, 'back': fence}
+    theme = {'top': asphalt, 'side': facade, 'under': soffit, 'front': dock, 'back': fence}
     solids = (
-        Solid(-10, 16, 0, 84, side=facade, under=soffit, front=brick),    # building over the left doorway
+        Solid(-10, 16, 0, 33, side=facade, under=soffit, front=brick),    # lower wall, below the service-bay doorway
+        Solid(-10, 49, 0, 84, side=facade, under=soffit, front=brick),
         Solid(240, 16, 250, 84, side=facade, under=soffit, front=brick),  # building over the right doorway
         Solid(22, 0, 58, 10, top=dock, side=dock),                     # loading dock (clear of the left doorway)
         Solid(92, 0, 132, 14, top=container, side=container, depth=14),           # container
@@ -177,7 +180,7 @@ def switchyard(blob):
     wire = Look('Pbeam01', (64, 64), (4, 4, 6))
     for y, x0, x1 in ((61, -10, 56), (61, 84, 152), (61, 180, 250), (71, -10, 60), (71, 80, 156), (71, 176, 250)):
         scenery.append(rcm.Quad(wire, ((x0, y + 0.3, -21), (x0, y, -21), (x1, y, -21), (x1, y + 0.3, -21))))
-    scenery += [_shutter(door, -9.9, 0, True), _shutter(door, 249.9, 0, False)]
+    scenery += [_shutter(door, -9.9, 0, True), _shutter(door, -9.9, 33, True), _shutter(door, 249.9, 0, False)]
     return Room('ML_Switchyard', (-10, 0, 250, 84), theme, solids, panels, tuple(scenery), textures, palettes,
                 hidden_shell=('above',), margin=30.0, shades=LIT)
 
@@ -208,7 +211,7 @@ def relay_hall(blob):
     plate, stripe = Look('Grate', (16, 16), cool), Look('WarningStrip', (8, 4))
     lights = Look('officeCLights', (30, 30))
     cut, door = Look('wcutaway01', (8, 8)), Look('gdoor01', (16, 14))
-    theme = {'top': tiles, 'side': steel, 'under': lights, 'front': cut, 'back': concrete}
+    theme = {'top': tiles, 'side': steel, 'under': steel, 'front': concrete, 'back': concrete}
     walk = dict(top=plate, side=stripe, under=steel, front=stripe, depth=14)
     top, door_floor = RELAY_HEIGHT, RELAY_TOP[3]
     solids = (
@@ -265,9 +268,10 @@ def control_roof(blob):
     stripe, parapet = Look('WarningStrip', (8, 4)), Look('Stucco', (32, 10), (14, 16, 22))
     cut, door, beam = Look('wcutaway01', (8, 8)), Look('gdoor01', (16, 14)), Look('Pbeam01', (4, 16), (14, 14, 20))
     soffit = Look('Stucco', (24, 24), (22, 23, 27))                    # the passage ceiling (the cutaway texture read as a black hole)
-    theme = {'top': roof, 'side': tower, 'under': soffit, 'front': cut, 'back': parapet}
+    theme = {'top': roof, 'side': brick, 'under': soffit, 'front': brick, 'back': parapet}
     solids = (
-        Solid(180, 16, 214, 90, side=brick, under=soffit, front=brick),   # stairwell hut: a covered passage to the door
+        Solid(0, 16, 18, 32, top=roof, side=brick, under=soffit, front=brick),
+        Solid(180, 16, 214, 38, top=roof, side=brick, under=soffit, front=brick),
         Solid(70, 0, 110, 3, top=pad, side=stripe),                    # low pad in the middle
         Solid(30, 0, 48, 12, top=vent, side=metal, depth=10),          # vent block, left
         Solid(132, 0, 150, 12, top=vent, side=metal, depth=10),        # vent block, right
@@ -280,14 +284,72 @@ def control_roof(blob):
         scenery += rcm.box(x - 7, 50, -24, x + 7, 51.5, -22, beam, 0.9, 'front top under')
     scenery += rcm.box(8, 10, -25, 24, 30, -17, metal, 0.8, 'front top left right')     # water tank
     scenery.append(_shutter(door, 213.9, 0, False))
+    scenery.append(_shutter(door, 0.1, 0, True))
     return Room('ML_Roof', (0, 0, 214, 90), theme, solids, tuple(panels), tuple(scenery), textures, palettes,
                 hidden_shell=('above',), margin=30.0, sky=80, shades=LIT)
+
+
+SIGNAL_TEXTURES = {
+    'Downtown_Map02': ['Metal', 'DarkConcrete', 'WarningStrip', 'WireBunch', 'FuseBox', 'Grate'],
+    'Downtown_Map01': ['screens01'],
+    'Residential_Map01': ['skyline04'],
+    'Hive_Map02': ['ich01', 'ich03'],
+    'Pier_Map01': ['gdoor01'],
+    'Pier_Map02': ['wcutaway01'],
+}
+
+
+def signal_core(blob):
+    """A flat readable arena: foreground targets, marked lanes and a distant machine."""
+    from tools import midnight_boss as boss
+    textures, palettes = _borrowed(blob, SIGNAL_TEXTURES)
+    metal = Look('Metal', (16, 16), (25, 29, 31))
+    concrete = Look('DarkConcrete', (32, 32), (23, 25, 29))
+    grate = Look('Grate', (16, 16), (28, 29, 31))
+    stripe = Look('WarningStrip', (8, 4))
+    ichor = Look('ich01', (20, 20), (25, 19, 31))
+    nerve = Look('ich03', (12, 12), (31, 23, 24))
+    cable = Look('WireBunch', (8, 20), (19, 23, 28))
+    cut = Look('wcutaway01', (8, 8))
+    theme = {'top': grate, 'side': concrete, 'under': metal, 'front': metal, 'back': concrete}
+    # The tall entrance bulkhead also blocks a swing over the arena seal.
+    solids = (Solid(84, 16, 104, 70, top=metal, side=metal, under=metal, front=concrete),)
+    scenery = rcm.backdrop(Look('skyline04', tint=(24, 25, 31)), -120, 200, 12, 108, tile=80, sky=48, ground=70)
+    # The control machine is room geometry: a broken octagonal silhouette,
+    # three steel relay housings and infested cables reaching toward the cores.
+    scenery += rcm.box(34, 15, -24, 58, 39, -14, metal, 0.9, 'front top left right under')
+    scenery += rcm.box(38, 11, -25, 54, 43, -15, ichor, 0.95, 'front top left right under')
+    scenery += rcm.box(30, 19, -24, 62, 35, -16, ichor, 0.9, 'front top left right under')
+    scenery += rcm.box(40, 21, -13.8, 52, 33, -13.6, Look('screens01', (12, 12), (31, 17, 17)), 1.0, 'front')
+    for i, x in enumerate(boss.CORE_X):
+        # Relays live in the playable foreground; background housings no
+        # longer look like a second set of targets or overhead platforms.
+        scenery += rcm.box(x - 4, 11, -22, x + 4, 15, -18, metal, 0.8, 'front top left right')
+        scenery += rcm.box(x - 1.5, 13, -22, x + 1.5, 23, -18, cable, 0.9, 'front left right')
+        lo, hi = sorted((x, 46))
+        scenery += rcm.box(lo - 1, 20 + i * 2, -22, hi + 1, 22 + i * 2, -18, nerve, 0.9, 'front top under')
+        # One dark metal floor insert per powered lane, with stripes only
+        # on its two boundaries. These quads are paint, never collision.
+        for lo, hi in ((x - boss.LANE_HALF, x - boss.LANE_HALF + .7),
+                       (x + boss.LANE_HALF - .7, x + boss.LANE_HALF)):
+            scenery += rcm.box(lo, .02, -24, hi, .08, 24, stripe, 1.0, 'top')
+        scenery += rcm.box(x - boss.LANE_HALF, -2, 25.05, x + boss.LANE_HALF, 0, 25.1,
+                          Look('Metal', (16, 16), (15, 18, 24)), 1.0, 'front')
+    # Bright green paint identifies the six-unit gaps and the end refuges.
+    safe = Look('Grate', (8, 8), (10, 31, 23))
+    for lo, hi in ((2, 12), (31.5, 36.5), (55.5, 60.5), (79.5, 81)):
+        scenery += rcm.box(lo, .02, -24, hi, .07, 24, safe, 1.0, 'top')
+        scenery += rcm.box(lo, -1.5, 25.05, hi, 0, 25.1, safe, 1.0, 'front')
+    scenery.append(_shutter(Look('gdoor01', (16, 14)), 103.9, 0, False))
+    return Room('ML_SignalCore', (0, 0, 104, 70), theme, solids,
+                (Panel(0, 10, 84, 160, None),), tuple(scenery), textures, palettes,
+                hidden_shell=('above',), margin=24, shades=LIT)
 
 
 AUTHORED = {
     'ML_Switchyard': Authored(
         'ML_Switchyard', switchyard, tuple(SWITCHYARD_TEXTURES),
-        doors=(Door('right', 250, 0, 1, 'Yard'), Door('left', -10, 0, 2, 'Relay')),
+        doors=(Door('right', 250, 0, 1, 'Yard'), Door('left', -10, 0, 2, 'Relay'), Door('left', -10, 33, 3, 'Service')),
         camera=(((20, 62), (20, 0), (220, 0), (220, 62)),), area=(4, 0, 236, 80),
         gangs=(Gang('Pier_Map04', 0x08, (120, 28), (180, 60), 'Switchyard Crew'),),
         props=(Prop('proto01', 'Object (Smashable_MetalBarrel)', (150, 0), 'Barrel'),
@@ -306,8 +368,8 @@ AUTHORED = {
         'ML_Roof', control_roof, tuple(ROOF_TEXTURES),
         # The door sits at the end of a 34-unit passage so that a fight does not spill out of the room
         # (leaving restarts the waves). No anchors in the passage: nobody appears there.
-        doors=(Door('right', 214, 0, 1, 'Relay'),),
-        camera=(((20, 52), (20, 0), (186, 0), (186, 52)),), area=(4, 0, 176, 70), spawn_top=4,
+        doors=(Door('right', 214, 0, 1, 'Relay'), Door('left', 0, 0, 2, 'Signal')),
+        camera=(((20, 52), (20, 0), (186, 0), (186, 52)),), area=(18, 0, 176, 70), spawn_top=4,
         # The zone covers the whole roof: a spawner starts only once Spidey stands well inside its box
         # (lab: 6 units inside was not enough, 10 was).
         waves=(Gang('Pier_Map04', 0x08, (100, 20), (240, 60), 'Wave 1'),
@@ -318,7 +380,39 @@ AUTHORED = {
                Prop('proto01', 'Object (Smashable_MetalBarrel)', (62, 0), 'Barrel 2')),
         lines=(('first', 'The control roof. They knew you were coming: three crews, one after another.'),
                ('clear', 'Substation 7 is yours. The roof is open whenever you want another round.'))),
+    'ML_SignalCore': Authored(
+        'ML_SignalCore', signal_core, tuple(SIGNAL_TEXTURES),
+        doors=(Door('right', 104, 0, 1, 'Roof'),),
+        camera=(((20, 46), (20, 0), (80, 0), (80, 46)),), area=(8, 0, 78, 44), spawn_top=4,
+        boss=True,
+        lines=(('first', 'Break any bright core. Yellow warns; blue arcs hurt. Green safe. \ue603 cuts power.'),
+               ('clear', 'Signal Leech is dead. The Midnight Line is clear of its interference.'))),
 }
+
+
+SERVICE_TEXTURES = {'Downtown_Map02': ['Metal','DarkConcrete','FloorTileFull','Grate','WarningStrip','FuseBox'],
+                    'Downtown_Map01': ['screens01','officeCLights'], 'Pier_Map01':['gdoor01'], 'Pier_Map02':['wcutaway01']}
+
+
+def service_bay(blob):
+    textures,palettes=_borrowed(blob,SERVICE_TEXTURES)
+    metal=Look('Metal',(16,16),(25,28,31));wall=Look('DarkConcrete',(32,32),(25,27,31))
+    tile=Look('FloorTileFull',(24,24));light=Look('officeCLights',(20,20))
+    cut=Look('wcutaway01',(8,8));stripe=Look('WarningStrip',(8,4))
+    theme={'top':tile,'side':wall,'under':metal,'front':wall,'back':wall}
+    solids=(Solid(74,16,84,42,side=metal,under=metal,front=wall),)
+    panels=(Panel(10,14,28,30,Look('screens01',(18,16)),1.0),
+            Panel(54,12,64,22,Look('FuseBox',(10,10)),1.0))
+    scenery=rcm.box(6,0,-24,24,3,-14,metal,0.9,'front top left right')
+    scenery+=rcm.box(30,0.1,-24,50,2,-23.8,stripe,1.0,'front')
+    scenery.append(_shutter(Look('gdoor01',(16,14)),83.9,0,False))
+    return Room('ML_ServiceBay',(0,0,84,42),theme,solids,panels,tuple(scenery),textures,palettes,shades=LIT,margin=20)
+
+
+AUTHORED['ML_ServiceBay']=Authored('ML_ServiceBay',service_bay,tuple(SERVICE_TEXTURES),
+    doors=(Door('right',84,0,1,'Switchyard'),),camera=(((20,32),(20,0),(64,0),(64,32)),),
+    area=(10,0,64,32),save=(40,7),
+    lines=(('first','Maintenance bay. A quiet checkpoint for the Substation. Save and gear up.'),))
 
 _cache = {}
 LAB = {}                                    # lab switches (never set in a release build): see work/rooms/wave_exp.py
@@ -341,7 +435,10 @@ def lines():
 def sources(name):
     """Native resources an authored room is made from (the build checks they are clean)."""
     spec = AUTHORED[name]
+    from tools import midnight_boss
     return ({a + 'Textures.nsbtx' for a in spec.archives} | {g.source + '_app.obj' for g in (*spec.gangs, *spec.waves)}
+            | (midnight_boss.SOURCES if spec.boss else set())
+            | ({'Sewer_Save04_app.obj'} if spec.save else set())
             | {p.source + '_app.obj' for p in spec.props} | ({HAZARD[0] + '_app.obj'} if spec.hazards else set()))
 
 
@@ -373,7 +470,8 @@ def _spawner(blob, gang, dead_group=0):
     return bytes(spawner)
 
 
-def stage(raw, name, blob, *, room_of, visited, spawn_template, exit_template, say=None, links=None, flags=None):
+def stage(raw, name, blob, *, room_of, visited, spawn_template, exit_template, say=None, links=None, flags=None,
+          authored=None, compiled_room=None):
     """Object file of an authored room from the sanitized empty room `raw`.
 
     Doors become exits (record 0 groups 1.. in door order) to `links[(name,
@@ -382,15 +480,33 @@ def stage(raw, name, blob, *, room_of, visited, spawn_template, exit_template, s
     group starts them, marks the room visited and shows the first-visit line
     once.
     """
-    spec = AUTHORED[name]
+    spec = authored or AUTHORED[name]
     say = say or (lambda key: None)
     for group, door in enumerate(spec.doors, 1):
         dest, spawn = links[(name, group)]
         raw = room_doors.add_spawn(raw, template=spawn_template, **door.spawn)
         raw = room_doors.add_exit(raw, room=room_of(dest), selector=1, spawn=spawn, template=exit_template, **door.exit)
     raw = room_author.set_camera(raw, spec.camera)
-    room = plan(name, blob)
-    tree = rcm.rc.RoomCollision.parse(compiled(name, blob).collision)
+    if spec.save:
+        default=next(i for i,spawn in enumerate(room_doors.spawns(raw)) if spawn.spawn_id==0)
+        header=bytearray(raw)
+        struct.pack_into('<3iH',header,16+20*default,round(spec.save[0]*4096),2*4096,0,room_doors.FACING['right'])
+        raw=bytes(header)
+        native=RoomObjects.parse(blob('Sewer_Save04_app.obj'))
+        sphere=next(e for e in Entities.parse(native.records[0].sections[0]).records
+                    if len(e)==16 and struct.unpack_from('<I',e,12)[0]==10)
+        raw,ag=room_script.append_batch(raw,0,[(bytes(_placed(sphere,spec.save)),'SavePoint')],'Save Sphere')
+        raw=room_script.extend_group(raw,0,0,[room_script.activate(ag=ag)])
+        parsed=RoomObjects.parse(raw)
+        entities=Entities.parse(parsed.records[0].sections[0])
+        index=next(i for i,e in enumerate(entities.records) if len(e)==24 and struct.unpack_from('<I',e,12)[0]==2 and e[22]==1)
+        # Continue uses spawn 0: the empty room's default placement must be
+        # beside the sphere, rather than at the boundary of the authored room.
+        player=_placed(entities.records[index],(spec.save[0],2))
+        raw=parsed.replace_section(0,0,entities.replace_record(index,player))
+    room = spec.plan(blob) if authored else plan(name, blob)
+    built = compiled_room or (rcm.compile_room(room) if authored else compiled(name, blob))
+    tree = rcm.rc.RoomCollision.parse(built.collision)
     points = room_author.plan_anchors(rcm.surfaces(room), spec.area or room.bounds, floor_top=spec.spawn_top,
                                       solid=lambda x, y: tree.solid_at(x, y) is not None)
     raw = room_author.set_anchors(raw, points)
@@ -453,4 +569,8 @@ def stage(raw, name, blob, *, room_of, visited, spawn_template, exit_template, s
         raw, first_id = room_script.append_groups(raw, 1, groups)
         if first_id != group_id(0): raise ValueError('Authored group ids moved')
     init.append(room_script.set_var(visited, 1))
-    return room_script.extend_group(raw, 1, 0, init)
+    raw = room_script.extend_group(raw, 1, 0, init)
+    if spec.boss:
+        from tools import midnight_boss
+        raw = midnight_boss.stage(raw, blob, flags['signal_leech_defeated'], say)
+    return raw

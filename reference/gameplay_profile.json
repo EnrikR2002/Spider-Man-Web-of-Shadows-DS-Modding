@@ -1,9 +1,9 @@
 {
-  "profile": "tasm-v0.13.0",
-  "release_version": "0.13.0",
+  "profile": "tasm-v0.16.1",
+  "release_version": "0.16.1",
   "required_overlays": {
-    "American.strings": "0874720f6495d168bd90bf1135138edee29c5f34e18eb20edf58672f39711caf",
-    "English.strings": "0874720f6495d168bd90bf1135138edee29c5f34e18eb20edf58672f39711caf",
+    "American.strings": "b05a7040f5ca3d591641a64ef6062773ee2e6f16f4235af99d7a4522ed754e3d",
+    "English.strings": "b05a7040f5ca3d591641a64ef6062773ee2e6f16f4235af99d7a4522ed754e3d",
     "MissionMiniMapIcon.pal": "5072156a663205facf22310c98913e01febb028c74edd1c196e7db26985b5787",
     "Test_Combat01_app.obj": "7db7d05399354e194d4af191780e47360bf3764a3e4c7d63349536369d3db30d",
     "spd.nsbmd": "8ddbdac95ba919b50d4c107f491936b10eea2ae65b2117ed1a6d9fa0ce6f5ad0",
@@ -26,9 +26,9 @@
     "zz_kit_SkyAxe.sca": "e3b58921800bc6c423305bc8e37ec018cfeef6cde87f6dce1e9f843007c37b66",
     "zz_kit_Spin.sca": "6e810d537873a0cfeff6273a3836eba6820c6daccc5293a090a96c7c7bc82d67",
     "zz_kit_WebHeave.sca": "3f218836303603c499646342ccd442132bd78caff746301ff77e7b645a6c2748",
-    "zz_kit_WebLash.sca": "da8914fae721ebca072e95f5426e2722e618ae7327aee5910060381303f7c4dd",
+    "zz_kit_WebLash.sca": "9a39bc860615b98e17660c62556470dd2868b4b67062e58a99b9dfb10dd8cd9a",
     "zz_kit_WebSlam.sca": "19377e458cead29a16154da463b93501312794b1251d75c42e784649c52699fc",
-    "zz_kit_WebWhip.sca": "972bc9ae7b23e3e1a123abeba9d351e51b6cc03c2027c9ca89bc6e38645026c7",
+    "zz_kit_WebWhip.sca": "a303ba0c396bff2a547fe87f0cdaf8b184b742bd41624e967861d869dde6ac96",
     "zz_tasm_RushBridge.sca": "c478f8775845e28d92cd48f8b645a794f0f35c4560b4063c9f47b0b09762466b",
     "zz_tasm_RushEntry.sca": "ec653be102bd3f408ae147a7cdf8407ccf5eeadd9f0a4550156e7a307740f79b",
     "zz_tasm_RushFinish.sca": "5766f0df098a5779dc45831febf703d82cba13c73bd7cf2f317f7f5178355771"
