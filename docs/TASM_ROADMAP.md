@@ -497,21 +497,21 @@ large authored spaces, maps and a crane finale; prototype machinery honestly.
 **Design direction:** Crane Row selected. Midnight felt
 "small and underwhelming"; take time to design a much bigger, more impressive
 map and riff the ideas to the player before construction. The old three-room
-Crane slice and nine-room shared first wave are superseded. This turn develops
-the pitch and checked its budget. Construction is now active in a private
-candidate; implementation/qualification status is in TASKS and TECHNICAL.
+Crane slice and nine-room shared first wave are superseded. The twelve-room
+pitch shipped in0.16.0; its terrain/encounters are overhauled in0.17.0 after
+the player found the early map boring/bland. Current status is in TASKS/CHANGES.
 Existing story routes and the present kit remain the foundation. Earlier
 Slingshot-dependent designs are obsolete:
 these places must work with native jump/swing/wall movement and the player's
 existing story abilities; paid TASM moves make combat more expressive rather
 than unlocking required terrain. No further skills.
 
-Machine-readable room outlines, materials, entrance candidates, provisional
+Machine-readable room outlines, materials, entrance candidates, owned
 IDs/flags and research gates: `reference/area_roadmap.json`. Engine evidence:
 TECHNICAL "Campaign branch research" and `work/area-research/`. None of these
 areas is player-confirmed. Crane Row's twelve rooms, Pier entrance, checkpoint,
-two returns, local/detail maps and hoist machine are implemented in private
-candidates; qualification is active in TASKS/TECHNICAL. Other branches remain
+two returns, local/detail maps and hoist machine are published and agent-tested.
+The0.17.0 overhaul awaits player feedback. Other branches remain
 designs. Counterweight movement is scenery; fixed landings carry Spidey.
 
 | Branch | Proposed progression | What makes it different | Proposed entrance |
@@ -521,6 +521,48 @@ designs. Counterweight movement is scenery; fixed landings carry Spidey.
 | **Residential: Skyline Run** | Roofline -> Water Tower Steps -> Skyline Relay | Broad roof jumps, fire escapes, tower supports and a distant skyline; recover from falls instead of falling into death pits | New access by Residential_Map09's upper roof, or an interior access in Save02 |
 
 ### Crane Row: The Hanging Harbor — expanded pitch
+
+**Player feedback, 2026-10-15:** the partly explored map feels boring and bland;
+the hoist is unplayed. The route itself must make the player want to continue.
+The overhaul replaces repeated flat-floor/crate rooms with an opening broken
+quay, a cargo-roof express above the Freight arena, tall container canyons,
+a ship deck with dive-through holds, counterweight switchbacks and a fractured
+gantry over recoverable service decks. Encounters use varied existing native
+crews, throwable cargo and two bounded Crown waves; no new skills, slow motion,
+required paid traversal or repeated timed victory. Keep the established graph,
+map guidance, checkpoint and persistent clears. Implemented/published in0.17.0;
+agent qualification is in CHANGES, and the player's fun verdict remains pending.
+
+**Crane creature direction, 2026-10-15:** Pier enemies feel weak/boring. The player
+explicitly selected entirely new creatures with new attack animations. Implemented
+original shipyard mutations: a low pouncing Mooring Maw, a ballast-shelled heavy
+and a floating spore caster. Distinct authored meshes/attack motion and readable
+windup/commit/recovery matter; imported enemies or recolours alone do not meet
+this request. Preserve combo/juggle/cancel play, current traversal and earned
+progress. Published0.18.0 implements three original meshes and47 authored
+clips (31 attack routes), retaining native rigs/AI/spawners. Maw has a low
+four-limbed silhouette, paired jaws/four eyes and claw attacks; Ballast has
+asymmetric armoured claws, shell spines/forked tail, sweeps/charge/two-arm slam;
+Spore has a hovering bell/core and tendrils with authored casting motion.
+Windup/commit/recovery remains fast; one private fast-slam event is delayed
+inside its original clip. Mixed crews use1+1+2 native costs with4 live/8 total.
+Uncapped-health research duels prove base Red can defeat Spore, Red kit can
+defeat Maw/Ballast, and Black base can defeat Ballast. Healing fixtures do not
+prove encounter difficulty. Final publication/agent gates live in TASKS/CHANGES;
+player fun remains unconfirmed. D's production mixed fight selects the authored
+leap prep/leap naturally (GMB IDs traced), with all three species concurrently;
+native AI remains the framework, rather than a newly implemented AI system.
+
+**Player correction, 2026-10-16:**0.18.0 was rejected: animations still felt
+familiar, voices were shared, kills lacked readable death/reward feedback, rooms
+felt empty, and signs/maps/materials looked cluttered and coarse. Treat creature
+identity as the entire lifecycle: silhouette, locomotion, attacks, reactions,
+death tint, sound and physical rewards. Quiet environments and short map goals
+are explicit preferences; keep detailed route help on Objectives. Sustain
+encounters on saved revisits and near upper entrances while preserving safe save
+and cache rooms.0.19.0 implements154 authored routes,15 original voices, native
+XP/HP drops, revised patrols and restrained harbor art. Native AI/rigs remain;
+agent evidence lives in CHANGES/TECHNICAL. Player acceptance is still required.
 
 The central idea: **enter beneath an enormous cargo crane, explore the docks
 and its machinery, then reach the arm that dominated the skyline at arrival**.
@@ -629,13 +671,10 @@ option only after proving how it coexists with native parent/world views;
 no seventh area slot is assumed. An unreadable miniature diagram is not a
 successful twelve-room map.
 
-Next implementation slice: qualify the shared table expansion, prototype a
-Pier_Save02 -> disposable chamber -> Pier_Save02 trip with real inputs, then
-generalize parent-area/detail-map selection and author Quayside plus Freight
-Exchange as a representative visual/traversal slice. Finish Crane
-Row before starting the next branch. Moving-crane, protected-machine and timed
-pursuit prototypes are separate gates; none is a prerequisite for researching
-the fixed room layouts.
+The shared expansion, Pier entrance, local/detail maps, twelve authored rooms
+and warned hoist are implemented. Next: iterate this district from player
+feedback before starting another branch. The counterweight remains moving
+scenery above fixed landings; rideable loads and timed pursuit remain research.
 
 ## Spider-Man 2099: future Black kit (2026-10-11, theorycraft)
 

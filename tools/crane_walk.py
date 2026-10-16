@@ -56,6 +56,8 @@ class Walker(mw.Walker):
         if self.on['fight'] and self.buttons and 'Y' in self.buttons:
             from tools import kit_lab as k
             state=self.read(frame,k.ram_of(lib)[1])
+            if state and state.state==9 and self.i<len(self.steps) and self.steps[self.i][0] in ('navigate','travel','land'):
+                self.buttons.discard('Y')
             if state and state.pos and not any(abs(e['position'][0]/4096-state.pos[0])<15 and
                 abs(e['position'][1]/4096-state.pos[1])<12 for e in state.enemies):self.buttons.discard('Y')
 
@@ -75,7 +77,43 @@ class Walker(mw.Walker):
         if self.scratch['travel_stall']>8 and jump<=0 and state.state in (0,1,4,5,6,7,16):jump=28
         if jump>0:self.buttons.add('B')
         self.scratch['travel_jump']=jump-1
-        if state.state in (7,16):self.buttons.add('Up')
+        if state.state in (7,9,16):self.buttons.add('Up')
+        return False
+
+    def do_land(self,step,state,ptr,ram):
+        """Reach a platform with native inputs; no position or velocity writes.
+
+        Enemies may be parked by an explicitly labelled traversal fixture.
+        The destination is the standing player position, five above the deck.
+        """
+        _,x,y,timeout=step
+        if state.pos is None:return self.timeout(step,state,timeout,'landing pose')
+        px,py=state.pos
+        if self.t==0:self.scratch.update(landing_x=px,landing_ground=False,landing_settled=0,
+                                        landing_descent=py>y+3,landing_pause=8 if abs(x-px)<28 else 0)
+        vx=px-self.scratch['landing_x'];self.scratch['landing_x']=px
+        ground=state.state in (0,1,4,5,6,24)
+        if abs(px-x)<12 and abs(py-y)<2 and ground:self.scratch['landing_ground']=True
+        if py<y-4:self.scratch.update(landing_ground=False,landing_descent=False)
+        settled=abs(px-x)<2 and abs(py-y)<2 and state.state in (0,1,4,5,6) and abs(vx)<.12
+        self.scratch['landing_settled']=self.scratch['landing_settled']+1 if settled else 0
+        if self.scratch['landing_settled']>=12:
+            self.record('land_'+str(x)+'_'+str(y),True,state);return True
+        if self.t>=timeout:return self.timeout(step,state,timeout,'native landing '+str((x,y)))
+        self.buttons.clear()
+        if self.t%6==0:self.report.setdefault('landing_control',[]).append([state.frame,x,y,px,py,state.state])
+        if self.scratch['landing_ground']:
+            # Release B after a real contact and brake before the destination.
+            # Repeating jumps while trying to hit one coordinate made a valid
+            # landing look impossible and could walk the driver off its edge.
+            if abs(px-x)>max(1,abs(vx)*8):self.buttons.add('Right' if x>px else 'Left')
+            return False
+        # Gain clearance before moving under a higher platform's leading edge.
+        if abs(px-x)>1 and not (py<y-3 and self.t%64<self.scratch['landing_pause']):self.buttons.add('Right' if x>px else 'Left')
+        # Held jump -> release -> retry. A second airborne B is the native
+        # web swing. Controller state never substitutes for a RAM placement.
+        if self.t<40 or not self.scratch['landing_descent'] and self.t%64<40:self.buttons.add('B')
+        if state.state in (7,9,16) and py<y:self.buttons.add('Up')
         return False
 
     def read(self,frame,ram):
@@ -116,7 +154,7 @@ class Walker(mw.Walker):
                     if abs(x)>4096*1024 or abs(y)>4096*1024:continue
                     state.machines.append([kind,hp,x/4096,y/4096,ram[at+0x131],ram[at+0x168],hex(at+0x02000000),hex(vt)])
                     found.add(at)
-            if frame>=0 and frame%12==0:
+            if frame>=0 and frame%12==0 and state.sample is not None:
                 self.report.setdefault('machinery',[]).append([frame,state.room,list(state.room_vars),state.machines,state.hp])
         return state
 
@@ -150,6 +188,12 @@ class Walker(mw.Walker):
         if state.pos is None:return self.timeout(step,state,timeout,'live pose for '+name)
         if self.t>=timeout:return self.timeout(step,state,timeout,'reach '+name+' door '+str(group))
         self.buttons.clear()
+        if state.state==29:
+            # Native WebHangIdle: repeated traversal jumps can attach a web
+            # below a raised dock. Release it before resuming the route.
+            if self.t%24<6:self.buttons.add('B')
+            else:self.buttons.add('Down')
+            return False
         if name=='Pier_Save02':
             self.buttons.add('Right' if group==2 else 'Left');return False
         side,wall,floor,_=cr.PORTS[name][group-1]
@@ -189,10 +233,23 @@ class Walker(mw.Walker):
         if jump>0:
             self.buttons.add('B');self.scratch['nav_jump']=jump-1
         else:self.scratch['nav_jump']=max(-20,jump-1)
-        if state.state in (7,16):self.buttons.add('Up')
+        if state.state in (7,9,16):self.buttons.add('Up')
         return False
 
 def nav(name,group,timeout=2200):return ('navigate',name,group,timeout)
+
+# Native entrance -> set-piece landings -> real exit. Separate from the broad
+# door controller, these require the authored platforms instead of bypassing
+# an entire room along its outer walls. y is standing position, not feet.
+SETPIECES={
+    'quay':(0,1,2,((60,5),(100,21),(112,21),(156,23),(168,23),(204,41),(222,41),(264,59),(290,59),(318,5))),
+    'freight-roofs':(1,1,4,((64,25),(98,47),(118,47),(152,69),(184,69),(232,89),(264,89),(312,109),(372,117))),
+    'cargo-canyon':(3,1,2,((42,5),(72,23),(112,43),(150,49),(188,69),(210,69),(230,89),(264,109),(320,87),(356,5))),
+    'ship-deck':(4,1,2,((40,69),(104,73),(130,73),(180,95),(190,95),(250,113),(310,93),(374,69))),
+    'shaft':(6,1,2,((48,23),(72,23),(102,45),(82,67),(102,89),(72,111),(102,133),(82,155),(102,177),(144,197))),
+    'broken-gantry':(7,1,2,((48,5),(98,5),(118,5),(166,21),(202,21),(254,5),(284,5),(332,25),(354,25),(394,5))),
+    'crown':(9,1,3,((102,21),(92,21),(58,43),(78,43),(132,63),(156,63),(210,83),(234,83),(296,101))),
+}
 
 def run(rom,label,start,spawn,steps,preset=()):
     original=mw.Walker;mw.Walker=Walker
@@ -200,7 +257,7 @@ def run(rom,label,start,spawn,steps,preset=()):
     # representation used by the base harness. A generous final wait is safe:
     # the frame hook stops immediately when the actual steps finish.
     steps=list(steps)
-    budget=sum(step[3] if step[0]=='navigate' else step[1] if step[0]=='machine_attack' else step[2] if step[0]=='travel' else 0 for step in steps)
+    budget=sum(step[3] if step[0] in ('navigate','land') else step[1] if step[0]=='machine_attack' else step[2] if step[0]=='travel' else 0 for step in steps)
     steps.append(mw.wait(1))
     base_run=mw.run_child
     # run_child's step budget doesn't know this extra step type. Reserve
@@ -228,7 +285,7 @@ def run(rom,label,start,spawn,steps,preset=()):
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('command',choices=('entry','cross','view','save','machine','power','all','map'))
+    p.add_argument('command',choices=('entry','cross','view','save','machine','power','all','map','setpiece'))
     p.add_argument('name',nargs='?',default=cr.NAMES[0]);p.add_argument('points',nargs='*')
     p.add_argument('--rom',type=Path,default=ROOT/'build/crane-row/dev.nds')
     p.add_argument('--spawn',type=int,default=1);p.add_argument('--group',type=int,default=2)
@@ -242,7 +299,17 @@ def main(argv=None):
     p.add_argument('--fight',action='store_true',help='Traversal fixture: 1HP crew, native strikes; not a difficulty test')
     p.add_argument('--jobs',type=int,default=2)
     args=p.parse_args(argv);install();MACHINE_DATA.update(machine_records(args.rom))
-    if args.command=='entry':
+    if args.command=='setpiece':
+        i,spawn,group,points=SETPIECES[args.name];name=cr.NAMES[i]
+        steps=[mw.wait(90),mw.fixtures(fight=False,park=(-60,-60)),mw.wait(20)]
+        for x,y in points:steps += [('land',x,y,900),mw.wait(12)]
+        wanted=cr.IDS[cr.LINKS[name,group][0]]
+        dest=cr.LINKS[name,group][0];dw,dh=cr.BOUNDS[cr.NAMES.index(dest)]
+        bottom=cr.LOWER.get(cr.NAMES.index(dest),0)
+        steps += [nav(name,group),mw.wait(80),mw.until('setpiece_real_exit',
+            lambda s:s.room==wanted and s.pos is not None and 0<s.pos[0]<dw and bottom<s.pos[1]<dh,600)]
+        run(args.rom,'setpiece-'+args.name+args.tag,name,spawn,steps,tuple(cr.FLAGS.values()))
+    elif args.command=='entry':
         run(args.rom,'pier-entry','Pier_Save02',1,[mw.wait(60),mw.fixtures(fight=False),nav('Pier_Save02',2),
             mw.wait(60),mw.check('native_pier_to_crane',lambda s:s.room==96),nav(cr.NAMES[0],1),mw.wait(60),
             mw.check('crane_to_native_pier',lambda s:s.room==38)])
@@ -251,7 +318,8 @@ def main(argv=None):
         wanted=cr.IDS.get(destination,38)
         run(args.rom,'cross-'+args.name+str(args.group),args.name,args.spawn,[mw.fixtures(fight=args.fight),mw.wait(60),
             mw.check('starts_in_room',lambda s:s.room==cr.IDS[args.name] and s.pos is not None),
-            nav(args.name,args.group),mw.fixtures(fight=False),mw.wait(80),mw.check('real_exit',lambda s:s.room==wanted)],
+            nav(args.name,args.group),mw.fixtures(fight=False),mw.wait(80),
+            mw.until('real_exit',lambda s:s.room==wanted and s.pos is not None,600)],
             tuple(cr.FLAGS[n] for n in args.preset.split(',') if n))
     elif args.command=='view':
         steps=[mw.wait(90),mw.fixtures(fight=False)]
@@ -288,8 +356,9 @@ def main(argv=None):
             globals()['Walker']=ControlWalker
             steps += [mw.fixtures(park=(100,80),alive=False),('measure','victory_hazards_clear','player'),
                 mw.wait(700),('compare','victory_hazards_clear','player','no_damage'),nav(cr.NAMES[10],2),mw.wait(80),
-                nav(cr.NAMES[11],1),mw.wait(80),mw.check('earned_cleared_revisit',
-                    lambda s:s.room==106 and bool(s.flags>>142&1) and s.room_vars[0]==0)]
+                nav(cr.NAMES[11],1),mw.wait(80),mw.until('earned_cleared_revisit',
+                    lambda s:s.room==106 and s.pos is not None and bool(s.flags>>142&1)
+                    and bool(s.room_vars) and s.room_vars[0]==0,600)]
         run(args.rom,label,cr.NAMES[10],1,steps)
     elif args.command=='map':
         from tools import kit_lab as k

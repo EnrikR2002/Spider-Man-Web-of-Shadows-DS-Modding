@@ -36,7 +36,7 @@ def projection(room,area=5):
     return Projection(room.bounds,(left,top,left+w,top+h),area)
 
 
-def build(template,room,doors,*,hazards=(),cores=(),save=()):
+def build(template,room,doors,*,hazards=(),cores=(),save=(),door_labels=(),glyphs=None):
     """Keep native frame/HUD palettes, replace only the empty detail-map panel."""
     screen=Cbmp.parse(template)
     pixels=[[1]*256 for _ in range(192)]
@@ -63,6 +63,16 @@ def build(template,room,doors,*,hazards=(),cores=(),save=()):
         a,z=p.point(x,y);fill(a-3,z-3,a+4,z+4,7);fill(a-1,z-1,a+2,z+2,9)
     if save:
         a,z=p.point(*save);fill(a-3,z-3,a+4,z+4,8);fill(a-1,z-1,a+2,z+2,9)
+    if door_labels:
+        if len(door_labels)!=len(doors) or glyphs is None:raise ValueError('Labels need one caption per door and glyphs')
+        for door,label in zip(doors,door_labels):
+            x,y=p.point(door.wall,door.floor+6);width=6*len(label)-1
+            tx=x+5 if door.side=='left' else x-5-width;ty=max(24,y-10)
+            fill(tx-1,ty-1,tx+width+1,ty+8,1)
+            for i,char in enumerate(label):
+                for yy,row in enumerate(glyphs[char]):
+                    for xx,value in enumerate(row):
+                        if value=='1':fill(tx+6*i+xx,ty+yy,tx+6*i+xx+1,ty+yy+1,9)
     cells={};tiles=[]
     for cy in range(3,19):
         for cx in range(3,28):

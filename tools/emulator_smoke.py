@@ -184,7 +184,10 @@ def run(rom_path, frames, captures, *, save_path=None, script=None, label=None, 
     @AUDIO
     def audio(left, right): pass
     @BATCH
-    def batch(pointer, count): return count
+    def batch(pointer, count):
+        sink=getattr(library,'_wos_audio_sink',None)
+        if sink is not None and count:sink(state['frame'],c.string_at(pointer,count*4))
+        return count
     @POLL
     def poll(): pass
     @INPUT

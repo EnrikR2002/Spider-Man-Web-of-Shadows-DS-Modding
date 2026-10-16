@@ -30,6 +30,8 @@ def core_hp(state):
 
 class ControlWalker(cw.Walker):
     pen=None
+    native_crew=False
+    native_crew_room=None
     def read(self,frame,ram):
         state=super().read(frame,ram)
         if state:
@@ -37,6 +39,11 @@ class ControlWalker(cw.Walker):
         return state
     def tick(self,frame,lib):
         self.native_lib=lib
+        if self.native_crew:
+            ptr,ram=k.ram_of(lib);state=self.read(frame,ram)
+            if state and state.room in (97,100,105) and state.pos:
+                stats=struct.unpack_from('<I',ram,k.STATS_POINTER-p.BASE)[0]-p.BASE
+                c.memmove(ptr+stats+0x84,struct.pack('<2I',245760,245760),8)
         if self.pen is not None and frame>self.scratch.get('death_frame',10**9):
             from tools.midnight_boss_lab import orb_point
             if frame%8==0 and hasattr(lib,'_wos_video'):
@@ -50,7 +57,35 @@ class ControlWalker(cw.Walker):
             ptr,ram=k.ram_of(lib)
             manager=struct.unpack_from('<I',ram,0x02145C34-p.BASE)[0]-p.BASE
             if 0<manager<len(ram)-0x1CA:c.memmove(ptr+manager+0x1C1,b'\0',1)
-        return super().tick(frame,lib)
+        result=super().tick(frame,lib)
+        if self.native_crew and self.on['fight'] and self.i<len(self.steps) and self.steps[self.i][0]=='until':
+            from tools.crane_creature_lab import pursuit_buttons
+            _,ram=k.ram_of(lib);state=self.read(frame,ram)
+            if state and state.pos:
+                self.buttons.clear()
+                if state.room!=self.native_crew_room and 96<=state.room<108:
+                    current=cr.NAMES[state.room-96]
+                    group=next((g for (source,g),(target,_) in cr.LINKS.items()
+                                if source==current and cr.IDS.get(target)==self.native_crew_room),None)
+                    if group is not None:
+                        self.report.setdefault('native_crew_returns',[]).append([frame,state.room,group])
+                        self.do_navigate(('navigate',current,group,12000),state,*k.ram_of(lib))
+                elif state.enemies:
+                    enemy=min(state.enemies,key=lambda e:abs(e['position'][0]/4096-state.pos[0])+abs(e['position'][1]/4096-state.pos[1]))
+                    self.buttons.update(pursuit_buttons(frame,state,enemy))
+                else:
+                    centre=cr.BOUNDS[state.room-96][0]/2
+                    if abs(state.pos[0]-centre)>8:self.buttons.add('Right' if state.pos[0]<centre else 'Left')
+                    if frame%64<30:self.buttons.add('B')
+        if frame>=0 and self.on['chase']:
+            _,ram=k.ram_of(lib);state=self.read(frame,ram)
+            if state and state.room==cr.IDS[cr.NAMES[9]] and state.pos and not state.enemies and not(state.flags>>cr.FLAGS['crown']&1):
+                # A chase fixture can finish the first wave at x12, outside
+                # the reinforcement's activation zone. Resume native movement
+                # into the arena instead of waiting motionless for a callback.
+                self.buttons.add('Right' if state.pos[0]<168 else 'Left')
+                self.report.setdefault('crew_zone_return_frames',[]).append(frame)
+        return result
 
     def do_mask_exposure(self,step,state,ptr,ram):
         self.scratch['mask_exposure']=step[1]
@@ -193,10 +228,11 @@ def main(argv=None):
                 mw.wait(90),mw.hold('A',6),mw.wait(220),('snapshot','native-save')]
     elif mode=='crew':
         room=args.room;key={cr.NAMES[1]:'freight',cr.NAMES[4]:'drydock',cr.NAMES[9]:'crown'}[room]
-        steps=[mw.wait(60),mw.fixtures(fight=False),*mw.put(cr.BOUNDS[cr.NAMES.index(room)][0]/2,5),
+        ControlWalker.native_crew=True;ControlWalker.native_crew_room=cr.IDS[room]
+        steps=[mw.fixtures(fight=False),mw.wait(60),
             mw.until('native_crew_appears',lambda s:bool(s.enemies),600),
             mw.check('no_automatic_clear',lambda s:not(s.flags>>cr.FLAGS[key]&1)),
-            mw.fixtures(fight=True,chase=True),mw.until('crew_death_callback',mw.flag(cr.FLAGS[key]),2500),
+            mw.fixtures(fight=True,chase=False),mw.until('crew_death_callback',mw.flag(cr.FLAGS[key]),6000),
             mw.fixtures(fight=False,chase=False),mw.check('crown_opens_upper_return',
                 lambda s:key!='crown' or bool(s.flags>>cr.FLAGS['upper']&1))]
     elif mode=='cache':
@@ -214,6 +250,10 @@ def main(argv=None):
             mw.check('native_lever_earns_power',mw.flag(140)),cw.nav(room,2),mw.wait(80),
             mw.check('counterweight_open_after_power',lambda s:s.room==102)]
     report=cw.run(args.rom,'control-'+mode+('-'+args.room if mode=='crew' else ''),room,1,steps,preset)
+    if mode=='crew':
+        report['limit']='Copied save;60-unit healed player and1HP enemy fixtures. Native arrival/inputs/positions; no actor placements. Callback qualification only.'
+        from tools import wos_tool as w
+        w.write_json(cw.OUT/('walk-control-crew-'+args.room+'-'+report['rom_sha256'][:8]+'.json'),report)
     if mode=='persist' and report['passed']:
         native=k._run
         def reload(*pos,**kw):kw['save']=cw.OUT/'crane-win.sav';return native(*pos,**kw)

@@ -40,6 +40,13 @@ class MidnightWalkTests(unittest.TestCase):
         substation = ['ML_Yard', 'ML_Switchyard', 'ML_RelayHall', 'ML_Roof', 'ML_SignalCore']    # every authored door, both ways
         self.assertTrue({*zip(substation, substation[1:]), *zip(substation[1:], substation)} <= seen)
         self.assertTrue({('ML_Switchyard','ML_ServiceBay'),('ML_ServiceBay','ML_Switchyard')}<=seen)
+        # The native Span neck is12 high: a masher can stand against it
+        # forever. The walk gate must use a real duck-roll, with the crew
+        # kept in the same traversal fixture as the preceding wall checks.
+        steps=self.routes['span-hollow'][3]
+        i=next(i for i,s in enumerate(steps) if s[0]=='until' and s[1]=='span_to_hollow')
+        self.assertEqual(steps[i][4],('Right','Down','tapR'))
+        self.assertEqual(steps[i-1],walk.fixtures(fight=False,park=(-330,-30)))
 
     def test_lab_placements_are_in_open_space_of_their_room(self):
         placed = 0
@@ -86,6 +93,20 @@ class MidnightWalkTests(unittest.TestCase):
         self.assertEqual(walk.in_room('ML_Venom').room, 'ML_Venom')
         self.assertEqual(walk.PLAYER_ABILITIES >> 5 & 1, 0)                # no Sledgehammer Slam (story ability 314)
         self.assertEqual(walk.PLAYER_ABILITIES & 0x1F, 0x1F)               # Ichor Crawl/Web, Tarantula, Reinforced Web, Bulldozer
+
+    def test_loading_frame_has_no_fabricated_player_or_room_variables(self):
+        from unittest.mock import patch
+        from tools import kit_lab,player_trace,crane_walk
+        ram=bytearray(0x400000)
+        struct.pack_into('<I',ram,kit_lab.STATS_POINTER-player_trace.BASE,player_trace.BASE+0x1000)
+        struct.pack_into('<I',ram,0x1000,102)
+        driver=crane_walk.Walker((),{})
+        with patch.object(player_trace,'sample',side_effect=ValueError('Actor still loading')):
+            state=driver.read(12,ram)
+        self.assertEqual(state.room,102)
+        self.assertIsNone(state.pos)
+        self.assertEqual(state.room_vars,())
+        self.assertNotIn('machinery',driver.report)
 
     def test_roof_chase_fixture_cannot_enter_the_boss_or_relay_door(self):
         self.assertEqual(walk.chase_point(93,3.5,5),(24,6))

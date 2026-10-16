@@ -14,6 +14,282 @@ ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
 
+## v0.19.0 - 2026-10-16 - Crane Row rework
+
+Comprehensive response to the player's rejection of0.18.0: recognizable enemy
+reactions/shared voices, missing rewards/death tint, sparse saved revisits and
+cluttered text/coarse repeated art. Published through playtest; implemented and agent-tested. Player acceptance
+is pending.
+
+Release `9b2b948f6030a60246a0ca9ae477ae51c22f4aa349645fb2c6cef367c4557582`,
+ARM9 `9b04b02a74cd634901c1435a5bb7708c073c127467cc9971b3bc9a5d1c6a10e3`,
+`build/version-0.19.0-final/Versioned.nds`. Boot and Options both display0.19.0;
+normal composition is byte-exact. Crane code uses7864/8192 bytes; max365 room quads.
+
+- **Creature identity:** revised Maw/Ballast/Spore silhouettes and154 authored
+  animation routes, covering movement, attacks, bound/hurt/air reactions and
+  deaths. The earlier47 routes left recognizable native reactions. Native rigs
+  and AI framework remain. Texture-based face colour allows the engine's native
+  hurt/death tint to show; baked per-face GPU colour had hidden it.
+- **Original sound:**15 deterministic synthesized alert/attack/death/hurt/idle
+  voices. Scoped native sound routing selects them only in Crane rooms; Spore
+  gets explicit native state-entry cues because its chassis emitted no voice
+  request. All582 original sound entries and unrelated files remain exact.
+- **Real rewards:** cloned enemy configs had copied a zero reward-set field.
+  Private set31 now uses native physical XP/HP orbs,10..12 XP and small health
+  rolls. It preserves native LP behavior and does not directly credit stats.
+  Reward controls disable player healing and measure actual currency at+0x44.
+- **Pressure and coverage:** persistent cleared crews retain callback-free
+  patrols; Engine/Shaft/Breakwater gain encounters. Main crews use12 total/4 live
+  spawn-cost units; patrols8/4. Upper Quay/Shaft/Gantry use a bounded4/2 central
+  wave; global live-cost ceiling4 stays intact. Spawning reaches roofs/shelves,
+  and Quay gains a suspended upper combat loft. Office/Cache remain safe.
+- **Cleaner presentation:** outdoor destination/action boards and first-visit/
+  clear speech bubbles removed. High hatches retain one small X; the Engine
+  lever gets a painted bolt. Maps show a short current goal, landmark icons,
+  actual connections and loop letters. Route details stay on Objectives.
+  Fine low-contrast deck/steel/cargo/wood replace coarse repeated patterns.
+  Original painted harbor panorama has three continuous panels at far depth;
+  source and built-in ImageGen prompt/provenance are in reference/art.
+- **Preservation:** exact frozen Red kit/strength dial and Midnight block;
+  native assets retained outside owned Crane resources/version text/audio
+  additions. Existing doors/trigger records remain exact. Collision remains
+  exact except the added Quay loft. No save ownership migration or paid grants.
+
+Validation:387 automated tests;9 expanded adapter/driver/reward regressions;
+30 Crane real-door cases;13 Midnight native routes;11 arrival/revisit patrol
+probes;8 power/cache/save/safety and Red/Black no-refill hoist controls. All pass.
+Native-HP mixed Freight fight damages all3 and earns its actual clear callback
+(XP1850->2028). Separate Dry Dock/Crown controls earn their callbacks and Crown
+opens its shortcut. All three isolated native kills collect10XP and1024/1024/
+2048 Q12 health for Maw/Spore/Ballast; paired zero-set real kill awards0/0.
+Private voice calls and recorded PCM waveform matches establish all three death
+sounds render. Four goal/Objective phases and final Quay/Engine/native Pier UI
+visually reviewed;65 prior art poses inherit through exact art bytes.
+
+Stable publication matches the qualified ROM exactly. Latest634-byte battery
+`3d21ee63` and DSV wrapper remain byte-exact; its lossless checkpoint, prior ROM
+and compositions are retained. Player continues through the usual launcher.
+Final receipts: `work/crane-row/rework/publication.json`; research and explicit
+lab limitations in TECHNICAL. The natural-HP mixed fight heals the60-unit lab
+player; separate callback and reward controls cap foes. These do not establish
+encounter difficulty. No frame-rate or player-fun claim.
+
+## v0.18.0 - 2026-10-15 - Original Crane Row creatures
+
+Player found the Pier enemies weak/boring and explicitly requested entirely new
+creatures with new attack animations. Crane Row now has three original shipyard
+mutations and tougher mixed encounters. Published through playtest; implemented
+and agent-tested. The player rejected its creature identity, rewards, density
+and presentation;0.19.0 responds to that feedback.
+
+Release `f6d09cfcc41f76a3484648b828755a52726f5378f936fee3faa0640b9461930a`,
+ARM9 `805460f9bcdccdc5d0c7ad674fd6270640b3fa26519d1a6bee74db7fd107f87e`,
+`build/version-0.18.0-final/Versioned.nds`; normal composition is byte-exact.
+Boot and Options both display0.18.0.
+
+- **Mooring Maw:** low four-limbed predator with four eyes, paired jaws, claws,
+  spines and tail. Authored scuttling, claw attacks and leap prep/pounce replace
+  the old silhouette and attack poses. Natural leap selection is traced during
+  the production mixed fight.
+- **Ballast Beast:** asymmetric armoured claws, shell spines and forked tail,
+  with new sweeps, charge and two-arm slams. Its fast slam has a clearer windup
+  inside the same native17 samples. It takes real combo damage with both suits.
+- **Lantern Spore:** hovering bell/core and tentacles, with new casting and
+  melee motion. Its ranged attacks land in native story-context controls.
+- **Mixed pressure:** main crews use8 total/4 live native spawn-cost units,
+  admitting all three types together (costs1/2/1 for Maw/Ballast/Spore).
+  Patrols use3/2 and the hoist opens with one Maw. Nominal HP10/14/7 is applied
+  before existing room scaling; these numbers are not attack damage.
+- **Original authored assets:** three models and47 SCA routes, including31
+  attack routes, use preserved native rigs/AI/controllers and defeat callbacks.
+  Models fit a conservative6144-vertex crowd budget. Original actor resources
+  and config tables remain intact; appended groups/private records are selected
+  only in rooms96..107.
+- **Progress compatibility:**0.17.0 geometry, doors, maps, locks, earned clears,
+  native abilities/purchases, kit/dial and Midnight block remain exact. Existing
+  crew clears stay earned; repeatable patrols and uncleared encounters use the
+  new roster. No save migration is required.
+
+Qualification on the exact release:374 tests, all30 Crane door cases, all13
+Midnight routes, three native crew callbacks, Red extra-kit/Vitality and Black
+Vitality no-refill hoist wins with cleanup/exit/revisit, plus a production mixed
+fight with all three species concurrently (max4 live) and real defeat callback.
+The mixed fight heals Spidey, retains native enemy HP, and uses native inputs
+without actor placements. Four uncapped-health duels on C carry through proved
+C->D mesh-only equivalence: every gameplay/config/motion/event/texture byte is
+exact, with only the Maw/Spore meshes trimmed. Duel healing proves contact,
+combo and defeat compatibility; it does not establish encounter difficulty.
+Seven prior native-input terrain routes inherit through exact room bytes.
+Player fun, full-chapter duration and frame-rate remain unmeasured.
+
+Latest actual battery `ac9896ff` is byte-identical before/after publication,
+DSV wrapper/checkpoint verified; prior0.17.0 ROM and prior/active compositions
+retained. Evidence: `work/crane-row/creatures/publication.json`; source/catalog:
+`tools/crane_creatures.py`, `crane_creature_art.py`, `crane_creature_motion.py`,
+`crane_creature_lab.py`, `actor_resources.py`, `reference/crane_creatures.json`.
+Player flow remains `Play Spider-Man.cmd -> Continue`.
+
+## v0.17.0 - 2026-10-15 - Crane Row terrain and encounter overhaul
+
+Player finds the partly explored district boring and bland; the hoist has not
+been played. This overhaul makes the journey itself more active: substantial
+cargo routes, a playable ship, broken spans, vertical movement and varied crews.
+Published through playtest. Implemented and agent-tested; player verdict pending.
+
+Release `c5fc05127ca98923ca01b35b7f2bd686e30bdece821fd07d97b5b6fb03841dfa`,
+ARM9 `51c8273fa174eac3527ebbf2cf66a50be707640a972c01e5874081baebecaf22`,
+`build/version-0.17.0-final/Versioned.nds`; normal composition is byte-exact.
+Boot and Options both display0.17.0.
+
+- **Broken waterfront routes.** Quay, Freight, Warren, Gantry and Breakwater
+  have segmented docks/platforms above solid maintenance decks. Missed jumps
+  lose height rather than falling into a death pit. Cameras/detail maps cover
+  the lower levels. Quay starts the district with suspended cargo landings.
+- **Cargo rooftops.** Freight gains a complete rising roof express over its
+  fight deck; Warren's tall solid container stacks, intermediate steps and
+  hanging platforms replace the repeated low-crate course. Upper cargo barrels
+  give the optional route something to find and smash.
+- **Board the ship.** The Dry Dock vessel now has real deck/hull collision,
+  dive-through hold openings and upper rigging platforms. Rust/navy hull art,
+  windows, rails and rigging follow the playable architecture.
+- **Climb the crane.** Counterweight becomes a switchback climb around the
+  existing scenery mover; Gantry becomes a fractured bridge with lower service
+  landings. Crown has a broad raised combat stage and upper launch platforms.
+  The Long Arm approach gains stepped machinery and overhead platforms; its
+  final fighting pocket, native hoist models/HP/attack cycle remain unchanged.
+- **Different fights.** Dry Dock uses the native Sewer0x0E crew; Gantry uses
+  Residential0x0C. Crown's Pier crew calls one bounded hunter reinforcement,
+  and the second real defeat callback earns its clear/shortcut. No timer can
+  award victory. Native throwable barrels populate the principal arenas.
+- **Progress compatibility.** Existing room IDs, door connections/spawns/input
+  modes, locks, visits, purchases, crew clears, cache, lever and save checkpoint
+  remain valid. Previously cleared crews stay cleared. The complete kit/dial,
+  Midnight block, native assets/mission/ownership code and overview/goal screens
+  remain exact; no new skill, stat balance or slow-motion effect is introduced.
+
+Qualification:357 unit tests, all30 Crane door cases, seven complete native-input
+terrain routes, all13 Midnight routes, six lever/cache/save/hazard controls,
+three native crew callbacks, and Red extra-kit/Vitality plus Black Vitality III
+no-refill hoist victories/cleanup/exit/revisit pass on the exact final ROM.
+Midnight Span needed one retry; its earlier failure remains recorded. The Crown
+chase fixture twice waited outside the reinforcement zone after the first crew;
+returning into the arena with native D-pad input fixes that driver stall without
+changing game waves. Failed reports/RAM and earlier terrain/controller trials
+remain in `work/crane-row/overhaul/`. Crew checks use1HP enemies/chase placements;
+they establish callbacks rather than difficulty. Movement routes use native
+inputs after room arrival, parked enemies and bounded live destination checks.
+Visual
+review covers twelve rooms: eleven retain exactly the reviewed J model/texture
+bytes, and the repaired Long Arm is recaptured on K. Models remain below the
+existing400-quad budget (largest370), with texture/palette and lossless
+model/texture/BSP/OBJ checks. The box compiler also gains a regression-tested
+terminal encoding for valid adjacent solid cells; native parsers stay lossless.
+Player fun, full exploration duration and actual frame-rate remain unmeasured.
+
+Publication proof: `work/crane-row/overhaul/publication.json`. The latest actual
+battery `ac9896ff` is byte-identical; DSV wrapper/checkpoint bytes are verified.
+Previous0.16.3 ROM, prior/active compositions and progress are retained. The
+stable launcher ROM matches the qualified candidate exactly.
+Another24 post-publication release/document/capacity/lab checks pass; the stable
+ROM, latest battery and unique release-history record were rechecked afterwards.
+
+## v0.16.3 - 2026-10-15 - Crane Row map connections and next-action guidance
+
+Published through Play Spider-Man.cmd. ROM SHA256
+`18c90eb829f4ec9f116d3fde269ba73c88eafc69e15bbbfc105ad1398b09d494`;
+ARM9 `2dea0314...`. Normal composition reproduces the exact qualified ROM at
+`build/version-0.16.3-qualified/Versioned.nds`. Boot/Options both display0.16.3.
+Latest player battery `ac9896ff...` remains byte-identical, with lossless
+wrapper/checkpoints and prior0.16.2 ROM/prior/active compositions retained.
+Agent-tested; player verdict on this navigation repair is pending.
+
+- **A map that follows the actual doors.** All twelve rooms have names,
+  connections leave the correct sides, and drawn routes avoid false crossings.
+  Matching A..D endpoints identify longer loops/shortcuts; P identifies the
+  Pier. The Office save marker is legible. Detailed room maps now label each
+  door destination and identify upper X hatches.
+- **A visible next goal throughout the chapter.** Map headers and amber goal
+  borders advance from cargo power to the Crown crew, hoist and return to Pier.
+  Red endpoints identify locked routes. Native current/visited colours remain
+  distinct, and the dim unvisited plan gives route context. Objectives now
+  explains the current Crane route/action instead of showing the sewer mission.
+  Earned save flags select both pages without changing native mission progress.
+- **Door purpose beside its destination.** WALK IN/X ENTER, shortcut, save-room,
+  optional-cache, hoist and return boards explain the input. Local first-visit
+  and lock hints explain what unlocks a route and where to go next. Crane hints
+  clear after five native seconds, restoring the map while play continues;
+  the lever refreshes its next goal without leaving the room.
+- **Progress and gameplay preserved.** No migration/new paid moves or balance
+  changes. Kit/dial and Midnight code are byte-exact to0.16.2. All collision,
+  door destinations/input modes, spawns, anchors and cameras remain exact.
+  Encounter logic is unchanged apart from messages and first-visit selection;
+  moved entity callback indices resolve to the same named groups. Two scoped
+  native UI adapters preserve other rooms/areas and native Objectives fallback.
+
+Passed:352 full-suite tests,37 navigation/build checks,19 post-probe/document/
+release checks, then10 post-publication metadata checks; all30 Crane real-door
+cases with live arrivals, all13 Midnight
+routes (Signal entry needed one rerun), and eight gameplay controls. All29 exit
+boards/12 detailed maps/four map-and-Objectives phases/native UI fallback were
+reviewed in emulator captures. Real lever -> Office save -> fresh native
+Continue restores the earned power goal. Red extra kit/Vitality and Black
+Vitality III win without lab refills and pass cleanup/real exit/revisit.
+Initial lab failures are retained: the probe counted a freed actor/motion as
+another player; validated controller ownership now disambiguates it. Partial
+sample logging and live-arrival waits were corrected without changing ROM bytes.
+Exact kit/native combat contracts retain prior68-kit/12-crash evidence; those
+batches were not rerun on this ROM. Held poses prove rendering, real-door cases
+prove traversal. Full-chapter duration, performance and player feel remain
+unmeasured. Evidence/preview/publication proof: `work/crane-row/navigation/`,
+especially `publication.json`, `audit.json` and `preview.png`.
+
+## v0.16.2 - 2026-10-15 - Visible Crane Row exits, roofs and destinations
+
+Published through the normal Play Spider-Man.cmd setup. ROM SHA256
+`1bd288f171d0cc58fc94190a68bb52a9752ff59a9636bea376eb3608d04ea139`.
+Qualified composition: `build/version-0.16.2-qualified/Versioned.nds`.
+Latest battery `54417ed4...` remains byte-identical, with wrapper/snapshots
+verified; prior0.16.1 ROM and prior/active compositions are retained.
+Player reported major improvements in0.16.1 but invisible exits/ceilings;
+the player subsequently confirmed visual improvements, then prioritized map
+connections and next-action clarity (addressed in0.16.3).
+
+- **Visible exits throughout the district.** All29 Crane shutters now face
+  the room, correcting back-face culling. Recessed steel jambs and a lintel
+  lamp make each doorway legible from either approach. High hatches retain X;
+  ground exits keep their walk-in behavior.
+- **Visible ceilings and finished upper corners.** Nine formerly hidden
+  ceiling shells gain steel undersides at their actual collision boundary.
+  All12 rooms receive roof fascia, hazard edging and flush trim. World-scale
+  texture repeats avoid giant flat patches at upper corners.
+- **A destination at every exit.** Labels follow the actual links, including
+  Freight's Engine House return. Compact boards clear stacked Engine House
+  landings and Crown's low platform; their depth clears Warren cargo and
+  Engine pipes. Old floating bars, overlapping Office text and duplicate signs
+  are removed; Quay's district sign moves clear of the Pier label.
+- **Existing gameplay remains exact.** The only changed resources are the12
+  Crane model/texture pairs and English/American version labels. ARM9
+  `abfbb112...`, all BSP/OBJ, doors, anchors, cameras, scripts, maps, native
+  assets and kit are byte-identical to0.16.1. No enemy, purchase or balance
+  changes. Boot and Options display0.16.2.
+
+Passed:342 full-suite tests,25 targeted tests,10 document/release checks,
+11 post-driver checks, all30 Crane real-door cases and8 gameplay controls,
+exact-byte scope/version audit, and65 reviewed emulator poses (29 exits/36
+roof-and-corner views) covering all12 rooms. All13 corrected Midnight routes
+pass on this exact ROM (Signal entry needed one rerun). The old Span masher
+stalled at its native12-unit neck on both
+0.16.1 and this ROM; native duck/roll inputs pass the full route on both.
+No ROM change for that lab correction; original failures are retained.
+Red extra kit/Vitality and Black Vitality III beat the hoist without lab health
+refills and pass post-win cleanup/real exit/revisit. Office native save/Continue,
+power, cache and warning/live/refuge controls pass. Exact executable/collision/
+kit inheritance retains prior68 kit/12 crash/native parity evidence. Held poses
+prove rendering; real-door routes prove traversal. Performance, first-visit
+duration and player feel remain unmeasured. Evidence/preview and exact
+publication/save proof: `work/crane-row/repair/publication.json` and its folder.
+
 ## v0.16.1 - 2026-10-14 - Crane Row visual and readability sweep
 
 Published through Play Spider-Man.cmd. ROM SHA256
@@ -21,7 +297,8 @@ Published through Play Spider-Man.cmd. ROM SHA256
 ARM9 `abfbb112...`, byte-identical to v0.16.0. Boot and Options both show
 0.16.1 in English/American. Latest battery `3a4e7c9b...` is byte-identical,
 with wrapper/checkpoints verified; prior ROM and both compositions retained.
-Agent-tested; the player has not tested Crane Row yet.
+Agent-tested at release. Subsequent player feedback confirmed visual
+improvements but reported invisible exits/ceilings;0.16.2 addresses those.
 
 - **All twelve rooms receive an art pass.** Original riveted steel, deck,
   hull, water, lamp, amber girder and sign textures; lattice cranes with

@@ -129,7 +129,7 @@ class Walker:
         if not 0 <= stats < len(ram) - 0x98: return None
         s = SimpleNamespace(frame=frame, room=struct.unpack_from('<I', ram, stats)[0],
                             flags=int.from_bytes(ram[stats + 0x1C:stats + 0x44], 'little'),
-                            pos=None, sample=None, enemies=[], state=None, black=ram[stats + 0x53],
+                            pos=None, sample=None, enemies=[], state=None, room_vars=(), black=ram[stats + 0x53],
                             hp=struct.unpack_from('<i', ram, stats + 0x84)[0])       # Spidey's health (Q12)
         try: sample = p.sample(ram)
         except ValueError: return s
@@ -401,8 +401,11 @@ def routes():
         until('span_wall_a_dashed', flag(wall_a), 900, 'Right+tapA'),
         until('span_wall_b_dashed', flag(wall_b), 1200, 'Right+tapA'), wait(30),
         until('red_suit', red, 400, 'tapL', fatal=False), walk('span_into_the_right_chamber', -128, 600, fatal=False),
-        *put(-12, 5),hold('B',6),wait(90),fixtures(fight=True, park=None),
-        leave('span_to_hollow', 'ML_NestHollow', 'Right'), fixtures(fight=False, park=(0, 140)), wait(SETTLE), mark('hollow'),
+        # The native right neck is only12 units high. Standing/attacking at
+        # its wall stalls at x=-3.5; duck-roll through it with native inputs.
+        *put(-12, 5),hold('B',6),wait(90),fixtures(fight=False, park=(-330,-30)),
+        until('span_to_hollow', in_room('ML_NestHollow'), 900, 'Right+Down+tapR'),
+        fixtures(fight=False, park=(0, 140)), wait(SETTLE), mark('hollow'),
         check('arrived_in_the_hollow', in_room('ML_NestHollow')),
         *drop(-15, 106), fall('hollow_gap_without_red_floor', 88), wait(30), fixtures(park=(0, 8)),
         *put(-18, 166), check('hollow_top_reached', in_room('ML_NestHollow')),

@@ -89,6 +89,7 @@
           "kind": "upper_shortcut"
         }
       ],
+      "creature_catalog": "reference/crane_creatures.json",
       "district": "Pier",
       "entrance_candidates": [
         {
@@ -125,6 +126,16 @@
         ]
       },
       "name": "Crane Row: The Hanging Harbor",
+      "overhaul": {
+        "evidence": "work/crane-row/overhaul/publication.json",
+        "hoist_attack_rules_unchanged": true,
+        "native_input_setpieces": 7,
+        "no_new_skills": true,
+        "player_feedback": "Partly explored map felt boring and bland; boss not played. Make the journey epic and fun.",
+        "progress_compatible": true,
+        "source": "tools/crane_rooms.py",
+        "version": "0.17.0"
+      },
       "parent_map_area": 0,
       "priority": 1,
       "proven_building_blocks": [
@@ -148,11 +159,11 @@
           "key": "quay",
           "landmark": "The first distant view of the crane becomes a place the player eventually reaches.",
           "name": "AR_CraneQuay",
-          "play": "Open waterfront approach, stacked cargo and the huge final crane visible behind the route. A lower path catches missed jumps.",
+          "play": "Broken quay with suspended cargo landings, an upper return, and a lower solid recovery deck.",
           "role": "arrival",
           "target_bounds": [
             0,
-            0,
+            -20,
             360,
             96
           ],
@@ -162,11 +173,11 @@
           "key": "freight",
           "landmark": "Recognizable cargo colours, one broken vessel and the central crane silhouette orient the whole district.",
           "name": "AR_FreightExchange",
-          "play": "Three usable layers: dock floor, container roofs and overhead rails. A strong mixed crew occupies broad landings; routes loop back from above and below.",
+          "play": "Broad combat deck below a rising container-roof express; native throwable cargo and a persistent crew.",
           "role": "central hub",
           "target_bounds": [
             0,
-            0,
+            -24,
             400,
             176
           ],
@@ -190,11 +201,11 @@
           "key": "containers",
           "landmark": "Authored cargo architecture with visible supports, varied lengths and occasional open containers.",
           "name": "AR_ContainerWarren",
-          "play": "Container stacks form climbable alleys, roofs and maintenance gaps. Several connected routes reward reading the scenery; the main route remains legible.",
+          "play": "Tall container canyon, stepped roofs, hanging upper landings and a lower recovery route.",
           "role": "lower loop",
           "target_bounds": [
             0,
-            0,
+            -24,
             380,
             160
           ],
@@ -204,7 +215,7 @@
           "key": "drydock",
           "landmark": "The ship hull gives the area a large structure beyond crates. Water appearance and fall recovery need a visual/collision prototype.",
           "name": "AR_DryDock",
-          "play": "Descend around a grounded hull, cross service platforms and fight a durable dock crew beneath it before finding the machinery route up.",
+          "play": "Playable ship deck and solid hull sections, dive-through holds and upper rigging; a different native crew.",
           "role": "lower loop",
           "target_bounds": [
             0,
@@ -232,7 +243,7 @@
           "key": "counterweight",
           "landmark": "A tall climbing space whose lower machinery remains visible far below; mandatory movement uses existing abilities.",
           "name": "AR_Counterweight",
-          "play": "Climb through the crane supports with hanging loads, wall changes and roomy recovery landings. Moving cargo is a stretch mechanic until proven.",
+          "play": "Counterweight switchbacks around the moving scenery weight; fixed platforms carry Spidey.",
           "role": "vertical ascent",
           "target_bounds": [
             0,
@@ -246,11 +257,11 @@
           "key": "gantry",
           "landmark": "The view reveals earlier routes at a new height. Avoid large foreground beams obscuring Spidey.",
           "name": "AR_GantrySpine",
-          "play": "Traverse a long exposed steel spine above the yard with broad combat pockets, clear takeoffs and distant harbor scenery.",
+          "play": "Fractured stepped crane bridge over a solid service deck, optional upper platforms and hunters.",
           "role": "upper loop",
           "target_bounds": [
             0,
-            0,
+            -32,
             420,
             112
           ],
@@ -274,7 +285,7 @@
           "key": "crown",
           "landmark": "A panoramic payoff and checkpoint shortcut before the boss; no repeated mandatory fight after clearing.",
           "name": "AR_CraneCrown",
-          "play": "Fight a strong crew on a broad crane platform, reveal the final arm and open a return descent to Engine House.",
+          "play": "Raised combat stage and upper launch route; Pier crew followed by one native hunter reinforcement.",
           "role": "upper encounter",
           "target_bounds": [
             0,
@@ -288,7 +299,7 @@
           "key": "arm",
           "landmark": "One clearly exposed winch/motor target during recovery windows. Native melee damage, moving hook collision and cleanup must be proven before committing the boss.",
           "name": "AR_LongArm",
-          "play": "Cross the final crane arm to a large cargo-grabber/hoist-machine encounter. Local camera-sized combat pockets keep every attack warning visible.",
+          "play": "Stepped machinery approach into the existing warned hoist fight; final combat pocket and attack rules retained.",
           "role": "boss approach and arena",
           "target_bounds": [
             0,
@@ -302,18 +313,18 @@
           "key": "breakwater",
           "landmark": "A visible change to the district and a quick return home; no forced timer or new story bypass.",
           "name": "AR_Breakwater",
-          "play": "A newly opened waterfront return route after the finale, with a last exploration opportunity and a direct route back to Quayside.",
+          "play": "Broken waterfront victory return over solid recovery landings, without another mandatory crew.",
           "role": "victory return",
           "target_bounds": [
             0,
-            0,
+            -20,
             320,
             96
           ],
           "working_title": "Breakwater"
         }
       ],
-      "status": "implemented_published_agent_tested_player_pending",
+      "status": "v0.19.0_published_agent_tested_player_pending",
       "target_experience": "Three stacked route layers, two major exploration loops, one quiet checkpoint, an optional maintenance discovery and a boss/victory return. Roughly 45\u201360 minutes for an exploratory first visit is a pacing goal, not measured playtime.",
       "visual_direction": [
         "Steel crane silhouettes, open sky, a grounded ship hull, warm dock lights and cooler distant water/city layers.",
@@ -519,8 +530,8 @@
     }
   ],
   "authority": "Player approved the twelve-room Crane Row pitch on 2026-10-14 and instructed construction. Private implementation and qualification are active; the player has not tested it.",
-  "baseline_release": "0.15.1",
-  "baseline_sha256": "160d01cbda3320bc2c70eb2ab55359263e4b64272808e2d1fde9a704296de44c",
+  "baseline_release": "0.19.0",
+  "baseline_sha256": "9b2b948f6030a60246a0ca9ae477ae51c22f4aa349645fb2c6cef367c4557582",
   "build_order": [
     "Present this expanded pitch before beginning map construction; detailed features remain proposals.",
     "Prove capacity, visit mapping and a reversible Pier entrance on private copies.",
@@ -540,7 +551,10 @@
     "work/crane-row/publication.json",
     "work/crane-row/final-equivalence.json",
     "work/crane-row/final-native-parity.json",
-    "work/kit/v0.16.0/qualification.json"
+    "work/kit/v0.16.0/qualification.json",
+    "work/crane-row/overhaul/publication.json",
+    "work/crane-row/creatures/publication.json",
+    "work/crane-row/rework/publication.json"
   ],
   "first_wave": {
     "area_ids": [
@@ -626,21 +640,32 @@
     "target_room_count": 12
   },
   "implementation": {
-    "arm9_sha256": "abfbb1120c6e2d3237b437fefa742bb12aa0c3a1c57a08664282274c6cc0f722",
-    "candidate": "build/version-0.16.0-qualified/Versioned.nds",
+    "arm9_sha256": "9b04b02a74cd634901c1435a5bb7708c073c127467cc9971b3bc9a5d1c6a10e3",
+    "candidate": "build/version-0.19.0-final/Versioned.nds",
     "map_area": 6,
     "player_confirmed": false,
     "published": true,
-    "qualification": "work/crane-row/publication.json",
-    "rom_sha256": "39fcf89e46487e4cc80eed7414871891e6f0ca1a21ed86d4e3f26844f095d299",
+    "qualification": "work/crane-row/rework/publication.json",
+    "rom_sha256": "9b2b948f6030a60246a0ca9ae477ae51c22f4aa349645fb2c6cef367c4557582",
     "sources": [
       "tools/crane_rooms.py",
       "tools/crane_row.py",
       "tools/crane_boss.py",
       "tools/crane_walk.py",
-      "tools/crane_boss_lab.py"
+      "tools/crane_boss_lab.py",
+      "tools/crane_art.py",
+      "tools/crane_navigation.py",
+      "tools/room_collision.py",
+      "tools/crane_creatures.py",
+      "tools/crane_creature_art.py",
+      "tools/crane_creature_motion.py",
+      "tools/crane_creature_lab.py",
+      "tools/actor_resources.py",
+      "tools/crane_audio.py",
+      "tools/sdat.py",
+      "tools/crane_reward_lab.py"
     ],
-    "version": "0.16.0"
+    "version": "0.19.0"
   },
   "parked_connections": {
     "danger_room_and_gauntlet": "Separate repeatable-content ideas, not substitutes for the three authored campaign branches.",
@@ -654,8 +679,8 @@
     "Every branch has a return route and nearby native checkpoint; native door walks, save/reload and map behavior must be qualified.",
     "Campaign room and flag allocation must share one ledger with Midnight; provisional IDs are not an implemented contract."
   ],
-  "qualification_limits": "v0.16.0 agent-tested; player feel and 45-60 minute pacing target unmeasured. Full68-kit pass on unchanged-kit candidate6705b394; all30 Crane/all13 Midnight doors and12 crash seeds on3624afd5. Final39fcf89e has identical kit/collision/maps/doors/other assets; only Long Arm art/script and owned adapter refinements change. Final native parity and exhaustive gateway scope tests pass. Actual Red full-kit/Vitality and Black Vitality III victories use no lab refills; native health gains allowed. Precise crew-free HP controls prove green x328/392 safe and warning/live distinction. Earned flag142 survives native Office save/reload; native orb recovery, cache, lever, Crown callback and moving scenery qualified. Counterweight is not rideable; surviving support can remain until room change.",
+  "qualification_limits": "Agent-tested; player fun and frame-rate unmeasured. Native rigs/AI retained. Natural-HP mixed fight uses an explicitly healed60-unit player; crew callback controls cap foes1HP. Reward controls use idle1HP foes with no healing; zero-set is paired. No actor placements in those fights. Separate hoist wins use no refills and copied purchased abilities. UI/art poses suppress births and use labelled held positions; they do not prove traversal.",
   "schema_version": 1,
-  "status": "crane_row_published_agent_tested",
-  "updated": "2026-10-14"
+  "status": "crane_row_v0.19.0_published_agent_tested",
+  "updated": "2026-10-16"
 }

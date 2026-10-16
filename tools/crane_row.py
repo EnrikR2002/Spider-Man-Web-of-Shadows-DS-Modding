@@ -10,12 +10,12 @@ from pathlib import Path
 import struct
 import sys
 from types import SimpleNamespace
-from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 import mod
 from tools import crane_rooms as cr, midnight_chapter as ch, midnight_rooms as mr
+from tools import crane_navigation as nav
 from tools import oscorp_resources, room_catalog, room_compiler, room_doors, room_minimap
 from tools import room_script as s, tasm_kit as kit, wos_tool as w
 from tools.room_objects import RoomObjects
@@ -23,7 +23,7 @@ from tools.room_entities import Entities
 from tools.room_events import Command
 from tools.qol_suits_menu import StringSlots,slot_count
 
-VERSION='0.16.1'
+VERSION='0.19.0'
 BASE=0x02000000
 CR_BASE=ch.ML_BASE+0x1000
 CR_SPACE=0x2000
@@ -31,33 +31,13 @@ MAP_AREA=6
 MAP_SCREEN='zz_CraneOverview.cbmp'
 PARENT_ARM9='117c9f7c21c6b2212e95aaf021b3537128de7d6b831cc328e7620021635d6da6'
 _ROLES={n:SimpleNamespace(index=cr.IDS[n]) for n in cr.NAMES}
-RECTS=dict(zip(cr.NAMES,((80,110,126,122),(70,80,122,98),(148,82,170,96),
-    (6,80,44,98),(6,110,56,122),(62,40,104,60),(6,32,34,68),(6,8,56,20),
-    (132,44,154,56),(76,8,126,20),(148,8,196,20),(148,110,196,122))))
+RECTS=nav.RECTS
 
 def _map_pixels():
-    pixels={}
-    def line(name,x0,y0,x1,y1):
-        count=max(abs(x1-x0),abs(y1-y0),1)
-        for i in range(count+1):pixels[round(x0+(x1-x0)*i/count),round(y0+(y1-y0)*i/count)]=(name,ch.EDGE)
-    for i,points in ((0,((104,110),(104,98))),(1,((70,88),(44,88))),
-                     (3,((26,98),(26,110))),(4,((52,110),(52,76),(60,76),(60,50),(62,50))),
-                     (5,((62,48),(34,48))),(6,((20,32),(20,20))),(7,((56,14),(76,14))),
-                     (9,((126,14),(148,14))),(10,((196,14),(199,14),(199,116),(196,116))),
-                     (11,((148,116),(126,116))),(1,((122,89),(148,89))),
-                     (5,((104,50),(132,50))),(5,((88,60),(88,80))),(9,((88,20),(88,40)))):
-        for a,b in zip(points,points[1:]):line(cr.NAMES[i],*a,*b)
-    for name,(x0,y0,x1,y1) in RECTS.items():
-        for x in range(x0,x1):
-            for y in range(y0,y1):
-                pixels[x,y]=(name,ch.EDGE if x in (x0,x1-1) or y in (y0,y1-1) else ch.FILL)
-    for k in range(-3,4):pixels[172+k,14+k]=(cr.NAMES[10],ch.EDGE)
-    return pixels
+    return nav.map_pixels(0)
 
 def overview(raw):
-    with patch.multiple(ch,MAP_ROOMS={n:[r] for n,r in RECTS.items()},SAVE_ROOMS={cr.NAMES[2]},
-                         BOSS_ROOMS={cr.NAMES[10]},_map_pixels=_map_pixels):
-        return ch.map_layout(raw)
+    return nav.overview(raw)
 
 def branch(site,target,condition=14,link=False):
     displacement=target-site-8
@@ -84,7 +64,7 @@ def entrance(raw):
     e=bytearray(e);struct.pack_into('<i',e,0,int(59.5*4096))
     return room_doors.append_entity(raw,1,bytes(e),'Door (Crane Row)')
 
-def apply_rom(rom, *, version=VERSION):
+def apply_rom(rom, *, version=VERSION,include_creatures=True):
     h=w.parse_header(rom);arm=rom[h['arm9_offset']:h['arm9_offset']+h['arm9_size']]
     if w.sha256(arm)!=PARENT_ARM9:raise ValueError('Crane Row needs the exact v0.15.1 chapter ARM9')
     source_hash=w.sha256(rom)
@@ -104,7 +84,10 @@ def apply_rom(rom, *, version=VERSION):
     old_message_first=ch.MESSAGE_FIRST+len(ch.LINES)
     def say(key):
         if key not in cr.LINES:return None
-        return Command(0x15,struct.pack('<HBBBBBB',0,old_message_first+list(cr.LINES).index(key),0,0,0,0,0))
+        if key in ('power','crown_clear','boss_clear','cache_done'):return Command(0x15,bytes(8))
+        # The native handler multiplies this duration by30 updates. It is
+        # seconds, not a frame count; five seconds keeps hints temporary.
+        return Command(0x15,struct.pack('<HBBBBBB',5,old_message_first+list(cr.LINES).index(key),0,0,0,0,0))
     extras={};plans={};objects={};built_rooms={}
     for name in cr.NAMES:
         index=cr.IDS[name]
@@ -118,18 +101,29 @@ def apply_rom(rom, *, version=VERSION):
         extras[f'zz_{name}Textures.nsbtx']=built.textures
         extras[f'zz_{name}.nsbmd']=built.model
         extras[f'zz_{name}.bsp']=built.collision
-        extras[f'zz_{name}_detail.cbmp'],_=room_minimap.build(asset(ch.MAP_SOURCE),plan,cr.SPECS[name].doors,save=cr.SPECS[name].save)
+        extras[f'zz_{name}_detail.cbmp'],_=room_minimap.build(asset(ch.MAP_SOURCE),plan,cr.SPECS[name].doors,
+            save=cr.SPECS[name].save,door_labels=nav.detail_labels(name),glyphs=nav.art.FONT)
         plans[name]=plan;objects[name]=obj;built_rooms[name]=built
-    extras[MAP_SCREEN],listing=overview(asset(ch.MAP_SOURCE))
+    listing=None
+    for stage,screen in enumerate(nav.SCREENS):
+        extras[screen],rows=nav.overview(asset(ch.MAP_SOURCE),stage)
+        if listing is not None and rows!=listing:raise ValueError('Progress map slots must stay identical')
+        listing=rows
     from tools import crane_boss
     for key,model in crane_boss.models().items():extras[f'zz_CR_{key}.nsbmd']=model
+    creature_report=None
+    if include_creatures:
+        from tools import crane_creatures as creatures
+        creature_assets,creature_links,creature_report=creatures.prepare(asset,names)
+        if extras.keys()&creature_assets.keys():raise ValueError('Creature resource name collision')
+        extras.update(creature_assets)
     modified={names.index('Pier_Save02_app.obj')}
     blobs[names.index('Pier_Save02_app.obj')]=entrance(blobs[names.index('Pier_Save02_app.obj')])
     firsts=set()
     for name in ch.STRING_FILES:
         i=names.index(name);modified.add(i);firsts.add(slot_count(blobs[i]))
         blobs[i]=StringSlots(asset(name)).grown(blobs[i],{50:f'TASM v{version}\nPress a button to start',74:f'Options v{version}'},
-                              appended=[*cr.LINES.values(),cr.TITLE])
+                              appended=[*cr.LINES.values(),cr.TITLE,*nav.GOAL_TITLES])
     if len(firsts)!=1:raise ValueError('String count mismatch')
     first_string=firsts.pop()
     aligned={};size=sum(map(len,blobs))
@@ -138,6 +132,14 @@ def apply_rom(rom, *, version=VERSION):
             pad=bytes(-size%4);aligned[f'zz_cr_alignment{len(aligned)}.bin']=pad;size+=len(pad)
         aligned[name]=data;size+=len(data)
     out_names,out_blobs=oscorp_resources.append_resources(names,blobs,aligned)
+    if include_creatures:
+        from tools.actor_resources import ModelSheet
+        out_blobs=creatures.bind_xbds(out_names,out_blobs,creature_links)
+        sheet_index=out_names.index('model_sheet.xbd');modified.add(sheet_index)
+        sheet=ModelSheet.parse(out_blobs[sheet_index])
+        creature_groups={spec.key:len(sheet.groups)+i for i,spec in enumerate(creatures.CREATURES)}
+        out_blobs[sheet_index]=sheet.append(tuple((out_names.index('zz_CR_'+spec.key+'.nsbmd'),
+            out_names.index('zz_CR_'+spec.key+'.xbd'),out_names.index('zz_CR_'+spec.key+'.nsbtx')) for spec in creatures.CREATURES))
     # Owned table allocator. The Midnight autoload prefix is copied unchanged.
     data=bytearray()
     def alloc(payload=b'',size=None):
@@ -185,6 +187,15 @@ def apply_rom(rom, *, version=VERSION):
     messages_at=alloc(message_bytes)
     state_at=alloc(size=32)
     hooks=[]
+    if w.u32(arm,nav.SCREEN_SITE-BASE)!=nav.SCREEN_ORIGINAL:raise ValueError('Native map screen loader changed')
+    map_select=alloc();data.extend(nav.screen_adapter(map_select,[out_names.index(n) for n in nav.SCREENS]))
+    hooks.append((nav.SCREEN_SITE,branch(nav.SCREEN_SITE,map_select)))
+    goals_at=alloc(b''.join(struct.pack('<2I',first_string+len(cr.LINES)+1+i,
+                         first_string+list(cr.LINES).index(key)) for i,key in enumerate(nav.GOAL_BODIES)))
+    if w.u32(arm,nav.OBJECTIVE_SITE-BASE)!=branch(nav.OBJECTIVE_SITE,nav.OBJECTIVE_NATIVE,link=True):
+        raise ValueError('Native Objectives getter call changed')
+    objective_select=alloc();data.extend(nav.objective_adapter(objective_select,goals_at))
+    hooks.append((nav.OBJECTIVE_SITE,branch(nav.OBJECTIVE_SITE,objective_select,link=True)))
     data_at=alloc();data.extend(crane_boss.data_adapter(clean_arm,data_at,
         target(0x020D1610,w.u32(arm,0x020D1610-BASE)),
         {key:out_names.index(f'zz_CR_{key}.nsbmd') for key in crane_boss.models()}))
@@ -195,6 +206,16 @@ def apply_rom(rom, *, version=VERSION):
         at=alloc();data.extend(make(at));hooks.append((site,branch(site,at)))
     wave_site=0x0204C2C8;at=alloc();data.extend(crane_boss.wave_adapter(at,target(wave_site,w.u32(arm,wave_site-BASE))))
     hooks.append((wave_site,branch(wave_site,at,condition=1)))
+    if include_creatures:
+        creature_hooks,creature_runtime=creatures.install_runtime(arm,creature_groups,alloc,data)
+        hooks.extend(creature_hooks)
+        from tools import crane_audio
+        if w.u32(arm,crane_audio.SITE-BASE)!=0xE92D40F0:raise ValueError('Native sound prologue changed')
+        sound_at=alloc();data.extend(crane_audio.adapter(sound_at))
+        hooks.append((crane_audio.SITE,branch(crane_audio.SITE,sound_at)))
+        if w.u32(arm,crane_audio.STATE_SITE-BASE)!=0xE92D000F:raise ValueError('Native controller entry changed')
+        spore_sound_at=alloc();data.extend(crane_audio.spore_adapter(spore_sound_at,creature_runtime['configs']['spore']))
+        hooks.append((crane_audio.STATE_SITE,branch(crane_audio.STATE_SITE,spore_sound_at)))
     if len(data)>CR_SPACE:raise ValueError('Crane tables exceed reservation')
     used=len(data);data.extend(bytes(CR_SPACE-len(data)))
     old_end=kit.SOURCE+kit.RESERVE+ch.ML_SPACE
@@ -232,7 +253,11 @@ def apply_rom(rom, *, version=VERSION):
     for address,value in hooks:put(address,value)
     # Retain the exact existing chapter block, including both native adapters.
     if new[kit.SOURCE+kit.RESERVE:old_end]!=arm[kit.SOURCE+kit.RESERVE:old_end]:raise ValueError('Midnight block changed')
-    staged=w.rebuild_rom(rom,{'Glob.bin':w.pack_glob(out_names,out_blobs)})
+    replacements={'Glob.bin':w.pack_glob(out_names,out_blobs)};audio_report=None
+    if include_creatures:
+        sound_fs=next(e for e in w.validate_rom(rom,target=True)['nitrofs'] if e['name']=='sound_data.sdat')
+        replacements['sound_data.sdat'],audio_report=crane_audio.apply(rom[sound_fs['start']:sound_fs['end']])
+    staged=w.rebuild_rom(rom,replacements)
     result,_=kit.replace_arm9(staged,bytes(new))
     checked=w.validate_rom(result,target=True)
     final_h=w.parse_header(result)
@@ -247,6 +272,8 @@ def apply_rom(rom, *, version=VERSION):
         'area':MAP_AREA,'map_entries':len(listing),'area_references':area_refs,'table_bytes':used,'reservation':CR_SPACE,
         'midnight_block_preserved':True,'patches':[{'address':hex(a),'old':hex(b),'new':hex(c)} for a,b,c in patches],
         'messages':{k:{'id':old_message_first+i,'string':first_string+i} for i,k in enumerate(cr.LINES)},
+        'creatures':{'assets':creature_report,'runtime':creature_runtime} if include_creatures else None,
+        'audio':audio_report,
         'status':'Structural candidate; traversal, map, save and encounter qualification required.'}
 
 def build(source=ROOT/'build/version-0.15.1-final/Versioned.nds',output=ROOT/'build/crane-row/dev.nds'):

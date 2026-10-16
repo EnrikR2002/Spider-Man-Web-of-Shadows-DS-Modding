@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "source": "crane-harbor-v1.png",
+  "texture_source": "crane-harbor-v1.rgb555",
+  "width": 768,
+  "height": 128,
+  "generator": "Built-in image_gen",
+  "prompt": "Use case: stylized-concept. Asset type: original production background panorama for a Nintendo DS side-scrolling night-time dockyard level. Paint an extremely wide continuous 3:1 composition, fully edge-to-edge environmental art, no frame. View straight across a quiet New York industrial harbor at night: distant brick warehouses, irregular tenement towers, rooftop water tanks and antennas, long loading sheds, varied small ship silhouettes, cranes far away, a few amber windows, mist and deep navy water along the bottom quarter. Restrained atmospheric early-2000s hand-painted game background, convincing rich industrial detail and depth, crisp substantial silhouettes that survive reduction to 768x256. Smooth painted shading and subtle texture; no chunky pixel-art blocks, no vector/flat geometric illustration, no photographic noise. Palette primarily ink navy, desaturated blue-grey and dark teal, sparse muted amber lights. Dark dramatic sky across the top half, subtle cloud masses and atmospheric haze around the skyline. All objects in the distance; no close platforms, playable surfaces, characters, HUD, text, lettering, signs or logos. Panorama is a quiet backdrop behind bright foreground characters, so avoid bright foreground elements. Level horizon at approximately 70 percent down the image. Render the complete original background only.",
+  "encoding": "Lanczos resize to 768x128; RGB555. Compiler quantizes each of three 256x128 panels to 256 colors. Original PNG retained."
+}

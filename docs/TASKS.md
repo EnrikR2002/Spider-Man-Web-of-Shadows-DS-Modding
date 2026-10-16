@@ -1,131 +1,76 @@
 # Current work, backend queue and handoff
 
-Updated 2026-10-14 (America/Edmonton). Read this and AGENTS at startup; then only
-the section relevant to the task. Shipped history: [CHANGES](CHANGES.md); ROM
-knowledge: [TECHNICAL](TECHNICAL.md); combat design: [TASM_ROADMAP](TASM_ROADMAP.md).
+Updated 2026-10-16 (America/Edmonton). Read AGENTS and this first. Shipped facts:
+[CHANGES](CHANGES.md); research: [TECHNICAL](TECHNICAL.md); combat design:
+[TASM_ROADMAP](TASM_ROADMAP.md). No new Markdown.
 
-## Current work
+## Current state
 
-**v0.16.1 stable `5b0d6f55` (2026-10-14): Crane Row polish.**
-Published through playtest; latest battery `3a4e7c9b` byte-identical,
-wrapper/snapshots verified, prior ROM/compositions retained. Agent-tested;
-player verdict pending. **No more skills.**
+**Published0.19.0: Crane Row rework, agent-tested; player verdict pending.**
+The player rejected0.18.0: familiar enemies/sounds, missing death/reward feedback,
+sparse spawns, text clutter and coarse/repeated art. User explicitly requested
+finishing and pushing source to Git; this release commit includes all related
+pre-existing0.16.2..0.18.0 changes. Main/origin main; no ROM/extracted assets in Git.
+Original generated panorama reference/art is safe to commit, RGB555 marked binary.
 
-v0.15.1's Signal Leech/Substation/Vortex changes remain player-pending;
-CHANGES owns their release evidence.
+Stable `build/Spider-Man-WoS-modded.nds` is exact full composition
+`build/version-0.19.0-final/Versioned.nds`, SHA9b2b948f6030a60246a0ca9ae477ae51c22f4aa349645fb2c6cef367c4557582,
+ARM9 9b04b02a74cd634901c1435a5bb7708c073c127467cc9971b3bc9a5d1c6a10e3.
+Boot/Options0.19.0. Crane7864/8192 bytes, max365 room quads. Keep exact frozen
+Red kit/strength dial and Midnight4KiB. Crane parent remains frozen0.15.1.
 
-**Crane Row:** `build/version-0.16.1-qualified/Versioned.nds` reproduces
-through normal composition. User requested an ambitious pre-player visual/feel
-sweep. All12 rooms have new materials, lattice cranes, ship/cargo detail,
-broader harbor panorama, catwalk fittings, wayfinding and distinct interiors
-(`tools/crane_art.py`). ARM9 `abfbb112`, BSP/OBJ/maps/kit stay byte-exact
-against0.16.0; only24 visual resources and2 strings change. Twelve rooms,
-two loops, Office save, lever/shortcuts, cache, Crown crew and hoist remain.
-Rooms96..107/area6/visits161..152/149/148/milestones140..146 own an8KiB block.
-Passed:339 suite +30 post-driver targeted checks; all30 Crane/all13 Midnight
-real-door cases;12-room/elevated visual review; Office save/Continue, power,
-cache, warning/live and refuge controls. Red extra kit/Vitality and Black
-Vitality III win and exit/revisit without lab health refills. Roof lab now
-leaves enemies native and avoids post-win door drift; baseline control passes.
-Exact-code inheritance retains0.16.0's68 kit/12 crash/native parity evidence.
-Publication/save proof and preview: `work/crane-row/polish/`; CHANGES owns limits.
-Next: player feedback on visuals, routes, encounters and hoist; iterate existing
-content. No player verdict, frame-rate gain or first-visit duration measured.
-Player enters through Pier_Save02's new right door, uses X at high markers
-and otherwise follows the usual launch/Continue/save/close flow. Player
-verdict and first-visit duration unmeasured. TECHNICAL "Crane Row construction"
-owns details; Grid/Skyline deferred, Hive post-story.
+Implemented: revised three silhouettes,154 authored full-lifecycle clips and
+15 original voices; native rigs/AI retained. Texture atlas allows native death
+tint. Private reward set31 fixes the copied zero field: actual physical XP/HP
+orbs, no stat credit. Saved clears retain patrols; Engine/Shaft/Breakwater gain
+encounters; upper Quay/Shaft/Gantry gain central waves. Global live cost4 stays.
+Quiet materials, original painted harbor panorama, no destination boards or
+first-visit/clear speech bubbles; small hatch X/lever bolt, map icons/short goal,
+route details on Objectives. Office/Cache remain safe.
 
-Signal Leech: room94/visited163/defeated151. Prior death/save evidence:
-TECHNICAL "Signal Leech implementation".
+**Final evidence:** work/crane-row/rework/publication.json, exact scope audit,
+387 tests +9 expanded adapter/driver/reward regressions;30 real Crane doors;
+13 Midnight routes;11 native arrival/revisit patrol probes;8 progression controls
+including Red/Black no-refill bosses. All pass. Patrols2..4 live, safe rooms0,
+high Quay/Shaft covered. Native-HP mixed Freight clears all3 species and earns
+178XP; player60-unit healing is explicit. Capped DryDock/Crown callbacks pass;
+Crown opens upper return. Actual no-heal reward kills give each10XP plus1024/
+1024/2048 health (Maw/Spore/Ballast); zero-set actual kill0/0. Private death IDs
+and recorded waveform matches prove all3 voices render. Four map/Objective
+phases, Quay/Engine/native Pier UI reviewed;65 prior art poses inherit.
 
-Pending verdict: Dragnet held A, Overclock tier5; v0.11.0 speed, Vitality,
-map, Nest/Yard. Crowd backend remains deferred.
-Open: Leapfrog's pop does not ricochet, R during the rush dash rolls
-forward, Perch B in the cycle gap swings, proposals of 2026-10-07.
+**Progress retained:** latest actual634-byte battery3d21ee63 is byte-exact,
+wrapper and snapshot round trips verified. Checkpoint before-v0-19-0-dsv-<fullhash>
+and prior0.18.0 ROM/compositions retained. Publication used playtest.py build.
+No fixture/stale emulator state entered the real save. Player uses the usual cmd,
+Continue, play, save in-game, close. Agent manages builds/checkpoints.
 
-**Chapter state:** shipped rooms76..95 plus Crane96..107. **Release rule:** a chapter room ships only
-after a walk route crosses it through real doors and needs no story ability
-the player lacks (0..4 owned). Tools: `tools/midnight_walk.py`,
-`tools/room_compiler.py`, `tools/midnight_rooms.py`,
-`room_doors.add_spawn/add_exit`.
+Next: collect player verdict on creature identity, pacing, pickups and visual
+clarity. Agent tests do not prove fun, difficulty, duration or frame-rate. Native
+AI is still reused. No further feature expansion is requested.
 
-Limits known: Crane allocates rooms96..107 and visits161..152/149/148;
-milestones140..146 leave147/245 in the audited pool. Its8KiB extension
-owns lookup/map/message/adapters, retaining Midnight's4KiB exactly.
-Authored rooms may borrow textures
-only from districts the player has seen: never Hive_Map08..10 or
-Downtown_Map13/14. Vertex scale128 supports wider scenery (not a511-unit
-global limit). Kit: second
-block 6628 of 6656 code bytes, first 7096 of 7936; ability bits 83..95 free;
-state below +0x280 (the Both Suits rows sit above it).
+## Deferred queue
 
-### Handoff commands
+No more skills; no slow effects/teleports. Signal Leech/Substation/Vortex verdict
+pending. Dragnet held A, Overclock tier5, speed/Vitality/map/Nest/Yard and earlier
+Leapfrog/R/Perch feedback remain. Crowd backend staged on older kit: requalify
+before integrating. JIT12 confirmed; AUTOGL1x/Dragnet lines unmeasured. Training,
+HUD/camera/suits/Conductor deferred.2099 later replaces Black (theorycraft).
+Grid/Skyline deferred; Hive post-story.
 
-Run `python -m unittest discover -s tests` (339 expected). Crane full-release
-generator: `python tools/crane_row.py --release-dir build/NAME`; tasm_kit is
-the frozen0.15.1 parent component. Dev candidate of the whole
-game without pins: `python work/shop/dev_build.py NAME` (`build/dev-kit/NAME`,
-prints the hashes to pin). Lab: `python work/kit/weblab.py ROM LABEL INPUTS`
-(sparring Brutes, RAM pokes, summary), `work/kit/newchecks.py ROM`. Look at a
-room: `python work/rooms/lab_view.py ROM NAME ROOM X,Y ...` then
-`work/rooms/sheet.py OUT.png FRAMES`. Preserve Crane when changing the kit:
-deliberately rebase its parent ARM9 guard/profile and qualify the combined
-build. Publish the accepted recipe through `python tools/playtest.py build`. Lab
-gates (copied saves; `--rom R`): `python tools/kit_lab.py qualify R` (68,
-about 50 minutes), `python tools/crash_hunt.py batch 1 12` (now also holds A,
-yanks and pauses; odd seeds at tier 5), `python tools/midnight_walk.py all`
-(13 routes; a failing route reruns up to three times, fights vary), `python
-tools/midnight_line.py tour | puzzle | save-test [--room R]`,
-`work/shop/vit_shop_lab.py R`, `work/shop/web_shop_lab.py R`. Evidence:
-`work/kit/v0.14.0/`, `work/midnight-line/walk-*.json`, frames under
-`build/boot-tests/`.
+## Commands and safety
 
-**Crowd performance:** JIT12 is player-confirmed. AUTOGL 1x trial pending
-(`work/performance/renderer-player-trial-2026-10-06.json`). Dragnet lines
-are unmeasured in DeSmuME.
+`python -m unittest discover -s tests`; crane_row --release-dir build/NAME after
+pinning. Labs: crane_walk, crane_boss_lab, crane_creature_lab, crane_reward_lab;
+private qualification/UI scripts in work/crane-row. Read TECHNICAL rework section
+for driver corrections and rejected E/F camera experiment; never publish E/F.
+Reward currency is stats+0x44; config+0x50 is ERewardSetType. Camera functions
+must never be inferred to produce rewards. Native arrival/inputs qualify drops;
+held poses and teleports do not qualify traversal/difficulty.
 
-**Shared crowd-hit backend staged, unpublished.** Its validation is over the
-v0.9.0 kit; the candidates still assemble over the v0.13.0 source and need
-requalifying (TECHNICAL "Shared crowd-hit backend candidates").
-
-## Previous queue (deferred)
-
-Training/HUD/art proposals deferred; Conductor teaser remains an idea.
-
-1. Midnight Line: player verdict on Signal Leech, teaser, more rooms.
-2. Await renderer verdict; then requalify/integrate the staged crowd backend.
-
-## Deferred ideas
-
-Training: mixed enemies, dummy toggle, aggression presets, position reset.
-HUD/Sense cues, campaign art, camera, AI, suits (reference/suit_roadmap.json),
-audio remain ideas. Visible damage panels were rejected (CHANGES);
-damage telemetry stays private.
-
-2099 replaces Black after TASM; preserve A/story gates. Theorycraft only:
-TASM_ROADMAP "Spider-Man 2099" (2026-10-11).
-
-## Evidence and safe resumption
-
-- Kit: source `tools/tasm_kit.{py,s,hex}` and `tools/tasm_kit2.{s,hex}`
-  (second block; its web block has its own literal table), `tools/kit_choreography.py`,
-  `tools/kit_clips.py`, `tools/training_room.py`. Constants only via the
-  `lit_`/`lit2_`/`lit3_` tables, tables as `.word` (never `.byte`);
-  `assemble_tasm_kit.py` checks literals and outside branches for both
-  blocks. Kit code checks other actors with `kit_alive`.
-- Research/qualification: `tools/kit_lab.py` (inputs
-  `reference/combat-inputs/kit/`). A placed Spidey keeps his stance until a
-  real jump. Workflow: TECHNICAL "Research workflow", "Second kit block",
-  "Web lines, built hits and the web skills", "Room compiler".
-- Rollback: build/releases/<sha>/; exact releases in reference/releases.json
-  and CHANGES. Releases before v0.4.1 carry the Sense heap bug. A save in a room an
-  older ROM does not have is rejected by it (battery intact).
-- Real Battery path: work/playtest.json. Re-read the latest save while DeSmuME
-  is closed before publication/checkpoints; verify wrapper/snapshot bytes.
-  Player only launches/Continues/plays/saves/closes.
-- Docs can change between sessions: re-read a section before editing it.
-
-No new Markdown. Update owning documents; stay under 900 words.
-Read archives through tools/doc_archive.py in bounded sections. Cache files remain ignored;
-prior deletion was rejected by automatic approval review.
+Rooms96..107/area6, visits161..152/149/148, milestones140..146; only147/245 remain
+audited. Kit changes need explicit rebase. Kit second6628/6656, first7096/7936;
+bits83..95 free, state below+0x280. Literal tables, no mid-code byte/ltorg;
+validate actors. Actual Battery/emulator: work/playtest.json. Re-read latest
+while DeSmuME closed before publishing; preserve wrapper/snapshot/prior ROM and
+compositions. Research always uses copied saves/disposable RAM.

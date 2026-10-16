@@ -2172,9 +2172,13 @@ Confirmed 2026-10-08 from the handlers, all 156 native records
   (file + 0x419*4) and no other code reads the file holder `0x0213FE00`
   (literals at `0x02006948`/`9A8`/`9BC`/`9E8`); decoding indexes the offset
   table, which grows. This supersedes "grow both in production" above.
-- **0x15 operand** as authored: u16 display frames (0 = native default),
-  message id, lookup flag 0, continuation group 0. Shown on the touch-screen
-  panel without pausing play (~8 s).
+- **0x15 operand:** u16 duration in seconds (legacy helper keyword `frames`),
+  message id, lookup flag0, continuation group0. Correction measured during
+  Crane navigation,2026-10-15: handler0x02039B0C multiplies the u16 by30 at
+  0x02039BA8 and stores the native-update countdown.180 means minutes, not180
+  frames; five seconds clears to the map while play continues. Zero retains
+  native/default behaviour and has left authored hints covering the map until
+  the next room. Native update/clear:0x020E0144..0x020E01A4.
 - **Lines (v0.8.0):** Platform entry while 269 is clear (`live_tracks`),
   breaker thrown (`breaker`), Refuge entry objective board: `269 == 0` ?
   `goal_power` : (`completed == 0` ? `goal_nest` : `goal_done`), completed =
@@ -2316,6 +2320,20 @@ and v0.8.0 were never walkable past the Span.
   `f68a082e`: 5/5 routes, 67 checks, first try (`work/midnight-line/walk-*`).
 - **Needs from the player's kit:** Bulldozer Dash for the Span's two red walls
   (owned). Whether Hive walls need Ichor Crawl/Web was not isolated (owned).
+
+**Native Span low-neck driver (2026-10-15).** The right exit of Hive_Map05 /
+ML_NestSpan has a12-unit opening at x0 (BSP empty at y11.75, solid at12;
+floor0). Standing/attacking reached x-3.5 without entering it. The old masher
+timed out three times on the0.16.2 visual candidate. Paired0.16.1/current
+controls also failed with plain walking, including with the crew parked away;
+Right+Down+tapR passed the full Span/Hollow/Gallery/Shrine route on both
+builds. `midnight_walk` now keeps its existing traversal crew fixture and uses
+native duck/roll inputs at this neck. No ROM or player save changes. Native
+input improvements require a baseline control; do not alter game geometry or
+mark a release broken solely from an incapable driver. Original failures and
+paired controls: `work/crane-row/repair/`, `walk-span-driver-roll-*` in
+`work/midnight-line/`. Rendering candidates must finish their full port/corner
+review before launching expensive gameplay gates.
 
 ### The Yard: proto01 as a chapter room (v0.9.0)
 
@@ -3624,6 +3642,471 @@ The final concise hint copy preserves the original residue and restores exact
 IDs/ARM9; intermediate art-C `21af857c` is not the release. Named candidates
 remain immutable while emulator surveys run. Visual placements prove art only;
 real-door tests separately qualify traversal.
+
+#### Crane Row door and roof repair (v0.16.2)
+
+Player feedback2026-10-14 confirms the art improved but exit shutters and many
+ceilings disappear. Two confirmed authoring errors: the shared
+`midnight_rooms._shutter` winds a left-wall shutter toward-x (away from the
+room), and nine outdoor Crane plans deliberately hide their ceiling shell
+despite retaining its solid collision. Native front-face culling makes the
+reversed shutters invisible. Crane now uses its own `crane_art.portal` with
+inward normals (+x left/-x right), recessed jambs and a lintel lamp. Projection
+from either wall remains below1.5 units, within the3.5-unit collision clearance.
+The shared helper/other districts are unchanged by this repair.
+
+`crane_art.ceiling` draws full-width downward-facing steel at the existing
+y=h boundary of each formerly hidden shell, plus fascia/amber edge and flush
+underside strips. Trim stays inside the real ceiling solid. Outdoor roofs use
+scenery deliberately: making the plan shell visible would also add ceiling
+enemy anchors through `plan_anchors`. This approach retains exact BSP/OBJ,
+camera, anchors, maps and ARM9. Twelve room model/texture pairs and the two
+version labels are the complete resource-change scope. Every exit gains a
+destination sign from LINKS; Freight's wrong "Crown" label is removed (the
+high return actually goes to Engine House).
+
+Regression coverage tests actual emitted shutter normals at every port,
+downward roof coverage across the full width at z=0, frames/trim extents,
+destination labels and conservative GPU budgets (largest335 quads).
+Private survey/audit sources and captures: `work/crane-row/repair/`.
+Final `reviewed/` survey covers29 exits and36 roof/corner poses; all65 sampled
+coordinates match their requested positions, and all rooms remain the intended
+IDs. Held poses establish rendering, not the ability to stand in mid-air.
+Central scenic captures missed boundary-face errors in0.16.1: future art
+reviews must cover every port, ceiling and upper corner before starting the
+expensive route/combat qualification. Place/hold fixtures
+prove rendering only; validate traversal separately through real doors. A
+marked pose can move before the nearest later screenshot: choose the preceding
+capture within a sustained pose window, and check the sampled position/room.
+`art.face` maps one whole texture onto a quad (correct for signs): using it
+for a360-unit steel fascia stretched individual palette pixels into apparent
+blank blocks at upper corners. Roof fascia/trim now use `rc.box` world-scale
+UVs and reach h+18 to close the whole visible shell. Old floating foreground
+hazard bars crossed labels, and Quay's24-unit cargo obscured its ground label;
+remove the bars, keep X beside high hatches, and put destination signs above
+cargo while clamping their tops below h-2. Final boards are24x6 at z-7,
+above ground cargo (floor+27) but below stacked landings (high floor+18).
+X uses the same plane in the adjacent column. Projected silhouette checks
+cover both playable solids and foreground scenery: merely separating their
+world rectangles misses perspective overlap. Compact boards clear Crown's
+first landing; moving them forward clears Warren cargo/Engine pipes. Quay's
+district sign moves away from its return label; redundant Office lettering
+is removed where it overlapped the exit label.
+Published as `1bd288f1` on2026-10-15, exact composition and latest battery
+`54417ed4` verified by `work/crane-row/repair/publication.json`. CHANGES owns
+the qualification counts, reruns and player/performance limits.
+
+#### Crane Row navigation and objectives (v0.16.3)
+
+Player confirms0.16.2 visual improvements, but reports the map's connections
+are misleading and X at doors has no clear purpose. `tools/crane_navigation.py`
+defines a labelled schematic directly against all29 directed `crane_rooms.LINKS`
+ports. Every continuous connector leaves the real door side and avoids other
+rooms/wires. Matching letters carry loops that cannot fit the small flat panel:
+A Engine/Shaft, B Breakwater/Quay, C Freight/Engine, D Engine/Crown; P is Pier.
+Tests assert one-to-one graph coverage, sides, no crossings and panel bounds.
+Detail maps retain the native projection and gain destination captions; X marks
+button-operated upper hatches. Three-dimensional boards distinguish WALK IN,
+X ENTER, X SHORT, X SAVE RM, X OPTIONAL, X HOIST and X RETURN. Their secondary
+boards sit above high-door destinations, below ground-door destinations, clear
+of the actor's head/stacked landings. Scenery never contributes collision.
+
+**Four progress screens:** power140, Crown146 and boss142 select Restore cargo
+power -> Clear the Crown crew -> Defeat the hoist -> Return to the Pier, with
+boss taking priority. No new persistent flags or migration. Goal borders amber,
+locked endpoints red, unvisited rooms dim but labelled; native current/visited
+colours remain distinct. `zz_CraneOverview.cbmp` plus `zz_CraneGuide1..3.cbmp`
+share the same20 room-list palette slots and635 tiles each. Reserve palette11
+from room allocation: B1..B5 static header/legend, B6..BA current-room source,
+BB..BF hidden-room source. Native frame/buttons outside the panel are verified
+colour-identical. Office's S/save marker moves away from its text.
+
+Native screen load0x020E136C originally `E7911202` (LDR r1,[r1,r2,LSL#4]).
+A B adapter selects the earned screen only for area6/rooms96..107; other
+areas/rooms/null stats execute that original LDR. Preserve r0/r2..r14 and CPSR;
+branch directly to site+4. A BL here would overwrite the caller's live LR.
+Native Objectives constructor's BL0x020E0F28 formerly called0x020D13CC, the
+mission-goal getter (native mission table0x0211E4C8,16-byte stride). Only this
+call is wrapped. In Crane rooms it returns one of four private8-byte title/body
+pairs; constructor reads only +0/+4. Else restore arguments/CPSR and tail-call
+the original getter. Native mission table/counter/save bytes stay exact.
+The old page incorrectly said "Drain the sewers" while in Crane Row.
+Both adapters have ARM instruction tests for flags/registers, null/native
+fallback and all12 rooms/four phases; generated pointers/strings are checked.
+
+First-visit groups choose local instructions from those same earned flags,
+before the existing visited flag is set; no repeated per-frame message write.
+Native say0x15 now receives5 seconds for all Crane hints, including lock/power/
+crew/hoist messages. See "Chapter dialogue" for the corrected native timer
+units. A real lever press clears the temporary hint back to the updated map
+without room change or manual refresh. Other chapters retain their durations.
+
+Pinned candidate `18c90eb8`, ARM9 `2dea0314`, owns5844/8192 Crane bytes; message
+bound244 remains below256. Full kit/dial and Midnight4KiB are byte-exact to
+0.16.2, as are all collision, doors/spawns/input modes/camera/anchors and native
+assets except version/appended strings and filename table. Removing obsolete
+First_Visit moves ten entity callback indices; audit resolves them by EG name
+and checks every other entity byte and non-message encounter command unchanged.
+Only ten native ARM words differ: resource count, message pointer/two bounds,
+four relocated Crane gameplay adapter branches, and the two scoped UI sites.
+Evidence: `work/crane-row/navigation/audit.json`, `ui-version-0.16.3-nav-d/`,
+four door contact sheets and detail/goal/hint sheets. All29 doors/12 detail maps,
+four goal maps/Objective pages, native fallback and real lever/hint expiration
+have been reviewed. Earning power at the real lever, returning through the
+Freight shortcut to Office, saving there and fresh native Continue restores
+room98/flag140 and both the phase1 map and Objectives page (`save-goal/`).
+**Probe correction:** some transitions leave an old actor/motion pair whose
+motion back-link still looks owned. Two Engine exits retain actor0x022AE8F0
+alongside the actual player; its controller pointer is4/0x34C, while the live
+player has the native controller type0x021352A4 and a matching owner at+0x44.
+`player_trace.sample` now uses those validated controller links if motion-owner
+filtering leaves multiple candidates. Two fully owned controllers stay
+ambiguous; a single original actor can still have no controller. Read-only
+tests cover invalid/reused/outside pointers and preserve the input bytes.
+The previous probe returned a partial sample without `room_vars`, causing
+Crane's machinery logger to raise. Initialize absent variables as an empty tuple
+and log machinery only with a sampled actor; never fabricate a pose/variables.
+Real-door and post-win revisit checks now await a live arrival instead of
+assuming80 frames is sufficient. Earlier exception/ambiguous-probe captures
+remain retained. These changes affect lab code only; ROM bytes stay exact.
+Published exactly through playtest as0.16.3 (`publication.json`): latest battery
+`ac9896ff` is byte-identical and wrapper/checkpoints/prior compositions verify.
+All30 Crane cases now confirm live arrivals; all13 Midnight routes and eight
+gameplay controls pass. CHANGES owns counts, retries and player-validation limits.
+
+#### Crane Row terrain overhaul (v0.17.0, 2026-10-15)
+
+Player finds the partly explored district boring/bland; hoist feedback is not
+available. The repeated flat floor/small-crate geometry is replaced in
+`crane_rooms.geometry`: Quay/Freight/Warren/Gantry/Breakwater gain lower solid
+maintenance decks at -20/-24/-24/-32/-20. Segmented docks and recovery steps
+stand above them. Camera minima, anchor areas and native detail-map projection
+follow the new bounds. Doors, arrivals, input modes, locks, IDs, visits and
+milestones remain unchanged. The continuous lower deck catches missed jumps;
+it is deliberately not water damage or a death pit.
+
+Freight has a complete rising roof route over its fight deck; Warren uses tall
+solid stacks with intermediate steps and upper hanging platforms. The Dry Dock
+ship is playable hull/deck geometry with open holds, upper rigging platforms and
+original rust/navy hull pixels. Shaft shelves become switchbacks around the
+existing scenery mover; Gantry uses broken spans over a lower service deck.
+Crown gains a broad stage and upper platforms. Native throwable metal barrels
+populate combat decks and optional roofs. Hoist warning/live/recovery, HP,
+models and win conditions remain unchanged; only its approach terrain changes.
+`crane_art` adds support/rigging scenery and reduces repeated small rail posts
+to retain the existing <400-quad room budget.
+
+Crew variety uses already-proven native spawner sources: Freight Pier8, Dry
+Dock Sewer0x0E, Gantry Residential0x0C. Crown Pier8's real defeat callback
+activates Residential0x0C once, guarded by room scratch0x12A; only that second
+crew's defeat sets Crown146/upper141. No timer awards a clear. Existing earned
+clear flags skip the changed encounters without a save migration. Qualifying
+crew controls use 1HP enemies/native strikes and player chase placements:
+they establish callbacks, not difficulty or normal traversal.
+
+The final Crown chase control twice stopped at x11.9 after the first crew,
+outside the second spawner's activation zone. Aborted RAM has scratch0x12A==1:
+the first native callback had worked; it was not a missing victory callback.
+`crane_boss_lab.ControlWalker` now returns toward the arena with native D-pad
+input while chase is enabled, no enemy remains and Crown is uncleared. That
+control passes with121 return frames. Game waves/flags are unchanged. Failed
+report/RAM are retained under `work/crane-row/overhaul/k/crews/`.
+
+**Compiler correction:** a valid box layout exposed `compile_boxes` recursing
+into a completely solid back child. Its old error misleadingly blamed overlaps.
+The native node format only has a front-solid leaf. A redundant x plane at that
+child's existing left boundary now encodes a front-solid/back-empty terminal;
+the parent makes its empty side unreachable. Existing successful trees are
+unchanged. A minimized five-box regression round-trips/checks the tree, checks
+2,500 random points plus edge-offset samples against the box union and checks
+surface6 versus plain z faces. Crane's revised Warren crosses this generated
+collision through real native inputs. No native BSP parser bytes are rewritten.
+
+**Traversal-driver lessons:** do not judge a jump from a teleport pose under
+an overhang. Required takeoffs need head clearance; tall ground stacks need
+intermediate steps. `crane_walk setpiece` starts at a native room arrival and
+uses only controller inputs for Spidey, with enemies explicitly parked. It
+checks settled landings and a real exit. State24 is landing, not stable idle:
+a buffered B can start another jump after it. The driver releases B after
+contact, brakes, waits for twelve settled frames, and uses one initial jump
+across descending gaps instead of repeatedly triggering airborne swings. Long
+jumps begin moving immediately; only a close higher landing delays steering.
+Earlier failed controls
+remain in `work/crane-row/overhaul/`; a controller failure alone is not proof
+that the terrain is impossible. No traversal RAM placement is used by this
+set-piece controller. Combat/visual fixtures remain separately labelled.
+
+Final K `c5fc0512` reproduces through normal composition in
+`build/version-0.17.0-final/`. Audit `work/crane-row/overhaul/overhaul-k/audit.json`
+checks kit/dial/Midnight bytes, original resources/machine models, all record0
+door/trigger/lock bytes, unchanged overview/goal screens and matching boot/Options.
+Only native ARM word0x020077F8 (Glob count) differs before the extension; owned
+resource descriptors/data change. Crane still owns5844/8192 bytes. All30 real
+door cases, seven native-input set pieces and357 tests pass on K. J's final Arm
+step gap let a walking player drop before the36-unit block: joining its18-unit
+step to that block fixes the generic input route. K differs from J only in the
+Arm's OBJ/model/BSP/detail map and filename/alignment framing. Eleven visual
+reviews/preview inherit identical bytes; the Arm is recaptured. Collector checks
+each source landing's room and bounded live destination after an80-frame wait.
+Publication and completed regressions are in TASKS/CHANGES; player
+fun/performance are unmeasured.
+
+#### Original Crane creature pipeline (v0.18.0, 2026-10-15)
+
+Player explicitly chose entirely new creatures with new attack animations;
+imported enemies/recolours alone do not meet the request. Isolated development
+preserved0.17.0 and the real battery; publication is recorded below. Private
+probes: `work/crane-row/creatures/`.
+
+`model_sheet.xbd` is a separate resource-group format, numeric kind0xFDB3E9A5.
+Its repeated footer/envelope stay intact. Native payload at+8 has s16 high
+offset and u16 packed low4 offset/high12 count; table starts8+(high<<4)+low,
+then182 groups of three u16 NSBMD/XBD/NSBTX IDs. `actor_resources.ModelSheet`
+round-trips and appends without changing old rows/unknown prefix/tail; three
+tests include the native file. Runtime wrapper replaces its first8 bytes:
+global pointer0x0213E144 identifies the loaded resource. Native model accessor
+0x02001EB4 takes a pointer to a group index and loads the group's animation XBD,
+model and texture. Do not confuse this with an action-XBD binding.
+
+Character config getter0x020D12A0 returns84-byte records for types2..50 from
+0x02136880; types0/1/outside use0x0213682C. Record+8 is populated at runtime
+with model-sheet group, +C supplies native HP. Runtime probes: type36->group24
+(`brt`), type21->38 (`hLpr`), type20->42 (`hRng`). First word participates in
+native spawner cost/live-budget checks at0x0204C5C8; it is not established as
+visual scale. Other fields remain unknown unless separately qualified.
+
+Mesh A (`c9e150ac`) replaces only a private training Brute mesh as a control.
+Scope A (`c27ac24d`) instead appends group182/model/texture/XBD, clones type36's
+config in unused Crane reservation bytes, and overrides the getter only for
+room70/type36. The authored mesh renders identically; original models remain
+exact. This establishes append/binding feasibility, not new attacks/production
+scope. Source `scope_proof.py`; captures under the matching boot-test folders.
+
+Brute/hostless templates have28 bones and one shape. SBC stores bone matrices
+in slots0..26, so authored GPU streams can restore individual bone matrices and
+draw newly authored rigid geometry in bone-local coordinates. Preserve native
+node/SBC/rig bytes; do not infer a new skin editor. Flat-colour original mesh
+proof uses opaque white format7 texture plus vertex colours, with an unused
+dummy palette for the existing archive writer. Current art/motion modules:
+`crane_creature_art.py`, `crane_creature_motion.py`. Attacks are authored from
+idle bind lengths/IK/continuous curves, not sampled native attack poses.
+
+Native spawner goal getter0x020D11B0 (24-byte rows at0x02136634) and role chooser
+0x020D1200 are distinct from character config. Goal->character variant getter
+starts0x020D102C, called at0x0204C5A4; constructor gets goals at0x0204C15C.
+Scoped adapters retain native initialization, budget accounting and real defeat
+callbacks. `crane_creatures.py` appends three groups, clones configs (nominal
+HP10/14/7, native costs1/2/1) and hooks config/variant/goal only in rooms96..107.
+Goal row+20 must carry its initialized weight sum: calling native init does not
+initialize a separately cloned row. Full A `d34f3cd7` fits6648/8192 bytes.
+Original resources/configs remain exact except appended model_sheet rows.
+Ten parser/asset/adapter tests pass; native frameworks/rigs are reused, not new AI.
+
+Actual room102/no-dummy duels (`arena_view.py`, isolated native spawns, healing
+fixture) prove Ballast and Spore HP loss. Maw initially whiffs at~9 units.
+Radius-only control `arena-reach-a.nds` (`3cdf31ea`) changes its GMB kind3 part2
+radius3.1->4.6, retaining other words; player HP then drops24576->17904.
+Native config+24/+28 range edits were inconclusive training controls and are
+**not** used. Training kit gives enemies dummy protection flags, so confirm
+incoming damage in story context. Placement below a native body's support
+height can fall through the floor: duel driver now uses native positions only.
+Kind3 body/attack coordinates are empirically useful, but general cylinder/flag
+semantics remain hypotheses; kind0 part9 muzzle placement still needs controls.
+All qualified species retain the other GMB words/flags and native movement.
+
+Published D: `f6d09cfc`, ARM9 `805460f9`, version0.18.0;
+`build/version-0.18.0-final/Versioned.nds` reproduces it.47 authored SCA routes
+(including31 attack routes); one private Ballast GroundAttack2 GAB moves only
+contact-start2->6 and end6->11 inside its original17 samples, for visible windup.
+Crew budget8 total/4 live admits the1+1+2-cost trio. Patrol3/2 and hoist1/1 retain
+small pressure; native budgets/death callbacks handle replenishment.
+
+Mesh-only C->D proof: `mesh-equivalence.json` changes only Maw/Spore NSBMD.
+Code, configs, SCA/GMB/GAB, textures and every other resource remain exact.
+C's uncapped-health native-position duels clear Maw with Red kit, Spore with
+base Red, and Ballast with both Black base and Red kit. Healing is labelled;
+these prove combo/damage/real defeat, not difficulty. Early failed drivers
+remain: first never entered activation zone; second held Y after its first tap.
+Generate a fresh button set each frame so repeated presses have release edges.
+The corrected Black Ballast driver needed longer than2400 combat frames.
+
+D uses220/348/218 quads (Maw/Ballast/Spore). All cost<=4 compositions fit6144
+vertices with the largest370-quad room, native744-vertex Spidey and384-vertex
+prop/FX margin, before clipping/culling. No measured frame-rate claim follows.
+The earlier283/234-quad light meshes could exceed this conservative crowd
+budget. D's three real crew callbacks, Red-kit/Black no-refill hoist controls
+and production mixed fight pass. Mixed fight: all three species together,
+max4 live actors, native HP, no placements/caps, healed player, real callback
+at3966. It naturally selects Maw leap prep and `hLpr_LeapAttack` (new GMB IDs
+traced), in addition to both claw attacks. All30 Crane door cases,13 Midnight
+routes and374 tests pass on D; geometry/native-input terrain evidence inherits
+from exact0.17.0 room bytes. Normal playtest publication preserves latest DSV
+`ac9896ff` exactly (wrapper/checkpoint verified), retaining prior ROM/compositions.
+Sources: `crane_creatures.py`, `crane_creature_lab.py`; evidence in
+`work/crane-row/creatures/publication.json`; catalog `reference/crane_creatures.json`.
+Agent-tested, not player-confirmed; full-chapter duration/frame-rate unmeasured.
+
+#### Crane Row rework and reward correction (v0.19.0, 2026-10-16)
+
+Player rejects0.18.0 (2026-10-15): familiar enemies/sounds, no death tint,
+apparently absent XP/HP, sparse encounters, excessive signage/map text and
+coarse/repeated art. Prior healed duels did not qualify rewards. Sources and
+evidence: `work/crane-row/rework/`; final L is published/agent-tested.
+ROM9b2b948f, ARM9 9b04b02a; exact composition and limits in CHANGES.
+
+**Confirmed reward bug:** cloned84-byte configs copied ROM-time zero at+0x50.
+Native startup changes it to9 for Brute/type36 and16 for hostless20/21.
+Native lethal HP setter0x02049304 sets its once-only dead flag and passes
+config+0x50 to0x02049410. Factory RTTI at0x0212BA5C explicitly identifies
+`RewardSetSpewer(ERewardSetSpewerType_raw,ERewardSetType,Vector3,Enemy*)`.
+Thus+0x50 is **ERewardSetType**, not an animation/sound/model-group index.
+Private set31 now copies Brute set9's48-byte row at0x0211E808+9*48, retaining
+XP10..12 points (Q12 words at+16/+20) and native LP behavior. Its HP lower/upper
+words become1024/2048 (0.25..0.5 native health units). Native OrbHP's smallest
+threshold is1024 at0x02138AFC; no fractional-orb assumption is needed. Scoped
+getter0x020D1590 returns the private row only for31/in rooms96..107; other IDs/
+rooms keep the native prologue. Native tables remain exact. Old0.18.0
+controls show actual XP1850->1850 and no health recovery. B `70d9234d` Ballast
+gives1850->1862XP and3072 Q12 recovery with healing disabled. Revised idle1HP
+targets/real strikes isolate actual collection, not difficulty/AI. H's native
+Shaft arrivals/no-placement controls give Maw10XP/2048 HP and Spore12XP/2048 HP;
+J Ballast gives12XP/1024 HP, without player healing. Final L gives Maw10XP/1024HP
+and Spore10XP/1024HP. The paired native-arrival zero-set Ballast kill observes
+real death and awards0XP/0HP. Receipt names reward-*-escape-9b2b948f.json in
+work/crane-row/rework; final positive Ballast uses the corrected exit-safe driver.
+L Ballast exit-safe gives10XP/2048HP. All three species therefore collect both
+native currencies without healing. Positive Ballast receipt is reward-ballast-
+native-exit-safe-9b2b948f.json; its zero-set counterpart remains escape. Real
+currency is measured throughout.
+
+**Fixture correction:** broad-deck placements could retain the old lower-floor
+standing plane even after a jump: Spidey later stood at y-19 inside a rendered
+raised dock, while the orbs remained above it. Those zero-collection runs do
+not qualify drop behavior. Current reward lab uses native Shaft arrival and
+controller movement only, an idle1HP target, and logs player XY/state. Never
+attribute a missed pickup to the ROM before checking actual player placement.
+
+**Rejected E/F experiment: never ship these ROMs.**0x02145C54 is the camera;
+0x0207E5B0/5CC and distance-scaled0x02049FC0 control camera shake, **not rewards**.
+An incorrect inference added a death hook calling them in E/F; it is completely
+removed for G. F's observed rewards came from native RewardSetSpewer behavior,
+not that hook. Never name a function from adjacent effects: trace its consumer/
+RTTI and qualify paired controls before asserting meaning.
+**Currency is stats+0x44.** An early rework observation mistakenly called the
+changing+0x18 counter XP; corrected before acceptance. Do not repeat it.
+Reusable measurement: `tools/crane_reward_lab.py`; no real-save writes.
+
+**Death colour:** authored GPU streams emitted COLOR0x20 for every face,
+overwriting the engine's material tint. Face colours now live in a private
+RGB555 texture atlas; authored streams emit texcoords, matrices and vertices,
+leaving COLOR to the native renderer. A's actual lethal-hit capture visibly
+darkens Maw (`death-a-sheet.png`). Native rig/SBC/node bytes remain intact.
+All154 SCA routes (Maw57/Ballast39/Spore58) now use authored species poses,
+including hit reactions, bindings, air and death. Earlier47-route coverage
+left recognizable humanoid reactions/death. Native AI still underlies these
+creatures; do not claim a new AI framework. Attack GAB timing stays intact
+except the previously qualified fast slam.
+
+**Sound pipeline:** `tools/sdat.py` frames SDAT losslessly and preserves opaque
+SYMB/INFO/headers/padding and untouched files. FAT sizes include padding while
+SSAR/SBNK/SWAR internal lengths exclude it. Never equate those sizes. Insert
+new indexed rows, relocate existing offsets and retain payload bytes exactly;
+whole32-byte file growth retains native following-file alignment. Three native
+files (SSAR0, SFX bank20, wave archive0) each grow582->597 entries. No native
+sound ID/sample/instrument/sequence is replaced.15 deterministic original
+11025Hz PCM8 voices cover alert/attack/death/hurt/idle for three species.
+SSAR events use instrument VLQ, unity-key60, velocity110, duration0 (native
+one-shot convention), endFF. New file growth64608 bytes. `ndspy4.2.0` in ignored
+work/runtime independently reads all597 entries; production uses stdlib only.
+
+`crane_audio.adapter` scopes the normal sound-start prologue0x0203D5E4 to
+rooms96..107, remapping Brute306..328, Hostless457..479, Leaper480..501 to
+private582..596. Input bounds run before this hook, so native582-count guards
+stay untouched. Other sounds/rooms execute the original push/continuation with
+their original args/registers/CPSR. Five audio integrity/ARM tests pass. F's
+post-remap probes observe Maw attack/death593/594 and Ballast583/584 reaching
+the sound engine. The ranged chassis supplied no vocal request during its
+reward control. G adds an exact private-Spore/controller-type guard at state
+entry0x02077844:15/16 attack588,28/29 hurt590,53 death589. It constructs/plays/
+destroys a native sound handle like OBJ opcode22. Those cues/native fallback are qualified. PCM capture uses the optional lab audio sink.
+Final L counters observe all three private death IDs. Recorded mix waveform
+matches Spore0.868/Ballast0.304. Maw's broadband hiss is sensitive to native
+pitch and aliasing: naive unfiltered4x mono diagnostic scored0.110 (retained as
+a failed diagnostic). Identical2kHz anti-alias filters and a0.65..1.4 pitch scan
+match0.234 at0.77 pitch/7.772s, near the actual lethal hit. This independently
+proves its authored wave rendered, rather than assuming a call counter proves
+sound. Reports audio-render-proof-l.json and maw-pcm-filtered.json; WAVs stay
+ignored. Preserve native caller pitch/pan arguments.
+
+**Density:** old Freight/Dry Dock/Crown spawners ran only with clear flags0,
+leaving permanently empty saved revisits. Those earned flags still skip the
+objective crews; an independent callback-free patrol runs on cleared revisits.
+Engine/Shaft/Breakwater also gain patrols. Patrol total/live cost8/4, crews12/4,
+hoist opening1/1. Safe office/cache stay clear. Ordinary patrol activation boxes
+cover the room vertically/horizontally. Live cost ceiling stays4 for GPU budget;
+final native-HP Freight clear and capped Dry Dock/Crown callbacks pass. Floor-anchor height
+now reaches h-24 (hoist retains12), so shelves/roofs are eligible. I's copied
+earned-clear/native-arrival survey sees3..4 live foes in combat rooms and0 in
+Office/Cache. High Quay/Shaft entries initially still saw lower foes; delaying
+birth via zero live budget then restoring it did not fix placement.
+
+J splits Quay/Shaft/Gantry into lower and upper patrol zones. The upper spawner
+uses native Sewer table14; scoped goal selection supplies4 total/2 live cost
+only for14 in96/102/103 (Dry Dock14 remains its main crew). Other goals remain
+8/4 patrol,12/4 crew,1/1 hoist. Native global cost ceiling still4. Shaft high
+arrival now observes2 foes including y154. Quay's small high hatch landing is
+too close to the arriving hero; other legal upper anchors are far across the
+room. K adds a58-unit suspended loft x60..118,y64 for visible upper combat.
+L uses native spawn mode2 (with real empty completion callback) for those upper
+zones. Tracing0x02081D74 from0x02080620 shows mode2 selects central-sector mask0x10;
+normal offscreen weights repeatedly selected lower points. Empty upper callback
+writes no quest flags; finite4/2 upper wave retains global live cost4. L native
+high Quay arrival now sees2 foes y45..47 beside hero69. Keep actual spawn evidence
+distinct from anchor eligibility tests.
+
+**Controller lessons:** state9 is wall cling; ignored Up could strand a route
+against cargo. State29/GMB `spd_WebHangIdle` can result from repeated B below a
+dock; release with Down/B before resuming. These are lab-driver issues, not
+proof of broken doors. Native-input pursuit now handles wall routes to higher
+foes and moves horizontally when a nearby target is below. Mixed tests may
+use explicitly labelled60-unit max/healed player fixtures to avoid a driver
+death/minigame interrupt; they do not establish encounter difficulty. Low catwalks
+also require moving away before jumping: simply steering to an enemy above
+left the lab player directly below its platform. A periodic escape sweep fixes
+that driver. Jump before approaching an automatic ground exit when climbing to
+a high target; a failed Ballast reward fixture had walked back into Engine,
+and a failed Crown callback fixture walked into Gantry. Those original failed
+reports/RAM are retained; no production fault is inferred from them. The callback
+driver now returns through the actual connecting door if pursuit exits its arena.
+Crown then clears at2205 and opens upper return;42 frames use the native return
+navigator. Freight uses the stronger natural-HP mixed-clear proof (6019 frames,
+XP1850->2028). No actor placements in these controls. All30 final Crane doors,
+13 Midnight routes,11 patrol probes,8 progression/boss controls and three actual
+reward controls plus zero control pass. Publication preserves latest battery
+3d21ee63/634 bytes exactly, including DSV wrapper and checkpoint round trip.
+
+**Art/navigation:** outdoor destination/action boards removed; a4-unit X glyph
+marks high hatches. Detail captions and most map labels/legend removed; one
+short goal line, landmark icons, true ports and matching loop letters remain.
+First-visit/clear speech bubbles are removed: they blocked movement during
+encounters (state75); full route details stay on Objectives. A small painted
+bolt marks the Engine lever. New64px
+steel/deck/cargo/wood use sparse low-contrast wear. Original painted panorama
+is `reference/art/crane-harbor-v1.png`, built-in ImageGen prompt/provenance in
+the sibling JSON; technical RGB555 encoding is deterministic and build-read
+from its sibling binary. Three256x128/256-colour panels cover672x224 world
+units at z-170, with no repeated cycling pictures. Inspect at actual DS size.
+Git must treat *.rgb555 as binary: a dark palette may have no NUL in Git's
+initial probe, causing text/CRLF handling. .gitattributes disables conversion;
+staged bytes equal79093a67 SHA256 exactly. Never normalize raw texture words.
+All29 exits and36 ceilings/corners reviewed on E (`repair/rework-e/`), inheriting
+through exact art bytes. Collision/doors/anchors remain exact.384-test suite E
+passes. Final L suite387 passes; expanded ARM/native-input telemetry regressions
+also pass9 tests. All13 Midnight native routes and11 arrival/revisit patrol
+observations pass on L. Art/UI QA rework/ui-review-l.png shows all four map and
+Objectives phases, upper Quay loft and no destination boards. Engine lever is
+visually reviewed in walk-control-gates/frame-03300.png; native Pier Objectives
+still displays its original goal. Final receipts live in rework/publication.json.
 
 ### Native parent-area maps
 

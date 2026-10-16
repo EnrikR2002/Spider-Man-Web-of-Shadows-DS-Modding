@@ -147,7 +147,7 @@ class CraneBuildTests(unittest.TestCase):
         cls.arm,cls.assets=parts(cls.rom);cls.old_arm,cls.old_assets=parts(cls.parent)
 
     def test_original_chapter_and_every_unrelated_asset_are_exact(self):
-        allowed={'Pier_Save02_app.obj','English.strings','American.strings','GlobFiles.txt'}
+        allowed={'Pier_Save02_app.obj','English.strings','American.strings','GlobFiles.txt','model_sheet.xbd'}
         for n,b in self.old_assets.items():
             if n not in allowed:self.assertEqual(self.assets[n],b,n)
         start=kit.SOURCE+kit.RESERVE;end=start+ch.ML_SPACE
@@ -163,6 +163,52 @@ class CraneBuildTests(unittest.TestCase):
             pointer=w.u32(self.arm,at+i*4)
             descriptor=kit.SOURCE+pointer-kit.TARGET
             self.assertEqual(w.u32(self.arm,descriptor+0x28),6)
+
+    def test_appended_creature_groups_and_private_records_preserve_native_groups(self):
+        from tools.actor_resources import ModelSheet
+        from tools import crane_creatures as creatures
+        old=ModelSheet.parse(self.old_assets['model_sheet.xbd']);new=ModelSheet.parse(self.assets['model_sheet.xbd'])
+        self.assertEqual(new.groups[:len(old.groups)],old.groups)
+        self.assertEqual(len(new.groups),len(old.groups)+3)
+        runtime=self.report['creatures']['runtime']
+        self.assertEqual(runtime['scope'],list(range(96,108)))
+        for spec in creatures.CREATURES:
+            at=kit.SOURCE+runtime['configs'][spec.key]-kit.TARGET
+            self.assertEqual(w.u32(self.arm,at+8),runtime['groups'][spec.key])
+            self.assertEqual(w.u32(self.arm,at),spec.cost*4096)
+        for site in (creatures.CONFIG_SITE,creatures.VARIANT_CALL,creatures.GOAL_CALL):
+            address=r.target(site,w.u32(self.arm,site-r.BASE))
+            self.assertTrue(r.CR_BASE<=address<r.CR_BASE+self.report['table_bytes'])
+
+    def test_navigation_hooks_reference_owned_goal_strings_and_fit_reservation(self):
+        from tools import crane_navigation as nav
+        for site in (nav.SCREEN_SITE,nav.OBJECTIVE_SITE):
+            word=w.u32(self.arm,site-r.BASE)
+            self.assertEqual(bool(word&0x01000000),site==nav.OBJECTIVE_SITE)
+            pointer=r.target(site,word)
+            self.assertTrue(r.CR_BASE<=pointer<r.CR_BASE+self.report['table_bytes'])
+        pointer=r.target(nav.OBJECTIVE_SITE,w.u32(self.arm,nav.OBJECTIVE_SITE-r.BASE))
+        at=kit.SOURCE+pointer-kit.TARGET
+        code=nav.objective_adapter(pointer,0)
+        # All four literal pointers must resolve to private title/body pairs.
+        found=[]
+        for i in range(0,len(code),4):
+            word=w.u32(code,i)
+            if word&0xFFFFF000!=0xE59F2000:continue
+            address=w.u32(self.arm,at+i+8+(word&0xFFF))
+            if address==0x02145C5C:continue
+            self.assertTrue(r.CR_BASE<=address<r.CR_BASE+self.report['table_bytes']-7)
+            pair=kit.SOURCE+address-kit.TARGET
+            title,body=struct.unpack_from('<2I',self.arm,pair)
+            from tools.qol_suits_menu import decode_grown
+            titles=nav.GOAL_TITLES
+            decoded=decode_grown(self.assets['English.strings'],title)
+            self.assertIn(decoded,titles)
+            found.append(decoded)
+            self.assertEqual(decode_grown(self.assets['English.strings'],body),c.LINES[nav.GOAL_BODIES[titles.index(decoded)]])
+        self.assertCountEqual(found,nav.GOAL_TITLES)
+        self.assertLessEqual(self.report['table_bytes'],r.CR_SPACE)
+        self.assertLess(max(m['id'] for m in self.report['messages'].values()),256)
 
     def test_all_models_textures_bsp_and_objects_roundtrip(self):
         for n in c.NAMES:

@@ -41,6 +41,19 @@ def sample(ram: bytes):
             m = struct.unpack_from('<I', ram, a + 0x30)[0] - BASE
             return 0 <= m <= len(ram) - 4 and struct.unpack_from('<I', ram, m)[0] == a + BASE
         candidates = [a for a in candidates if owned(a)]
+    if len(candidates) > 1:
+        # A freed motion can retain its owner too. Its controller has been
+        # released/reused; require the native controller's type and back-link
+        # when those motion links alone still leave multiple actor layouts.
+        def controlled(a):
+            m = struct.unpack_from('<I', ram, a + 0x30)[0] - BASE
+            if not 0 <= m <= len(ram) - 0x1FC: return False
+            c = struct.unpack_from('<I', ram, m + 0x1F8)[0] - BASE
+            return (c % 4 == 0 and 0 <= c <= len(ram) - 0x48
+                    and struct.unpack_from('<I', ram, c)[0] == CONTROLLER_VTABLE
+                    and struct.unpack_from('<I', ram, c + 0x44)[0] == a + BASE)
+        active = [a for a in candidates if controlled(a)]
+        if active: candidates = active
     if len(candidates) != 1: raise ValueError(f'Expected one live Spidey layout, found {len(candidates)}')
     actor = candidates[0]
     motion = struct.unpack_from('<I', ram, actor+0x30)[0] - BASE

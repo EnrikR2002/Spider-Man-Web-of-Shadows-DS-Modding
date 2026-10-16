@@ -1,0 +1,1475 @@
+{
+  "arm9_sha256": "9b04b02a74cd634901c1435a5bb7708c073c127467cc9971b3bc9a5d1c6a10e3",
+  "audio": {
+    "count": 15,
+    "first": 582,
+    "native_files_preserved": true,
+    "ranges": [
+      [
+        306,
+        310
+      ],
+      [
+        311,
+        315
+      ],
+      [
+        316,
+        318
+      ],
+      [
+        319,
+        323
+      ],
+      [
+        324,
+        328
+      ],
+      [
+        457,
+        461
+      ],
+      [
+        462,
+        466
+      ],
+      [
+        467,
+        469
+      ],
+      [
+        470,
+        474
+      ],
+      [
+        475,
+        479
+      ],
+      [
+        480,
+        484
+      ],
+      [
+        485,
+        489
+      ],
+      [
+        490,
+        492
+      ],
+      [
+        493,
+        497
+      ],
+      [
+        498,
+        501
+      ]
+    ],
+    "sample_rate": 11025,
+    "voices": [
+      "ballast_alert",
+      "ballast_attack",
+      "ballast_death",
+      "ballast_hurt",
+      "ballast_idle",
+      "spore_alert",
+      "spore_attack",
+      "spore_death",
+      "spore_hurt",
+      "spore_idle",
+      "maw_alert",
+      "maw_attack",
+      "maw_death",
+      "maw_hurt",
+      "maw_idle"
+    ]
+  },
+  "creatures": {
+    "ballast": {
+      "clips": [
+        {
+          "authored": "zz_CR_ballast_brt_BlockIdle.sca",
+          "contact_end": 6,
+          "contact_start": 3,
+          "frames": 7,
+          "mode": "idle",
+          "source": "brt_BlockIdle.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_BlockImpact.sca",
+          "contact_end": 9,
+          "contact_start": 5,
+          "frames": 13,
+          "mode": "hurt",
+          "source": "brt_BlockImpact.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_BreakingOutOfGrapple.sca",
+          "contact_end": 10,
+          "contact_start": 6,
+          "frames": 15,
+          "mode": "bound",
+          "source": "brt_BreakingOutOfGrapple.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_Die.sca",
+          "contact_end": 10,
+          "contact_start": 6,
+          "frames": 16,
+          "mode": "die",
+          "source": "brt_Die.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_DropDownAttack.sca",
+          "contact_end": 7,
+          "contact_start": 2,
+          "frames": 15,
+          "mode": "slam",
+          "source": "brt_DropDownAttack.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_Fall.sca",
+          "contact_end": 13,
+          "contact_start": 9,
+          "frames": 22,
+          "mode": "air",
+          "source": "brt_Fall.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_GrappledByWeb.sca",
+          "contact_end": 21,
+          "contact_start": 17,
+          "frames": 43,
+          "mode": "bound",
+          "source": "brt_GrappledByWeb.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_GrappledByWebAlt1.sca",
+          "contact_end": 16,
+          "contact_start": 12,
+          "frames": 30,
+          "mode": "bound",
+          "source": "brt_GrappledByWebAlt1.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_GroundAttack1.sca",
+          "contact_end": 12,
+          "contact_start": 6,
+          "frames": 37,
+          "mode": "attack",
+          "source": "brt_GroundAttack1.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_GroundAttack2.sca",
+          "contact_end": 11,
+          "contact_start": 6,
+          "frames": 17,
+          "mode": "slam",
+          "source": "brt_GroundAttack2.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_GroundRangedAttack1.sca",
+          "contact_end": 7,
+          "contact_start": 3,
+          "frames": 21,
+          "mode": "attack",
+          "source": "brt_GroundRangedAttack1.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HammerSlamLand.sca",
+          "contact_end": 14,
+          "contact_start": 10,
+          "frames": 25,
+          "mode": "land",
+          "source": "brt_HammerSlamLand.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtAirHitA.sca",
+          "contact_end": 4,
+          "contact_start": 2,
+          "frames": 5,
+          "mode": "hurt",
+          "source": "brt_HurtAirHitA.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtAirHitB.sca",
+          "contact_end": 4,
+          "contact_start": 2,
+          "frames": 5,
+          "mode": "hurt",
+          "source": "brt_HurtAirHitB.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtFall.sca",
+          "contact_end": 7,
+          "contact_start": 3,
+          "frames": 8,
+          "mode": "hurt",
+          "source": "brt_HurtFall.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtHitA.sca",
+          "contact_end": 10,
+          "contact_start": 6,
+          "frames": 16,
+          "mode": "hurt",
+          "source": "brt_HurtHitA.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtHitB.sca",
+          "contact_end": 9,
+          "contact_start": 5,
+          "frames": 12,
+          "mode": "hurt",
+          "source": "brt_HurtHitB.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtKnockBack.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "brt_HurtKnockBack.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtKnockBackFast.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "brt_HurtKnockBackFast.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtKnockDown.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "brt_HurtKnockDown.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtKnockFowardFast.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "brt_HurtKnockFowardFast.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtKnockUp.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "brt_HurtKnockUp.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtLand.sca",
+          "contact_end": 14,
+          "contact_start": 10,
+          "frames": 24,
+          "mode": "hurt",
+          "source": "brt_HurtLand.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtLandFaceToBack.sca",
+          "contact_end": 19,
+          "contact_start": 15,
+          "frames": 38,
+          "mode": "hurt",
+          "source": "brt_HurtLandFaceToBack.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtLandGetUp.sca",
+          "contact_end": 17,
+          "contact_start": 13,
+          "frames": 32,
+          "mode": "hurt",
+          "source": "brt_HurtLandGetUp.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtLandGetUpAttack1.sca",
+          "contact_end": 3,
+          "contact_start": 1,
+          "frames": 35,
+          "mode": "attack",
+          "source": "brt_HurtLandGetUpAttack1.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtLandHit.sca",
+          "contact_end": 8,
+          "contact_start": 4,
+          "frames": 10,
+          "mode": "hurt",
+          "source": "brt_HurtLandHit.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_HurtLandTumble.sca",
+          "contact_end": 20,
+          "contact_start": 16,
+          "frames": 39,
+          "mode": "hurt",
+          "source": "brt_HurtLandTumble.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_Idle.sca",
+          "contact_end": 23,
+          "contact_start": 19,
+          "frames": 47,
+          "mode": "idle",
+          "source": "brt_Idle.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_Jump.sca",
+          "contact_end": 7,
+          "contact_start": 3,
+          "frames": 8,
+          "mode": "air",
+          "source": "brt_Jump.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_JumpPrep.sca",
+          "contact_end": 3,
+          "contact_start": 2,
+          "frames": 4,
+          "mode": "air",
+          "source": "brt_JumpPrep.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_JumpStartForward.sca",
+          "contact_end": 3,
+          "contact_start": 2,
+          "frames": 4,
+          "mode": "air",
+          "source": "brt_JumpStartForward.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_JumpStartUp.sca",
+          "contact_end": 3,
+          "contact_start": 2,
+          "frames": 4,
+          "mode": "air",
+          "source": "brt_JumpStartUp.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_Land.sca",
+          "contact_end": 16,
+          "contact_start": 12,
+          "frames": 31,
+          "mode": "land",
+          "source": "brt_Land.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_NoticeSpidey.sca",
+          "contact_end": 18,
+          "contact_start": 14,
+          "frames": 36,
+          "mode": "idle",
+          "source": "brt_NoticeSpidey.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_Run.sca",
+          "contact_end": 14,
+          "contact_start": 10,
+          "frames": 24,
+          "mode": "run",
+          "source": "brt_Run.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_RunAttack.sca",
+          "contact_end": 3,
+          "contact_start": 1,
+          "frames": 13,
+          "mode": "charge",
+          "source": "brt_RunAttack.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_ThrowObject.sca",
+          "contact_end": 6,
+          "contact_start": 2,
+          "frames": 20,
+          "mode": "attack",
+          "source": "brt_ThrowObject.sca"
+        },
+        {
+          "authored": "zz_CR_ballast_brt_Walk.sca",
+          "contact_end": 21,
+          "contact_start": 17,
+          "frames": 43,
+          "mode": "walk",
+          "source": "brt_Walk.sca"
+        }
+      ],
+      "cost": 2,
+      "hp_before_room_dial": 14,
+      "joints": 28,
+      "model": "zz_CR_ballast.nsbmd",
+      "name": "Ballast Beast",
+      "native_chassis_kind": 36,
+      "quads": 348,
+      "slots": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        12,
+        13,
+        14,
+        19,
+        20,
+        21,
+        23,
+        24,
+        25
+      ],
+      "texture": "zz_CR_ballast.nsbtx",
+      "xbd": "zz_CR_ballast.xbd"
+    },
+    "maw": {
+      "clips": [
+        {
+          "authored": "zz_CR_maw_hm_BerserkerIdle.sca",
+          "contact_end": 30,
+          "contact_start": 26,
+          "frames": 66,
+          "mode": "idle",
+          "source": "hm_BerserkerIdle.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_BlockIdle.sca",
+          "contact_end": 5,
+          "contact_start": 2,
+          "frames": 6,
+          "mode": "idle",
+          "source": "hm_BlockIdle.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_BlockImpact.sca",
+          "contact_end": 9,
+          "contact_start": 5,
+          "frames": 13,
+          "mode": "hurt",
+          "source": "hm_BlockImpact.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_BreakingOutOfGrapple.sca",
+          "contact_end": 11,
+          "contact_start": 7,
+          "frames": 18,
+          "mode": "bound",
+          "source": "hm_BreakingOutOfGrapple.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_Burrow.sca",
+          "contact_end": 12,
+          "contact_start": 8,
+          "frames": 20,
+          "mode": "prep",
+          "source": "hm_Burrow.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_Crawl.sca",
+          "contact_end": 12,
+          "contact_start": 8,
+          "frames": 20,
+          "mode": "walk",
+          "source": "hm_Crawl.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_Die.sca",
+          "contact_end": 19,
+          "contact_start": 15,
+          "frames": 37,
+          "mode": "die",
+          "source": "hm_Die.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_DiveSlantKick.sca",
+          "contact_end": 11,
+          "contact_start": 3,
+          "frames": 17,
+          "mode": "attack",
+          "source": "hm_DiveSlantKick.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_DropDownAttack.sca",
+          "contact_end": 13,
+          "contact_start": 3,
+          "frames": 20,
+          "mode": "attack",
+          "source": "hm_DropDownAttack.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_Duck.sca",
+          "contact_end": 14,
+          "contact_start": 10,
+          "frames": 24,
+          "mode": "prep",
+          "source": "hm_Duck.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_DuckAttack.sca",
+          "contact_end": 12,
+          "contact_start": 7,
+          "frames": 38,
+          "mode": "attack",
+          "source": "hm_DuckAttack.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_Emerge.sca",
+          "contact_end": 12,
+          "contact_start": 8,
+          "frames": 21,
+          "mode": "idle",
+          "source": "hm_Emerge.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_EmergeAttack.sca",
+          "contact_end": 13,
+          "contact_start": 9,
+          "frames": 23,
+          "mode": "attack",
+          "source": "hm_EmergeAttack.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_Explode.sca",
+          "contact_end": 29,
+          "contact_start": 25,
+          "frames": 62,
+          "mode": "die",
+          "source": "hm_Explode.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_Fall.sca",
+          "contact_end": 7,
+          "contact_start": 3,
+          "frames": 8,
+          "mode": "air",
+          "source": "hm_Fall.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_Fly.sca",
+          "contact_end": 18,
+          "contact_start": 14,
+          "frames": 34,
+          "mode": "air",
+          "source": "hm_Fly.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_GettingPossessed.sca",
+          "contact_end": 19,
+          "contact_start": 15,
+          "frames": 38,
+          "mode": "hurt",
+          "source": "hm_GettingPossessed.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_GrappledByWeb.sca",
+          "contact_end": 23,
+          "contact_start": 19,
+          "frames": 48,
+          "mode": "bound",
+          "source": "hm_GrappledByWeb.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hLpr_GrappledByWebAlt1.sca",
+          "contact_end": 12,
+          "contact_start": 8,
+          "frames": 21,
+          "mode": "bound",
+          "source": "hLpr_GrappledByWebAlt1.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_GroundAttack1.sca",
+          "contact_end": 8,
+          "contact_start": 5,
+          "frames": 27,
+          "mode": "attack",
+          "source": "hm_GroundAttack1.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_GroundAttack2.sca",
+          "contact_end": 15,
+          "contact_start": 9,
+          "frames": 31,
+          "mode": "backhand",
+          "source": "hm_GroundAttack2.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_GroundAttackCombo.sca",
+          "contact_end": 14,
+          "contact_start": 4,
+          "frames": 78,
+          "mode": "attack",
+          "source": "hm_GroundAttackCombo.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_GroundAttackStrong1.sca",
+          "contact_end": 12,
+          "contact_start": 10,
+          "frames": 33,
+          "mode": "attack",
+          "source": "hm_GroundAttackStrong1.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_GroundAttackStrong2.sca",
+          "contact_end": 15,
+          "contact_start": 9,
+          "frames": 31,
+          "mode": "attack",
+          "source": "hm_GroundAttackStrong2.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_GroundRangedAttack1.sca",
+          "contact_end": 25,
+          "contact_start": 21,
+          "frames": 65,
+          "mode": "attack",
+          "source": "hm_GroundRangedAttack1.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtAirHitA.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtAirHitA.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtAirHitB.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtAirHitB.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtFall.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtFall.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtHitA.sca",
+          "contact_end": 8,
+          "contact_start": 4,
+          "frames": 10,
+          "mode": "hurt",
+          "source": "hm_HurtHitA.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtHitB.sca",
+          "contact_end": 8,
+          "contact_start": 4,
+          "frames": 10,
+          "mode": "hurt",
+          "source": "hm_HurtHitB.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtKnockBack.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtKnockBack.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtKnockBackFast.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtKnockBackFast.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtKnockDown.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtKnockDown.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtKnockFowardFast.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtKnockFowardFast.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtKnockUp.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtKnockUp.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtLand.sca",
+          "contact_end": 14,
+          "contact_start": 10,
+          "frames": 26,
+          "mode": "hurt",
+          "source": "hm_HurtLand.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtLandFaceToBack.sca",
+          "contact_end": 15,
+          "contact_start": 11,
+          "frames": 28,
+          "mode": "hurt",
+          "source": "hm_HurtLandFaceToBack.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtLandGetUp.sca",
+          "contact_end": 19,
+          "contact_start": 15,
+          "frames": 37,
+          "mode": "hurt",
+          "source": "hm_HurtLandGetUp.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtLandGetUpAttack1.sca",
+          "contact_end": 14,
+          "contact_start": 9,
+          "frames": 20,
+          "mode": "attack",
+          "source": "hm_HurtLandGetUpAttack1.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtLandHit.sca",
+          "contact_end": 9,
+          "contact_start": 5,
+          "frames": 12,
+          "mode": "hurt",
+          "source": "hm_HurtLandHit.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtLandTumble.sca",
+          "contact_end": 18,
+          "contact_start": 14,
+          "frames": 36,
+          "mode": "hurt",
+          "source": "hm_HurtLandTumble.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_HurtLandTumbleAlt1.sca",
+          "contact_end": 27,
+          "contact_start": 23,
+          "frames": 57,
+          "mode": "hurt",
+          "source": "hm_HurtLandTumbleAlt1.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hLpr_Idle.sca",
+          "contact_end": 28,
+          "contact_start": 24,
+          "frames": 59,
+          "mode": "idle",
+          "source": "hLpr_Idle.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_Jump.sca",
+          "contact_end": 7,
+          "contact_start": 3,
+          "frames": 8,
+          "mode": "air",
+          "source": "hm_Jump.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_JumpPrep.sca",
+          "contact_end": 4,
+          "contact_start": 2,
+          "frames": 5,
+          "mode": "air",
+          "source": "hm_JumpPrep.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_JumpStartForward.sca",
+          "contact_end": 5,
+          "contact_start": 2,
+          "frames": 6,
+          "mode": "air",
+          "source": "hm_JumpStartForward.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_JumpStartUp.sca",
+          "contact_end": 5,
+          "contact_start": 2,
+          "frames": 6,
+          "mode": "air",
+          "source": "hm_JumpStartUp.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_Land.sca",
+          "contact_end": 17,
+          "contact_start": 13,
+          "frames": 33,
+          "mode": "land",
+          "source": "hm_Land.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hLpr_LeapAttack.sca",
+          "contact_end": 6,
+          "contact_start": 2,
+          "frames": 47,
+          "mode": "leap",
+          "source": "hLpr_LeapAttack.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_LeapAttackPrep.sca",
+          "contact_end": 34,
+          "contact_start": 30,
+          "frames": 76,
+          "mode": "prep",
+          "source": "hm_LeapAttackPrep.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_NoticeSpidey.sca",
+          "contact_end": 20,
+          "contact_start": 16,
+          "frames": 41,
+          "mode": "idle",
+          "source": "hm_NoticeSpidey.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hLpr_Run.sca",
+          "contact_end": 13,
+          "contact_start": 9,
+          "frames": 22,
+          "mode": "run",
+          "source": "hLpr_Run.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_SproutWings.sca",
+          "contact_end": 12,
+          "contact_start": 8,
+          "frames": 21,
+          "mode": "air",
+          "source": "hm_SproutWings.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_ThrowIchorDown.sca",
+          "contact_end": 11,
+          "contact_start": 7,
+          "frames": 18,
+          "mode": "attack",
+          "source": "hm_ThrowIchorDown.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_ThrowIchorSlant.sca",
+          "contact_end": 11,
+          "contact_start": 7,
+          "frames": 18,
+          "mode": "attack",
+          "source": "hm_ThrowIchorSlant.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hLpr_Walk.sca",
+          "contact_end": 13,
+          "contact_start": 9,
+          "frames": 22,
+          "mode": "walk",
+          "source": "hLpr_Walk.sca"
+        },
+        {
+          "authored": "zz_CR_maw_hm_WallJumpAttack.sca",
+          "contact_end": 16,
+          "contact_start": 12,
+          "frames": 31,
+          "mode": "attack",
+          "source": "hm_WallJumpAttack.sca"
+        }
+      ],
+      "cost": 1,
+      "hp_before_room_dial": 10,
+      "joints": 28,
+      "model": "zz_CR_maw.nsbmd",
+      "name": "Mooring Maw",
+      "native_chassis_kind": 21,
+      "quads": 220,
+      "slots": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        11,
+        12,
+        13,
+        18,
+        19,
+        20,
+        22,
+        23,
+        24
+      ],
+      "texture": "zz_CR_maw.nsbtx",
+      "xbd": "zz_CR_maw.xbd"
+    },
+    "spore": {
+      "clips": [
+        {
+          "authored": "zz_CR_spore_hm_BerserkerIdle.sca",
+          "contact_end": 30,
+          "contact_start": 26,
+          "frames": 66,
+          "mode": "idle",
+          "source": "hm_BerserkerIdle.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_BlockIdle.sca",
+          "contact_end": 5,
+          "contact_start": 2,
+          "frames": 6,
+          "mode": "idle",
+          "source": "hm_BlockIdle.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_BlockImpact.sca",
+          "contact_end": 9,
+          "contact_start": 5,
+          "frames": 13,
+          "mode": "hurt",
+          "source": "hm_BlockImpact.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_BreakingOutOfGrapple.sca",
+          "contact_end": 11,
+          "contact_start": 7,
+          "frames": 18,
+          "mode": "bound",
+          "source": "hm_BreakingOutOfGrapple.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_Burrow.sca",
+          "contact_end": 12,
+          "contact_start": 8,
+          "frames": 20,
+          "mode": "prep",
+          "source": "hm_Burrow.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_Crawl.sca",
+          "contact_end": 12,
+          "contact_start": 8,
+          "frames": 20,
+          "mode": "walk",
+          "source": "hm_Crawl.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_Die.sca",
+          "contact_end": 19,
+          "contact_start": 15,
+          "frames": 37,
+          "mode": "die",
+          "source": "hm_Die.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_DiveSlantKick.sca",
+          "contact_end": 11,
+          "contact_start": 7,
+          "frames": 17,
+          "mode": "attack",
+          "source": "hm_DiveSlantKick.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_DropDownAttack.sca",
+          "contact_end": 12,
+          "contact_start": 8,
+          "frames": 20,
+          "mode": "attack",
+          "source": "hm_DropDownAttack.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_Duck.sca",
+          "contact_end": 14,
+          "contact_start": 10,
+          "frames": 24,
+          "mode": "prep",
+          "source": "hm_Duck.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_DuckAttack.sca",
+          "contact_end": 12,
+          "contact_start": 7,
+          "frames": 38,
+          "mode": "attack",
+          "source": "hm_DuckAttack.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_Emerge.sca",
+          "contact_end": 12,
+          "contact_start": 8,
+          "frames": 21,
+          "mode": "idle",
+          "source": "hm_Emerge.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_EmergeAttack.sca",
+          "contact_end": 13,
+          "contact_start": 9,
+          "frames": 23,
+          "mode": "attack",
+          "source": "hm_EmergeAttack.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_Explode.sca",
+          "contact_end": 29,
+          "contact_start": 25,
+          "frames": 62,
+          "mode": "die",
+          "source": "hm_Explode.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_ExplodePrep.sca",
+          "contact_end": 29,
+          "contact_start": 25,
+          "frames": 62,
+          "mode": "prep",
+          "source": "hm_ExplodePrep.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_Fall.sca",
+          "contact_end": 7,
+          "contact_start": 3,
+          "frames": 8,
+          "mode": "air",
+          "source": "hm_Fall.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_Fly.sca",
+          "contact_end": 18,
+          "contact_start": 14,
+          "frames": 34,
+          "mode": "air",
+          "source": "hm_Fly.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_GettingPossessed.sca",
+          "contact_end": 19,
+          "contact_start": 15,
+          "frames": 38,
+          "mode": "hurt",
+          "source": "hm_GettingPossessed.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_GrappledByWeb.sca",
+          "contact_end": 23,
+          "contact_start": 19,
+          "frames": 48,
+          "mode": "bound",
+          "source": "hm_GrappledByWeb.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_GrappledByWebAlt1.sca",
+          "contact_end": 13,
+          "contact_start": 9,
+          "frames": 22,
+          "mode": "bound",
+          "source": "hm_GrappledByWebAlt1.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_GroundAttack1.sca",
+          "contact_end": 8,
+          "contact_start": 5,
+          "frames": 27,
+          "mode": "attack",
+          "source": "hm_GroundAttack1.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_GroundAttack2.sca",
+          "contact_end": 15,
+          "contact_start": 9,
+          "frames": 31,
+          "mode": "attack",
+          "source": "hm_GroundAttack2.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_GroundAttackCombo.sca",
+          "contact_end": 14,
+          "contact_start": 4,
+          "frames": 78,
+          "mode": "attack",
+          "source": "hm_GroundAttackCombo.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_GroundAttackStrong1.sca",
+          "contact_end": 12,
+          "contact_start": 10,
+          "frames": 33,
+          "mode": "attack",
+          "source": "hm_GroundAttackStrong1.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_GroundAttackStrong2.sca",
+          "contact_end": 15,
+          "contact_start": 9,
+          "frames": 31,
+          "mode": "attack",
+          "source": "hm_GroundAttackStrong2.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hRng_GroundRangedAttack1.sca",
+          "contact_end": 10,
+          "contact_start": 6,
+          "frames": 15,
+          "mode": "spit",
+          "source": "hRng_GroundRangedAttack1.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtAirHitA.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtAirHitA.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtAirHitB.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtAirHitB.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtFall.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtFall.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtHitA.sca",
+          "contact_end": 8,
+          "contact_start": 4,
+          "frames": 10,
+          "mode": "hurt",
+          "source": "hm_HurtHitA.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtHitB.sca",
+          "contact_end": 8,
+          "contact_start": 4,
+          "frames": 10,
+          "mode": "hurt",
+          "source": "hm_HurtHitB.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtKnockBack.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtKnockBack.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtKnockBackFast.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtKnockBackFast.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtKnockDown.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtKnockDown.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtKnockFowardFast.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtKnockFowardFast.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtKnockUp.sca",
+          "contact_end": 2,
+          "contact_start": 2,
+          "frames": 3,
+          "mode": "hurt",
+          "source": "hm_HurtKnockUp.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtLand.sca",
+          "contact_end": 14,
+          "contact_start": 10,
+          "frames": 26,
+          "mode": "hurt",
+          "source": "hm_HurtLand.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtLandFaceToBack.sca",
+          "contact_end": 15,
+          "contact_start": 11,
+          "frames": 28,
+          "mode": "hurt",
+          "source": "hm_HurtLandFaceToBack.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtLandGetUp.sca",
+          "contact_end": 19,
+          "contact_start": 15,
+          "frames": 37,
+          "mode": "hurt",
+          "source": "hm_HurtLandGetUp.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtLandGetUpAttack1.sca",
+          "contact_end": 14,
+          "contact_start": 9,
+          "frames": 20,
+          "mode": "attack",
+          "source": "hm_HurtLandGetUpAttack1.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtLandHit.sca",
+          "contact_end": 9,
+          "contact_start": 5,
+          "frames": 12,
+          "mode": "hurt",
+          "source": "hm_HurtLandHit.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtLandTumble.sca",
+          "contact_end": 18,
+          "contact_start": 14,
+          "frames": 36,
+          "mode": "hurt",
+          "source": "hm_HurtLandTumble.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_HurtLandTumbleAlt1.sca",
+          "contact_end": 27,
+          "contact_start": 23,
+          "frames": 57,
+          "mode": "hurt",
+          "source": "hm_HurtLandTumbleAlt1.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hRng_Idle.sca",
+          "contact_end": 24,
+          "contact_start": 20,
+          "frames": 49,
+          "mode": "idle",
+          "source": "hRng_Idle.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_Jump.sca",
+          "contact_end": 7,
+          "contact_start": 3,
+          "frames": 8,
+          "mode": "air",
+          "source": "hm_Jump.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_JumpPrep.sca",
+          "contact_end": 4,
+          "contact_start": 2,
+          "frames": 5,
+          "mode": "air",
+          "source": "hm_JumpPrep.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_JumpStartForward.sca",
+          "contact_end": 5,
+          "contact_start": 2,
+          "frames": 6,
+          "mode": "air",
+          "source": "hm_JumpStartForward.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_JumpStartUp.sca",
+          "contact_end": 5,
+          "contact_start": 2,
+          "frames": 6,
+          "mode": "air",
+          "source": "hm_JumpStartUp.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_Land.sca",
+          "contact_end": 17,
+          "contact_start": 13,
+          "frames": 33,
+          "mode": "land",
+          "source": "hm_Land.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_LeapAttack.sca",
+          "contact_end": 5,
+          "contact_start": 1,
+          "frames": 33,
+          "mode": "attack",
+          "source": "hm_LeapAttack.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_LeapAttackPrep.sca",
+          "contact_end": 34,
+          "contact_start": 30,
+          "frames": 76,
+          "mode": "attack",
+          "source": "hm_LeapAttackPrep.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_NoticeSpidey.sca",
+          "contact_end": 20,
+          "contact_start": 16,
+          "frames": 41,
+          "mode": "idle",
+          "source": "hm_NoticeSpidey.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hRng_Run.sca",
+          "contact_end": 13,
+          "contact_start": 9,
+          "frames": 22,
+          "mode": "run",
+          "source": "hRng_Run.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_SproutWings.sca",
+          "contact_end": 12,
+          "contact_start": 8,
+          "frames": 21,
+          "mode": "air",
+          "source": "hm_SproutWings.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_ThrowIchorDown.sca",
+          "contact_end": 11,
+          "contact_start": 7,
+          "frames": 18,
+          "mode": "attack",
+          "source": "hm_ThrowIchorDown.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_ThrowIchorSlant.sca",
+          "contact_end": 11,
+          "contact_start": 7,
+          "frames": 18,
+          "mode": "attack",
+          "source": "hm_ThrowIchorSlant.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hRng_Walk.sca",
+          "contact_end": 24,
+          "contact_start": 20,
+          "frames": 49,
+          "mode": "walk",
+          "source": "hRng_Walk.sca"
+        },
+        {
+          "authored": "zz_CR_spore_hm_WallJumpAttack.sca",
+          "contact_end": 16,
+          "contact_start": 12,
+          "frames": 31,
+          "mode": "attack",
+          "source": "hm_WallJumpAttack.sca"
+        }
+      ],
+      "cost": 1,
+      "hp_before_room_dial": 7,
+      "joints": 28,
+      "model": "zz_CR_spore.nsbmd",
+      "name": "Lantern Spore",
+      "native_chassis_kind": 20,
+      "quads": 218,
+      "slots": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        11,
+        12,
+        13,
+        18,
+        19,
+        20,
+        22,
+        23,
+        24
+      ],
+      "texture": "zz_CR_spore.nsbtx",
+      "xbd": "zz_CR_spore.xbd"
+    }
+  },
+  "limits": "Agent-tested; player fun and frame-rate unmeasured. Native rigs/AI retained. Natural-HP mixed fight uses an explicitly healed60-unit player; crew callback controls cap foes1HP. Reward controls use idle1HP foes with no healing; zero-set is paired. No actor placements in those fights. Separate hoist wins use no refills and copied purchased abilities. UI/art poses suppress births and use labelled held positions; they do not prove traversal.",
+  "native_framework": "Native rigs, AI/controllers, movement, attack contact events (except private fast slam), spawner/death/reward engines. Original meshes, full authored motion, private configs/budgets/reward set, and voices.",
+  "player_confirmed": false,
+  "qualification": "work/crane-row/rework/publication.json",
+  "rom_sha256": "9b2b948f6030a60246a0ca9ae477ae51c22f4aa349645fb2c6cef367c4557582",
+  "runtime": {
+    "adapters": {
+      "config": 34970760,
+      "goal": 34971076,
+      "reward": 34971324,
+      "variant": 34970900
+    },
+    "configs": {
+      "ballast": 34970440,
+      "maw": 34970356,
+      "spore": 34970524
+    },
+    "goals": {
+      "crew": 34970632,
+      "opening": 34970656,
+      "patrol": 34970608,
+      "upper": 34970680
+    },
+    "groups": {
+      "ballast": 183,
+      "maw": 182,
+      "spore": 184
+    },
+    "native_ai_framework": true,
+    "reward": 34970704,
+    "scope": [
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107
+    ],
+    "state": 34970752
+  },
+  "schema_version": 1,
+  "scope": [
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107
+  ],
+  "status": "published_agent_tested",
+  "version": "0.19.0"
+}

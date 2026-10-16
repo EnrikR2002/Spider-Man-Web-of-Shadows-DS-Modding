@@ -276,7 +276,11 @@ def message_id(key):
 
 
 def say(key, frames=0):
-    """0x15 operand: u16 display time (0 = native default), message id, lookup flag, continuation group."""
+    """0x15: duration in seconds, message id, lookup flag, continuation group.
+
+    `frames` is the legacy keyword; the native handler multiplies it by30
+    world updates. Zero retains the existing native default behaviour.
+    """
     return Command(MESSAGE, struct.pack('<HBBBxxx', frames, message_id(key), 0, 0))
 
 

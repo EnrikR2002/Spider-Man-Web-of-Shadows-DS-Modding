@@ -163,5 +163,23 @@ class RoomCollisionTests(unittest.TestCase):
         with self.assertRaises(ValueError): compile_boxes([(0, 0, 0, 5)])
         with self.assertRaises(ValueError): compile_boxes([(-INF, -INF, INF, INF)])
 
+    def test_adjacent_solid_children_retain_union_and_surface_faces(self):
+        from tools.room_collision import compile_boxes
+        import random
+        # Minimized from a broken dock with a stack touching its deck. The
+        # former writer recursed into an already-solid back child and failed.
+        boxes=[(80,-24,300,0,10),(240,0,286,42,6),(142,0,162,44,10),
+               (50,-15,74,-12,10),(218,81,250,84,10)]
+        raw=compile_boxes(boxes);tree=RoomCollision.parse(raw);tree.check_tree()
+        self.assertEqual(tree.to_bytes(),raw)
+        rng=random.Random(17)
+        points=[(rng.uniform(30,320),rng.uniform(-30,100),rng.uniform(-30,30)) for _ in range(2500)]
+        points += [(x+.1,y+.1,0) for x in (50,74,80,142,162,218,240,250,286,300) for y in (-24,-15,-12,0,42,44,81,84)]
+        for x,y,z in points:
+            expected=abs(z)>=25 or any(a<=x<=c and b<=y<=d for a,b,c,d,_ in boxes)
+            self.assertEqual(tree.solid_at(x,y,z) is not None,expected,(x,y,z))
+        self.assertIsNotNone(tree.solid_at(250,20))
+        self.assertEqual({v for n,v in tree.lists[tree.solid_at(250,20)] if tree.nodes[n][1]&3!=2},{6})
+
 
 if __name__ == '__main__': unittest.main()

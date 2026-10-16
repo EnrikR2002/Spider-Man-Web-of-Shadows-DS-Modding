@@ -14,6 +14,10 @@ VISITS=dict(zip(range(96,108),(*range(161,151,-1),149,148)))
 FLAGS=dict(zip(('power','upper','boss','cache','freight','drydock','crown'),range(140,147)))
 BOUNDS=((360,96),(400,176),(112,64),(380,160),(400,144),(280,144),
         (176,224),(420,112),(160,96),(336,176),(420,144),(320,96))
+# Broken docks have a solid maintenance deck below them: a missed swing loses
+# height, never progress or a life. Door heights/IDs and earned flags stay stable.
+LOWER={0:-20,1:-24,3:-24,7:-32,11:-20}
+UPPER_PATROLS={0:48,6:112,7:48}
 MATERIALS={
     'Pier_Map04':('Fconcrete01','Pbeam01','Pcrate01','corugated02','rcorugated01','wbrick01','skyline01','skyline02','skyline03'),
     'Pier_Map06':('Fconcrete02',), 'Pier_Map01':('gdoor01',),
@@ -22,25 +26,37 @@ MATERIALS={
 }
 TITLE='Crane Row'
 LINES={
-    'AR_CraneQuay':'Crane Row. Cargo power is out. Find the engine house beyond the dry dock. X opens marked high hatches.',
-    'AR_FreightExchange':'Freight Exchange. Save in the office above. The route to cargo power runs through the containers.',
-    'AR_HarbourOffice':'Harbor Office. Save here before climbing the cranes.',
-    'AR_DryDock':'Dry Dock. Follow the supports beneath the hull to reach the engine house.',
-    'AR_EngineHouse':'Engine House. Press X at the cargo lever. Upper maintenance hatches loop back to the yard.',
-    'power':'Cargo power restored. Climb to the yard maintenance hatch and press X.',
-    'locked':'This maintenance route needs cargo power.',
-    'upper_locked':'The upper return opens from Crane Crown.',
-    'boss_locked':'Clear the crane platform crew before crossing the final arm.',
-    'AR_Counterweight':'Counterweight Shaft. Climb the supports to reach the high gantry.',
-    'AR_GantrySpine':'Gantry Spine. Cross the steelwork to Crane Crown. The harbor is far below.',
-    'AR_WinchCache':'Winch Cache. A maintenance route hidden above the engine room.',
-    'AR_CraneCrown':'Crane Crown. Defeat the platform crew to open the final arm and the shortcut down.',
-    'crown_clear':'Crane platform secured. The descent and final arm are open.',
-    'AR_LongArm':'The Long Arm. Evade the committed grabber, then hit the exposed winch. Green marks show refuge points.',
-    'boss_clear':'The hoist is down. The waterfront return is open.',
-    'victory_locked':'The hoist controls this service return.',
-    'AR_Breakwater':'Breakwater. The cleared waterfront leads back to Quayside.',
-    'cache_done':'Maintenance stash recovered. The upper walkway overlooks the harbor.',
+    'AR_CraneQuay':'Cargo power is out. Engine House lies beyond the docks. X opens high hatches.',
+    'AR_FreightExchange':'Save office: upper left. Main route: ground right.',
+    'AR_HarbourOffice':'X at the sphere to save.',
+    'AR_DryDock':'Cross the ship. Engine House: high right hatch.',
+    'AR_EngineHouse':'X at the floor lever restores cargo power.',
+    'power':'Power restored. Next: the Crown crew.',
+    'locked':'Restore Engine House power first.',
+    'upper_locked':'Defeat the Crown crew to open this shortcut.',
+    'boss_locked':'Defeat the crew to open the final arm.',
+    'AR_Counterweight':'Climb to the high right hatch, then cross Gantry to Crown.',
+    'AR_GantrySpine':'Crown lies through the right door.',
+    'AR_WinchCache':'Optional cache: smash the barrels above.',
+    'AR_CraneCrown':'Clear the crew to open the high right hatch.',
+    'crown_clear':'Crown clear. The high right hatch leads to the hoist.',
+    'AR_LongArm':'Dodge the grabber. Strike the winch during recovery. Green pads are refuges.',
+    'boss_clear':'Hoist down. Breakwater leads back to Quay and the Pier.',
+    'victory_locked':'Defeat the hoist to open this exit.',
+    'AR_Breakwater':'Quay: right door. Pier: Quay ground left.',
+    'cache_done':'Cache recovered.',
+    'AR_ContainerWarren':'Cross the Yard to Dry Dock.',
+    'guide_crown':'Next: the Crown crew.',
+    'guide_hoist':'Next: the hoist. Crown high right hatch.',
+    'guide_done':'Return to the Pier through Breakwater and Quay.',
+    'quay_power':'The Freight high right shortcut now leads to Engine House.',
+    'freight_power':'Engine House shortcut: high right hatch.',
+    'return_locked':'Return route. Approach the hoist through Crown.',
+    'power_route_locked':'X at the floor lever opens this door.',
+    'objective_power':'Cross Freight, Yard and Dry Dock to Engine House. Use X at its floor lever. The bolt on the map marks Engine House.',
+    'objective_crown':'Take Engine House low right to Shaft. Climb to the high right hatch, cross Gantry and defeat the Crown crew.',
+    'objective_hoist':'Crown high right leads to Long Arm. Dodge the grabber, then hit the exposed winch. Green pads are refuges.',
+    'objective_done':'Breakwater leads to Quay. Its ground left door returns to the Pier. Office save and Winch Cache are optional.',
 }
 # (side, wall x, floor y, spawn). Groups follow this order, preserving IDs.
 PORTS={
@@ -67,19 +83,36 @@ for connection in ((0,2,1,1),(1,2,3,1),(1,3,2,1),(3,2,4,1),(4,2,5,1),
     _join(*connection)
 LINKS[(NAMES[0],1)]=('Pier_Save02',2)
 LOCKS={(NAMES[1],4):('power','locked'),(NAMES[5],3):('power','locked'),
-       (NAMES[5],2):('power','locked'),
+       (NAMES[5],2):('power','power_route_locked'),
        (NAMES[5],5):('upper','upper_locked'),(NAMES[9],2):('upper','upper_locked'),
        (NAMES[9],3):('crown','boss_locked'),(NAMES[10],2):('boss','victory_locked'),
-       (NAMES[11],1):('boss','victory_locked')}
+       (NAMES[11],1):('boss','return_locked')}
+DESTINATIONS=dict(zip(NAMES,('QUAY','FREIGHT','OFFICE','YARD','DOCK','ENGINE',
+                          'SHAFT','GANTRY','CACHE','CROWN','ARM','BREAKWATER')))
+DESTINATIONS['Pier_Save02']='PIER'
+
+def sign_height(name,floor):
+    # Ground labels clear the24-unit cargo beside Quay's right exit; high
+    # hatches also clear the underside of the next stacked landing (Engine
+    # House80 ->112). Keep X on a separate column, tops below the roof.
+    return min(floor+(18 if floor else 27),BOUNDS[NAMES.index(name)][1]-8)
+
+def door_action(name,group):
+    if not PORTS[name][group-1][2]:return 'WALK IN'
+    if (name,group)==(NAMES[1],3):return 'X SAVE RM'
+    if (name,group)==(NAMES[5],4):return 'X OPTIONAL'
+    if (name,group)==(NAMES[9],3):return 'X HOIST'
+    if (name,group) in LOCKS and LOCKS[name,group][0] in ('power','upper'):return 'X SHORT'
+    return 'X RETURN' if (name,group)==(NAMES[0],3) else 'X ENTER'
 
 def looks():
-    return dict(floor=rc.Look('Fconcrete02',(28,24),(30,29,28)),
-        wall=rc.Look('wbrick01',(24,24),(25,27,31)),
+    return dict(floor=rc.Look('HarborStone',(64,64)),
+        wall=rc.Look('HarborHull',(64,32),(26,29,31)),
         metal=art.STEEL,
         beam=art.AMBER,
-        crate=rc.Look('Pcrate01',(18,18),(31,26,21)),
-        cargo=rc.Look('rcorugated01',(32,16),(31,20,14)),
-        cargo2=rc.Look('corugated02',(28,16),(17,26,31)),
+        crate=rc.Look('HarborWood',(32,32)),
+        cargo=rc.Look('HarborRed',(48,48)),
+        cargo2=rc.Look('HarborBlue',(48,48)),
         plate=art.DECK,
         stripe=rc.Look('WarningStrip',(8,8)),
         door=rc.Look('gdoor01',(16,18)), light=rc.Look('officeCLights',(12,12)))
@@ -106,119 +139,163 @@ def geometry(name,blob):
                      top=rc.Look('Fconcrete02',(28,24),(31,27,22)))
     solids=[];scenery=[];panels=[]
     outdoor=i not in (2,5,8)
+    bottom=LOWER.get(i,0)
     if outdoor:
-        panels=[rc.Panel(0,0,w,h,None)]
+        panels=[rc.Panel(0,bottom,w,h,None)]
         scenery.append(rc.Quad(art.WATER,
             ((-12,-4,-120),(-12,-4,-26),(w+12,-4,-26),(w+12,-4,-120)),
             ((0,0),(0,3),((w+24)/64,3),((w+24)/64,0)),.85))
         # The three native pictures form one panorama. Repeating all three
         # every 240 units turned the bridge into a wallpaper strip.
         for n in range(3):
-            scenery+=rc.backdrop(rc.Look('skyline0'+str(n+1),(224,144),(22,24,30)),
-                                  -128+n*224,96+n*224,16,160,tile=224,mirror=False,sky=max(100,h))
+            scenery+=rc.backdrop(rc.Look('HarborSky'+str(n),(224,224)),
+                                  -128+n*224,96+n*224,-28,196,tile=224,mirror=False,sky=max(100,h))
         # The native skyline's black bottom row is not a harbor horizon.
         # A far water face joins the skyline to the nearer horizontal water.
         scenery.append(rc.Quad(art.WATER,
-            ((-128,16,-169),(-128,-180,-169),(544,-180,-169),(544,16,-169)),
+            ((-128,-28,-169),(-128,-180,-169),(544,-180,-169),(544,-28,-169)),
             ((0,0),(0,5),(10.5,5),(10.5,0)),.80))
         # Dock-edge facing and warm marker bars keep landings legible.
-        scenery+=rc.box(0,-4,20,w,0,24,l['floor'],1,'front top')
+        scenery+=rc.box(0,bottom-4,20,w,bottom,24,l['floor'],1,'front top')
         for x in range(24,w-10,64):
             scenery+=rc.box(x,0,-20,x+1,11,-18,l['metal'],.8,'front top')
             scenery.append(art.face(art.LAMP,x-2,10,x+4,13,-17.8))
     if i==0:
-        solids += [_box(74,0,108,12,l['crate']),_box(172,0,212,18,l['cargo']),
-                   _box(184,18,204,30,l['cargo2']),_walkway(238,32,294,l['plate']),
-                   _walkway(22,18,60,l['plate']),_walkway(0,64,42,l['plate'])]
-        scenery+=rc.box(290,0,-24,348,24,-12,l['cargo'],.85,'front left top')
+        # First thirty seconds: broken quay -> hanging freight -> rooftop.
+        solids += [_box(0,bottom,64,0,art.DECK),_box(124,bottom,180,0,art.DECK),
+                   _box(244,bottom,360,0,art.DECK),
+                   _box(142,0,174,18,l['cargo2']),_box(260,0,294,18,l['cargo']),
+                   *[_walkway(a,y,b,l['plate']) for a,y,b in
+                     ((68,-10,100),(188,-10,220),(60,64,118),(78,16,118),(182,36,226),
+                      (244,54,300),(20,20,56),(12,42,50),(0,64,42))]]
     elif i==1:
-        solids += [_box(76,0,116,14,l['cargo']),_box(168,0,212,18,l['cargo2']),
-                   _box(264,0,300,12,l['crate']),
-                   *[_walkway(a,y,b,l['plate']) for a,y,b in ((0,64,44),(48,40,108),(126,64,200),
-                        (216,88,276),(286,112,400),(314,40,362),(216,40,246))]]
-        scenery+=rc.box(124,0,-24,162,36,-15,l['cargo2'],.8,'front left top')
+        # Broad fight deck below a complete container-roof express route.
+        solids += [_box(0,bottom,58,0,art.DECK),_box(90,bottom,304,0,art.DECK),
+                   _box(344,bottom,400,0,art.DECK),
+                   _box(108,0,148,20,l['cargo']),_box(184,0,232,40,l['cargo2']),
+                   _box(154,0,180,20,l['crate']),
+                   _box(264,0,302,20,l['cargo']),
+                   *[_walkway(a,y,b,l['plate']) for a,y,b in
+                     ((60,-12,84),(310,-12,338),(0,64,44),(40,20,88),
+                      (80,42,124),(128,64,188),(208,84,268),(288,104,348),
+                      (346,112,400),(304,60,350))]]
     elif i==2:
         panels=[rc.Panel(8,12,38,32,art.HULL,.95)]
         scenery+=rc.box(8,0,-22,32,4,-13,l['metal'],.9,'front top')
     elif i==3:
-        solids += [_box(a,0,a+36,y,l['cargo'] if n%2 else l['cargo2']) for n,(a,y) in enumerate(((64,16),(136,24),(214,18),(292,24)))]
-        solids += [_walkway(a,y,b,l['plate']) for a,y,b in ((30,48,110),(140,64,220),(246,80,342),(0,112,76),(108,128,202))]
-        for n,x in enumerate((10,110,228,334)):
-            scenery+=rc.box(x,4,-24,x+32,52+n%2*16,-14,l['cargo2'],.8,'front left right top')
+        # Cargo canyon: tall real stacks, an underpass and a fast roof chain.
+        solids += [_box(0,bottom,48,0,art.DECK),_box(80,bottom,300,0,art.DECK),
+                   _box(338,bottom,380,0,art.DECK),
+                   _box(94,0,140,38,l['cargo2']),_box(166,0,214,64,l['cargo']),
+                   _box(240,0,286,42,l['cargo2']),
+                   _box(64,0,90,18,l['crate']),_box(142,0,162,44,l['cargo2']),
+                   *[_walkway(a,y,b,l['plate']) for a,y,b in
+                     ((50,-12,74),(306,-12,334),
+                      (218,84,250),(242,104,286),(298,82,338),
+                      (310,22,346))]]
     elif i==4:
-        # A supported hull behind the play plane, with an actual route below it.
-        hull=art.HULL;scenery+=rc.box(76,30,-23,318,68,-8,hull,.85,'front left right top under')
-        scenery.append(rc.Quad(l['metal'],((50,58,-8),(76,30,-8),(76,68,-8),(50,68,-8))))
-        scenery.append(rc.Quad(l['metal'],((318,30,-8),(346,58,-8),(346,68,-8),(318,68,-8))))
-        for x in (90,150,210,270):
-            scenery+=rc.box(x,0,-21,x+6,30,-15,l['beam'],.8,'front left right')
-        solids += [_walkway(0,64,48,l['plate']),_walkway(352,64,400,l['plate'])]
-        for x,y in ((44,16),(78,32),(112,48),(254,16),(288,32),(322,48)):
-            solids.append(_walkway(x,y,x+32,l['plate']))
+        # The ship is now playable architecture. A raised bow/stern and two
+        # deck openings let a launch become a rooftop fight or a cargo-hold dive.
+        solids += [_walkway(0,64,48,l['plate']),_walkway(352,64,400,l['plate']),
+                   _box(76,30,136,68,art.SHIP),_box(168,54,252,68,art.SHIP),
+                   _box(284,30,324,68,art.SHIP),
+                   *[_walkway(a,y,b,l['plate']) for a,y,b in
+                     ((38,18,72),(44,40,82),(94,18,134),(142,38,180),
+                      (220,30,262),(264,48,300),(320,20,356),(324,42,366),
+                      (144,90,194),(214,108,282),(294,88,342))]]
+        for x in (90,300):scenery+=rc.box(x,0,-21,x+6,30,-15,l['beam'],.8,'front left right')
     elif i==5:
         solids += [_box(92,0,120,14,l['metal']),_box(174,0,204,18,l['metal'])]
         solids += [_walkway(a,y,b,l['plate']) for a,y,b in ((0,80,42),(0,112,40),(58,32,110),(112,56,162),(172,80,280),(208,112,252))]
         for x in (64,204):scenery+=rc.box(x,0,-23,x+30,44,-13,l['metal'],.85,'front top left right')
         panels=[rc.Panel(32,40,252,132,art.HULL,.8)]
     elif i==6:
-        for n in range(1,12):
-            y=n*16;x=0 if n%2 else 96
-            solids.append(_walkway(x,y,x+80,l['plate']))
-        solids.append(_walkway(96,192,176,l['plate']))
+        # Switchbacks around the live counterweight, rather than eleven
+        # identical shelves. Central rungs are alternate swing recoveries.
+        for a,y,b in ((32,18,88),(94,40,154),(26,62,88),(94,84,154),
+                      (20,106,78),(92,128,154),(28,150,88),(94,172,154),
+                      (134,192,176)):
+            solids.append(_walkway(a,y,b,l['plate']))
         for x in (50,120):scenery+=rc.box(x-2,0,-22,x+2,220,-18,l['beam'],1,'front left right')
         for x,y in ((22,44),(130,108),(24,172)):
             scenery+=rc.box(x,y,-22,x+24,y+20,-12,l['cargo'],.9,'front top left right under')
     elif i==7:
-        solids += [_box(x,0,x+24,8,l['metal']) for x in (78,170,262,354)]
-        solids += [_walkway(a,40,a+52,l['plate']) for a in (36,140,244,348)]
-        for x in range(12,420,48):
-            scenery+=rc.box(x,0,-20,x+3,66,-16,l['beam'],.9,'front left right')
-        scenery+=rc.box(4,62,-20,416,66,-16,l['beam'],1,'front top under')
+        # A fractured crane bridge. Below each leap, a visible service deck
+        # catches the player and short recovery steps lead back into the run.
+        solids += [_box(0,bottom,54,0,art.DECK),_box(366,bottom,420,0,art.DECK),
+                   *[_walkway(a,y,b,l['plate']) for a,y,b in
+                     ((74,0,124),(154,16,208),(238,0,290),(318,20,360),
+                      (44,-16,74),(126,-16,154),(208,-16,238),(290,-16,318),
+                      (54,40,106),(142,58,194),(228,76,280),(316,58,370))]]
     elif i==8:
-        solids += [_box(54,0,86,16,l['crate']),_walkway(94,40,150,l['plate'])]
+        solids += [_box(36,0,66,18,l['crate']),_walkway(62,38,96,l['plate']),
+                   _walkway(94,40,150,l['plate']),_walkway(28,62,62,l['plate'])]
         panels=[rc.Panel(20,24,140,78,art.HULL,.9)]
     elif i==9:
-        solids += [_box(80,0,108,12,l['metal']),_box(220,0,248,12,l['metal']),
-                   *[_walkway(a,y,b,l['plate']) for a,y,b in ((34,32,90),(110,48,172),(188,72,248),(264,96,336))]]
+        # The crown fight has a wide stage and a complete ring of launch
+        # platforms above it. All required exits retain their original levels.
+        solids += [_box(84,0,244,16,art.DECK),
+                   *[_walkway(a,y,b,l['plate']) for a,y,b in
+                     ((34,38,82),(104,58,160),(182,78,238),(264,96,336),
+                      (48,100,102),(126,122,186),(216,140,270))]]
     elif i==10:
         # Flat readable fighting pocket at the motor; long approach retains
         # broad takeoffs and enough height for launches and evade cancels.
-        solids += [_box(70,0,94,8,l['metal']),_box(156,0,180,8,l['metal'])]
+        solids += [_box(70,0,112,18,l['metal']),_box(124,0,164,18,l['metal']),_box(164,0,206,36,l['metal']),
+                   _walkway(112,56,160,l['plate']),_walkway(214,56,264,l['plate'])]
         scenery+=rc.box(8,30,-23,410,34,-18,l['beam'],.9,'front top under')
         scenery+=rc.box(318,0,-22,386,24,-12,l['metal'],1,'front left right top')
         safe=rc.Look('Grate',(8,8),(9,30,16))
         for x in (328,392):scenery+=rc.box(x-3,.12,-10,x+3,.25,12,safe,1,'top')
     elif i==11:
-        solids += [_box(90,0,122,10,l['floor']),_box(192,0,222,12,l['crate'])]
-        scenery+=rc.box(130,4,-23,186,14,-14,l['cargo2'],.9,'front top left right')
+        solids += [_box(0,bottom,60,0,art.DECK),_box(124,bottom,186,0,art.DECK),
+                   _box(250,bottom,320,0,art.DECK),
+                   *[_walkway(a,y,b,l['plate']) for a,y,b in
+                     ((66,-10,104),(190,-10,232),(72,20,116),(144,40,192),(220,44,262))]]
     # All upper exits have a full landing. Side walls remain climbable.
-    for side,wall,floor,_ in PORTS[name]:
+    for group,(side,wall,floor,_) in enumerate(PORTS[name],1):
         if floor:
             a,b=(0,30) if side=='left' else (w-30,w)
             solids.append(_walkway(a,floor,b,l['plate']))
-        scenery.append(mr._shutter(l['door'],wall+(.1 if side=='left' else -.1),floor,side=='left'))
-        for yy in (floor+1,floor+15):
-            a,b=(1,14) if side=='left' else (w-14,w-1)
-            scenery+=rc.box(a,yy,18,b,yy+.8,20,l['stripe'],1,'front')
+        scenery+=art.portal(l['door'],wall,floor,side=='left')
         if floor:
-            a=2 if side=='left' else w-8
-            scenery.append(rc.Quad(rc.Look('AccessMark',(6,6)),((a,floor+24,18),(a,floor+18,18),(a+6,floor+18,18),(a+6,floor+24,18))))
+            # One small button glyph at the hatch replaces two floating
+            # destination/instruction boards. The map owns route guidance.
+            a=3 if side=='left' else w-7
+            scenery.append(art.face(rc.Look('AccessMark',(4,4)),a,floor+17,a+4,floor+21,-7))
     # A narrow side channel keeps catwalk undersides from sealing the native
     # wall-crawl route to high doors. Arrivals land six units onto the ledge.
     solids=[replace(q,x0=12 if q.x0==0 and q.y0>0 else q.x0,
                       x1=w-12 if q.x1==w and q.y0>0 else q.x1) for q in solids]
     scenery+=art.setwork(i,w,h,solids)
-    return rc.Room(name,(0,0,w,h),theme,tuple(solids),tuple(panels),tuple(scenery),textures,palettes,
+    scenery+=art.ceiling(w,h,draw_shell=outdoor)
+    return rc.Room(name,(0,bottom,w,h),theme,tuple(solids),tuple(panels),tuple(scenery),textures,palettes,
                    hidden_shell=('above',) if outdoor else (),margin=18,shades=mr.LIT)
 
 SPECS={}
 for i,name in enumerate(NAMES):
     w,h=BOUNDS[i]
     doors=tuple(mr.Door(side,x,y,spawn,str(spawn),inset=18) for side,x,y,spawn in PORTS[name])
-    gangs=() if i in (1,2,4,5,8,9,10,11) else (mr.Gang('Pier_Map04',8,(w/2,12),(w-32,40),'Dock Patrol'),)
+    gangs=() if i in (1,2,4,8,9,10) else (mr.Gang(
+        'Residential_Map09' if i==7 else 'Pier_Map04',0x0C if i==7 else 8,
+        (w/2,(h+LOWER.get(i,0))/2),(w+24,h-LOWER.get(i,0)+48),
+        'Gantry Hunters' if i==7 else 'Dock Patrol'),)
+    if i in UPPER_PATROLS:
+        split=UPPER_PATROLS[i];cy=min(32,(LOWER.get(i,0)+split)/2)
+        lower=replace(gangs[0],xy=(w/2,cy),box=(w+24,round(2*(split+8-cy))))
+        upper=mr.Gang('Sewer_Map03',0x0E,(w/2,(split+h)/2),(w+24,h-split+16),'Upper Patrol')
+        gangs=(lower,upper)
+    bottom=LOWER.get(i,0)
     SPECS[name]=mr.Authored(name,lambda blob,n=name:geometry(n,blob),tuple(MATERIALS),doors,
-        (((20,0),(w-20,0),(w-20,h-8),(20,h-8)),),area=(10,0,w-10,h-8),
+        (((20,bottom),(w-20,bottom),(w-20,h-8),(20,h-8)),),area=(10,bottom,w-10,h-8),
+        # Encounters follow the vertical routes. The old12-unit Shaft limit
+        # excluded every switchback shelf, leaving its upper192 units empty.
+        spawn_top=12 if i==10 else h-24,
         gangs=gangs,save=(48,7) if i==2 else (),
+        props=tuple(mr.Prop('proto01','Object (Smashable_MetalBarrel)',xy,'Cargo Barrel '+str(j))
+                    for j,xy in enumerate({0:((272,56),),1:((156,2),(244,2),(226,86)),
+                                          3:((150,2),(224,2),(262,106)),4:((110,70),(222,70)),
+                                          7:((250,78),),9:((120,18),(208,18))}.get(i,()))),
         lines=(('first',LINES[name]),) if name in LINES else ())
 
 def lock_exits(raw,name,say):
@@ -245,9 +322,28 @@ def encounter(raw,name,blob,say):
     if i==9:clear += [s.set_var(FLAGS['upper'],1),say('crown_clear')]
     raw,done=s.append_groups(raw,1,[(EventGroup(tuple(c for c in clear if c)),'Crew_Cleared')])
     w,h=BOUNDS[i]
-    gang=mr.Gang('Pier_Map04',8,(w*.52,h/2),(w-48,h+32),'Dock Crew')
+    gang=mr.Gang('Sewer_Map03' if i==4 else 'Pier_Map04',0x0E if i==4 else 8,
+                 (w*.52,h/2),(w+24,h+48),'Hold Crew' if i==4 else 'Dock Crew')
     raw,ag=s.append_batch(raw,1,[(mr._spawner(blob,gang,done),'EnemySpawner (Dock Crew)')],'Dock Crew')
-    return s.extend_group(raw,1,0,[s.if_var(FLAGS[key],'==',0,then=s.action(ag=ag))])
+    if i==9:
+        # Bounded reinforcement, earned only from a real clear callback.
+        # No timer can award victory or open the boss door.
+        second=mr.Gang('Residential_Map09',0x0C,(w*.52,h/2),(w+24,h+48),'Crown Hunters')
+        raw,second_ag=s.append_batch(raw,1,[(mr._spawner(blob,second,done),'EnemySpawner (Crown Hunters)')],'Crown Hunters')
+        raw,go=s.append_groups(raw,1,[(EventGroup((s.set_var(0x12A,1),s.activate(ag=second_ag,frames=45))),
+                                     'Crown_Reinforcements')])
+        raw,guard=s.append_groups(raw,1,[(EventGroup((s.if_var(0x12A,'==',0,then=s.action(eg=go)),)),
+                                        'Crown_First_Crew_Cleared')])
+        parsed=RoomObjects.parse(raw);entities=mr.Entities.parse(parsed.records[1].sections[0])
+        index=next(j for j,e in enumerate(entities.records) if len(e)==28 and e[12:16]==struct.pack('<I',4) and e[22]==8)
+        first=bytearray(entities.records[index]);first[25]=guard
+        raw=parsed.replace_section(1,0,entities.replace_record(index,first))
+        raw=s.extend_group(raw,1,0,[s.set_var(0x12A,0)])
+    # A saved crew clear remains earned, while revisits still have a patrol.
+    # It has no clear callback and cannot change the objective/door flags.
+    patrol=mr.Gang('Pier_Map04',8,(w/2,h/2),(w+24,h+48),'Returning Patrol')
+    raw,patrol_ag=s.append_batch(raw,1,[(mr._spawner(blob,patrol),'EnemySpawner (Returning Patrol)')],'Returning Patrol')
+    return s.extend_group(raw,1,0,[s.if_var(FLAGS[key],'==',0,then=s.action(ag=ag),otherwise=s.action(ag=patrol_ag))])
 
 def power_switch(raw,blob,say):
     parsed=RoomObjects.parse(blob('Sewer_Map04_app.obj'))
@@ -273,7 +369,7 @@ def cache(raw,blob,say):
 
 def stage(raw,name,blob,built,spawn_template,exit_template,say):
     raw=mr.stage(raw,name,blob,room_of=lambda n:IDS[n] if n in IDS else 38,visited=VISITS[IDS[name]],
-        spawn_template=spawn_template,exit_template=exit_template,say=say,links=LINKS,flags=FLAGS,
+        spawn_template=spawn_template,exit_template=exit_template,say=lambda k:None if k==name else say(k),links=LINKS,flags=FLAGS,
         authored=SPECS[name],compiled_room=built)
     raw=lock_exits(raw,name,say)
     parsed=RoomObjects.parse(raw);entities=mr.Entities.parse(parsed.records[0].sections[0])
@@ -286,6 +382,16 @@ def stage(raw,name,blob,built,spawn_template,exit_template,say):
         section=entities.replace_record(index,e);raw=RoomObjects.parse(raw).replace_section(0,0,section)
         entities=mr.Entities.parse(section)
     raw=encounter(raw,name,blob,say)
+    if NAMES.index(name) in UPPER_PATROLS:
+        # Native ambush mode2 requests the central spawn sector (0x10 at
+        # 0x02081D74), rather than ordinary offscreen-sector weighting. An
+        # empty real completion callback makes this a bounded optional wave.
+        raw,finished=s.append_groups(raw,1,[(EventGroup(()),'Upper_Patrol_Cleared')])
+        parsed=RoomObjects.parse(raw);entities=mr.Entities.parse(parsed.records[1].sections[0])
+        matches=[i for i,e in enumerate(entities.records) if len(e)==28 and struct.unpack_from('<I',e,12)[0]==4 and e[22]==0x0E]
+        if len(matches)!=1:raise ValueError('Upper patrol spawner must be unique')
+        index=matches[0];entity=bytearray(entities.records[index]);entity[23:26]=bytes((2,1,finished))
+        raw=parsed.replace_section(1,0,entities.replace_record(index,entity))
     if name==NAMES[5]:raw=power_switch(raw,blob,say)
     if name==NAMES[6]:
         from tools import crane_boss

@@ -112,7 +112,7 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
         new_glob = result[ge['start']:ge['end']]
     if release.get('crane'):
         from tools import crane_row
-        result, crane = crane_row.apply_rom(result, version=release['version'])
+        result, crane = crane_row.apply_rom(result, version=release['version'],include_creatures=release.get('creatures',False))
         report = w.validate_rom(result, target=True)
         ge = report['nitrofs'][0]
         new_glob = result[ge['start']:ge['end']]

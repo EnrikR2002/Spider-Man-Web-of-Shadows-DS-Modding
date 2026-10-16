@@ -47,3 +47,15 @@ class PlayerTraceTests(unittest.TestCase):
         self.assertEqual(sample(bytes(data))['actor_address'], BASE + 0x300)
         struct.pack_into('<I', data, 0x2400, BASE + 0x2000)        # both owned: still ambiguous
         with self.assertRaisesRegex(ValueError, 'found 2'): sample(bytes(data))
+        struct.pack_into('<I', data, 0x7F8, BASE + 0x1000)
+        struct.pack_into('<I', data, 0x1000, 0x021352a4)
+        struct.pack_into('<I', data, 0x1044, BASE + 0x300)
+        for stale in (4, 0x34C, BASE + len(data), BASE + 0x3000):
+            struct.pack_into('<I', data, 0x25F8, stale)
+            before=bytes(data)
+            self.assertEqual(sample(before)['actor_address'], BASE + 0x300)
+            self.assertEqual(bytes(data),before)
+        # Two valid controller owners remain ambiguous; never choose by order.
+        struct.pack_into('<I', data, 0x3000, 0x021352a4)
+        struct.pack_into('<I', data, 0x3044, BASE + 0x2000)
+        with self.assertRaisesRegex(ValueError, 'found 2'): sample(bytes(data))

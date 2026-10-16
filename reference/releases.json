@@ -137,6 +137,36 @@
       "previous_rom_sha256": "39fcf89e46487e4cc80eed7414871891e6f0ca1a21ed86d4e3f26844f095d299",
       "rom_sha256": "5b0d6f552ac0da040ce0ee3f6a650e2b629614a9b73ea56ddbadc062efef705e",
       "version": "0.16.1"
+    },
+    {
+      "date": "2026-10-15",
+      "previous_rom_sha256": "5b0d6f552ac0da040ce0ee3f6a650e2b629614a9b73ea56ddbadc062efef705e",
+      "rom_sha256": "1bd288f171d0cc58fc94190a68bb52a9752ff59a9636bea376eb3608d04ea139",
+      "version": "0.16.2"
+    },
+    {
+      "date": "2026-10-15",
+      "previous_rom_sha256": "1bd288f171d0cc58fc94190a68bb52a9752ff59a9636bea376eb3608d04ea139",
+      "rom_sha256": "18c90eb829f4ec9f116d3fde269ba73c88eafc69e15bbbfc105ad1398b09d494",
+      "version": "0.16.3"
+    },
+    {
+      "date": "2026-10-15",
+      "previous_rom_sha256": "18c90eb829f4ec9f116d3fde269ba73c88eafc69e15bbbfc105ad1398b09d494",
+      "rom_sha256": "c5fc05127ca98923ca01b35b7f2bd686e30bdece821fd07d97b5b6fb03841dfa",
+      "version": "0.17.0"
+    },
+    {
+      "date": "2026-10-15",
+      "previous_rom_sha256": "c5fc05127ca98923ca01b35b7f2bd686e30bdece821fd07d97b5b6fb03841dfa",
+      "rom_sha256": "f6d09cfcc41f76a3484648b828755a52726f5378f936fee3faa0640b9461930a",
+      "version": "0.18.0"
+    },
+    {
+      "date": "2026-10-16",
+      "previous_rom_sha256": "f6d09cfcc41f76a3484648b828755a52726f5378f936fee3faa0640b9461930a",
+      "rom_sha256": "9b2b948f6030a60246a0ca9ae477ae51c22f4aa349645fb2c6cef367c4557582",
+      "version": "0.19.0"
     }
   ],
   "schema_version": 1

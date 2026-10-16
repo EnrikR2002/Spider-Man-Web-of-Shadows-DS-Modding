@@ -198,6 +198,16 @@ def compile_boxes(solids, slab=25.0):
         return len(nodes) - 1
 
     def build(region, inside, path):
+        status = state(region, inside)
+        if isinstance(status, tuple):
+            # A split can leave two solid children (e.g. adjacent dock/stack
+            # cells). The format only has a front-solid leaf. Encode the back
+            # child's entire cell with a redundant plane on its existing left
+            # boundary; its empty side is unreachable through the parent.
+            index = emit(0, region[0], False)
+            nodes[index]['flags'] = FRONT_SOLID | BACK_EMPTY
+            nodes[index]['link'] = leaf(path + [(index, (0, False, True))], status[1])
+            return
         # Candidate planes: box edges strictly inside the region.
         options = []
         for axis in (0, 1):
