@@ -1,105 +1,90 @@
 # Project instructions
 
-Private modding/research of Nintendo DS Spider-Man: Web of Shadows, USA CS5E.
-User instructions override older plans. Never overwrite the original ROM or
-publish ROMs/extracted copyrighted assets.
+Private Nintendo DS Spider-Man: Web of Shadows research/modding, USA CS5E.
+User instructions override older plans. Never overwrite the clean ROM in
+original/ or externally publish ROMs/extracted copyrighted assets.
 
-## Shared agent context
+## Start and find the current truth
 
-The user alternates between different AI assistants (e.g. Claude and GPT). The
-repository is the only shared memory: put every durable fact, decision, user
-preference and workflow lesson into the documents below, never only into an
-assistant's private memory or chat. Read them; do not rely on prior chats.
+Read AGENTS and docs/TASKS first. Inspect the working tree and preserve unrelated
+changes. TASKS is the live handoff; verify its current build against
+reference/gameplay_profile.json, tools/release_info.py, reference/releases.json
+and the stable ROM/build metadata before acting. Past save hashes are observations,
+not instructions to restore them. Always read the actual latest battery.
 
-## Fixed document layout
+Read only the relevant section of docs/DEVELOPMENT.md for tool selection,
+commands, evidence schemas and release procedure. TECHNICAL has a topic map;
+search headings and read bounded sections. Never bulk-read the technical notebook,
+changelog, catalogs or archive at startup. Historical notes: tools/doc_archive.py
+list, then read --toc/--section. Dated designs and old release sections are historical;
+check later implementations and current player direction before reusing them.
 
-There are six core Markdown documents. Edit these in place. Do not create another
-feature, release, experiment, session, plan, summary or handoff Markdown file,
-including at the end of a task: update the owning document instead.
+## Documentation ownership
 
 | File | Owns |
 |---|---|
-| AGENTS.md | Startup instructions, guardrails and this document policy |
-| docs/TASKS.md | Current work, ordered backend queue/ideas and short handoff |
-| docs/TECHNICAL.md | Everything learned about ROM formats/engine/tools; confidence, unknowns and evidence |
-| docs/OG_GAMEPLAY.md | How the original game works, before modifications |
-| docs/CHANGES.md | Implemented mod behavior, numbered release history and validation limits |
-| docs/TASM_ROADMAP.md | TASM identity, combat design, skill status and next iterations |
+| AGENTS.md | Stable constraints, startup and documentation policy |
+| docs/TASKS.md | Current objective/build, evidence, blocker and next exact action |
+| docs/DEVELOPMENT.md | Reusable development, validation and release workflow |
+| docs/TECHNICAL.md | Engine/format contracts, discoveries, unknowns and evidence |
+| docs/OG_GAMEPLAY.md | Original game behavior before modifications |
+| docs/CHANGES.md | Shipped behavior, numbered release history and validation limits |
+| docs/TASM_ROADMAP.md | Design, player feedback and deferred ideas |
 
-Root README is a short entry point/workflow; mods/README is the overlay-loader
-exception. No other active Markdown is permitted; a test enforces this set and
-the TASKS/AGENTS size. Technical detail may grow in the
-single notebook, but must use searchable topic headings, not repeated logs.
-Machine-readable catalogs/release records/input scripts live under reference/.
-Generated reports/captures and scratch scripts live in ignored work/ or build/;
-a research tool worth reusing belongs in tools/ with a test.
+README is the short entry point; mods/README is the overlay-loader exception.
+Keep this approved set; add a document only when the user authorizes it and a
+new ownership boundary is necessary. No per-session/release/handoff Markdown.
+Keep AGENTS/TASKS under 900 words. Update TASKS at accepted-candidate/publication
+milestones and before stopping; replace stale state. Record discoveries in their
+owning technical section immediately, with confidence and source version. Mark
+superseded assumptions. Distinguish implemented, agent-tested and player-confirmed.
 
-Read AGENTS and TASKS at startup. Then list headings (`rg -n "^#" docs/TECHNICAL.md`)
-and read only the relevant section. For combat/engine work start with TECHNICAL
-"Player state machine and Red kit hooks" and "Research workflow and pitfalls".
-Never bulk-read TECHNICAL, CHANGES, catalogs or the archive. Older exact notes are
-in docs/archive/legacy-notes.zip; use `python tools/doc_archive.py list <topic>`
-then `read <note> --toc/--section`. Update TASKS after milestones/before stopping,
-replacing stale state; keep it under 900 words with concrete next actions and
-evidence paths. Put shipped facts in CHANGES, research in TECHNICAL, design in
-TASM_ROADMAP. Always distinguish implemented, agent-tested and player-confirmed.
+Machine catalogs/recipes/receipts belong in reference/. Scratch scripts, large
+traces, captures and temporary assets belong in ignored work/ or build/. A reusable
+research tool belongs in tools/ with appropriate tests. Do not duplicate volatile
+hashes, runtime addresses or test logs across startup documents.
 
-## Tools, testing and release safety
+## Safety and validation
 
-- Read originals from original/, write builds to build/. Keep tools deterministic
-  and scriptable in Windows PowerShell; prefer Python standard library.
-- Every parser/repacker needs lossless round-trip tests. Preserve unknown bytes;
-  call unknown fields unknown. Test one empirical change at a time with a control.
-- Emulator research: `python tools/kit_lab.py` (traces, arena, qualification,
-  previews, disassembly), copied saves, disposable RAM. Check numbers, frames.
-- Chapter rooms must pass `tools/midnight_walk.py all` (real doors);
-  teleport tours prove links only.
-- Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.
-  Agent manages builds/checkpoints; keep build/Spider-Man-WoS-modded.nds stable.
-- Use the actual Battery directory in ignored work/playtest.json. Keep DeSmuME
-  closed for save mutations/publication, verify DSV wrapper/snapshot bytes, and
-  preserve latest progress/prior ROMs/active compositions. Re-read latest battery.
-- Never write fixtures into the real save or load stale emulator states over a
-  changed ROM.
-- Qualify isolated candidates, compose all accepted overlays, publish through
-  `python tools/playtest.py build`. Do not ask the player to manage filenames,
-  backups or build commands. Record the release in CHANGES and reference/releases.json.
-- Version is major.minor.patch: minor for new/overhauled mechanics, patch for
-  fixes/polish/balance, major for a finished overhaul or incompatible contract.
-  A published version identifies one exact ROM; never reuse it for different bytes.
-  Show the same version at boot and in Options. Release profiles live in
-  tools/release_info.py; the Red kit release generator is tools/tasm_kit.py.
+- Read original/, write build/. Prefer deterministic Python tools and PowerShell.
+  Parsers/repackers need lossless round trips; preserve unknown bytes.
+- Use copied batteries/disposable RAM for research; never put fixtures into the
+  actual save or load stale emulator states across changed ROMs.
+- Preserve native abilities, ownership/dependencies, purchases, Both Suits
+  traversal, Reinforced Web, rewards and the 32 KiB player kit unless deliberately
+  changing the contract. Never grant paid skills or steal Black ownership bits.
+- Use native velocity/collision for gameplay movement. No player teleports or
+  time-slowing effects. Check pointer ownership, stale actors, flags and hook ABI.
+- Unfamiliar visual/combat pipelines need one complete in-engine example before
+  roster-wide expansion. Review native-scale motion, textures and mixed audio
+  early. Counters/clearability do not establish presentation quality or fun.
+- Changed chapter rooms require real-input door qualification through
+  tools/midnight_walk.py all with an explicit candidate ROM. Teleport tours prove
+  links only. Run focused checks, then relevant broad controls on a stable candidate.
+- Qualify the final composition before publishing through tools/playtest.py build.
+  Use actual Battery paths in work/playtest.json; keep DeSmuME closed, verify latest
+  DSV wrapper/checkpoint bytes, preserve prior ROM/recipe and compare final hashes.
+  A published version identifies one exact ROM; fixes require a new version.
+  Version boot and Options identically. Record publication in CHANGES/releases.json.
+- Player flow stays Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.
+  Agent manages the stable build/Spider-Man-WoS-modded.nds and all backups/releases.
 
-## Current gameplay authority
+## Player direction
 
-2026-10-05 latest steering: FUN COMES FIRST. Garfield's Spider-Man is
-spider-like, jumpy and acrobatic; the kit must combo strong enemies and
-web-resistant bosses, hit behind as well as in front, and let R cancel combos to
-reposition without losing them. Leave native abilities (A web, B jump, base
-strings/evade) untouched; change behavior only by rewriting the 7 Red purchase
-slots, gated on Red form and their ownership bits. v0.2.0 ships first versions of
-Leapfrog, Skyjack, Spider Perch, Split Decision, Spin Cycle, Spider Reflex and
-Spider-Sense (TASM_ROADMAP); iterate them from player feedback.
-Defer prices and balance unless the player asks.
-2026-10-05: player confirmed v0.2.1/v0.3.0. Keep the game
-super fast paced: no slow-motion or time-slowing effects (Spider-Sense included).
-2026-10-06: no teleports (felt "teleporty", clipped out of the level, froze the
-game): moves travel visibly; kit code moves Spidey by velocity only.
-2026-10-13: Overclock, Dragnet, Vortex are the last skills: iterate, add
-none. New rooms: strong enemies, far backdrops (TECHNICAL "Room compiler").
+Fun and spectacle come first. Garfield's Spider-Man is fast, acrobatic and
+spider-like: combo strong/web-resistant enemies, hit behind, cancel with R to
+reposition and retain the combo. Preserve native A/B/base strings/evade. Develop
+one combined TASM1/2 kit through Red purchase slots. Overclock, Dragnet and Vortex
+are the final added skills: iterate them, add none. Prices/balance, third suit,
+shop/save expansion and other campaign branches remain deferred unless requested.
 
-New moves need new, fluid, acrobatic animations (not repackaged native clips).
-The player rejected earlier per-key-eased clips as looking like dancing; follow
-TECHNICAL "Kit animation authoring".
+New moves require fluid authored motion, continuous trajectories and overlap;
+per-key eased "dancing" and repackaged stock attacks were rejected. Both chapters
+need original enemy silhouettes/patterns/voices, full knockdown/get-up/death,
+visible roofs/doors and connected varied spaces. Midnight should avoid repeated
+sewer/Hive recolours and excess copy-paste rooms. Accepted map improvement does
+not imply acceptance of enemy quality; read the latest player feedback in TASKS.
 
-Develop one combined TASM1/2 kit at a time through red form. Selected later suits
-remain in reference/suit_roadmap.json. Preserve native ownership/dependencies,
-existing purchases, Both Suits traversal and Reinforced Web unless a deliberate
-migration is implemented. Do not grant paid moves at start or steal black bits.
-Expanded shop rows/save support and third suit selection remain research.
-Fully enabled research uses copied saves/disposable RAM, never the real save.
-
-Snap Sweep is player-confirmed. It borrows GroundAttack15 payloads; G11/16/17
-also have m6.xbd users, so they are not spare storage; retain original IDs/other
-actor bindings. Original Web Vault is player-confirmed. Never report attack
-strength as HP damage or the combo gauge as hit count.
+Snap Sweep and original Web Vault are player-confirmed. GroundAttack15 is shared;
+G11/16/17 have m6.xbd users and are not spare storage. Preserve other actor bindings.
+Attack strength is not HP damage; the combo gauge is not a hit count.

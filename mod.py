@@ -112,9 +112,79 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
         new_glob = result[ge['start']:ge['end']]
     if release.get('crane'):
         from tools import crane_row
-        result, crane = crane_row.apply_rom(result, version=release['version'],include_creatures=release.get('creatures',False))
+        result, crane = crane_row.apply_rom(result, version=release.get('crane_parent',release['version']),include_creatures=release.get('creatures',False))
         report = w.validate_rom(result, target=True)
         ge = report['nitrofs'][0]
+        new_glob = result[ge['start']:ge['end']]
+    midnight_rework = None
+    if release.get('midnight_rework'):
+        from tools import midnight_rework as rework
+        result, midnight_rework = rework.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
+        new_glob = result[ge['start']:ge['end']]
+    chapter_renewal = None
+    if release.get('chapter_renewal'):
+        from tools import chapter_renewal as renewal
+        result, chapter_renewal = renewal.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
+        new_glob = result[ge['start']:ge['end']]
+    creature_forge = None
+    if release.get('creature_forge'):
+        from tools import creature_forge as forge
+        result, creature_forge = forge.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
+        new_glob = result[ge['start']:ge['end']]
+    creature_texture_fix = None
+    if release.get('creature_texture_fix'):
+        from tools import creature_texture_fix as texture_fix
+        result, creature_texture_fix = texture_fix.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
+        new_glob = result[ge['start']:ge['end']]
+    chapter_spectacle = None
+    if release.get('chapter_spectacle'):
+        from tools import chapter_spectacle as spectacle
+        result, chapter_spectacle = spectacle.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
+        new_glob = result[ge['start']:ge['end']]
+    midnight_rebuild = None
+    if release.get('midnight_rebuild'):
+        from tools import midnight_rebuild as rebuild
+        result, midnight_rebuild = rebuild.apply_rom(result,full_motion=True,voices=True,rooms=True)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
+        new_glob = result[ge['start']:ge['end']]
+    midnight_encore = None
+    if release.get('midnight_encore'):
+        from tools import midnight_encore as encore
+        result, midnight_encore = encore.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
+        new_glob = result[ge['start']:ge['end']]
+    midnight_voltage = None
+    if release.get('midnight_voltage'):
+        from tools import midnight_voltage as voltage
+        result, midnight_voltage = voltage.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
+        new_glob = result[ge['start']:ge['end']]
+    midnight_finale = None
+    if release.get('midnight_finale'):
+        from tools import midnight_finale as finale
+        result, midnight_finale = finale.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
+        new_glob = result[ge['start']:ge['end']]
+    midnight_reliability = None
+    if release.get('midnight_reliability'):
+        from tools import midnight_reliability as reliability
+        result, midnight_reliability = reliability.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
         new_glob = result[ge['start']:ge['end']]
     log = {'schema_version': 1, 'clean_rom_sha256': w.sha256(rom), 'output_rom_sha256': w.sha256(result),
            'clean_glob_sha256': manifest['sha256'], 'output_glob_sha256': w.sha256(new_glob),
@@ -122,7 +192,9 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
            'combat_data_edits': combat_edits,
            'header_crc16': report['header']['header_crc16'], 'nitrofs': report['nitrofs'],
            'replaced_assets': replacements, 'identical_overlays': identical,
-           'added_assets':added, 'midnight_line': chapter, 'crane_row': crane,
+           'added_assets':added, 'midnight_line': chapter, 'crane_row': crane, 'midnight_rework': midnight_rework,
+           'chapter_renewal':chapter_renewal, 'creature_forge':creature_forge, 'creature_texture_fix':creature_texture_fix, 'chapter_spectacle':chapter_spectacle,
+           'midnight_rebuild':midnight_rebuild, 'midnight_encore':midnight_encore, 'midnight_voltage':midnight_voltage, 'midnight_finale':midnight_finale, 'midnight_reliability':midnight_reliability,
            'verified_resource_count': len(names), 'unchanged_resource_count': len(names) - len(replacements)-len(added)}
     if gameplay_profile in release_info.PROFILES:
         release = release_info.PROFILE_INFO[gameplay_profile]

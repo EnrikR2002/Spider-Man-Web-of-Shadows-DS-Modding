@@ -1,0 +1,256 @@
+{
+  "date": "2026-10-17",
+  "design": {
+    "path": "docs/TASM_ROADMAP.md",
+    "section": "Chapter evaluation against v0.22.1 (2026-10-17)"
+  },
+  "engine": {
+    "path": "docs/TECHNICAL.md",
+    "section": "Chapter composition and engagement audit (v0.22.1, 2026-10-17)"
+  },
+  "identity": {
+    "actual_battery": {
+      "checkpoint_exists_and_exact": true,
+      "path": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+      "sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "size": 634,
+      "wrapper_roundtrip": true
+    },
+    "inherited_crane_capture_scope": {
+      "path": "work/dual-rework/visual-scope.json",
+      "sha256": "61ebb5ea8c73908a15261396e85f0569f7537b3e015b4a598d173538da1d24e0"
+    },
+    "native_view_geometry": {
+      "Pier_Map04": {
+        "all_exact": true,
+        "resources": [
+          "Pier_Map04.bsp",
+          "Pier_Map04.nsbmd",
+          "Pier_Map04Textures.nsbtx"
+        ]
+      },
+      "Sewer_Map02": {
+        "all_exact": true,
+        "resources": [
+          "Sewer_Map02.bsp",
+          "Sewer_Map02.nsbmd",
+          "Sewer_Map02Textures.nsbtx"
+        ]
+      }
+    },
+    "profile": "reference/gameplay_profile.json",
+    "publication": "reference/releases.json",
+    "release_pins": "tools/release_info.py",
+    "renewal_room_resources": {
+      "all_exact": true,
+      "compared": 128
+    },
+    "stable_and_canonical_exact": true
+  },
+  "limits": [
+    "Room sheets contain inherited engine captures qualified by exact room resources. Older enemy appearances are not used as current enemy evidence.",
+    "Fresh observations boot copied latest player DSV with initial room-entry fixtures. Probe runtime grants a research kit and heals/parks as labelled; it never writes the actual battery.",
+    "Mixed patrol observations preserve native enemy HP and player/enemy movement; no player placement or enemy HP edits. One separate ground control isolates the Warden roster.",
+    "Native-room probes park enemies and have no combat checks; passed only means the observation route finished, not traversal, difficulty or full-level qualification.",
+    "No new full-route unassisted difficulty run, player quality verdict, subjective audio-mix approval or actual DeSmuME FPS measurement.",
+    "No game source/ROM/recipe/player save was changed; all recommendations are proposals."
+  ],
+  "observations": {
+    "current_enemy_visuals": {
+      "path": "work/creature-forge/preview-sources.json",
+      "sha256": "9e3009d640afc0d21804cd7bed6829ffea39fe0dad3f8e94c4f3ad52673f738a"
+    },
+    "native_architecture_views": [
+      {
+        "path": "work/chapter-evaluation/pier-probe-summary.json",
+        "sha256": "2857ecc795e3cfdfd93413fb7fde2292730861f692a3640886d9472884bb71e0"
+      },
+      {
+        "path": "work/chapter-evaluation/sewer-probe-summary.json",
+        "sha256": "36d11e80c994890566b1f3073e6cfe85e0de8843d43191b2fdcb88d574b24828"
+      }
+    ],
+    "room_sheets": {
+      "path": "work/chapter-evaluation/room-sheets-sources.json",
+      "sha256": "4bc85da0b5a951d734443259a2a4775b466d3d37cd49c0ccf2c544d8302e7c84"
+    },
+    "terminal_elevated_target": {
+      "all_warden_idle_full_HP": true,
+      "confidence": "High for observed suppression and matching source threshold; not every encounter/arrival is claimed affected.",
+      "engagement_band": 12,
+      "player_xy_ranges": [
+        [
+          145.06591796875,
+          145.06591796875
+        ],
+        [
+          16.980712890625,
+          16.980712890625
+        ]
+      ],
+      "relative_frame_window": [
+        600,
+        1202
+      ],
+      "report": {
+        "path": "work/chapter-evaluation/walk-native-mixed-patrol-evaluation.json",
+        "sha256": "cde5adeee4d503de2b8f992a7cde821de7364e259b29a74e02125b4b1f57b274"
+      },
+      "samples": 302,
+      "screenshot": "build/boot-tests/1613d746-walk-native-mixed-patrol-evaluation-a578b404/walk-native-mixed-patrol-evaluation/frame-04230.png",
+      "vertical_gap_range": [
+        12.360595703125,
+        12.360595703125
+      ],
+      "warden_xy_ranges": [
+        [
+          145.1826171875,
+          145.1826171875
+        ],
+        [
+          4.6201171875,
+          4.6201171875
+        ]
+      ]
+    },
+    "terminal_obstruction": {
+      "all_walk_state": true,
+      "confidence": "Observed obstruction in a separate native spawn evolution; not a controlled same-actor proof that ground movement fixes elevated suppression.",
+      "relative_frame_window": [
+        1000,
+        1822
+      ],
+      "report": {
+        "path": "work/chapter-evaluation/walk-native-mixed-patrol-midnight_ground-evaluation.json",
+        "sha256": "c2858de6962b8abdec12abea90f5b5c58880fb0d66c94a63b6bd4665cd980020"
+      },
+      "warden_x_range": [
+        216.94873046875,
+        216.94873046875
+      ]
+    },
+    "warden_flat_ground_control": {
+      "contact_crossings": [
+        5,
+        4,
+        6
+      ],
+      "intended_elevated_control_achieved": false,
+      "limit": "Attempted isolated perch route stopped on the ground. Retained as a flat-ground attack control; it does not reproduce the mixed-roster perch or prove a fix.",
+      "move_selections": [
+        3,
+        2,
+        2
+      ],
+      "report": {
+        "path": "work/chapter-evaluation/walk-native-mixed-patrol-warden_perch-evaluation.json",
+        "sha256": "0c68ff9af7d3460feef9b11acb74c5d87df0aeebc29f52be8a9f1db3ae63f5ca"
+      }
+    }
+  },
+  "primary_external_context": [
+    {
+      "author": "J.C. Connors, Griptonite studio head",
+      "section": "Control Is King",
+      "url": "https://www.gamedeveloper.com/production/five-years-20-lessons-20-ds-games",
+      "use": "Controls, AI, backgrounds and mission-flow priorities; chapter recommendations are agent design inferences."
+    },
+    {
+      "url": "https://www.nintendo.com/en-gb/Games/Nintendo-DS/Spider-Man-Web-of-Shadows-273058.html",
+      "use": "Publisher-supplied DS foundation: suit styles, native recovery and pickups; local CS5E evidence governs exact mechanics."
+    }
+  ],
+  "priority": [
+    {
+      "acceptance": "Both suits, full-HP mixed roster, both sides/roof/ground of train, no healing or position fixtures in ordinary route qualification.",
+      "id": "P0",
+      "scope": "Terminal engagement/pursuit"
+    },
+    {
+      "acceptance": "Distinct room role, readable native-scale motion/art/cues, meaningful native combo openings and convincing ending.",
+      "id": "P1",
+      "scope": "One complete Terminal and Long Arm sequence"
+    },
+    {
+      "acceptance": "Ordinary full-route play, saved revisit/Continue, meaningful optional discovery and measured actual DeSmuME frame pacing.",
+      "id": "P2",
+      "scope": "Authored room encounters, saved visible consequences, art/audio and retry route"
+    }
+  ],
+  "prototype_gates": [
+    "Moving train",
+    "Rideable counterweight/load",
+    "Changing live solid collision",
+    "Major camera hooks",
+    "New native-style boss UI",
+    "Hoist HP-driven phase observer"
+  ],
+  "rom_sha256": "1613d74662c7dfa9d5166da0b8c8ed08ec048c605a7e9167edf3e320ac4d2a75",
+  "schema_version": 1,
+  "source_fingerprints": [
+    {
+      "path": "tools/chapter_renewal_rooms.py",
+      "sha256": "1a1fd034eab11f3012b2c1afb8faba531888a3c5d878654dadf23946c9fa4f29"
+    },
+    {
+      "path": "tools/crane_rooms.py",
+      "sha256": "bd18070874a4cde127064878981ffb0408c569be57c1f28e1968ae4260b54d9f"
+    },
+    {
+      "path": "tools/crane_boss.py",
+      "sha256": "d29b5162ff207a66e2eaada135647aff1acef13f445016626468968ecb66ac49"
+    },
+    {
+      "path": "tools/midnight_rework_boss.py",
+      "sha256": "1e6cdfd35bbebba3856bef28f59163538619f8540899ca4f38a44ee7e077a40b"
+    },
+    {
+      "path": "tools/creature_forge_combat.py",
+      "sha256": "e0aba9d037bf93840a9f5896fa0f8923fbb1871a6718bf8f58151ab9b4c45f8b"
+    },
+    {
+      "path": "tools/creature_forge_design.py",
+      "sha256": "18ef139cc132b4ac4eea8a8e89db8fc5225516e5314fa51f0f468dacf8a18e60"
+    },
+    {
+      "path": "tools/midnight_rework_creatures.py",
+      "sha256": "444b733dc35c08fecdbf83a188f2c0ef960b03e027281728f73cf39b076a89a7"
+    },
+    {
+      "path": "tools/crane_creatures.py",
+      "sha256": "b3b9e47e79b7b1b029a706360ccb5179d0a96b590a06f45b21688a132fda5609"
+    }
+  ],
+  "static_facts": {
+    "active_crane_rooms": 12,
+    "active_midnight_rooms": 10,
+    "conductor": "Creature move sequencer and HP-phased arena lane timer are separate schedules.",
+    "crane_save_room": 98,
+    "hoist": {
+      "exposed_per_move": 100,
+      "lane_center_span": 64,
+      "limit": "Script delay-budget ratio, excluding warmup; not measured real FPS, damage or difficulty.",
+      "nominal_exposed_fraction": 0.41841004184100417,
+      "room_width": 420,
+      "slam_delay_budget": 206,
+      "sweep_delay_budget": 272
+    },
+    "midnight_save_rooms": [
+      77,
+      82,
+      87
+    ],
+    "move_selection": "Per-actor descriptor index increments and wraps; range checks the next move; only Conductor count changes below half HP.",
+    "power_and_counterweight": "Power flag opens saved routes/lever pose. Moving counterweight is scenery; player traverses fixed landings.",
+    "same_midnight_table8_patrol_recipe_rooms": [
+      76,
+      78,
+      81,
+      83,
+      86,
+      88
+    ]
+  },
+  "status": "Evaluation completed; design proposals only; no game changes or new publication",
+  "version": "0.22.1"
+}

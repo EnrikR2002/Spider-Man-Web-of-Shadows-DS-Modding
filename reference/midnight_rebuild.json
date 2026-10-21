@@ -1,0 +1,5834 @@
+{
+  "arm9_sha256": "dd30eb25ada17e7d95bc1419588d46f96f6367ebbc1213faba21749d161b39e3",
+  "artifacts": {
+    "footprints": "work/midnight-rebuild/room-footprints-final-j.png",
+    "heavy_contact_sheet": "work/midnight-rebuild/warden-weighted-native.png",
+    "skitter_native_clip": "work/midnight-rebuild/skitter-native-f.mp4"
+  },
+  "current_candidate": "build/version-0.24.0-final/Versioned.nds",
+  "date": "2026-10-18",
+  "feedback": {
+    "current_player_acceptance": "Awaiting player verdict; agent checks are not acceptance",
+    "date": "2026-10-18",
+    "enemy_verdict": "Player rejected0.23 enemies: failed attacks, stock sounds, slow/odd motion, weak attacks",
+    "terrain_verdict": "Materials improved; rectangular structures rejected"
+  },
+  "fixtures_and_limits": [
+    "Native chapter controls start from a disposable copied-save room arrival. No research save is written into the actual battery.",
+    "Regular attack controls isolate a one-species spawn budget. Native enemy HP, AI, movement, hit detection and reactions; player HP resets only between complete programs, plus labelled ending-clear refills.",
+    "Conductor Red/Black no-refill wins use the actual19-unit native player maximum. The four-program study heals the player, reaches half HP through actual player attacks, and establishes damaging Crownfall; not a difficulty run.",
+    "Hoist Red/Black no-refill controls use copied-save kit/Vitality purchases with60-unit native maximum and an explicit initial approach placement. Every fight, return movement, sphere interaction and fresh Continue is native. This fixture is never installed in the player save.",
+    "Final Freight/Observatory mixed clears heal the player and keep enemy HP/spawns/damage/callbacks native. Roof observations show Wardens attacking above the train and Skitters reaching elevated space; not every species has an attack at every elevation.",
+    "Black tower/stair route and Red boss-return route preset already-cleared progress in disposable RAM; paired earned saves and fresh Continue independently establish persistence.",
+    "Six recorded native R responses avoid their active windows; other HP drops remain in that control. No claim of a no-damage run.",
+    "Full-route balance, player presentation/fun acceptance and actual DeSmuME pacing remain unconfirmed. Ballast can repeat navigation hops when a target stays directly above a Freight overhang; tested ground attack coverage is separate from that remaining pursuit limit."
+  ],
+  "implementation": {
+    "arm9_sha256": "dd30eb25ada17e7d95bc1419588d46f96f6367ebbc1213faba21749d161b39e3",
+    "audio_observer": null,
+    "contact_pilot": false,
+    "creatures": {
+      "ballast": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_BlockIdle.sca",
+            "samples": 40,
+            "source": "brt_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_BlockImpact.sca",
+            "samples": 11,
+            "source": "brt_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_BreakingOutOfGrapple.sca",
+            "samples": 15,
+            "source": "brt_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Die.sca",
+            "samples": 16,
+            "source": "brt_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                15,
+                21
+              ],
+              [
+                29,
+                35
+              ]
+            ],
+            "mode": "slam",
+            "move": "Breakwater rupture",
+            "resource": "zz_F22_ballast_brt_DropDownAttack.sca",
+            "samples": 42,
+            "source": "brt_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Fall.sca",
+            "samples": 16,
+            "source": "brt_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_GrappledByWeb.sca",
+            "samples": 18,
+            "source": "brt_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_GrappledByWebAlt1.sca",
+            "samples": 18,
+            "source": "brt_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                17
+              ],
+              [
+                25,
+                29
+              ]
+            ],
+            "mode": "strike",
+            "move": "Dredger sweep",
+            "resource": "zz_F22_ballast_brt_GroundAttack1.sca",
+            "samples": 38,
+            "source": "brt_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                15,
+                21
+              ],
+              [
+                29,
+                35
+              ]
+            ],
+            "mode": "slam",
+            "move": "Breakwater rupture",
+            "resource": "zz_F22_ballast_brt_GroundAttack2.sca",
+            "samples": 42,
+            "source": "brt_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                22
+              ],
+              [
+                28,
+                32
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Hull charge",
+            "resource": "zz_F22_ballast_brt_GroundRangedAttack1.sca",
+            "samples": 39,
+            "source": "brt_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HammerSlamLand.sca",
+            "samples": 12,
+            "source": "brt_HammerSlamLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtAirHitA.sca",
+            "samples": 5,
+            "source": "brt_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtAirHitB.sca",
+            "samples": 5,
+            "source": "brt_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtFall.sca",
+            "samples": 8,
+            "source": "brt_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtHitA.sca",
+            "samples": 11,
+            "source": "brt_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtHitB.sca",
+            "samples": 11,
+            "source": "brt_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtLand.sca",
+            "samples": 20,
+            "source": "brt_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtLandFaceToBack.sca",
+            "samples": 20,
+            "source": "brt_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtLandGetUp.sca",
+            "samples": 20,
+            "source": "brt_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                22
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_ballast_brt_HurtLandGetUpAttack1.sca",
+            "samples": 26,
+            "source": "brt_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtLandHit.sca",
+            "samples": 10,
+            "source": "brt_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtLandTumble.sca",
+            "samples": 20,
+            "source": "brt_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Idle.sca",
+            "samples": 40,
+            "source": "brt_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Jump.sca",
+            "samples": 8,
+            "source": "brt_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_JumpPrep.sca",
+            "samples": 4,
+            "source": "brt_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_JumpStartForward.sca",
+            "samples": 4,
+            "source": "brt_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_JumpStartUp.sca",
+            "samples": 4,
+            "source": "brt_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Land.sca",
+            "samples": 12,
+            "source": "brt_Land.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_NoticeSpidey.sca",
+            "samples": 40,
+            "source": "brt_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Run.sca",
+            "samples": 18,
+            "source": "brt_Run.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                22
+              ],
+              [
+                28,
+                32
+              ]
+            ],
+            "mode": "strike",
+            "move": "Hull charge",
+            "resource": "zz_F22_ballast_brt_RunAttack.sca",
+            "samples": 39,
+            "source": "brt_RunAttack.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                17
+              ],
+              [
+                25,
+                29
+              ]
+            ],
+            "mode": "strike",
+            "move": "Dredger sweep",
+            "resource": "zz_F22_ballast_brt_ThrowObject.sca",
+            "samples": 38,
+            "source": "brt_ThrowObject.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Walk.sca",
+            "samples": 22,
+            "source": "brt_Walk.sca"
+          }
+        ],
+        "model": {
+          "quads": 266,
+          "shared_texture": "Forge128",
+          "stored_matrices": 20,
+          "vertices": 1064
+        },
+        "programs": [
+          {
+            "action": 55,
+            "contacts": [
+              [
+                13,
+                17
+              ],
+              [
+                25,
+                29
+              ]
+            ],
+            "cooldown": 20,
+            "drives": [
+              [
+                12,
+                17,
+                0.35
+              ],
+              [
+                24,
+                29,
+                0.2
+              ]
+            ],
+            "jumps": [],
+            "kind": "sweep",
+            "name": "Dredger sweep",
+            "reach": 12,
+            "samples": 38
+          },
+          {
+            "action": 63,
+            "contacts": [
+              [
+                15,
+                21
+              ],
+              [
+                29,
+                35
+              ]
+            ],
+            "cooldown": 23,
+            "drives": [],
+            "jumps": [],
+            "kind": "quake",
+            "name": "Breakwater rupture",
+            "reach": 20,
+            "samples": 42
+          },
+          {
+            "action": 136,
+            "contacts": [
+              [
+                14,
+                22
+              ],
+              [
+                28,
+                32
+              ]
+            ],
+            "cooldown": 23,
+            "drives": [
+              [
+                10,
+                22,
+                1.2
+              ],
+              [
+                23,
+                26,
+                0.4
+              ]
+            ],
+            "jumps": [],
+            "kind": "charge",
+            "name": "Hull charge",
+            "reach": 28,
+            "samples": 39
+          }
+        ]
+      },
+      "conductor": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_BlockIdle.sca",
+            "samples": 40,
+            "source": "brt_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_BlockImpact.sca",
+            "samples": 11,
+            "source": "brt_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_BreakingOutOfGrapple.sca",
+            "samples": 15,
+            "source": "brt_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Die.sca",
+            "samples": 16,
+            "source": "brt_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                25
+              ],
+              [
+                32,
+                40
+              ]
+            ],
+            "mode": "slam",
+            "move": "Storm verdict",
+            "resource": "zz_F22_conductor_brt_DropDownAttack.sca",
+            "samples": 48,
+            "source": "brt_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Fall.sca",
+            "samples": 16,
+            "source": "brt_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_GrappledByWeb.sca",
+            "samples": 18,
+            "source": "brt_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_GrappledByWebAlt1.sca",
+            "samples": 18,
+            "source": "brt_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                12,
+                16
+              ],
+              [
+                23,
+                27
+              ],
+              [
+                33,
+                37
+              ]
+            ],
+            "mode": "strike",
+            "move": "Cadenza",
+            "resource": "zz_F22_conductor_brt_GroundAttack1.sca",
+            "samples": 44,
+            "source": "brt_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                23
+              ],
+              [
+                29,
+                35
+              ],
+              [
+                40,
+                46
+              ]
+            ],
+            "mode": "slam",
+            "move": "Blackout fugue",
+            "resource": "zz_F22_conductor_brt_GroundAttack2.sca",
+            "samples": 50,
+            "source": "brt_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                25
+              ],
+              [
+                32,
+                40
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Storm verdict",
+            "resource": "zz_F22_conductor_brt_GroundRangedAttack1.sca",
+            "samples": 48,
+            "source": "brt_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HammerSlamLand.sca",
+            "samples": 12,
+            "source": "brt_HammerSlamLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtAirHitA.sca",
+            "samples": 5,
+            "source": "brt_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtAirHitB.sca",
+            "samples": 5,
+            "source": "brt_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtFall.sca",
+            "samples": 8,
+            "source": "brt_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtHitA.sca",
+            "samples": 11,
+            "source": "brt_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtHitB.sca",
+            "samples": 11,
+            "source": "brt_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtLand.sca",
+            "samples": 20,
+            "source": "brt_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtLandFaceToBack.sca",
+            "samples": 20,
+            "source": "brt_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtLandGetUp.sca",
+            "samples": 20,
+            "source": "brt_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                22
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_conductor_brt_HurtLandGetUpAttack1.sca",
+            "samples": 26,
+            "source": "brt_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtLandHit.sca",
+            "samples": 10,
+            "source": "brt_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtLandTumble.sca",
+            "samples": 20,
+            "source": "brt_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Idle.sca",
+            "samples": 40,
+            "source": "brt_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Jump.sca",
+            "samples": 8,
+            "source": "brt_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_JumpPrep.sca",
+            "samples": 4,
+            "source": "brt_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_JumpStartForward.sca",
+            "samples": 4,
+            "source": "brt_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_JumpStartUp.sca",
+            "samples": 4,
+            "source": "brt_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Land.sca",
+            "samples": 12,
+            "source": "brt_Land.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_NoticeSpidey.sca",
+            "samples": 40,
+            "source": "brt_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Run.sca",
+            "samples": 18,
+            "source": "brt_Run.sca"
+          },
+          {
+            "contacts": [
+              [
+                15,
+                21
+              ],
+              [
+                33,
+                39
+              ]
+            ],
+            "mode": "strike",
+            "move": "Crownfall",
+            "resource": "zz_F22_conductor_brt_RunAttack.sca",
+            "samples": 46,
+            "source": "brt_RunAttack.sca"
+          },
+          {
+            "contacts": [
+              [
+                12,
+                16
+              ],
+              [
+                23,
+                27
+              ],
+              [
+                33,
+                37
+              ]
+            ],
+            "mode": "strike",
+            "move": "Cadenza",
+            "resource": "zz_F22_conductor_brt_ThrowObject.sca",
+            "samples": 44,
+            "source": "brt_ThrowObject.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Walk.sca",
+            "samples": 22,
+            "source": "brt_Walk.sca"
+          }
+        ],
+        "model": {
+          "quads": 422,
+          "shared_texture": "Forge128",
+          "stored_matrices": 22,
+          "vertices": 1688
+        },
+        "programs": [
+          {
+            "action": 55,
+            "contacts": [
+              [
+                12,
+                16
+              ],
+              [
+                23,
+                27
+              ],
+              [
+                33,
+                37
+              ]
+            ],
+            "cooldown": 16,
+            "drives": [
+              [
+                10,
+                16,
+                0.5
+              ],
+              [
+                21,
+                27,
+                0.5
+              ],
+              [
+                31,
+                37,
+                0.6
+              ]
+            ],
+            "jumps": [],
+            "kind": "cadenza",
+            "name": "Cadenza",
+            "reach": 16,
+            "samples": 44
+          },
+          {
+            "action": 63,
+            "contacts": [
+              [
+                17,
+                23
+              ],
+              [
+                29,
+                35
+              ],
+              [
+                40,
+                46
+              ]
+            ],
+            "cooldown": 20,
+            "drives": [],
+            "jumps": [],
+            "kind": "fugue",
+            "name": "Blackout fugue",
+            "reach": 26,
+            "samples": 50
+          },
+          {
+            "action": 30,
+            "contacts": [
+              [
+                17,
+                25
+              ],
+              [
+                32,
+                40
+              ]
+            ],
+            "cooldown": 21,
+            "drives": [],
+            "jumps": [],
+            "kind": "verdict",
+            "name": "Storm verdict",
+            "reach": 44,
+            "samples": 48
+          },
+          {
+            "action": 136,
+            "contacts": [
+              [
+                15,
+                21
+              ],
+              [
+                33,
+                39
+              ]
+            ],
+            "cooldown": 23,
+            "drives": [
+              [
+                9,
+                22,
+                1.15
+              ]
+            ],
+            "jumps": [
+              [
+                9,
+                1.7
+              ]
+            ],
+            "kind": "crownfall",
+            "name": "Crownfall",
+            "reach": 30,
+            "samples": 46
+          }
+        ]
+      },
+      "eye": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_eye_hm_BerserkerIdle.sca",
+            "samples": 40,
+            "source": "hm_BerserkerIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_eye_hm_BlockIdle.sca",
+            "samples": 40,
+            "source": "hm_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_BlockImpact.sca",
+            "samples": 11,
+            "source": "hm_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_eye_hm_BreakingOutOfGrapple.sca",
+            "samples": 18,
+            "source": "hm_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Burrow.sca",
+            "samples": 12,
+            "source": "hm_Burrow.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Crawl.sca",
+            "samples": 14,
+            "source": "hm_Crawl.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Die.sca",
+            "samples": 25,
+            "source": "hm_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                24
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_DiveSlantKick.sca",
+            "samples": 36,
+            "source": "hm_DiveSlantKick.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ]
+            ],
+            "mode": "slam",
+            "move": "Capacitor bloom",
+            "resource": "zz_F22_eye_hm_DropDownAttack.sca",
+            "samples": 30,
+            "source": "hm_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Duck.sca",
+            "samples": 12,
+            "source": "hm_Duck.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                24
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_DuckAttack.sca",
+            "samples": 36,
+            "source": "hm_DuckAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Emerge.sca",
+            "samples": 40,
+            "source": "hm_Emerge.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                24
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_EmergeAttack.sca",
+            "samples": 36,
+            "source": "hm_EmergeAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Explode.sca",
+            "samples": 25,
+            "source": "hm_Explode.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_eye_hm_ExplodePrep.sca",
+            "samples": 25,
+            "source": "hm_ExplodePrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Fall.sca",
+            "samples": 8,
+            "source": "hm_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Fly.sca",
+            "samples": 16,
+            "source": "hm_Fly.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_eye_hm_GettingPossessed.sca",
+            "samples": 40,
+            "source": "hm_GettingPossessed.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_eye_hm_GrappledByWeb.sca",
+            "samples": 18,
+            "source": "hm_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_eye_hm_GrappledByWebAlt1.sca",
+            "samples": 18,
+            "source": "hm_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                24
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_GroundAttack1.sca",
+            "samples": 36,
+            "source": "hm_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ]
+            ],
+            "mode": "slam",
+            "move": "Capacitor bloom",
+            "resource": "zz_F22_eye_hm_GroundAttack2.sca",
+            "samples": 30,
+            "source": "hm_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                17
+              ],
+              [
+                23,
+                30
+              ]
+            ],
+            "mode": "strike",
+            "move": "Twin discharge",
+            "resource": "zz_F22_eye_hm_GroundAttackCombo.sca",
+            "samples": 38,
+            "source": "hm_GroundAttackCombo.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                24
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_GroundAttackStrong1.sca",
+            "samples": 36,
+            "source": "hm_GroundAttackStrong1.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                24
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_GroundAttackStrong2.sca",
+            "samples": 36,
+            "source": "hm_GroundAttackStrong2.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                17
+              ],
+              [
+                23,
+                30
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Twin discharge",
+            "resource": "zz_F22_eye_hRng_GroundRangedAttack1.sca",
+            "samples": 38,
+            "source": "hRng_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtAirHitA.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtAirHitB.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtFall.sca",
+            "samples": 3,
+            "source": "hm_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtHitA.sca",
+            "samples": 10,
+            "source": "hm_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtHitB.sca",
+            "samples": 10,
+            "source": "hm_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtLand.sca",
+            "samples": 20,
+            "source": "hm_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtLandFaceToBack.sca",
+            "samples": 20,
+            "source": "hm_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtLandGetUp.sca",
+            "samples": 20,
+            "source": "hm_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                17
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_eye_hm_HurtLandGetUpAttack1.sca",
+            "samples": 20,
+            "source": "hm_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtLandHit.sca",
+            "samples": 12,
+            "source": "hm_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtLandTumble.sca",
+            "samples": 20,
+            "source": "hm_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtLandTumbleAlt1.sca",
+            "samples": 20,
+            "source": "hm_HurtLandTumbleAlt1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_eye_hRng_Idle.sca",
+            "samples": 40,
+            "source": "hRng_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Jump.sca",
+            "samples": 8,
+            "source": "hm_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_JumpPrep.sca",
+            "samples": 5,
+            "source": "hm_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_JumpStartForward.sca",
+            "samples": 6,
+            "source": "hm_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_JumpStartUp.sca",
+            "samples": 6,
+            "source": "hm_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Land.sca",
+            "samples": 12,
+            "source": "hm_Land.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ]
+            ],
+            "mode": "pounce",
+            "move": "Capacitor bloom",
+            "resource": "zz_F22_eye_hm_LeapAttack.sca",
+            "samples": 30,
+            "source": "hm_LeapAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_LeapAttackPrep.sca",
+            "samples": 12,
+            "source": "hm_LeapAttackPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_eye_hm_NoticeSpidey.sca",
+            "samples": 40,
+            "source": "hm_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_eye_hRng_Run.sca",
+            "samples": 14,
+            "source": "hRng_Run.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_SproutWings.sca",
+            "samples": 16,
+            "source": "hm_SproutWings.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                17
+              ],
+              [
+                23,
+                30
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Twin discharge",
+            "resource": "zz_F22_eye_hm_ThrowIchorDown.sca",
+            "samples": 38,
+            "source": "hm_ThrowIchorDown.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                17
+              ],
+              [
+                23,
+                30
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Twin discharge",
+            "resource": "zz_F22_eye_hm_ThrowIchorSlant.sca",
+            "samples": 38,
+            "source": "hm_ThrowIchorSlant.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_eye_hRng_Walk.sca",
+            "samples": 20,
+            "source": "hRng_Walk.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                24
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_WallJumpAttack.sca",
+            "samples": 36,
+            "source": "hm_WallJumpAttack.sca"
+          }
+        ],
+        "model": {
+          "quads": 272,
+          "shared_texture": "Forge128",
+          "stored_matrices": 16,
+          "vertices": 1088
+        },
+        "programs": [
+          {
+            "action": 55,
+            "contacts": [
+              [
+                14,
+                24
+              ]
+            ],
+            "cooldown": 18,
+            "drives": [],
+            "jumps": [],
+            "kind": "beam",
+            "name": "Arc guillotine",
+            "reach": 37,
+            "samples": 36
+          },
+          {
+            "action": 63,
+            "contacts": [
+              [
+                10,
+                15
+              ]
+            ],
+            "cooldown": 16,
+            "drives": [
+              [
+                7,
+                14,
+                -0.55
+              ]
+            ],
+            "jumps": [
+              [
+                7,
+                1.05
+              ]
+            ],
+            "kind": "burst",
+            "name": "Capacitor bloom",
+            "reach": 13,
+            "samples": 30
+          },
+          {
+            "action": 68,
+            "contacts": [
+              [
+                10,
+                17
+              ],
+              [
+                23,
+                30
+              ]
+            ],
+            "cooldown": 18,
+            "drives": [],
+            "jumps": [],
+            "kind": "twins",
+            "name": "Twin discharge",
+            "reach": 37,
+            "samples": 38
+          }
+        ]
+      },
+      "maw": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_maw_hm_BerserkerIdle.sca",
+            "samples": 40,
+            "source": "hm_BerserkerIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_maw_hm_BlockIdle.sca",
+            "samples": 40,
+            "source": "hm_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_BlockImpact.sca",
+            "samples": 11,
+            "source": "hm_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_maw_hm_BreakingOutOfGrapple.sca",
+            "samples": 18,
+            "source": "hm_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Burrow.sca",
+            "samples": 12,
+            "source": "hm_Burrow.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Crawl.sca",
+            "samples": 14,
+            "source": "hm_Crawl.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Die.sca",
+            "samples": 25,
+            "source": "hm_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                9,
+                12
+              ],
+              [
+                17,
+                20
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_DiveSlantKick.sca",
+            "samples": 29,
+            "source": "hm_DiveSlantKick.sca"
+          },
+          {
+            "contacts": [
+              [
+                12,
+                17
+              ]
+            ],
+            "mode": "slam",
+            "move": "Anchor vault",
+            "resource": "zz_F22_maw_hm_DropDownAttack.sca",
+            "samples": 34,
+            "source": "hm_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Duck.sca",
+            "samples": 12,
+            "source": "hm_Duck.sca"
+          },
+          {
+            "contacts": [
+              [
+                9,
+                12
+              ],
+              [
+                17,
+                20
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_DuckAttack.sca",
+            "samples": 29,
+            "source": "hm_DuckAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Emerge.sca",
+            "samples": 40,
+            "source": "hm_Emerge.sca"
+          },
+          {
+            "contacts": [
+              [
+                9,
+                12
+              ],
+              [
+                17,
+                20
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_EmergeAttack.sca",
+            "samples": 29,
+            "source": "hm_EmergeAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Explode.sca",
+            "samples": 25,
+            "source": "hm_Explode.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Fall.sca",
+            "samples": 8,
+            "source": "hm_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Fly.sca",
+            "samples": 16,
+            "source": "hm_Fly.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_maw_hm_GettingPossessed.sca",
+            "samples": 40,
+            "source": "hm_GettingPossessed.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_maw_hm_GrappledByWeb.sca",
+            "samples": 18,
+            "source": "hm_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_maw_hLpr_GrappledByWebAlt1.sca",
+            "samples": 18,
+            "source": "hLpr_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                9,
+                12
+              ],
+              [
+                17,
+                20
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_GroundAttack1.sca",
+            "samples": 29,
+            "source": "hm_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                12,
+                17
+              ]
+            ],
+            "mode": "slam",
+            "move": "Anchor vault",
+            "resource": "zz_F22_maw_hm_GroundAttack2.sca",
+            "samples": 34,
+            "source": "hm_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                15,
+                20
+              ]
+            ],
+            "mode": "strike",
+            "move": "Keelbreaker feint",
+            "resource": "zz_F22_maw_hm_GroundAttackCombo.sca",
+            "samples": 33,
+            "source": "hm_GroundAttackCombo.sca"
+          },
+          {
+            "contacts": [
+              [
+                9,
+                12
+              ],
+              [
+                17,
+                20
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_GroundAttackStrong1.sca",
+            "samples": 29,
+            "source": "hm_GroundAttackStrong1.sca"
+          },
+          {
+            "contacts": [
+              [
+                9,
+                12
+              ],
+              [
+                17,
+                20
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_GroundAttackStrong2.sca",
+            "samples": 29,
+            "source": "hm_GroundAttackStrong2.sca"
+          },
+          {
+            "contacts": [
+              [
+                15,
+                20
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Keelbreaker feint",
+            "resource": "zz_F22_maw_hm_GroundRangedAttack1.sca",
+            "samples": 33,
+            "source": "hm_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtAirHitA.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtAirHitB.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtFall.sca",
+            "samples": 3,
+            "source": "hm_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtHitA.sca",
+            "samples": 10,
+            "source": "hm_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtHitB.sca",
+            "samples": 10,
+            "source": "hm_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtLand.sca",
+            "samples": 20,
+            "source": "hm_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtLandFaceToBack.sca",
+            "samples": 20,
+            "source": "hm_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtLandGetUp.sca",
+            "samples": 20,
+            "source": "hm_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                17
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_maw_hm_HurtLandGetUpAttack1.sca",
+            "samples": 20,
+            "source": "hm_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtLandHit.sca",
+            "samples": 12,
+            "source": "hm_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtLandTumble.sca",
+            "samples": 20,
+            "source": "hm_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtLandTumbleAlt1.sca",
+            "samples": 20,
+            "source": "hm_HurtLandTumbleAlt1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_maw_hLpr_Idle.sca",
+            "samples": 40,
+            "source": "hLpr_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Jump.sca",
+            "samples": 8,
+            "source": "hm_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_JumpPrep.sca",
+            "samples": 5,
+            "source": "hm_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_JumpStartForward.sca",
+            "samples": 6,
+            "source": "hm_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_JumpStartUp.sca",
+            "samples": 6,
+            "source": "hm_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Land.sca",
+            "samples": 12,
+            "source": "hm_Land.sca"
+          },
+          {
+            "contacts": [
+              [
+                12,
+                17
+              ]
+            ],
+            "mode": "pounce",
+            "move": "Anchor vault",
+            "resource": "zz_F22_maw_hLpr_LeapAttack.sca",
+            "samples": 34,
+            "source": "hLpr_LeapAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_LeapAttackPrep.sca",
+            "samples": 12,
+            "source": "hm_LeapAttackPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_maw_hm_NoticeSpidey.sca",
+            "samples": 40,
+            "source": "hm_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_maw_hLpr_Run.sca",
+            "samples": 14,
+            "source": "hLpr_Run.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_SproutWings.sca",
+            "samples": 16,
+            "source": "hm_SproutWings.sca"
+          },
+          {
+            "contacts": [
+              [
+                15,
+                20
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Keelbreaker feint",
+            "resource": "zz_F22_maw_hm_ThrowIchorDown.sca",
+            "samples": 33,
+            "source": "hm_ThrowIchorDown.sca"
+          },
+          {
+            "contacts": [
+              [
+                15,
+                20
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Keelbreaker feint",
+            "resource": "zz_F22_maw_hm_ThrowIchorSlant.sca",
+            "samples": 33,
+            "source": "hm_ThrowIchorSlant.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_maw_hLpr_Walk.sca",
+            "samples": 20,
+            "source": "hLpr_Walk.sca"
+          },
+          {
+            "contacts": [
+              [
+                9,
+                12
+              ],
+              [
+                17,
+                20
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_WallJumpAttack.sca",
+            "samples": 29,
+            "source": "hm_WallJumpAttack.sca"
+          }
+        ],
+        "model": {
+          "quads": 296,
+          "shared_texture": "Forge128",
+          "stored_matrices": 20,
+          "vertices": 1184
+        },
+        "programs": [
+          {
+            "action": 55,
+            "contacts": [
+              [
+                9,
+                12
+              ],
+              [
+                17,
+                20
+              ]
+            ],
+            "cooldown": 14,
+            "drives": [
+              [
+                8,
+                12,
+                0.6
+              ],
+              [
+                16,
+                20,
+                0.4
+              ]
+            ],
+            "jumps": [],
+            "kind": "scissor",
+            "name": "Riptide scissor",
+            "reach": 10,
+            "samples": 29
+          },
+          {
+            "action": 63,
+            "contacts": [
+              [
+                12,
+                17
+              ]
+            ],
+            "cooldown": 18,
+            "drives": [
+              [
+                6,
+                19,
+                1.05
+              ]
+            ],
+            "jumps": [
+              [
+                6,
+                1.4
+              ]
+            ],
+            "kind": "vault",
+            "name": "Anchor vault",
+            "reach": 22,
+            "samples": 34
+          },
+          {
+            "action": 68,
+            "contacts": [
+              [
+                15,
+                20
+              ]
+            ],
+            "cooldown": 18,
+            "drives": [
+              [
+                4,
+                8,
+                -0.5
+              ],
+              [
+                11,
+                20,
+                1.3
+              ]
+            ],
+            "jumps": [],
+            "kind": "feint",
+            "name": "Keelbreaker feint",
+            "reach": 22,
+            "samples": 33
+          }
+        ]
+      },
+      "skitter": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_BerserkerIdle.sca",
+            "samples": 40,
+            "source": "hm_BerserkerIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_BlockIdle.sca",
+            "samples": 40,
+            "source": "hm_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_BlockImpact.sca",
+            "samples": 11,
+            "source": "hm_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_BreakingOutOfGrapple.sca",
+            "samples": 18,
+            "source": "hm_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Burrow.sca",
+            "samples": 12,
+            "source": "hm_Burrow.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Crawl.sca",
+            "samples": 14,
+            "source": "hm_Crawl.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Die.sca",
+            "samples": 25,
+            "source": "hm_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                8,
+                11
+              ],
+              [
+                16,
+                19
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_DiveSlantKick.sca",
+            "samples": 27,
+            "source": "hm_DiveSlantKick.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                18
+              ]
+            ],
+            "mode": "slam",
+            "move": "Switchback execution",
+            "resource": "zz_F22_skitter_hm_DropDownAttack.sca",
+            "samples": 32,
+            "source": "hm_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Duck.sca",
+            "samples": 12,
+            "source": "hm_Duck.sca"
+          },
+          {
+            "contacts": [
+              [
+                8,
+                11
+              ],
+              [
+                16,
+                19
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_DuckAttack.sca",
+            "samples": 27,
+            "source": "hm_DuckAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Emerge.sca",
+            "samples": 40,
+            "source": "hm_Emerge.sca"
+          },
+          {
+            "contacts": [
+              [
+                8,
+                11
+              ],
+              [
+                16,
+                19
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_EmergeAttack.sca",
+            "samples": 27,
+            "source": "hm_EmergeAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Explode.sca",
+            "samples": 25,
+            "source": "hm_Explode.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Fall.sca",
+            "samples": 8,
+            "source": "hm_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Fly.sca",
+            "samples": 16,
+            "source": "hm_Fly.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_GettingPossessed.sca",
+            "samples": 40,
+            "source": "hm_GettingPossessed.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_GrappledByWeb.sca",
+            "samples": 18,
+            "source": "hm_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_skitter_hLpr_GrappledByWebAlt1.sca",
+            "samples": 18,
+            "source": "hLpr_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                8,
+                11
+              ],
+              [
+                16,
+                19
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_GroundAttack1.sca",
+            "samples": 27,
+            "source": "hm_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                18
+              ]
+            ],
+            "mode": "slam",
+            "move": "Switchback execution",
+            "resource": "zz_F22_skitter_hm_GroundAttack2.sca",
+            "samples": 32,
+            "source": "hm_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                14
+              ],
+              [
+                24,
+                27
+              ]
+            ],
+            "mode": "strike",
+            "move": "Trackside bound",
+            "resource": "zz_F22_skitter_hm_GroundAttackCombo.sca",
+            "samples": 35,
+            "source": "hm_GroundAttackCombo.sca"
+          },
+          {
+            "contacts": [
+              [
+                8,
+                11
+              ],
+              [
+                16,
+                19
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_GroundAttackStrong1.sca",
+            "samples": 27,
+            "source": "hm_GroundAttackStrong1.sca"
+          },
+          {
+            "contacts": [
+              [
+                8,
+                11
+              ],
+              [
+                16,
+                19
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_GroundAttackStrong2.sca",
+            "samples": 27,
+            "source": "hm_GroundAttackStrong2.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                14
+              ],
+              [
+                24,
+                27
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Trackside bound",
+            "resource": "zz_F22_skitter_hm_GroundRangedAttack1.sca",
+            "samples": 35,
+            "source": "hm_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtAirHitA.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtAirHitB.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtFall.sca",
+            "samples": 3,
+            "source": "hm_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtHitA.sca",
+            "samples": 10,
+            "source": "hm_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtHitB.sca",
+            "samples": 10,
+            "source": "hm_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtLand.sca",
+            "samples": 20,
+            "source": "hm_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtLandFaceToBack.sca",
+            "samples": 20,
+            "source": "hm_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtLandGetUp.sca",
+            "samples": 20,
+            "source": "hm_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                17
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_skitter_hm_HurtLandGetUpAttack1.sca",
+            "samples": 20,
+            "source": "hm_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtLandHit.sca",
+            "samples": 12,
+            "source": "hm_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtLandTumble.sca",
+            "samples": 20,
+            "source": "hm_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtLandTumbleAlt1.sca",
+            "samples": 20,
+            "source": "hm_HurtLandTumbleAlt1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_skitter_hLpr_Idle.sca",
+            "samples": 40,
+            "source": "hLpr_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Jump.sca",
+            "samples": 8,
+            "source": "hm_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_JumpPrep.sca",
+            "samples": 5,
+            "source": "hm_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_JumpStartForward.sca",
+            "samples": 6,
+            "source": "hm_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_JumpStartUp.sca",
+            "samples": 6,
+            "source": "hm_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Land.sca",
+            "samples": 12,
+            "source": "hm_Land.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                18
+              ]
+            ],
+            "mode": "pounce",
+            "move": "Switchback execution",
+            "resource": "zz_F22_skitter_hLpr_LeapAttack.sca",
+            "samples": 32,
+            "source": "hLpr_LeapAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_LeapAttackPrep.sca",
+            "samples": 12,
+            "source": "hm_LeapAttackPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_NoticeSpidey.sca",
+            "samples": 40,
+            "source": "hm_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_skitter_hLpr_Run.sca",
+            "samples": 14,
+            "source": "hLpr_Run.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_SproutWings.sca",
+            "samples": 16,
+            "source": "hm_SproutWings.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                14
+              ],
+              [
+                24,
+                27
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Trackside bound",
+            "resource": "zz_F22_skitter_hm_ThrowIchorDown.sca",
+            "samples": 35,
+            "source": "hm_ThrowIchorDown.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                14
+              ],
+              [
+                24,
+                27
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Trackside bound",
+            "resource": "zz_F22_skitter_hm_ThrowIchorSlant.sca",
+            "samples": 35,
+            "source": "hm_ThrowIchorSlant.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_skitter_hLpr_Walk.sca",
+            "samples": 20,
+            "source": "hLpr_Walk.sca"
+          },
+          {
+            "contacts": [
+              [
+                8,
+                11
+              ],
+              [
+                16,
+                19
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_WallJumpAttack.sca",
+            "samples": 27,
+            "source": "hm_WallJumpAttack.sca"
+          }
+        ],
+        "model": {
+          "quads": 316,
+          "shared_texture": "Forge128",
+          "stored_matrices": 20,
+          "vertices": 1264
+        },
+        "programs": [
+          {
+            "action": 55,
+            "contacts": [
+              [
+                8,
+                11
+              ],
+              [
+                16,
+                19
+              ]
+            ],
+            "cooldown": 12,
+            "drives": [
+              [
+                7,
+                11,
+                0.7
+              ],
+              [
+                15,
+                19,
+                0.4
+              ]
+            ],
+            "jumps": [],
+            "kind": "scissor",
+            "name": "Railcut cross",
+            "reach": 10,
+            "samples": 27
+          },
+          {
+            "action": 63,
+            "contacts": [
+              [
+                14,
+                18
+              ]
+            ],
+            "cooldown": 16,
+            "drives": [
+              [
+                3,
+                7,
+                -0.65
+              ],
+              [
+                10,
+                18,
+                1.35
+              ]
+            ],
+            "jumps": [],
+            "kind": "feint",
+            "name": "Switchback execution",
+            "reach": 23,
+            "samples": 32
+          },
+          {
+            "action": 68,
+            "contacts": [
+              [
+                10,
+                14
+              ],
+              [
+                24,
+                27
+              ]
+            ],
+            "cooldown": 16,
+            "drives": [
+              [
+                5,
+                17,
+                1.05
+              ]
+            ],
+            "jumps": [
+              [
+                5,
+                1.35
+              ]
+            ],
+            "kind": "shear",
+            "name": "Trackside bound",
+            "reach": 23,
+            "samples": 35
+          }
+        ]
+      },
+      "spore": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_spore_hm_BerserkerIdle.sca",
+            "samples": 40,
+            "source": "hm_BerserkerIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_spore_hm_BlockIdle.sca",
+            "samples": 40,
+            "source": "hm_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_BlockImpact.sca",
+            "samples": 11,
+            "source": "hm_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_spore_hm_BreakingOutOfGrapple.sca",
+            "samples": 18,
+            "source": "hm_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Burrow.sca",
+            "samples": 12,
+            "source": "hm_Burrow.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Crawl.sca",
+            "samples": 14,
+            "source": "hm_Crawl.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Die.sca",
+            "samples": 25,
+            "source": "hm_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ],
+              [
+                20,
+                25
+              ],
+              [
+                29,
+                34
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_DiveSlantKick.sca",
+            "samples": 39,
+            "source": "hm_DiveSlantKick.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ]
+            ],
+            "mode": "slam",
+            "move": "Bloom recoil",
+            "resource": "zz_F22_spore_hm_DropDownAttack.sca",
+            "samples": 30,
+            "source": "hm_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Duck.sca",
+            "samples": 12,
+            "source": "hm_Duck.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ],
+              [
+                20,
+                25
+              ],
+              [
+                29,
+                34
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_DuckAttack.sca",
+            "samples": 39,
+            "source": "hm_DuckAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Emerge.sca",
+            "samples": 40,
+            "source": "hm_Emerge.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ],
+              [
+                20,
+                25
+              ],
+              [
+                29,
+                34
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_EmergeAttack.sca",
+            "samples": 39,
+            "source": "hm_EmergeAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Explode.sca",
+            "samples": 25,
+            "source": "hm_Explode.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_spore_hm_ExplodePrep.sca",
+            "samples": 25,
+            "source": "hm_ExplodePrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Fall.sca",
+            "samples": 8,
+            "source": "hm_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Fly.sca",
+            "samples": 16,
+            "source": "hm_Fly.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_spore_hm_GettingPossessed.sca",
+            "samples": 40,
+            "source": "hm_GettingPossessed.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_spore_hm_GrappledByWeb.sca",
+            "samples": 18,
+            "source": "hm_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_spore_hm_GrappledByWebAlt1.sca",
+            "samples": 18,
+            "source": "hm_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ],
+              [
+                20,
+                25
+              ],
+              [
+                29,
+                34
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_GroundAttack1.sca",
+            "samples": 39,
+            "source": "hm_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ]
+            ],
+            "mode": "slam",
+            "move": "Bloom recoil",
+            "resource": "zz_F22_spore_hm_GroundAttack2.sca",
+            "samples": 30,
+            "source": "hm_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                24
+              ]
+            ],
+            "mode": "strike",
+            "move": "Lantern lance",
+            "resource": "zz_F22_spore_hm_GroundAttackCombo.sca",
+            "samples": 34,
+            "source": "hm_GroundAttackCombo.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ],
+              [
+                20,
+                25
+              ],
+              [
+                29,
+                34
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_GroundAttackStrong1.sca",
+            "samples": 39,
+            "source": "hm_GroundAttackStrong1.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ],
+              [
+                20,
+                25
+              ],
+              [
+                29,
+                34
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_GroundAttackStrong2.sca",
+            "samples": 39,
+            "source": "hm_GroundAttackStrong2.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                24
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Lantern lance",
+            "resource": "zz_F22_spore_hRng_GroundRangedAttack1.sca",
+            "samples": 34,
+            "source": "hRng_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtAirHitA.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtAirHitB.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtFall.sca",
+            "samples": 3,
+            "source": "hm_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtHitA.sca",
+            "samples": 10,
+            "source": "hm_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtHitB.sca",
+            "samples": 10,
+            "source": "hm_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtLand.sca",
+            "samples": 20,
+            "source": "hm_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtLandFaceToBack.sca",
+            "samples": 20,
+            "source": "hm_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtLandGetUp.sca",
+            "samples": 20,
+            "source": "hm_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                17
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_spore_hm_HurtLandGetUpAttack1.sca",
+            "samples": 20,
+            "source": "hm_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtLandHit.sca",
+            "samples": 12,
+            "source": "hm_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtLandTumble.sca",
+            "samples": 20,
+            "source": "hm_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtLandTumbleAlt1.sca",
+            "samples": 20,
+            "source": "hm_HurtLandTumbleAlt1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_spore_hRng_Idle.sca",
+            "samples": 40,
+            "source": "hRng_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Jump.sca",
+            "samples": 8,
+            "source": "hm_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_JumpPrep.sca",
+            "samples": 5,
+            "source": "hm_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_JumpStartForward.sca",
+            "samples": 6,
+            "source": "hm_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_JumpStartUp.sca",
+            "samples": 6,
+            "source": "hm_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Land.sca",
+            "samples": 12,
+            "source": "hm_Land.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ]
+            ],
+            "mode": "pounce",
+            "move": "Bloom recoil",
+            "resource": "zz_F22_spore_hm_LeapAttack.sca",
+            "samples": 30,
+            "source": "hm_LeapAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_LeapAttackPrep.sca",
+            "samples": 12,
+            "source": "hm_LeapAttackPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_spore_hm_NoticeSpidey.sca",
+            "samples": 40,
+            "source": "hm_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_spore_hRng_Run.sca",
+            "samples": 14,
+            "source": "hRng_Run.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_SproutWings.sca",
+            "samples": 16,
+            "source": "hm_SproutWings.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                24
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Lantern lance",
+            "resource": "zz_F22_spore_hm_ThrowIchorDown.sca",
+            "samples": 34,
+            "source": "hm_ThrowIchorDown.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                24
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Lantern lance",
+            "resource": "zz_F22_spore_hm_ThrowIchorSlant.sca",
+            "samples": 34,
+            "source": "hm_ThrowIchorSlant.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_spore_hRng_Walk.sca",
+            "samples": 20,
+            "source": "hRng_Walk.sca"
+          },
+          {
+            "contacts": [
+              [
+                10,
+                15
+              ],
+              [
+                20,
+                25
+              ],
+              [
+                29,
+                34
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_WallJumpAttack.sca",
+            "samples": 39,
+            "source": "hm_WallJumpAttack.sca"
+          }
+        ],
+        "model": {
+          "quads": 260,
+          "shared_texture": "Forge128",
+          "stored_matrices": 16,
+          "vertices": 1040
+        },
+        "programs": [
+          {
+            "action": 55,
+            "contacts": [
+              [
+                10,
+                15
+              ],
+              [
+                20,
+                25
+              ],
+              [
+                29,
+                34
+              ]
+            ],
+            "cooldown": 18,
+            "drives": [
+              [
+                31,
+                36,
+                -0.3
+              ]
+            ],
+            "jumps": [],
+            "kind": "seeds",
+            "name": "Seed procession",
+            "reach": 35,
+            "samples": 39
+          },
+          {
+            "action": 63,
+            "contacts": [
+              [
+                10,
+                15
+              ]
+            ],
+            "cooldown": 16,
+            "drives": [
+              [
+                7,
+                15,
+                -0.6
+              ]
+            ],
+            "jumps": [
+              [
+                7,
+                1.1
+              ]
+            ],
+            "kind": "burst",
+            "name": "Bloom recoil",
+            "reach": 12,
+            "samples": 30
+          },
+          {
+            "action": 68,
+            "contacts": [
+              [
+                13,
+                24
+              ]
+            ],
+            "cooldown": 18,
+            "drives": [],
+            "jumps": [],
+            "kind": "lance",
+            "name": "Lantern lance",
+            "reach": 38,
+            "samples": 34
+          }
+        ]
+      },
+      "warden": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_warden_brt_BlockIdle.sca",
+            "samples": 40,
+            "source": "brt_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_warden_brt_BlockImpact.sca",
+            "samples": 11,
+            "source": "brt_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_warden_brt_BreakingOutOfGrapple.sca",
+            "samples": 15,
+            "source": "brt_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Die.sca",
+            "samples": 16,
+            "source": "brt_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                19
+              ],
+              [
+                28,
+                33
+              ]
+            ],
+            "mode": "slam",
+            "move": "Deadbell peal",
+            "resource": "zz_F22_warden_brt_DropDownAttack.sca",
+            "samples": 40,
+            "source": "brt_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Fall.sca",
+            "samples": 16,
+            "source": "brt_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_warden_brt_GrappledByWeb.sca",
+            "samples": 18,
+            "source": "brt_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_warden_brt_GrappledByWebAlt1.sca",
+            "samples": 18,
+            "source": "brt_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                11,
+                14
+              ],
+              [
+                23,
+                26
+              ]
+            ],
+            "mode": "strike",
+            "move": "Pendulum sentence",
+            "resource": "zz_F22_warden_brt_GroundAttack1.sca",
+            "samples": 36,
+            "source": "brt_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                19
+              ],
+              [
+                28,
+                33
+              ]
+            ],
+            "mode": "slam",
+            "move": "Deadbell peal",
+            "resource": "zz_F22_warden_brt_GroundAttack2.sca",
+            "samples": 40,
+            "source": "brt_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                11,
+                15
+              ],
+              [
+                25,
+                29
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Toll march",
+            "resource": "zz_F22_warden_brt_GroundRangedAttack1.sca",
+            "samples": 38,
+            "source": "brt_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HammerSlamLand.sca",
+            "samples": 12,
+            "source": "brt_HammerSlamLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtAirHitA.sca",
+            "samples": 5,
+            "source": "brt_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtAirHitB.sca",
+            "samples": 5,
+            "source": "brt_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtFall.sca",
+            "samples": 8,
+            "source": "brt_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtHitA.sca",
+            "samples": 11,
+            "source": "brt_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtHitB.sca",
+            "samples": 11,
+            "source": "brt_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtLand.sca",
+            "samples": 20,
+            "source": "brt_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtLandFaceToBack.sca",
+            "samples": 20,
+            "source": "brt_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtLandGetUp.sca",
+            "samples": 20,
+            "source": "brt_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                22
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_warden_brt_HurtLandGetUpAttack1.sca",
+            "samples": 26,
+            "source": "brt_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtLandHit.sca",
+            "samples": 10,
+            "source": "brt_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtLandTumble.sca",
+            "samples": 20,
+            "source": "brt_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Idle.sca",
+            "samples": 40,
+            "source": "brt_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Jump.sca",
+            "samples": 8,
+            "source": "brt_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_warden_brt_JumpPrep.sca",
+            "samples": 4,
+            "source": "brt_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_warden_brt_JumpStartForward.sca",
+            "samples": 4,
+            "source": "brt_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_warden_brt_JumpStartUp.sca",
+            "samples": 4,
+            "source": "brt_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Land.sca",
+            "samples": 12,
+            "source": "brt_Land.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_warden_brt_NoticeSpidey.sca",
+            "samples": 40,
+            "source": "brt_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Run.sca",
+            "samples": 18,
+            "source": "brt_Run.sca"
+          },
+          {
+            "contacts": [
+              [
+                11,
+                15
+              ],
+              [
+                25,
+                29
+              ]
+            ],
+            "mode": "strike",
+            "move": "Toll march",
+            "resource": "zz_F22_warden_brt_RunAttack.sca",
+            "samples": 38,
+            "source": "brt_RunAttack.sca"
+          },
+          {
+            "contacts": [
+              [
+                11,
+                14
+              ],
+              [
+                23,
+                26
+              ]
+            ],
+            "mode": "strike",
+            "move": "Pendulum sentence",
+            "resource": "zz_F22_warden_brt_ThrowObject.sca",
+            "samples": 36,
+            "source": "brt_ThrowObject.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Walk.sca",
+            "samples": 22,
+            "source": "brt_Walk.sca"
+          }
+        ],
+        "model": {
+          "quads": 278,
+          "shared_texture": "Forge128",
+          "stored_matrices": 22,
+          "vertices": 1112
+        },
+        "programs": [
+          {
+            "action": 55,
+            "contacts": [
+              [
+                11,
+                14
+              ],
+              [
+                23,
+                26
+              ]
+            ],
+            "cooldown": 19,
+            "drives": [
+              [
+                10,
+                14,
+                0.3
+              ]
+            ],
+            "jumps": [],
+            "kind": "pendulum",
+            "name": "Pendulum sentence",
+            "reach": 12,
+            "samples": 36
+          },
+          {
+            "action": 63,
+            "contacts": [
+              [
+                14,
+                19
+              ],
+              [
+                28,
+                33
+              ]
+            ],
+            "cooldown": 21,
+            "drives": [],
+            "jumps": [],
+            "kind": "peal",
+            "name": "Deadbell peal",
+            "reach": 20,
+            "samples": 40
+          },
+          {
+            "action": 136,
+            "contacts": [
+              [
+                11,
+                15
+              ],
+              [
+                25,
+                29
+              ]
+            ],
+            "cooldown": 19,
+            "drives": [
+              [
+                6,
+                13,
+                0.7
+              ],
+              [
+                20,
+                27,
+                0.65
+              ]
+            ],
+            "jumps": [],
+            "kind": "march",
+            "name": "Toll march",
+            "reach": 19,
+            "samples": 38
+          }
+        ]
+      }
+    },
+    "ground_gate": {
+      "adapter": 34996680,
+      "grounded_bit": 128,
+      "site": 34988712,
+      "walking": 34989504
+    },
+    "modified_resources": [
+      "zz_F22_maw_hm_BerserkerIdle.sca",
+      "zz_F22_maw_hm_BerserkerIdle.gmb",
+      "zz_F22_maw_hm_BlockIdle.sca",
+      "zz_F22_maw_hm_BlockIdle.gmb",
+      "zz_F22_maw_hm_BlockImpact.sca",
+      "zz_F22_maw_hm_BlockImpact.gmb",
+      "zz_F22_maw_hm_BreakingOutOfGrapple.sca",
+      "zz_F22_maw_hm_BreakingOutOfGrapple.gmb",
+      "zz_F22_maw_hm_Burrow.sca",
+      "zz_F22_maw_hm_Burrow.gmb",
+      "zz_F22_maw_hm_Crawl.sca",
+      "zz_F22_maw_hm_Crawl.gmb",
+      "zz_F22_maw_hm_Die.sca",
+      "zz_F22_maw_hm_Die.gmb",
+      "zz_F22_maw_hm_DiveSlantKick.sca",
+      "zz_F22_maw_hm_DiveSlantKick.gmb",
+      "zz_F22_maw_hm_DiveSlantKick.gab",
+      "zz_F22_maw_hm_DropDownAttack.sca",
+      "zz_F22_maw_hm_DropDownAttack.gmb",
+      "zz_F22_maw_hm_DropDownAttack.gab",
+      "zz_F22_maw_hm_Duck.sca",
+      "zz_F22_maw_hm_Duck.gmb",
+      "zz_F22_maw_hm_DuckAttack.sca",
+      "zz_F22_maw_hm_DuckAttack.gmb",
+      "zz_F22_maw_hm_DuckAttack.gab",
+      "zz_F22_maw_hm_Emerge.sca",
+      "zz_F22_maw_hm_Emerge.gmb",
+      "zz_F22_maw_hm_EmergeAttack.sca",
+      "zz_F22_maw_hm_EmergeAttack.gmb",
+      "zz_F22_maw_hm_Explode.sca",
+      "zz_F22_maw_hm_Explode.gmb",
+      "zz_F22_maw_hm_Fall.sca",
+      "zz_F22_maw_hm_Fall.gmb",
+      "zz_F22_maw_hm_Fly.sca",
+      "zz_F22_maw_hm_Fly.gmb",
+      "zz_F22_maw_hm_GettingPossessed.sca",
+      "zz_F22_maw_hm_GettingPossessed.gmb",
+      "zz_F22_maw_hm_GrappledByWeb.sca",
+      "zz_F22_maw_hm_GrappledByWeb.gmb",
+      "zz_F22_maw_hLpr_GrappledByWebAlt1.sca",
+      "zz_F22_maw_hLpr_GrappledByWebAlt1.gmb",
+      "zz_F22_maw_hm_GroundAttack1.sca",
+      "zz_F22_maw_hm_GroundAttack1.gmb",
+      "zz_F22_maw_hm_GroundAttack1.gab",
+      "zz_F22_maw_hm_GroundAttack2.sca",
+      "zz_F22_maw_hm_GroundAttack2.gmb",
+      "zz_F22_maw_hm_GroundAttack2.gab",
+      "zz_F22_maw_hm_GroundAttackCombo.sca",
+      "zz_F22_maw_hm_GroundAttackCombo.gmb",
+      "zz_F22_maw_hm_GroundAttackCombo.gab",
+      "zz_F22_maw_hm_GroundAttackStrong1.sca",
+      "zz_F22_maw_hm_GroundAttackStrong1.gmb",
+      "zz_F22_maw_hm_GroundAttackStrong1.gab",
+      "zz_F22_maw_hm_GroundAttackStrong2.sca",
+      "zz_F22_maw_hm_GroundAttackStrong2.gmb",
+      "zz_F22_maw_hm_GroundAttackStrong2.gab",
+      "zz_F22_maw_hm_GroundRangedAttack1.sca",
+      "zz_F22_maw_hm_GroundRangedAttack1.gmb",
+      "zz_F22_maw_hm_GroundRangedAttack1.gab",
+      "zz_F22_maw_hm_HurtAirHitA.sca",
+      "zz_F22_maw_hm_HurtAirHitA.gmb",
+      "zz_F22_maw_hm_HurtAirHitB.sca",
+      "zz_F22_maw_hm_HurtAirHitB.gmb",
+      "zz_F22_maw_hm_HurtFall.sca",
+      "zz_F22_maw_hm_HurtFall.gmb",
+      "zz_F22_maw_hm_HurtHitA.sca",
+      "zz_F22_maw_hm_HurtHitA.gmb",
+      "zz_F22_maw_hm_HurtHitB.sca",
+      "zz_F22_maw_hm_HurtHitB.gmb",
+      "zz_F22_maw_hm_HurtKnockBack.sca",
+      "zz_F22_maw_hm_HurtKnockBack.gmb",
+      "zz_F22_maw_hm_HurtKnockBackFast.sca",
+      "zz_F22_maw_hm_HurtKnockBackFast.gmb",
+      "zz_F22_maw_hm_HurtKnockDown.sca",
+      "zz_F22_maw_hm_HurtKnockDown.gmb",
+      "zz_F22_maw_hm_HurtKnockFowardFast.sca",
+      "zz_F22_maw_hm_HurtKnockFowardFast.gmb",
+      "zz_F22_maw_hm_HurtKnockUp.sca",
+      "zz_F22_maw_hm_HurtKnockUp.gmb",
+      "zz_F22_maw_hm_HurtLand.sca",
+      "zz_F22_maw_hm_HurtLand.gmb",
+      "zz_F22_maw_hm_HurtLandFaceToBack.sca",
+      "zz_F22_maw_hm_HurtLandFaceToBack.gmb",
+      "zz_F22_maw_hm_HurtLandGetUp.sca",
+      "zz_F22_maw_hm_HurtLandGetUp.gmb",
+      "zz_F22_maw_hm_HurtLandGetUpAttack1.sca",
+      "zz_F22_maw_hm_HurtLandGetUpAttack1.gmb",
+      "zz_F22_maw_hm_HurtLandGetUpAttack1.gab",
+      "zz_F22_maw_hm_HurtLandHit.sca",
+      "zz_F22_maw_hm_HurtLandHit.gmb",
+      "zz_F22_maw_hm_HurtLandTumble.sca",
+      "zz_F22_maw_hm_HurtLandTumble.gmb",
+      "zz_F22_maw_hm_HurtLandTumbleAlt1.sca",
+      "zz_F22_maw_hm_HurtLandTumbleAlt1.gmb",
+      "zz_F22_maw_hLpr_Idle.sca",
+      "zz_F22_maw_hLpr_Idle.gmb",
+      "zz_F22_maw_hm_Jump.sca",
+      "zz_F22_maw_hm_Jump.gmb",
+      "zz_F22_maw_hm_JumpPrep.sca",
+      "zz_F22_maw_hm_JumpPrep.gmb",
+      "zz_F22_maw_hm_JumpStartForward.sca",
+      "zz_F22_maw_hm_JumpStartForward.gmb",
+      "zz_F22_maw_hm_JumpStartUp.sca",
+      "zz_F22_maw_hm_JumpStartUp.gmb",
+      "zz_F22_maw_hm_Land.sca",
+      "zz_F22_maw_hm_Land.gmb",
+      "zz_F22_maw_hLpr_LeapAttack.sca",
+      "zz_F22_maw_hLpr_LeapAttack.gmb",
+      "zz_F22_maw_hLpr_LeapAttack.gab",
+      "zz_F22_maw_hm_LeapAttackPrep.sca",
+      "zz_F22_maw_hm_LeapAttackPrep.gmb",
+      "zz_F22_maw_hm_NoticeSpidey.sca",
+      "zz_F22_maw_hm_NoticeSpidey.gmb",
+      "zz_F22_maw_hLpr_Run.sca",
+      "zz_F22_maw_hLpr_Run.gmb",
+      "zz_F22_maw_hm_SproutWings.sca",
+      "zz_F22_maw_hm_SproutWings.gmb",
+      "zz_F22_maw_hm_ThrowIchorDown.sca",
+      "zz_F22_maw_hm_ThrowIchorDown.gmb",
+      "zz_F22_maw_hm_ThrowIchorSlant.sca",
+      "zz_F22_maw_hm_ThrowIchorSlant.gmb",
+      "zz_F22_maw_hLpr_Walk.sca",
+      "zz_F22_maw_hLpr_Walk.gmb",
+      "zz_F22_maw_hm_WallJumpAttack.sca",
+      "zz_F22_maw_hm_WallJumpAttack.gmb",
+      "zz_F22_maw.nsbmd",
+      "zz_F22_ballast_brt_BlockIdle.sca",
+      "zz_F22_ballast_brt_BlockIdle.gmb",
+      "zz_F22_ballast_brt_BlockImpact.sca",
+      "zz_F22_ballast_brt_BlockImpact.gmb",
+      "zz_F22_ballast_brt_BreakingOutOfGrapple.sca",
+      "zz_F22_ballast_brt_BreakingOutOfGrapple.gmb",
+      "zz_F22_ballast_brt_Die.sca",
+      "zz_F22_ballast_brt_Die.gmb",
+      "zz_F22_ballast_brt_DropDownAttack.sca",
+      "zz_F22_ballast_brt_DropDownAttack.gmb",
+      "zz_F22_ballast_brt_DropDownAttack.gab",
+      "zz_F22_ballast_brt_Fall.sca",
+      "zz_F22_ballast_brt_Fall.gmb",
+      "zz_F22_ballast_brt_GrappledByWeb.sca",
+      "zz_F22_ballast_brt_GrappledByWeb.gmb",
+      "zz_F22_ballast_brt_GrappledByWebAlt1.sca",
+      "zz_F22_ballast_brt_GrappledByWebAlt1.gmb",
+      "zz_F22_ballast_brt_GroundAttack1.sca",
+      "zz_F22_ballast_brt_GroundAttack1.gmb",
+      "zz_F22_ballast_brt_GroundAttack1.gab",
+      "zz_F22_ballast_brt_GroundAttack2.sca",
+      "zz_F22_ballast_brt_GroundAttack2.gmb",
+      "zz_F22_ballast_brt_GroundAttack2.gab",
+      "zz_F22_ballast_brt_GroundRangedAttack1.sca",
+      "zz_F22_ballast_brt_GroundRangedAttack1.gmb",
+      "zz_F22_ballast_brt_GroundRangedAttack1.gab",
+      "zz_F22_ballast_brt_HammerSlamLand.sca",
+      "zz_F22_ballast_brt_HammerSlamLand.gmb",
+      "zz_F22_ballast_brt_HurtAirHitA.sca",
+      "zz_F22_ballast_brt_HurtAirHitA.gmb",
+      "zz_F22_ballast_brt_HurtAirHitB.sca",
+      "zz_F22_ballast_brt_HurtAirHitB.gmb",
+      "zz_F22_ballast_brt_HurtFall.sca",
+      "zz_F22_ballast_brt_HurtFall.gmb",
+      "zz_F22_ballast_brt_HurtHitA.sca",
+      "zz_F22_ballast_brt_HurtHitA.gmb",
+      "zz_F22_ballast_brt_HurtHitB.sca",
+      "zz_F22_ballast_brt_HurtHitB.gmb",
+      "zz_F22_ballast_brt_HurtKnockBack.sca",
+      "zz_F22_ballast_brt_HurtKnockBack.gmb",
+      "zz_F22_ballast_brt_HurtKnockBackFast.sca",
+      "zz_F22_ballast_brt_HurtKnockBackFast.gmb",
+      "zz_F22_ballast_brt_HurtKnockDown.sca",
+      "zz_F22_ballast_brt_HurtKnockDown.gmb",
+      "zz_F22_ballast_brt_HurtKnockFowardFast.sca",
+      "zz_F22_ballast_brt_HurtKnockFowardFast.gmb",
+      "zz_F22_ballast_brt_HurtKnockUp.sca",
+      "zz_F22_ballast_brt_HurtKnockUp.gmb",
+      "zz_F22_ballast_brt_HurtLand.sca",
+      "zz_F22_ballast_brt_HurtLand.gmb",
+      "zz_F22_ballast_brt_HurtLandFaceToBack.sca",
+      "zz_F22_ballast_brt_HurtLandFaceToBack.gmb",
+      "zz_F22_ballast_brt_HurtLandGetUp.sca",
+      "zz_F22_ballast_brt_HurtLandGetUp.gmb",
+      "zz_F22_ballast_brt_HurtLandGetUpAttack1.sca",
+      "zz_F22_ballast_brt_HurtLandGetUpAttack1.gmb",
+      "zz_F22_ballast_brt_HurtLandGetUpAttack1.gab",
+      "zz_F22_ballast_brt_HurtLandHit.sca",
+      "zz_F22_ballast_brt_HurtLandHit.gmb",
+      "zz_F22_ballast_brt_HurtLandTumble.sca",
+      "zz_F22_ballast_brt_HurtLandTumble.gmb",
+      "zz_F22_ballast_brt_Idle.sca",
+      "zz_F22_ballast_brt_Idle.gmb",
+      "zz_F22_ballast_brt_Jump.sca",
+      "zz_F22_ballast_brt_Jump.gmb",
+      "zz_F22_ballast_brt_JumpPrep.sca",
+      "zz_F22_ballast_brt_JumpPrep.gmb",
+      "zz_F22_ballast_brt_JumpStartForward.sca",
+      "zz_F22_ballast_brt_JumpStartForward.gmb",
+      "zz_F22_ballast_brt_JumpStartUp.sca",
+      "zz_F22_ballast_brt_JumpStartUp.gmb",
+      "zz_F22_ballast_brt_Land.sca",
+      "zz_F22_ballast_brt_Land.gmb",
+      "zz_F22_ballast_brt_NoticeSpidey.sca",
+      "zz_F22_ballast_brt_NoticeSpidey.gmb",
+      "zz_F22_ballast_brt_Run.sca",
+      "zz_F22_ballast_brt_Run.gmb",
+      "zz_F22_ballast_brt_RunAttack.sca",
+      "zz_F22_ballast_brt_RunAttack.gmb",
+      "zz_F22_ballast_brt_RunAttack.gab",
+      "zz_F22_ballast_brt_ThrowObject.sca",
+      "zz_F22_ballast_brt_ThrowObject.gmb",
+      "zz_F22_ballast_brt_ThrowObject.gab",
+      "zz_F22_ballast_brt_Walk.sca",
+      "zz_F22_ballast_brt_Walk.gmb",
+      "zz_F22_ballast.nsbmd",
+      "zz_F22_spore_hm_BerserkerIdle.sca",
+      "zz_F22_spore_hm_BerserkerIdle.gmb",
+      "zz_F22_spore_hm_BlockIdle.sca",
+      "zz_F22_spore_hm_BlockIdle.gmb",
+      "zz_F22_spore_hm_BlockImpact.sca",
+      "zz_F22_spore_hm_BlockImpact.gmb",
+      "zz_F22_spore_hm_BreakingOutOfGrapple.sca",
+      "zz_F22_spore_hm_BreakingOutOfGrapple.gmb",
+      "zz_F22_spore_hm_Burrow.sca",
+      "zz_F22_spore_hm_Burrow.gmb",
+      "zz_F22_spore_hm_Crawl.sca",
+      "zz_F22_spore_hm_Crawl.gmb",
+      "zz_F22_spore_hm_Die.sca",
+      "zz_F22_spore_hm_Die.gmb",
+      "zz_F22_spore_hm_DiveSlantKick.sca",
+      "zz_F22_spore_hm_DiveSlantKick.gmb",
+      "zz_F22_spore_hm_DropDownAttack.sca",
+      "zz_F22_spore_hm_DropDownAttack.gmb",
+      "zz_F22_spore_hm_Duck.sca",
+      "zz_F22_spore_hm_Duck.gmb",
+      "zz_F22_spore_hm_DuckAttack.sca",
+      "zz_F22_spore_hm_DuckAttack.gmb",
+      "zz_F22_spore_hm_DuckAttack.gab",
+      "zz_F22_spore_hm_Emerge.sca",
+      "zz_F22_spore_hm_Emerge.gmb",
+      "zz_F22_spore_hm_EmergeAttack.sca",
+      "zz_F22_spore_hm_EmergeAttack.gmb",
+      "zz_F22_spore_hm_Explode.sca",
+      "zz_F22_spore_hm_Explode.gmb",
+      "zz_F22_spore_hm_ExplodePrep.sca",
+      "zz_F22_spore_hm_ExplodePrep.gmb",
+      "zz_F22_spore_hm_Fall.sca",
+      "zz_F22_spore_hm_Fall.gmb",
+      "zz_F22_spore_hm_Fly.sca",
+      "zz_F22_spore_hm_Fly.gmb",
+      "zz_F22_spore_hm_GettingPossessed.sca",
+      "zz_F22_spore_hm_GettingPossessed.gmb",
+      "zz_F22_spore_hm_GrappledByWeb.sca",
+      "zz_F22_spore_hm_GrappledByWeb.gmb",
+      "zz_F22_spore_hm_GrappledByWebAlt1.sca",
+      "zz_F22_spore_hm_GrappledByWebAlt1.gmb",
+      "zz_F22_spore_hm_GroundAttack1.sca",
+      "zz_F22_spore_hm_GroundAttack1.gmb",
+      "zz_F22_spore_hm_GroundAttack1.gab",
+      "zz_F22_spore_hm_GroundAttack2.sca",
+      "zz_F22_spore_hm_GroundAttack2.gmb",
+      "zz_F22_spore_hm_GroundAttack2.gab",
+      "zz_F22_spore_hm_GroundAttackCombo.sca",
+      "zz_F22_spore_hm_GroundAttackCombo.gmb",
+      "zz_F22_spore_hm_GroundAttackCombo.gab",
+      "zz_F22_spore_hm_GroundAttackStrong1.sca",
+      "zz_F22_spore_hm_GroundAttackStrong1.gmb",
+      "zz_F22_spore_hm_GroundAttackStrong1.gab",
+      "zz_F22_spore_hm_GroundAttackStrong2.sca",
+      "zz_F22_spore_hm_GroundAttackStrong2.gmb",
+      "zz_F22_spore_hm_GroundAttackStrong2.gab",
+      "zz_F22_spore_hRng_GroundRangedAttack1.sca",
+      "zz_F22_spore_hRng_GroundRangedAttack1.gmb",
+      "zz_F22_spore_hm_HurtAirHitA.sca",
+      "zz_F22_spore_hm_HurtAirHitA.gmb",
+      "zz_F22_spore_hm_HurtAirHitB.sca",
+      "zz_F22_spore_hm_HurtAirHitB.gmb",
+      "zz_F22_spore_hm_HurtFall.sca",
+      "zz_F22_spore_hm_HurtFall.gmb",
+      "zz_F22_spore_hm_HurtHitA.sca",
+      "zz_F22_spore_hm_HurtHitA.gmb",
+      "zz_F22_spore_hm_HurtHitB.sca",
+      "zz_F22_spore_hm_HurtHitB.gmb",
+      "zz_F22_spore_hm_HurtKnockBack.sca",
+      "zz_F22_spore_hm_HurtKnockBack.gmb",
+      "zz_F22_spore_hm_HurtKnockBackFast.sca",
+      "zz_F22_spore_hm_HurtKnockBackFast.gmb",
+      "zz_F22_spore_hm_HurtKnockDown.sca",
+      "zz_F22_spore_hm_HurtKnockDown.gmb",
+      "zz_F22_spore_hm_HurtKnockFowardFast.sca",
+      "zz_F22_spore_hm_HurtKnockFowardFast.gmb",
+      "zz_F22_spore_hm_HurtKnockUp.sca",
+      "zz_F22_spore_hm_HurtKnockUp.gmb",
+      "zz_F22_spore_hm_HurtLand.sca",
+      "zz_F22_spore_hm_HurtLand.gmb",
+      "zz_F22_spore_hm_HurtLandFaceToBack.sca",
+      "zz_F22_spore_hm_HurtLandFaceToBack.gmb",
+      "zz_F22_spore_hm_HurtLandGetUp.sca",
+      "zz_F22_spore_hm_HurtLandGetUp.gmb",
+      "zz_F22_spore_hm_HurtLandGetUpAttack1.sca",
+      "zz_F22_spore_hm_HurtLandGetUpAttack1.gmb",
+      "zz_F22_spore_hm_HurtLandGetUpAttack1.gab",
+      "zz_F22_spore_hm_HurtLandHit.sca",
+      "zz_F22_spore_hm_HurtLandHit.gmb",
+      "zz_F22_spore_hm_HurtLandTumble.sca",
+      "zz_F22_spore_hm_HurtLandTumble.gmb",
+      "zz_F22_spore_hm_HurtLandTumbleAlt1.sca",
+      "zz_F22_spore_hm_HurtLandTumbleAlt1.gmb",
+      "zz_F22_spore_hRng_Idle.sca",
+      "zz_F22_spore_hRng_Idle.gmb",
+      "zz_F22_spore_hm_Jump.sca",
+      "zz_F22_spore_hm_Jump.gmb",
+      "zz_F22_spore_hm_JumpPrep.sca",
+      "zz_F22_spore_hm_JumpPrep.gmb",
+      "zz_F22_spore_hm_JumpStartForward.sca",
+      "zz_F22_spore_hm_JumpStartForward.gmb",
+      "zz_F22_spore_hm_JumpStartUp.sca",
+      "zz_F22_spore_hm_JumpStartUp.gmb",
+      "zz_F22_spore_hm_Land.sca",
+      "zz_F22_spore_hm_Land.gmb",
+      "zz_F22_spore_hm_LeapAttack.sca",
+      "zz_F22_spore_hm_LeapAttack.gmb",
+      "zz_F22_spore_hm_LeapAttack.gab",
+      "zz_F22_spore_hm_LeapAttackPrep.sca",
+      "zz_F22_spore_hm_LeapAttackPrep.gmb",
+      "zz_F22_spore_hm_NoticeSpidey.sca",
+      "zz_F22_spore_hm_NoticeSpidey.gmb",
+      "zz_F22_spore_hRng_Run.sca",
+      "zz_F22_spore_hRng_Run.gmb",
+      "zz_F22_spore_hm_SproutWings.sca",
+      "zz_F22_spore_hm_SproutWings.gmb",
+      "zz_F22_spore_hm_ThrowIchorDown.sca",
+      "zz_F22_spore_hm_ThrowIchorDown.gmb",
+      "zz_F22_spore_hm_ThrowIchorSlant.sca",
+      "zz_F22_spore_hm_ThrowIchorSlant.gmb",
+      "zz_F22_spore_hRng_Walk.sca",
+      "zz_F22_spore_hRng_Walk.gmb",
+      "zz_F22_spore_hm_WallJumpAttack.sca",
+      "zz_F22_spore_hm_WallJumpAttack.gmb",
+      "zz_F22_spore.nsbmd",
+      "zz_F22_skitter_hm_BerserkerIdle.sca",
+      "zz_F22_skitter_hm_BerserkerIdle.gmb",
+      "zz_F22_skitter_hm_BlockIdle.sca",
+      "zz_F22_skitter_hm_BlockIdle.gmb",
+      "zz_F22_skitter_hm_BlockImpact.sca",
+      "zz_F22_skitter_hm_BlockImpact.gmb",
+      "zz_F22_skitter_hm_BreakingOutOfGrapple.sca",
+      "zz_F22_skitter_hm_BreakingOutOfGrapple.gmb",
+      "zz_F22_skitter_hm_Burrow.sca",
+      "zz_F22_skitter_hm_Burrow.gmb",
+      "zz_F22_skitter_hm_Crawl.sca",
+      "zz_F22_skitter_hm_Crawl.gmb",
+      "zz_F22_skitter_hm_Die.sca",
+      "zz_F22_skitter_hm_Die.gmb",
+      "zz_F22_skitter_hm_DiveSlantKick.sca",
+      "zz_F22_skitter_hm_DiveSlantKick.gmb",
+      "zz_F22_skitter_hm_DiveSlantKick.gab",
+      "zz_F22_skitter_hm_DropDownAttack.sca",
+      "zz_F22_skitter_hm_DropDownAttack.gmb",
+      "zz_F22_skitter_hm_DropDownAttack.gab",
+      "zz_F22_skitter_hm_Duck.sca",
+      "zz_F22_skitter_hm_Duck.gmb",
+      "zz_F22_skitter_hm_DuckAttack.sca",
+      "zz_F22_skitter_hm_DuckAttack.gmb",
+      "zz_F22_skitter_hm_DuckAttack.gab",
+      "zz_F22_skitter_hm_Emerge.sca",
+      "zz_F22_skitter_hm_Emerge.gmb",
+      "zz_F22_skitter_hm_EmergeAttack.sca",
+      "zz_F22_skitter_hm_EmergeAttack.gmb",
+      "zz_F22_skitter_hm_Explode.sca",
+      "zz_F22_skitter_hm_Explode.gmb",
+      "zz_F22_skitter_hm_Fall.sca",
+      "zz_F22_skitter_hm_Fall.gmb",
+      "zz_F22_skitter_hm_Fly.sca",
+      "zz_F22_skitter_hm_Fly.gmb",
+      "zz_F22_skitter_hm_GettingPossessed.sca",
+      "zz_F22_skitter_hm_GettingPossessed.gmb",
+      "zz_F22_skitter_hm_GrappledByWeb.sca",
+      "zz_F22_skitter_hm_GrappledByWeb.gmb",
+      "zz_F22_skitter_hLpr_GrappledByWebAlt1.sca",
+      "zz_F22_skitter_hLpr_GrappledByWebAlt1.gmb",
+      "zz_F22_skitter_hm_GroundAttack1.sca",
+      "zz_F22_skitter_hm_GroundAttack1.gmb",
+      "zz_F22_skitter_hm_GroundAttack1.gab",
+      "zz_F22_skitter_hm_GroundAttack2.sca",
+      "zz_F22_skitter_hm_GroundAttack2.gmb",
+      "zz_F22_skitter_hm_GroundAttack2.gab",
+      "zz_F22_skitter_hm_GroundAttackCombo.sca",
+      "zz_F22_skitter_hm_GroundAttackCombo.gmb",
+      "zz_F22_skitter_hm_GroundAttackCombo.gab",
+      "zz_F22_skitter_hm_GroundAttackStrong1.sca",
+      "zz_F22_skitter_hm_GroundAttackStrong1.gmb",
+      "zz_F22_skitter_hm_GroundAttackStrong1.gab",
+      "zz_F22_skitter_hm_GroundAttackStrong2.sca",
+      "zz_F22_skitter_hm_GroundAttackStrong2.gmb",
+      "zz_F22_skitter_hm_GroundAttackStrong2.gab",
+      "zz_F22_skitter_hm_GroundRangedAttack1.sca",
+      "zz_F22_skitter_hm_GroundRangedAttack1.gmb",
+      "zz_F22_skitter_hm_GroundRangedAttack1.gab",
+      "zz_F22_skitter_hm_HurtAirHitA.sca",
+      "zz_F22_skitter_hm_HurtAirHitA.gmb",
+      "zz_F22_skitter_hm_HurtAirHitB.sca",
+      "zz_F22_skitter_hm_HurtAirHitB.gmb",
+      "zz_F22_skitter_hm_HurtFall.sca",
+      "zz_F22_skitter_hm_HurtFall.gmb",
+      "zz_F22_skitter_hm_HurtHitA.sca",
+      "zz_F22_skitter_hm_HurtHitA.gmb",
+      "zz_F22_skitter_hm_HurtHitB.sca",
+      "zz_F22_skitter_hm_HurtHitB.gmb",
+      "zz_F22_skitter_hm_HurtKnockBack.sca",
+      "zz_F22_skitter_hm_HurtKnockBack.gmb",
+      "zz_F22_skitter_hm_HurtKnockBackFast.sca",
+      "zz_F22_skitter_hm_HurtKnockBackFast.gmb",
+      "zz_F22_skitter_hm_HurtKnockDown.sca",
+      "zz_F22_skitter_hm_HurtKnockDown.gmb",
+      "zz_F22_skitter_hm_HurtKnockFowardFast.sca",
+      "zz_F22_skitter_hm_HurtKnockFowardFast.gmb",
+      "zz_F22_skitter_hm_HurtKnockUp.sca",
+      "zz_F22_skitter_hm_HurtKnockUp.gmb",
+      "zz_F22_skitter_hm_HurtLand.sca",
+      "zz_F22_skitter_hm_HurtLand.gmb",
+      "zz_F22_skitter_hm_HurtLandFaceToBack.sca",
+      "zz_F22_skitter_hm_HurtLandFaceToBack.gmb",
+      "zz_F22_skitter_hm_HurtLandGetUp.sca",
+      "zz_F22_skitter_hm_HurtLandGetUp.gmb",
+      "zz_F22_skitter_hm_HurtLandGetUpAttack1.sca",
+      "zz_F22_skitter_hm_HurtLandGetUpAttack1.gmb",
+      "zz_F22_skitter_hm_HurtLandGetUpAttack1.gab",
+      "zz_F22_skitter_hm_HurtLandHit.sca",
+      "zz_F22_skitter_hm_HurtLandHit.gmb",
+      "zz_F22_skitter_hm_HurtLandTumble.sca",
+      "zz_F22_skitter_hm_HurtLandTumble.gmb",
+      "zz_F22_skitter_hm_HurtLandTumbleAlt1.sca",
+      "zz_F22_skitter_hm_HurtLandTumbleAlt1.gmb",
+      "zz_F22_skitter_hLpr_Idle.sca",
+      "zz_F22_skitter_hLpr_Idle.gmb",
+      "zz_F22_skitter_hm_Jump.sca",
+      "zz_F22_skitter_hm_Jump.gmb",
+      "zz_F22_skitter_hm_JumpPrep.sca",
+      "zz_F22_skitter_hm_JumpPrep.gmb",
+      "zz_F22_skitter_hm_JumpStartForward.sca",
+      "zz_F22_skitter_hm_JumpStartForward.gmb",
+      "zz_F22_skitter_hm_JumpStartUp.sca",
+      "zz_F22_skitter_hm_JumpStartUp.gmb",
+      "zz_F22_skitter_hm_Land.sca",
+      "zz_F22_skitter_hm_Land.gmb",
+      "zz_F22_skitter_hLpr_LeapAttack.sca",
+      "zz_F22_skitter_hLpr_LeapAttack.gmb",
+      "zz_F22_skitter_hLpr_LeapAttack.gab",
+      "zz_F22_skitter_hm_LeapAttackPrep.sca",
+      "zz_F22_skitter_hm_LeapAttackPrep.gmb",
+      "zz_F22_skitter_hm_NoticeSpidey.sca",
+      "zz_F22_skitter_hm_NoticeSpidey.gmb",
+      "zz_F22_skitter_hLpr_Run.sca",
+      "zz_F22_skitter_hLpr_Run.gmb",
+      "zz_F22_skitter_hm_SproutWings.sca",
+      "zz_F22_skitter_hm_SproutWings.gmb",
+      "zz_F22_skitter_hm_ThrowIchorDown.sca",
+      "zz_F22_skitter_hm_ThrowIchorDown.gmb",
+      "zz_F22_skitter_hm_ThrowIchorSlant.sca",
+      "zz_F22_skitter_hm_ThrowIchorSlant.gmb",
+      "zz_F22_skitter_hLpr_Walk.sca",
+      "zz_F22_skitter_hLpr_Walk.gmb",
+      "zz_F22_skitter_hm_WallJumpAttack.sca",
+      "zz_F22_skitter_hm_WallJumpAttack.gmb",
+      "zz_F22_skitter.nsbmd",
+      "zz_F22_warden_brt_BlockIdle.sca",
+      "zz_F22_warden_brt_BlockIdle.gmb",
+      "zz_F22_warden_brt_BlockImpact.sca",
+      "zz_F22_warden_brt_BlockImpact.gmb",
+      "zz_F22_warden_brt_BreakingOutOfGrapple.sca",
+      "zz_F22_warden_brt_BreakingOutOfGrapple.gmb",
+      "zz_F22_warden_brt_Die.sca",
+      "zz_F22_warden_brt_Die.gmb",
+      "zz_F22_warden_brt_DropDownAttack.sca",
+      "zz_F22_warden_brt_DropDownAttack.gmb",
+      "zz_F22_warden_brt_DropDownAttack.gab",
+      "zz_F22_warden_brt_Fall.sca",
+      "zz_F22_warden_brt_Fall.gmb",
+      "zz_F22_warden_brt_GrappledByWeb.sca",
+      "zz_F22_warden_brt_GrappledByWeb.gmb",
+      "zz_F22_warden_brt_GrappledByWebAlt1.sca",
+      "zz_F22_warden_brt_GrappledByWebAlt1.gmb",
+      "zz_F22_warden_brt_GroundAttack1.sca",
+      "zz_F22_warden_brt_GroundAttack1.gmb",
+      "zz_F22_warden_brt_GroundAttack1.gab",
+      "zz_F22_warden_brt_GroundAttack2.sca",
+      "zz_F22_warden_brt_GroundAttack2.gmb",
+      "zz_F22_warden_brt_GroundAttack2.gab",
+      "zz_F22_warden_brt_GroundRangedAttack1.sca",
+      "zz_F22_warden_brt_GroundRangedAttack1.gmb",
+      "zz_F22_warden_brt_GroundRangedAttack1.gab",
+      "zz_F22_warden_brt_HammerSlamLand.sca",
+      "zz_F22_warden_brt_HammerSlamLand.gmb",
+      "zz_F22_warden_brt_HurtAirHitA.sca",
+      "zz_F22_warden_brt_HurtAirHitA.gmb",
+      "zz_F22_warden_brt_HurtAirHitB.sca",
+      "zz_F22_warden_brt_HurtAirHitB.gmb",
+      "zz_F22_warden_brt_HurtFall.sca",
+      "zz_F22_warden_brt_HurtFall.gmb",
+      "zz_F22_warden_brt_HurtHitA.sca",
+      "zz_F22_warden_brt_HurtHitA.gmb",
+      "zz_F22_warden_brt_HurtHitB.sca",
+      "zz_F22_warden_brt_HurtHitB.gmb",
+      "zz_F22_warden_brt_HurtKnockBack.sca",
+      "zz_F22_warden_brt_HurtKnockBack.gmb",
+      "zz_F22_warden_brt_HurtKnockBackFast.sca",
+      "zz_F22_warden_brt_HurtKnockBackFast.gmb",
+      "zz_F22_warden_brt_HurtKnockDown.sca",
+      "zz_F22_warden_brt_HurtKnockDown.gmb",
+      "zz_F22_warden_brt_HurtKnockFowardFast.sca",
+      "zz_F22_warden_brt_HurtKnockFowardFast.gmb",
+      "zz_F22_warden_brt_HurtKnockUp.sca",
+      "zz_F22_warden_brt_HurtKnockUp.gmb",
+      "zz_F22_warden_brt_HurtLand.sca",
+      "zz_F22_warden_brt_HurtLand.gmb",
+      "zz_F22_warden_brt_HurtLandFaceToBack.sca",
+      "zz_F22_warden_brt_HurtLandFaceToBack.gmb",
+      "zz_F22_warden_brt_HurtLandGetUp.sca",
+      "zz_F22_warden_brt_HurtLandGetUp.gmb",
+      "zz_F22_warden_brt_HurtLandGetUpAttack1.sca",
+      "zz_F22_warden_brt_HurtLandGetUpAttack1.gmb",
+      "zz_F22_warden_brt_HurtLandGetUpAttack1.gab",
+      "zz_F22_warden_brt_HurtLandHit.sca",
+      "zz_F22_warden_brt_HurtLandHit.gmb",
+      "zz_F22_warden_brt_HurtLandTumble.sca",
+      "zz_F22_warden_brt_HurtLandTumble.gmb",
+      "zz_F22_warden_brt_Idle.sca",
+      "zz_F22_warden_brt_Idle.gmb",
+      "zz_F22_warden_brt_Jump.sca",
+      "zz_F22_warden_brt_Jump.gmb",
+      "zz_F22_warden_brt_JumpPrep.sca",
+      "zz_F22_warden_brt_JumpPrep.gmb",
+      "zz_F22_warden_brt_JumpStartForward.sca",
+      "zz_F22_warden_brt_JumpStartForward.gmb",
+      "zz_F22_warden_brt_JumpStartUp.sca",
+      "zz_F22_warden_brt_JumpStartUp.gmb",
+      "zz_F22_warden_brt_Land.sca",
+      "zz_F22_warden_brt_Land.gmb",
+      "zz_F22_warden_brt_NoticeSpidey.sca",
+      "zz_F22_warden_brt_NoticeSpidey.gmb",
+      "zz_F22_warden_brt_Run.sca",
+      "zz_F22_warden_brt_Run.gmb",
+      "zz_F22_warden_brt_RunAttack.sca",
+      "zz_F22_warden_brt_RunAttack.gmb",
+      "zz_F22_warden_brt_RunAttack.gab",
+      "zz_F22_warden_brt_ThrowObject.sca",
+      "zz_F22_warden_brt_ThrowObject.gmb",
+      "zz_F22_warden_brt_ThrowObject.gab",
+      "zz_F22_warden_brt_Walk.sca",
+      "zz_F22_warden_brt_Walk.gmb",
+      "zz_F22_warden.nsbmd",
+      "zz_F22_eye_hm_BerserkerIdle.sca",
+      "zz_F22_eye_hm_BerserkerIdle.gmb",
+      "zz_F22_eye_hm_BlockIdle.sca",
+      "zz_F22_eye_hm_BlockIdle.gmb",
+      "zz_F22_eye_hm_BlockImpact.sca",
+      "zz_F22_eye_hm_BlockImpact.gmb",
+      "zz_F22_eye_hm_BreakingOutOfGrapple.sca",
+      "zz_F22_eye_hm_BreakingOutOfGrapple.gmb",
+      "zz_F22_eye_hm_Burrow.sca",
+      "zz_F22_eye_hm_Burrow.gmb",
+      "zz_F22_eye_hm_Crawl.sca",
+      "zz_F22_eye_hm_Crawl.gmb",
+      "zz_F22_eye_hm_Die.sca",
+      "zz_F22_eye_hm_Die.gmb",
+      "zz_F22_eye_hm_DiveSlantKick.sca",
+      "zz_F22_eye_hm_DiveSlantKick.gmb",
+      "zz_F22_eye_hm_DropDownAttack.sca",
+      "zz_F22_eye_hm_DropDownAttack.gmb",
+      "zz_F22_eye_hm_Duck.sca",
+      "zz_F22_eye_hm_Duck.gmb",
+      "zz_F22_eye_hm_DuckAttack.sca",
+      "zz_F22_eye_hm_DuckAttack.gmb",
+      "zz_F22_eye_hm_DuckAttack.gab",
+      "zz_F22_eye_hm_Emerge.sca",
+      "zz_F22_eye_hm_Emerge.gmb",
+      "zz_F22_eye_hm_EmergeAttack.sca",
+      "zz_F22_eye_hm_EmergeAttack.gmb",
+      "zz_F22_eye_hm_Explode.sca",
+      "zz_F22_eye_hm_Explode.gmb",
+      "zz_F22_eye_hm_ExplodePrep.sca",
+      "zz_F22_eye_hm_ExplodePrep.gmb",
+      "zz_F22_eye_hm_Fall.sca",
+      "zz_F22_eye_hm_Fall.gmb",
+      "zz_F22_eye_hm_Fly.sca",
+      "zz_F22_eye_hm_Fly.gmb",
+      "zz_F22_eye_hm_GettingPossessed.sca",
+      "zz_F22_eye_hm_GettingPossessed.gmb",
+      "zz_F22_eye_hm_GrappledByWeb.sca",
+      "zz_F22_eye_hm_GrappledByWeb.gmb",
+      "zz_F22_eye_hm_GrappledByWebAlt1.sca",
+      "zz_F22_eye_hm_GrappledByWebAlt1.gmb",
+      "zz_F22_eye_hm_GroundAttack1.sca",
+      "zz_F22_eye_hm_GroundAttack1.gmb",
+      "zz_F22_eye_hm_GroundAttack1.gab",
+      "zz_F22_eye_hm_GroundAttack2.sca",
+      "zz_F22_eye_hm_GroundAttack2.gmb",
+      "zz_F22_eye_hm_GroundAttack2.gab",
+      "zz_F22_eye_hm_GroundAttackCombo.sca",
+      "zz_F22_eye_hm_GroundAttackCombo.gmb",
+      "zz_F22_eye_hm_GroundAttackCombo.gab",
+      "zz_F22_eye_hm_GroundAttackStrong1.sca",
+      "zz_F22_eye_hm_GroundAttackStrong1.gmb",
+      "zz_F22_eye_hm_GroundAttackStrong1.gab",
+      "zz_F22_eye_hm_GroundAttackStrong2.sca",
+      "zz_F22_eye_hm_GroundAttackStrong2.gmb",
+      "zz_F22_eye_hm_GroundAttackStrong2.gab",
+      "zz_F22_eye_hRng_GroundRangedAttack1.sca",
+      "zz_F22_eye_hRng_GroundRangedAttack1.gmb",
+      "zz_F22_eye_hm_HurtAirHitA.sca",
+      "zz_F22_eye_hm_HurtAirHitA.gmb",
+      "zz_F22_eye_hm_HurtAirHitB.sca",
+      "zz_F22_eye_hm_HurtAirHitB.gmb",
+      "zz_F22_eye_hm_HurtFall.sca",
+      "zz_F22_eye_hm_HurtFall.gmb",
+      "zz_F22_eye_hm_HurtHitA.sca",
+      "zz_F22_eye_hm_HurtHitA.gmb",
+      "zz_F22_eye_hm_HurtHitB.sca",
+      "zz_F22_eye_hm_HurtHitB.gmb",
+      "zz_F22_eye_hm_HurtKnockBack.sca",
+      "zz_F22_eye_hm_HurtKnockBack.gmb",
+      "zz_F22_eye_hm_HurtKnockBackFast.sca",
+      "zz_F22_eye_hm_HurtKnockBackFast.gmb",
+      "zz_F22_eye_hm_HurtKnockDown.sca",
+      "zz_F22_eye_hm_HurtKnockDown.gmb",
+      "zz_F22_eye_hm_HurtKnockFowardFast.sca",
+      "zz_F22_eye_hm_HurtKnockFowardFast.gmb",
+      "zz_F22_eye_hm_HurtKnockUp.sca",
+      "zz_F22_eye_hm_HurtKnockUp.gmb",
+      "zz_F22_eye_hm_HurtLand.sca",
+      "zz_F22_eye_hm_HurtLand.gmb",
+      "zz_F22_eye_hm_HurtLandFaceToBack.sca",
+      "zz_F22_eye_hm_HurtLandFaceToBack.gmb",
+      "zz_F22_eye_hm_HurtLandGetUp.sca",
+      "zz_F22_eye_hm_HurtLandGetUp.gmb",
+      "zz_F22_eye_hm_HurtLandGetUpAttack1.sca",
+      "zz_F22_eye_hm_HurtLandGetUpAttack1.gmb",
+      "zz_F22_eye_hm_HurtLandGetUpAttack1.gab",
+      "zz_F22_eye_hm_HurtLandHit.sca",
+      "zz_F22_eye_hm_HurtLandHit.gmb",
+      "zz_F22_eye_hm_HurtLandTumble.sca",
+      "zz_F22_eye_hm_HurtLandTumble.gmb",
+      "zz_F22_eye_hm_HurtLandTumbleAlt1.sca",
+      "zz_F22_eye_hm_HurtLandTumbleAlt1.gmb",
+      "zz_F22_eye_hRng_Idle.sca",
+      "zz_F22_eye_hRng_Idle.gmb",
+      "zz_F22_eye_hm_Jump.sca",
+      "zz_F22_eye_hm_Jump.gmb",
+      "zz_F22_eye_hm_JumpPrep.sca",
+      "zz_F22_eye_hm_JumpPrep.gmb",
+      "zz_F22_eye_hm_JumpStartForward.sca",
+      "zz_F22_eye_hm_JumpStartForward.gmb",
+      "zz_F22_eye_hm_JumpStartUp.sca",
+      "zz_F22_eye_hm_JumpStartUp.gmb",
+      "zz_F22_eye_hm_Land.sca",
+      "zz_F22_eye_hm_Land.gmb",
+      "zz_F22_eye_hm_LeapAttack.sca",
+      "zz_F22_eye_hm_LeapAttack.gmb",
+      "zz_F22_eye_hm_LeapAttack.gab",
+      "zz_F22_eye_hm_LeapAttackPrep.sca",
+      "zz_F22_eye_hm_LeapAttackPrep.gmb",
+      "zz_F22_eye_hm_NoticeSpidey.sca",
+      "zz_F22_eye_hm_NoticeSpidey.gmb",
+      "zz_F22_eye_hRng_Run.sca",
+      "zz_F22_eye_hRng_Run.gmb",
+      "zz_F22_eye_hm_SproutWings.sca",
+      "zz_F22_eye_hm_SproutWings.gmb",
+      "zz_F22_eye_hm_ThrowIchorDown.sca",
+      "zz_F22_eye_hm_ThrowIchorDown.gmb",
+      "zz_F22_eye_hm_ThrowIchorSlant.sca",
+      "zz_F22_eye_hm_ThrowIchorSlant.gmb",
+      "zz_F22_eye_hRng_Walk.sca",
+      "zz_F22_eye_hRng_Walk.gmb",
+      "zz_F22_eye_hm_WallJumpAttack.sca",
+      "zz_F22_eye_hm_WallJumpAttack.gmb",
+      "zz_F22_eye.nsbmd",
+      "zz_F22_conductor_brt_BlockIdle.sca",
+      "zz_F22_conductor_brt_BlockIdle.gmb",
+      "zz_F22_conductor_brt_BlockImpact.sca",
+      "zz_F22_conductor_brt_BlockImpact.gmb",
+      "zz_F22_conductor_brt_BreakingOutOfGrapple.sca",
+      "zz_F22_conductor_brt_BreakingOutOfGrapple.gmb",
+      "zz_F22_conductor_brt_Die.sca",
+      "zz_F22_conductor_brt_Die.gmb",
+      "zz_F22_conductor_brt_DropDownAttack.sca",
+      "zz_F22_conductor_brt_DropDownAttack.gmb",
+      "zz_F22_conductor_brt_DropDownAttack.gab",
+      "zz_F22_conductor_brt_Fall.sca",
+      "zz_F22_conductor_brt_Fall.gmb",
+      "zz_F22_conductor_brt_GrappledByWeb.sca",
+      "zz_F22_conductor_brt_GrappledByWeb.gmb",
+      "zz_F22_conductor_brt_GrappledByWebAlt1.sca",
+      "zz_F22_conductor_brt_GrappledByWebAlt1.gmb",
+      "zz_F22_conductor_brt_GroundAttack1.sca",
+      "zz_F22_conductor_brt_GroundAttack1.gmb",
+      "zz_F22_conductor_brt_GroundAttack1.gab",
+      "zz_F22_conductor_brt_GroundAttack2.sca",
+      "zz_F22_conductor_brt_GroundAttack2.gmb",
+      "zz_F22_conductor_brt_GroundAttack2.gab",
+      "zz_F22_conductor_brt_GroundRangedAttack1.sca",
+      "zz_F22_conductor_brt_GroundRangedAttack1.gmb",
+      "zz_F22_conductor_brt_GroundRangedAttack1.gab",
+      "zz_F22_conductor_brt_HammerSlamLand.sca",
+      "zz_F22_conductor_brt_HammerSlamLand.gmb",
+      "zz_F22_conductor_brt_HurtAirHitA.sca",
+      "zz_F22_conductor_brt_HurtAirHitA.gmb",
+      "zz_F22_conductor_brt_HurtAirHitB.sca",
+      "zz_F22_conductor_brt_HurtAirHitB.gmb",
+      "zz_F22_conductor_brt_HurtFall.sca",
+      "zz_F22_conductor_brt_HurtFall.gmb",
+      "zz_F22_conductor_brt_HurtHitA.sca",
+      "zz_F22_conductor_brt_HurtHitA.gmb",
+      "zz_F22_conductor_brt_HurtHitB.sca",
+      "zz_F22_conductor_brt_HurtHitB.gmb",
+      "zz_F22_conductor_brt_HurtKnockBack.sca",
+      "zz_F22_conductor_brt_HurtKnockBack.gmb",
+      "zz_F22_conductor_brt_HurtKnockBackFast.sca",
+      "zz_F22_conductor_brt_HurtKnockBackFast.gmb",
+      "zz_F22_conductor_brt_HurtKnockDown.sca",
+      "zz_F22_conductor_brt_HurtKnockDown.gmb",
+      "zz_F22_conductor_brt_HurtKnockFowardFast.sca",
+      "zz_F22_conductor_brt_HurtKnockFowardFast.gmb",
+      "zz_F22_conductor_brt_HurtKnockUp.sca",
+      "zz_F22_conductor_brt_HurtKnockUp.gmb",
+      "zz_F22_conductor_brt_HurtLand.sca",
+      "zz_F22_conductor_brt_HurtLand.gmb",
+      "zz_F22_conductor_brt_HurtLandFaceToBack.sca",
+      "zz_F22_conductor_brt_HurtLandFaceToBack.gmb",
+      "zz_F22_conductor_brt_HurtLandGetUp.sca",
+      "zz_F22_conductor_brt_HurtLandGetUp.gmb",
+      "zz_F22_conductor_brt_HurtLandGetUpAttack1.sca",
+      "zz_F22_conductor_brt_HurtLandGetUpAttack1.gmb",
+      "zz_F22_conductor_brt_HurtLandGetUpAttack1.gab",
+      "zz_F22_conductor_brt_HurtLandHit.sca",
+      "zz_F22_conductor_brt_HurtLandHit.gmb",
+      "zz_F22_conductor_brt_HurtLandTumble.sca",
+      "zz_F22_conductor_brt_HurtLandTumble.gmb",
+      "zz_F22_conductor_brt_Idle.sca",
+      "zz_F22_conductor_brt_Idle.gmb",
+      "zz_F22_conductor_brt_Jump.sca",
+      "zz_F22_conductor_brt_Jump.gmb",
+      "zz_F22_conductor_brt_JumpPrep.sca",
+      "zz_F22_conductor_brt_JumpPrep.gmb",
+      "zz_F22_conductor_brt_JumpStartForward.sca",
+      "zz_F22_conductor_brt_JumpStartForward.gmb",
+      "zz_F22_conductor_brt_JumpStartUp.sca",
+      "zz_F22_conductor_brt_JumpStartUp.gmb",
+      "zz_F22_conductor_brt_Land.sca",
+      "zz_F22_conductor_brt_Land.gmb",
+      "zz_F22_conductor_brt_NoticeSpidey.sca",
+      "zz_F22_conductor_brt_NoticeSpidey.gmb",
+      "zz_F22_conductor_brt_Run.sca",
+      "zz_F22_conductor_brt_Run.gmb",
+      "zz_F22_conductor_brt_RunAttack.sca",
+      "zz_F22_conductor_brt_RunAttack.gmb",
+      "zz_F22_conductor_brt_RunAttack.gab",
+      "zz_F22_conductor_brt_ThrowObject.sca",
+      "zz_F22_conductor_brt_ThrowObject.gmb",
+      "zz_F22_conductor_brt_ThrowObject.gab",
+      "zz_F22_conductor_brt_Walk.sca",
+      "zz_F22_conductor_brt_Walk.gmb",
+      "zz_F22_conductor.nsbmd",
+      "zz_R21_ML_Entry.nsbmd",
+      "zz_R21_ML_Entry.nsbtx",
+      "zz_R21_ML_Entry.bsp",
+      "zz_R21_ML_Entry.cbmp",
+      "zz_ML_Entry_app.obj",
+      "zz_R21_ML_Refuge.nsbmd",
+      "zz_R21_ML_Refuge.nsbtx",
+      "zz_R21_ML_Refuge.bsp",
+      "zz_R21_ML_Refuge.cbmp",
+      "zz_ML_Refuge_app.obj",
+      "zz_R21_ML_Station.nsbmd",
+      "zz_R21_ML_Station.nsbtx",
+      "zz_R21_ML_Station.bsp",
+      "zz_R21_ML_Station.cbmp",
+      "zz_ML_Station_app.obj",
+      "zz_R21_ML_NestShaft.nsbmd",
+      "zz_R21_ML_NestShaft.nsbtx",
+      "zz_R21_ML_NestShaft.bsp",
+      "zz_R21_ML_NestShaft.cbmp",
+      "zz_ML_NestShaft_app.obj",
+      "zz_R21_ML_NestRest.nsbmd",
+      "zz_R21_ML_NestRest.nsbtx",
+      "zz_R21_ML_NestRest.bsp",
+      "zz_R21_ML_NestRest.cbmp",
+      "zz_ML_NestRest_app.obj",
+      "zz_R21_ML_NestThroat.nsbmd",
+      "zz_R21_ML_NestThroat.nsbtx",
+      "zz_R21_ML_NestThroat.bsp",
+      "zz_R21_ML_NestThroat.cbmp",
+      "zz_ML_NestThroat_app.obj",
+      "zz_R21_ML_NestGallery.nsbmd",
+      "zz_R21_ML_NestGallery.nsbtx",
+      "zz_R21_ML_NestGallery.bsp",
+      "zz_R21_ML_NestGallery.cbmp",
+      "zz_ML_NestGallery_app.obj",
+      "zz_R21_ML_NestShrine.nsbmd",
+      "zz_R21_ML_NestShrine.nsbtx",
+      "zz_R21_ML_NestShrine.bsp",
+      "zz_R21_ML_NestShrine.cbmp",
+      "zz_ML_NestShrine_app.obj",
+      "zz_R21_ML_NestGate.nsbmd",
+      "zz_R21_ML_NestGate.nsbtx",
+      "zz_R21_ML_NestGate.bsp",
+      "zz_R21_ML_NestGate.cbmp",
+      "zz_ML_NestGate_app.obj",
+      "zz_R21_ML_Venom.nsbmd",
+      "zz_R21_ML_Venom.nsbtx",
+      "zz_R21_ML_Venom.bsp",
+      "zz_R21_ML_Venom.cbmp",
+      "zz_ML_Venom_app.obj",
+      "zz_MMMidnight.cbmp",
+      "English.strings",
+      "American.strings"
+    ],
+    "parent_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+    "player_kit_preserved": true,
+    "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+    "rooms": {
+      "ML_Entry": {
+        "anchors": 63,
+        "bounds": [
+          0,
+          0,
+          224,
+          88
+        ],
+        "collision_sha256": "79caaed6e91aac4432359b750e516355901ecc86a768ed768e5400bc470581d6",
+        "doors": [
+          {
+            "floor": 0,
+            "side": "right",
+            "spawn": 2,
+            "wall": 224
+          },
+          {
+            "floor": 0,
+            "side": "left",
+            "spawn": 3,
+            "wall": 0
+          },
+          {
+            "floor": 48,
+            "side": "left",
+            "spawn": 4,
+            "wall": 0
+          }
+        ],
+        "index": 76,
+        "native_bsp_nodes": 27,
+        "polygon": [],
+        "quads": 234,
+        "shape": "L-shaped street and return tower"
+      },
+      "ML_NestGallery": {
+        "anchors": 70,
+        "bounds": [
+          0,
+          -16,
+          288,
+          128
+        ],
+        "collision_sha256": "562244949c56e2739c64189593b1536c8f3212f68061a3c6edc26bd2286bbbda",
+        "doors": [
+          {
+            "floor": 0,
+            "side": "left",
+            "spawn": 2,
+            "wall": 0
+          },
+          {
+            "floor": 0,
+            "side": "right",
+            "spawn": 1,
+            "wall": 288
+          }
+        ],
+        "index": 86,
+        "native_bsp_nodes": 20,
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            72,
+            -16
+          ],
+          [
+            216,
+            -16
+          ],
+          [
+            288,
+            0
+          ],
+          [
+            288,
+            32
+          ],
+          [
+            244,
+            96
+          ],
+          [
+            192,
+            128
+          ],
+          [
+            96,
+            128
+          ],
+          [
+            44,
+            96
+          ],
+          [
+            0,
+            32
+          ]
+        ],
+        "quads": 267,
+        "shape": "sunken observatory bowl with sloping approaches"
+      },
+      "ML_NestGate": {
+        "anchors": 58,
+        "bounds": [
+          0,
+          0,
+          256,
+          112
+        ],
+        "collision_sha256": "1ae4a3d7b77cd09e21dd789b20eb2b7206367facbd0ad477a7044fb730369f10",
+        "doors": [
+          {
+            "floor": 64,
+            "side": "left",
+            "spawn": 2,
+            "wall": 0
+          },
+          {
+            "floor": 0,
+            "side": "right",
+            "spawn": 1,
+            "wall": 256
+          }
+        ],
+        "index": 88,
+        "native_bsp_nodes": 25,
+        "polygon": [],
+        "quads": 236,
+        "shape": "descending staircase with stepped ceiling"
+      },
+      "ML_NestRest": {
+        "anchors": 24,
+        "bounds": [
+          0,
+          0,
+          112,
+          48
+        ],
+        "collision_sha256": "bf73a2a4d5d558cf9eb619414d09d0a7e98b08d377ed4689b56e2432f02fcfbc",
+        "doors": [
+          {
+            "floor": 0,
+            "side": "right",
+            "spawn": 2,
+            "wall": 112
+          }
+        ],
+        "index": 82,
+        "native_bsp_nodes": 8,
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            112,
+            0
+          ],
+          [
+            112,
+            48
+          ],
+          [
+            44,
+            48
+          ],
+          [
+            0,
+            28
+          ]
+        ],
+        "quads": 106,
+        "shape": "low asymmetric maintenance shelter"
+      },
+      "ML_NestShaft": {
+        "anchors": 71,
+        "bounds": [
+          0,
+          0,
+          288,
+          112
+        ],
+        "collision_sha256": "1fb8f90e118d43b170df5fee26416d878dfbc6f94073cd83425adc512a98fbe8",
+        "doors": [
+          {
+            "floor": 0,
+            "side": "left",
+            "spawn": 2,
+            "wall": 0
+          },
+          {
+            "floor": 0,
+            "side": "right",
+            "spawn": 1,
+            "wall": 288
+          },
+          {
+            "floor": 48,
+            "side": "left",
+            "spawn": 3,
+            "wall": 0
+          }
+        ],
+        "index": 81,
+        "native_bsp_nodes": 30,
+        "polygon": [],
+        "quads": 320,
+        "shape": "bent low service channel and tall pump access"
+      },
+      "ML_NestShrine": {
+        "anchors": 25,
+        "bounds": [
+          0,
+          0,
+          128,
+          80
+        ],
+        "collision_sha256": "b2d8f2633ab70175a227ec923999d42dfe5d0e17e514cbf6e6887905cb001e32",
+        "doors": [
+          {
+            "floor": 0,
+            "side": "left",
+            "spawn": 2,
+            "wall": 0
+          },
+          {
+            "floor": 0,
+            "side": "right",
+            "spawn": 1,
+            "wall": 128
+          }
+        ],
+        "index": 87,
+        "native_bsp_nodes": 8,
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            128,
+            0
+          ],
+          [
+            128,
+            32
+          ],
+          [
+            80,
+            80
+          ],
+          [
+            40,
+            80
+          ],
+          [
+            0,
+            32
+          ]
+        ],
+        "quads": 125,
+        "shape": "tall vaulted checkpoint chapel"
+      },
+      "ML_NestThroat": {
+        "anchors": 75,
+        "bounds": [
+          0,
+          0,
+          192,
+          144
+        ],
+        "collision_sha256": "88ad5d40f5b1d06355f7d0a176a5dcdb96798e118a6a89630838d5d13db054e3",
+        "doors": [
+          {
+            "floor": 0,
+            "side": "left",
+            "spawn": 2,
+            "wall": 0
+          },
+          {
+            "floor": 96,
+            "side": "right",
+            "spawn": 1,
+            "wall": 192
+          }
+        ],
+        "index": 83,
+        "native_bsp_nodes": 35,
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            128,
+            0
+          ],
+          [
+            192,
+            36
+          ],
+          [
+            192,
+            144
+          ],
+          [
+            112,
+            144
+          ],
+          [
+            0,
+            96
+          ]
+        ],
+        "quads": 296,
+        "shape": "tapered diagonal turbine shaft"
+      },
+      "ML_Refuge": {
+        "anchors": 19,
+        "bounds": [
+          0,
+          0,
+          80,
+          56
+        ],
+        "collision_sha256": "5d42fe85c7a7e017802d6cf128ac5a9d3489b784a8f5dd14dcdefc2835132040",
+        "doors": [
+          {
+            "floor": 0,
+            "side": "right",
+            "spawn": 1,
+            "wall": 80
+          }
+        ],
+        "index": 77,
+        "native_bsp_nodes": 8,
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            80,
+            0
+          ],
+          [
+            80,
+            28
+          ],
+          [
+            52,
+            56
+          ],
+          [
+            20,
+            56
+          ],
+          [
+            0,
+            36
+          ]
+        ],
+        "quads": 90,
+        "shape": "compact clipped signal cabin"
+      },
+      "ML_Station": {
+        "anchors": 91,
+        "bounds": [
+          0,
+          0,
+          336,
+          112
+        ],
+        "collision_sha256": "8dc3bb40df43f500e14ed525ed2d5c9eb1b8154c8b21c1ca8fab7d9a05c2f83c",
+        "doors": [
+          {
+            "floor": 0,
+            "side": "left",
+            "spawn": 1,
+            "wall": 0
+          },
+          {
+            "floor": 0,
+            "side": "right",
+            "spawn": 2,
+            "wall": 336
+          },
+          {
+            "floor": 48,
+            "side": "left",
+            "spawn": 3,
+            "wall": 0
+          }
+        ],
+        "index": 78,
+        "native_bsp_nodes": 31,
+        "polygon": [],
+        "quads": 398,
+        "shape": "T-shaped vaulted train concourse"
+      },
+      "ML_Venom": {
+        "anchors": 45,
+        "bounds": [
+          0,
+          0,
+          224,
+          112
+        ],
+        "collision_sha256": "cd254d4fd004742c9edcb81e64b4406158c5bce43754bcef19422b4a47dd4ce0",
+        "doors": [
+          {
+            "floor": 0,
+            "side": "left",
+            "spawn": 2,
+            "wall": 0
+          },
+          {
+            "floor": 0,
+            "side": "right",
+            "spawn": 1,
+            "wall": 224
+          }
+        ],
+        "index": 89,
+        "native_bsp_nodes": 10,
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            224,
+            0
+          ],
+          [
+            224,
+            40
+          ],
+          [
+            176,
+            96
+          ],
+          [
+            148,
+            112
+          ],
+          [
+            76,
+            112
+          ],
+          [
+            48,
+            96
+          ],
+          [
+            0,
+            40
+          ]
+        ],
+        "quads": 225,
+        "shape": "crowned storm amphitheatre"
+      }
+    },
+    "runtime": {
+      "reservation": 4096,
+      "start": 34994720,
+      "used": 2004
+    },
+    "shipping": true,
+    "sound": {
+      "bank_adapter": 34996520,
+      "configs": 34996184,
+      "count": 57,
+      "first": 719,
+      "manifest": "reference\\audio\\midnight-creatures-v2\\manifest.json",
+      "play": 34984800,
+      "spatial_adapter": 34996212
+    },
+    "version": "0.24.0"
+  },
+  "parent_rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+  "pending": [],
+  "publication": {
+    "actual_battery": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+    "arm9_sha256": "dd30eb25ada17e7d95bc1419588d46f96f6367ebbc1213faba21749d161b39e3",
+    "battery_bytes": 634,
+    "battery_lossless": true,
+    "battery_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+    "boot_options": "0.24.0 visually verified on exact candidate",
+    "canonical": "build/version-0.24.0-final/Versioned.nds",
+    "checkpoint": "before-build-dsv-b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+    "clean_rom_unchanged": true,
+    "emulator_closed": true,
+    "exact_publisher_checkpoint": true,
+    "passed": true,
+    "payload_sha256": "ad97e262189a8f3e1f494b1c85b43404985d7199a46141bfb166e82286eb2c89",
+    "previous_rom_metadata_recipe_preserved": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\releases\\534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+    "qualified_candidate": "build/midnight-rebuild-j/Versioned.nds",
+    "recipe_sha256": "382ac7b74e164185ea2fa6b2775d45ffec8febca9190ac2f43b23a7c72dc7f7a",
+    "release_history_recorded": true,
+    "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+    "stable": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+    "version": "0.24.0",
+    "wrapper_words": [
+      1,
+      512,
+      1,
+      1,
+      512,
+      0
+    ]
+  },
+  "qualification": {
+    "boot_options": {
+      "options": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-c31bae4c\\version-024-options-j",
+      "options_visually_confirmed": "Options v0.24.0",
+      "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+      "source_save_unchanged": true,
+      "title": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-c31bae4c\\version-024-title-j",
+      "title_visually_confirmed": "TASM v0.24.0",
+      "visual_review_pending": false
+    },
+    "counterplay": "work/midnight-rebuild/g-counter/contacts-skitter.json",
+    "mixed_pcm": {
+      "freight": {
+        "channels": 2,
+        "clipped_samples": 0,
+        "path": "work\\midnight-rebuild\\freight-j\\freight-j.wav",
+        "peak": 16384,
+        "rate": 32768,
+        "seconds": 84.143,
+        "sha256": "6d8a50df15d6f79cf7ed887b2b51b1d89811052bb68ec5df23d8358bd210b98a"
+      },
+      "observatory": {
+        "channels": 2,
+        "clipped_samples": 0,
+        "path": "work\\midnight-rebuild\\observatory-j\\observatory-j.wav",
+        "peak": 16384,
+        "rate": 32768,
+        "seconds": 106.915,
+        "sha256": "d4d3aabe9bface908ce308ebc325216f068aa3245fc3704e61d5cc75a7b4ee1a"
+      },
+      "roof": {
+        "channels": 2,
+        "clipped_samples": 0,
+        "path": "work\\midnight-rebuild\\roof-j\\terminal-roof-j-black.wav",
+        "peak": 14204,
+        "rate": 32768,
+        "seconds": 27.864,
+        "sha256": "ae543fc26ecf39c97a0ebd6af031a63b1290b215c201d71f7911621fa55ff22c"
+      }
+    },
+    "native": {
+      "all_midnight_doors": {
+        "passed": true,
+        "report": "work/midnight-rebuild/doors-j/midnight-doors.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "bbe46c546914a593f89f015da17f8680bf30d65a3d3d4fd6b0b986c18c822175"
+      },
+      "black_conductor": {
+        "passed": true,
+        "report": "work/midnight-rebuild/boss-black-j/walk-conductor-black-no-refill-j-black.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "0f7d599a83a4aa4016190714e989d4973467a35ee7dd74e078640ea176e67ebf"
+      },
+      "black_hoist": {
+        "passed": true,
+        "report": "work/midnight-rebuild/hoist-black-j/walk-hoist-black-kit-j-black.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "507360143edbfe4b49c88795696fd8ea4a55edf140aca554b8bc5d046601d914"
+      },
+      "black_reverse_stairs_tower": {
+        "passed": true,
+        "report": "work/midnight-rebuild/tower-j/result-tower-loop-j.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "5d478c43b34d2a370c2c7be9ebc5b166f874f8eb6e303735eea5224df1016db1"
+      },
+      "conductor_four_programs": {
+        "actual_hp_damage_events_by_action": {
+          "136": 2,
+          "30": 3,
+          "55": 9,
+          "63": 9
+        },
+        "passed": true,
+        "report": "work/midnight-rebuild/study-j/result-conductor-study-j.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "100722cc7d368a607133f795241eed1de07fea50f196b571b1ef7982e7d90817"
+      },
+      "conductor_fresh_continue": {
+        "passed": true,
+        "report": "work/midnight-rebuild/boss-red-j/earned-continue.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "dbf16d207b1f60e759016e9dbc14baa026b3985bd226480b26b4c6ccfa07fa03"
+      },
+      "hoist_fresh_continue": {
+        "passed": true,
+        "report": "work/midnight-rebuild/hoist-save-route-j/arm-continue-j-earned.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "e12d4226097f2cd77173614cc31e9c5809afc330df345e08fcdf13798a37e21b"
+      },
+      "mixed_freight": {
+        "passed": true,
+        "report": "work/midnight-rebuild/freight-j/creatures/creature-duel-mixed-red-kit-j-c31bae4c.json",
+        "rom_sha256": null,
+        "sha256": "5676e608df00419efc746ec37a23bc3e1c3a5f4e509b74843a8a8d42602e043c"
+      },
+      "mixed_observatory": {
+        "passed": true,
+        "report": "work/midnight-rebuild/observatory-j/result-observatory-j.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "ef7d679d9984cb83162c9b9e971059c59e0c4c4eb426e85fefb560604415eac7"
+      },
+      "native_pump_interaction": {
+        "passed": true,
+        "report": "work/midnight-rebuild/pump-j/walk-pump-j.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "ab22f1d21ca8bff70c1c592d0e982a9d148234fe04a983cf875e423e8f77c55d"
+      },
+      "red_conductor_earned_save": {
+        "passed": true,
+        "report": "work/midnight-rebuild/boss-red-j/walk-conductor-red-save-j-red.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "5d5888cdc6c4782e1193b9995a65798590e4dd630466ae4ab037a03bc2942a02"
+      },
+      "red_hoist_earned_save": {
+        "passed": true,
+        "report": "work/midnight-rebuild/hoist-save-route-j/walk-hoist-red-kit-j-route-save.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "07ebda454f6b1a9e3985b1e41e2403d178eeafa21908bf5e168142fd7454f4e6"
+      },
+      "red_return_to_sewer": {
+        "passed": true,
+        "report": "work/midnight-rebuild/return-j/result-return-loop-j.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "ed4f237ce2ef15fe786fdc80c823b47e13da9b4c184a54298035bf2f6dcf35af"
+      },
+      "terminal_roof_pursuit": {
+        "passed": true,
+        "report": "work/midnight-rebuild/roof-j/pursuit-terminal-roof-j-black.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "8f67a72577c9f155771220bdfeee48c400784816a04859832f222fb1b376b8cb"
+      }
+    },
+    "pilot_audio": "work/midnight-rebuild/pilot-audio.json",
+    "production_reproduction": {
+      "arm9_sha256": "dd30eb25ada17e7d95bc1419588d46f96f6367ebbc1213faba21749d161b39e3",
+      "passed": true,
+      "recipe": "Full clean-ROM/overlay production mod.create_build chain",
+      "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+      "seconds": 325.73
+    },
+    "regular_actual_hp": {
+      "ballast": {
+        "actual_hp_hit_actions": [
+          55,
+          63,
+          136
+        ],
+        "limits": "Copied battery; initial room arrival and isolated one-species budget. Native inputs/HP/AI; no attack forcing or position edits. Optional HP resets occur only between complete programs; clearance has separate player refills. Enemy HP stays native.",
+        "native_base_string_clear": true,
+        "passed": true,
+        "report": "work/midnight-rebuild/j-ballast-open/contacts-ballast.json",
+        "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+        "sha256": "d4d0f3a82a07e40fde3c38f6730901703b683b9a60decc9a0ccdbdde6bb05ab1"
+      },
+      "eye": {
+        "actual_hp_hit_actions": [
+          55,
+          63,
+          68
+        ],
+        "limits": "Copied battery; initial room arrival and isolated one-species budget. Native inputs/HP/AI; no attack forcing or position edits. Optional HP resets occur only between complete programs; clearance has separate player refills. Enemy HP stays native.",
+        "native_base_string_clear": true,
+        "passed": true,
+        "report": "work/midnight-rebuild/f-eye/contacts-eye.json",
+        "rom_sha256": "d438dee47ebc5bdaddd4c2672bfb2f3f94dd96b39a8a6cb28b2f43ef12b00f33",
+        "sha256": "2b43d2f2a003b9813771b1fb7f6f2110d8077622af58c7c7e74376d00c02f480"
+      },
+      "maw": {
+        "actual_hp_hit_actions": [
+          55,
+          63,
+          68
+        ],
+        "limits": "Copied battery; initial room arrival and isolated one-species budget. Native inputs/HP/AI; no attack forcing or position edits. Optional HP resets occur only between complete programs; clearance has separate player refills. Enemy HP stays native.",
+        "native_base_string_clear": true,
+        "passed": true,
+        "report": "work/midnight-rebuild/f-maw/contacts-maw.json",
+        "rom_sha256": "d438dee47ebc5bdaddd4c2672bfb2f3f94dd96b39a8a6cb28b2f43ef12b00f33",
+        "sha256": "cd9c95fb41cfd3822c5fbd4626eadb46bff7a71f6f28cb3d16b4ff2d0d541d4a"
+      },
+      "skitter": {
+        "actual_hp_hit_actions": [
+          55,
+          63,
+          68
+        ],
+        "limits": "Copied battery; initial room arrival and isolated one-species budget. Native inputs/HP/AI; no attack forcing or position edits. Optional HP resets occur only between complete programs; clearance has separate player refills. Enemy HP stays native.",
+        "native_base_string_clear": true,
+        "passed": true,
+        "report": "work/midnight-rebuild/f-skitter/contacts-skitter.json",
+        "rom_sha256": "d438dee47ebc5bdaddd4c2672bfb2f3f94dd96b39a8a6cb28b2f43ef12b00f33",
+        "sha256": "006f5bb678cdabf012f1658c97cbe6d81acfcd7b13e365bfa24b87d1f8f74fae"
+      },
+      "spore": {
+        "actual_hp_hit_actions": [
+          55,
+          63,
+          68
+        ],
+        "limits": "Copied battery; initial room arrival and isolated one-species budget. Native inputs/HP/AI; no attack forcing or position edits. Optional HP resets occur only between complete programs; clearance has separate player refills. Enemy HP stays native.",
+        "native_base_string_clear": true,
+        "passed": true,
+        "report": "work/midnight-rebuild/i-spore/contacts-spore.json",
+        "rom_sha256": "c0d96750de51386e532f45a8b89bb56387b554951a89c19551bb355235bd3bdb",
+        "sha256": "c66e44380c92f0c85c72c4e527e22dcbde5c16c1c6b44d4cd5f7537f56de83f8"
+      },
+      "warden": {
+        "actual_hp_hit_actions": [
+          55,
+          63,
+          136
+        ],
+        "limits": "Copied battery; initial room arrival and isolated one-species budget. Native inputs/HP/AI; no attack forcing or position edits. Optional HP resets occur only between complete programs; clearance has separate player refills. Enemy HP stays native.",
+        "native_base_string_clear": true,
+        "passed": true,
+        "report": "work/midnight-rebuild/g-weight/contacts-warden.json",
+        "rom_sha256": "9524e656cd4df2dd65663303debe5fe8321e5df89f939f0f21481a50613f4877",
+        "sha256": "04bffd849c328d72b3a20c8f8970a284ad02293667ebb984d2084d39c0dbd900"
+      }
+    },
+    "tests": {
+      "count": 440,
+      "log": "work/midnight-rebuild/broad-tests-j-retry.log",
+      "passed": true
+    }
+  },
+  "resource_audit": {
+    "actual_changed": {
+      ".bsp": 10,
+      ".cbmp": 11,
+      ".gab": 55,
+      ".gmb": 234,
+      ".nsbmd": 17,
+      ".nsbtx": 1,
+      ".obj": 10,
+      ".sca": 230,
+      ".strings": 2
+    },
+    "inherited_controls": {
+      "f": {
+        "arm_changed_offsets": [],
+        "arm_identical": true,
+        "native_sound_bank_identical": true,
+        "rom_sha256": "d438dee47ebc5bdaddd4c2672bfb2f3f94dd96b39a8a6cb28b2f43ef12b00f33",
+        "styles": {
+          "eye": {
+            "private_resources_identical": 125
+          },
+          "maw": {
+            "private_resources_identical": 126
+          },
+          "skitter": {
+            "private_resources_identical": 126
+          }
+        }
+      },
+      "g": {
+        "arm_changed_offsets": [],
+        "arm_identical": true,
+        "native_sound_bank_identical": true,
+        "rom_sha256": "9524e656cd4df2dd65663303debe5fe8321e5df89f939f0f21481a50613f4877",
+        "styles": {
+          "warden": {
+            "private_resources_identical": 86
+          }
+        }
+      },
+      "i": {
+        "arm_changed_offsets": [],
+        "arm_identical": true,
+        "native_sound_bank_identical": true,
+        "rom_sha256": "c0d96750de51386e532f45a8b89bb56387b554951a89c19551bb355235bd3bdb",
+        "styles": {
+          "spore": {
+            "private_resources_identical": 125
+          }
+        }
+      }
+    },
+    "regenerated_and_roundtripped": {
+      ".bsp": 10,
+      ".cbmp": 11,
+      ".gab": 59,
+      ".gmb": 347,
+      ".nsbmd": 17,
+      ".nsbtx": 10,
+      ".obj": 10,
+      ".sca": 347,
+      ".strings": 2
+    },
+    "report": "work/midnight-rebuild/resource-audit-j.json",
+    "sound_files_changed": [
+      22,
+      43,
+      46
+    ]
+  },
+  "retained_diagnostics": [
+    "work/midnight-rebuild/baseline-skitter/contacts-skitter.json",
+    "work/midnight-rebuild/d-warden/contacts-warden.json",
+    "work/midnight-rebuild/e-ballast/contacts-ballast.json",
+    "work/midnight-rebuild/hoist-j/walk-hoist-red-kit-j-red-save.json",
+    "work/midnight-rebuild/hoist-route-j/result-hoist-return-j.json",
+    "work/midnight-rebuild/-final-j/contacts-ballast.json",
+    "work/midnight-rebuild/j-ballast-ground/contacts-ballast.json"
+  ],
+  "rom_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+  "schema_version": 1,
+  "source_sha256": {
+    "mod.py": "1581f290758c262bf43db58cee18bfeeebfbfb7cdccbd65d17175bc6d3e2b24e",
+    "reference/audio/midnight-creatures-v2/ballast-alert.swavdata": "b246d250e2a104d0dd82a2849bbc5235d0b5a55e90e51bb601669d2b6b5ccb78",
+    "reference/audio/midnight-creatures-v2/ballast-death.swavdata": "24461c1188ab87096b29a75314f5f1f95511abd3aa06c2b012e09c6bc50d229f",
+    "reference/audio/midnight-creatures-v2/ballast-hurt.swavdata": "f5be2713e42180a68aac0a813734dffa5f4517ec70482989775bebb76012a5d3",
+    "reference/audio/midnight-creatures-v2/ballast-step.swavdata": "54865002bb31a2ca08beef31915fc1726688416df366b5c4f71184e20e2e1ffd",
+    "reference/audio/midnight-creatures-v2/ballast-strike-0.swavdata": "d89e25bb4271280c034c6b37283ca3f8ae012538d0b46cfc551e2aff56d4e4ef",
+    "reference/audio/midnight-creatures-v2/ballast-strike-1.swavdata": "95e9f74f7e297297d84a6a2ea443c3efd4fcdf52c9dfee4aae930b3bc4ebaf5e",
+    "reference/audio/midnight-creatures-v2/ballast-strike-2.swavdata": "813eaf90370ea432ffb2b7218a1b4d2be8809fee8671dcfbb16b2f4339bf0953",
+    "reference/audio/midnight-creatures-v2/ballast-tell.swavdata": "7a642bebdf39329bbd7323c4773f51d2d17cad2e4b1bc3f1f660e7962f8263af",
+    "reference/audio/midnight-creatures-v2/conductor-alert.swavdata": "40dce80e3e363b1303b4a549abca634f93891a0acb9d30de8087080ca2474f6e",
+    "reference/audio/midnight-creatures-v2/conductor-death.swavdata": "541a50e00c5297b323af4cc7ed22d2dc6f5ef8c601c1611fd95193ea81dd5505",
+    "reference/audio/midnight-creatures-v2/conductor-hurt.swavdata": "acf23e918bdc06e62836156434ee57f2160c60d045de62049ce838b28644a8a6",
+    "reference/audio/midnight-creatures-v2/conductor-step.swavdata": "60aa290fd12a8a90baf36ed21ff644cc9f900edf2a25fd101a254bb362a80f02",
+    "reference/audio/midnight-creatures-v2/conductor-strike-0.swavdata": "438b819fcbb0ea633ccb7d653a0600b806eb622a1d0f2ee612918352d70466bf",
+    "reference/audio/midnight-creatures-v2/conductor-strike-1.swavdata": "bce122cfbc3d4b9799ef46588f683325b8f5b13eea763126722e8f00fdf06a30",
+    "reference/audio/midnight-creatures-v2/conductor-strike-2.swavdata": "6d0327879b1b6f54ffa8dddeaa19092536a9b91fd1f7042765797ac42665865e",
+    "reference/audio/midnight-creatures-v2/conductor-strike-3.swavdata": "bba531d1dce73b70f372f431b5cfe10230d5d05f44d7af82fd8795250e61a1f4",
+    "reference/audio/midnight-creatures-v2/conductor-tell.swavdata": "3bd5f0d744868512dc45526e0b2f52bbbdebf086330cec368f9650b5e4f9a4e5",
+    "reference/audio/midnight-creatures-v2/eye-alert.swavdata": "24c2df48882a54422c2b2d8c71a8a67d4971d416b02bff7f8c900967c0e0a236",
+    "reference/audio/midnight-creatures-v2/eye-death.swavdata": "38c17b0d0c9cf0969af32d753d69659daa618562b84593af0e8dd9a0be33b457",
+    "reference/audio/midnight-creatures-v2/eye-hurt.swavdata": "2b3ec4d9907fa42e0197691897a50ea7106b5548570fd8d82f9bc3f7c20b0b46",
+    "reference/audio/midnight-creatures-v2/eye-step.swavdata": "669d35ba403b6d90a3ab138e8731738bb64b9b36dd97aa3c2c540d5096e3a1ab",
+    "reference/audio/midnight-creatures-v2/eye-strike-0.swavdata": "ef533c5640d5ef671f99e972b120898c6643153bd9b35827ab519ed7a16f8e45",
+    "reference/audio/midnight-creatures-v2/eye-strike-1.swavdata": "f00bbead7de0c4ebdf8bb3c809ac3a5586c0c96d63166c907788a8f8de6397f2",
+    "reference/audio/midnight-creatures-v2/eye-strike-2.swavdata": "873d83147aa3ebd47790e7a36e085b12c9d0c2252b8b87876d3faab21bd8f24e",
+    "reference/audio/midnight-creatures-v2/eye-tell.swavdata": "85995eb2f2d7be771ffb7c2ea2f060fcbd69aa514cd5e14dde74e92ac07b50f7",
+    "reference/audio/midnight-creatures-v2/manifest.json": "67c7c0349aaad9047f906d46082bef88538975a28efddd966b62d0ea20eafb98",
+    "reference/audio/midnight-creatures-v2/maw-alert.swavdata": "05b47f236660009b520c9766e3e6680cf2f3ffb0d8e97eec782f9a78d7ace1b6",
+    "reference/audio/midnight-creatures-v2/maw-death.swavdata": "f8de0b9a6d845a77de227d56e7785d7a89ebaf71cfd7acfc57634e215542ceb9",
+    "reference/audio/midnight-creatures-v2/maw-hurt.swavdata": "5e3f42f1a0855e4641e6f17d6c04bde1331e817d261c644f662106f12964b07b",
+    "reference/audio/midnight-creatures-v2/maw-step.swavdata": "5a39f548f71c090bde4dd114065da331489feac7a7210a9542ad575084e9fc1a",
+    "reference/audio/midnight-creatures-v2/maw-strike-0.swavdata": "7f31c0c1992ffcc5e046c981744cc7469fcf09b548c4f0302584be5c68f89969",
+    "reference/audio/midnight-creatures-v2/maw-strike-1.swavdata": "ef4b4399637056f53b911bc627ed0ac25ab62968c5f85260669debcdb88c6eae",
+    "reference/audio/midnight-creatures-v2/maw-strike-2.swavdata": "e938f9a57ea2a72c1abf85b69aa1641b06a5b00799c9cd10a75b3f255e589751",
+    "reference/audio/midnight-creatures-v2/maw-tell.swavdata": "dc354e08cb7f620f0f8bdac1d57ef9b4effcb7f16a57decfa8879dcdd6ac8445",
+    "reference/audio/midnight-creatures-v2/skitter-alert.swavdata": "6195ee8e3c2d6078adaa003749c6133538dd86f0231273c493dadb8c401b3753",
+    "reference/audio/midnight-creatures-v2/skitter-death.swavdata": "0d0a1543310aad6704fc6913c4bf2026a75035b0140a3b8f940b1459747fe44f",
+    "reference/audio/midnight-creatures-v2/skitter-hurt.swavdata": "28231134b715b58d8b1b67bfcf10a627beebbb88ed3bf71b2bd40a59dd8d0977",
+    "reference/audio/midnight-creatures-v2/skitter-step.swavdata": "577fffcc8628169aed6da19ce48badd71d2ec2df06eeaabc6b217cecda2d6f58",
+    "reference/audio/midnight-creatures-v2/skitter-strike-0.swavdata": "c526c4fa98e8a30c4624319dabfb531785c813c945d5083592bab4fddf32808f",
+    "reference/audio/midnight-creatures-v2/skitter-strike-1.swavdata": "b304a80cc114165845bba0cf41202d2f1204c79b5cf2d4f846f8b2ff0068cca9",
+    "reference/audio/midnight-creatures-v2/skitter-strike-2.swavdata": "62682bf5b480c591332ed089d0bbc6096b6e17e57c930509fef1017554eb9c75",
+    "reference/audio/midnight-creatures-v2/skitter-tell.swavdata": "c996db6b8a7afdd6d1cb5b999e1e8a90aafcdf5ecd666a450a1406a9eb1164b1",
+    "reference/audio/midnight-creatures-v2/spore-alert.swavdata": "f2e6ddb3a6f47ac8c7a10a1317aaa00696350e034684aa423a89eecd156ba0a4",
+    "reference/audio/midnight-creatures-v2/spore-death.swavdata": "8aa2c0c22c8018dd6d27db62bc23368061d4953c421db9743a6f76a7de5a2ff4",
+    "reference/audio/midnight-creatures-v2/spore-hurt.swavdata": "94c55d52fa4188ccac02030e52255a28517784d803ef9e360dea8c92003465e3",
+    "reference/audio/midnight-creatures-v2/spore-step.swavdata": "52fed8441a869672f945610b72d3b1bcb8b8707e3b589a6e41b9676edba55e62",
+    "reference/audio/midnight-creatures-v2/spore-strike-0.swavdata": "104e09bda9493db3c81b5705e7119c691568e17c85784414e1f026a43e75f2e4",
+    "reference/audio/midnight-creatures-v2/spore-strike-1.swavdata": "352565f28bd6035d879b2ec701db3d5e854684aec5e97e86578b17d8af3cbc70",
+    "reference/audio/midnight-creatures-v2/spore-strike-2.swavdata": "f1a09d49b5925bbd5e3634a66047da9819151f9224fb2095d501eb85a4a13057",
+    "reference/audio/midnight-creatures-v2/spore-tell.swavdata": "aa964ff5a79897de4cab815bd972d47f84a0018c1be8d03b1bef36d85623d084",
+    "reference/audio/midnight-creatures-v2/warden-alert.swavdata": "771f417a743e5688edfbc5e7ddfb65e4fa1d013ea82d358195003ccd3de910ef",
+    "reference/audio/midnight-creatures-v2/warden-death.swavdata": "0f00663ff3779695b0736173f08734cd2ff795cc3c87d93430e7263b5c1a60ad",
+    "reference/audio/midnight-creatures-v2/warden-hurt.swavdata": "bf7aaa97807c9f3ef589491f7a2ce36087b66564d25554a436f36ed42826928c",
+    "reference/audio/midnight-creatures-v2/warden-step.swavdata": "4f75391aaa734bed93977deb414c420f742395c47e65eb8b6cfc282f37a45bf1",
+    "reference/audio/midnight-creatures-v2/warden-strike-0.swavdata": "464622caa58f64584216ecd4b5a95fcb07f76467a0fd04902d3c9e863fb62b74",
+    "reference/audio/midnight-creatures-v2/warden-strike-1.swavdata": "bce122cfbc3d4b9799ef46588f683325b8f5b13eea763126722e8f00fdf06a30",
+    "reference/audio/midnight-creatures-v2/warden-strike-2.swavdata": "86d372d1152c97260871b22b99af061fa229cc04891b0928ef6ff48b016c339e",
+    "reference/audio/midnight-creatures-v2/warden-tell.swavdata": "eaa00d217415eda38527321a7a0d5c76ac79007bb503ede72654a836d6148699",
+    "reference/chapter_spectacle.json": "1f85e3beca087584c9cf6bac8186cc2e171d42999307d6f567091e9ab1defa15",
+    "tests/test_midnight_rebuild.py": "95ec604d3469beab823bf7fe59ccbd3a840efc821354538e7dbf922a64b6273d",
+    "tools/chapter_renewal_lab.py": "7379143a6a173114f6423d34571f663014ed423e07e21cceda3b12ad0bd78976",
+    "tools/midnight_enemy_art.py": "455cb3191b644d6db8cf3ae33c23ad8c7ad7f731c63e7e819947817163e66c1b",
+    "tools/midnight_enemy_audio.py": "6bc2922fab8685aa84164cd98ad0ff47c3ef180799df696e155fe959d62f143d",
+    "tools/midnight_enemy_combat.py": "1f954182dd5dcf63b82caa06f673c2d094f817773df21d75700f50e6de9a670d",
+    "tools/midnight_enemy_lab.py": "081f699c64d5e34a990c0e9e7ea57962949910817835a401f1e1bae9374ffcfb",
+    "tools/midnight_enemy_motion.py": "61eb53bd5978382cb70e7001201db8b9603fad7ad6763a7ea63bdd53406901e9",
+    "tools/midnight_rebuild.py": "a44b592664073c0ef1751c6dec01071cfa5dbf2135d3e725f9fb9e30973d18df",
+    "tools/midnight_rebuild_lab.py": "1eee610a8591d9534472bb7809b47ea191b3b0c945c77f85d37029fabf814873",
+    "tools/midnight_rebuild_rooms.py": "4a162ca0ba14c26ffbf54c116aac1fb271009b2ba9f1b00da252bf7ad808c014",
+    "tools/release_info.py": "7cb1cb8ac58bdcfbc57f708a560e364ff669b095beb6217a3357c9824fbb4152",
+    "tools/room_envelope.py": "665c5c2d326aa8b305210d2a3bb815ddacaedfd0e9adca0ec8a5e277ff2c8cfa"
+  },
+  "status": "published",
+  "version": "0.24.0"
+}

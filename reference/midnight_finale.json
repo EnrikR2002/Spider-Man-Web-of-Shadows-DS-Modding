@@ -1,0 +1,188 @@
+{
+  "arm9_sha256": "88475ec2d8bec8e1d521cf92ff2560e1e72f26b00e73ceefaa525e9d608977aa",
+  "audio": {
+    "limits": "Output PCM headroom is a clipping check, not listening/player sound-quality acceptance; frozen0.26 voices/music/player sound rows stay exact.",
+    "mixed_final_red": {
+      "clipped_samples": 0,
+      "path": "work/midnight-flow/final-red/conductor-red-save-final-red.wav",
+      "peak": 14165,
+      "rate": 32768,
+      "seconds": 76.58
+    },
+    "sound_data_exact_to_026": true
+  },
+  "audits": [
+    "work/midnight-flow/scope-b.json",
+    "work/midnight-flow/scope-b-to-c.json"
+  ],
+  "boss_rules": {
+    "armoured_action": 74,
+    "counter_cooldown": 72,
+    "ordinary_attacks_stagger": true,
+    "pressure_hits": 4,
+    "pressure_window": 100,
+    "standing_hurt_state": 37
+  },
+  "candidate": "build\\version-0.27.0-final\\Versioned.nds",
+  "feedback": "Keep boss mobility/strength; restore comboable stagger with counters/knockdown resistance. Improve Midnight silhouettes/motion and ramp room pressure toward the boss.",
+  "inherited_controls": {
+    "black_victory": "B: final C differs only in four meshes; fresh earned Continue tested on C",
+    "normal_contacts": "Skitter/Warden A, Eye B: all ordinary motion/GMB/GAB/ARM programs are exact to final C; final mixed/presentation reviewed on C"
+  },
+  "limits": "Native-scale appearance reviewed independently of counters; fun, complete-route balance and actual DeSmuME pacing require player replay.",
+  "mesh_quads": {
+    "conductor": 364,
+    "eye": 320,
+    "skitter": 298,
+    "warden": 348
+  },
+  "normal_contact_evidence": {
+    "eye": {
+      "hit_actions": [
+        55,
+        63,
+        68
+      ],
+      "limits": "Copied battery; initial room arrival and isolated one-species budget. Native inputs/HP/AI; no attack forcing or position edits. Optional HP resets occur only between complete programs; clearance has separate player refills. Enemy HP stays native.",
+      "passed": true,
+      "path": "work\\midnight-rebuild\\finale-b-eye\\contacts-eye.json",
+      "rom_sha256": "f01298f45a636184626402ef5067fa32237835e6e815bfa9717d3cfb7c340823"
+    },
+    "skitter": {
+      "hit_actions": [
+        55,
+        63,
+        68
+      ],
+      "limits": "Copied battery; initial room arrival and isolated one-species budget. Native inputs/HP/AI; no attack forcing or position edits. Optional HP resets occur only between complete programs; clearance has separate player refills. Enemy HP stays native.",
+      "passed": true,
+      "path": "work\\midnight-rebuild\\finale-a-skitter\\contacts-skitter.json",
+      "rom_sha256": "a06e3158cceece141fb0703e54a9cab39cd64fbcdb021d9c8b35567d4c966b2b"
+    },
+    "warden": {
+      "hit_actions": [
+        55,
+        63,
+        136
+      ],
+      "limits": "Copied battery; initial room arrival and isolated one-species budget. Native inputs/HP/AI; no attack forcing or position edits. Optional HP resets occur only between complete programs; clearance has separate player refills. Enemy HP stays native.",
+      "passed": true,
+      "path": "work\\midnight-rebuild\\finale-a-warden\\contacts-warden.json",
+      "rom_sha256": "a06e3158cceece141fb0703e54a9cab39cd64fbcdb021d9c8b35567d4c966b2b"
+    }
+  },
+  "parent_sha256": "21bd1b19c8b8f74f24fca06e238204dac0f78b02630e04629fd8ae78f978a947",
+  "parent_version": "0.26.0",
+  "pending": [],
+  "presentation": {
+    "boot_options_sheet": "work/midnight-flow/final-boot-sheet.png",
+    "native_scale_sheet": "work/midnight-flow/final-presentation-sheet.png",
+    "player_accepted": false,
+    "visually_reviewed": true
+  },
+  "publication_audit": "work/midnight-flow/publication-final.json",
+  "ramp": {
+    "78": {
+      "live_cost": 3,
+      "pattern": [
+        21,
+        20,
+        21,
+        36
+      ],
+      "total_cost": 8
+    },
+    "81": {
+      "live_cost": 3,
+      "pattern": [
+        36,
+        21,
+        20,
+        21
+      ],
+      "total_cost": 8
+    },
+    "83": {
+      "live_cost": 3,
+      "pattern": [
+        21,
+        20,
+        36,
+        21
+      ],
+      "total_cost": 7
+    },
+    "86": {
+      "live_cost": 4,
+      "pattern": [
+        36,
+        20,
+        21,
+        36,
+        21,
+        20
+      ],
+      "total_cost": 12
+    }
+  },
+  "release_date": "2026-10-19",
+  "retained_early_controls": [
+    "work/midnight-flow/pilot-a-press",
+    "work/midnight-flow/pilot-a-red",
+    "work/midnight-flow/a-press-noheal"
+  ],
+  "rom_sha256": "1b1e4e37d48f4a5661b77ac10032e694d1985347b7eb0f70fdd5d828226cdc4d",
+  "schema_version": 1,
+  "scope": "Four private Midnight creature model/animation groups, version strings and scoped ARM programs/encounter tables. Rooms/maps/doors/textures/audio/Crane actors/player kit exact.",
+  "selected_evidence": [
+    "work/midnight-flow/combo-proof-b.json",
+    "work/midnight-flow/final-red/walk-conductor-red-save-final-red.json",
+    "work/midnight-flow/b-black/walk-conductor-black-save-b-black.json",
+    "work/midnight-flow/final-phase/walk-conductor-study-final-phase.json",
+    "work/midnight-flow/final-observatory/walk-observatory-final-observatory.json",
+    "work/midnight-flow/final-doors/midnight-doors.json",
+    "work/midnight-flow/final-black-continue/earned-continue.json",
+    "work/midnight-flow/final-boot.json",
+    "work/midnight-flow/final-terminal/walk-terminal-wave-final-terminal.json",
+    "work/midnight-flow/final-floodworks/walk-floodworks-wave-final-floodworks.json",
+    "work/midnight-flow/final-turbine/walk-turbine-wave-final-turbine.json",
+    "work/midnight-flow/final-red-continue/earned-continue.json"
+  ],
+  "source_hashes": {
+    "mod.py": "4d87ac00c408e397dee9d83b3f1a0b5aaeb413855c1fa2f11ce570115e96afdd",
+    "tests/test_midnight_finale.py": "9d15d72a6b603f5cee2ce9fd4080b51fc0b64910bb4e5ed3e65cdca9e0f3cc1c",
+    "tools/midnight_enemy_lab.py": "b1a3d8f89a4d06c27594ab5ee5361083fa7880401c988ef7916bc75285b0d11e",
+    "tools/midnight_finale.py": "b820a3221d3c7caa5f1e18edb695aefc8985b2567bf78a3f20c0069caf265f7f",
+    "tools/midnight_finale_art.py": "a8c3b7beb7cd90d53d67258fac1366e04a5ba8f9c070a63c0064d8673e6ae171",
+    "tools/midnight_finale_combat.py": "53740e7da70acd41677a5b39fcdff7c5614006ad334185c769cb341dfcfecfc4",
+    "tools/midnight_finale_motion.py": "a551ae682e88a60cee224edbdbe8837a899c3b7ba20a283d317f3ca0de4f5165",
+    "tools/midnight_rebuild_lab.py": "5d1164711f8785554b7c8e16d97721570627f2dd6ab60b66fc37b362464ccd39",
+    "tools/midnight_voltage_combat.py": "fe5e6d51ad1d183a74cf28d2d9b7a13740ee28a9d3ab0e3a5302eb4e300679ee",
+    "tools/midnight_voltage_lab.py": "cd844504faabfe142cf480c3e08f23d80e2c7508650f655acd4073bffb03b6f2",
+    "tools/release_info.py": "6dee2e539a0ae521ad357c6ae0cbd6ac50ca6ec7b959587c2191531473c39352"
+  },
+  "status": "published and verified",
+  "superseded": [
+    "A gives combo openings/escapes but its counter has weak grounded contact; B changes counter path/timing.",
+    "B meshes too dense for a DS crowd; C changes exactly four model resources and has identical ARM9/motion/audio/room data."
+  ],
+  "tests": [
+    {
+      "log": "work/midnight-flow/tests-b-broad.log",
+      "passed": true,
+      "scope": "B ARM9 exact to C; C model-only delta separately parsed and visually reviewed",
+      "tests": 180
+    },
+    {
+      "log": "work/midnight-flow/tests-final-publication.log",
+      "passed": true,
+      "tests": 16
+    },
+    {
+      "log": "post-publication docs/TASKS + CHANGES/roadmap update; tests.test_document_layout",
+      "passed": true,
+      "tests": 2
+    }
+  ],
+  "version": "0.27.0"
+}

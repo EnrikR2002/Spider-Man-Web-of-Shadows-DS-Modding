@@ -1,0 +1,1124 @@
+{
+  "audio_receipt": "reference/audio/chapter-spectacle-v1/manifest.json",
+  "candidate": "build\\spectacle-full-k\\Versioned.nds",
+  "captured_audio": {
+    "cues": {
+      "harbor-air": {
+        "correlation": 0.649,
+        "pcm": "work\\chapter-spectacle\\quay-air-full-j.wav",
+        "peak": 729,
+        "pitch": 1.0,
+        "sample": "harbor-air",
+        "seconds": 10.091
+      },
+      "harbor-release": {
+        "correlation": 0.319,
+        "pcm": "work\\chapter-spectacle\\hoist-full-j-red.wav",
+        "peak": 16383,
+        "pitch": 1.0,
+        "sample": "harbor-release",
+        "seconds": 26.133
+      },
+      "hoist-impact": {
+        "correlation": 0.332,
+        "pcm": "work\\chapter-spectacle\\hoist-full-j-red.wav",
+        "peak": 16383,
+        "pitch": 1.0,
+        "sample": "hoist-impact",
+        "seconds": 5.321
+      },
+      "hoist-tell": {
+        "correlation": 0.393,
+        "pcm": "work\\chapter-spectacle\\hoist-full-j-red.wav",
+        "peak": 16383,
+        "pitch": 1.0,
+        "sample": "hoist-tell",
+        "seconds": 10.399
+      },
+      "motor-open": {
+        "correlation": 0.886,
+        "pcm": "work\\chapter-spectacle\\hoist-full-j-red.wav",
+        "peak": 16383,
+        "pitch": 1.0,
+        "sample": "motor-open",
+        "seconds": 5.955
+      },
+      "pump-start": {
+        "correlation": 0.284,
+        "pcm": "work\\chapter-spectacle\\engine-full-j.wav",
+        "peak": 16384,
+        "pitch": 1.0,
+        "sample": "pump-start",
+        "seconds": 6.136
+      },
+      "station-air": {
+        "correlation": 0.608,
+        "pcm": "work\\chapter-spectacle\\station-air-full-j.wav",
+        "peak": 878,
+        "pitch": 1.0,
+        "sample": "station-air",
+        "seconds": 21.658
+      },
+      "storm-release": {
+        "correlation": 0.216,
+        "pcm": "work\\chapter-spectacle\\conductor-red-save-full-j-red.wav",
+        "peak": 16384,
+        "pitch": 1.0,
+        "sample": "storm-release",
+        "seconds": 38.579
+      },
+      "storm-tell": {
+        "correlation": 0.556,
+        "pcm": "work\\chapter-spectacle\\conductor-red-save-full-j-red.wav",
+        "peak": 16384,
+        "pitch": 1.0,
+        "sample": "storm-tell",
+        "seconds": 23.901
+      }
+    },
+    "limits": "Recorded game PCM, normalized template matches and timing against real wins; no clipped samples. This is playback/mix evidence, not a human listening verdict.",
+    "passed": true,
+    "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c"
+  },
+  "composition": {
+    "arm9_sha256": "28bd1cd188d94c5422f6c0b2192c3ea060bb295aabba3b0ec54c4bdd8f979241",
+    "checkpoint": {
+      "disabled_during_combat": true,
+      "room": 106,
+      "xy": [
+        36,
+        1
+      ]
+    },
+    "map_areas": {
+      "crane": 6,
+      "midnight": 5
+    },
+    "material_atlas": "chapter-spectacle-materials-v1.png",
+    "modified_resources": [
+      "American.strings",
+      "English.strings",
+      "GlobFiles.txt",
+      "zz_ML_Entry_app.obj",
+      "zz_ML_Station_app.obj",
+      "zz_ML_NestShaft_app.obj",
+      "zz_ML_NestThroat_app.obj",
+      "zz_ML_NestGallery_app.obj",
+      "zz_ML_NestGate_app.obj",
+      "zz_ML_Venom_app.obj",
+      "zz_AR_CraneQuay_app.obj",
+      "zz_AR_FreightExchange_app.obj",
+      "zz_AR_HarbourOffice_app.obj",
+      "zz_AR_ContainerWarren_app.obj",
+      "zz_AR_DryDock_app.obj",
+      "zz_AR_EngineHouse_app.obj",
+      "zz_AR_Counterweight_app.obj",
+      "zz_AR_GantrySpine_app.obj",
+      "zz_AR_WinchCache_app.obj",
+      "zz_AR_CraneCrown_app.obj",
+      "zz_AR_LongArm_app.obj",
+      "zz_AR_Breakwater_app.obj",
+      "zz_CraneOverview.cbmp",
+      "zz_CraneGuide1.cbmp",
+      "zz_CraneGuide2.cbmp",
+      "zz_CraneGuide3.cbmp",
+      "zz_CR_hook.nsbmd",
+      "zz_R21_ML_Entry.nsbmd",
+      "zz_R21_ML_Entry.nsbtx",
+      "zz_R21_ML_Refuge.nsbmd",
+      "zz_R21_ML_Refuge.nsbtx",
+      "zz_R21_ML_Station.nsbmd",
+      "zz_R21_ML_Station.bsp",
+      "zz_R21_ML_Station.nsbtx",
+      "zz_R21_ML_Station.cbmp",
+      "zz_R21_ML_NestShaft.nsbmd",
+      "zz_R21_ML_NestShaft.nsbtx",
+      "zz_R21_ML_NestRest.nsbmd",
+      "zz_R21_ML_NestRest.nsbtx",
+      "zz_R21_ML_NestThroat.nsbmd",
+      "zz_R21_ML_NestThroat.nsbtx",
+      "zz_R21_ML_NestGallery.nsbmd",
+      "zz_R21_ML_NestGallery.nsbtx",
+      "zz_R21_ML_NestShrine.nsbmd",
+      "zz_R21_ML_NestShrine.nsbtx",
+      "zz_R21_ML_NestGate.nsbmd",
+      "zz_R21_ML_NestGate.nsbtx",
+      "zz_R21_ML_Venom.nsbmd",
+      "zz_R21_ML_Venom.nsbtx",
+      "zz_R21_AR_CraneQuay.nsbmd",
+      "zz_R21_AR_CraneQuay.nsbtx",
+      "zz_R21_AR_FreightExchange.nsbmd",
+      "zz_R21_AR_FreightExchange.nsbtx",
+      "zz_R21_AR_HarbourOffice.nsbmd",
+      "zz_R21_AR_HarbourOffice.nsbtx",
+      "zz_R21_AR_ContainerWarren.nsbmd",
+      "zz_R21_AR_ContainerWarren.nsbtx",
+      "zz_R21_AR_DryDock.nsbmd",
+      "zz_R21_AR_DryDock.nsbtx",
+      "zz_R21_AR_EngineHouse.nsbmd",
+      "zz_R21_AR_EngineHouse.nsbtx",
+      "zz_R21_AR_Counterweight.nsbmd",
+      "zz_R21_AR_Counterweight.nsbtx",
+      "zz_R21_AR_GantrySpine.nsbmd",
+      "zz_R21_AR_GantrySpine.nsbtx",
+      "zz_R21_AR_WinchCache.nsbmd",
+      "zz_R21_AR_WinchCache.nsbtx",
+      "zz_R21_AR_CraneCrown.nsbmd",
+      "zz_R21_AR_CraneCrown.nsbtx",
+      "zz_R21_AR_LongArm.nsbmd",
+      "zz_R21_AR_LongArm.nsbtx",
+      "zz_R21_AR_LongArm.cbmp",
+      "zz_R21_AR_Breakwater.nsbmd",
+      "zz_R21_AR_Breakwater.nsbtx",
+      "zz_F22_maw.nsbmd",
+      "zz_F22_ballast.nsbmd",
+      "zz_F22_spore.nsbmd",
+      "zz_F22_skitter.nsbmd",
+      "zz_F22_warden.nsbmd",
+      "zz_F22_eye.nsbmd",
+      "zz_F22_conductor.nsbmd"
+    ],
+    "parent_sha256": "1613d74662c7dfa9d5166da0b8c8ed08ec048c605a7e9167edf3e320ac4d2a75",
+    "pilot": false,
+    "player_kit_preserved": true,
+    "pump_flag": 245,
+    "readable_creature_models": {
+      "ballast": {
+        "quads": 256,
+        "shared_texture": "Forge128",
+        "stored_matrices": 20,
+        "vertices": 1024
+      },
+      "conductor": {
+        "quads": 402,
+        "shared_texture": "Forge128",
+        "stored_matrices": 22,
+        "vertices": 1608
+      },
+      "eye": {
+        "quads": 252,
+        "shared_texture": "Forge128",
+        "stored_matrices": 16,
+        "vertices": 1008
+      },
+      "maw": {
+        "quads": 286,
+        "shared_texture": "Forge128",
+        "stored_matrices": 20,
+        "vertices": 1144
+      },
+      "skitter": {
+        "quads": 291,
+        "shared_texture": "Forge128",
+        "stored_matrices": 20,
+        "vertices": 1164
+      },
+      "spore": {
+        "quads": 240,
+        "shared_texture": "Forge128",
+        "stored_matrices": 16,
+        "vertices": 960
+      },
+      "warden": {
+        "quads": 278,
+        "shared_texture": "Forge128",
+        "stored_matrices": 22,
+        "vertices": 1112
+      }
+    },
+    "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+    "rooms": {
+      "AR_Breakwater": {
+        "bounds": [
+          0,
+          -20,
+          320,
+          96
+        ],
+        "budget": [
+          2,
+          1
+        ],
+        "index": 107,
+        "objects_sha256": "81bd191fba589ef7e92aac7cfc5f413b705be3075ffc0b4687822c84a9078e50",
+        "quads": 263,
+        "roof_platforms": false,
+        "roster": [
+          21
+        ],
+        "save": []
+      },
+      "AR_ContainerWarren": {
+        "bounds": [
+          0,
+          -24,
+          380,
+          160
+        ],
+        "budget": [
+          6,
+          3
+        ],
+        "index": 99,
+        "objects_sha256": "803a7fde66d240912c14577913267d30899e1fa491d1d82cf9ddf4473732f163",
+        "quads": 344,
+        "roof_platforms": false,
+        "roster": [
+          21,
+          20,
+          21
+        ],
+        "save": []
+      },
+      "AR_Counterweight": {
+        "bounds": [
+          0,
+          0,
+          176,
+          224
+        ],
+        "budget": [
+          4,
+          2
+        ],
+        "index": 102,
+        "objects_sha256": "e2f60596afa158333d136a97ea6836fd8c23d4c86acfcb58bd6e2af9d8b663f4",
+        "quads": 375,
+        "roof_platforms": false,
+        "roster": [
+          21,
+          20
+        ],
+        "save": []
+      },
+      "AR_CraneCrown": {
+        "bounds": [
+          0,
+          0,
+          336,
+          176
+        ],
+        "budget": [
+          4,
+          4
+        ],
+        "index": 105,
+        "objects_sha256": "d88cc952da7b9cadb1794a14f1d0e5cddd75bc11b5a3d4f077a3df9f20175d8b",
+        "quads": 364,
+        "roof_platforms": false,
+        "roster": [
+          36,
+          20,
+          21
+        ],
+        "save": []
+      },
+      "AR_CraneQuay": {
+        "bounds": [
+          0,
+          -20,
+          360,
+          96
+        ],
+        "budget": [
+          5,
+          3
+        ],
+        "index": 96,
+        "objects_sha256": "4495d5d44b714fa303c0009f667c263b764c271a12f21df77cecc4e6d33e7775",
+        "quads": 459,
+        "roof_platforms": false,
+        "roster": [
+          21,
+          21,
+          20
+        ],
+        "save": []
+      },
+      "AR_DryDock": {
+        "bounds": [
+          0,
+          0,
+          400,
+          144
+        ],
+        "budget": [
+          8,
+          3
+        ],
+        "index": 100,
+        "objects_sha256": "c61386122f21329b8b671d2b642baa5a14bc1957eb6a4bb7792d609c249abf09",
+        "quads": 531,
+        "roof_platforms": false,
+        "roster": [
+          36,
+          21,
+          36
+        ],
+        "save": []
+      },
+      "AR_EngineHouse": {
+        "bounds": [
+          0,
+          0,
+          280,
+          144
+        ],
+        "budget": [
+          5,
+          2
+        ],
+        "index": 101,
+        "objects_sha256": "6d97783a480ee1f17cff687bce630059f90b9d4ef397ed2d218b071c14a8c172",
+        "quads": 436,
+        "roof_platforms": false,
+        "roster": [
+          20,
+          36
+        ],
+        "save": []
+      },
+      "AR_FreightExchange": {
+        "bounds": [
+          0,
+          -24,
+          400,
+          176
+        ],
+        "budget": [
+          8,
+          3
+        ],
+        "index": 97,
+        "objects_sha256": "0f89be76c41dad16e2f6c5e29d65fde8b60b861cda3f54a0b060f73ccecf16ac",
+        "quads": 456,
+        "roof_platforms": false,
+        "roster": [
+          36,
+          21,
+          20,
+          21
+        ],
+        "save": []
+      },
+      "AR_GantrySpine": {
+        "bounds": [
+          0,
+          -32,
+          420,
+          112
+        ],
+        "budget": [
+          5,
+          3
+        ],
+        "index": 103,
+        "objects_sha256": "238e0146914fbe86f44a917c6bde39e41f157169f2aebfce6a40ffe46943a61c",
+        "quads": 340,
+        "roof_platforms": false,
+        "roster": [
+          20,
+          21,
+          21
+        ],
+        "save": []
+      },
+      "AR_HarbourOffice": {
+        "bounds": [
+          0,
+          0,
+          112,
+          64
+        ],
+        "budget": null,
+        "index": 98,
+        "objects_sha256": "25f7a37be8baa73510f0ed72182ee440cede0daeeff02737665b9591383b73a7",
+        "quads": 98,
+        "roof_platforms": false,
+        "roster": [],
+        "save": []
+      },
+      "AR_LongArm": {
+        "bounds": [
+          0,
+          0,
+          420,
+          144
+        ],
+        "budget": [
+          1,
+          1
+        ],
+        "index": 106,
+        "objects_sha256": "6e067e679c967c4d3d61fe20b0ebb4817ac82820ee8eda48fc71b8c189807291",
+        "quads": 297,
+        "roof_platforms": false,
+        "roster": [
+          21
+        ],
+        "save": [
+          36,
+          1
+        ]
+      },
+      "AR_WinchCache": {
+        "bounds": [
+          0,
+          0,
+          160,
+          96
+        ],
+        "budget": null,
+        "index": 104,
+        "objects_sha256": "8a868c1e94ef88f1cf587d6546e2c2ff420545e796c1bd0829f61661e7eace14",
+        "quads": 162,
+        "roof_platforms": false,
+        "roster": [],
+        "save": []
+      },
+      "ML_Entry": {
+        "bounds": [
+          0,
+          0,
+          224,
+          88
+        ],
+        "budget": [
+          3,
+          2
+        ],
+        "index": 76,
+        "objects_sha256": "b0601c4ab2385dbf74f6abd8e9af9a4343cb4665a57f927f0ed7d4630acd1f38",
+        "quads": 217,
+        "roof_platforms": false,
+        "roster": [
+          21,
+          21
+        ],
+        "save": []
+      },
+      "ML_NestGallery": {
+        "bounds": [
+          0,
+          0,
+          288,
+          128
+        ],
+        "budget": [
+          8,
+          3
+        ],
+        "index": 86,
+        "objects_sha256": "00f9b897b20710caba9b2fa1487ccb715cd80d76e3fbabf02753c60b625b3b43",
+        "quads": 247,
+        "roof_platforms": false,
+        "roster": [
+          20,
+          36,
+          21,
+          20
+        ],
+        "save": []
+      },
+      "ML_NestGate": {
+        "bounds": [
+          0,
+          0,
+          224,
+          104
+        ],
+        "budget": [
+          2,
+          1
+        ],
+        "index": 88,
+        "objects_sha256": "bc426af1d71e3431c6ff2720cfb83d12ebf302bd1975f0b4cbaaa79fc38790c4",
+        "quads": 176,
+        "roof_platforms": false,
+        "roster": [
+          21
+        ],
+        "save": []
+      },
+      "ML_NestRest": {
+        "bounds": [
+          0,
+          0,
+          96,
+          64
+        ],
+        "budget": null,
+        "index": 82,
+        "objects_sha256": "88fd22ad02cb89198ad3a3ce4ca09b61cb7bf32fdf25b9b98a6051079bcceac9",
+        "quads": 96,
+        "roof_platforms": false,
+        "roster": [],
+        "save": []
+      },
+      "ML_NestShaft": {
+        "bounds": [
+          0,
+          0,
+          288,
+          112
+        ],
+        "budget": [
+          6,
+          3
+        ],
+        "index": 81,
+        "objects_sha256": "a263831a455f5c36ef9a531071cba2983743c6dc90091c3a6f020861a5c001ac",
+        "quads": 303,
+        "roof_platforms": false,
+        "roster": [
+          36,
+          20,
+          36
+        ],
+        "save": []
+      },
+      "ML_NestShrine": {
+        "bounds": [
+          0,
+          0,
+          112,
+          72
+        ],
+        "budget": null,
+        "index": 87,
+        "objects_sha256": "64acc32e15123679a680208e7d95c9a99e5897554eaa3d880790ede3e74a17f6",
+        "quads": 120,
+        "roof_platforms": false,
+        "roster": [],
+        "save": []
+      },
+      "ML_NestThroat": {
+        "bounds": [
+          0,
+          0,
+          192,
+          144
+        ],
+        "budget": [
+          4,
+          2
+        ],
+        "index": 83,
+        "objects_sha256": "8803598d8233abf3e4646fa0e1b2e112011adb250fe041df99a4a6156af9fd06",
+        "quads": 292,
+        "roof_platforms": false,
+        "roster": [
+          21,
+          20,
+          21
+        ],
+        "save": []
+      },
+      "ML_Refuge": {
+        "bounds": [
+          0,
+          0,
+          96,
+          64
+        ],
+        "budget": null,
+        "index": 77,
+        "objects_sha256": "a10a4ded179b7f67e0f1bef68f4a7ac5286960dbc9470a3e3c36904a5bc966a2",
+        "quads": 86,
+        "roof_platforms": false,
+        "roster": [],
+        "save": []
+      },
+      "ML_Station": {
+        "bounds": [
+          0,
+          0,
+          336,
+          112
+        ],
+        "budget": [
+          7,
+          3
+        ],
+        "index": 78,
+        "objects_sha256": "715d1cd72cde4ba05ecdea2a8d263826e663b32bf1334e070f65d4e3b1585d44",
+        "quads": 381,
+        "roof_platforms": true,
+        "roster": [
+          21,
+          36,
+          21,
+          20
+        ],
+        "save": []
+      },
+      "ML_Venom": {
+        "bounds": [
+          0,
+          0,
+          224,
+          112
+        ],
+        "budget": [
+          2,
+          2
+        ],
+        "index": 89,
+        "objects_sha256": "03082cd8bf0340543ad8d8d1319d19c8c8de9779234458342a94f76dee990417",
+        "quads": 217,
+        "roof_platforms": false,
+        "roster": [
+          36
+        ],
+        "save": []
+      }
+    },
+    "runtime": {
+      "navigation": 34987204,
+      "reservation": 7516,
+      "secondary": 34989832,
+      "start": 34987204,
+      "think": 34987460,
+      "used": 6732
+    },
+    "runtime_only": false,
+    "scripted_runtime": {
+      "core_hp": 34993680,
+      "goal_table": 34990728,
+      "goals": 34991088,
+      "patterns": {
+        "100": 34990064,
+        "101": 34990068,
+        "102": 34990072,
+        "103": 34990076,
+        "105": 34990080,
+        "106": 34990084,
+        "107": 34990088,
+        "76": 34990024,
+        "78": 34990028,
+        "81": 34990032,
+        "83": 34990036,
+        "86": 34990040,
+        "88": 34990044,
+        "89": 34990048,
+        "96": 34990052,
+        "97": 34990056,
+        "99": 34990060
+      },
+      "roster_state": 34990308,
+      "roster_table": 34990092,
+      "variant": 34990316,
+      "world_data": 34993488,
+      "world_table": 34993168
+    },
+    "sound": {
+      "count": 9,
+      "first": 710
+    },
+    "sound_data_preserved": false,
+    "sound_event": {
+      "adapter": 34993816,
+      "count": 9,
+      "first": 710,
+      "native_count": 582,
+      "play": 34984800,
+      "rooms": [
+        76,
+        107
+      ],
+      "site": 33794196
+    },
+    "version": "0.23.0",
+    "world_models": {
+      "zz_CS23_L101_0.nsbmd": {
+        "sha256": "c981780707b47d157e7bcca6d7621e1e831eead97f8e733e292ea933a5e4f9a6",
+        "size": 852
+      },
+      "zz_CS23_L101_1.nsbmd": {
+        "sha256": "975443abb5ecc29eba605e3eb9b2e445cbc98aca446ab63d610f5751a49ce712",
+        "size": 852
+      },
+      "zz_CS23_L102_0.nsbmd": {
+        "sha256": "41b1867a83648ea9d1777195c7f4f9170c3c76e85f85eb7b9e7e2ba958429826",
+        "size": 852
+      },
+      "zz_CS23_L102_1.nsbmd": {
+        "sha256": "6241fe1365e2e39ce57f7d5f5c6ac27a4ca4093eb31271326d2d035a9f1d6fcf",
+        "size": 852
+      },
+      "zz_CS23_L103_0.nsbmd": {
+        "sha256": "544dc4281610f3fcee9acf5bcb948d5fbec080836118eec0d140d9dbe66e1e5a",
+        "size": 852
+      },
+      "zz_CS23_L103_1.nsbmd": {
+        "sha256": "a0e2119cec8f2bf443b9cf63ff5e4a48c20cb293d1097fbb984c4b7b518ded76",
+        "size": 852
+      },
+      "zz_CS23_L105_0.nsbmd": {
+        "sha256": "b63a96c22782544a7a7ad34d313b08084fb0d7884e3de50029488f97ff96f340",
+        "size": 852
+      },
+      "zz_CS23_L105_1.nsbmd": {
+        "sha256": "aa485fbd37dc1ba3dc9597a653c3d123c9061cea825c4deddf72b8b4b62d6b63",
+        "size": 852
+      },
+      "zz_CS23_L107_0.nsbmd": {
+        "sha256": "5c56f8311d018b0bda511a067c9543f8a5dc4b528568ad1641c32c6c947a40d8",
+        "size": 852
+      },
+      "zz_CS23_L107_1.nsbmd": {
+        "sha256": "b0a86b1171f2c5292344709fb45af5151a382e12b94e02ec62eb4e947e186425",
+        "size": 852
+      },
+      "zz_CS23_L76_0.nsbmd": {
+        "sha256": "20d909fb02a350f4cac3b8d6b6c71263139b62804fa4cf983d74a8cf44120560",
+        "size": 852
+      },
+      "zz_CS23_L76_1.nsbmd": {
+        "sha256": "7fc12cd5fc3eb06e125b123b6ce5b2c517bfc417c929b58e459e1ba154460740",
+        "size": 852
+      },
+      "zz_CS23_L78_0.nsbmd": {
+        "sha256": "05bed82d15511ce863db59867bcb90646e292145537b796962d6a70907a2b27f",
+        "size": 852
+      },
+      "zz_CS23_L78_1.nsbmd": {
+        "sha256": "fc3370e238f3e879130e76ad4162c5f1b3a04408d20533da0405d52ee9957533",
+        "size": 852
+      },
+      "zz_CS23_L81_0.nsbmd": {
+        "sha256": "d4618d8e14da71550f642ea82fb5f0b366aa0c5a957a4d49950a1def01696c17",
+        "size": 852
+      },
+      "zz_CS23_L81_1.nsbmd": {
+        "sha256": "cfaffc04b6e0fdd8e32ccd8ad276fff9bc368610575f8cec93ee16b087e4a5a5",
+        "size": 852
+      },
+      "zz_CS23_L83_0.nsbmd": {
+        "sha256": "fe937ef5aeaf3bd7493fc53facd898c0e8bc3746fb18828d50faefa6c8af1c1d",
+        "size": 852
+      },
+      "zz_CS23_L83_1.nsbmd": {
+        "sha256": "e8a8daf6b0d5deb7c7f02bcb5b7817096c580b1278745f096c603359a2ef7cc9",
+        "size": 852
+      },
+      "zz_CS23_L86_0.nsbmd": {
+        "sha256": "6844ea4f562ce33f566cc2a404072a3bb27b98d6a4cbbd6cfd08d96259ca36f1",
+        "size": 852
+      },
+      "zz_CS23_L86_1.nsbmd": {
+        "sha256": "3ceb34da2e4b2e676b6c5404375727f9e938a56d35b898ebe74915c2ac22f96c",
+        "size": 852
+      },
+      "zz_CS23_L89_0.nsbmd": {
+        "sha256": "696076ba3b5f5f2c0ab6644942dba021c2df2babc480ef268cac7ef8ea291b00",
+        "size": 852
+      },
+      "zz_CS23_L89_1.nsbmd": {
+        "sha256": "16ff7c1443ac8b7a81c7c7a624f8363db54e6e9bdd5c1fa752a8f5e4b292be01",
+        "size": 852
+      },
+      "zz_CS23_L96_0.nsbmd": {
+        "sha256": "34d1d4248e3cfedcf1f577b08cd5fb233d46be6f1da3d9fb5fe2bbb7ce8fb73b",
+        "size": 852
+      },
+      "zz_CS23_L96_1.nsbmd": {
+        "sha256": "58f244a55d9723486a4e4d5a3cdf4f452aa63b4daf93b876f6568a8e8a8af0f3",
+        "size": 852
+      },
+      "zz_CS23_L98_0.nsbmd": {
+        "sha256": "98517090357f3f899d708df538ae5900d3d90c1a25191bd0a99610038c97047b",
+        "size": 684
+      },
+      "zz_CS23_L98_1.nsbmd": {
+        "sha256": "af8713bb24f5643de441f539ead657d7f76581b78eb639361e74235a42525695",
+        "size": 684
+      },
+      "zz_CS23_motor.nsbmd": {
+        "sha256": "155c299e74dd56d26f7d2e80c791a034dd6f7c5e0f4cc57de5b97a335b41a355",
+        "size": 4244
+      },
+      "zz_CS23_motor_dead.nsbmd": {
+        "sha256": "00a66653cd1daffd08e330efd4578647ba1f6fad3cb5043d979dbf64cd9d35b9",
+        "size": 4244
+      },
+      "zz_CS23_shield.nsbmd": {
+        "sha256": "1280e1555a54ba46f1539ac1f1daf7884dc3520516d1907cd47cbe51ab8dc429",
+        "size": 3044
+      },
+      "zz_CS23_shield_broken.nsbmd": {
+        "sha256": "726e04e603183795a236702ffca4fc639d564614afb5d7659acdaf90a2c4b8bf",
+        "size": 3344
+      }
+    }
+  },
+  "inheritance_scope": "work/chapter-spectacle/inheritance-scope.json",
+  "limitations": [
+    "Arrival, optional purchases and player healing/parking fixtures are identified per report; no player difficulty verdict.",
+    "Final K Black bosses pass without healing. H hoist wins, but its native save-return controller times out; failed report retained.",
+    "H Freight earns native clearance. Its old three-simultaneous-species assertion is incompatible with the new cost3 live budget. Final mixed check requires2 and damage/clearance of all3.",
+    "K tightens only Crown spawning. J door/Red boss/PCM evidence carries by exact room, instruction and audio identity. K Crown clear/unlocked door pass; the first immediate save attempt missed sphere interaction after a transient arrival. Its failed fresh Continue is retained. A focused settled-arrival checkpoint control presets separately earned progress, then uses native input and fresh Continue to qualify saving.",
+    "G/I sound diagnostics exposed two separate original582-ID guards. Weak earlier correlations are inconclusive; J fixes the actual OBJ handler.",
+    "Actual DeSmuME frame pacing and player presentation/fun verdict remain unconfirmed."
+  ],
+  "material_receipt": "reference/art/chapter-spectacle-materials-v1.json",
+  "native_versions": {
+    "boot": "TASM v0.23.0",
+    "options": "Options v0.23.0",
+    "visually_reviewed": [
+      "build/boot-tests/Versioned-534c9df5/version-title-k/frame-00899.png",
+      "build/boot-tests/Versioned-534c9df5/version-boot-k/frame-01799.png"
+    ]
+  },
+  "pending": [],
+  "player_confirmed": false,
+  "publication": {
+    "battery": {
+      "checkpoint_exact": true,
+      "lossless_wrapper": true,
+      "payload_sha256": "ad97e262189a8f3e1f494b1c85b43404985d7199a46141bfb166e82286eb2c89",
+      "sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "size": 634,
+      "unchanged_from_prepublication": true
+    },
+    "passed": true,
+    "publication": {
+      "battery_checkpoint": "before-build-dsv-b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "battery_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "previous_rom_sha256": "1613d74662c7dfa9d5166da0b8c8ed08ec048c605a7e9167edf3e320ac4d2a75",
+      "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+      "schema_version": 1,
+      "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+      "version": "0.23.0"
+    },
+    "recipe_equals_canonical": true,
+    "stable_equals_canonical": true,
+    "versions": {
+      "boot": "TASM v0.23.0",
+      "options": "Options v0.23.0",
+      "visually_reviewed": [
+        "build/boot-tests/Versioned-534c9df5/version-title-k/frame-00899.png",
+        "build/boot-tests/Versioned-534c9df5/version-boot-k/frame-01799.png"
+      ]
+    }
+  },
+  "retained_failed_controls": [
+    "work/chapter-spectacle/crown-first-attempt.json",
+    "work/chapter-spectacle/arm-retry-continue-full-k.json",
+    "work/chapter-spectacle/walk-hoist-black-kit-full-h-black-save.json",
+    "work/chapter-spectacle/rendered-audio-pre-bound-failure.json",
+    "work/chapter-spectacle/engine-audio-i.json"
+  ],
+  "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+  "schema_version": 1,
+  "selected_evidence": [
+    {
+      "inherited": true,
+      "limits": "Lab warp into the first room; place/fight/boss fixtures as documented in tools/midnight_walk.py",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\walk-conductor-red-save-full-j-red.json",
+      "rom_sha256": "ca8071e658787efb4d689de9523c8b5f24c90a628328cc3d8b2a5cfe280eaa1f",
+      "sha256": "a83f80e1187c7936001a87c58146fb67386d317a302d526771db5b105052ec41"
+    },
+    {
+      "inherited": true,
+      "limits": "Lab warp into the first room; place/fight/boss fixtures as documented in tools/midnight_walk.py",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\walk-engine-full-j.json",
+      "rom_sha256": "ca8071e658787efb4d689de9523c8b5f24c90a628328cc3d8b2a5cfe280eaa1f",
+      "sha256": "5adae2baedc0e6d489b631a2a541b9ded5b8a1700b0db4d657812b3b3542fce0"
+    },
+    {
+      "inherited": true,
+      "limits": "Lab warp into the first room; place/fight/boss fixtures as documented in tools/midnight_walk.py",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\walk-hoist-red-kit-full-j-red-save.json",
+      "rom_sha256": "ca8071e658787efb4d689de9523c8b5f24c90a628328cc3d8b2a5cfe280eaa1f",
+      "sha256": "910a6d5af1bce06949640c02fe3aa361bb6f3c055832a1124cb2e7f29b0ddc9d"
+    },
+    {
+      "inherited": true,
+      "limits": "Fresh unmodified candidate boot/Continue from the in-game earned private hoist save; no warp, flag, player or enemy placement fixture.",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\arm-continue-full-j.json",
+      "rom_sha256": "ca8071e658787efb4d689de9523c8b5f24c90a628328cc3d8b2a5cfe280eaa1f",
+      "sha256": "b1563bcb789b72c3c78416d873806345ae4675e62143fd21338897afd6a5c705"
+    },
+    {
+      "inherited": false,
+      "limits": "Actual earned copied battery, fresh boot and Continue, native inputs to boss; no warp, flag or actor fixtures.",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\earned-continue.json",
+      "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+      "sha256": "3ed974bfca4dd7049047a06865d17cf3a7522e90f0d49613aa027134358a79e6"
+    },
+    {
+      "inherited": true,
+      "limits": "Lab warp into the first room; place/fight/boss fixtures as documented in tools/midnight_walk.py",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\walk-pump-full-j.json",
+      "rom_sha256": "ca8071e658787efb4d689de9523c8b5f24c90a628328cc3d8b2a5cfe280eaa1f",
+      "sha256": "4bd46955d5dc8dbf86184832c74ad48f5a002291ab6f185f0231670eaadfc927"
+    },
+    {
+      "inherited": true,
+      "limits": "Production mixed roster/budget; 60-unit max/healed player; copied save. Native enemy HP/spawns/AI; real inputs, no actor placement/state fixture. Not a difficulty test.",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\creatures\\creature-duel-mixed-red-kit-full-j-ca8071e6.json",
+      "rom_sha256": "ca8071e658787efb4d689de9523c8b5f24c90a628328cc3d8b2a5cfe280eaa1f",
+      "sha256": "dca81f928eaf5870c5ea2319c26b1d291f7331275e5a76646ee192ff6f24f541"
+    },
+    {
+      "inherited": false,
+      "limits": "Native full-HP Crown clear and real unlocked hoist door; 60-unit/healed player, power140/arrival/purchase fixtures. Subsequent first save attempt failed fresh Continue: its travel accepted a transient0,0 position. Retained separately; focused settled checkpoint control qualifies persistence.",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\crown-native-clear-k.json",
+      "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+      "sha256": "a307733d901c2e60fcefb1b80de319230c9584024ba4a2d1f7a24e00ed29a1f2"
+    },
+    {
+      "inherited": false,
+      "limits": "Lab warp into the first room; place/fight/boss fixtures as documented in tools/midnight_walk.py",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\walk-crown-checkpoint-full-k.json",
+      "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+      "sha256": "79f50bc8c376ba9a6b380ec033c93f31ec287d0ac05b14804563ea28db6737f9"
+    },
+    {
+      "inherited": false,
+      "limits": "Fresh unmodified candidate boot/Continue from the in-game earned private hoist save; no warp, flag, player or enemy placement fixture.",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\arm-retry-continue-checkpoint-k.json",
+      "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+      "sha256": "32fd803553ee74e5f15119bf7137e49175c9b35e5ffd7084e38c072db1f4b5a1"
+    },
+    {
+      "inherited": false,
+      "limits": "Fresh unmodified candidate boot/Continue from the in-game earned private hoist save; no warp, flag, player or enemy placement fixture.",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\arm-continue-full-k.json",
+      "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+      "sha256": "929b48f122f3251eef3e14549a433d7c970c1a315a1350d348107a7988c885f7"
+    },
+    {
+      "inherited": false,
+      "limits": "Lab warp into the first room; place/fight/boss fixtures as documented in tools/midnight_walk.py",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\walk-hoist-black-kit-full-k-black.json",
+      "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+      "sha256": "3ee019a0e422967f935dd967c901c891777c1d558fb48bbb7eec1338aa258f6e"
+    },
+    {
+      "inherited": false,
+      "limits": "Lab warp into the first room; place/fight/boss fixtures as documented in tools/midnight_walk.py",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\walk-conductor-black-no-refill-full-k-black.json",
+      "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+      "sha256": "097d92b2fa886088e0c36e2e2694af1cbd86e8d2991d611f3c6a85dfdc700b6b"
+    },
+    {
+      "inherited": true,
+      "limits": "Lab warp into the first room; place/fight/boss fixtures as documented in tools/midnight_walk.py",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\walk-terminal-roof-full-j-black.json",
+      "rom_sha256": "ca8071e658787efb4d689de9523c8b5f24c90a628328cc3d8b2a5cfe280eaa1f",
+      "sha256": "857afcc187719716b9125cc109fa87abcb9b6f6de040d8d1b4a5473252acc0c3"
+    },
+    {
+      "inherited": true,
+      "limits": "Native arrivals and controller movement. Enemies parked and player healed. Initial warp compiled into disposable ROM before JIT. No traversal placement fixtures.",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\doors-j\\midnight-doors.json",
+      "rom_sha256": "ca8071e658787efb4d689de9523c8b5f24c90a628328cc3d8b2a5cfe280eaa1f",
+      "sha256": "2bddac02506e05abb8bae56b9081386f68c9d379229fb5cf2b565258a6589147"
+    },
+    {
+      "inherited": true,
+      "limits": "Copied-save arrivals, parked enemies, healed player. Native controller movement only; Cargo Canyon uses its authored roof landings. No player-position traversal fixtures.",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\doors-j\\crane-doors.json",
+      "rom_sha256": "ca8071e658787efb4d689de9523c8b5f24c90a628328cc3d8b2a5cfe280eaa1f",
+      "sha256": "949363a4ccbb66c1ea3be86a8f89eec758cc6b3b5663eccdf9f2d6f6086bb63d"
+    },
+    {
+      "inherited": false,
+      "limits": "See the report and lab fixture contract.",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\scope-audit.json",
+      "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+      "sha256": "a4559c509bb2df7507929a286fa5dc2b2a9c3a45da28bf0c7aea3fd49fa20549"
+    },
+    {
+      "inherited": false,
+      "limits": "See the report and lab fixture contract.",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\reproduction.json",
+      "rom_sha256": "534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c",
+      "sha256": "cca88434cb668a8cee3a59afe133c9525a0021517a76788820b255d6a6a43394"
+    },
+    {
+      "inherited": true,
+      "limits": "Lab warp into the first room; place/fight/boss fixtures as documented in tools/midnight_walk.py",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\walk-duel-warden-full-h-b.json",
+      "rom_sha256": "9ad1f6d014c1dd9dd90cb8adbcc0e7c4ef963590081abc2089e6b7252ff722dc",
+      "sha256": "9671c945e58078351fa382de210fc9d5e632d21035f8390eb13e44245355e0c2"
+    },
+    {
+      "inherited": true,
+      "limits": "Lab warp into the first room; place/fight/boss fixtures as documented in tools/midnight_walk.py",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\walk-conductor-phase-full-h.json",
+      "rom_sha256": "9ad1f6d014c1dd9dd90cb8adbcc0e7c4ef963590081abc2089e6b7252ff722dc",
+      "sha256": "19521d8e159f2a5422ce1b1cc49fd7d83303e131075e69e07ac0957e45916b35"
+    },
+    {
+      "inherited": true,
+      "limits": "Lab warp into the first room; place/fight/boss fixtures as documented in tools/midnight_walk.py",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\walk-conductor-black-no-refill-full-h-black.json",
+      "rom_sha256": "9ad1f6d014c1dd9dd90cb8adbcc0e7c4ef963590081abc2089e6b7252ff722dc",
+      "sha256": "fa8c090bcc8b10ad785caf95ec692d1b2203e6e0861a3f7a59fc49e61914bd9d"
+    },
+    {
+      "inherited": true,
+      "limits": "Lab warp into the first room; place/fight/boss fixtures as documented in tools/midnight_walk.py",
+      "passed": true,
+      "path": "work\\chapter-spectacle\\walk-terminal-roof-full-g.json",
+      "rom_sha256": "b3807c75b4b9dd3cf4e6fe55df2e279926256037b5a7885d25cba8588586f4f5",
+      "sha256": "ff0bd1cf26591e0774754ef2072801e9c36266a3461a7f87a552defb6b682e8c"
+    }
+  ],
+  "source_sha256": {
+    "mod.py": "b076497c33fe63fe2b3854a2079aaad082abb531fbae551b3d4fcf68d0e0cb4e",
+    "tests\\arm_runtime.py": "ca77116269207fbc4c07d623c882e9c61a03a0657365c7d7f0ab6d62fb930847",
+    "tests\\test_chapter_spectacle.py": "fec2ce71ac73c5e1cba5c9a6e463bbdd1d385c35cc714ff577332a7b19d81e03",
+    "tools\\chapter_renewal_lab.py": "9216f853116efe6a401f30d33496e68a4c15d7a2e4b395788e0a8aa106c80105",
+    "tools\\chapter_spectacle.py": "7144bc7b6ff32973818858cbbdd60418e3437b7afcae2ed363d4408b1b9df71a",
+    "tools\\chapter_spectacle_art.py": "138323c126c9dc4655c24625dde2d6929f87ec9c9f4241070f237aa715d6414a",
+    "tools\\chapter_spectacle_audio.py": "e109ccffae43b26dcd906dd0f45c82d3830a59cc82ed00197dc9023f827d3e17",
+    "tools\\chapter_spectacle_combat.py": "1e0ed9eee5356a8c4198f63f78e8017ac0a83d83438f5319e1561daaaf7bde4a",
+    "tools\\chapter_spectacle_events.py": "e55050467f40c7d07628c568e0daae435f56851c692fb68fa89f39e6e190150a",
+    "tools\\chapter_spectacle_lab.py": "a514107a016317cc973c47af373fd973d5423209615e908f1c93b542a1d264fc",
+    "tools\\chapter_spectacle_rooms.py": "d9da5cb7519693d7c5330b5d02a0105c16224d9c4413753682b095fb2144797f",
+    "tools\\crane_creature_lab.py": "f5cd1d74264ff7efb8b12a55f919c77617f00b5b9bf7cc14b69e005118b8fc9f",
+    "tools\\crane_navigation.py": "ec4e4f58a9b6d92da4591a7b04e5e3c2585783a5fbcc451079dc7f026496668b",
+    "tools\\creature_forge_art.py": "a930e4cbee89cf6639a71d4ae20daa72ca6b1e55af89999886b9735209808770",
+    "tools\\creature_forge_combat.py": "34ceb6b8fbb76d9684909417c0398a573f8c1ebbc03e4520dce93ba880d78dfe",
+    "tools\\release_info.py": "b509f5011475dacf55adf0781d04a7597df937eb34285ae95d22ca10ef72896e"
+  },
+  "status": "Published through playtest.py build",
+  "tests": {
+    "tests-broad-h.log": {
+      "scope": "Broad suite before final OBJ event adapter",
+      "sha256": "f79bbc4f0b983f84881b648a73ed7e7fced350ad6e83761a5c8ca163c4d04fd6",
+      "tests": 428
+    },
+    "tests-final-k.log": {
+      "scope": "Final owned runtime/audio adapters, parent preservation, save and document checks",
+      "sha256": "76f9898612bad6c4751ecc8e93d2cc5c1be97a4f33f87aa396ff00e373b0cd94",
+      "tests": 56
+    }
+  },
+  "version": "0.23.0"
+}

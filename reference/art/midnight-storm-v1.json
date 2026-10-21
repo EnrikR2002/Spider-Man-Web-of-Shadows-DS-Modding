@@ -1,0 +1,19 @@
+{
+  "compiled_panels": {
+    "conversion": "Average pairs of RGB555 rows before indexed quantization; fit native128KiB room texture allocation",
+    "count": 3,
+    "height": 128,
+    "width": 256
+  },
+  "conversion": "Pillow Lanczos resize then integer 8-bit to5-bit channel quantization",
+  "copyright": "Original generated background; contains no extracted game art.",
+  "format": "little-endian RGB555, R in bits0..4",
+  "generator": "built-in image_gen",
+  "height": 256,
+  "prompt": "Use case: stylized-concept. Asset type: original in-game distant panorama texture for a Nintendo DS side-scrolling superhero action game, horizontal wide 3:1 image. Scene: an abandoned elevated railway terminal and immense Art Deco electrical cathedral in a New York rainstorm at midnight. Camera perfectly side-on, no perspective tilt. Long glass train sheds, a monumental circular turbine portal, suspension cables, spires and lightning conductors emerging through blue mist, distant city, one dramatic fork of lightning, small warm amber maintenance windows, pale cyan signal lamps. Painterly game environment art with large readable silhouettes and restrained texture detail suitable for downsampling to 768x256 RGB555. Clear depth layers, dark navy roofs in lower third, teal storm clouds in upper half, luminous vertical turbine ring in middle distance. No people, no hero, no text, no logos, no borders, no montage, no UI. Rich atmospheric ambitious architecture; no sewers, no organic hive.",
+  "runtime_image": "midnight-storm-v1.rgb555",
+  "schema_version": 1,
+  "source_image": "midnight-storm-v1.png",
+  "title": "Midnight Line storm terminal",
+  "width": 768
+}

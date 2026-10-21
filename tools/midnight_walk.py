@@ -626,6 +626,16 @@ def main(argv=None):
     parser.add_argument('--tag', default='', help='suffix of the report and capture names')
     parser.add_argument('--tries', type=int, default=3, help='all: reruns of a failing route (fights vary between runs)')
     args = parser.parse_args(argv)
+    # The overhaul retains room IDs but replaces the old clone coordinates.
+    # Qualify its actual authored doors with the arrival/input navigator.
+    metadata = Path(args.rom).with_suffix('.build.json')
+    if args.command == 'all' and metadata.exists() and json.loads(metadata.read_text()).get('chapter_renewal'):
+        from tools import chapter_renewal_lab
+        report=chapter_renewal_lab.main(['all','--rom',args.rom,'--jobs',str(args.jobs)])
+        return 0 if report['passed'] else 1
+    if args.command == 'all' and metadata.exists() and json.loads(metadata.read_text()).get('midnight_rework'):
+        from tools import midnight_rework_lab
+        return midnight_rework_lab.main(['all','--rom',args.rom,'--jobs',str(args.jobs)])
     if args.command == 'list':
         for name, (start, spawn, preset, steps) in routes().items(): print(f'{name}: from {start}, {len(steps)} steps')
     elif args.command == '_child': run_child(args.rom, args.name, tag=args.tag)

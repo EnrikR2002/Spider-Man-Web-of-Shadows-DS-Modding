@@ -1,0 +1,124 @@
+{
+  "first": 710,
+  "format": "mono22050Hz DS IMA-ADPCM",
+  "processing": "Layered/pitched/filtered recordings; deterministic room tails; ambience14/12% and events58..75% of author mix peak; no native game samples.",
+  "samples": [
+    {
+      "file": "station-air.swavdata",
+      "id": 710,
+      "name": "station-air",
+      "peak": 4037,
+      "samples": 39690,
+      "sha256": "7ca1dc287bedf835cf47303f4c1e7198e62c533b761aa411188297576ced403b",
+      "snr_db": 42.99
+    },
+    {
+      "file": "harbor-air.swavdata",
+      "id": 711,
+      "name": "harbor-air",
+      "peak": 3460,
+      "samples": 39690,
+      "sha256": "95628c98612b4edbfe4b2a3d0f8c398dc3960cac8e9118c19d7c63334c0e9eb6",
+      "snr_db": 44.52
+    },
+    {
+      "file": "pump-start.swavdata",
+      "id": 712,
+      "name": "pump-start",
+      "peak": 19608,
+      "samples": 46305,
+      "sha256": "11d815ca702964592c7ccd4b9b059eac072260ffe34f2b87a2b67197bbcc5b62",
+      "snr_db": 37.38
+    },
+    {
+      "file": "storm-tell.swavdata",
+      "id": 713,
+      "name": "storm-tell",
+      "peak": 18454,
+      "samples": 15435,
+      "sha256": "59488713837f11d50ae8648c0ca215a04b8d3ac0012aede1b9497a468339094a",
+      "snr_db": 36.59
+    },
+    {
+      "file": "storm-release.swavdata",
+      "id": 714,
+      "name": "storm-release",
+      "peak": 19031,
+      "samples": 48510,
+      "sha256": "893813be5bc7378e648c1fccee056df050270c49f115398fdde8f7a7a57d24c0",
+      "snr_db": 22.77
+    },
+    {
+      "file": "hoist-tell.swavdata",
+      "id": 715,
+      "name": "hoist-tell",
+      "peak": 20184,
+      "samples": 14332,
+      "sha256": "b0b210c84612cbb7ef8880cda5e00fc77e6bef187693164bb2e9e017f6e37a9a",
+      "snr_db": 32.59
+    },
+    {
+      "file": "hoist-impact.swavdata",
+      "id": 716,
+      "name": "hoist-impact",
+      "peak": 21626,
+      "samples": 19845,
+      "sha256": "a67d213298913e61e8da5af296892a8b7a727536fa6d4a34547890be86b7ca5b",
+      "snr_db": 25.33
+    },
+    {
+      "file": "motor-open.swavdata",
+      "id": 717,
+      "name": "motor-open",
+      "peak": 16724,
+      "samples": 18742,
+      "sha256": "268fcc5686e9096ebb00a6350dd4df71dbabdab38230df8fc2b7473ec711b907",
+      "snr_db": 39.83
+    },
+    {
+      "file": "harbor-release.swavdata",
+      "id": 718,
+      "name": "harbor-release",
+      "peak": 20761,
+      "samples": 52920,
+      "sha256": "ad9aeb8d1725cc12cc49dfaede6b3d802419852f6f2b3cc6c9867e709768e701",
+      "snr_db": 22.22
+    }
+  ],
+  "schema_version": 1,
+  "source_receipt": "reference/audio/creature-forge-sources/provenance.json",
+  "sources": {
+    "bell": {
+      "path": "reference\\audio\\creature-forge-sources\\impact\\Audio\\impactBell_heavy_000.ogg",
+      "sha256": "94b8bb5f2d43ab65e4bcc32b28562416e9bc2c51d9fd4be1e333660ee52f977f"
+    },
+    "crunch": {
+      "path": "reference\\audio\\creature-forge-sources\\sci-fi\\Audio\\explosionCrunch_001.ogg",
+      "sha256": "fdd04d6f0032d4d57c134ad37f3587d2d00e58c9572715275bd8cf4f43593576"
+    },
+    "engine": {
+      "path": "reference\\audio\\creature-forge-sources\\sci-fi\\Audio\\spaceEngineLow_002.ogg",
+      "sha256": "3b1adf8645a40c35fcad25eee224c82c9836dc443102a9af5586eb22cbedabcc"
+    },
+    "field": {
+      "path": "reference\\audio\\creature-forge-sources\\sci-fi\\Audio\\forceField_002.ogg",
+      "sha256": "051b0eafc479695af4ca3607d41fd4be41bae7c21f4f9508d004722b09f1bd63"
+    },
+    "plate": {
+      "path": "reference\\audio\\creature-forge-sources\\impact\\Audio\\impactPlate_heavy_003.ogg",
+      "sha256": "59775f8979a396c8a793b0a1db206d5bdc651eae808d858e9acaee8ebda5bc6d"
+    },
+    "steel": {
+      "path": "reference\\audio\\creature-forge-sources\\impact\\Audio\\impactMetal_heavy_002.ogg",
+      "sha256": "b914c8f1eb7c0f34bb165d7c77f4be0351f6be0660c13c53e65424e262e2c093"
+    },
+    "stone": {
+      "path": "reference\\audio\\creature-forge-sources\\impact\\Audio\\impactMining_002.ogg",
+      "sha256": "059558ec751115ca6b1441e00f0adc837c1a3eeb0a066b109e0fd879fc5d0b0c"
+    },
+    "thrust": {
+      "path": "reference\\audio\\creature-forge-sources\\sci-fi\\Audio\\thrusterFire_001.ogg",
+      "sha256": "924636edc923fe4aab5829b69dc5dc1c5d659dec5739865434dabee752a3bb79"
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "arm9_sha256": "f060152924d74cb5400e620be39a9e9217f96dab4e88ece8153186e9790c6ba2",
+  "candidate": "build/midnight-epic-full-b/Versioned.nds",
+  "limits": [
+    "Agent mechanical/presentation review is not player fun acceptance.",
+    "Contact studies label between-program player refills and isolated native rosters.",
+    "No route geometry change; original 0.24 terrain retained."
+  ],
+  "parent_sha256": "c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393",
+  "parent_version": "0.24.0",
+  "pilot_evidence": {
+    "black_no_refill": "work/midnight-epic/pilot-d-black/walk-conductor-black-no-refill-pilot-d-black.json",
+    "native_hp_progression": "work/midnight-epic/pilot-d-pressure/boss-pressure-pilot-d-pressure.json",
+    "red_no_refill": "work/midnight-epic/pilot-d-red/walk-conductor-red-no-refill-pilot-d.json",
+    "skitter_complete": "work/midnight-rebuild/epic-pilot-b/contacts-skitter.json"
+  },
+  "player_feedback": "0.24 environment and unique enemy direction accepted; rigid motion, poor SFX and slow/easy boss rejected; native boss HUD requested.",
+  "preservation": {
+    "native_ownership_purchases_rewards_unchanged": true,
+    "player_kit_32768_byte_identical": true,
+    "room_resources_byte_identical": true
+  },
+  "rom_sha256": "0817ec91a44f85a31135f4d99ef90452dd8c30870689e803743b3594ddadb314",
+  "schema_version": 1,
+  "selected_final_evidence": {
+    "black_earned_save": "work/midnight-epic/full-a-black/walk-conductor-black-save-full-a-black.json",
+    "eye": "work/midnight-rebuild/epic-full-a-eye/contacts-eye.json",
+    "warden": "work/midnight-rebuild/epic-full-a-warden/contacts-warden.json",
+    "maw": "work/midnight-rebuild/epic-full-a-maw/contacts-maw.json",
+    "ballast": "work/midnight-rebuild/epic-full-a-ballast-open/contacts-ballast.json",
+    "spore": "work/midnight-rebuild/epic-full-a-spore/contacts-spore.json",
+    "boss_active_windows": "work/midnight-epic/full-a-pressure/boss-pressure-full-a-pressure.json",
+    "red_final_b": "work/midnight-epic/full-b-boss/walk-conductor-red-save-full-b-red.json",
+    "red_b_continue": "work/midnight-epic/full-b-continue-red/earned-continue.json",
+    "black_a_continue": "work/midnight-epic/final-continue-black/earned-continue.json",
+    "original_boss": "work/midnight-epic/native-boss/native-boss-full-a.json",
+    "midnight_mixed": "work/midnight-epic/full-a-mixed-midnight/result-observatory-full-a-observatory.json",
+    "freight_final_b": "work/midnight-epic/full-b-mixed-freight/creatures/creature-duel-mixed-red-kit-full-b-freight-0817ec91.json",
+    "native_recovery": "work/midnight-epic/maw-native-recovery.json",
+    "actual_player_continue": "build/boot-tests/Versioned-0817ec91/final-player-continue-025-corrected/boot.json",
+    "scope": "work/midnight-epic/scope-validation.json",
+    "audio": "work/midnight-epic/audio-mix-analysis.json",
+    "black_continue_final_b": "work/midnight-epic/final-b-black-continue/earned-continue.json"
+  },
+  "source_hashes": {
+    "tools\\midnight_encore.py": "457bc6dca34cdc3dda0c2b10ca45022ee41301696c243019276ed969658f28b9",
+    "tools\\midnight_encore_art.py": "0ec55d32a156772dab15b34cec33ba1daf23a722e92a3215ace5eacc5e96a1a2",
+    "tools\\midnight_encore_audio.py": "b356119447555d117594563d24ba5e2d30b3c19c7a3ea4101556c0e0bd51cc38",
+    "tools\\midnight_encore_combat.py": "a49acbf1a4fd5b1a94310008a2aa2a9fd9dced1aff7f25c8922af96c2fdb19aa",
+    "tools\\midnight_encore_lab.py": "381e7014eebaef04d722f6356d56f766ef4b3c2b7b2e78b4e155896d0a139e8d",
+    "tools\\midnight_encore_motion.py": "2ca7741c0009fbc86c48f3bbb6d402f94bcf29647aed814edd31ce0fef246305",
+    "mod.py": "0a9ccff3e6409b66283f193b8eac3c43aafdb5a2cc6e74775bcaf481e64bcbab",
+    "tools\\release_info.py": "35aacc7397971d33ca3a68b80bf6a00d2cf6d68c6a0f5a253eb9aa3636d7fe89",
+    "tests\\test_midnight_encore.py": "3cade3fe9ba2759139409484e9332a9a713617b63567369c4f870b441bb62d38",
+    "tests\\arm_runtime.py": "06b0ddeae3550e5167a8ff9fccf2da1cd319e8c731eade9f0c57d4f66cd9c30e",
+    "tools\\crane_creature_lab.py": "764d89ce50c0cbd29d40e63ae309e5d509d465c40e0532ead0ab395443955aa9",
+    "tools\\chapter_renewal_lab.py": "ea7a19d21c89dd7bc74aeb4358f322b71ba741eb0bf555903b51c03664c92d3b",
+    "tools\\midnight_enemy_lab.py": "c054fb0cb8fc13cbba804dced1c0cceccc5c748830e2e035c584fbd7a97c257d",
+    "tools/release_info.py": "35aacc7397971d33ca3a68b80bf6a00d2cf6d68c6a0f5a253eb9aa3636d7fe89"
+  },
+  "status": "published",
+  "version": "0.25.0",
+  "previous_candidate": "build/midnight-epic-full-a/Versioned.nds",
+  "inherited_scope": "work/midnight-epic/a-to-b-scope.json",
+  "failed_controls": [
+    "work/midnight-rebuild/epic-full-a-ballast/contacts-ballast.json",
+    "work/midnight-epic/full-a-mixed-freight/creatures/creature-duel-mixed-red-kit-full-a-freight-039e9646.json",
+    "work/midnight-epic/full-a-continue-black-earned/earned-continue.json"
+  ],
+  "corrections": [
+    "Open-deck Ballast native approach proves charge; cramped first probe did not select it.",
+    "State-based fresh Continue walks whole native chapel and stops on cleared boss arrival.",
+    "Candidate B extends exact room97 physical walk-out/vault to Maw, including native Land7."
+  ],
+  "canonical": "build/version-0.25.0-final/Versioned.nds",
+  "tests": {
+    "broad": {
+      "count": 447,
+      "passed": true,
+      "candidate": "A; B inheritance scoped in a-to-b-scope.json",
+      "log": "work/midnight-epic/broad-tests.log"
+    },
+    "focused": {
+      "count": 8,
+      "passed": true,
+      "candidate": "B",
+      "module": "tests.test_midnight_encore",
+      "additional_document_tests_passed": true,
+      "log": "work/midnight-epic/final-focused-tests.log"
+    }
+  },
+  "actual_player_preflight": {
+    "report": "build/boot-tests/Versioned-0817ec91/final-player-continue-025-corrected/boot.json",
+    "room": 65,
+    "boss_already_defeated": false,
+    "title": "TASM v0.25.0",
+    "options": "Options v0.25.0",
+    "visual_review_complete": true
+  },
+  "retained_failed_version_ui_probe": "build/boot-tests/Versioned-0817ec91/final-player-continue-025/boot.json",
+  "qualification_summary": {
+    "regenerated_payloads_roundtrip": 754,
+    "actually_modified_resources": 267,
+    "changed_sca": 125,
+    "changed_gmb": 87,
+    "changed_gab": 52,
+    "changed_model": 1,
+    "new_audio_samples": 57,
+    "room_geometry_maps_bindings_textures_unchanged": true,
+    "kit_32768_unchanged": true,
+    "original_boss_hud_control_passed": true,
+    "all_22_programs_observed_native_hp_loss": true,
+    "player_acceptance": "pending replay",
+    "asset_scope_report_uses_A_assets_identical_to_B": true
+  },
+  "active_recipe_sha256": "690e344963ddc89aaefdb7bef5f94fbdf50dcd9a27465b9acc2fe0500bbd17b4",
+  "presentation_artifacts": {
+    "native_scale_captures": "build/boot-tests/0817ec91-walk-conductor-red-save-full-b-red-0cb09a33/walk-conductor-red-save-full-b-red",
+    "motion_review": "work/midnight-epic/pilot-c-crownfall.png",
+    "mixed_audio": "work/midnight-epic/full-b-boss/conductor-red-save-full-b-red.wav",
+    "preview": "work/midnight-epic/boss-preview.mp4",
+    "preview_source": "Candidate A; exact boss assets/behavior inherited by B"
+  },
+  "publication_audit": "work/midnight-epic/publication-final.json",
+  "release_metadata": "build\\releases\\0817ec91a44f85a31135f4d99ef90452dd8c30870689e803743b3594ddadb314\\release.json"
+}

@@ -1,0 +1,597 @@
+{
+  "first": 653,
+  "processing": "Layered, pitch-cut, filtered recordings; transient/room tail design; soft limiting; mono22050Hz DS IMA-ADPCM",
+  "provenance": [
+    {
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "url": "https://kenney.nl/assets/impact-sounds"
+    },
+    {
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "url": "https://kenney.nl/assets/sci-fi-sounds"
+    },
+    {
+      "author": "john129pats",
+      "download": "https://cdn.freesound.org/previews/146/146558_831330-hq.mp3",
+      "license": "CC0-1.0",
+      "title": "Hybrid Monster Growl",
+      "url": "https://freesound.org/people/john129pats/sounds/146558/"
+    }
+  ],
+  "samples": [
+    {
+      "file": "maw-alert.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.8,
+      "sha256": "6a82cd09635fbc62d3a813446c1166ef8f392030749a05cec5ad456844d496c8",
+      "snr_db": 31.69
+    },
+    {
+      "file": "maw-tell.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6499773242630386,
+      "sha256": "2fcb50ec417033cb0a64e581ca87b068ec69ef1a45ae60895846c2f55cf48c3e",
+      "snr_db": 30.05
+    },
+    {
+      "file": "maw-death.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 1.2499773242630385,
+      "sha256": "3d08440ec0b1f47ce8d018947e06efaf44bbc54d5c800a524374cedae9147e1a",
+      "snr_db": 24.7
+    },
+    {
+      "file": "maw-hurt.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.3,
+      "sha256": "28e22fdd357c7426a31d6b6bda108fc7829d1fff8eee2e518bced3c04f5ed157",
+      "snr_db": 34.59
+    },
+    {
+      "file": "maw-idle.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.5500226757369614,
+      "sha256": "362b706081d1c1405de2325c8533fc485c1a58ea16ce6e305bdbaedd14ef4c30",
+      "snr_db": 31.19
+    },
+    {
+      "file": "ballast-alert.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.8,
+      "sha256": "37ec6e1e83fb504b5290d11ddb7deb21992472ec282eb3a7cc24ae8eacd4859b",
+      "snr_db": 34.72
+    },
+    {
+      "file": "ballast-tell.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6499773242630386,
+      "sha256": "6e401097d412b2d2f8020e96ad8ec55313a9d948b82b513866c85ff37f6dd9ec",
+      "snr_db": 32.53
+    },
+    {
+      "file": "ballast-death.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 1.2499773242630385,
+      "sha256": "facebead309636e97fffd7ff299ddbf406ab0318c677308455b5b985532883c2",
+      "snr_db": 23.26
+    },
+    {
+      "file": "ballast-hurt.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.3,
+      "sha256": "ceb7cf791f3bd2c43b26a05838b0ded1a37ec34e73cd8d35a5ea71744e2b684c",
+      "snr_db": 37.96
+    },
+    {
+      "file": "ballast-idle.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.5500226757369614,
+      "sha256": "5beed56820361b0e1db0c4da2cdf35326f9efb26f0c03eed87d5f86f34d59c4e",
+      "snr_db": 34.59
+    },
+    {
+      "file": "spore-alert.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.8,
+      "sha256": "b0b2837b1848d84ecf5dbd5511ca8b5dbdaccd6bb3ca4cc93a915d8179c37074",
+      "snr_db": 31.8
+    },
+    {
+      "file": "spore-tell.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6499773242630386,
+      "sha256": "2feb0cc120ac5d2f1309355d684ce8add4086b39b2ea6489639d35724abc272f",
+      "snr_db": 32.27
+    },
+    {
+      "file": "spore-death.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 1.2499773242630385,
+      "sha256": "b6fb4d92a32a451f3f43ec8442c9e36264e4ea14d9d29e9da71cf51d623ea4f6",
+      "snr_db": 27.14
+    },
+    {
+      "file": "spore-hurt.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.3,
+      "sha256": "0d0f43f86c617a7b7c4411ea608884d46c31fdc45528ec2b1a623015dd4659df",
+      "snr_db": 33.67
+    },
+    {
+      "file": "spore-idle.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.5500226757369614,
+      "sha256": "3fbd2494601169f2b3583eff5323ebda4495f9cd8264429b19ed4dc09bace69b",
+      "snr_db": 32.75
+    },
+    {
+      "file": "skitter-alert.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.8,
+      "sha256": "ceed9842dc4b74d84ea9323f2687397f93196c11556f2c4adf61bc92bb0f8710",
+      "snr_db": 31.28
+    },
+    {
+      "file": "skitter-tell.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6499773242630386,
+      "sha256": "af29e26cbf7b9ade77e1496c6fc4b8760c5ef35de3069efb9e5367d584d48948",
+      "snr_db": 25.22
+    },
+    {
+      "file": "skitter-death.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 1.2499773242630385,
+      "sha256": "61cc7df331ce8f147127788f075029557f9600a88f993d735d7eaa1f896b00f5",
+      "snr_db": 21.06
+    },
+    {
+      "file": "skitter-hurt.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.3,
+      "sha256": "b66faee29ddf4f24ae93bed757ec0796d78887b8a60e65fb66a4f076d6798e69",
+      "snr_db": 35.06
+    },
+    {
+      "file": "skitter-idle.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.5500226757369614,
+      "sha256": "6382e94dd0e23e5910d976cbafc143004306acd5dd0f2e7d519aee2222e07394",
+      "snr_db": 31.28
+    },
+    {
+      "file": "warden-alert.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.8,
+      "sha256": "0bbf4bd33fca060447d09b6f8c13ed7360a1cec65e126fe7234434ba20f20f9b",
+      "snr_db": 38.86
+    },
+    {
+      "file": "warden-tell.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6499773242630386,
+      "sha256": "739925c499e87ada3fd68ef0beedca8cc19bff08b2eb4916f64c8b3a6f9fb9be",
+      "snr_db": 34.59
+    },
+    {
+      "file": "warden-death.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 1.2499773242630385,
+      "sha256": "bd4f81daf63ec0995012eeec2f85372fe00b5bcb141cefce5632fdb808f9545c",
+      "snr_db": 22.14
+    },
+    {
+      "file": "warden-hurt.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.3,
+      "sha256": "ac6d45fb8e0d7503d4cde56c49e6d0ff834d87566732b988eb76cb7af25469c2",
+      "snr_db": 39.4
+    },
+    {
+      "file": "warden-idle.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.5500226757369614,
+      "sha256": "7d31dd48391761afd223962eb7b67f849b73baa8ec20b8bfd8fc1f7ea9a3539e",
+      "snr_db": 38.92
+    },
+    {
+      "file": "eye-alert.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.8,
+      "sha256": "c9e47eee853912031e3b9aea5fd31cde31494bedb49d8615fba926f4e0f762ed",
+      "snr_db": 36.0
+    },
+    {
+      "file": "eye-tell.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6499773242630386,
+      "sha256": "4133c6190283517c54cbbc95cbc2845f44dcde9e1ae1d14cb1262dd960b27153",
+      "snr_db": 36.33
+    },
+    {
+      "file": "eye-death.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 1.2499773242630385,
+      "sha256": "3a7fbeaf71e829c7f9da4826a3fabb820fe284663f705c80c6ad4a355e85ab6a",
+      "snr_db": 29.7
+    },
+    {
+      "file": "eye-hurt.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.3,
+      "sha256": "8052798f5b73325d9e3b2f6ca488f76a51e2a2c8a084096e145f260df02b9f86",
+      "snr_db": 33.18
+    },
+    {
+      "file": "eye-idle.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.5500226757369614,
+      "sha256": "80f63f2c302e078545b9af0cb81e864d7662e2a5493130f5f07429d47e2d3f4a",
+      "snr_db": 35.85
+    },
+    {
+      "file": "conductor-alert.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.8,
+      "sha256": "03aba231cb582fe23ca7a3614817328394bff5c44eec515b58e6b07b6705e1cf",
+      "snr_db": 36.5
+    },
+    {
+      "file": "conductor-tell.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6499773242630386,
+      "sha256": "0c156da7c9c7e1913f1bbcb2d9361210f63cc345dfdc6df65b4a9ba87501545f",
+      "snr_db": 37.99
+    },
+    {
+      "file": "conductor-death.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 1.2499773242630385,
+      "sha256": "749cbe4c74a9c3924449fec740f907431181387cd2a569fed88c4ac763d900b4",
+      "snr_db": 23.33
+    },
+    {
+      "file": "conductor-hurt.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.3,
+      "sha256": "37f12bcf3847ae514f53d76d18d6bbd141c80d30196d30bdb994178ed34b708b",
+      "snr_db": 36.76
+    },
+    {
+      "file": "conductor-idle.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.5500226757369614,
+      "sha256": "e7d6c71386a936eb2c8fdccaa6472f6fe813de4293fcd335c1934d182b5a7f7b",
+      "snr_db": 36.85
+    },
+    {
+      "file": "maw-impact-0.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "f18ca4db7462e3221f6eaab4df2889fb32a8f1f3929d57e5a69ebdf1bb8fba49",
+      "snr_db": 27.55
+    },
+    {
+      "file": "maw-impact-1.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "e1c7b2db17e71b049f349c5a9b9729b35d3b2029860f2c646f42b7df4b46f2d5",
+      "snr_db": 27.74
+    },
+    {
+      "file": "maw-impact-2.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "fea1958256c1707e0cddea590e694557f520a5dffd20644e784f3a083880149a",
+      "snr_db": 27.31
+    },
+    {
+      "file": "ballast-impact-0.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "163a4f0444048b4016423358cd9b2845de92ae1a1ab4fb8610ebebd5b75e3777",
+      "snr_db": 28.33
+    },
+    {
+      "file": "ballast-impact-1.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.9,
+      "sha256": "1a3e73c8d39abe7b306cf8b98aaf0ad2f1fada3c16c3542a89dc6e17e928d15a",
+      "snr_db": 24.27
+    },
+    {
+      "file": "ballast-impact-2.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "a462274174045862b92736eeb28f12c74544848715f6f9dd32e4c05807b51331",
+      "snr_db": 28.0
+    },
+    {
+      "file": "spore-impact-0.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "39b2d569525f130558814ec7426cd0f80667e2849b4b183dad9f44b32dce2dec",
+      "snr_db": 29.36
+    },
+    {
+      "file": "spore-impact-1.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "fdd7b5c643487adda192963854f8748302c16a8f83f2b9d6adbb378e76e7d6d9",
+      "snr_db": 29.54
+    },
+    {
+      "file": "spore-impact-2.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "3f2c76fcdfe657e80a5f2887326ade05996e1de80f0199e1c16974c49e118248",
+      "snr_db": 30.4
+    },
+    {
+      "file": "skitter-impact-0.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "d9aaea0701e172c041fe7d5ed2d02b84e8b99a5fed78ba2c6bdc57dc1f48c8c6",
+      "snr_db": 25.31
+    },
+    {
+      "file": "skitter-impact-1.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "7be4a55fca1d4cf3b1f9dad6f11f11adc7da526d8566108203d83218e94e811a",
+      "snr_db": 24.85
+    },
+    {
+      "file": "skitter-impact-2.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "953514e3dac878d9c7f2a0a48d72b59594cfa12f7d235be9cf87f2d06995a75f",
+      "snr_db": 25.15
+    },
+    {
+      "file": "warden-impact-0.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "b0bd14b3aafcb96658f1b946dc4f0c1eb4b769f86d780f7356885f3b77ce86cb",
+      "snr_db": 27.08
+    },
+    {
+      "file": "warden-impact-1.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.9,
+      "sha256": "3c30fac372f81cb5a3dc1e2eda7a43fe3ce73712ea686812428d54d4690d8163",
+      "snr_db": 22.86
+    },
+    {
+      "file": "warden-impact-2.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "3d9fe384e4767f83cc435812f41fadbad39096579ced582beaa5ef3d55cbb74d",
+      "snr_db": 23.48
+    },
+    {
+      "file": "eye-impact-0.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "ce37e574de74a05371a2437d2871b30cc67b517f2f6960f768ac33f44e98e8a6",
+      "snr_db": 30.42
+    },
+    {
+      "file": "eye-impact-1.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "1e40d7afd46e08305b2aa31a2e8f075e0106e9eddb2e4a587193274ddd922aec",
+      "snr_db": 30.89
+    },
+    {
+      "file": "eye-impact-2.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "e443962a9bc172666a6a80dfa4b06d9801da696fb2e1e044210219db04529e81",
+      "snr_db": 32.02
+    },
+    {
+      "file": "conductor-impact-0.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "824edd9b0e59f005107754b90a5f9661f0498e1d17a09978723449a3ade9cda6",
+      "snr_db": 26.23
+    },
+    {
+      "file": "conductor-impact-1.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.9,
+      "sha256": "d000d3daa7c5534cf39d4b217e8a0df72ff1ccd3003a3e17c96b19a8cd342d3b",
+      "snr_db": 22.36
+    },
+    {
+      "file": "conductor-impact-2.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.6,
+      "sha256": "7bc41e732d4080fdf465adfcb19472cf6e50c1cc91e1684907f7ed9548bbdf40",
+      "snr_db": 32.17
+    },
+    {
+      "file": "conductor-impact-3.swavdata",
+      "format": "DS IMA-ADPCM",
+      "peak": 28835,
+      "rate": 22050,
+      "seconds": 0.9,
+      "sha256": "9ea98c0880cfa9778b7bad256346036aa368e3e56326431da8852dfadd3a4d53",
+      "snr_db": 22.0
+    }
+  ],
+  "schema_version": 1,
+  "sources": {
+    "arc": {
+      "file": "work\\creature-forge\\foley\\sci-fi\\Audio\\laserLarge_002.ogg",
+      "sha256": "e5e0b6ccc4d5720c8174a3e5b7cc6f9be3057352a89cbb2e99a00efc6fe5cc11"
+    },
+    "bell": {
+      "file": "work\\creature-forge\\foley\\impact\\Audio\\impactBell_heavy_000.ogg",
+      "sha256": "94b8bb5f2d43ab65e4bcc32b28562416e9bc2c51d9fd4be1e333660ee52f977f"
+    },
+    "charge": {
+      "file": "work\\creature-forge\\foley\\sci-fi\\Audio\\forceField_002.ogg",
+      "sha256": "051b0eafc479695af4ca3607d41fd4be41bae7c21f4f9508d004722b09f1bd63"
+    },
+    "crunch": {
+      "file": "work\\creature-forge\\foley\\sci-fi\\Audio\\explosionCrunch_001.ogg",
+      "sha256": "fdd04d6f0032d4d57c134ad37f3587d2d00e58c9572715275bd8cf4f43593576"
+    },
+    "engine": {
+      "file": "work\\creature-forge\\foley\\sci-fi\\Audio\\spaceEngineLow_002.ogg",
+      "sha256": "3b1adf8645a40c35fcad25eee224c82c9836dc443102a9af5586eb22cbedabcc"
+    },
+    "glass": {
+      "file": "work\\creature-forge\\foley\\impact\\Audio\\impactGlass_heavy_002.ogg",
+      "sha256": "4978654ac840ad519692d5d5ba48a8101cabce13b9a577be73ad589185e5e9ed"
+    },
+    "growl": {
+      "file": "work\\creature-forge\\foley\\monster-growl.mp3",
+      "sha256": "d6f5b2537776310e06ebe6113cca10bda48e86f40d75afab58bd49510d5c558d"
+    },
+    "meat": {
+      "file": "work\\creature-forge\\foley\\impact\\Audio\\impactSoft_heavy_001.ogg",
+      "sha256": "4d0096364ba9e46119d2ff6df493fdc101bd2e1efae061da5e5f77a53b3fdcb6"
+    },
+    "plate": {
+      "file": "work\\creature-forge\\foley\\impact\\Audio\\impactPlate_heavy_003.ogg",
+      "sha256": "59775f8979a396c8a793b0a1db206d5bdc651eae808d858e9acaee8ebda5bc6d"
+    },
+    "punch": {
+      "file": "work\\creature-forge\\foley\\impact\\Audio\\impactPunch_heavy_003.ogg",
+      "sha256": "4ab53b26f4ea575120dcc1348526c9e0db2afc6af7a442aa0489bdead2ca80b6"
+    },
+    "slime": {
+      "file": "work\\creature-forge\\foley\\sci-fi\\Audio\\slime_001.ogg",
+      "sha256": "822ca475d71e18ef6bba707dbe6bff2bd493d3457b2552f7473d23022c1257ca"
+    },
+    "steel": {
+      "file": "work\\creature-forge\\foley\\impact\\Audio\\impactMetal_heavy_002.ogg",
+      "sha256": "b914c8f1eb7c0f34bb165d7c77f4be0351f6be0660c13c53e65424e262e2c093"
+    },
+    "stone": {
+      "file": "work\\creature-forge\\foley\\impact\\Audio\\impactMining_002.ogg",
+      "sha256": "059558ec751115ca6b1441e00f0adc837c1a3eeb0a066b109e0fd879fc5d0b0c"
+    },
+    "thrust": {
+      "file": "work\\creature-forge\\foley\\sci-fi\\Audio\\thrusterFire_001.ogg",
+      "sha256": "924636edc923fe4aab5829b69dc5dc1c5d659dec5739865434dabee752a3bb79"
+    }
+  }
+}

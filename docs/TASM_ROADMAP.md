@@ -1,9 +1,305 @@
 # TASM: never stand still
 
-Design of 2026-10-05. **First versions of all seven shipped in v0.2.0** (see
-"Status" below and [CHANGES](CHANGES.md)); none is player-confirmed yet. Shipped behavior belongs in [CHANGES](CHANGES.md), engine facts in
-[TECHNICAL](TECHNICAL.md). This replaces the bounce/zip/sling/burst draft and
-the web-tag draft. Tags are parked for later skills (see the end).
+Design and player feedback, beginning 2026-10-05. First versions of all seven
+original Red skills shipped in v0.2.0; the player praised v0.2.0/v0.3.0 and later
+requested specific corrections and extensions. Current objective/build/verdict:
+[TASKS](TASKS.md). Shipped behavior: [CHANGES](CHANGES.md); engine contracts:
+[TECHNICAL](TECHNICAL.md); development/quality review: [DEVELOPMENT](DEVELOPMENT.md).
+
+Dated sections retain design snapshots and decisions. Their original "next" or
+"proposed" wording does not override later implementation or player instructions.
+Overclock, Dragnet and Vortex are the last added skills; further skills and the
+2099/other-suit theorycraft remain deferred. The player accepted0.24's environment
+and more distinctive enemy direction, while rejecting rigid motion, poor SFX
+and the slow/easy boss.0.25 is the authorized correction; its mechanical tests
+and presentation review do not establish the player's fun verdict.
+
+**Delivered0.26.0 (2026-10-19).** The boss now reacts to real hit pressure
+with physical escape/return attacks and faster, lower acrobatic movement. The
+quiet-cue regression has actual in-game waveform controls for all three
+Midnight species. This is agent-tested; the player's replay decides its feel.
+Shipped details and limits: [CHANGES](CHANGES.md).
+
+**Delivered0.28.0 (2026-10-19).** The player found the boss more comboable but
+still too easy or unreliable because attacks seemed absent or missed, and did
+not feel the enemy ramp. They also requested removal of two save rooms, a map
+that matches the upper route, and stronger presentation. The release changes
+boss contact/counter handling, removes both rooms and entrances, corrects the
+map, and escalates the last encounters. Structural and agent gameplay checks
+pass; the player's full-route replay and quality verdict remain pending. See
+[CHANGES](CHANGES.md) and [TASKS](TASKS.md).
+
+**Latest0.25 replay verdict (2026-10-18).** The boss is somewhat better but
+remains too slow and vulnerable to continuous combos; its claimed poise does not
+provide an effective counter/escape. Rebuild it as a hyper-mobile electronic
+symbiote monster, with real responses to pressure. Midnight's monsters appear
+silent: sound rendering must be demonstrated against an isolated silent control.
+Earlier agent claims about sound and anti-combo behavior are not player acceptance.
+
+**Latest player verdict on0.24 (2026-10-18).** The environment is much better
+and the enemies feel more unique: preserve that accepted direction. Movement
+still looks rigid, like a doll, and sound effects sound bad. The Conductor is
+visually unimpressive, slow, over-choreographed and too easy. Authorized next
+work: much more dynamic continuous animation, better mixed sound, a visually
+stronger and genuinely challenging boss, and the original game's boss health
+bar. Mechanical clearability is insufficient; review actual native-scale
+footage and mixed audio before expanding the prototype or publishing0.25.
+
+**Delivered0.25.0.** The authorized correction is installed and agent-tested;
+the player's replay will decide its feel. Shipped behavior and validation
+limits belong to [CHANGES](CHANGES.md).
+
+## Midnight0.23 replay feedback (2026-10-18, historical)
+
+The player explicitly rejected0.23.0 enemies again: some attacks do not work,
+most sounds are recognizable from existing characters, animations look slow and
+odd, and attacks are unconvincing. This supersedes the prior agent assessment of
+the Forge/spectacle enemies. Do not defend sample counts or contact counters as
+quality evidence. Reproduce actual hits/misses, native frame cadence and all
+inherited audio paths; establish one complete fast, fluid, distinctive enemy in
+the real engine before extending the result across the roster.
+
+The terrain looks much better. Preserve its material improvements. The playable
+room structures remain repetitive rectangles, despite decorative additions.
+Change silhouettes, dimensions, proportions and route organization: compact
+shelters, long concourses, bent service channels, asymmetrical shafts and broad
+chambers must actually play differently. Collision, camera, roofs and doors
+must agree with the visible outline; a different wallpaper is insufficient.
+Current work/evidence is in TASKS. This is implementation authorization, not a
+quality acceptance of any subsequent candidate.
+
+
+**Implemented in0.24.0 (2026-10-18).** The correction fixes native hit activation
+and failing attack carriers, shortens whole-body motion, improves planted heavy
+impacts and silhouettes, and scopes57 recorded voices/foley to the seven private
+enemies. All ten Midnight room envelopes/collision/maps are rebuilt with actual
+L/T spaces, different shelter sizes, diagonal/sloping chambers and a stair return.
+Native HP hits, mixed clears, doors, both-suit boss wins and earned-save Continue
+are agent-tested; CHANGES and reference/midnight_rebuild.json own the exact scope
+and limits. Ballast's directly-overhead Freight pursuit remains a known edge
+case. The0.23 player rejection is retained; it is not retroactively acceptance of
+these new poses, attacks or layouts. The next player replay decides their feel.
+
+## Chapter evaluation against v0.22.1 (2026-10-17)
+
+**Implementation approved by the player, 2026-10-17.** The evaluation below is
+the accepted direction; current candidate/testing/publication is in TASKS.
+Player approval of the plan does not establish acceptance of the implementation.
+
+**Implementation status:** shipped in0.23.0. The pass adds collision-honest roof
+pursuit, staged encounters, saved pump/power responses, coordinated Conductor
+pressure, a damaged hoist phase, an approach checkpoint, new materials/depth,
+clearer creature mass and recorded machinery/ambience cues. Crown was tightened
+to two three-role waves after the longer heavy repetition failed the pacing
+review. CHANGES owns shipped details; reference/chapter_spectacle.json owns
+exact controls/fixtures. Player quality acceptance and actual DeSmuME pacing
+remain open. Moving trains, rideable loads and new campaign branches are still
+deferred. The evaluation below remains the dated0.22.1 assessment.
+
+
+**Evaluation against 0.22.1.** Reviewed the
+published composition, all 22 active room presentations, original Pier/subway
+architecture, final Forge creature/boss captures, encounter scripts and progress
+contracts. Exact evidence and limits: `reference/chapter_evaluation.json`;
+captures/traces: `work/chapter-evaluation`. The 128 renewal room resources are
+byte exact to 0.21.0. Earlier room captures therefore remain useful for scenery;
+they do not establish the current enemies' appearance. Fresh copied-save probes
+use 0.22.1. Neither healed lab observation nor an isolated duel decides difficulty.
+
+**Assessment:** both chapters have usable foundations. Midnight has a coherent
+storm identity and compact circuit, but too many stops offer the same activity.
+Crane has the stronger exploration structure and distinct terrain, but its
+machinery, presentation and finale do not yet deliver the scale its premise
+promises. Their next improvements should make existing spaces more purposeful.
+
+The original game's standard is fluid control, readable enemies, atmosphere and
+mission flow. Griptonite's studio head explicitly describes those priorities in
+his [development retrospective](https://www.gamedeveloper.com/production/five-years-20-lessons-20-ds-games).
+The design inference here is to make spectacle support movement and decisions.
+A longer map or a more elaborate model only earns its place when it improves
+what the player experiences on the route.
+
+### Midnight Line: a storm that builds toward its source
+
+Keep the train terminal, flood infrastructure, turbine ascent, observatory and
+Conductor. Make their relationship physical: rail power feeds the storm system;
+the Conductor is visibly drawing from it. Introduce a cue safely, complicate it
+in an encounter, then combine it in the boss. The chapter should progress from
+an abandoned public place into increasingly active machinery.
+
+**First priority is encounter reachability.** A fresh unisolated Terminal probe
+finds a carriage-edge perch with a Warden immediately below, outside its vertical
+engagement threshold. This needs a terrain/AI correction before adding pressure.
+Test the actual perch and nearby ground with native input, full enemy HP and
+both suits. Widening every attack volume would hide the navigation problem and
+make unrelated fights less readable. Engine details belong in TECHNICAL.
+
+**Replace the generic patrol rhythm with authored encounters.** Six ordinary
+rooms use the same table-8 patrol recipe and a room-wide spawn region; species
+selection cycles across the same roster. This can populate rooms, but it does
+not author a first reveal, a crossfire or a particular traversal choice. Start
+with one Skitter on an open stretch, teach the Warden's distinct response on a
+wide landing, then introduce the Eye across a clearly reachable lane. Mix them
+only after those roles are readable. Keep entrances, save access and recovery
+landings free from immediate attacks.
+
+**Give each stop a specific purpose:**
+
+| Existing space | Proposed improvement |
+|---|---|
+| Storm Gate | Frame the distant destination; one short Skitter introduction and a clear main shutter. The return balcony should become recognizable later. |
+| Signal House | A warm, quiet public-service interior, its own silhouette and one concise clue about the rail power problem. Preserve the save. |
+| Midnight Terminal | Build a continuous, collision-honest carriage-roof route and a broad platform fight below. Let route choice change the encounter. |
+| Floodworks | Put a broad service deck beside a visibly unsafe, warned channel. A local action should visibly stabilize a pump or expose a route. |
+| Pump Refuge | Contrast the noisy pumps with a sheltered maintenance nook. Preserve the safe save and distinguish it from Signal House. |
+| Turbine Rise | Turn repeated steps into a climb around the turbine's shape, with readable wall movement, recovery shelves and one roomy combat landing. |
+| Storm Observatory | Give the player a brief unobstructed view of the source, then a deliberate final mixed encounter using previously taught cues. |
+| Relay Sanctuary | Preserve the checkpoint immediately before the boss. Make the next door's significance obvious without a long instruction panel. |
+| The Conductor | Connect the creature's gestures, arena lanes and phase changes into one readable performance. |
+| Crown Return | Deliver a swift descent through a visibly quieter system. Keep only light, optional patrol pressure and a satisfying return reveal. |
+
+Floodworks should initially use a switch plus a static, saved before/after
+configuration. Actual draining water, changing solid platforms and a moving
+train are separate research projects. A playable train sequence would be a fine
+stretch goal only after moving collision, camera behavior and interruption
+recovery work in one complete example. A sweeping background and foreground
+supports can already convey scale with fixed native traversal.
+
+**The Conductor needs stage direction.** It already has four authored moves,
+real HP damage/death and HP-driven arena phases. Its creature program and the
+floor-lane timer are nevertheless separate systems. Coordinate their pressure
+so an evasive route remains available; teach the low pulse and high/low attack
+lanes earlier. Let each phase change the arrangement or order of familiar
+threats, accompanied by a clear body/arena cue. Keep ordinary combo openings and
+R repositioning meaningful. Avoid long invulnerability or permanent armor.
+Finish with a readable collapse, electrical shutdown and persistent calm.
+
+### Crane Row: a harbor you explore, restart and climb
+
+Keep the twelve-room district, recoverable falls, lower ship route, roof paths,
+Engine House shortcut, upper loop and waterfront return. These are substantial
+strengths. Make the huge crane seen from Quay consistently recognizable from
+the ship, Gantry and Crown, with coherent supports, cab, arm and cable direction.
+Repeated skyline wallpaper should give way to room-specific foreground/middle
+distance composition and a clear sense of increasing height.
+
+**Make power restoration an event.** Today the lever earns progress and opens
+routes, but most of the district remains the same static arrangement. Reuse the
+power flag for a visible change: lamps come on, a winch starts behind the play
+plane, an access panel opens and the shortcut is revealed. Preserve the lever's
+single permanent outcome. Use fixed safe landings first; the existing moving
+counterweight is scenery and has not established rideable collision.
+
+| Existing space | Proposed improvement |
+|---|---|
+| Quay | Compose a strong first crane reveal and teach one safe gap/recovery route. Introduce the Maw where its pounce is readable. |
+| Freight Exchange | Make ground combat, cargo roofs and Office access three legible choices. Put threats where each route changes the tactical approach. |
+| Harbor Office | Preserve the safe checkpoint; use its window/chart to establish the crane destination and show power returning. |
+| Container Warren | Give roof/underpass routes different encounters or discoveries. Break the rectangular stack silhouette with openings and a recognizable central landmark. |
+| Dry Dock | Make bow, hold and deck read as parts of one vessel. Stage an encounter through a broad hold with a usable upper escape route. |
+| Engine House | Turn the power switch into a short visual/sound payoff that explains the newly available shortcut. |
+| Counterweight Shaft | Organize the ascent into a few distinct stages around the machinery, preserving wall channels and safe recovery. Keep combat off cramped jump ledges. |
+| Gantry Spine | Pay off the height with a view of earlier landmarks, a flowing exposed traverse and one broad combat pocket. |
+| Winch Cache | Make the detour reveal a memorable maintenance space and a clearly valuable native supply stash. Current completion is tied to barrels, not a special upgrade. |
+| Crane Crown | Build the two existing finite waves into a deliberate mixed-species test; reveal the final arm and offer a short, safe retry route. |
+| Long Arm | Integrate the moving grabber, arm structure and damageable motor into one convincing machine encounter. |
+| Breakwater | Show the disabled crane from below and give a fast return with one optional discovery, retaining a small revisit patrol. |
+
+**The hoist is the largest spectacle opportunity.** Its warnings, committed
+target lane, moving grabber, protected motor and native damage callback already
+work. But the three attack lanes span only 64 units near the end of a 420-unit
+room; much of the space is approach. The normal slam/sweep loop exposes the
+winch for about 42% of its scripted delay budget. That is an opening for a
+stronger encounter, but can also become waiting beside a small target.
+
+First improve framing and physical cause/effect: show the cable tightening,
+commit the grabber before impact, connect the vulnerable motor visibly to that
+motion, and make the recovery long enough for a satisfying native combo. Build
+the other portion of the cycle around useful repositioning or an optional
+throwable opportunity. Keep hits local to visible warnings. Later, a real-HP
+phase change could damage the guard or change the lane sequence; research the
+core HP observer before promising it. Avoid a succession of mandatory switch
+presses or a longer damage sponge. Give victory a sagging cable/disabled motor,
+sound release and immediately usable return.
+
+**Reduce boss retry friction.** The district's save is the Office, well before
+the ascent. The earned Crown/Engine shortcut helps, but a retry should not
+replay a long climb or both mandatory waves. Measure the real Office-to-hoist
+route with existing progress. If it is still cumbersome, prototype a quiet
+native save point on the cleared Crown/approach or a shorter return connection.
+Verify the saved default spawn, boss reset and safe sphere access before adding
+it. Retain some nonblocking patrol life on saved revisits, as the player asked.
+
+### Shared improvements that determine whether either feels finished
+
+- **Readable art at 256x192.** Native comparison views have strong local light,
+  material boundaries and modeled architectural depth. New rooms often expose
+  broad, uniformly lit blue/gray slabs. Break those surfaces at structural
+  joints, add restrained baked shadow/value gradients, readable fascias,
+  recesses and supports. Make the near collision plane clearest, silhouettes
+  distinct and distant scenery quieter. Inspect native pixels before increasing
+  texture resolution or detail. Keep visible roofs and doors.
+- **Different enemy decisions.** Forge already supplies original motions,
+  contacts and sounds; another blanket asset replacement misses the next issue.
+  Selection still advances through a fixed move list. Give the Maw a committed
+  pursuit/punish role, Ballast a slow territory role and Spore a reachable ranged
+  support role. Give Skitter rapid lane changes, Warden high/low cadence and Eye
+  a clear line-attack role. Choose among the existing moves using distance,
+  elevation, facing and recent history, with consistent tells and recoveries.
+  Do not respond to hidden player input or attack from outside the camera.
+- **Complete, legible bodies.** Current captures still show thin, similarly
+  proportioned bodies against busy backdrops. Prioritize silhouette, limb
+  separation, side-facing cores, planted support and weight over small texture
+  markings. Review locomotion, interrupts, prone land/get-up and death at normal
+  speed, including two species together. Sharing a rig is acceptable when the
+  resulting motion and tactical response are distinct.
+- **Fair mixed pressure.** Audit spawning at both entrances, vertical pursuit,
+  recovery pits and offscreen firing. Limit overlapping commitments so the
+  player can read a threat and retain a combo with R. Tune encounter placement
+  before HP/resistance. Preserve native juggles, throws, reactions and real
+  rewards, and keep a route for baseline Red/Black without optional purchases.
+- **Sound and music progression.** Build on the 57 new creature cues. Midnight
+  needs electrical/bell identities and an increasingly active terminal; Crane
+  needs chain, servo, hull and waterfront identities. Add sparse room ambience,
+  distinct attack tells and a clear victory release. Check the actual mix so
+  ambience or simultaneous voices never mask a contact warning. Per-room audio
+  routing/channel budget remains a prototype, not a proven soundtrack feature.
+- **Purpose and payoff.** Give each branch a brief reason to enter tied to the
+  city's invasion, evidence of what happened, a visible response to the player's
+  actions and a saved completion state. Use optional discoveries, native pickups
+  and shortcuts as rewards. Preserve the existing shop/skill/save contract.
+  Keep main goals short on the map, detailed directions on Objectives and X
+  prompts near their actual target; avoid more floating signboards.
+- **Performance and continuity.** Profile the busiest mixed encounter with
+  normal DeSmuME audio/rendering and normal-speed input. Record frame pacing and
+  missed inputs, not just emulator throughput or mesh counts. Compare room
+  loading, camera framing, transitions, defeat/re-entry and earned Continue with
+  native rooms. A static backdrop cannot substitute for an active set piece,
+  but inexpensive staged changes can sell a larger event.
+
+### Recommended order and acceptance
+
+1. Correct the Terminal perch/engagement problem and audit analogous Crane
+   terrain with full native-HP mixed crews. Preserve a paired failing/control
+   trace; qualify the fix on a new candidate.
+2. Finish one representative sequence in each chapter: Terminal's two-level
+   encounter feeding a storm cue, and Long Arm's complete hoist cycle with
+   convincing art, recovery, sound and victory. These are the standards for
+   further room/enemy work, not additional roster-wide experiments.
+3. Author the room-specific encounter progression and low-cost saved
+   before/after events. Improve materials, silhouettes, audio mix and the short
+   narrative thread around those events; preserve the accepted connections.
+4. Review ordinary full-route Red/Black play with no healing, no parked/weakened
+   enemies, no position fixtures and both sparse/established optional purchases.
+   Measure retry travel and frustration separately from clearability. Then run
+   final door/save/composition qualification and obtain the player's quality
+   verdict before treating the design as accepted.
+
+Moving trains, rideable loads, altered solid geometry during play, major camera
+hooks and new boss UI are higher-risk prototypes. Current room scripts, private
+move descriptors, meshes, audio assets and saved flags already support most of
+the first improvements. No more rooms, skills, third suit or shop/save expansion
+is needed for this plan. These proposals do not change v0.22.1's published bytes.
 
 ## Player direction (2026-10-05)
 
@@ -18,6 +314,18 @@ the web-tag draft. Tags are parked for later skills (see the end).
   skills can come later. Fun over balance.
 
 ## The identity
+
+2026-10-17 follow-up: the player rejected renewal's enemy quality. Creature
+Forge replaces ordered stock attack handlers with22 private movement/contact
+programs, UV-painted articulated models and layered recorded foley. Crane's
+scissor/vault/charge/rupture attacks and Midnight's switchbacks, tolls and
+high/low electrical lanes need distinct anticipation and punishable recovery.
+Correct wrist chains, grounded weight transfer and full knockdown lifecycles
+matter more than adding decorative parts or merely changing action order.
+The player's existing kit stays intact; these enemies give its evade/reposition
+loop different rhythms. No additional player skills are added.
+Published in0.22.0, with atlas material sampling corrected in0.22.1. Native-input
+duels and boss/save controls pass; the player's quality/fun verdict is pending.
 
 Spider-Man doesn't stand in front of one enemy and press Y. He **strikes, cancels,
 flips somewhere better and keeps the combo going**: on top of an enemy, behind the
@@ -167,7 +475,10 @@ Also needed: where bits 18/19 are queried (passive speed), so the bonus is kept
 while new gates are added. Heap headroom with the 24 KiB reserve: TECHNICAL
 "Kit extension contract" (large untouched arena in the sewer fight).
 
-## Status (v0.4.1) and next iterations
+## Historical kit status (v0.4.1)
+
+This table describes 0.4.1, not the current build. Later dated sections record
+subsequent extensions; current shipped behavior is in CHANGES/TASKS.
 
 All seven shipped in v0.2.0 as simplest working versions. Player verdict on
 v0.2.0 (2026-10-05): "very good"; only the helicopter spin missed every other
@@ -224,7 +535,10 @@ bowling-spread tags, Reel/Net, Orbit tetherball, tier-5 Cocoon. Wall/ceiling
 pounce dive. *Stop Hitting Yourself* (redirecting an enemy's swing into his
 friend). Later suits stay in reference/suit_roadmap.json.
 
-## Proposals awaiting the player (2026-10-07, not approved)
+## Historical proposals (2026-10-07)
+
+These were unapproved at the time. Check later decisions/implementations below
+before treating a proposal as available, deferred or still awaiting approval.
 
 Asked for while away from the game: a Midnight Line roadmap, later areas,
 features and XP sinks (player has ~3000 unspent XP). Proposed, nothing built:
@@ -378,6 +692,34 @@ the ten before them, from play; do not propose new ones unless asked.
 Dragnet. Published v0.15.1 adds the explicit directional entry and extra lash;
 early/late/fast entry and R resume passed among all 68 kit checks, with 12
 crash seeds. The revised feel is not player-confirmed.
+
+## Midnight Line storm overhaul (2026-10-16)
+
+User requests wholly original areas instead of sewer/Hive recolours, new enemy
+identity and a real, impressive combat boss. The0.20.0 implementation replaces
+rooms76..90 with a storm terminal, glass sheds, skyrail, floodworks, turbine
+climb, capacitor hall and observatory; Substation remains. No additional skills.
+Rail Skitter, Bell Warden, Arc Eye and Conductor have original geometry/voices
+on native enemy frameworks and shared authored full-lifecycle choreography.
+Conductor is a normal damageable creature with storm attacks that escalate at
+half/quarter HP. Native combos, R repositioning, fast pace and ownership remain.
+Completion requires its actual death callback. Agent qualification/publication
+status is in TASKS/CHANGES; fun, spectacle and difficulty need the player's verdict.
+
+**Player feedback,0.26,2026-10-19:** the boss is harder/cooler and its mobility
+and strength are welcome, but blanket stagger suppression makes combos impossible
+and the difficulty frustrating. Restore meaningful combo openings; retaining
+knockdown resistance and counters is acceptable. The boss and other Midnight
+creatures still look/animate poorly. Improve their silhouettes and continuous
+motion, and build encounter pressure toward the boss without flattening the
+chapter into equally crowded rooms.0.27 now implements combo openings, a bounded
+counter, cleaner articulated creature anatomy/motion and a four-room encounter
+ramp. The player's next verdict rejects0.27 difficulty/contact reliability:
+boss combos are slightly better but it is too easy/appears inactive or misses;
+the ramp is not felt. Remove Signal House/Pump Refuge plus incoming doors, fix
+upper map order and prioritize reliable pressure.0.28 corrects the native counter
+route/guard loop, uses current-owned validation and revises the actual staging.
+Player quality acceptance remains pending.
 
 ## Midnight Line new boss (2026-10-13, Signal Leech v0.14.0)
 

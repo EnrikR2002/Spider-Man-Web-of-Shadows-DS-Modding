@@ -1,0 +1,4747 @@
+{
+  "arm9_sha256": "571d0d51090d427e024306b55a86728c7adcfda2068e8683c47e125c3eee5eb2",
+  "assets": {
+    "exact_generation_prompt_and_mode": "reference/art/creature-forge-materials-v1.json",
+    "frozen_wave_manifest": "reference/audio/creature-forge-v1/manifest.json",
+    "material_atlas": "reference/art/creature-forge-materials-v1.png",
+    "preview_sources": "work/creature-forge/preview-sources.json",
+    "recorded_sources_and_licenses": "reference/audio/creature-forge-sources"
+  },
+  "authored": {
+    "creatures": {
+      "ballast": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_BlockIdle.sca",
+            "samples": 7,
+            "source": "brt_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_BlockImpact.sca",
+            "samples": 13,
+            "source": "brt_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_BreakingOutOfGrapple.sca",
+            "samples": 15,
+            "source": "brt_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Die.sca",
+            "samples": 16,
+            "source": "brt_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                22,
+                29
+              ],
+              [
+                39,
+                45
+              ]
+            ],
+            "mode": "slam",
+            "move": "Breakwater rupture",
+            "resource": "zz_F22_ballast_brt_DropDownAttack.sca",
+            "samples": 61,
+            "source": "brt_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Fall.sca",
+            "samples": 22,
+            "source": "brt_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_GrappledByWeb.sca",
+            "samples": 43,
+            "source": "brt_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_GrappledByWebAlt1.sca",
+            "samples": 30,
+            "source": "brt_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                22,
+                27
+              ],
+              [
+                33,
+                37
+              ]
+            ],
+            "mode": "strike",
+            "move": "Dredger sweep",
+            "resource": "zz_F22_ballast_brt_GroundAttack1.sca",
+            "samples": 55,
+            "source": "brt_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                22,
+                29
+              ],
+              [
+                39,
+                45
+              ]
+            ],
+            "mode": "slam",
+            "move": "Breakwater rupture",
+            "resource": "zz_F22_ballast_brt_GroundAttack2.sca",
+            "samples": 61,
+            "source": "brt_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                23,
+                32
+              ],
+              [
+                39,
+                43
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Hull charge",
+            "resource": "zz_F22_ballast_brt_GroundRangedAttack1.sca",
+            "samples": 60,
+            "source": "brt_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HammerSlamLand.sca",
+            "samples": 25,
+            "source": "brt_HammerSlamLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtAirHitA.sca",
+            "samples": 5,
+            "source": "brt_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtAirHitB.sca",
+            "samples": 5,
+            "source": "brt_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtFall.sca",
+            "samples": 8,
+            "source": "brt_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtHitA.sca",
+            "samples": 16,
+            "source": "brt_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtHitB.sca",
+            "samples": 12,
+            "source": "brt_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtLand.sca",
+            "samples": 24,
+            "source": "brt_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtLandFaceToBack.sca",
+            "samples": 38,
+            "source": "brt_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtLandGetUp.sca",
+            "samples": 32,
+            "source": "brt_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                25,
+                29
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_ballast_brt_HurtLandGetUpAttack1.sca",
+            "samples": 35,
+            "source": "brt_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtLandHit.sca",
+            "samples": 10,
+            "source": "brt_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_HurtLandTumble.sca",
+            "samples": 39,
+            "source": "brt_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Idle.sca",
+            "samples": 47,
+            "source": "brt_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Jump.sca",
+            "samples": 8,
+            "source": "brt_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_JumpPrep.sca",
+            "samples": 4,
+            "source": "brt_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_JumpStartForward.sca",
+            "samples": 4,
+            "source": "brt_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_JumpStartUp.sca",
+            "samples": 4,
+            "source": "brt_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Land.sca",
+            "samples": 31,
+            "source": "brt_Land.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_NoticeSpidey.sca",
+            "samples": 36,
+            "source": "brt_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Run.sca",
+            "samples": 24,
+            "source": "brt_Run.sca"
+          },
+          {
+            "contacts": [
+              [
+                22,
+                27
+              ],
+              [
+                33,
+                37
+              ]
+            ],
+            "mode": "strike",
+            "move": "Dredger sweep",
+            "resource": "zz_F22_ballast_brt_RunAttack.sca",
+            "samples": 55,
+            "source": "brt_RunAttack.sca"
+          },
+          {
+            "contacts": [
+              [
+                22,
+                27
+              ],
+              [
+                33,
+                37
+              ]
+            ],
+            "mode": "strike",
+            "move": "Dredger sweep",
+            "resource": "zz_F22_ballast_brt_ThrowObject.sca",
+            "samples": 55,
+            "source": "brt_ThrowObject.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_ballast_brt_Walk.sca",
+            "samples": 43,
+            "source": "brt_Walk.sca"
+          }
+        ],
+        "config": 34970440,
+        "group": 183,
+        "hp": 20,
+        "model": "zz_F22_ballast.nsbmd",
+        "quads": 256,
+        "shared_texture": "Forge128",
+        "stem": "brt",
+        "stored_matrices": 20,
+        "vertices": 1024
+      },
+      "conductor": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_BlockIdle.sca",
+            "samples": 7,
+            "source": "brt_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_BlockImpact.sca",
+            "samples": 13,
+            "source": "brt_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_BreakingOutOfGrapple.sca",
+            "samples": 15,
+            "source": "brt_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Die.sca",
+            "samples": 16,
+            "source": "brt_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                27,
+                33
+              ],
+              [
+                43,
+                49
+              ],
+              [
+                59,
+                65
+              ]
+            ],
+            "mode": "slam",
+            "move": "Blackout fugue",
+            "resource": "zz_F22_conductor_brt_DropDownAttack.sca",
+            "samples": 76,
+            "source": "brt_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Fall.sca",
+            "samples": 22,
+            "source": "brt_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_GrappledByWeb.sca",
+            "samples": 43,
+            "source": "brt_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_GrappledByWebAlt1.sca",
+            "samples": 30,
+            "source": "brt_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                23
+              ],
+              [
+                31,
+                35
+              ],
+              [
+                44,
+                49
+              ]
+            ],
+            "mode": "strike",
+            "move": "Cadenza",
+            "resource": "zz_F22_conductor_brt_GroundAttack1.sca",
+            "samples": 66,
+            "source": "brt_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                27,
+                33
+              ],
+              [
+                43,
+                49
+              ],
+              [
+                59,
+                65
+              ]
+            ],
+            "mode": "slam",
+            "move": "Blackout fugue",
+            "resource": "zz_F22_conductor_brt_GroundAttack2.sca",
+            "samples": 76,
+            "source": "brt_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                27,
+                38
+              ],
+              [
+                47,
+                56
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Storm verdict",
+            "resource": "zz_F22_conductor_brt_GroundRangedAttack1.sca",
+            "samples": 72,
+            "source": "brt_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HammerSlamLand.sca",
+            "samples": 25,
+            "source": "brt_HammerSlamLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtAirHitA.sca",
+            "samples": 5,
+            "source": "brt_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtAirHitB.sca",
+            "samples": 5,
+            "source": "brt_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtFall.sca",
+            "samples": 8,
+            "source": "brt_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtHitA.sca",
+            "samples": 16,
+            "source": "brt_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtHitB.sca",
+            "samples": 12,
+            "source": "brt_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtLand.sca",
+            "samples": 24,
+            "source": "brt_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtLandFaceToBack.sca",
+            "samples": 38,
+            "source": "brt_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtLandGetUp.sca",
+            "samples": 32,
+            "source": "brt_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                25,
+                29
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_conductor_brt_HurtLandGetUpAttack1.sca",
+            "samples": 35,
+            "source": "brt_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtLandHit.sca",
+            "samples": 10,
+            "source": "brt_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_HurtLandTumble.sca",
+            "samples": 39,
+            "source": "brt_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Idle.sca",
+            "samples": 47,
+            "source": "brt_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Jump.sca",
+            "samples": 8,
+            "source": "brt_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_JumpPrep.sca",
+            "samples": 4,
+            "source": "brt_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_JumpStartForward.sca",
+            "samples": 4,
+            "source": "brt_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_JumpStartUp.sca",
+            "samples": 4,
+            "source": "brt_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Land.sca",
+            "samples": 31,
+            "source": "brt_Land.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_NoticeSpidey.sca",
+            "samples": 36,
+            "source": "brt_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Run.sca",
+            "samples": 24,
+            "source": "brt_Run.sca"
+          },
+          {
+            "contacts": [
+              [
+                22,
+                29
+              ],
+              [
+                42,
+                51
+              ]
+            ],
+            "mode": "strike",
+            "move": "Crownfall",
+            "resource": "zz_F22_conductor_brt_RunAttack.sca",
+            "samples": 70,
+            "source": "brt_RunAttack.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                23
+              ],
+              [
+                31,
+                35
+              ],
+              [
+                44,
+                49
+              ]
+            ],
+            "mode": "strike",
+            "move": "Cadenza",
+            "resource": "zz_F22_conductor_brt_ThrowObject.sca",
+            "samples": 66,
+            "source": "brt_ThrowObject.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_conductor_brt_Walk.sca",
+            "samples": 43,
+            "source": "brt_Walk.sca"
+          }
+        ],
+        "config": 34972972,
+        "group": 188,
+        "hp": 80,
+        "model": "zz_F22_conductor.nsbmd",
+        "quads": 402,
+        "shared_texture": "Forge128",
+        "stem": "brt",
+        "stored_matrices": 22,
+        "vertices": 1608
+      },
+      "eye": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_eye_hm_BerserkerIdle.sca",
+            "samples": 66,
+            "source": "hm_BerserkerIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_eye_hm_BlockIdle.sca",
+            "samples": 6,
+            "source": "hm_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_BlockImpact.sca",
+            "samples": 13,
+            "source": "hm_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_eye_hm_BreakingOutOfGrapple.sca",
+            "samples": 18,
+            "source": "hm_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Burrow.sca",
+            "samples": 20,
+            "source": "hm_Burrow.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Crawl.sca",
+            "samples": 20,
+            "source": "hm_Crawl.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Die.sca",
+            "samples": 37,
+            "source": "hm_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                25,
+                39
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_DiveSlantKick.sca",
+            "samples": 58,
+            "source": "hm_DiveSlantKick.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                26
+              ]
+            ],
+            "mode": "slam",
+            "move": "Capacitor bloom",
+            "resource": "zz_F22_eye_hm_DropDownAttack.sca",
+            "samples": 48,
+            "source": "hm_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Duck.sca",
+            "samples": 24,
+            "source": "hm_Duck.sca"
+          },
+          {
+            "contacts": [
+              [
+                25,
+                39
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_DuckAttack.sca",
+            "samples": 58,
+            "source": "hm_DuckAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Emerge.sca",
+            "samples": 21,
+            "source": "hm_Emerge.sca"
+          },
+          {
+            "contacts": [
+              [
+                25,
+                39
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_EmergeAttack.sca",
+            "samples": 58,
+            "source": "hm_EmergeAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Explode.sca",
+            "samples": 62,
+            "source": "hm_Explode.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_eye_hm_ExplodePrep.sca",
+            "samples": 62,
+            "source": "hm_ExplodePrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Fall.sca",
+            "samples": 8,
+            "source": "hm_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Fly.sca",
+            "samples": 34,
+            "source": "hm_Fly.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_eye_hm_GettingPossessed.sca",
+            "samples": 38,
+            "source": "hm_GettingPossessed.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_eye_hm_GrappledByWeb.sca",
+            "samples": 48,
+            "source": "hm_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_eye_hm_GrappledByWebAlt1.sca",
+            "samples": 22,
+            "source": "hm_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                25,
+                39
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_GroundAttack1.sca",
+            "samples": 58,
+            "source": "hm_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                26
+              ]
+            ],
+            "mode": "slam",
+            "move": "Capacitor bloom",
+            "resource": "zz_F22_eye_hm_GroundAttack2.sca",
+            "samples": 48,
+            "source": "hm_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                26
+              ],
+              [
+                32,
+                41
+              ]
+            ],
+            "mode": "strike",
+            "move": "Twin discharge",
+            "resource": "zz_F22_eye_hm_GroundAttackCombo.sca",
+            "samples": 58,
+            "source": "hm_GroundAttackCombo.sca"
+          },
+          {
+            "contacts": [
+              [
+                25,
+                39
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_GroundAttackStrong1.sca",
+            "samples": 58,
+            "source": "hm_GroundAttackStrong1.sca"
+          },
+          {
+            "contacts": [
+              [
+                25,
+                39
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_GroundAttackStrong2.sca",
+            "samples": 58,
+            "source": "hm_GroundAttackStrong2.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                26
+              ],
+              [
+                32,
+                41
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Twin discharge",
+            "resource": "zz_F22_eye_hRng_GroundRangedAttack1.sca",
+            "samples": 58,
+            "source": "hRng_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtAirHitA.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtAirHitB.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtFall.sca",
+            "samples": 3,
+            "source": "hm_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtHitA.sca",
+            "samples": 10,
+            "source": "hm_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtHitB.sca",
+            "samples": 10,
+            "source": "hm_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtLand.sca",
+            "samples": 26,
+            "source": "hm_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtLandFaceToBack.sca",
+            "samples": 28,
+            "source": "hm_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtLandGetUp.sca",
+            "samples": 37,
+            "source": "hm_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                17
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_eye_hm_HurtLandGetUpAttack1.sca",
+            "samples": 20,
+            "source": "hm_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtLandHit.sca",
+            "samples": 12,
+            "source": "hm_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtLandTumble.sca",
+            "samples": 36,
+            "source": "hm_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_eye_hm_HurtLandTumbleAlt1.sca",
+            "samples": 57,
+            "source": "hm_HurtLandTumbleAlt1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_eye_hRng_Idle.sca",
+            "samples": 49,
+            "source": "hRng_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Jump.sca",
+            "samples": 8,
+            "source": "hm_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_JumpPrep.sca",
+            "samples": 5,
+            "source": "hm_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_JumpStartForward.sca",
+            "samples": 6,
+            "source": "hm_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_JumpStartUp.sca",
+            "samples": 6,
+            "source": "hm_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_eye_hm_Land.sca",
+            "samples": 33,
+            "source": "hm_Land.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                26
+              ]
+            ],
+            "mode": "pounce",
+            "move": "Capacitor bloom",
+            "resource": "zz_F22_eye_hm_LeapAttack.sca",
+            "samples": 48,
+            "source": "hm_LeapAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_eye_hm_LeapAttackPrep.sca",
+            "samples": 76,
+            "source": "hm_LeapAttackPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_eye_hm_NoticeSpidey.sca",
+            "samples": 41,
+            "source": "hm_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_eye_hRng_Run.sca",
+            "samples": 22,
+            "source": "hRng_Run.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_eye_hm_SproutWings.sca",
+            "samples": 21,
+            "source": "hm_SproutWings.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                26
+              ],
+              [
+                32,
+                41
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Twin discharge",
+            "resource": "zz_F22_eye_hm_ThrowIchorDown.sca",
+            "samples": 58,
+            "source": "hm_ThrowIchorDown.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                26
+              ],
+              [
+                32,
+                41
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Twin discharge",
+            "resource": "zz_F22_eye_hm_ThrowIchorSlant.sca",
+            "samples": 58,
+            "source": "hm_ThrowIchorSlant.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_eye_hRng_Walk.sca",
+            "samples": 49,
+            "source": "hRng_Walk.sca"
+          },
+          {
+            "contacts": [
+              [
+                25,
+                39
+              ]
+            ],
+            "mode": "strike",
+            "move": "Arc guillotine",
+            "resource": "zz_F22_eye_hm_WallJumpAttack.sca",
+            "samples": 58,
+            "source": "hm_WallJumpAttack.sca"
+          }
+        ],
+        "config": 34972888,
+        "group": 187,
+        "hp": 10,
+        "model": "zz_F22_eye.nsbmd",
+        "quads": 252,
+        "shared_texture": "Forge128",
+        "stem": "hRng",
+        "stored_matrices": 16,
+        "vertices": 1008
+      },
+      "maw": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_maw_hm_BerserkerIdle.sca",
+            "samples": 66,
+            "source": "hm_BerserkerIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_maw_hm_BlockIdle.sca",
+            "samples": 6,
+            "source": "hm_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_BlockImpact.sca",
+            "samples": 13,
+            "source": "hm_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_maw_hm_BreakingOutOfGrapple.sca",
+            "samples": 18,
+            "source": "hm_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Burrow.sca",
+            "samples": 20,
+            "source": "hm_Burrow.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Crawl.sca",
+            "samples": 20,
+            "source": "hm_Crawl.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Die.sca",
+            "samples": 37,
+            "source": "hm_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                16
+              ],
+              [
+                22,
+                25
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_DiveSlantKick.sca",
+            "samples": 43,
+            "source": "hm_DiveSlantKick.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                25
+              ]
+            ],
+            "mode": "slam",
+            "move": "Anchor vault",
+            "resource": "zz_F22_maw_hm_DropDownAttack.sca",
+            "samples": 49,
+            "source": "hm_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Duck.sca",
+            "samples": 24,
+            "source": "hm_Duck.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                16
+              ],
+              [
+                22,
+                25
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_DuckAttack.sca",
+            "samples": 43,
+            "source": "hm_DuckAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Emerge.sca",
+            "samples": 21,
+            "source": "hm_Emerge.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                16
+              ],
+              [
+                22,
+                25
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_EmergeAttack.sca",
+            "samples": 43,
+            "source": "hm_EmergeAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Explode.sca",
+            "samples": 62,
+            "source": "hm_Explode.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Fall.sca",
+            "samples": 8,
+            "source": "hm_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Fly.sca",
+            "samples": 34,
+            "source": "hm_Fly.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_maw_hm_GettingPossessed.sca",
+            "samples": 38,
+            "source": "hm_GettingPossessed.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_maw_hm_GrappledByWeb.sca",
+            "samples": 48,
+            "source": "hm_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_maw_hLpr_GrappledByWebAlt1.sca",
+            "samples": 21,
+            "source": "hLpr_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                16
+              ],
+              [
+                22,
+                25
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_GroundAttack1.sca",
+            "samples": 43,
+            "source": "hm_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                25
+              ]
+            ],
+            "mode": "slam",
+            "move": "Anchor vault",
+            "resource": "zz_F22_maw_hm_GroundAttack2.sca",
+            "samples": 49,
+            "source": "hm_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                21,
+                26
+              ]
+            ],
+            "mode": "strike",
+            "move": "Keelbreaker feint",
+            "resource": "zz_F22_maw_hm_GroundAttackCombo.sca",
+            "samples": 47,
+            "source": "hm_GroundAttackCombo.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                16
+              ],
+              [
+                22,
+                25
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_GroundAttackStrong1.sca",
+            "samples": 43,
+            "source": "hm_GroundAttackStrong1.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                16
+              ],
+              [
+                22,
+                25
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_GroundAttackStrong2.sca",
+            "samples": 43,
+            "source": "hm_GroundAttackStrong2.sca"
+          },
+          {
+            "contacts": [
+              [
+                21,
+                26
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Keelbreaker feint",
+            "resource": "zz_F22_maw_hm_GroundRangedAttack1.sca",
+            "samples": 47,
+            "source": "hm_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtAirHitA.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtAirHitB.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtFall.sca",
+            "samples": 3,
+            "source": "hm_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtHitA.sca",
+            "samples": 10,
+            "source": "hm_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtHitB.sca",
+            "samples": 10,
+            "source": "hm_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtLand.sca",
+            "samples": 26,
+            "source": "hm_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtLandFaceToBack.sca",
+            "samples": 28,
+            "source": "hm_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtLandGetUp.sca",
+            "samples": 37,
+            "source": "hm_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                17
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_maw_hm_HurtLandGetUpAttack1.sca",
+            "samples": 20,
+            "source": "hm_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtLandHit.sca",
+            "samples": 12,
+            "source": "hm_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtLandTumble.sca",
+            "samples": 36,
+            "source": "hm_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_maw_hm_HurtLandTumbleAlt1.sca",
+            "samples": 57,
+            "source": "hm_HurtLandTumbleAlt1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_maw_hLpr_Idle.sca",
+            "samples": 59,
+            "source": "hLpr_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Jump.sca",
+            "samples": 8,
+            "source": "hm_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_JumpPrep.sca",
+            "samples": 5,
+            "source": "hm_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_JumpStartForward.sca",
+            "samples": 6,
+            "source": "hm_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_JumpStartUp.sca",
+            "samples": 6,
+            "source": "hm_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_maw_hm_Land.sca",
+            "samples": 33,
+            "source": "hm_Land.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                25
+              ]
+            ],
+            "mode": "pounce",
+            "move": "Anchor vault",
+            "resource": "zz_F22_maw_hLpr_LeapAttack.sca",
+            "samples": 49,
+            "source": "hLpr_LeapAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_maw_hm_LeapAttackPrep.sca",
+            "samples": 76,
+            "source": "hm_LeapAttackPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_maw_hm_NoticeSpidey.sca",
+            "samples": 41,
+            "source": "hm_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_maw_hLpr_Run.sca",
+            "samples": 22,
+            "source": "hLpr_Run.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_maw_hm_SproutWings.sca",
+            "samples": 21,
+            "source": "hm_SproutWings.sca"
+          },
+          {
+            "contacts": [
+              [
+                21,
+                26
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Keelbreaker feint",
+            "resource": "zz_F22_maw_hm_ThrowIchorDown.sca",
+            "samples": 47,
+            "source": "hm_ThrowIchorDown.sca"
+          },
+          {
+            "contacts": [
+              [
+                21,
+                26
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Keelbreaker feint",
+            "resource": "zz_F22_maw_hm_ThrowIchorSlant.sca",
+            "samples": 47,
+            "source": "hm_ThrowIchorSlant.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_maw_hLpr_Walk.sca",
+            "samples": 22,
+            "source": "hLpr_Walk.sca"
+          },
+          {
+            "contacts": [
+              [
+                13,
+                16
+              ],
+              [
+                22,
+                25
+              ]
+            ],
+            "mode": "strike",
+            "move": "Riptide scissor",
+            "resource": "zz_F22_maw_hm_WallJumpAttack.sca",
+            "samples": 43,
+            "source": "hm_WallJumpAttack.sca"
+          }
+        ],
+        "config": 34970356,
+        "group": 182,
+        "hp": 14,
+        "model": "zz_F22_maw.nsbmd",
+        "quads": 286,
+        "shared_texture": "Forge128",
+        "stem": "hLpr",
+        "stored_matrices": 20,
+        "vertices": 1144
+      },
+      "skitter": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_BerserkerIdle.sca",
+            "samples": 66,
+            "source": "hm_BerserkerIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_BlockIdle.sca",
+            "samples": 6,
+            "source": "hm_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_BlockImpact.sca",
+            "samples": 13,
+            "source": "hm_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_BreakingOutOfGrapple.sca",
+            "samples": 18,
+            "source": "hm_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Burrow.sca",
+            "samples": 20,
+            "source": "hm_Burrow.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Crawl.sca",
+            "samples": 20,
+            "source": "hm_Crawl.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Die.sca",
+            "samples": 37,
+            "source": "hm_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                11,
+                14
+              ],
+              [
+                19,
+                22
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_DiveSlantKick.sca",
+            "samples": 39,
+            "source": "hm_DiveSlantKick.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                25
+              ]
+            ],
+            "mode": "slam",
+            "move": "Switchback execution",
+            "resource": "zz_F22_skitter_hm_DropDownAttack.sca",
+            "samples": 46,
+            "source": "hm_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Duck.sca",
+            "samples": 24,
+            "source": "hm_Duck.sca"
+          },
+          {
+            "contacts": [
+              [
+                11,
+                14
+              ],
+              [
+                19,
+                22
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_DuckAttack.sca",
+            "samples": 39,
+            "source": "hm_DuckAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Emerge.sca",
+            "samples": 21,
+            "source": "hm_Emerge.sca"
+          },
+          {
+            "contacts": [
+              [
+                11,
+                14
+              ],
+              [
+                19,
+                22
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_EmergeAttack.sca",
+            "samples": 39,
+            "source": "hm_EmergeAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Explode.sca",
+            "samples": 62,
+            "source": "hm_Explode.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Fall.sca",
+            "samples": 8,
+            "source": "hm_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Fly.sca",
+            "samples": 34,
+            "source": "hm_Fly.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_GettingPossessed.sca",
+            "samples": 38,
+            "source": "hm_GettingPossessed.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_GrappledByWeb.sca",
+            "samples": 48,
+            "source": "hm_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_skitter_hLpr_GrappledByWebAlt1.sca",
+            "samples": 21,
+            "source": "hLpr_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                11,
+                14
+              ],
+              [
+                19,
+                22
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_GroundAttack1.sca",
+            "samples": 39,
+            "source": "hm_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                25
+              ]
+            ],
+            "mode": "slam",
+            "move": "Switchback execution",
+            "resource": "zz_F22_skitter_hm_GroundAttack2.sca",
+            "samples": 46,
+            "source": "hm_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                22
+              ],
+              [
+                32,
+                36
+              ]
+            ],
+            "mode": "strike",
+            "move": "Overhead shear",
+            "resource": "zz_F22_skitter_hm_GroundAttackCombo.sca",
+            "samples": 51,
+            "source": "hm_GroundAttackCombo.sca"
+          },
+          {
+            "contacts": [
+              [
+                11,
+                14
+              ],
+              [
+                19,
+                22
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_GroundAttackStrong1.sca",
+            "samples": 39,
+            "source": "hm_GroundAttackStrong1.sca"
+          },
+          {
+            "contacts": [
+              [
+                11,
+                14
+              ],
+              [
+                19,
+                22
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_GroundAttackStrong2.sca",
+            "samples": 39,
+            "source": "hm_GroundAttackStrong2.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                22
+              ],
+              [
+                32,
+                36
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Overhead shear",
+            "resource": "zz_F22_skitter_hm_GroundRangedAttack1.sca",
+            "samples": 51,
+            "source": "hm_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtAirHitA.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtAirHitB.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtFall.sca",
+            "samples": 3,
+            "source": "hm_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtHitA.sca",
+            "samples": 10,
+            "source": "hm_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtHitB.sca",
+            "samples": 10,
+            "source": "hm_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtLand.sca",
+            "samples": 26,
+            "source": "hm_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtLandFaceToBack.sca",
+            "samples": 28,
+            "source": "hm_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtLandGetUp.sca",
+            "samples": 37,
+            "source": "hm_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                17
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_skitter_hm_HurtLandGetUpAttack1.sca",
+            "samples": 20,
+            "source": "hm_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtLandHit.sca",
+            "samples": 12,
+            "source": "hm_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtLandTumble.sca",
+            "samples": 36,
+            "source": "hm_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_HurtLandTumbleAlt1.sca",
+            "samples": 57,
+            "source": "hm_HurtLandTumbleAlt1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_skitter_hLpr_Idle.sca",
+            "samples": 59,
+            "source": "hLpr_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Jump.sca",
+            "samples": 8,
+            "source": "hm_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_JumpPrep.sca",
+            "samples": 5,
+            "source": "hm_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_JumpStartForward.sca",
+            "samples": 6,
+            "source": "hm_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_JumpStartUp.sca",
+            "samples": 6,
+            "source": "hm_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_Land.sca",
+            "samples": 33,
+            "source": "hm_Land.sca"
+          },
+          {
+            "contacts": [
+              [
+                19,
+                25
+              ]
+            ],
+            "mode": "pounce",
+            "move": "Switchback execution",
+            "resource": "zz_F22_skitter_hLpr_LeapAttack.sca",
+            "samples": 46,
+            "source": "hLpr_LeapAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_LeapAttackPrep.sca",
+            "samples": 76,
+            "source": "hm_LeapAttackPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_NoticeSpidey.sca",
+            "samples": 41,
+            "source": "hm_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_skitter_hLpr_Run.sca",
+            "samples": 22,
+            "source": "hLpr_Run.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_skitter_hm_SproutWings.sca",
+            "samples": 21,
+            "source": "hm_SproutWings.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                22
+              ],
+              [
+                32,
+                36
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Overhead shear",
+            "resource": "zz_F22_skitter_hm_ThrowIchorDown.sca",
+            "samples": 51,
+            "source": "hm_ThrowIchorDown.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                22
+              ],
+              [
+                32,
+                36
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Overhead shear",
+            "resource": "zz_F22_skitter_hm_ThrowIchorSlant.sca",
+            "samples": 51,
+            "source": "hm_ThrowIchorSlant.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_skitter_hLpr_Walk.sca",
+            "samples": 22,
+            "source": "hLpr_Walk.sca"
+          },
+          {
+            "contacts": [
+              [
+                11,
+                14
+              ],
+              [
+                19,
+                22
+              ]
+            ],
+            "mode": "strike",
+            "move": "Railcut cross",
+            "resource": "zz_F22_skitter_hm_WallJumpAttack.sca",
+            "samples": 39,
+            "source": "hm_WallJumpAttack.sca"
+          }
+        ],
+        "config": 34972720,
+        "group": 185,
+        "hp": 12,
+        "model": "zz_F22_skitter.nsbmd",
+        "quads": 291,
+        "shared_texture": "Forge128",
+        "stem": "hLpr",
+        "stored_matrices": 20,
+        "vertices": 1164
+      },
+      "spore": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_spore_hm_BerserkerIdle.sca",
+            "samples": 66,
+            "source": "hm_BerserkerIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_spore_hm_BlockIdle.sca",
+            "samples": 6,
+            "source": "hm_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_BlockImpact.sca",
+            "samples": 13,
+            "source": "hm_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_spore_hm_BreakingOutOfGrapple.sca",
+            "samples": 18,
+            "source": "hm_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Burrow.sca",
+            "samples": 20,
+            "source": "hm_Burrow.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Crawl.sca",
+            "samples": 20,
+            "source": "hm_Crawl.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Die.sca",
+            "samples": 37,
+            "source": "hm_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                16,
+                21
+              ],
+              [
+                26,
+                31
+              ],
+              [
+                36,
+                41
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_DiveSlantKick.sca",
+            "samples": 54,
+            "source": "hm_DiveSlantKick.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                23
+              ]
+            ],
+            "mode": "slam",
+            "move": "Bloom recoil",
+            "resource": "zz_F22_spore_hm_DropDownAttack.sca",
+            "samples": 47,
+            "source": "hm_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Duck.sca",
+            "samples": 24,
+            "source": "hm_Duck.sca"
+          },
+          {
+            "contacts": [
+              [
+                16,
+                21
+              ],
+              [
+                26,
+                31
+              ],
+              [
+                36,
+                41
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_DuckAttack.sca",
+            "samples": 54,
+            "source": "hm_DuckAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Emerge.sca",
+            "samples": 21,
+            "source": "hm_Emerge.sca"
+          },
+          {
+            "contacts": [
+              [
+                16,
+                21
+              ],
+              [
+                26,
+                31
+              ],
+              [
+                36,
+                41
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_EmergeAttack.sca",
+            "samples": 54,
+            "source": "hm_EmergeAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Explode.sca",
+            "samples": 62,
+            "source": "hm_Explode.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_spore_hm_ExplodePrep.sca",
+            "samples": 62,
+            "source": "hm_ExplodePrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Fall.sca",
+            "samples": 8,
+            "source": "hm_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Fly.sca",
+            "samples": 34,
+            "source": "hm_Fly.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_spore_hm_GettingPossessed.sca",
+            "samples": 38,
+            "source": "hm_GettingPossessed.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_spore_hm_GrappledByWeb.sca",
+            "samples": 48,
+            "source": "hm_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_spore_hm_GrappledByWebAlt1.sca",
+            "samples": 22,
+            "source": "hm_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                16,
+                21
+              ],
+              [
+                26,
+                31
+              ],
+              [
+                36,
+                41
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_GroundAttack1.sca",
+            "samples": 54,
+            "source": "hm_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                23
+              ]
+            ],
+            "mode": "slam",
+            "move": "Bloom recoil",
+            "resource": "zz_F22_spore_hm_GroundAttack2.sca",
+            "samples": 47,
+            "source": "hm_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                23,
+                33
+              ]
+            ],
+            "mode": "strike",
+            "move": "Lantern lance",
+            "resource": "zz_F22_spore_hm_GroundAttackCombo.sca",
+            "samples": 52,
+            "source": "hm_GroundAttackCombo.sca"
+          },
+          {
+            "contacts": [
+              [
+                16,
+                21
+              ],
+              [
+                26,
+                31
+              ],
+              [
+                36,
+                41
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_GroundAttackStrong1.sca",
+            "samples": 54,
+            "source": "hm_GroundAttackStrong1.sca"
+          },
+          {
+            "contacts": [
+              [
+                16,
+                21
+              ],
+              [
+                26,
+                31
+              ],
+              [
+                36,
+                41
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_GroundAttackStrong2.sca",
+            "samples": 54,
+            "source": "hm_GroundAttackStrong2.sca"
+          },
+          {
+            "contacts": [
+              [
+                23,
+                33
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Lantern lance",
+            "resource": "zz_F22_spore_hRng_GroundRangedAttack1.sca",
+            "samples": 52,
+            "source": "hRng_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtAirHitA.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtAirHitB.sca",
+            "samples": 3,
+            "source": "hm_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtFall.sca",
+            "samples": 3,
+            "source": "hm_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtHitA.sca",
+            "samples": 10,
+            "source": "hm_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtHitB.sca",
+            "samples": 10,
+            "source": "hm_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "hm_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtLand.sca",
+            "samples": 26,
+            "source": "hm_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtLandFaceToBack.sca",
+            "samples": 28,
+            "source": "hm_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtLandGetUp.sca",
+            "samples": 37,
+            "source": "hm_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                14,
+                17
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_spore_hm_HurtLandGetUpAttack1.sca",
+            "samples": 20,
+            "source": "hm_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtLandHit.sca",
+            "samples": 12,
+            "source": "hm_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtLandTumble.sca",
+            "samples": 36,
+            "source": "hm_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_spore_hm_HurtLandTumbleAlt1.sca",
+            "samples": 57,
+            "source": "hm_HurtLandTumbleAlt1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_spore_hRng_Idle.sca",
+            "samples": 49,
+            "source": "hRng_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Jump.sca",
+            "samples": 8,
+            "source": "hm_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_JumpPrep.sca",
+            "samples": 5,
+            "source": "hm_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_JumpStartForward.sca",
+            "samples": 6,
+            "source": "hm_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_JumpStartUp.sca",
+            "samples": 6,
+            "source": "hm_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_spore_hm_Land.sca",
+            "samples": 33,
+            "source": "hm_Land.sca"
+          },
+          {
+            "contacts": [
+              [
+                17,
+                23
+              ]
+            ],
+            "mode": "pounce",
+            "move": "Bloom recoil",
+            "resource": "zz_F22_spore_hm_LeapAttack.sca",
+            "samples": 47,
+            "source": "hm_LeapAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "coil",
+            "move": null,
+            "resource": "zz_F22_spore_hm_LeapAttackPrep.sca",
+            "samples": 76,
+            "source": "hm_LeapAttackPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_spore_hm_NoticeSpidey.sca",
+            "samples": 41,
+            "source": "hm_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_spore_hRng_Run.sca",
+            "samples": 22,
+            "source": "hRng_Run.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_spore_hm_SproutWings.sca",
+            "samples": 21,
+            "source": "hm_SproutWings.sca"
+          },
+          {
+            "contacts": [
+              [
+                23,
+                33
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Lantern lance",
+            "resource": "zz_F22_spore_hm_ThrowIchorDown.sca",
+            "samples": 52,
+            "source": "hm_ThrowIchorDown.sca"
+          },
+          {
+            "contacts": [
+              [
+                23,
+                33
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Lantern lance",
+            "resource": "zz_F22_spore_hm_ThrowIchorSlant.sca",
+            "samples": 52,
+            "source": "hm_ThrowIchorSlant.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_spore_hRng_Walk.sca",
+            "samples": 49,
+            "source": "hRng_Walk.sca"
+          },
+          {
+            "contacts": [
+              [
+                16,
+                21
+              ],
+              [
+                26,
+                31
+              ],
+              [
+                36,
+                41
+              ]
+            ],
+            "mode": "strike",
+            "move": "Seed procession",
+            "resource": "zz_F22_spore_hm_WallJumpAttack.sca",
+            "samples": 54,
+            "source": "hm_WallJumpAttack.sca"
+          }
+        ],
+        "config": 34970524,
+        "group": 184,
+        "hp": 10,
+        "model": "zz_F22_spore.nsbmd",
+        "quads": 240,
+        "shared_texture": "Forge128",
+        "stem": "hRng",
+        "stored_matrices": 16,
+        "vertices": 960
+      },
+      "warden": {
+        "clips": [
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_warden_brt_BlockIdle.sca",
+            "samples": 7,
+            "source": "brt_BlockIdle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_warden_brt_BlockImpact.sca",
+            "samples": 13,
+            "source": "brt_BlockImpact.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_warden_brt_BreakingOutOfGrapple.sca",
+            "samples": 15,
+            "source": "brt_BreakingOutOfGrapple.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "death",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Die.sca",
+            "samples": 16,
+            "source": "brt_Die.sca"
+          },
+          {
+            "contacts": [
+              [
+                24,
+                31
+              ],
+              [
+                41,
+                48
+              ]
+            ],
+            "mode": "slam",
+            "move": "Deadbell peal",
+            "resource": "zz_F22_warden_brt_DropDownAttack.sca",
+            "samples": 63,
+            "source": "brt_DropDownAttack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Fall.sca",
+            "samples": 22,
+            "source": "brt_Fall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_warden_brt_GrappledByWeb.sca",
+            "samples": 43,
+            "source": "brt_GrappledByWeb.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "bound",
+            "move": null,
+            "resource": "zz_F22_warden_brt_GrappledByWebAlt1.sca",
+            "samples": 30,
+            "source": "brt_GrappledByWebAlt1.sca"
+          },
+          {
+            "contacts": [
+              [
+                20,
+                25
+              ],
+              [
+                34,
+                39
+              ]
+            ],
+            "mode": "strike",
+            "move": "Pendulum sentence",
+            "resource": "zz_F22_warden_brt_GroundAttack1.sca",
+            "samples": 58,
+            "source": "brt_GroundAttack1.sca"
+          },
+          {
+            "contacts": [
+              [
+                24,
+                31
+              ],
+              [
+                41,
+                48
+              ]
+            ],
+            "mode": "slam",
+            "move": "Deadbell peal",
+            "resource": "zz_F22_warden_brt_GroundAttack2.sca",
+            "samples": 63,
+            "source": "brt_GroundAttack2.sca"
+          },
+          {
+            "contacts": [
+              [
+                16,
+                21
+              ],
+              [
+                30,
+                35
+              ],
+              [
+                44,
+                49
+              ]
+            ],
+            "mode": "ranged",
+            "move": "Toll march",
+            "resource": "zz_F22_warden_brt_GroundRangedAttack1.sca",
+            "samples": 66,
+            "source": "brt_GroundRangedAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HammerSlamLand.sca",
+            "samples": 25,
+            "source": "brt_HammerSlamLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtAirHitA.sca",
+            "samples": 5,
+            "source": "brt_HurtAirHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtAirHitB.sca",
+            "samples": 5,
+            "source": "brt_HurtAirHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "tumble",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtFall.sca",
+            "samples": 8,
+            "source": "brt_HurtFall.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtHitA.sca",
+            "samples": 16,
+            "source": "brt_HurtHitA.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtHitB.sca",
+            "samples": 12,
+            "source": "brt_HurtHitB.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtKnockBack.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtKnockBackFast.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockBackFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "knockdown",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtKnockDown.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockDown.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "recoil",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtKnockFowardFast.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockFowardFast.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "launch",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtKnockUp.sca",
+            "samples": 3,
+            "source": "brt_HurtKnockUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtLand.sca",
+            "samples": 24,
+            "source": "brt_HurtLand.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtLandFaceToBack.sca",
+            "samples": 38,
+            "source": "brt_HurtLandFaceToBack.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "rise",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtLandGetUp.sca",
+            "samples": 32,
+            "source": "brt_HurtLandGetUp.sca"
+          },
+          {
+            "contacts": [
+              [
+                25,
+                29
+              ]
+            ],
+            "mode": "rise_attack",
+            "move": "Rising retaliation",
+            "resource": "zz_F22_warden_brt_HurtLandGetUpAttack1.sca",
+            "samples": 35,
+            "source": "brt_HurtLandGetUpAttack1.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtLandHit.sca",
+            "samples": 10,
+            "source": "brt_HurtLandHit.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "prone",
+            "move": null,
+            "resource": "zz_F22_warden_brt_HurtLandTumble.sca",
+            "samples": 39,
+            "source": "brt_HurtLandTumble.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Idle.sca",
+            "samples": 47,
+            "source": "brt_Idle.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Jump.sca",
+            "samples": 8,
+            "source": "brt_Jump.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_warden_brt_JumpPrep.sca",
+            "samples": 4,
+            "source": "brt_JumpPrep.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_warden_brt_JumpStartForward.sca",
+            "samples": 4,
+            "source": "brt_JumpStartForward.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "air",
+            "move": null,
+            "resource": "zz_F22_warden_brt_JumpStartUp.sca",
+            "samples": 4,
+            "source": "brt_JumpStartUp.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "land",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Land.sca",
+            "samples": 31,
+            "source": "brt_Land.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "idle",
+            "move": null,
+            "resource": "zz_F22_warden_brt_NoticeSpidey.sca",
+            "samples": 36,
+            "source": "brt_NoticeSpidey.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "run",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Run.sca",
+            "samples": 24,
+            "source": "brt_Run.sca"
+          },
+          {
+            "contacts": [
+              [
+                20,
+                25
+              ],
+              [
+                34,
+                39
+              ]
+            ],
+            "mode": "strike",
+            "move": "Pendulum sentence",
+            "resource": "zz_F22_warden_brt_RunAttack.sca",
+            "samples": 58,
+            "source": "brt_RunAttack.sca"
+          },
+          {
+            "contacts": [
+              [
+                20,
+                25
+              ],
+              [
+                34,
+                39
+              ]
+            ],
+            "mode": "strike",
+            "move": "Pendulum sentence",
+            "resource": "zz_F22_warden_brt_ThrowObject.sca",
+            "samples": 58,
+            "source": "brt_ThrowObject.sca"
+          },
+          {
+            "contacts": [],
+            "mode": "walk",
+            "move": null,
+            "resource": "zz_F22_warden_brt_Walk.sca",
+            "samples": 43,
+            "source": "brt_Walk.sca"
+          }
+        ],
+        "config": 34972804,
+        "group": 186,
+        "hp": 18,
+        "model": "zz_F22_warden.nsbmd",
+        "quads": 278,
+        "shared_texture": "Forge128",
+        "stem": "brt",
+        "stored_matrices": 22,
+        "vertices": 1112
+      }
+    },
+    "programs": {
+      "ballast": [
+        {
+          "action": 55,
+          "contacts": [
+            [
+              22,
+              27
+            ],
+            [
+              33,
+              37
+            ]
+          ],
+          "cooldown": 18,
+          "drives": [
+            [
+              21,
+              26,
+              0.28
+            ],
+            [
+              32,
+              36,
+              0.2
+            ]
+          ],
+          "jumps": [],
+          "kind": "sweep",
+          "name": "Dredger sweep",
+          "reach": 11,
+          "samples": 55
+        },
+        {
+          "action": 63,
+          "contacts": [
+            [
+              22,
+              29
+            ],
+            [
+              39,
+              45
+            ]
+          ],
+          "cooldown": 26,
+          "drives": [],
+          "jumps": [],
+          "kind": "quake",
+          "name": "Breakwater rupture",
+          "reach": 19,
+          "samples": 61
+        },
+        {
+          "action": 71,
+          "contacts": [
+            [
+              23,
+              32
+            ],
+            [
+              39,
+              43
+            ]
+          ],
+          "cooldown": 28,
+          "drives": [
+            [
+              20,
+              32,
+              1.45
+            ],
+            [
+              33,
+              36,
+              0.55
+            ]
+          ],
+          "jumps": [],
+          "kind": "charge",
+          "name": "Hull charge",
+          "reach": 29,
+          "samples": 60
+        }
+      ],
+      "conductor": [
+        {
+          "action": 55,
+          "contacts": [
+            [
+              19,
+              23
+            ],
+            [
+              31,
+              35
+            ],
+            [
+              44,
+              49
+            ]
+          ],
+          "cooldown": 18,
+          "drives": [
+            [
+              17,
+              22,
+              0.45
+            ],
+            [
+              29,
+              34,
+              0.4
+            ],
+            [
+              42,
+              48,
+              0.6
+            ]
+          ],
+          "jumps": [],
+          "kind": "cadenza",
+          "name": "Cadenza",
+          "reach": 15,
+          "samples": 66
+        },
+        {
+          "action": 63,
+          "contacts": [
+            [
+              27,
+              33
+            ],
+            [
+              43,
+              49
+            ],
+            [
+              59,
+              65
+            ]
+          ],
+          "cooldown": 22,
+          "drives": [],
+          "jumps": [],
+          "kind": "fugue",
+          "name": "Blackout fugue",
+          "reach": 26,
+          "samples": 76
+        },
+        {
+          "action": 71,
+          "contacts": [
+            [
+              27,
+              38
+            ],
+            [
+              47,
+              56
+            ]
+          ],
+          "cooldown": 24,
+          "drives": [],
+          "jumps": [],
+          "kind": "verdict",
+          "name": "Storm verdict",
+          "reach": 46,
+          "samples": 72
+        },
+        {
+          "action": 136,
+          "contacts": [
+            [
+              22,
+              29
+            ],
+            [
+              42,
+              51
+            ]
+          ],
+          "cooldown": 28,
+          "drives": [
+            [
+              14,
+              29,
+              1.3
+            ]
+          ],
+          "jumps": [
+            [
+              14,
+              3.4
+            ]
+          ],
+          "kind": "crownfall",
+          "name": "Crownfall",
+          "reach": 31,
+          "samples": 70
+        }
+      ],
+      "eye": [
+        {
+          "action": 55,
+          "contacts": [
+            [
+              25,
+              39
+            ]
+          ],
+          "cooldown": 25,
+          "drives": [],
+          "jumps": [],
+          "kind": "beam",
+          "name": "Arc guillotine",
+          "reach": 39,
+          "samples": 58
+        },
+        {
+          "action": 63,
+          "contacts": [
+            [
+              19,
+              26
+            ]
+          ],
+          "cooldown": 23,
+          "drives": [
+            [
+              13,
+              24,
+              -0.65
+            ]
+          ],
+          "jumps": [
+            [
+              13,
+              2.8
+            ]
+          ],
+          "kind": "burst",
+          "name": "Capacitor bloom",
+          "reach": 13,
+          "samples": 48
+        },
+        {
+          "action": 68,
+          "contacts": [
+            [
+              17,
+              26
+            ],
+            [
+              32,
+              41
+            ]
+          ],
+          "cooldown": 25,
+          "drives": [],
+          "jumps": [],
+          "kind": "twins",
+          "name": "Twin discharge",
+          "reach": 39,
+          "samples": 58
+        }
+      ],
+      "maw": [
+        {
+          "action": 55,
+          "contacts": [
+            [
+              13,
+              16
+            ],
+            [
+              22,
+              25
+            ]
+          ],
+          "cooldown": 18,
+          "drives": [
+            [
+              12,
+              17,
+              0.72
+            ],
+            [
+              21,
+              25,
+              0.48
+            ]
+          ],
+          "jumps": [],
+          "kind": "scissor",
+          "name": "Riptide scissor",
+          "reach": 10,
+          "samples": 43
+        },
+        {
+          "action": 63,
+          "contacts": [
+            [
+              19,
+              25
+            ]
+          ],
+          "cooldown": 24,
+          "drives": [
+            [
+              13,
+              25,
+              1.15
+            ]
+          ],
+          "jumps": [
+            [
+              13,
+              2.8
+            ]
+          ],
+          "kind": "vault",
+          "name": "Anchor vault",
+          "reach": 23,
+          "samples": 49
+        },
+        {
+          "action": 68,
+          "contacts": [
+            [
+              21,
+              26
+            ]
+          ],
+          "cooldown": 25,
+          "drives": [
+            [
+              5,
+              11,
+              -0.45
+            ],
+            [
+              17,
+              25,
+              1.55
+            ]
+          ],
+          "jumps": [],
+          "kind": "feint",
+          "name": "Keelbreaker feint",
+          "reach": 20,
+          "samples": 47
+        }
+      ],
+      "skitter": [
+        {
+          "action": 55,
+          "contacts": [
+            [
+              11,
+              14
+            ],
+            [
+              19,
+              22
+            ]
+          ],
+          "cooldown": 18,
+          "drives": [
+            [
+              10,
+              14,
+              0.8
+            ],
+            [
+              18,
+              22,
+              0.5
+            ],
+            [
+              26,
+              30,
+              -0.35
+            ]
+          ],
+          "jumps": [],
+          "kind": "scissor",
+          "name": "Railcut cross",
+          "reach": 10,
+          "samples": 39
+        },
+        {
+          "action": 63,
+          "contacts": [
+            [
+              19,
+              25
+            ]
+          ],
+          "cooldown": 24,
+          "drives": [
+            [
+              6,
+              12,
+              -0.65
+            ],
+            [
+              16,
+              25,
+              1.9
+            ]
+          ],
+          "jumps": [],
+          "kind": "feint",
+          "name": "Switchback execution",
+          "reach": 28,
+          "samples": 46
+        },
+        {
+          "action": 68,
+          "contacts": [
+            [
+              17,
+              22
+            ],
+            [
+              32,
+              36
+            ]
+          ],
+          "cooldown": 26,
+          "drives": [
+            [
+              11,
+              24,
+              1.15
+            ]
+          ],
+          "jumps": [
+            [
+              11,
+              3.2
+            ]
+          ],
+          "kind": "shear",
+          "name": "Overhead shear",
+          "reach": 23,
+          "samples": 51
+        }
+      ],
+      "spore": [
+        {
+          "action": 55,
+          "contacts": [
+            [
+              16,
+              21
+            ],
+            [
+              26,
+              31
+            ],
+            [
+              36,
+              41
+            ]
+          ],
+          "cooldown": 18,
+          "drives": [
+            [
+              39,
+              46,
+              -0.3
+            ]
+          ],
+          "jumps": [],
+          "kind": "seeds",
+          "name": "Seed procession",
+          "reach": 37,
+          "samples": 54
+        },
+        {
+          "action": 63,
+          "contacts": [
+            [
+              17,
+              23
+            ]
+          ],
+          "cooldown": 22,
+          "drives": [
+            [
+              12,
+              22,
+              -0.8
+            ]
+          ],
+          "jumps": [
+            [
+              12,
+              2.8
+            ]
+          ],
+          "kind": "burst",
+          "name": "Bloom recoil",
+          "reach": 12,
+          "samples": 47
+        },
+        {
+          "action": 68,
+          "contacts": [
+            [
+              23,
+              33
+            ]
+          ],
+          "cooldown": 24,
+          "drives": [],
+          "jumps": [],
+          "kind": "lance",
+          "name": "Lantern lance",
+          "reach": 40,
+          "samples": 52
+        }
+      ],
+      "warden": [
+        {
+          "action": 55,
+          "contacts": [
+            [
+              20,
+              25
+            ],
+            [
+              34,
+              39
+            ]
+          ],
+          "cooldown": 18,
+          "drives": [
+            [
+              19,
+              23,
+              0.2
+            ]
+          ],
+          "jumps": [],
+          "kind": "pendulum",
+          "name": "Pendulum sentence",
+          "reach": 12,
+          "samples": 58
+        },
+        {
+          "action": 63,
+          "contacts": [
+            [
+              24,
+              31
+            ],
+            [
+              41,
+              48
+            ]
+          ],
+          "cooldown": 28,
+          "drives": [],
+          "jumps": [],
+          "kind": "peal",
+          "name": "Deadbell peal",
+          "reach": 20,
+          "samples": 63
+        },
+        {
+          "action": 71,
+          "contacts": [
+            [
+              16,
+              21
+            ],
+            [
+              30,
+              35
+            ],
+            [
+              44,
+              49
+            ]
+          ],
+          "cooldown": 26,
+          "drives": [
+            [
+              11,
+              16,
+              0.55
+            ],
+            [
+              25,
+              30,
+              0.55
+            ],
+            [
+              39,
+              44,
+              0.55
+            ]
+          ],
+          "jumps": [],
+          "kind": "march",
+          "name": "Toll march",
+          "reach": 18,
+          "samples": 66
+        }
+      ]
+    },
+    "runtime": {
+      "attack_counters": 34984560,
+      "capture": 34984740,
+      "contact_cues": 34984728,
+      "enter": 34986464,
+      "hero": 34984736,
+      "move_counter_encoding": "low16 selections / high16 contacts",
+      "move_counters": 34984616,
+      "records": 34983408,
+      "reservation": 12288,
+      "secondary": 34986320,
+      "slot_bytes": 32,
+      "slots": 34983536,
+      "start": 34981408,
+      "think": 34984860,
+      "update": 34986712,
+      "used": 5796,
+      "voice_counters": 34984588
+    },
+    "sound": {
+      "count": 57,
+      "first": 653,
+      "format": "22050Hz DS IMA-ADPCM",
+      "manifest": "reference/audio/creature-forge-v1/manifest.json"
+    }
+  },
+  "date": "2026-10-17",
+  "forge_parent_sha256": "60a974f33a3ca2f57dbe2cf11a7a12b585c172be8565cc0968301544b3a11340",
+  "forge_rom_sha256": "69082fda16d7c0491f9bc945e6ebef11c526f7c7622a98a89959ea294b4f2eb2",
+  "forge_version": "0.22.0",
+  "limits": [
+    "Copied research batteries; six final duels isolate rosters and heal the player, preserve native enemy HP and use native controls/damage.",
+    "Final boss phase/clear heals the player; Crownfall eligibility is reached through actual native damage, not enemy HP/state placement.",
+    "No-refill Black control uses published0.22.0; Red uses9ee9034c earlier candidate with same boss mechanics. Final0.22.1 ARM9/SDAT exactly match0.22.0.",
+    "52 directed door controls inherited through exact0.21 room/collision/object/map resources; direct terminal pair on0.22.0.",
+    "Audio reel contains decoded production samples separately from actual gameplay. Gameplay previews use exact final0.22.1 captures.",
+    "Failed early clock/secondary-state/ranged spacing and navigation-driver reports retained; final passed cases identified explicitly.",
+    "No claim of player acceptance, ordinary encounter difficulty, full game completion or actual DeSmuME performance."
+  ],
+  "publication": {
+    "path": "work/creature-forge/publication-final.json",
+    "sha256": "322f2ad6977562c38cc23249da728a3846648a736fb1bd9f23c21f29fa649ba2"
+  },
+  "qualification": {
+    "controls": {
+      "black_no_refill": {
+        "checks": [
+          {
+            "check": "Conductor_defeated_by_native_damage",
+            "enemies": 0,
+            "frame": 4284,
+            "minimum_hp": 16384,
+            "passed": true,
+            "player_refills": false,
+            "pos": [
+              24.2,
+              5.0
+            ],
+            "room": 89
+          },
+          {
+            "check": "earned_exit_to_save",
+            "enemies": 0,
+            "frame": 4610,
+            "passed": true,
+            "pos": [
+              96.0,
+              5.0
+            ],
+            "room": 87
+          },
+          {
+            "check": "boss_cleared_on_return",
+            "enemies": 0,
+            "frame": 4743,
+            "passed": true,
+            "pos": [
+              16.0,
+              5.0
+            ],
+            "room": 89
+          }
+        ],
+        "passed": true,
+        "path": "work/creature-forge/walk-conductor-black-no-refill-final-black.json",
+        "rom_sha256": "69082fda16d7c0491f9bc945e6ebef11c526f7c7622a98a89959ea294b4f2eb2",
+        "sha256": "c41a043ffe7989f7872597aa677fefb879ab63d4c0f7794685e1e831ada05153"
+      },
+      "red_no_refill_earlier_candidate": {
+        "checks": [
+          {
+            "check": "Conductor_defeated_by_native_damage",
+            "enemies": 0,
+            "frame": 4114,
+            "minimum_hp": 15332,
+            "passed": true,
+            "player_refills": false,
+            "pos": [
+              27.1,
+              5.0
+            ],
+            "room": 89
+          },
+          {
+            "check": "earned_exit_to_save",
+            "enemies": 0,
+            "frame": 4440,
+            "passed": true,
+            "pos": [
+              96.0,
+              5.0
+            ],
+            "room": 87
+          },
+          {
+            "check": "sanctuary_save",
+            "enemies": 0,
+            "frame": 4499,
+            "frames": 59,
+            "passed": true,
+            "pos": [
+              55.9,
+              5.0
+            ],
+            "room": 87
+          },
+          {
+            "check": "earned_Conductor_flag_saved",
+            "enemies": 0,
+            "frame": 4897,
+            "passed": true,
+            "pos": [
+              51.0,
+              5.0
+            ],
+            "room": 87
+          }
+        ],
+        "passed": true,
+        "path": "work/creature-forge/walk-conductor-red-save-m-red.json",
+        "rom_sha256": "9ee9034ccf4c6177435358ecb00461f78c31dfa87da3bb320ad39e7756a27a9b",
+        "sha256": "794e1fb3f26b4cc66c33ef569106d1d9f765accdd28d5ec52fd3ecdc063490be"
+      },
+      "terminal_doors": {
+        "checks": [
+          {
+            "check": "outward_door",
+            "enemies": 0,
+            "frame": 842,
+            "passed": true,
+            "pos": [
+              16.0,
+              5.0
+            ],
+            "room": 81
+          },
+          {
+            "check": "return_door",
+            "enemies": 0,
+            "frame": 976,
+            "passed": true,
+            "pos": [
+              320.0,
+              5.0
+            ],
+            "room": 78
+          }
+        ],
+        "passed": true,
+        "path": "work/creature-forge/walk-pair-78-2.json",
+        "rom_sha256": "69082fda16d7c0491f9bc945e6ebef11c526f7c7622a98a89959ea294b4f2eb2",
+        "sha256": "f589e77a6a1bd3ef71723ad1e1324f8df20b6bff29c2f8c87500b916d1f5859d"
+      }
+    },
+    "final_boss_phase_and_clear": {
+      "checks": [
+        {
+          "check": "Crownfall_selected_after_actual_half_HP",
+          "enemies": 1,
+          "frame": 2062,
+          "native_enemy_hp": 171042,
+          "native_enemy_max": 365600,
+          "passed": true,
+          "player_healing": true,
+          "pos": [
+            114.7,
+            5.0
+          ],
+          "room": 89
+        },
+        {
+          "check": "Conductor_defeated_by_native_damage",
+          "enemies": 0,
+          "frame": 3751,
+          "minimum_hp": 20480,
+          "passed": true,
+          "player_refills": true,
+          "pos": [
+            99.2,
+            5.0
+          ],
+          "room": 89
+        }
+      ],
+      "contacts": [
+        1,
+        1,
+        2,
+        2
+      ],
+      "passed": true,
+      "path": "work/creature-forge/walk-conductor-phase-tex-boss.json",
+      "selections": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "sha256": "f9a4e996ec88f49f180b866d6776b197f5b336cc3ca297530a5220c6686de3ce"
+    },
+    "final_earned_continue": {
+      "checks": {
+        "continue_at_sanctuary": true,
+        "earned_flag": true,
+        "native_return_to_cleared_boss": true,
+        "source_save_unchanged": true
+      },
+      "path": "work/creature-forge/earned-continue.json",
+      "sha256": "70baef67a8ca93a395650ec1e32b7cf08716d1fba3863ece23752dc91c39ef2d"
+    },
+    "final_six_duels": {
+      "ballast": {
+        "contact_crossings": [
+          4,
+          4,
+          4
+        ],
+        "move_selections": [
+          2,
+          2,
+          2
+        ],
+        "passed": true,
+        "path": "work/creature-forge/duel-ballast-proof-tex-ballast.json",
+        "sha256": "d9872a512880a9aabe3f0a9fd6640e3abf923e9ae32e922067ebb024506f8183"
+      },
+      "eye": {
+        "contact_crossings": [
+          1,
+          1,
+          1
+        ],
+        "move_selections": [
+          2,
+          1,
+          1
+        ],
+        "passed": true,
+        "path": "work/creature-forge/walk-duel-eye-tex-eye.json",
+        "sha256": "4862e4ef6502ca7fda2e4b4cc099344aeddff415be2f2d7b054528ee7ad817ad"
+      },
+      "maw": {
+        "contact_crossings": [
+          8,
+          2,
+          3
+        ],
+        "move_selections": [
+          4,
+          3,
+          3
+        ],
+        "passed": true,
+        "path": "work/creature-forge/duel-maw-proof-tex-maw.json",
+        "sha256": "d97b25a163c34d2715e6b3df629336e444998e924e8cdedec80af133ad0bc5db"
+      },
+      "skitter": {
+        "contact_crossings": [
+          2,
+          1,
+          2
+        ],
+        "move_selections": [
+          1,
+          1,
+          1
+        ],
+        "passed": true,
+        "path": "work/creature-forge/walk-duel-skitter-tex-skitter.json",
+        "sha256": "4a56997062a5b80c1b387538128eedb9c2709048284867c1240b69f8b93ab14b"
+      },
+      "spore": {
+        "contact_crossings": [
+          9,
+          3,
+          4
+        ],
+        "move_selections": [
+          5,
+          4,
+          4
+        ],
+        "passed": true,
+        "path": "work/creature-forge/duel-spore-proof-tex-spore.json",
+        "sha256": "f28b47c080495df50dd1c129fbb8baf912451e37a37ef43a5f89949eab72e4c4"
+      },
+      "warden": {
+        "contact_crossings": [
+          2,
+          2,
+          1
+        ],
+        "move_selections": [
+          2,
+          1,
+          1
+        ],
+        "passed": true,
+        "path": "work/creature-forge/walk-duel-warden-tex-warden.json",
+        "sha256": "2be0a8dfd809bdc0a69a5345d8250467eb3b19b8074c26399872199b5b36097b"
+      }
+    },
+    "rendered_audio": {
+      "cases": [
+        {
+          "matches": [
+            {
+              "correlation": 0.688,
+              "pitch": 1.0,
+              "sample": "maw-tell",
+              "seconds": 10.643
+            },
+            {
+              "correlation": 0.864,
+              "pitch": 1.0,
+              "sample": "maw-impact-0",
+              "seconds": 16.789
+            },
+            {
+              "correlation": 0.83,
+              "pitch": 1.0,
+              "sample": "maw-hurt",
+              "seconds": 39.595
+            }
+          ],
+          "path": "work\\creature-forge\\duel-maw-p-maw.wav",
+          "style": "maw"
+        },
+        {
+          "matches": [
+            {
+              "correlation": 0.766,
+              "pitch": 1.0,
+              "sample": "ballast-tell",
+              "seconds": 11.445
+            },
+            {
+              "correlation": 0.596,
+              "pitch": 1.0,
+              "sample": "ballast-impact-0",
+              "seconds": 4.135
+            },
+            {
+              "correlation": 0.894,
+              "pitch": 1.0,
+              "sample": "ballast-hurt",
+              "seconds": 6.273
+            }
+          ],
+          "path": "work\\creature-forge\\duel-ballast-final-ballast.wav",
+          "style": "ballast"
+        },
+        {
+          "matches": [
+            {
+              "correlation": 0.923,
+              "pitch": 1.0,
+              "sample": "spore-tell",
+              "seconds": 9.712
+            },
+            {
+              "correlation": 0.718,
+              "pitch": 1.0,
+              "sample": "spore-impact-0",
+              "seconds": 4.634
+            },
+            {
+              "correlation": 0.855,
+              "pitch": 1.0,
+              "sample": "spore-hurt",
+              "seconds": 21.701
+            }
+          ],
+          "path": "work\\creature-forge\\duel-spore-final-spore.wav",
+          "style": "spore"
+        },
+        {
+          "matches": [
+            {
+              "correlation": 0.812,
+              "pitch": 1.0,
+              "sample": "skitter-tell",
+              "seconds": 1.314
+            },
+            {
+              "correlation": 0.724,
+              "pitch": 1.0,
+              "sample": "skitter-impact-0",
+              "seconds": 0.076
+            },
+            {
+              "correlation": 0.866,
+              "pitch": 1.0,
+              "sample": "skitter-hurt",
+              "seconds": 4.754
+            }
+          ],
+          "path": "work\\creature-forge\\duel-skitter-final-skitter.wav",
+          "style": "skitter"
+        },
+        {
+          "matches": [
+            {
+              "correlation": 0.94,
+              "pitch": 1.0,
+              "sample": "warden-tell",
+              "seconds": 8.625
+            },
+            {
+              "correlation": 0.688,
+              "pitch": 1.0,
+              "sample": "warden-impact-0",
+              "seconds": 3.245
+            },
+            {
+              "correlation": 0.977,
+              "pitch": 1.0,
+              "sample": "warden-hurt",
+              "seconds": 7.855
+            }
+          ],
+          "path": "work\\creature-forge\\duel-warden-final-warden.wav",
+          "style": "warden"
+        },
+        {
+          "matches": [
+            {
+              "correlation": 0.987,
+              "pitch": 1.0,
+              "sample": "eye-tell",
+              "seconds": 0.112
+            },
+            {
+              "correlation": 0.646,
+              "pitch": 1.0,
+              "sample": "eye-impact-0",
+              "seconds": 1.08
+            },
+            {
+              "correlation": 0.654,
+              "pitch": 0.9,
+              "sample": "eye-hurt",
+              "seconds": 3.927
+            }
+          ],
+          "path": "work\\creature-forge\\duel-eye-final-eye.wav",
+          "style": "eye"
+        }
+      ],
+      "path": "work/creature-forge/rendered-audio-final.json",
+      "sha256": "473880d4c870428a0969cf0a43a893badd91a83cac3be502cc96b06e6e668934"
+    },
+    "tests": {
+      "broad": {
+        "log": "work/creature-forge/tests-broad.log",
+        "passed": 418
+      },
+      "focused": {
+        "log": "work/creature-forge/tests-final.log",
+        "passed": 24
+      }
+    }
+  },
+  "rom_sha256": "1613d74662c7dfa9d5166da0b8c8ed08ec048c605a7e9167edf3e320ac4d2a75",
+  "schema_version": 1,
+  "scope": {
+    "maps_byte_identical": true,
+    "native_purchases_save_format_unchanged": true,
+    "player_kit_preserved": true
+  },
+  "status": "Published through tools/playtest.py build; awaiting player quality/fun feedback",
+  "texture_patch": {
+    "all_other_resources_exact": true,
+    "arm9_sha256": "571d0d51090d427e024306b55a86728c7adcfda2068e8683c47e125c3eee5eb2",
+    "executable_exact": true,
+    "materials": {
+      "ballast": [
+        {
+          "after": [
+            128,
+            128
+          ],
+          "before": [
+            64,
+            64
+          ],
+          "material": "brt:blue",
+          "offset": 1872
+        }
+      ],
+      "conductor": [
+        {
+          "after": [
+            128,
+            128
+          ],
+          "before": [
+            64,
+            64
+          ],
+          "material": "brt:blue",
+          "offset": 1872
+        }
+      ],
+      "eye": [
+        {
+          "after": [
+            128,
+            128
+          ],
+          "before": [
+            64,
+            64
+          ],
+          "material": "hRng:blu",
+          "offset": 1848
+        }
+      ],
+      "maw": [
+        {
+          "after": [
+            128,
+            128
+          ],
+          "before": [
+            64,
+            64
+          ],
+          "material": "hLpr:color",
+          "offset": 1848
+        }
+      ],
+      "skitter": [
+        {
+          "after": [
+            128,
+            128
+          ],
+          "before": [
+            64,
+            64
+          ],
+          "material": "hLpr:color",
+          "offset": 1848
+        }
+      ],
+      "spore": [
+        {
+          "after": [
+            128,
+            128
+          ],
+          "before": [
+            64,
+            64
+          ],
+          "material": "hRng:blu",
+          "offset": 1848
+        }
+      ],
+      "warden": [
+        {
+          "after": [
+            128,
+            128
+          ],
+          "before": [
+            64,
+            64
+          ],
+          "material": "brt:blue",
+          "offset": 1872
+        }
+      ]
+    },
+    "modified_resources": [
+      "American.strings",
+      "English.strings",
+      "zz_F22_maw.nsbmd",
+      "zz_F22_ballast.nsbmd",
+      "zz_F22_spore.nsbmd",
+      "zz_F22_skitter.nsbmd",
+      "zz_F22_warden.nsbmd",
+      "zz_F22_eye.nsbmd",
+      "zz_F22_conductor.nsbmd"
+    ],
+    "parent_sha256": "69082fda16d7c0491f9bc945e6ebef11c526f7c7622a98a89959ea294b4f2eb2",
+    "rom_sha256": "1613d74662c7dfa9d5166da0b8c8ed08ec048c605a7e9167edf3e320ac4d2a75",
+    "sound_exact": true,
+    "version": "0.22.1"
+  },
+  "version": "0.22.1"
+}

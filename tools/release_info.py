@@ -185,6 +185,64 @@ PROFILE_INFO = {
                     'shared_prices': (25, 50, 100, 150, 50, 200, 150),
                     'arm9_sha256': '9b04b02a74cd634901c1435a5bb7708c073c127467cc9971b3bc9a5d1c6a10e3'},
 }
+PROFILE_INFO['tasm-v0.20.0'] = {
+    **PROFILE_INFO['tasm-v0.19.0'], 'version':'0.20.0', 'date':'2026-10-16',
+    'crane_parent':'0.19.0', 'midnight_rework':True,
+    'arm9_sha256':'854b07a0e37faa49df3dd895df126aa4eb32e0243ca986190e0373aafe24f8b7',
+    'rom_sha256':'4b4e739eb9e85699942afe29cb0f9e809d7f9302dcee9154e338717516139888',
+}
+PROFILE_INFO['tasm-v0.21.0'] = {
+    **PROFILE_INFO['tasm-v0.20.0'], 'version':'0.21.0', 'date':'2026-10-17',
+    'chapter_renewal':True,
+    'arm9_sha256':'0439571a1bf87182caf548bbc33cdc4ce1f867f09430c0541c4bb7b60c430fc3',
+    'rom_sha256':'60a974f33a3ca2f57dbe2cf11a7a12b585c172be8565cc0968301544b3a11340',
+}
+PROFILE_INFO['tasm-v0.22.0'] = {
+    **PROFILE_INFO['tasm-v0.21.0'], 'version':'0.22.0', 'date':'2026-10-17',
+    'creature_forge':True,
+    'arm9_sha256':'571d0d51090d427e024306b55a86728c7adcfda2068e8683c47e125c3eee5eb2',
+    'rom_sha256':'69082fda16d7c0491f9bc945e6ebef11c526f7c7622a98a89959ea294b4f2eb2',
+}
+PROFILE_INFO['tasm-v0.22.1'] = {
+    **PROFILE_INFO['tasm-v0.22.0'], 'version':'0.22.1', 'creature_texture_fix':True,
+    'rom_sha256':'1613d74662c7dfa9d5166da0b8c8ed08ec048c605a7e9167edf3e320ac4d2a75',
+}
+PROFILE_INFO['tasm-v0.23.0'] = {
+    **PROFILE_INFO['tasm-v0.22.1'], 'version':'0.23.0', 'date':'2026-10-17',
+    'chapter_spectacle':True,
+    'arm9_sha256':'28bd1cd188d94c5422f6c0b2192c3ea060bb295aabba3b0ec54c4bdd8f979241',
+    'rom_sha256':'534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c',
+}
+PROFILE_INFO['tasm-v0.24.0'] = {
+    **PROFILE_INFO['tasm-v0.23.0'], 'version':'0.24.0', 'date':'2026-10-18',
+    'midnight_rebuild':True,
+    'arm9_sha256':'dd30eb25ada17e7d95bc1419588d46f96f6367ebbc1213faba21749d161b39e3',
+    'rom_sha256':'c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393',
+}
+PROFILE_INFO['tasm-v0.25.0'] = {
+    **PROFILE_INFO['tasm-v0.24.0'], 'version':'0.25.0', 'date':'2026-10-18',
+    'midnight_encore':True,
+    'arm9_sha256':'f060152924d74cb5400e620be39a9e9217f96dab4e88ece8153186e9790c6ba2',
+    'rom_sha256':'0817ec91a44f85a31135f4d99ef90452dd8c30870689e803743b3594ddadb314',
+}
+PROFILE_INFO['tasm-v0.26.0'] = {
+    **PROFILE_INFO['tasm-v0.25.0'], 'version':'0.26.0', 'date':'2026-10-19',
+    'midnight_voltage':True,
+    'arm9_sha256':'2ac0e269d709689f94f06ae8b89c75b456fec4fb767f3e3e9660b0c4c704383d',
+    'rom_sha256':'21bd1b19c8b8f74f24fca06e238204dac0f78b02630e04629fd8ae78f978a947',
+}
+PROFILE_INFO['tasm-v0.27.0'] = {
+    **PROFILE_INFO['tasm-v0.26.0'], 'version':'0.27.0', 'date':'2026-10-19',
+    'midnight_finale':True,
+    'arm9_sha256':'88475ec2d8bec8e1d521cf92ff2560e1e72f26b00e73ceefaa525e9d608977aa',
+    'rom_sha256':'1b1e4e37d48f4a5661b77ac10032e694d1985347b7eb0f70fdd5d828226cdc4d',
+}
+PROFILE_INFO['tasm-v0.28.0'] = {
+    **PROFILE_INFO['tasm-v0.27.0'], 'version':'0.28.0', 'date':'2026-10-19',
+    'midnight_reliability':True,
+    'arm9_sha256':'ccc2e83bae9d1b31004834b3be0192dc4ba506d9ad809f9bbd9e69c1c9dd0ea9',
+    'rom_sha256':'6819cb91e824961552b86690c3fdd112930bbd1cbb70d5c3c76978b5ce932a20',
+}
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'
 

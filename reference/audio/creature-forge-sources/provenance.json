@@ -1,0 +1,37 @@
+{
+  "provenance": [
+    {
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "url": "https://kenney.nl/assets/impact-sounds"
+    },
+    {
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "url": "https://kenney.nl/assets/sci-fi-sounds"
+    },
+    {
+      "author": "john129pats",
+      "download": "https://cdn.freesound.org/previews/146/146558_831330-hq.mp3",
+      "license": "CC0-1.0",
+      "title": "Hybrid Monster Growl",
+      "url": "https://freesound.org/people/john129pats/sounds/146558/"
+    }
+  ],
+  "source_hashes": {
+    "arc": "e5e0b6ccc4d5720c8174a3e5b7cc6f9be3057352a89cbb2e99a00efc6fe5cc11",
+    "bell": "94b8bb5f2d43ab65e4bcc32b28562416e9bc2c51d9fd4be1e333660ee52f977f",
+    "charge": "051b0eafc479695af4ca3607d41fd4be41bae7c21f4f9508d004722b09f1bd63",
+    "crunch": "fdd04d6f0032d4d57c134ad37f3587d2d00e58c9572715275bd8cf4f43593576",
+    "engine": "3b1adf8645a40c35fcad25eee224c82c9836dc443102a9af5586eb22cbedabcc",
+    "glass": "4978654ac840ad519692d5d5ba48a8101cabce13b9a577be73ad589185e5e9ed",
+    "growl": "d6f5b2537776310e06ebe6113cca10bda48e86f40d75afab58bd49510d5c558d",
+    "meat": "4d0096364ba9e46119d2ff6df493fdc101bd2e1efae061da5e5f77a53b3fdcb6",
+    "plate": "59775f8979a396c8a793b0a1db206d5bdc651eae808d858e9acaee8ebda5bc6d",
+    "punch": "4ab53b26f4ea575120dcc1348526c9e0db2afc6af7a442aa0489bdead2ca80b6",
+    "slime": "822ca475d71e18ef6bba707dbe6bff2bd493d3457b2552f7473d23022c1257ca",
+    "steel": "b914c8f1eb7c0f34bb165d7c77f4be0351f6be0660c13c53e65424e262e2c093",
+    "stone": "059558ec751115ca6b1441e00f0adc837c1a3eeb0a066b109e0fd879fc5d0b0c",
+    "thrust": "924636edc923fe4aab5829b69dc5dc1c5d659dec5739865434dabee752a3bb79"
+  }
+}

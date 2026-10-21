@@ -95,7 +95,7 @@ def code_marker(key):
     if side=='left':return ((x,y),(x-2,y)),(x-8,y-3)
     return ((x,y),(x+2,y)),(x+4,y-3)
 
-def map_pixels(stage):
+def map_pixels(stage,*,extra_saves=()):
     out={};flags=phase_flags(stage)
     for name,(x0,y0,x1,y1) in RECTS.items():
         for x in range(x0,x1):
@@ -113,6 +113,10 @@ def map_pixels(stage):
         for yy,row in enumerate(icon):
             for xx,value in enumerate(row):
                 if value=='1':out[tx+xx,ty+yy]=(name,ch.EDGE)
+        if name in extra_saves:
+            for yy,row in enumerate(('11111','10000','11111','00001','11111')):
+                for xx,value in enumerate(row):
+                    if value=='1':out[x0+3+xx,y1-7+yy]=(name,ch.EDGE)
     for link in LINKS:
         if link.code:
             for key in (link.source,link.destination):
@@ -133,11 +137,11 @@ def map_pixels(stage):
                 for dy in (-1,0,1):out[x,y+dy]=(key[0],LOCK if locked else ch.EDGE)
     return out
 
-def overview(raw,stage=0):
+def overview(raw,stage=0,*,extra_saves=()):
     palettes=tuple(p for p in ch.MAP_PALETTES if p!=11)
     colours=(0x1042,0x03FF,0x3548,0x001F,0x5E30)
     with patch.multiple(ch,MAP_ROOMS={n:[r] for n,r in RECTS.items()},MAP_PALETTES=palettes,
-                        SLOT_DEFAULT=colours,_map_pixels=lambda:map_pixels(stage)):
+                        SLOT_DEFAULT=colours,_map_pixels=lambda:map_pixels(stage,extra_saves=extra_saves)):
         result,listing=ch.map_layout(raw)
     listing=[(n,slot,24+RECTS[n][0]+5,24+RECTS[n][1]+9) if n==cr.NAMES[2] else (n,slot,x,y)
              for n,slot,x,y in listing]

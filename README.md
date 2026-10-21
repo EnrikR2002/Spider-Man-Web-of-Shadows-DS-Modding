@@ -1,53 +1,50 @@
 # Spider-Man: Web of Shadows DS modding
 
-Private USA CS5E research. Python 3.10+, Windows PowerShell, standard-library
-archive tools. ROMs/extracted assets/builds/saves stay private.
+Private USA CS5E research. ROMs/extracted assets/builds/saves stay private.
 
 **Play:** `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
-The agent handles releases, backups/checkpoints and the stable everyday ROM.
+The agent handles the stable ROM, releases and progress backups.
+Current release: **v0.26.0**, with audible creature effects and a mobile
+Conductor that escapes and retaliates against combo pressure. Details: [Changes](docs/CHANGES.md).
 
-Six core documents: [instructions](AGENTS.md), [tasks/backend queue](docs/TASKS.md),
-[ROM technical knowledge](docs/TECHNICAL.md), [original gameplay](docs/OG_GAMEPLAY.md),
-[implemented changes/releases](docs/CHANGES.md), [TASM redesign](docs/TASM_ROADMAP.md).
-Start with instructions/tasks; read other sections only as needed. No new
-feature/release/session/summary Markdown files. Machine data belongs in
-reference/; reports/captures/scratch scripts belong in ignored work/ or build/.
-The repo docs are the shared memory for every assistant working here.
+## Find what you need
 
-## Agent workflow
+Start with [instructions](AGENTS.md) and the [current handoff](docs/TASKS.md).
+Then read the relevant section; routine startup does not require every document.
 
-Clean ROM: `original/Spider-Man - Web of Shadows (USA) (En,Fr).nds`, 64 MiB,
+| Need | Document |
+|---|---|
+| Commands, tool selection, qualification, evidence and publishing | [Development guide](docs/DEVELOPMENT.md) |
+| Engine/format knowledge and task-to-topic map | [Technical notebook](docs/TECHNICAL.md) |
+| Original gameplay | [Native behavior](docs/OG_GAMEPLAY.md) |
+| Shipped behavior and release history | [Changes](docs/CHANGES.md) |
+| Design, player feedback and deferred work | [TASM roadmap](docs/TASM_ROADMAP.md) |
+
+TASKS describes current work; source recipes, release pins and verified build
+metadata establish exact build identity. Dated sections retain historical facts;
+they are not current instructions. Keep the approved document roles instead of
+adding session logs. Machine receipts/catalogs belong in reference/; scratch
+scripts, captures and large reports belong in ignored work/ or build/.
+
+## Local setup
+
+Python3.10+ and Windows PowerShell; production art/ARM tools have additional
+[local dependencies](docs/DEVELOPMENT.md#local-runtime-dependencies). A new clone
+contains source/metadata, not private ROMs, overlays, batteries or research tools.
+Clean ROM: `original/Spider-Man - Web of Shadows (USA) (En,Fr).nds`,64MiB,
 SHA256 `61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203`.
-Never overwrite it. A new clone has source/metadata, not private overlays/saves.
+Never overwrite it. Initial inventory/round-trip setup, when needed:
 
 ```powershell
 python mod.py extract
 python mod.py verify --round-trip
-python mod.py build --mods work/my-overlay -o build/my-test.nds
-python mod.py verify --mods work/my-overlay -o build/my-test.nds
-python -m unittest discover -s tests -v
-# After isolated qualification, merge all accepted overlays/profile; emulator closed:
-python tools/playtest.py checkpoint before-feature
-python tools/playtest.py build
 ```
 
-Red kit (v0.2.0+) and emulator research:
+Use the development guide's task-specific workflow for changes. Old release
+generators reproduce their pinned release; changing their bytes under an already
+published version is forbidden. Preserve the accepted composition, qualify a
+private candidate, then publish via `python tools/playtest.py build` with DeSmuME
+closed. Do not load an old emulator state over a changed ROM.
 
-```powershell
-python tools/assemble_tasm_kit.py            # after editing tools/tasm_kit.s or tasm_kit2.s (then re-pin hashes)
-python tools/tasm_kit.py                     # candidate build/version-<VERSION>
-python tools/kit_lab.py qualify build/version-0.2.0/Versioned.nds
-python tools/kit_lab.py trace <rom> <label> reflex --frames 300 --cap 30,40
-python tools/kit_lab.py preview spin 4,9     # stick-figure clip check
-python tools/kit_lab.py disasm 0x020B5C28 20
-```
-
-Use the candidate's composed `--gameplay-profile` for new recipes; `original`
-means native engine with the selected asset overlay. Never load old emulator
-states over changed ROMs. Read the actual Battery directory in work/playtest.json;
-use copies for research. Checkpoints/previous ROMs are agent-managed.
-
-Older exact notes: `python tools/doc_archive.py list <topic>`,
-`read <name> --toc`, then `read <name> --section '<heading>'` (80-line default).
-The archive is excluded from routine searches. Text/tree/asset round trips,
-unknown bytes and unresolved gameplay checks belong in TECHNICAL/CHANGES.
+Historical notes: `python tools/doc_archive.py list <topic>`, then
+`read <name> --toc` or `read <name> --section '<heading>'` (80-line default).

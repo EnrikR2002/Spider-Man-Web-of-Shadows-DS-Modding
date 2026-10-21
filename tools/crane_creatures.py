@@ -95,16 +95,17 @@ def geometry_motion(raw,kind,positions,reference,mode,source):
     Gmb.parse(out)
     return wrapper.replace_decoded(bytes(out))
 
-def prepare(blob,names):
+def prepare(blob,names,*,specs=None,prefix_base='zz_CR_',model_author=None):
     """Return appendable authored assets, deferred XBD links and diagnostics."""
     extras={};links={};report={}
-    for spec in CREATURES:
+    for spec in (CREATURES if specs is None else specs):
         template=blob(spec.stem+'.nsbmd');texture=blob(spec.stem+'.nsbtx');idle_raw=blob(spec.stem+'_Idle.sca')
         idle=Sca.parse(idle_raw);rig=AnimationRig.parse(template);neutral=motion.neutral(idle,rig.parents,spec.key)
-        if spec.key=='ballast':model,tex,meta=art.ballast(template,idle_raw,neutral)
+        if model_author is not None:model,tex,meta=model_author(spec,template,texture,neutral)
+        elif spec.key=='ballast':model,tex,meta=art.ballast(template,idle_raw,neutral)
         elif spec.key=='maw':model,tex,meta=art.maw(template,texture,neutral)
         else:model,tex,meta=art.spore(template,texture,neutral)
-        prefix='zz_CR_'+spec.key
+        prefix=prefix_base+spec.key
         model_name=prefix+'.nsbmd';tex_name=prefix+'.nsbtx';xbd_name=prefix+'.xbd'
         extras[model_name]=model;extras[tex_name]=tex
         source_xbd=blob(spec.stem+'.xbd');xbd=Xbd.parse(source_xbd,names)

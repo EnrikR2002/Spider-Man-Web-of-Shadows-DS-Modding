@@ -1,4 +1,4 @@
-"""Keep the approved six document roles and bound routine startup reading."""
+"""Keep the approved document roles and bound routine startup reading."""
 from pathlib import Path
 import os
 import unittest
@@ -10,7 +10,7 @@ class DocumentLayoutTests(unittest.TestCase):
     def test_fixed_core_document_set(self):
         expected = {'AGENTS.md', 'README.md', 'mods/README.md', 'docs/TASKS.md',
                     'docs/TECHNICAL.md', 'docs/OG_GAMEPLAY.md', 'docs/CHANGES.md',
-                    'docs/TASM_ROADMAP.md'}
+                    'docs/TASM_ROADMAP.md', 'docs/DEVELOPMENT.md'}
         actual = set()
         for directory, children, files in os.walk(ROOT):
             children[:] = [name for name in children if name not in {'.git', '__pycache__'}

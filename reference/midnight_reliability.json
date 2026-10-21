@@ -1,0 +1,181 @@
+{
+  "arm9_sha256": "ccc2e83bae9d1b31004834b3be0192dc4ba506d9ad809f9bbd9e69c1c9dd0ea9",
+  "audits": [
+    "work/midnight-reliability/final-scope-k.json"
+  ],
+  "candidate": "build\\version-0.28.0-final\\Versioned.nds",
+  "changes": {
+    "active_rooms": [
+      76,
+      78,
+      81,
+      83,
+      86,
+      87,
+      88,
+      89
+    ],
+    "boss_counter_carrier": 136,
+    "counter_identity": "owned descriptor pointers, distinct from normal136",
+    "guard_response_updates": 12,
+    "lifecycle": "private owner/slot reset during native room89 RUN=0",
+    "map_order": [
+      76,
+      78,
+      81,
+      83,
+      86,
+      87,
+      89,
+      88
+    ],
+    "ramp": {
+      "78": {
+        "base_HP": [
+          13,
+          20,
+          11
+        ],
+        "live_cost": 3,
+        "max_live_actors": 4,
+        "pattern": [
+          21,
+          20,
+          21,
+          36
+        ],
+        "total_cost": 9
+      },
+      "81": {
+        "base_HP": [
+          15,
+          22,
+          12
+        ],
+        "live_cost": 5,
+        "max_live_actors": 4,
+        "pattern": [
+          36,
+          20,
+          21,
+          21
+        ],
+        "total_cost": 11
+      },
+      "83": {
+        "base_HP": [
+          16,
+          24,
+          13
+        ],
+        "live_cost": 5,
+        "max_live_actors": 4,
+        "pattern": [
+          36,
+          21,
+          20,
+          21
+        ],
+        "total_cost": 13
+      },
+      "86": {
+        "base_HP": [
+          18,
+          26,
+          15
+        ],
+        "live_cost": 5,
+        "max_live_actors": 4,
+        "pattern": [
+          36,
+          20,
+          21,
+          21,
+          20
+        ],
+        "total_cost": 16
+      }
+    },
+    "retired_rooms": [
+      77,
+      82
+    ],
+    "turbine": "Continuous final landing70..192 at y96, upper-tier native spawner/approach; no player placement"
+  },
+  "date": "2026-10-19",
+  "feedback": "Remove Signal House/Pump Refuge and their incoming doors; map actual upper-room order; boss should attack/hit reliably with combos/counters; actual difficulty ramp.",
+  "findings": [
+    "0.27 native type8 constructor really selects8/3 and12/4 budgets; increasing budget alone did not establish challenge.",
+    "Counter74 plays in range with valid GMB/GAB but produces no boss-to-player dispatcher contacts in B;136 has native taken hits/HP loss in C.",
+    "Native reaction impulses survived state-only poise; only the guarded native impulse block is now skipped.",
+    "Native block states26/27 occupy much of F Red fight; I queues a bounded counter from guard pressure.",
+    "Old lab fixed word0 mask/temporary purchase XP differs from the latest measured save; owned-player controls restore all three words/XP/starting HP in disposable RAM."
+  ],
+  "inheritance": {
+    "I_to_final": "Combat code exact; two Terminal live-budget data words change4->3; two guide/version string resources plus Turbine OBJ/model/BSP/detail map differ. K all18 doors/Terminal/Turbine tested directly.",
+    "J_controls": "Final Black, phase, Floodworks/Observatory, removed/legacy routes tested on J; final K changes only Turbine4 resources plus Terminal live cost. Relevant new-room/budget controls rerun on K; fresh earned Continues tested on K."
+  },
+  "limits": "Initial native arrival warp is compiled into disposable ROMs. No runtime player placement, enemy HP fixtures or time slowing in combat. Player quality/actual DeSmuME pacing remain separate.",
+  "negative_control": {
+    "classified_as_expected_pressure_failure": true,
+    "expected": "No-R continuous attack pressure loses via actual native HP damage",
+    "gameplay_passed": false,
+    "report": "work/midnight-reliability/final-pressure/walk-conductor-red-no-refill-final-pressure.json",
+    "source_limits": "Current-owned initial stats, no refills; Y/pursuit with B only for elevated pursuit, no programmed R counterplay."
+  },
+  "parent_sha256": "1b1e4e37d48f4a5661b77ac10032e694d1985347b7eb0f70fdd5d828226cdc4d",
+  "parent_version": "0.27.0",
+  "pending": [
+    "Player confirmation of full-route balance and actual DeSmuME pacing"
+  ],
+  "player_profile": "work/midnight-reliability/owned-player-profile.json",
+  "retained_control_interpretation": [
+    "First legacy scripts pressed X while still beside the save sphere; moving to the door before X succeeds on the identical ROM.",
+    "Earlier Terminal4 live-cost and turbine mixed-height staging are superseded by K; earlier candidate resources/receipts are retained."
+  ],
+  "retained_controls": [
+    "work/midnight-reliability/goals-terminal",
+    "work/midnight-reliability/goals-observatory",
+    "work/midnight-reliability/pilot-a-press",
+    "work/midnight-reliability/pilot-b-press",
+    "work/midnight-reliability/pilot-c-press",
+    "work/midnight-reliability/final-legacy-signal",
+    "work/midnight-reliability/final-legacy-refuge",
+    "work/midnight-reliability/final-terminal",
+    "work/midnight-reliability/final-turbine"
+  ],
+  "rom_sha256": "6819cb91e824961552b86690c3fdd112930bbd1cbb70d5c3c76978b5ce932a20",
+  "schema_version": 1,
+  "selected_evidence": [
+    "work/midnight-reliability/k-doors/midnight-doors.json",
+    "work/midnight-reliability/i-red/walk-conductor-red-save-i-red.json",
+    "work/midnight-reliability/final-black/walk-conductor-black-save-final-black.json",
+    "work/midnight-reliability/k-terminal/walk-terminal-wave-k-terminal.json",
+    "work/midnight-reliability/final-floodworks/walk-floodworks-wave-final-floodworks.json",
+    "work/midnight-reliability/k-turbine/walk-turbine-wave-k-turbine.json",
+    "work/midnight-reliability/final-observatory/walk-observatory-final-observatory.json",
+    "work/midnight-reliability/final-phase/walk-conductor-study-final-phase.json",
+    "work/midnight-reliability/final-red-continue/earned-continue.json",
+    "work/midnight-reliability/final-black-continue/earned-continue.json",
+    "work/midnight-reliability/final-legacy-signal-r2/result.json",
+    "work/midnight-reliability/final-legacy-refuge-r2/result.json",
+    "work/midnight-reliability/final-removed-terminal/result.json",
+    "work/midnight-reliability/final-removed-floodworks/result.json",
+    "work/midnight-reliability/i-map/result.json",
+    "work/midnight-reliability/final-scope-k.json"
+  ],
+  "status": "published and agent-qualified final K; player confirmation pending",
+  "tests": [
+    {
+      "log": "work/midnight-reliability/tests-i-broad.log",
+      "passed": true,
+      "tests": 190
+    },
+    {
+      "log": "work/midnight-reliability/tests-final-focused.log",
+      "passed": true,
+      "tests": 45
+    }
+  ],
+  "version": "0.28.0"
+}
