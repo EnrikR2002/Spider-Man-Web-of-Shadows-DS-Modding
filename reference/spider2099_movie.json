@@ -1,0 +1,644 @@
+{
+  "appearance": {
+    "arm9_sha256": "122bacf474acd659bb77562ba664542dc76348c5ac6243f2d1ef262dc86f4924",
+    "cosmetic_draw_selector": {
+      "abi": "Existing guarded selector with updated model-size/footer literals only; registers/CPSR and gameplay kit preserved.",
+      "arm9_source_offset": 1441696,
+      "code_address": 35043872,
+      "code_bytes": 488,
+      "code_sha256": "9298038842702f695b6c440c4e3eb77a0e5563b07f1c852842b7193aae7d8f2b",
+      "new_allocation_bytes": 0
+    },
+    "model": {
+      "added_triangles": 36,
+      "cape": {
+        "removed": true,
+        "triangles": 0
+      },
+      "forearm_blades": [
+        {
+          "base_world": [
+            2.741749394917045,
+            7.09296578308056,
+            -0.806292496425737
+          ],
+          "fraction": 0.22,
+          "slot": 6,
+          "surface_radius": 0.34890022537590076,
+          "sweep_toward_elbow": true,
+          "tip_world": [
+            2.5564656824873038,
+            7.1622491335950595,
+            -1.5377087686331152
+          ],
+          "visible_height": 0.7
+        },
+        {
+          "base_world": [
+            3.054355995159089,
+            6.976072439495768,
+            -0.7509401279723555
+          ],
+          "fraction": 0.5,
+          "slot": 6,
+          "surface_radius": 0.33681562112240804,
+          "sweep_toward_elbow": true,
+          "tip_world": [
+            2.889408462344567,
+            7.037751459106431,
+            -1.338382048470263
+          ],
+          "visible_height": 0.56
+        },
+        {
+          "base_world": [
+            3.3561833414403086,
+            6.8632097946737485,
+            -0.7007447650765581
+          ],
+          "fraction": 0.77,
+          "slot": 6,
+          "surface_radius": 0.3283692351393826,
+          "sweep_toward_elbow": true,
+          "tip_world": [
+            3.2091690415604095,
+            6.918183019981316,
+            -1.1243775543293573
+          ],
+          "visible_height": 0.4
+        },
+        {
+          "base_world": [
+            -2.7425787050454145,
+            7.092655678195702,
+            -0.813137918213791
+          ],
+          "fraction": 0.22,
+          "slot": 15,
+          "surface_radius": 0.35580266840608904,
+          "sweep_toward_elbow": true,
+          "tip_world": [
+            -2.5572949926156734,
+            7.161939028710202,
+            -1.5445541904211693
+          ],
+          "visible_height": 0.7
+        },
+        {
+          "base_world": [
+            -3.054981159669036,
+            6.975838671015507,
+            -0.7561004589644782
+          ],
+          "fraction": 0.5,
+          "slot": 15,
+          "surface_radius": 0.3420189368263724,
+          "sweep_toward_elbow": true,
+          "tip_world": [
+            -2.890033626854514,
+            7.03751769062617,
+            -1.3435423794623857
+          ],
+          "visible_height": 0.56
+        },
+        {
+          "base_world": [
+            -3.3568344986652066,
+            6.862966306707856,
+            -0.7061196492149269
+          ],
+          "fraction": 0.77,
+          "slot": 15,
+          "surface_radius": 0.333788891182155,
+          "sweep_toward_elbow": true,
+          "tip_world": [
+            -3.2098201987853074,
+            6.917939532015423,
+            -1.129752438467726
+          ],
+          "visible_height": 0.4
+        }
+      ],
+      "native_body_triangles": 480,
+      "native_rig_unchanged": true,
+      "physique": "Broader chest/lats/traps and deltoids, athletic thighs, tapered waist and narrower jaw; native pivots unchanged.",
+      "talon_tips": 6,
+      "total_triangles": 516
+    },
+    "modified_resources": [
+      "American.strings",
+      "English.strings",
+      "spd.nsbmd",
+      "spdB.nsbtx"
+    ],
+    "paint": {
+      "colors": 51,
+      "design": "Navy/cobalt body, negative-space red mask, angular chest spider, red shoulder caps, bracers and knee chevrons; no cape atlas.",
+      "pixel_pool_bytes": 16384,
+      "storage_format": "I8",
+      "texture_size": [
+        128,
+        128
+      ],
+      "transparent_texels": 0
+    },
+    "parent_sha256": "7286d0536b6e29d0ebdc355563c6ece8e974058534c9676024ee67928cae530c",
+    "resource_hashes": {
+      "American.strings": "88c8eaa91c4dc8a81d045d1ad5d4901f6a50d1ab997b177f2b195599d849782c",
+      "English.strings": "88c8eaa91c4dc8a81d045d1ad5d4901f6a50d1ab997b177f2b195599d849782c",
+      "spd.nsbmd": "3f3b19c870472610ab239bcb9e622b5882be2477f54415d66e9cb3dd6c3aacaa",
+      "spdB.nsbtx": "55eb78be3307fdb234cbb64bb5680639231c11d1969bd6a647dbf87fb50dbaf0"
+    },
+    "rom_sha256": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808",
+    "scope": "Black appearance only: cape geometry/atlas removed, movie-inspired sculpt and markings. Native rig/SBC/animations/physics/controls/purchases, Red list/texture, kit, rooms/audio and battery contract preserved.",
+    "shared_model": {
+      "black_dimensions": [
+        128,
+        128
+      ],
+      "black_magnification": [
+        4096,
+        4096
+      ],
+      "black_stream_bytes": 15200,
+      "default_red_list_exact": true,
+      "material_offset": 2152,
+      "metadata_offset": 30240,
+      "model_size": 30304,
+      "one_list_per_draw": true,
+      "red_dimensions": [
+        128,
+        128
+      ],
+      "red_magnification": [
+        2048,
+        2048
+      ],
+      "red_stream_bytes": 12788,
+      "shape_offset": 2236,
+      "trailer": [
+        959459923,
+        827081785,
+        2236,
+        2152,
+        16,
+        12788,
+        12804,
+        15200,
+        8388736,
+        8388736,
+        2048,
+        2048,
+        4096,
+        4096,
+        30304,
+        1345531953
+      ]
+    },
+    "version": "0.30.2"
+  },
+  "art_controls": {
+    "a": {
+      "path": "build/version-0.30.2-a/Versioned.nds",
+      "status": "superseded-unpublished-art-control"
+    }
+  },
+  "candidate": {
+    "accepted_candidate": "build/version-0.30.2-b/Versioned.nds",
+    "path": "build\\version-0.30.2-final\\Versioned.nds",
+    "rom_sha256": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808",
+    "version": "0.30.2"
+  },
+  "followup_enemy_texture_fix": {
+    "receipt": "spider2099_enemy_texture.json",
+    "status": "published-in-v0.30.3-terminal-crowd",
+    "version": "0.30.3"
+  },
+  "limits": [
+    "Player appearance preference and actual DeSmuME pacing are unconfirmed.",
+    "Appearance-only revision; no new Black moves or animation clips.",
+    "Crowded-scene enemies have an inherited missing texture binding (also in v0.30/v0.30.1 controls). This release qualifies the player model, not enemy presentation.",
+    "One transient newly initialized room-load position sample differs at frame 4212; settled native motion/states, ownership/XP/HP agree.",
+    "Mixed encounter actor roster/arrival timing differs between parent and candidate; this observation is not a gameplay parity/balance or clear claim."
+  ],
+  "publication": {
+    "receipt": {
+      "battery_checkpoint": "before-build-dsv-b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "battery_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "previous_rom_sha256": "7286d0536b6e29d0ebdc355563c6ece8e974058534c9676024ee67928cae530c",
+      "rom_sha256": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808",
+      "schema_version": 1,
+      "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+      "version": "0.30.2"
+    },
+    "verification": {
+      "actual_battery_path": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+      "actual_battery_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "arm9_sha256": "122bacf474acd659bb77562ba664542dc76348c5ac6243f2d1ef262dc86f4924",
+      "clean_original_unchanged": true,
+      "dsv_footer_words": [
+        1,
+        512,
+        1,
+        1,
+        512,
+        0
+      ],
+      "exact_composition_hashes": {
+        "build\\Spider-Man-WoS-modded.nds": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808",
+        "build\\playtest-candidate\\Spider-Man-WoS-modded.nds": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808",
+        "build\\version-0.30.2-b\\Versioned.nds": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808",
+        "build\\version-0.30.2-final\\Versioned.nds": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808",
+        "build\\version-0.30.2-normal\\Versioned.nds": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808"
+      },
+      "payload_sha256": "ad97e262189a8f3e1f494b1c85b43404985d7199a46141bfb166e82286eb2c89",
+      "prior_rom_recipe_metadata_retained": true,
+      "recipe_pin_history_metadata_agree": true,
+      "rom_sha256": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808",
+      "stable_accepted_canonical_normal_and_publication_identical": true,
+      "version_strings": {
+        "American.strings": {
+          "50": "TASM v0.30.2\nPress a button to start",
+          "74": "Options v0.30.2"
+        },
+        "English.strings": {
+          "50": "TASM v0.30.2\nPress a button to start",
+          "74": "Options v0.30.2"
+        }
+      },
+      "whole_dsv_wrapper_payload_equal_qualification_copy_and_checkpoint": true
+    }
+  },
+  "qualification": {
+    "canonical_matches_accepted": true,
+    "final_document_checks": {
+      "count": 7,
+      "passed": true,
+      "path": "work/2099-movie/final-doc-tests.log"
+    },
+    "mixed_scene": {
+      "binding_audit": "work/2099-movie/historical-enemy-binding.json",
+      "comparison": "work/2099-movie/mixed-parent-parity.json",
+      "enemy_rendering_passed": false,
+      "existing_enemy_texture_failure_in_parent": true,
+      "limits": "Native actor roster/arrival timing differs; neither run establishes enemy texture success, combat balance or a clear. The same missing-binding symptom is present in both, including retained older controls.",
+      "player_binding": "work/2099-movie/mixed/live-model.json",
+      "player_rendering_passed": true,
+      "report": "work/2099-movie/mixed/walk-terminal-2099-movie.json",
+      "source_check": "work/2099-movie/mixed/source-check.json"
+    },
+    "motion": {
+      "ability_words_first": [
+        940572671,
+        4293918703,
+        523743
+      ],
+      "ability_words_last": [
+        940572671,
+        4293918703,
+        523743
+      ],
+      "all_live_selections_pass": true,
+      "battery_unchanged": true,
+      "captures": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-214282a5\\2099-candidate-motion",
+      "forms": [
+        0,
+        1
+      ],
+      "limits": "Fresh native-input Continue from latest actual copied DSV. No RAM writes, position/HP/ownership fixtures or stale states. Presentation/control observation, not player approval or actual DeSmuME performance.",
+      "live_selection": [
+        {
+          "dimensions": [
+            128,
+            128
+          ],
+          "form": 0,
+          "frame": 3500,
+          "live_model_pointer": 35860936,
+          "passed": true,
+          "private_tag": "S2099DL1",
+          "room": 65,
+          "shape_list": [
+            16,
+            12788
+          ],
+          "texture_format": 4,
+          "transparent_zero": false
+        },
+        {
+          "dimensions": [
+            128,
+            128
+          ],
+          "form": 1,
+          "frame": 3620,
+          "live_model_pointer": 35860936,
+          "passed": true,
+          "private_tag": "S2099DL1",
+          "room": 65,
+          "shape_list": [
+            12804,
+            15200
+          ],
+          "texture_format": 4,
+          "transparent_zero": false
+        },
+        {
+          "dimensions": [
+            128,
+            128
+          ],
+          "form": 1,
+          "frame": 4420,
+          "live_model_pointer": 35860936,
+          "passed": true,
+          "private_tag": "S2099DL1",
+          "room": 65,
+          "shape_list": [
+            12804,
+            15200
+          ],
+          "texture_format": 4,
+          "transparent_zero": false
+        },
+        {
+          "dimensions": [
+            128,
+            128
+          ],
+          "form": 0,
+          "frame": 4540,
+          "live_model_pointer": 35860936,
+          "passed": true,
+          "private_tag": "S2099DL1",
+          "room": 65,
+          "shape_list": [
+            16,
+            12788
+          ],
+          "texture_format": 4,
+          "transparent_zero": false
+        }
+      ],
+      "observations": 1170,
+      "rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\version-0.30.2-b\\Versioned.nds",
+      "rom_sha256": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808",
+      "rooms": [
+        65
+      ],
+      "source_battery_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "states": [
+        0,
+        1,
+        4,
+        15,
+        19,
+        24,
+        34,
+        35,
+        36,
+        46,
+        51,
+        52,
+        59
+      ],
+      "valid_player_observations": 1170,
+      "xp_first": 4561,
+      "xp_last": 4561
+    },
+    "motion_parent_parity": {
+      "candidate_observations": 1170,
+      "differences": [],
+      "paired_valid_position_differences": 0,
+      "parent_observations": 1170,
+      "scope": "Pairwise native controls, stats and jointly valid position samples; no fixtures or stale states."
+    },
+    "native_motion_gif": "build/version-0.30.2-final/2099-native-motion.gif",
+    "normal_source": {
+      "log": "work/2099-movie/normal-source.log",
+      "matches_accepted": true,
+      "path": "build\\version-0.30.2-normal\\Versioned.nds",
+      "sha256": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808"
+    },
+    "preview": "build/version-0.30.2-final/2099-movie-preview.png",
+    "room": {
+      "ability_words_first": [
+        940572671,
+        4293918703,
+        523743
+      ],
+      "ability_words_last": [
+        940572671,
+        4293918703,
+        523743
+      ],
+      "all_live_selections_pass": true,
+      "battery_unchanged": true,
+      "captures": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-214282a5\\2099-candidate-room",
+      "forms": [
+        0,
+        1
+      ],
+      "limits": "Fresh native-input Continue from latest actual copied DSV. No RAM writes, position/HP/ownership fixtures or stale states. Presentation/control observation, not player approval or actual DeSmuME performance.",
+      "live_selection": [
+        {
+          "dimensions": [
+            128,
+            128
+          ],
+          "form": 0,
+          "frame": 3500,
+          "live_model_pointer": 35860936,
+          "passed": true,
+          "private_tag": "S2099DL1",
+          "room": 65,
+          "shape_list": [
+            16,
+            12788
+          ],
+          "texture_format": 4,
+          "transparent_zero": false
+        },
+        {
+          "dimensions": [
+            128,
+            128
+          ],
+          "form": 1,
+          "frame": 3620,
+          "live_model_pointer": 35860936,
+          "passed": true,
+          "private_tag": "S2099DL1",
+          "room": 65,
+          "shape_list": [
+            12804,
+            15200
+          ],
+          "texture_format": 4,
+          "transparent_zero": false
+        },
+        {
+          "dimensions": [
+            128,
+            128
+          ],
+          "form": 0,
+          "frame": 4420,
+          "live_model_pointer": 35792908,
+          "passed": true,
+          "private_tag": "S2099DL1",
+          "room": 76,
+          "shape_list": [
+            16,
+            12788
+          ],
+          "texture_format": 4,
+          "transparent_zero": false
+        },
+        {
+          "dimensions": [
+            128,
+            128
+          ],
+          "form": 0,
+          "frame": 4540,
+          "live_model_pointer": 35792908,
+          "passed": true,
+          "private_tag": "S2099DL1",
+          "room": 76,
+          "shape_list": [
+            16,
+            12788
+          ],
+          "texture_format": 4,
+          "transparent_zero": false
+        },
+        {
+          "dimensions": [
+            128,
+            128
+          ],
+          "form": 1,
+          "frame": 4780,
+          "live_model_pointer": 35792908,
+          "passed": true,
+          "private_tag": "S2099DL1",
+          "room": 76,
+          "shape_list": [
+            12804,
+            15200
+          ],
+          "texture_format": 4,
+          "transparent_zero": false
+        },
+        {
+          "dimensions": [
+            128,
+            128
+          ],
+          "form": 1,
+          "frame": 4860,
+          "live_model_pointer": 35792908,
+          "passed": true,
+          "private_tag": "S2099DL1",
+          "room": 76,
+          "shape_list": [
+            12804,
+            15200
+          ],
+          "texture_format": 4,
+          "transparent_zero": false
+        }
+      ],
+      "observations": 1520,
+      "rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\version-0.30.2-b\\Versioned.nds",
+      "rom_sha256": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808",
+      "rooms": [
+        65,
+        76
+      ],
+      "source_battery_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "states": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7,
+        10,
+        14,
+        15,
+        19,
+        24,
+        29,
+        46,
+        51,
+        53,
+        59
+      ],
+      "valid_player_observations": 1518,
+      "xp_first": 4561,
+      "xp_last": 4561
+    },
+    "room_parent_parity": {
+      "candidate_observations": 1520,
+      "differences": [
+        [
+          4212,
+          "position",
+          [
+            0,
+            20402
+          ],
+          [
+            65536,
+            20402
+          ]
+        ]
+      ],
+      "paired_valid_position_differences": 1,
+      "parent_observations": 1520,
+      "scope": "Pairwise native controls, stats and jointly valid position samples; no fixtures or stale states."
+    },
+    "source_tests": {
+      "count": 45,
+      "passed": true,
+      "path": "work/2099-movie/source-tests.log"
+    }
+  },
+  "reference_image": {
+    "private_copy": "work\\2099-movie\\reference.png",
+    "sha256": "0cd2aef0364219336a6e83054d4fbfcda9a709464e93f4bda126c37d1eb4dfaf",
+    "source": "User attachment, 2026-10-22"
+  },
+  "request": "Refine 2099 toward the supplied Across the Spider-Verse reference; remove the red web cape.",
+  "schema_version": 1,
+  "source_battery": {
+    "battery_footer": [
+      1,
+      512,
+      1,
+      1,
+      512,
+      0
+    ],
+    "battery_path": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+    "battery_payload_sha256": "ad97e262189a8f3e1f494b1c85b43404985d7199a46141bfb166e82286eb2c89",
+    "battery_wrapper_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+    "clean_sha256": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203",
+    "stable_sha256": "7286d0536b6e29d0ebdc355563c6ece8e974058534c9676024ee67928cae530c"
+  },
+  "source_hashes": {
+    "mod.py": "34026c00c9eb0e4cf92f7344cbaf34f8d23b29d7640de38058ac0c1ce9ae7949",
+    "tests/test_spider2099_movie.py": "7eb98c60fa94e48309c2a477abf4a8ed881eae690edd1a30302a891357839534",
+    "tools/release_info.py": "234b12ee5b7c606e87b85cabc6285694929795cfe810200e10559e55c58e0623",
+    "tools/spider2099_art.py": "07e7943eab93b277adfb58e1c6a77ae8849d934d769657838fb10f5047311a07",
+    "tools/spider2099_movie.py": "64a8ea4dabba24aec9596f73be8665f27d80e1c98b82058a7a30a5e950ed69be",
+    "tools/spider2099_movie_art.py": "6528fdd29feb523681b0fdd1b609ade3eecfbe1e1da66ec831595b001eb76496",
+    "tools/spider2099_polish.py": "51340da4a7a2d7eb1f94007e9d80d12b39415696c34e7320d102d6cac74aab41",
+    "tools/spider2099_sculpt.py": "11bf5c7443e0c921da62d41aa78523373bae0240407a43eea23752dbf4e1aa30",
+    "tools/spider2099_visual.py": "a0be0eb95d146465899264b7eca4aa7702e157372b67c98cdd05a77fd7b41ad7"
+  },
+  "status": "published-0.30.2-cape-free-spiderverse-2099",
+  "updated": "2026-10-22"
+}

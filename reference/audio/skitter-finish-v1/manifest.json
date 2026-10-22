@@ -1,0 +1,114 @@
+{
+  "processing": "Deterministic short organic/chitin cues from own CC0-derived Skitter recordings; band-limited seeded foley, dry envelopes, quiet steps, role-specific headroom. No native/game recording sampled.",
+  "provenance": [
+    {
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "url": "https://kenney.nl/assets/impact-sounds"
+    },
+    {
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "url": "https://kenney.nl/assets/sci-fi-sounds"
+    },
+    {
+      "author": "john129pats",
+      "download": "https://cdn.freesound.org/previews/146/146558_831330-hq.mp3",
+      "license": "CC0-1.0",
+      "title": "Hybrid Monster Growl",
+      "url": "https://freesound.org/people/john129pats/sounds/146558/"
+    }
+  ],
+  "samples": [
+    {
+      "file": "skitter-alert.swavdata",
+      "parent_sha256": "ee8f2d1bc9266d3ca71cf5b74fbe529dc78d52237b4eaf340a7468362bd10407",
+      "peak": 19296,
+      "rate": 22050,
+      "rms": 3206.56,
+      "role": "alert",
+      "row": 791,
+      "seconds": 0.28,
+      "sha256": "60e12c756970b84eb4406a3b075797efc37599be3852c5e69229903f9d71d399"
+    },
+    {
+      "file": "skitter-tell.swavdata",
+      "parent_sha256": "0917021ab71e0529735bd2c8b50aa5abd5ed2e6d05b4faa7f521b7f3cdbb87bd",
+      "peak": 17377,
+      "rate": 22050,
+      "rms": 3580.69,
+      "role": "tell",
+      "row": 792,
+      "seconds": 0.19002267573696144,
+      "sha256": "0ad7b93d58aa380092a6e3d594ae1e9913a367bb1f5105352d9afb0da8af41c3"
+    },
+    {
+      "file": "skitter-death.swavdata",
+      "parent_sha256": "4e88d8dd22c66a12485efddebea9a26f054854b1c44b10ab7559083b3e542ccb",
+      "peak": 17965,
+      "rate": 22050,
+      "rms": 3407.85,
+      "role": "death",
+      "row": 793,
+      "seconds": 0.6200453514739229,
+      "sha256": "24bd529ba7182e2855b71ce660486169f928df4195f0ec038c7866becc6e04a1"
+    },
+    {
+      "file": "skitter-hurt.swavdata",
+      "parent_sha256": "d4a9963ca038161e8a3acc1ca1996c3a677d1d091722210195fea6ec2e291600",
+      "peak": 18989,
+      "rate": 22050,
+      "rms": 3038.41,
+      "role": "hurt",
+      "row": 794,
+      "seconds": 0.1400453514739229,
+      "sha256": "f39fda5d9d892d2c028356ae8bfe829a6658613c2c3b27cc2d496f7b0442a514"
+    },
+    {
+      "file": "skitter-step.swavdata",
+      "parent_sha256": "47bdaeb11fee30f71bee3b37cb1a59e12c17f717b40113fadad77d09d0ba7415",
+      "peak": 4431,
+      "rate": 22050,
+      "rms": 697.59,
+      "role": "step",
+      "row": 795,
+      "seconds": 0.06503401360544217,
+      "sha256": "a4de162dc3b9f028de4a4d8e4ace3ec1f82d44bbf2122d3ee4b1150767722c74"
+    },
+    {
+      "file": "skitter-strike-0.swavdata",
+      "parent_sha256": "19b175499d9c282b26832f2aec5eec3a4c3101f8395ebf5c1d3ca4493d8daa36",
+      "peak": 19790,
+      "rate": 22050,
+      "rms": 4239.47,
+      "role": "strike-0",
+      "row": 820,
+      "seconds": 0.16,
+      "sha256": "f1a5d913ed6e932e70d7ef6ab79dfcde0f089b00017d6d95cb78e1f86604c6fa"
+    },
+    {
+      "file": "skitter-strike-1.swavdata",
+      "parent_sha256": "cf46a5c18ed7860e3a9b3186e0e252a7d23d1f4c1e1534210c04c1a9a837d256",
+      "peak": 20749,
+      "rate": 22050,
+      "rms": 4354.13,
+      "role": "strike-1",
+      "row": 821,
+      "seconds": 0.2,
+      "sha256": "a537c5201a5ce0f8225df4c2631cd7f9140c698c134ce293236c1f61a1df126f"
+    },
+    {
+      "file": "skitter-strike-2.swavdata",
+      "parent_sha256": "de0991abeea02cafd6594445cc2f6083a40b9a8da6fe1d04d9fe3be20f896fb4",
+      "peak": 21317,
+      "rate": 22050,
+      "rms": 4354.17,
+      "role": "strike-2",
+      "row": 822,
+      "seconds": 0.23002267573696145,
+      "sha256": "c15711336904ec2cca076509bc1e0990f94c3d11130e57c7ec67cf55fbeca671"
+    }
+  ],
+  "schema_version": 1,
+  "source_manifest": "reference\\audio\\midnight-voltage-v1\\manifest.json"
+}

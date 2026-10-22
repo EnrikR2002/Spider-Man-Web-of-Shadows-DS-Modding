@@ -1,0 +1,193 @@
+{
+  "cause": {
+    "inference": "Reducing the same shared atlas to indexed I4 reduces its pixel pool to 8192 bytes. This candidate resource change binds the crowd, consistent with texture residency pressure; format and footprint changed together.",
+    "live_enemy_format": 0,
+    "material_dimensions": [
+      128,
+      128
+    ],
+    "native_resource_names_verified": [
+      "Forge128",
+      "ForgePal"
+    ],
+    "status": "fixed-in-v0.30.3-for-the-crowded-Terminal-sample",
+    "v0.30.2_atlas_bytes": 32768,
+    "v0.30.2_format": "direct-color"
+  },
+  "experiment": {
+    "candidate_rom": "build/experiment-2099-enemy-i4/TextureOnly.nds",
+    "candidate_sha256": "b286af984b33a6b4d030f5c05f71cd4febf3c2b8630933668d91f788f03a9d1a",
+    "control_rom": "build/Spider-Man-WoS-modded.nds",
+    "evidence": "work/2099-movie/enemy-binding-i4-result.json",
+    "only_payload_change": "zz_F22_Atlas.nsbtx from 32 KiB direct-color to 8 KiB I4; surrounding composition unchanged."
+  },
+  "implementation_source_hashes": {
+    "mod.py": "f0fcaea4144a75b62ca01ea3816f5848b3bc718668c433d72674cc7d56983740",
+    "reference/art/creature-forge-materials-v1.png": "a844b1e68ec6cd3a8c612be8ffcd906f8d3c6f79f123538c274980af138beb7c",
+    "tools/release_info.py": "7ea38b35ec0c30c44386bda0068c3aa47ec374b5a2ccd0cb66d77e21d53070a2",
+    "tools/spider2099_enemy_texture.py": "e1b5354c711ce9bc03ff67f98db8373ea7af3dc33655ff28dc152ca2c94322b3"
+  },
+  "live_scene": {
+    "actual_battery_unchanged": true,
+    "all_enemy_materials_bound_i4": true,
+    "artifact": "build/version-0.30.3-final/enemy-texture-before-after.png",
+    "capture": "build/boot-tests/4a282d63-walk-terminal-release-i4-5fc77379/walk-terminal-release-i4/frame-03822.png",
+    "enemy_materials": [
+      {
+        "actor": 36458392,
+        "dimensions": [
+          128,
+          128
+        ],
+        "material": "hRng:blu",
+        "texture_format": 3
+      },
+      {
+        "actor": 36458704,
+        "dimensions": [
+          128,
+          128
+        ],
+        "material": "hLpr:color",
+        "texture_format": 3
+      },
+      {
+        "actor": 36464492,
+        "dimensions": [
+          128,
+          128
+        ],
+        "material": "hLpr:color",
+        "texture_format": 3
+      }
+    ],
+    "limits": "One current-owned/initial HP/room-arrival-fixture encounter; native actors/AI and no healing thereafter. Proves this crowded sample; further room residency/player/DeSmuME pacing remains.",
+    "live_materials_after_full_release": [
+      {
+        "dimensions": [
+          128,
+          128
+        ],
+        "material": "hRng:blu",
+        "texture_format": 3
+      },
+      {
+        "dimensions": [
+          128,
+          128
+        ],
+        "material": "hLpr:color",
+        "texture_format": 3
+      },
+      {
+        "dimensions": [
+          128,
+          128
+        ],
+        "material": "hLpr:color",
+        "texture_format": 3
+      }
+    ],
+    "max_native_actors": 3,
+    "native_candidate_route_passed": true,
+    "native_styles": [
+      "eye",
+      "skitter"
+    ],
+    "player_texture": "I8; unchanged from 0.30.2",
+    "player_texture_after_full_release": "I8; unchanged",
+    "raw_observation": "work/2099-movie/probe-release-i4/observed-terminal-release-i4.ram",
+    "room": "ML_Station / Terminal",
+    "route_passed": true
+  },
+  "normal_source": {
+    "matches_candidate": true,
+    "path": "build/version-0.30.3-normal/Versioned.nds",
+    "rom_sha256": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c",
+    "status": "reproduced-through-standard-mod-build"
+  },
+  "publication": {
+    "receipt": {
+      "battery_checkpoint": "before-build-dsv-b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "battery_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "previous_rom_sha256": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808",
+      "rom_sha256": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c",
+      "schema_version": 1,
+      "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+      "version": "0.30.3"
+    },
+    "verification": {
+      "2099_player_texture_retains_i8": true,
+      "actual_battery_path": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+      "arm9_sha256": "122bacf474acd659bb77562ba664542dc76348c5ac6243f2d1ef262dc86f4924",
+      "battery_payload_sha256": "ad97e262189a8f3e1f494b1c85b43404985d7199a46141bfb166e82286eb2c89",
+      "battery_wrapper_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "clean_original_sha256": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203",
+      "compositions": {
+        "build/Spider-Man-WoS-modded.nds": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c",
+        "build/playtest-candidate/Spider-Man-WoS-modded.nds": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c",
+        "build/version-0.30.3-a/Versioned.nds": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c",
+        "build/version-0.30.3-final/Versioned.nds": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c",
+        "build/version-0.30.3-normal/Versioned.nds": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c"
+      },
+      "prior_v0_30_2_rom_recipe_and_metadata_retained": true,
+      "recipe_pin_history_metadata_and_boot_options_agree": true,
+      "stable_accepted_canonical_normal_source_and_publication_identical": true,
+      "stable_rom_sha256": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c",
+      "three_live_enemy_materials_bound_as_i4": true,
+      "version_strings": {
+        "American.strings": {
+          "50": "TASM v0.30.3\nPress a button to start",
+          "74": "Options v0.30.3"
+        },
+        "English.strings": {
+          "50": "TASM v0.30.3\nPress a button to start",
+          "74": "Options v0.30.3"
+        }
+      },
+      "whole_battery_matches_prebuild_source_and_checkpoint": true
+    }
+  },
+  "release_candidate": {
+    "arm9_sha256": "122bacf474acd659bb77562ba664542dc76348c5ac6243f2d1ef262dc86f4924",
+    "normal_source": "build/version-0.30.3-normal/Versioned.nds",
+    "patch": {
+      "all_enemy_model_xbd_and_motion_resources_exact": true,
+      "all_other_resources_exact": true,
+      "arm9_sha256": "122bacf474acd659bb77562ba664542dc76348c5ac6243f2d1ef262dc86f4924",
+      "atlas": {
+        "compression_ratio": 0.25,
+        "dimensions": [
+          128,
+          128
+        ],
+        "format": "I4",
+        "palette_colors": 16,
+        "palette_zero_transparent": false,
+        "parent_format": "direct-color",
+        "parent_pixel_bytes": 32768,
+        "pixel_bytes": 8192,
+        "quantizer": "Pillow FASTOCTREE, no dithering; RGB555 palette",
+        "shared_material_names": [
+          "Forge128",
+          "ForgePal"
+        ]
+      },
+      "gameplay_arm9_arm7_exact": true,
+      "modified_resources": [
+        "American.strings",
+        "English.strings",
+        "zz_F22_Atlas.nsbtx"
+      ],
+      "parent_sha256": "214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808",
+      "rom_sha256": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c",
+      "version": "0.30.3"
+    },
+    "path": "build/version-0.30.3-a/Versioned.nds",
+    "sha256": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c",
+    "version": "0.30.3"
+  },
+  "schema_version": 1,
+  "status": "published-v0.30.3-terminal-enemy-texture-binding-restored",
+  "updated": "2026-10-22"
+}

@@ -181,6 +181,21 @@ def set_bits(lib, bits, clear, bits2=0):
         c.memmove(ptr + stats + 0x14, struct.pack('<I', old | bits2), 4)
 
 
+ADDED_WORD2_MASK = 0x7FC00  # Purchased bits74..82; native/Black/story bits stay intact.
+
+
+def clear_word2(lib, mask):
+    """Explicit disposable-RAM ownership fixture; never edits a battery payload."""
+    if not isinstance(mask, int) or not 0 <= mask <= 0xFFFFFFFF:
+        raise ValueError('Invalid secondary ability clear mask')
+    ptr, ram = ram_of(lib)
+    stats = struct.unpack_from('<I', ram, STATS_POINTER - p.BASE)[0] - p.BASE
+    if stats % 4 or not 0 <= stats <= len(ram)-0x98:
+        raise ValueError('Invalid native stats pointer for ownership fixture')
+    old = struct.unpack_from('<I', ram, stats+0x14)[0]
+    c.memmove(ptr+stats+0x14, struct.pack('<I', old & ~mask), 4)
+
+
 COMBO_MODEL = 0x02145C44            # pointer cell: model +0 tier (0..5), +4 gauge (Q12)
 KIT2_STATE = 0x02157020             # v0.10.0 second block state (tools/tasm_kit2.s)
 
@@ -224,6 +239,11 @@ def run(rom, label, inputs, **options):
     import subprocess
     if not options.get('arena') and not options.get('sparring'):
         rom = solo_rom(rom)
+    if options.get('core_options'):
+        options['core_options'] = {
+            (key.decode('ascii') if isinstance(key, bytes) else key):
+            (value.decode('ascii') if isinstance(value, bytes) else value)
+            for key, value in options['core_options'].items()}
     request = {'rom': str(Path(rom).resolve()), 'label': label,
                'inputs': inputs if isinstance(inputs, list) else str(inputs), 'options': options}
     done = subprocess.run([sys.executable, str(Path(__file__).resolve()), '_child', json.dumps(request)],
@@ -239,7 +259,7 @@ def run(rom, label, inputs, **options):
 
 def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=None, patch=None, probe=None,
         caps=(), rams=(), arena=False, tx=120000, ty=40922, save=None, near=None, place=(), phantom=None, start_x=None, refill=False, extra_hook=None,
-        sparring=False, timing=False, core_options=None, live_buttons=None, bits2=0, tier=None, phantom_x=None):
+        sparring=False, timing=False, core_options=None, live_buttons=None, bits2=0, tier=None, phantom_x=None, clear2=0):
     """One disposable emulator run; returns (output directory, observation rows)."""
     rom = Path(rom).resolve()
     rel = rows_from(inputs) if not isinstance(inputs, list) else inputs
@@ -269,6 +289,8 @@ def _run(rom, label, inputs, *, frames=600, bits=0xFE000, clear=0, enemy_state=N
         if tier is not None and frame >= start - 20:
             set_tier(lib, tier)
         if frame == start - 20:
+            if clear2:
+                clear_word2(lib, clear2)
             set_bits(lib, bits, clear, bits2)
             ptr, ram = ram_of(lib)
             dest = (tx, ty)
@@ -365,6 +387,9 @@ def qualify(rom, parent=ROOT / 'build/releases/bcc6974a08b899a2def261b550b8bf9a3
     def go(label, name, frames, **kw):
         if progress: progress(label)
         if patch: kw['patch'] = str(patch)
+        # A fresh real copy may already own every added row. Each isolated
+        # case clears only those RAM bits before granting its explicit bits2.
+        kw.setdefault('clear2', ADDED_WORD2_MASK)
         return run(rom, label_prefix + label, INPUTS / f'{name}.json', frames=frames, **kw)[1]
     ck = {}
     o = go('q_reflex', 'reflex', 300)
@@ -801,6 +826,9 @@ def main(argv=None):
         elif a.cmd == '_child':
             req = json.loads(a.request)
             opts = req['options']
+            if opts.get('core_options'):
+                opts['core_options'] = {key.encode('ascii'): value.encode('ascii')
+                                        for key, value in opts['core_options'].items()}
             for key in ('caps', 'rams', 'enemy_state', 'probe'):
                 if opts.get(key) is not None: opts[key] = tuple(opts[key])
             if opts.get('place'): opts['place'] = tuple(None if x is None else tuple(x) for x in opts['place'])

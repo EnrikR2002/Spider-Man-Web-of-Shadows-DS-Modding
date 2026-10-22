@@ -65,6 +65,11 @@ class ArmProbe:
                 if word&0x00100000:
                     overflow=bool((a^b)&(a^result)&0x80000000)
                     cpsr=(cpsr&0x0FFFFFFF)|(result&0x80000000)|(0x40000000 if not result else 0)|(0x20000000 if a>=b else 0)|(0x10000000 if overflow else 0)
+            elif word&0x0FE00000 in (0x02600000,0x00600000):
+                a=regs[word>>16&15];b=self.operand(word,regs);result=(b-a)&0xFFFFFFFF;regs[word>>12&15]=result
+                if word&0x00100000:
+                    overflow=bool((b^a)&(b^result)&0x80000000)
+                    cpsr=(cpsr&0x0FFFFFFF)|(result&0x80000000)|(0x40000000 if not result else 0)|(0x20000000 if b>=a else 0)|(0x10000000 if overflow else 0)
             elif word&0x0FE00000 in (0x02000000,0x00000000):regs[word>>12&15]=regs[word>>16&15]&self.operand(word,regs)
             elif word&0x0FE00000 in (0x03800000,0x01800000):regs[word>>12&15]=regs[word>>16&15]|self.operand(word,regs)
             elif word&0x0FE00000 in (0x02200000,0x00200000):regs[word>>12&15]=regs[word>>16&15]^self.operand(word,regs)

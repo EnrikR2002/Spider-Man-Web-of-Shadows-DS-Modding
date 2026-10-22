@@ -4,8 +4,13 @@ Private USA CS5E research. ROMs/extracted assets/builds/saves stay private.
 
 **Play:** `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
 The agent handles the stable ROM, releases and progress backups.
-Current release: **v0.26.0**, with audible creature effects and a mobile
-Conductor that escapes and retaliates against combo pressure. Details: [Changes](docs/CHANGES.md).
+Current release: **v0.30.3**, with the cape-free Spider-Man 2099 Black slot,
+plus a compact shared-creature atlas that binds the previously white enemies in
+the crowded Midnight Terminal scene. The atlas keeps its 128x128 UVs and artwork
+with 16 colors. Press L to switch suits. Native Black gameplay/purchases remain.
+All v0.29 chapter/kit fixes stay. The crowd scene is agent-qualified; full-route
+balance, player visual preference and DeSmuME pacing await review.
+Details: [Changes](docs/CHANGES.md). Next priorities: [Roadmap](docs/TASM_ROADMAP.md#recommended-build-order).
 
 ## Find what you need
 
@@ -28,10 +33,10 @@ scripts, captures and large reports belong in ignored work/ or build/.
 
 ## Local setup
 
-Python3.10+ and Windows PowerShell; production art/ARM tools have additional
+Python 3.10+ and Windows PowerShell; production art/ARM tools have additional
 [local dependencies](docs/DEVELOPMENT.md#local-runtime-dependencies). A new clone
-contains source/metadata, not private ROMs, overlays, batteries or research tools.
-Clean ROM: `original/Spider-Man - Web of Shadows (USA) (En,Fr).nds`,64MiB,
+contains source/metadata, not private ROMs, overlays, batteries or local research dependencies.
+Clean ROM: `original/Spider-Man - Web of Shadows (USA) (En,Fr).nds`, 64 MiB,
 SHA256 `61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203`.
 Never overwrite it. Initial inventory/round-trip setup, when needed:
 
@@ -48,3 +53,5 @@ closed. Do not load an old emulator state over a changed ROM.
 
 Historical notes: `python tools/doc_archive.py list <topic>`, then
 `read <name> --toc` or `read <name> --section '<heading>'` (80-line default).
+The archive retains retired design/catalog snapshots with their own dates;
+the live roadmap records current decisions and deferred work.

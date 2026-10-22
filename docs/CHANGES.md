@@ -4,6 +4,11 @@ Current stable release status is in [TASKS](TASKS.md). Mechanics proposed for th
 TASM rebuild are in [TASM_ROADMAP](TASM_ROADMAP.md); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
+The latest numbered release below is v0.30.3. Each section records behavior,
+tests and limits at that publication; later fixes and player feedback supersede
+earlier pending work. Historical battery hashes are observations, never restore
+instructions. The current design queue and verdicts are in TASM_ROADMAP/TASKS.
+
 ## Version policy
 
 Use **major.minor.patch**, displayed identically at boot and in Options. Minor
@@ -13,6 +18,230 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.30.3 - 2026-10-22 - Restore crowded Midnight enemy textures
+
+Custom Midnight enemies appeared white in the Terminal crowd because their
+shared 128x128 direct-color creature atlas used 32 KiB and stayed unbound in
+live enemy materials. An exact resource-only experiment keeps the atlas artwork,
+UVs, material names/palette IDs, model sheet and every XBD/model/animation byte
+exact, while packing it as 128x128 I4: 16 colors and 8 KiB of pixels. In a fresh
+copied-save encounter, all three observed enemy materials bind as I4; the 2099
+player still binds its original I8 texture. This supports texture-residency
+pressure as the cause, though format and footprint change together.
+
+The shared artwork is quantized without dithering. Model geometry, texture UVs,
+128x128 material dimensions, rooms, enemy AI/HP, movement, audio, ARM9/ARM7,
+the player suit, its I8 atlas, purchases and the entire 32 KiB kit remain exact
+to v0.30.2. Only the creature atlas and English/American version strings change.
+This fixes the sampled Terminal enemy textures; it does not qualify all rooms
+or DeSmuME pacing.
+
+**Qualification.** The resource-only residency experiment and the full numbered
+candidate bind three live enemy materials in the crowded Terminal scene. The
+native route passes from a copied latest save with only initial room/current-owned/
+initial-HP fixtures; native enemy AI, damage and positions run after arrival, with
+no healing. The actual battery remains unchanged. Player appearance/gameplay
+and enemy model/motion/XBD data retain v0.30.2. Full normal-source/canonical/
+accepted/installed identities, release pins, fresh battery checkpoint and
+version labels agree; exact evidence is in
+`reference/spider2099_enemy_texture.json`.
+
+## v0.30.3 - 2026-10-22 - Restore crowded Midnight enemy textures
+
+Custom Midnight enemies appeared white in the Terminal crowd because their
+shared 128x128 direct-color creature atlas used 32 KiB and stayed unbound in
+live enemy materials. An exact resource-only experiment keeps the atlas artwork,
+UVs, material names/palette IDs, model sheet and every XBD/model/animation byte
+exact, while packing it as 128x128 I4: 16 colors and 8 KiB of pixels. In a fresh
+copied-save encounter, all three observed enemy materials bind as I4; the 2099
+player still binds its original I8 texture. This supports texture-residency
+pressure as the cause, though format and footprint change together.
+
+The shared artwork is quantized without dithering. Model geometry, texture UVs,
+128x128 material dimensions, rooms, enemy AI/HP, movement, audio, ARM9/ARM7,
+the player suit, its I8 atlas, purchases and the entire 32 KiB kit remain exact
+to v0.30.2. Only the creature atlas and English/American version strings change.
+This fixes the sampled Terminal enemy textures; it does not qualify all rooms
+or DeSmuME pacing.
+
+**Qualification.** The resource-only residency experiment and the full numbered
+candidate bind three live enemy materials in the crowded Terminal scene. The
+native route passes from a copied latest save with only initial room/current-owned/
+initial-HP fixtures; native enemy AI, damage and positions run after arrival, with
+no healing. The actual battery remains unchanged. Player appearance/gameplay
+and enemy model/motion/XBD data retain v0.30.2. Full normal-source/canonical/
+accepted/installed identities, release pins, fresh battery checkpoint and
+version labels agree; exact evidence is in
+`reference/spider2099_enemy_texture.json`.
+
+## v0.30.2 - 2026-10-22 - Cape-free Spider-Verse 2099
+
+The player's supplied Across the Spider-Verse reference replaces the prior
+classic/cape direction. The red web cape and its entire appended stream/atlas
+region are removed. 2099 now has darker navy with cobalt edge shading, red
+negative-space mask fields, a larger angular chest spider, broad shoulder caps,
+red knee chevrons and cleaner glove accents. Broader chest/lats/traps/deltoids,
+athletic thighs and a narrower jaw refine the silhouette. Six swept blades remain
+mounted on actual forearm skin, with small talon tips. Black draws 516 triangles
+on the unchanged native 37-node rig/SBC and animation set.
+
+The fully opaque 128x128 I8 atlas keeps the parent's 16 KiB pixel pool. Its actual
+original dimensions are declared; palette zero is opaque navy. The shared model
+retains Red's exact GPU list/texture. Only the existing cosmetic selector's
+size/footer literals change; its instruction bytes, hook/allocation, native
+controls/physics, entire 32 KiB kit, purchases, rewards, rooms/audio and save
+contract remain exact. No new Black moves or animation clips are installed.
+
+**Qualification.** Accepted B, canonical final, independent normal-source build
+and guarded installed stable match SHA-256
+`214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808`.
+All 45 focused source/ABI/release/document checks pass. Fresh copied-latest
+native-input motion/attack/suit-switch and real door controls pass. Ten live RAM
+captures prove list selection, dimensions, I8 binding and opaque palette zero in
+both forms, including a reallocated model and Black attacks in the next room.
+Native motion/state/purchase/XP/HP comparisons agree, apart from one transient
+newly initialized room-load position sample retained in the raw evidence.
+
+The crowded Terminal control renders the new player under native attacks/hurt.
+It has initial room/current-owned/initial-HP fixtures and does not prove balance
+or a clear. Its white untextured enemies also occur in the fresh v0.30.1 parent
+and retained v0.30/D/E controls. Earlier broad enemy-binding success claims were
+too strong; the older recovery proved player binding only. Enemy texture repair
+remains outstanding. Native mixed rosters/arrival timing differ, so the two
+crowded runs are not a gameplay parity claim. Player appearance preference and
+actual DeSmuME pacing remain unconfirmed.
+
+The whole latest actual DSV wrapper/payload matches the qualification copy and
+publication checkpoint. Previous ROM/recipe/metadata and the clean original are
+retained. Exact identities, controls, corrections, captures and publication
+verification are in `reference/spider2099_movie.json`.
+
+## v0.30.1 - 2026-10-22 - Active 2099 sculpt, blades and web cape
+
+**Later qualification correction (0.30.2 audit):** retained parent/D/E RAM and
+captures contain untextured enemy materials. The older crowded-binding recovery
+establishes player binding, not restored enemy textures; that issue remains open.
+
+The Black slot now actually selects its new geometry. The first-pass audit found
+both forms using shared `spd.nsbmd`, leaving v0.30's authored `spdB` mesh inactive.
+The shared resource now retains the exact original Red list and selects Black's
+sculpt immediately before native draw. A bounded cosmetic adapter checks the
+live wrapper/model/tag/form, preserves registers and CPSR flags, and changes only
+shape/material appearance fields. No RAM pointer is cached across room loads.
+
+2099 gains wider pecs/lats/traps, fuller upper arms, balanced forearms and modest
+thigh volume. Six swept blades mount on ray-qualified forearm skin; the larger
+curved crimson web cape anchors behind the actual back surface and deforms with
+native bones. Small talon tips remain. Black draws 676 triangles on the unchanged
+37-node rig. Native animations, physics, combat, ownership, prices, rewards and
+chapter/audio resources retain their contracts; the entire 32 KiB kit is exact.
+
+The transparent-index 256x128 I4 atlas uses 15 opaque colors and the parent's
+16 KiB pixel pool. The body half is opaque; the web has real holes. The rejected
+32 KiB I8 trial leaves crowded Terminal actor textures unbound despite passing
+its route checks. The lower-footprint D/E controls restore binding. Red's original
+geometry/texture and native material dimensions/transparency return on switching.
+
+**Qualification.** Accepted E, canonical final, guarded normal-source build and
+installed stable match SHA-256
+`7286d0536b6e29d0ebdc355563c6ece8e974058534c9676024ee67928cae530c`.
+All 54 source/ABI/release checks pass. Fresh copied-latest native-input Continue,
+motion and door runs cover both forms/facings, jumps/air attacks, spike/slam,
+ground strings, dodges and reload. Six RAM snapshots prove actual list, texture
+format, dimensions and transparency, including a different live model allocation
+after a door. Purchases/XP/HP match; motion positions agree exactly. One transient
+newly initialized room-load position sample differs and is retained in evidence.
+An exact-current-owned, no-heal mixed Terminal observation renders three native
+enemies and the textured hero/cape under attacks and hurt. Its initial arrival/
+owned-state fixtures and passive driver do not establish balance or a clear.
+
+Only the shared player model, Black texture, two version resources and the scoped
+draw adapter/autoload metadata change from v0.30. The entire actual DSV wrapper/
+payload matches its latest qualification copy and publication checkpoint. Prior
+ROM/recipe/metadata and clean original are preserved. Player visual preference
+and actual DeSmuME pacing remain open. Exact controls, rejected trials and
+verification are in `reference/spider2099_polish.json`.
+
+## v0.30.0 - 2026-10-22 - Classic Spider-Man 2099 appearance
+
+**Later validation correction:** the next appearance iteration proves that both
+forms actually load shared `spd.nsbmd`. v0.30 activated its texture, while its
+authored `spdB.nsbmd` geometry remained inactive. Its source/pose checks did not
+establish that the fins/cape were drawn in-game. The original release bytes and
+receipts remain intact; the real draw-selection fix and controls are tracked in
+`reference/spider2099_polish.json` and TECHNICAL.
+
+The Black slot now wears an authored 128x128 I8 blue/crimson atlas with pointed
+red mask fields and skull-spider markings. Six forearm fins, six small talon
+tips and a short open web mantle add 100 triangles on native stored matrices.
+Original skin, 37-node rig/SBC, material tint and animation bindings remain exact.
+This is the first appearance stage of the requested 2099 rework. Its seven
+proposed purchased moves, new combat animations, charge banking and gliding are
+not implemented by this release.
+
+Only `spdB.nsbmd`, `spdB.nsbtx` and the English/American version strings differ
+from v0.29. ARM9/ARM7, the complete native Black and TASM kits, ownership,
+dependencies, traversal/story barriers, prices, rewards, rooms and audio remain
+byte-identical. Prior chapter qualification keeps its actual v0.29 scope.
+
+**Qualification.** Accepted A, canonical final, independent normal-source build
+and guarded installed ROM match SHA-256
+`2ebdf894ae723ce6ead2cfbe15a4b11151243f639958bdeea18e9149bdabf088`.
+Forty-three source/release checks pass, with a separate seven-test GPU/atlas
+round-trip regression rerun. Fresh copied-latest Continue observations use real
+inputs without RAM writes, HP/ownership/position fixtures or stale states. They
+cover both forms/facings, walking, jumps, air attacks, Hammer Spike, Hammer Slam,
+ground strings, air/ground dodges and a room transition. Both comparisons retain
+all purchases, XP/HP and every jointly valid position sample; the airborne state
+sequence agrees exactly. Initial idle variation and one-frame loading/action
+phases in the Continue run remain in raw receipts. Model views and native-scale
+in-engine pose sheets are reviewed; player visual preference and actual DeSmuME
+pacing remain unconfirmed.
+
+The complete latest real DSV wrapper/payload matches its pre-publication copy
+and checkpoint. v0.29 ROM, recipe and metadata are retained; clean original is
+unchanged. Exact scope, qualification, retained failed test-module invocation and
+publication verification are in `reference/spider2099.json`.
+
+## v0.29.0 - 2026-10-22 - Skyjack, Skitter and Crane finish
+
+Skyjack's horizontal juggle correction now uses native velocity and collision.
+The parent could drift past a wall; the corrected move respects both walls while
+retaining air hits, spike/bowling and R exits. Only the first kit code region
+changes; its entry offsets, route/state layout, second block and 32 KiB reserve
+remain. Purchases, prices, dependencies, native/Black controls and rewards stay.
+
+Rail Skitter receives a 276-quad low silhouette, 57 bound lifecycle clips with
+planted support, carried scythes and overlapping motion, and eight short dry
+cues. Native attacks, damage, hurt, launch/prone/get-up/death and physical XP/HP
+rewards remain. All other actor bindings and sound waveforms stay exact.
+
+Freight Ballast now clears a roof edge before jumping toward an overhead player,
+then returns over the roof and retains its navigation phase until landing. The
+helper is scoped to the owned Freight actor and allows native hurt/death. Six
+existing hoist meshes improve warning limits, hook contrast, guarded versus open
+motor, damaged guard and saved wrecked aftermath. Hoist timing, collisions,
+damage, checkpoints and saved victory retain their contracts.
+
+**Qualification.** Installed, canonical and independent normal-source builds all
+match SHA-256 `3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2`.
+All 68 kit checks, 18 Midnight and 30 Crane directed doors pass. Source validation
+passes 106 broad checks and 31 final focused checks. Final C clears the mixed
+Terminal roster with current purchases, native HP and no refills. Native Freight
+bait reproduces the parent ceiling loop; corrected pursuit reaches both tested
+roofs and deals damage. Skitter's three attacks hit; a native lifecycle control
+earns XP/HP. Red/Black hoist and Conductor wins, returns, saves and fresh Continue
+retain their actual candidate identities and unchanged-byte inheritance in
+`reference/chapter_finish.json`. C's Black earned checkpoint reaches Save Options
+using native movement and X. Door controls park enemies/heal the player; boss
+wins have explicit initial setup fixtures. They are not full-route play evidence.
+
+The actual latest battery, wrapper and checkpoint remain byte-identical; v0.28's
+ROM, recipe and metadata are retained. Native-scale presentation is reviewed and
+all eight Skitter cue waveforms match the rendered mix without clipping. Audio
+quality, full-route fun and actual DeSmuME pacing remain player gates. B/C differ
+only in six hoist meshes; inherited controls are not relabelled as C runs.
 
 ## v0.28.0 - 2026-10-19 - Midnight combo reliability and escalation
 
@@ -24,10 +253,10 @@ native knockdown resistance, damage, death and rewards remain. Boss movement
 brakes and faces within strike range during openings; arena retries clear the
 mod's private decision state.
 
-Signal House77 and Pump Refuge82, their active entrances and map branches are
+Signal House 77 and Pump Refuge 82, their active entrances and map branches are
 removed. Old checkpoints retain safe one-way recovery. The unfolded map follows
-the playable route 76,78,81,83,86,87,89,88 and shows the return loop; Relay
-Sanctuary87 is the only remaining save room. Late encounters use stronger mixed
+the playable route 76, 78, 81, 83, 86, 87, 89, 88 and shows the return loop; Relay
+Sanctuary 87 is the remaining main-route save room. Late encounters use stronger mixed
 groups, staged native HP, a four-actor cap, faster Skitter pursuit and committed
 Warden windups. Terminal and Turbine Rise were tuned again after current-owned
 tests showed the first ramp pass was insufficient; Turbine's later wave now
@@ -36,11 +265,12 @@ the removed saves.
 
 **Qualification.** The final installed ROM and canonical candidate match at
 SHA-256 `6819cb91e824961552b86690c3fdd112930bbd1cbb70d5c3c76978b5ce932a20`.
-The publisher retained v0.27, and the latest real battery still matches its
-pre-build checkpoint. 190 broad checks and45 focused/publication checks pass.
+The publisher retained v0.27 and preserved the then-current real battery against
+its pre-build checkpoint. 190 broad checks and 45 focused/publication checks passed.
 Current-owned Red and Black saves, fresh Continue, boss phase programs, the four
 ramp rooms, removed-room entry, legacy recovery and all18 directed doors pass on
-the qualified candidates. No-R pressure loses to native damage; reactive R/B
+the qualified candidates with the unchanged-byte inheritance recorded in the
+receipt. No-R pressure loses to native damage; reactive R/B
 controls win. Player confirmation of full-route fun and actual DeSmuME pacing
 remains open. Detailed scope and limits: `reference/midnight_reliability.json`.
 

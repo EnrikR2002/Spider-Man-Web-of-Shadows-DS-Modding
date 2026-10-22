@@ -1,87 +1,13 @@
 {
-  "schema_version": 1,
-  "date": "2026-10-05",
-  "current_release": "0.1.1",
-  "design_status": "fun-first-core-prototype-proposed-not-implemented",
-  "design_reference": "../docs/TASM_ROADMAP.md",
-  "implemented_reference": "../docs/CHANGES.md",
-  "superseded": "The 26-skill catalog and extra-shop-row-first ordering were rejected as overwhelming. No target skill count remains.",
-  "priority": "Prove one complete trickster-acrobat loop in a crowd before progression or balance.",
+  "balance": "Current prices are retained; price and broader balance redesign remain deferred.",
   "core_interactions": [
-    "bounce",
-    "zip",
-    "sling",
-    "web-burst"
+    "strike",
+    "R cancel",
+    "reposition",
+    "resume"
   ],
-  "core_usability": [
-    "short attacks",
-    "immediate escapes",
-    "air steering",
-    "input buffering",
-    "readable target selection"
-  ],
-  "first_prototype": "Connected bounce, zip and immediate escape in one repeatable crowd encounter; then web burst and directional enemy collisions.",
-  "prototype_setup": "Full kit enabled with generous tuning in isolated candidates and disposable saves/RAM. Real progress is never edited to unlock tests.",
-  "progression": "Deferred until the player accepts the fun loop; select a few meaningful upgrades afterward. Existing public ownership and shared traversal require explicit migration.",
-  "balance": "Later. No initial price, cooldown, air-hop ration or native-damage-parity design target.",
-  "entries": [
-    {
-      "id": "rebound",
-      "original": "Web Kick",
-      "current_name": "Rebound",
-      "current_cost": 50,
-      "ability_bit": 13,
-      "status": "implemented"
-    },
-    {
-      "id": "web-vault",
-      "original": "Web Launch",
-      "current_name": "Web Vault",
-      "current_cost": 100,
-      "ability_bit": 14,
-      "status": "implemented"
-    },
-    {
-      "id": "sling-strike",
-      "original": "Mid-Air Snare",
-      "current_name": "Sling Strike",
-      "current_cost": 150,
-      "ability_bit": 15,
-      "status": "implemented-agent-tested"
-    },
-    {
-      "id": "oscorp-rush",
-      "original": "Spider Dance",
-      "current_name": "Oscorp Rush",
-      "current_cost": 150,
-      "ability_bit": 16,
-      "status": "implemented-agent-tested"
-    },
-    {
-      "id": "rebound-barrage",
-      "original": "Scissor-Kick Special",
-      "current_name": "Scissor-Kick Special",
-      "current_cost": 200,
-      "ability_bit": 17,
-      "status": "native-row-retained"
-    },
-    {
-      "id": "slip-counter",
-      "original": "Amazing Speed Boost",
-      "current_name": "Amazing Speed Boost",
-      "current_cost": 250,
-      "ability_bit": 18,
-      "status": "native-row-retained"
-    },
-    {
-      "id": "momentum",
-      "original": "Ultimate Speed Boost",
-      "current_name": "Ultimate Speed Boost",
-      "current_cost": 350,
-      "ability_bit": 19,
-      "status": "native-row-retained"
-    }
-  ],
+  "current_recipe": "gameplay_profile.json",
+  "current_release": "0.30.1",
   "current_shared_costs": {
     "Air Dodge": 50,
     "Drill Kick": 100,
@@ -90,5 +16,150 @@
     "Jackhammer Stomp": 150,
     "Launching Uppercut": 25,
     "Quick Recovery": 150
-  }
+  },
+  "date": "2026-10-22",
+  "design_reference": "../docs/TASM_ROADMAP.md#current-player-kit",
+  "design_status": "implemented-red-kit-final-skill-list-player-iteration",
+  "entries": [
+    {
+      "ability_bit": 13,
+      "current_cost": 50,
+      "current_name": "Leapfrog",
+      "id": "leapfrog",
+      "original": "Web Kick",
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 14,
+      "current_cost": 100,
+      "current_name": "Skyjack",
+      "id": "skyjack",
+      "original": "Web Launch",
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 15,
+      "current_cost": 150,
+      "current_name": "Spider Perch",
+      "id": "spider-perch",
+      "original": "Mid-Air Snare",
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 16,
+      "current_cost": 150,
+      "current_name": "Split Decision",
+      "id": "split-decision",
+      "original": "Spider Dance",
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 17,
+      "current_cost": 200,
+      "current_name": "Spin Cycle",
+      "id": "spin-cycle",
+      "original": "Scissor-Kick Special",
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 18,
+      "current_cost": 250,
+      "current_name": "Spider Reflex",
+      "id": "spider-reflex",
+      "original": "Amazing Speed Boost",
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 19,
+      "current_cost": 350,
+      "current_name": "Spider-Sense",
+      "id": "spider-sense",
+      "original": "Ultimate Speed Boost",
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 74,
+      "current_cost": 300,
+      "current_name": "Web Rush",
+      "id": "web-rush",
+      "original": null,
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 75,
+      "current_cost": 300,
+      "current_name": "Ricochet",
+      "id": "ricochet",
+      "original": null,
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 76,
+      "current_cost": 400,
+      "current_name": "Momentum",
+      "id": "momentum",
+      "original": null,
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 80,
+      "current_cost": 400,
+      "current_name": "Overclock",
+      "id": "overclock",
+      "original": null,
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 81,
+      "current_cost": 500,
+      "current_name": "Dragnet",
+      "id": "dragnet",
+      "original": null,
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 82,
+      "current_cost": 500,
+      "current_name": "Vortex",
+      "id": "vortex",
+      "original": null,
+      "status": "implemented"
+    }
+  ],
+  "historical_snapshot": {
+    "archive": "../docs/archive/legacy-notes.zip",
+    "entry": "reference/tasm_upgrade_plan.json",
+    "snapshot_date": "2026-10-21"
+  },
+  "implemented_reference": "../docs/CHANGES.md",
+  "known_movement_debt": "The prior direct-position Skyjack juggle drift is corrected in published v0.29 by a scoped native-velocity post-pass. Both walls, open contacts/R exits and 68 kit checks pass. Broader crowd backend remains unshipped; player feel verdict is pending.",
+  "next_iteration": "../docs/TASM_ROADMAP.md#recommended-build-order",
+  "priority": "Reliable, fast acrobatic combat and convincing presentation in the existing chapters. Preserve native ownership/dependencies, story traversal and rewards.",
+  "progression": "Preserve existing Red and Both Suits rows and paid ownership. No grant, refund migration, new stat row, shop expansion or save expansion is planned.",
+  "schema_version": 1,
+  "shared_vitality": [
+    {
+      "ability_bit": 77,
+      "cost": 500,
+      "id": "vitality1",
+      "name": "Vitality I",
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 78,
+      "cost": 750,
+      "id": "vitality2",
+      "name": "Vitality II",
+      "status": "implemented"
+    },
+    {
+      "ability_bit": 79,
+      "cost": 1000,
+      "id": "vitality3",
+      "name": "Vitality III",
+      "status": "implemented"
+    }
+  ],
+  "superseded": "The old v0.1.1 prototype rows and 26-skill expansion are historical. Rebound/Web Vault/Sling Strike/Oscorp Rush names do not describe the current thirteen Red purchase rows.",
+  "validation_limit": "Implementation is distinct from agent-tested and player-confirmed behavior. Snap Sweep and original Web Vault are player-confirmed; current revision feel and full-route balance retain the limits in TASKS/CHANGES."
 }

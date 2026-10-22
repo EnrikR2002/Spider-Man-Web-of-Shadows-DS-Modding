@@ -34,6 +34,8 @@ check later implementations and current player direction before reusing them.
 README is the short entry point; mods/README is the overlay-loader exception.
 Keep this approved set; add a document only when the user authorizes it and a
 new ownership boundary is necessary. No per-session/release/handoff Markdown.
+Preserve retired designs in the existing verified archive with dated provenance;
+keep current decisions and deferred scope in the live roadmap/catalogs.
 Keep AGENTS/TASKS under 900 words. Update TASKS at accepted-candidate/publication
 milestones and before stopping; replace stale state. Record discoveries in their
 owning technical section immediately, with confidence and source version. Mark

@@ -1,0 +1,242 @@
+{
+  "appearance": {
+    "all_other_resources_unchanged": true,
+    "arm9_sha256": "f3ff236785f7fc3dd96374a96d75e77f93c4a830c407b65bd3a292b4bd228490",
+    "executable_unchanged": true,
+    "model": {
+      "added_triangles": 100,
+      "claw_tips": 6,
+      "fin_count": 6,
+      "native_rig_unchanged": true,
+      "texture_size": [
+        128,
+        128
+      ]
+    },
+    "modified_resources": [
+      "American.strings",
+      "English.strings",
+      "spdB.nsbmd",
+      "spdB.nsbtx"
+    ],
+    "parent_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2",
+    "resource_hashes": {
+      "American.strings": "b6bb055652a0b1d98eaefbccc3068a31cf5d62631738e3c7ce63a1d53c5f1216",
+      "English.strings": "b6bb055652a0b1d98eaefbccc3068a31cf5d62631738e3c7ce63a1d53c5f1216",
+      "spdB.nsbmd": "41b1544431bef626668b8eb59c5ad1e1b9f9e5dff50e9306fa8fc36a16794c72",
+      "spdB.nsbtx": "7c809f8fa38d8b3f8b343d40a6d5bd10748765626056d6bcd0d1382d2f1af2a0"
+    },
+    "rom_sha256": "2ebdf894ae723ce6ead2cfbe15a4b11151243f639958bdeea18e9149bdabf088",
+    "scope": "Classic 2099 Black-slot appearance only. Native Black moves, ownership, shared upgrades, Red kit, rooms, audio and saves unchanged.",
+    "version": "0.30.0"
+  },
+  "candidate": {
+    "parent_rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2",
+    "path": "build/version-0.30.0-final/Versioned.nds",
+    "rom_sha256": "2ebdf894ae723ce6ead2cfbe15a4b11151243f639958bdeea18e9149bdabf088",
+    "version": "0.30.0"
+  },
+  "design_reference": "docs/TASM_ROADMAP.md#spider-man-2099-black-slot-rework",
+  "implemented_gameplay_changes": [],
+  "limits": [
+    "Player visual preference and actual DeSmuME pacing remain unconfirmed.",
+    "No new combat animations, moves, charge bank or glide ability are implemented.",
+    "Native Continue/motion observations use copied latest save and real inputs only, without RAM writes.",
+    "Parent comparison retains a differing initial idle variant and one-frame loading/action-boundary phases; raw receipts are preserved.",
+    "Initial broad test command named nonexistent tests.test_nitro_texture; work/2099/final-tests.log retains that import error. Corrected module is tests.test_nitro_build."
+  ],
+  "publication": {
+    "receipt": {
+      "battery_checkpoint": "before-build-dsv-b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "battery_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "previous_rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2",
+      "rom_sha256": "2ebdf894ae723ce6ead2cfbe15a4b11151243f639958bdeea18e9149bdabf088",
+      "schema_version": 1,
+      "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+      "version": "0.30.0"
+    },
+    "verification": {
+      "actual_battery_path": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+      "actual_battery_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "arm9_sha256": "f3ff236785f7fc3dd96374a96d75e77f93c4a830c407b65bd3a292b4bd228490",
+      "dsv_wrapper_and_payload_equal_source_and_checkpoint": true,
+      "original_rom_sha256": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203",
+      "payload_sha256": "ad97e262189a8f3e1f494b1c85b43404985d7199a46141bfb166e82286eb2c89",
+      "prior_rom_recipe_and_metadata_retained": true,
+      "release_receipt": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\releases\\2ebdf894ae723ce6ead2cfbe15a4b11151243f639958bdeea18e9149bdabf088\\release.json",
+      "rom_sha256": "2ebdf894ae723ce6ead2cfbe15a4b11151243f639958bdeea18e9149bdabf088",
+      "root_recipe_and_release_pin_agree": true,
+      "stable_canonical_independent_identical": true,
+      "version_strings": {
+        "American.strings": {
+          "50": "TASM v0.30.0\nPress a button to start",
+          "74": "Options v0.30.0"
+        },
+        "English.strings": {
+          "50": "TASM v0.30.0\nPress a button to start",
+          "74": "Options v0.30.0"
+        }
+      }
+    }
+  },
+  "qualification": {
+    "broad_source_tests": {
+      "count": 43,
+      "passed": true,
+      "path": "work/2099/final-tests-corrected.log"
+    },
+    "final_document_checks": {
+      "count": 7,
+      "passed": true,
+      "path": "work/2099/final-doc-tests.log"
+    },
+    "final_preview": "build/version-0.30.0-final/2099-preview.png",
+    "focused_tests": {
+      "count": 15,
+      "passed": true,
+      "path": "work/2099/art-tests.log"
+    },
+    "fresh_continue": {
+      "ability_words_first": [
+        940572671,
+        4293918703,
+        523743
+      ],
+      "ability_words_last": [
+        940572671,
+        4293918703,
+        523743
+      ],
+      "battery_unchanged": true,
+      "captures": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-2ebdf894\\2099-candidate-a",
+      "forms": [
+        0,
+        1
+      ],
+      "limits": "Fresh boot/Continue from actual latest copied DSV, native inputs only; no RAM writes, HP/ownership grants, position fixtures, or stale emulator states. No player feel or actual DeSmuME performance claim.",
+      "observations": 1170,
+      "rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\version-0.30.0-a\\Versioned.nds",
+      "rom_sha256": "2ebdf894ae723ce6ead2cfbe15a4b11151243f639958bdeea18e9149bdabf088",
+      "source_battery_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "states": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7,
+        10,
+        14,
+        15,
+        19,
+        24,
+        29,
+        46,
+        53,
+        59
+      ],
+      "valid_player_observations": 1168,
+      "xp_first": 4561,
+      "xp_last": 4561
+    },
+    "in_engine_pose_sheet": "work/2099/motions-a-sheet.png",
+    "independent_build": {
+      "matches_final": true,
+      "path": "build\\version-0.30.0-independent\\Versioned.nds",
+      "rom_sha256": "2ebdf894ae723ce6ead2cfbe15a4b11151243f639958bdeea18e9149bdabf088"
+    },
+    "model_views": "build/2099-art-v1/views.png",
+    "motion_gif": "work/2099/2099-native-motion.gif",
+    "native_motion": {
+      "ability_words_first": [
+        940572671,
+        4293918703,
+        523743
+      ],
+      "ability_words_last": [
+        940572671,
+        4293918703,
+        523743
+      ],
+      "battery_unchanged": true,
+      "captures": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-2ebdf894\\2099-motions-a",
+      "forms": [
+        0,
+        1
+      ],
+      "limits": "Fresh boot/Continue from actual latest copied DSV, native inputs only; no RAM writes, HP/ownership grants, position fixtures, or stale emulator states. No player feel or actual DeSmuME performance claim.",
+      "observations": 1170,
+      "rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\version-0.30.0-a\\Versioned.nds",
+      "rom_sha256": "2ebdf894ae723ce6ead2cfbe15a4b11151243f639958bdeea18e9149bdabf088",
+      "source_battery_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+      "states": [
+        0,
+        1,
+        4,
+        15,
+        19,
+        24,
+        34,
+        35,
+        36,
+        46,
+        51,
+        52,
+        59
+      ],
+      "valid_player_observations": 1170,
+      "xp_first": 4561,
+      "xp_last": 4561
+    },
+    "native_parity_summary": {
+      "motion-parity": {
+        "active_positions_identical": true,
+        "frames": 1170,
+        "maximum_event_phase_delta": 0,
+        "native_events_match_within_one_frame": true,
+        "persistent_fields_identical": true,
+        "valid_position_samples": 1170
+      },
+      "native-parity": {
+        "active_positions_identical": true,
+        "frames": 1170,
+        "maximum_event_phase_delta": 1,
+        "native_events_match_within_one_frame": true,
+        "persistent_fields_identical": true,
+        "valid_position_samples": 1168
+      }
+    },
+    "parity_reports": [
+      "work/2099/native-parity.json",
+      "work/2099/motion-parity.json"
+    ],
+    "publication": "passed",
+    "roundtrip_regressions": {
+      "count": 7,
+      "passed": true,
+      "path": "work/2099/roundtrip-tests.log"
+    },
+    "source_battery": "work/2099/source-battery.json"
+  },
+  "request": "Begin Spider-Man 2099 Black-slot rework with best feasible model/appearance; recap old seven-skill pitch and discuss ideas afterward.",
+  "schema_version": 1,
+  "source_hashes": {
+    "tests/test_spider2099.py": "3dc566d9ce7ef3033ec5cf9c5656179287d6ce3e77e2776ffc1f64593471594f",
+    "tools/spider2099.py": "009d21db0c9d96ebba9f5b6c69f11e0c6ac5f880413e247a6efff51d0c0e6b4b",
+    "tools/spider2099_art.py": "70043a526009434505826ad23b44f21cd2b4842561972c71f0f6a2fb1251acf1"
+  },
+  "status": "published-appearance-only-native-black-kit",
+  "updated": "2026-10-22",
+  "validation_correction_2026_10_22": {
+    "confidence": "high",
+    "discovery": "Both native forms load shared spd.nsbmd; spdB.nsbmd is not selected in the observed Black flow. The 0.30 screenshots prove its texture, not its authored cape/fins.",
+    "evidence": [
+      "work/2099/sculpt-a/report.json",
+      "work/2099/cape-solid-atlas/report.json",
+      "work/2099/cape-solid-swatch/report.json",
+      "work/2099/cape-shared-model/report.json"
+    ],
+    "scope": "Historical release bytes and original receipts retained; fix real geometry selection in a new version.",
+    "source_version": "0.30.0"
+  }
+}

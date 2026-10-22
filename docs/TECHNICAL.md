@@ -12,10 +12,12 @@ objective/build and next action: [TASKS](TASKS.md).
 
 | Working on | Start here | Historical context when needed |
 |---|---|---|
-| Current enemies: models, motion, contacts, AI, sound | [Creature Forge](#creature-forge) | [Chapter renewal](#chapter-renewal-v0210-2026-10-17), [original Crane pipeline](#original-crane-creature-pipeline-v0180-2026-10-15) |
-| Current chapter layout, roofs, shutters and persistence | [Chapter renewal](#chapter-renewal-v0210-2026-10-17) | [Storm-terminal overhaul](#midnight-storm-terminal-overhaul-v0200-2026-10-16), [Crane terrain](#crane-row-terrain-overhaul-v0170-2026-10-15) |
+| Current Midnight boss contact, guard/counter handling, active route/map and ramp | [Reliability correction (0.28)](#reliability-and-active-route-correction-028-research) | [Combo openings/anatomy (0.27)](#combo-openings-and-coherent-creature-motion-027-research), [audio/poise (0.26)](#voltage-correction-quiet-cues-and-ineffective-poise-026-research) |
+| Current Skitter and Crane pursuit/hoist finish | [Scoped finish (0.29)](#scoped-movement-and-chapter-finish-v0290) | [Contact/lifecycle correction (0.24)](#midnight-enemy-rejection-contact-diagnosis-2026-10-18), [Midnight anatomy (0.27)](#combo-openings-and-coherent-creature-motion-027-research), [Creature Forge](#creature-forge) |
+| Current room envelopes, roofs, shutters and persistence | [Room/contact correction (0.24)](#midnight-enemy-rejection-contact-diagnosis-2026-10-18), [active-route correction (0.28)](#reliability-and-active-route-correction-028-research) | [Chapter spectacle](#chapter-spectacle-implementation-v0230-2026-10-17), [chapter renewal](#chapter-renewal-v0210-2026-10-17), [Crane terrain](#crane-row-terrain-overhaul-v0170-2026-10-15) |
 | Rooms/collision/doors/maps | [Room compiler](#room-compiler-v0120), [collision tree](#room-collision-tree-2026-10-11), [native doors](#native-doors-spawns-and-game-variables) | [Minimap screens](#minimap-screens-and-area-room-lists-v070) |
 | Player kit and native combat | [Player state machine and Red kit hooks](#player-state-machine-and-red-kit-hooks-v020), [animation authoring](#kit-animation-authoring) | Later named kit sections describe extensions; use the current release recipe |
+| Skyjack velocity correction | [Scoped finish (0.29)](#scoped-movement-and-chapter-finish-v0290) | [Parent audit and unshipped prototypes](#shared-crowd-hit-backend-candidates); the old source/hex still reproduce their historical releases |
 | Binary formats and preservation | [Format boundaries](#format-boundaries-and-confirmed-structures), [SCA/rig contract](#animation-authoring-and-current-evidence) | [Baseline inventory](#rom-baseline-and-inventory) |
 | Emulator/rendering and performance | [Performance and visuals](#performance-and-visuals) | Dated renderer/JIT observations are not current performance guarantees |
 | Hook/trace failures | [Research workflow and pitfalls](#research-workflow-and-pitfalls-red-kit-sessions), then the affected feature | Old candidate claims remain scoped to their recorded build |
@@ -24,6 +26,12 @@ Read the latest applicable section first. A later confirmed correction supersede
 an earlier hypothesis; retain the earlier observation as history, not as a second
 current contract. Exact published identities and selected controls are in source
 recipes/release pins and the owning `reference/` receipts.
+
+Current capability summary: [Editing status and confidence](#editing-status-and-confidence),
+reviewed against published v0.29. Dated prototype/qualification sections retain their
+original fixture scope; a pending test in an old candidate is not automatically
+an open task in the published composition. Player verdicts belong in the live
+roadmap, not in historical agent test counts.
 
 ## ROM baseline and inventory
 
@@ -128,7 +136,8 @@ The included `tools/wos_tool.py` can already:
 - repack Glob after arbitrary same-file-count edits, including changed resource sizes
 - rebuild the ROM and update NitroFS FAT offsets, keeping the original 64 MiB cart capacity
 
-Next milestone: boot-test an unmodified round trip, then one visible asset modification.
+Initial milestone (completed by the 2026-10-02 update below): boot-test an
+unmodified round trip, then one visible asset modification.
 
 ### Validated workflow update — 2026-10-02
 
@@ -139,8 +148,8 @@ search and verification; size changes update FAT/header CRC and stay within capa
 
 The unmodified round-trip build and a single `spd.nsbtx` palette edit both reached
 Residential gameplay in melonDS DS 1.1.5. The edited player's red suit appears green.
-Reverting the overlay reproduces the original ROM hash. The next milestone above
-has therefore been completed for this bounded boot/visible-change experiment.
+Reverting the overlay reproduces the original ROM hash. This completed the
+initial bounded boot/visible-change experiment.
 
 Further confirmed structures include actor XBD references to archive IDs and
 GMB compression (749 PuCrunch, 20 LZ77). 149 UI 2LZ files also use PuCrunch.
@@ -256,6 +265,117 @@ NSBTA actor references are mapped; its payload has no local editor.
 Tools: `nitro_texture.py`, `movie_suit.py`, `visual_audit.py`, `animation_rig.py`.
 Archive `MOVIE_SUIT_EXPERIMENT.md` and `FORMAT_NOTES.md` heading `NSBTX / TEX0`.
 
+**2099 appearance research (2026-10-22, v0.29 parent; high confidence):**
+`spider2099_art.py` decodes the native player GPU strips and unscaled bind nodes.
+All 480 decoded triangles agree with the independent apicula DAE vertex positions
+within 0.000001 game unit. Red/Black geometry, UVs and 37-node rigs agree; their
+native model differences are two dictionary-name bytes. Stored matrices can bind
+each added triangle vertex separately, permitting forearm fins/fingertips and an
+open mantle to follow existing bones without editing SBC, skin, animation or AI.
+The native shape begins with restored head matrix 3. Native scale and all opaque
+node bytes must remain exact. This bounded player path supersedes the blanket
+"no topology/skin editor" limitation above only for appended GPU geometry.
+
+The old `nsbmd_docs.txt` pivot prose incorrectly states c=±a, d=±b. Actual
+[apicula rotation source](https://github.com/scurest/apicula/blob/master/src/nitro/rotation.rs)
+uses c=±b, d=±a, with column-major entries. Following the prose produces singular
+matrices; use the executable source and independent mesh agreement. This does
+not change `Sca` rotation conventions or authorize changing any bind transforms.
+
+**2099 draw-ownership correction (2026-10-22, v0.30.0 / unshipped 0.30.1 A;
+high confidence):** the game loads `spd.nsbmd` for both forms and switches the
+texture. At a freshly continued Black-form frame, live RAM contains the shared
+15,108-byte `spd` model and no `spdB` model. Solid-cape-atlas and solid-cape-UV
+controls on `spdB.nsbmd` have no visual effect. Replacing the shared `spd` model
+in a labelled research-only control makes the cape geometry draw. This supersedes
+the earlier assumption that editing `spdB.nsbmd` selected Black geometry. v0.30
+shipped its texture and authored inactive model; its screenshots did not prove
+the fins/cape were drawn. Preserve its immutable bytes and original receipts.
+
+The live player chain is actor+0x30 -> motion, motion+0x58 -> model wrapper,
+wrapper+0x14 -> MDL resource. Model wrapper vtable is 0x021284B4. Its ITCM draw
+method is 0x01FF8658; 0x01FF87C0 moves that wrapper (r5) into r0 just before its
+draw call. The execution address differs from its ARM9 autoload source offset;
+derive it from the autoload table, never patch a negative ARM9 offset.
+
+Material+0x24/+0x28 are binding magnification fields. The shared 128px material
+has 0.5 values after binding a texture whose TEX0 extra word still declares 64px
+original dimensions. TEX0 extra word low 11 / next 11 bits carry original width /
+height; preserve upper bits when correcting a new atlas. A pixel UV-scale claim
+still needs a rendered control; these fields alone do not prove GPU texgen use.
+
+**Published 0.30.1 draw correction (2026-10-22, E; high confidence):**
+`spider2099_sculpt.py` ray-qualifies six dorsal forearm blade mounts against the
+reshaped skin and sweeps the tips toward each elbow. Collar points sit 0.07 unit
+behind the actual back surface and bind to its native bones. A curved 8x5-panel
+crimson cape reaches the upper thighs and billows in Z so the side camera sees
+its web. Wider pecs/lats/traps, fuller upper arms, restrained forearms and modest
+thigh volume retain all 37 bind nodes, SBC records and native animation data.
+
+`spider2099_visual.py` keeps the exact original Red GPU list in shared `spd` and
+appends the Black list, with a private 64-byte footer. The pre-draw adapter resolves
+the current wrapper/MDL afresh, checks RAM bounds, vtable, model size, footer tag,
+offsets, stream bounds and native form, then changes only shape list pointer/length
+and material dimensions/magnification. It preserves all registers/CPSR flags and
+replays native `mov r0,r5`. One list is submitted per draw. The 4 KiB autoload
+extension preserves the entire 32 KiB kit; its ITCM hook is patched at the derived
+ARM9 source offset. Model counts/box cover either appearance. `spdB.nsbmd` remains
+the inactive historical asset; previews explicitly select the shared Black list.
+
+E's six live captures prove Red/Black/Red list selection, I8/I4/I8 texture formats,
+matching dimensions and transparency, including a newly allocated model after a
+native door transition. Motion positions and purchases/XP/HP match the parent;
+the room run retains one transient newly initialized actor position sample.
+Exact identities and raw evidence are in `reference/spider2099_polish.json`.
+
+**Observed texture residency boundary:** C's 256x128 I8 atlas adds 16 KiB of
+pixel storage and leaves crowded Terminal actor materials unbound (`format=0`),
+although the mechanical route passes. The parent and the same-geometry I4 control
+bind correctly. D/E use 15 opaque colors plus transparent zero, packing 256x128
+I4 into the parent's 16 KiB pixel pool. The entire body half is opaque; the cape
+half has actual holes. Native original-dimension bits are corrected and upper
+flags preserved. E's crowded scene has bound player I4 textures and visible native
+enemies/hurt poses. The configured global VRAM bank capacity is not established by
+these observations; do not infer texture headroom from a sparse room or a route
+pass. Preserve the paired failed C control and qualify the final crowded scene.
+
+**Published cape-free movie appearance (2026-10-22, 0.30.2 B; high confidence):**
+`spider2099_movie_art.py` starts from the exact native mesh, retains its 37-node
+rig/SBC and reshapes chest/deltoid/trap/jaw vertices continuously in bind space.
+Only six mounted blades and six small talons remain as added geometry: 516 total
+triangles, with the old cape stream/footer removed before recomposing shared
+`spd`. The movie-inspired atlas returns to opaque 128x128 I8 at the same 16 KiB
+pixel footprint. Actual original dimensions are declared and transparent-zero
+is disabled; palette index zero is an opaque navy color. Red retains its exact
+GPU list and texture. `spider2099_movie.py` changes only the existing selector's
+model-size/footer literals; all its instruction bytes, hook, autoload size and
+32 KiB kit stay exact. Forty-five source/ABI/release/document checks and ten
+fresh native-input live RAM captures qualify both forms and a real door reload,
+including Black attacks in the newly allocated model. The crowded player binds
+I8 and renders during native hurt. Settled motion and purchases/XP/HP match;
+one transient new-room position sample is retained. Full normal-source,
+canonical, accepted and installed ROMs agree. Exact receipts are in
+`reference/spider2099_movie.json`. Player visual acceptance and actual DeSmuME
+pacing remain open; enemy texture success is explicitly excluded below.
+
+**Crowded-scene evidence correction (2026-10-22; high confidence, actual retained
+v0.30 parent/D/E and 0.30.2 B RAM):** all four observations have custom creature
+materials with `format=0`, and the captures show white untextured enemies.
+The earlier claim that D/E restored crowded actor binding was too broad: the
+recorded improvement establishes the **player's** I4 binding/rendering only.
+B's 128x128 I8 player binds/renders, as do both forms after reload, while the
+same pre-existing enemy failure remains. Thus byte footprint alone neither
+explains nor qualifies all scene textures. Enemy texture success is not a passed
+gate for these older releases; preserve their ROMs and raw receipts. The current
+cosmetic scope keeps those enemy resources exact and requires a paired parent
+comparison. That v0.30.2 enemy-binding issue is resolved for the sampled Terminal crowd in v0.30.3; room-wide residency remains unqualified.
+
+**Shared creature atlas residency fix candidate (2026-10-22, v0.30.3 A; high confidence for the sampled Terminal scene):** v0.30.2's correct `Forge128` / `ForgePal` material names and 128x128 dimensions still yielded live enemy texture format0 with its 32 KiB direct-color atlas. A disposable resource-only control keeping the same artwork, UV dimensions, model sheets, XBDs and gameplay executable changes only the shared atlas to I4: packed I4 pixels take8 KiB with a 16-color RGB555 palette. On the same copied-save Terminal route all three live enemies then bind 128x128 I4 (`format=3`); the player remains textured I8. The numbered v0.30.3 candidate applies that same atlas plus boot/Options strings; ARM9/ARM7 and every model, XBD, animation and room stay exact. This strongly supports texture residency pressure as the cause; format and pool size move together, so it does not identify a lower-level allocator limit. One mixed scene is not whole-game texture qualification or a DeSmuME pacing result. Keep the direct-color control and full scene evidence in `reference/spider2099_enemy_texture.json`.
+
+**Compact shared creature atlas restores Terminal texture residency (2026-10-22, v0.30.3; high confidence for the tested scene):** the v0.30.2 shared `Forge128` model texture and `ForgePal` palette dictionary names were correct, yet all live enemy materials read `format=0` with a 32 KiB format-7 direct-color atlas. `spider2099_enemy_texture.py` replaces only `zz_F22_Atlas.nsbtx` with the same 128x128 UV artwork represented as I4, an 8 KiB pixel pool and a 16-color `ForgePal`; native material UV dimensions and every model sheet/XBD/NSBMD/SCA/GMB/GAB remain exact. The version strings advance to 0.30.3. A fresh copied-save experiment and full numbered candidate show three live enemy materials bound at format3/dimensions128x128, while the hero retains its I8. The native route passes; enemy AI/HP/positions stay live after initial fixtures, no healing, and the actual battery is unchanged. The paired format/footprint change strongly supports texture residency pressure, but does not prove a hardware allocation threshold. It qualifies the Terminal crowd, not every room or DeSmuME pacing. Detailed receipts are in `reference/spider2099_enemy_texture.json`.
+
+
+
 ### Text / UI / rooms / audio
 
 English/American STRINGS: hash-bounded Huffman tree plus1,049 UTF-16LE slots
@@ -298,10 +418,11 @@ normal builds use the pinned `tools/tasm_kit.hex`. Confidence: likely C++ for at
 least the native object-oriented engine; exact language/toolchain unknown.
 
 Native21 purchase records, flags, costs and dependencies are mapped; read
-[GAMEPLAY](OG_GAMEPLAY.md) before paid route changes. Current recipe is guarded by
-`reference/gameplay_profile.json` (now tasm-v0.2.0: v0.1.1 parent + Red kit;
-Sling's hooks restored, Rebound response retuned for Leapfrog). The HUD + kit
-extension reserves 24 KiB; free heap/VRAM peaks are unknown. Common player/enemy
+[GAMEPLAY](OG_GAMEPLAY.md) before paid route changes. The v0.2.0 snapshot used
+a v0.1.1 parent plus Red kit and a 24 KiB HUD/kit reserve. It is superseded as
+current composition by `reference/gameplay_profile.json`; the current kit's
+reserve is 32 KiB (`tasm_kit.RESERVE`). Free heap/VRAM peaks remain unknown.
+Common player/enemy
 HP telemetry is actual loss, with specialized health coverage still incomplete.
 Training SELECT+Down refill has positive/flag-clear controls and preserves
 position/reaction/XP/meter; other target flags are unknown.
@@ -311,7 +432,8 @@ Snapshots are byte-preserving, not a save editor. Native purchase/refund/save/
 reload checks pass for released moves; real-save protection is separate from
 copied-save fixtures. Follow [WORKFLOW](../README.md).
 
-Latest authored Rush: eight choreography tests, all3,736-resource build check,
+Historical authored Rush qualification (before v0.2.0): eight choreography tests,
+all 3,736-resource build check,
 both-facing contact/HP/credit/final-position parity. Prior compact source passed
 125 tests; latest gameplay revision did not rerun that full suite. Original
 archive extension shifted all observed contacts two emulator frames, including
@@ -319,10 +441,11 @@ unchanged Snap; count-only control has the same shift. Relative clocks/timing
 remain exact, with no established FPS change. Player/ordinary encounter,
 walls/bosses/interruption/long-play acceptance remains open.
 
-Documentation cleanup preserved every original note byte and SHA256 in the
-archive before consolidation; all36 entries verify and the ZIP repacks exactly.
-All131 current source tests pass during maintenance, including four archive
-integrity/reader checks. No additional emulator/player coverage was added.
+The 2026-10-05 documentation cleanup preserved every original note byte and
+SHA256 before consolidation: 36 entries and 131 maintenance source tests,
+including four archive integrity/reader checks. Those are historical counts;
+`doc_archive.py verify` checks the expanded archive's current index. No additional
+emulator/player coverage was established by that maintenance.
 New facts should update the relevant section here,
 with focused evidence links; avoid appending another duplicate release log.
 
@@ -751,46 +874,40 @@ animation and model redesign remains a separate incremental project.
 
 ## Editing status and confidence
 
-Updated 2026-10-05, private USA CS5E. Confidence refers to the stated structure;
-runtime/player acceptance requires separate checks. [Format entry points](TECHNICAL.md),
-[current release](TASKS.md). Detailed former matrix is preserved in the archive.
+Reviewed against published v0.29 on 2026-10-22, private USA CS5E.
+This replaces the v0.2.0 capability matrix; its original format notes remain in
+the archive. Confidence applies to the bounded paths actually implemented, not
+arbitrary files or player acceptance. Use the topic map for exact contracts and
+the current recipe/adjacent metadata for counts and composition.
 
-| Format / area | Likely or confirmed control | Parsing | Editing | Confidence / limitation |
-|---|---|---|---|---|
-| NDS / NitroFS | Executables/top-level resources | FNT/FAT/CRC/bounds/capacity validated | Exact no-op; resized files in64 MiB | High for tested no-overlay layout |
-| Glob.bin | Ordered named assets | 3,733 original; 3,742 authored resources verified | Variable sizes; Rush 3 + kit 6 guarded additions; IDs retained | High for tested append/revert; arbitrary names/manual GlobFiles rejected |
-| NSBTX | 3D pixels/palettes | 272 lossless;1654-texture census | Palette and bounded128x128 player I8 repaint | High bounded path; general format5 encoding absent |
-| NSBMD | Models/UVs/materials | Player export and rig/SBC mapped | Bounded player UV/material changes | No topology/skin/skeleton editor |
-| NSBTA | Material/texture animation | Inventory, XBD tag1 bindings | No local editor | Bindings confirmed; payload undecoded |
-| XBD actors | Asset bindings; other state unknown | All248 envelopes;155 actor binding sets | Synchronized Snap triple; three isolated paid SCAs | High bounded routes; opaque tails preserved |
-| XBD other kinds | UI/configuration, inferred | 92 UI-associated plus one envelope | Raw replacement only | Payload unknown |
-| GAB | Timed action events | 227 lossless record round trips | Existing bindings; no general event editor | Bounded event7/8/9 findings; event1 parameters unknown |
-| GMB | Root motion/contact geometry | 769 lossless;126 player layouts; compact codec decoded round trips | Single-word/root/response edits; no-op wrappers retained | Confirmed strides/selected motion; unknown geometry preserved |
-| SCA | Joint T/S/R animation | 869 exact/sample round trips;126 independent player bakes | Kit FK/IK clips (flips, spins, handstand) at native sample counts; runtime routing | High tested growth/poses; scale/retime/Blender/heap/broad encounters open |
-| Player rig | Canonical37 names/ancestry | Model dictionary/SBC ancestry agree | Read-only map/authoring controls | DAE34-bone ordinals differ; no skin editor |
-| BSP | Room spatial/collision, hypothesis | 75 lossless envelopes/offsets | No geometry editor | High envelope; node/coordinate semantics unknown |
-| OBJ | Placements; trigger/event graphs mostly unknown | 75 pairs; bounded Test_Combat01 character section decoded | Training Brute placements/count/spacing via training_room.py | High for one guarded training resource; general OBJ/trigger editing unproved |
-| STRINGS | Localized instructions | English/American Huffman/1,049 slots round-trip | Bounded same-slot names/descriptions | High bounded codec; other languages/popups unqualified |
-| FONT | Glyphs/metrics | Inventory/native draw traced | Reuse stock font/canvas | File editor absent |
-| 2LZ | UI/sprites, likely | 149 PuCrunch;two minimap previews round-trip | Bounded tiled conversion | Four00 wrappers/general schema unknown |
-| DAT / PAL | UI metadata/palettes, likely | 153 families;two dimension candidates | Guarded marker palette/revert; red restored | Wider ownership/DAT fields unknown |
-| CBMP | Custom bitmap, likely | 142 inventoried | No editor | Low |
-| MDAT / MGFX / MPAL | Scene groups, likely | 65 sets inventoried | No editor | Low |
-| SDAT | DS audio | Whole file preserved/hashed | Whole-file replacement surface only | Internal audio edits untested |
-| ARM9 | Rules/gates/health/movement | Hash-guarded known tables/hooks/autoload | Bounded HUD/refill/count patches + Red kit hooks | Unknown health/counter/speed paths; 24 KiB reserved, headroom unmeasured |
-| Combo / health HUD | Native combo rewards, wounded bars | Model/category/common HP/projection mapped | Transient combo numeral/continuous bars | Specialized HP/density/ordinary hits and player feel open; no inferred damage |
-| Saves | Progress/ownership | DSVv0 wrapper exact;game payload opaque | Byte-preserving backups/guarded restores | Native buy/refund/save/reload tested; no game-save editor |
-| Purchases | Native7+7+7 rows | All21 costs/flags/dependencies mapped | Kit: Leapfrog13 Skyjack14 Perch15 Split16 Spin17 Reflex18 Sense19 | Expanded rows/ownership/save migration unproved |
-| Third suit | Independent selectable kit | Red/alternate routes partly mapped | Red prototype only | Selector/UI/persistent slot unimplemented |
-| Training refill | Common target max HP | Native flag4/chord/setter mapped | SELECT+Down in existing observer | Positive/flag-clear controls pass; no full state reset |
-| Performance/graphics | Host emulation/rendering/resolution | INI/source inference, idle/crowd benchmarks, texture census | JIT12 normal launcher; optional 1x renderer/preload/HD trials | Player-confirmed JIT improvement with mild remaining dips; renderer/HD and measured DeSmuME FPS unproved |
+| Format / area | Confirmed control | Editing / confidence limit |
+|---|---|---|
+| NDS / NitroFS | Validated FNT/FAT/CRC/bounds, exact baseline no-op, resized/generated ROMs | Guarded known layout and capacity growth; preserve opaque bytes and original ROM. |
+| Glob.bin | Ordered original IDs, size changes and bounded generated additions | Three Rush + twelve kit SCAs are fixed overlay additions; chapter/creature builders append their own scoped resources. Arbitrary names/manual GlobFiles edits remain rejected. |
+| NSBTX / textures | Player I8 repaint and RGB555 shared creature/room atlases | Bounded palette/material/UV paths; native material dimensions and alignment matter. General format-5 authoring remains outside the proven path. |
+| NSBMD / rig | Authored creature meshes/weights on native rigs, room geometry, native SBC/material tint preservation | This is a deterministic bounded authoring pipeline, not a general skeleton/skin editor. |
+| NSBTA | Inventory and XBD material-animation bindings | General payload editing remains unproved. |
+| XBD actors | Actor/action/resource bindings and scoped private animation/model routes | Preserve other users and opaque tails. GroundAttack15 is shared; G11/16/17 have m6 users. |
+| GAB / GMB | Lossless original framing, timed contact events, resampled motion/contact volumes | Bounded native event/carrier contracts; active windows and counters alone do not prove native contacts or damage. |
+| SCA | Lossless/sample-document round trips, authored translation/rotation/scale, player and creature motion | Preserve rig/sample/clock contracts; verify native-scale continuity, contact and complete lifecycle in-engine. |
+| BSP / OBJ | Decoded collision tree, room compiler, placements, camera/anchors, doors and selected event commands | Authored envelopes/geometry and real-input routes ship. Preserve unknown commands/fields; parser validity is not traversal proof. |
+| STRINGS | English/American Huffman round trip, growth, shop/dialogue and version labels | Boot/Options must agree. Other languages/popups are not generally qualified. |
+| FONT / 2LZ / DAT / PAL | Native font/canvas reuse, selected sprite/palette conversions and map metadata | Wider UI/font families remain partly unknown; preserve unowned fields and localized behavior. |
+| CBMP / minimaps | Authored local/detail maps, ports, visited/current colors and chapter area selection | Bounded chapter paths; no general editor for every bitmap family. |
+| MDAT / MGFX / MPAL | Scene-family inventory | General editing remains unproved. |
+| SDAT | Lossless container framing, appended sequence/bank/wave rows, scoped voice remaps and captured PCM | Preserve untouched files, native IDs/pitch/pan and distinct internal/FAT lengths. Playback evidence and mixed-audio quality are separate. |
+| ARM9 / extensions | Hash-guarded hooks, native tables, private controller/room/boss adapters | Player HUD/kit reserve is 32 KiB. Check ABI, flags, actor ownership/freshness and final composition; heap/VRAM peaks remain unmeasured. |
+| Player movement | Native velocity/collision for Sense, Leapfrog and Perch; v0.29 composes the scoped Skyjack correction | Historical base source still contains the v0.28 drift; current composition applies frozen corrected code afterward. The broader crowd-hit prototype remains unshipped. |
+| Combo / health / HUD | Distinct combo credit, response strength and actual HP; native boss HUD isolation | Specialized coverage and ordinary-play balance require measured controls. The combo gauge is not a hit count. |
+| Purchases / progression | Original 21 rows plus released Red/Both Suits additions, native dependencies/refunds/save persistence | Preserve paid ownership, Black bits, story abilities and shared traversal. No general shop/save migration or third suit selector is implemented. |
+| Saves | Lossless DSV v0 wrapper and opaque native battery checkpoints | Byte-preserving backups/guarded publication; not a game-payload/checksum editor. Use actual latest batteries and disposable fixtures. |
+| Training / lab controls | Native training/refill hooks and version-scoped enemy/door/combat fixtures | Temporary grants, healing, isolation and initial arrival warps must stay labelled; they do not establish current-owned difficulty. |
+| Performance / graphics | Accepted JIT improvement and dated emulator/rendering controls | Actual full-route DeSmuME frame pacing and later renderer/HD quality remain separate gates; old idle throughput is not a current FPS guarantee. |
 
-Released composition (v0.2.0): 22 overlays, original IDs retained, 3,742
-verified resources (Rush 3 + kit 6 appended). Kit qualification 20/20
-(`python tools/kit_lab.py qualify`); 151 source tests pass.
-Player acceptance and ordinary/dense AI,
-specialized enemies/bosses, walls/ceilings/interruption/long play remain open.
-No game assets/saves/captures are included in source documentation.
+Published, agent-tested and player-confirmed are separate states. Exact selected
+qualification/inheritance belongs in reference receipts; do not promote historical
+test totals or an isolated clear into a current whole-game quality claim. Game
+assets, batteries, emulator captures and local build outputs remain private.
 
 ## Native engine purchase and combo mapping
 
@@ -1138,6 +1255,29 @@ frames), 0x14 on a flying one the air juggle 42, 0x25 launches even from the
 floor. A jumping enemy (state 4) answers 0x22 with a knockdown.
 
 ### Shared crowd-hit backend candidates
+
+**v0.29 published validation, 2026-10-22 (high confidence):**
+The fresh compiled correction preserves open-air native contacts. In the same
+active right-wall juggle fixture, v0.28 reaches X991232, past the native bound;
+the corrected kit stops at X968577. A left-wall control stops at X14463. These
+are one-time disposable RAM setups of an established juggle, not gameplay
+placement. The first wall report's 240-frame latch-release assertion ended
+before its slow native descent completed; retain that failed driver assertion
+separately from the passing collision bound. Final C passes both walls, native
+R exits and all 68 kit checks; the qualified composition is now published. Source: `chapter_finish_kit.py` and
+`work/chapter-finish/sky-*`; the original source/hex remains immutable.
+
+The prototype controls below are a **2026-10-06 historical snapshot**.
+
+**Current source/binary recheck, v0.28.0, 2026-10-21 (high confidence):**
+`tools/tasm_kit.s` still ends `sky_player` by adding the clamped horizontal
+correction directly to player motion+0x7C. The pinned first kit block from
+`tasm_kit.code_bytes()` matches the installed v0.28 ROM; at block+0x1278 it
+contains ARM words E595107C/E0811002/E585107C (load/add/store). The old velocity
+candidate therefore remains unshipped. This is a known movement-contract debt,
+not a newly observed wall clip or performance regression. A future correction
+must use native velocity/collision and requalify open/wall/cancel behavior on a
+new composed release; do not install the old disposable RAM patch as a fix.
 
 Player approved shared crowd targeting/hit work and explicitly authorized
 concurrent copied-save checks while testing OpenGL (2026-10-06). Workers use
@@ -3493,7 +3633,9 @@ Boot, live sequencer counters and native-input controls qualify actual relocatio
 ### Creature Forge
 
 Implemented in v0.22.0, material correction v0.22.1 (2026-10-17).
-Current enemy contract; earlier creature sections below describe prior versions.
+Shared enemy foundation at that release. The v0.24 contact/lifecycle correction,
+v0.25-v0.27 Midnight motion/audio/anatomy changes and v0.28 reliability layer
+supersede affected details below; start with the topic map for the current path.
 
 Strict post-pass over immutable0.21.0 SHA60a974f3; `creature_forge.py` composes
 it after the accepted maps. Helpers `_design`, `_art`, `_motion`, `_combat`,
@@ -3617,6 +3759,11 @@ preservation, not player fun/difficulty or actual DeSmuME FPS.
 
 #### Chapter composition and engagement audit (v0.22.1, 2026-10-17)
 
+Historical diagnosis of exact v0.22.1. v0.23 subsequently authors room ecology,
+coordinates Conductor/lane pressure and revises the hoist; v0.24 and v0.28 change
+room envelopes and staging further. The observations below explain those fixes,
+not a second current construction queue.
+
 High confidence from final ROM resource parsing, current generator/runtime
 source and fresh copied-save engine observations. Receipt:
 `reference/chapter_evaluation.json`; raw evidence: `work/chapter-evaluation`.
@@ -3626,7 +3773,7 @@ creature motion resources, which Forge replaces. The existing13f43bd4->0.21
 visual-scope receipt changes only Midnight room models; its Crane environment
 captures remain valid. Older enemy captures are not current enemy evidence.
 
-**Room-specific ecology is not yet authored.** Six ordinary active Midnight
+**At v0.22.1, room-specific ecology was not yet authored.** Six ordinary active Midnight
 rooms76/78/81/83/86/88 each contain one table8 spawner cloned from Pier_Map04,
 with the same `spec()` gang recipe and room-scale spawn region. Boss89 is a
 separate callback-driven spawner; save77/82/87 have none. The private species
@@ -3805,9 +3952,85 @@ state-only poise leaves those impulses active, displacing a committed attack.
 A guarded adapter at0x02094D4C skips just that decoded impulse block through
 0x02094E08 during owned commitment. Native HP/reaction dispatch continues.
 Source: exact0.27 ARM disassembly, tools/midnight_reliability_combat.py and the
-pilot's prevented-impulse telemetry. Final native counterplay/clearance pending.
+pilot's prevented-impulse telemetry. Subsequent I/J current-owned Red/Black
+counterplay and native clearance passed, carried into final K with explicit
+byte-scope limits in `reference/midnight_reliability.json`. K directly reran the
+changed Terminal/Turbine controls, all 18 doors and earned-save Continues.
+Player balance/fun and actual DeSmuME pacing remain open.
+
+#### Scoped movement and chapter finish (v0.29.0)
+
+**Source/agent confidence: high on published v0.29/C, 2026-10-22. Exact
+qualification/publication scope is in reference/chapter_finish.json.** This is a strict post-pass
+over the exact v0.28 ROM, composed by `chapter_finish.py` after reliability.
+The original generators, player source/hex and actor bindings remain immutable.
+C is independently reproduced through the normal `mod.py` composition. B/C
+scope proves exact ARM9, SDAT and all resources except six hoist models; C fixes
+front-facing polygon winding in those models. Controls keep their actual ROM
+identity and fixture limits rather than being silently relabelled.
+
+**Player code contract.** `chapter_finish_kit.py` reproduces the complete pinned
+parent source before assembling the one velocity transform; normal builds read
+its frozen hex. Only the first kit code region is replaced/padded. Fixed entry
+offsets, route table, state addresses, second block, purchases/dependencies and
+the 32 KiB reserve remain. The old source's load/add/store to player motion+0x7C
+is replaced by a store of the same clamped correction to actor+0x18; native
+physics/collision perform travel. Literal/native-branch/space checks and actual
+open/wall/R controls qualify the correction. The v0.28 wall negative goes beyond
+the native boundary; C respects it. This does not publish the old crowd backend.
+
+**Skitter authoring contract.** One private actor receives 57 bound lifecycle
+routes and a 276-quad mesh, retaining its native rig, shared Forge128 atlas,
+material tint and all other actors' bindings. `chapter_finish_motion.py` authors
+a shared low stance, carried wrist trajectories, overlapping thorax/head motion,
+linear planted steps and a C1 swing. All knockdown/prone/get-up/death modes use
+that body; native get-up attack event/sample clocks are preserved. The three
+verified melee carriers stay 55/63/68. GMB real activation and GAB windows are
+rebuilt with the authored samples. Current-owned native launch/fall/get-up/kill
+collects 10 XP and 1024 Q12 health without refills or enemy HP edits; all three
+programs cause actual damage on C. Native-scale captures qualify presentation
+execution, not player approval.
+
+**Audio scope.** Only existing Skitter SWAR0 rows 791..795 and 820..822 change.
+Every other waveform and SDAT file, including sequence/bank rows and native
+player/music sounds, remains exact. Frozen PCM comes from the existing owned
+CC0-derived bank with short dry envelopes and deterministic processing; normal
+builds verify hashes and do not require NumPy. Live/muted lifecycle runs diverge
+and are explicitly excluded from subtraction. Direct native-mix waveform matches
+cover all eight roles (0.642..0.941 correlation, bounded band/pitch search), with
+zero clipped samples in the lifecycle/contact captures. These are numerical
+render/mix controls; auditory preference and final fun remain player gates.
+
+**Freight native navigation.** The new helper runs only for the already-owned
+Ballast descriptor in room97, outside attacks/hurt/death. Per-slot private state
+stores owner/actor and edge-clear, vertical-lift and return/landing phases. Fresh
+slots reset ownership; secondary decisions keep an owned navigation jump while
+allowing native reactions. Existing roof extents choose a clear edge before the
+native jump/velocity impulse. The phase persists through the apex until real
+landing; the first pilot's early release was a demonstrated failure. No actor
+position, HP, gravity or player field is written. Native controls cover the
+original low overhang and the next roof with current purchases. This is not
+proof of every possible upper-platform pursuit sequence. Native hoist damage,
+phase timing, collisions, checkpoint and saved victory stay unchanged; only six
+already-bound machinery/marker meshes improve their visible states.
+
+**Qualification fixture corrections.** A latest copied save can already own all
+added purchases. The old OR-only `kit_lab.set_bits` therefore did not create
+unowned extra-skill cases. Explicit `clear2` clears only bits74..82 in disposable
+RAM before each case grants its declared bits; native/Black/story/unknown bits
+remain. Ordinary current-owned controls still restore the measured player values.
+No battery payload is edited. Black fresh Continue legitimately settles at
+x49.887 on the hoist's quiet approach, outside the former 12-unit Red-only
+sphere-radius assertion. Its actual safe floor segment (x0..64), victory
+flag and unchanged earned save pass; native Left then X reaches Save Options
+on the fresh earned Continue. Keep both original failed fixture reports.
 
 #### Midnight enemy rejection: contact diagnosis (2026-10-18)
+
+The diagnosis/candidate progression below belongs to the v0.24 correction.
+Final publication scope is in `reference/midnight_rebuild.json`; later Midnight
+post-passes are indexed above. Pending combined tests on an intermediate pilot
+are historical, not the status of the published v0.28 composition.
 
 **Native boss meter adapter research (0.24 ->0.25 prototype,2026-10-18).**
 Confirmed in-engine: HUDBossMeter is constructed unconditionally as HUD+0x0C
@@ -4078,11 +4301,13 @@ three-byte Crown-only scope. Player fun and actual DeSmuME pacing remain open.
 
 ## Campaign branches and Crane Row
 
-The initial 2026-10-13 survey below was research only. Crane Row was subsequently
-implemented in 0.16 and reworked through 0.21; those dated implementation sections
-follow the original survey. The Grid/Skyline and other proposed branches remain
-deferred. Current shipped behavior is in CHANGES; design is in TASM_ROADMAP
-"Campaign branches outside Midnight Line" and `reference/area_roadmap.json`.
+The initial 2026-10-13 survey below was research only. Crane Row shipped in
+v0.16, with later terrain/creature/navigation/reward changes and shared passes
+through v0.24, retained by v0.28. Those dated sections follow the original survey.
+The Grid/Skyline and other proposed branches remain deferred. Current shipped
+behavior is in CHANGES; design is in [the roadmap](TASM_ROADMAP.md#deferred-work).
+`reference/area_roadmap.json` labels current status separately from its historical
+capacity baseline and v0.19 implementation receipt.
 Original survey builds under `build/area-research/` did not change production.
 
 ### Native survey, entrances and materials
@@ -4984,21 +5209,38 @@ Midnight's overview or assuming a seventh area slot exists.
 
 ### Remaining empirical gates and workflow lessons
 
-Next gate is one appended native Pier door and a disposable chamber, walked
-both ways with existing doors/save intact. Then a parent-map colour/current/
-visited trial and a fixed Quayside plan with basic movement. Strong crews can
-use established Pier0x08/Residential0x0C recipes and the per-room dial (its
-room76..115 table covers these IDs), but counts/strength need scene tests;
-do not lower quality or enemy count as an unmeasured performance fix.
+**Freight roof reproduction/correction, v0.28 -> v0.29 B, 2026-10-21 (high
+confidence, agent evidence):** native walking baits an isolated full-HP Ballast
+under the x40..88/y17..20 platform, then native input returns the hero above it.
+Both runs reach the same x80.739/y24.981 landing at frame590. On v0.28, Ballast
+continues jumping beneath the slab through frame1850, around x80..81/y-7..12,
+with no roof contact/damage. B clears the edge, jumps outside the ceiling,
+returns and lands, then causes actual native HP loss at frame670 (enemy
+x81.291/y24.568). No post-spawn actor/player placement, enemy HP fixture or
+player refill is used. A simple arrival with Ballast already on the platform
+can pass on the parent and is retained as a separate control. The first A
+adapter incorrectly dropped its route at the jump apex; B retains it until a
+real landing. Scoped state/guards and other-room control remain required.
+Sources: `chapter_finish_crane.py`, `chapter_finish_lab.py`, and
+`work/chapter-finish/freight-base-short` / `freight-b-short`. This qualifies the
+specific obstruction, not all elevated pursuit or player fun.
 
-Moving crane loads/platform collision, protected machinery damage and
-cross-room countdown lifetime are unproved. Opcode0x23 starts/resets a native
-minute timer and TimerWatcher can run a timeout group; that does not establish
-timer survival or clean retry across new rooms. Prototype start -> real door
--> timeout/reset, then death/exit/revisit controls on copied saves. First make
-Skyline Run a reversible untimed route. Completion reward/grant and new-boss
-reactions each require isolated persistence/kit tests. Preserve story gates,
-avoid required paid moves, and qualify Red and Black traversal.
+The old Pier-door/disposable-chamber, parent-map and Quayside experiments are
+completed prerequisites of released Crane Row, not next tasks. Protected native
+machine-core damage, hoist death/save persistence, loops and maps subsequently
+shipped. Current Crane review should reproduce the Ballast directly-overhead
+Freight pursuit edge case and assess full-route presentation, retry flow and
+frame pacing. Isolated counters/healed crews do not settle those player gates.
+
+Rideable moving loads/platform collision and cross-room countdown lifetime
+remain unproved and deferred. Opcode0x23 starts/resets a native minute timer and
+TimerWatcher can run a timeout group; neither establishes survival or clean
+retry across rooms. If a future timed branch is requested, first prove an
+untimed reversible route, then start -> real door -> timeout/reset and
+death/exit/revisit on copied saves. New completion rewards or boss interactions
+need their own persistence/kit controls. Preserve story gates, avoid required
+paid moves and qualify both suits. Do not allocate deferred branches from an
+old capacity sketch or lower enemy quality/count as an unmeasured FPS fix.
 
 Scratch scripts must not shadow Python's standard library: naming a script
 `inspect.py` broke `dataclasses` imports in this session; it was renamed
@@ -5045,9 +5287,9 @@ observations.json (state, action, node, facing, position, enemies).
   research. For kit targeting/movement, `trace --phantom DX` adds a fake registry
   enemy (no AI/hitbox) in the training room; contacts on it whiff.
 - Sense, Leapfrog and Perch use velocity (v0.4.1), letting native collision
-  resolve walls/floors. Audit found a remaining direct Skyjack juggle drift
-  write to motion+0x7C; sky-velocity and combined candidates are now agent-qualified
-  but unpublished (see "Shared crowd-hit backend candidates"). A position write ignores
+  resolve walls/floors. The historical Skyjack velocity/combined candidates
+  remained unpublished; the current source/binary recheck confirms the debt
+  (see "Shared crowd-hit backend candidates"). A position write ignores
   collision (the v0.4.0 Sense teleport put Spidey 2 units inside the training
   room's right wall at x=968577 and clipped the player out of the level). Lab
   teleports (`kit_lab.teleport`) write the motion base and the three probes

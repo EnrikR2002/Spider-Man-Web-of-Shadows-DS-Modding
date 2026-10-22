@@ -2,7 +2,7 @@
   "schema_version": 1,
   "snapshot_date": "2026-10-05",
   "purpose": "Historical source notes; current status is in docs/TASKS.md. Read only a selected entry/section with tools/doc_archive.py.",
-  "archive_sha256": "ebd62d13d56dd45780f09c5dc43cb2866b36ba743c37dbfd50e6b68ced65a150",
+  "archive_sha256": "793e99df844875cb6218c5d71ad2e021e4ed2de527a61475d6dda78774e02224",
   "entries": [
     {
       "path": "AGENTS.md",
@@ -1596,6 +1596,232 @@
           "level": 1
         }
       ]
+    },
+    {
+      "path": "docs/TASM_ROADMAP.md",
+      "title": "TASM: never stand still",
+      "snapshot_date": "2026-10-21",
+      "source_revision": "fcdab237d26f90c31dd7357d591d6d0e05203dc4",
+      "bytes": 83442,
+      "words": 12536,
+      "sha256": "2bc15d9d43a62d52dfd0aa8d09de5038c6c6f27f1bce7e749a78f1a67caef11a",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "TASM: never stand still",
+          "level": 1
+        },
+        {
+          "line": 52,
+          "heading": "Midnight0.23 replay feedback (2026-10-18, historical)",
+          "level": 2
+        },
+        {
+          "line": 83,
+          "heading": "Chapter evaluation against v0.22.1 (2026-10-17)",
+          "level": 2
+        },
+        {
+          "line": 122,
+          "heading": "Midnight Line: a storm that builds toward its source",
+          "level": 3
+        },
+        {
+          "line": 177,
+          "heading": "Crane Row: a harbor you explore, restart and climb",
+          "level": 3
+        },
+        {
+          "line": 233,
+          "heading": "Shared improvements that determine whether either feels finished",
+          "level": 3
+        },
+        {
+          "line": 280,
+          "heading": "Recommended order and acceptance",
+          "level": 3
+        },
+        {
+          "line": 304,
+          "heading": "Player direction (2026-10-05)",
+          "level": 2
+        },
+        {
+          "line": 316,
+          "heading": "The identity",
+          "level": 2
+        },
+        {
+          "line": 339,
+          "heading": "The 7 Red slots, redesigned",
+          "level": 2
+        },
+        {
+          "line": 358,
+          "heading": "18 · Spider Reflex: the foundation",
+          "level": 3
+        },
+        {
+          "line": 371,
+          "heading": "19 · Spider-Sense: the reward",
+          "level": 3
+        },
+        {
+          "line": 385,
+          "heading": "15 · Spider Perch: the signature",
+          "level": 3
+        },
+        {
+          "line": 400,
+          "heading": "16 · Split Decision: the crowd string",
+          "level": 3
+        },
+        {
+          "line": 411,
+          "heading": "17 · Spin Cycle: the payoff",
+          "level": 3
+        },
+        {
+          "line": 419,
+          "heading": "13 · Leapfrog: the cross-up",
+          "level": 3
+        },
+        {
+          "line": 427,
+          "heading": "14 · Skyjack: the escape upward",
+          "level": 3
+        },
+        {
+          "line": 435,
+          "heading": "How it plays together",
+          "level": 2
+        },
+        {
+          "line": 455,
+          "heading": "Feasibility",
+          "level": 2
+        },
+        {
+          "line": 478,
+          "heading": "Historical kit status (v0.4.1)",
+          "level": 2
+        },
+        {
+          "line": 512,
+          "heading": "The playtest that decides what stays",
+          "level": 2
+        },
+        {
+          "line": 523,
+          "heading": "Parked for later Red skills",
+          "level": 2
+        },
+        {
+          "line": 538,
+          "heading": "Historical proposals (2026-10-07)",
+          "level": 2
+        },
+        {
+          "line": 568,
+          "heading": "Spice pack (2026-10-11): three new Red shop skills in v0.10.0",
+          "level": 2
+        },
+        {
+          "line": 614,
+          "heading": "Round two (2026-10-11): verdict on v0.10.0 and proposals",
+          "level": 2
+        },
+        {
+          "line": 668,
+          "heading": "3 new skills (2026-10-13): Overclock, Dragnet and Vortex in v0.13.0",
+          "level": 2
+        },
+        {
+          "line": 696,
+          "heading": "Midnight Line storm overhaul (2026-10-16)",
+          "level": 2
+        },
+        {
+          "line": 724,
+          "heading": "Midnight Line new boss (2026-10-13, Signal Leech v0.14.0)",
+          "level": 2
+        },
+        {
+          "line": 769,
+          "heading": "Proposed Signal Leech fight",
+          "level": 3
+        },
+        {
+          "line": 812,
+          "heading": "Order for the implementing agent",
+          "level": 3
+        },
+        {
+          "line": 834,
+          "heading": "Campaign branches outside Midnight Line (2026-10-14, Crane Row approved)",
+          "level": 2
+        },
+        {
+          "line": 865,
+          "heading": "Crane Row: The Hanging Harbor — expanded pitch",
+          "level": 3
+        },
+        {
+          "line": 1021,
+          "heading": "Spider-Man 2099: future Black kit (2026-10-11, theorycraft)",
+          "level": 2
+        },
+        {
+          "line": 1030,
+          "heading": "Identity and foundation",
+          "level": 3
+        },
+        {
+          "line": 1053,
+          "heading": "Seven purchased skills",
+          "level": 3
+        },
+        {
+          "line": 1132,
+          "heading": "How the complete kit connects",
+          "level": 3
+        },
+        {
+          "line": 1163,
+          "heading": "Presentation, growth and later possibilities",
+          "level": 3
+        }
+      ]
+    },
+    {
+      "path": "reference/suit_roadmap.json",
+      "title": "suit roadmap",
+      "snapshot_date": "2026-10-21",
+      "source_revision": "fcdab237d26f90c31dd7357d591d6d0e05203dc4",
+      "bytes": 3827,
+      "words": 370,
+      "sha256": "556b73f49b9cc415f31d58df7796372d64f8439e56fe281d4f46acd99fad93d9",
+      "sections": []
+    },
+    {
+      "path": "reference/tasm_upgrade_plan.json",
+      "title": "tasm upgrade plan",
+      "snapshot_date": "2026-10-21",
+      "source_revision": "fcdab237d26f90c31dd7357d591d6d0e05203dc4",
+      "bytes": 3084,
+      "words": 282,
+      "sha256": "f5bb32b8717a0c6d4846c54a742c3974b46c157a2a64c1f4edd86ebf8317861d",
+      "sections": []
+    },
+    {
+      "path": "reference/area_roadmap.json",
+      "title": "area roadmap",
+      "snapshot_date": "2026-10-21",
+      "source_revision": "fcdab237d26f90c31dd7357d591d6d0e05203dc4",
+      "bytes": 27091,
+      "words": 2637,
+      "sha256": "ae37090f8065ec0ec948f3880b670358a8526777a2ee8ad6ea4eb1c0350126c5",
+      "sections": []
     }
   ]
 }

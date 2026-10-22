@@ -8,7 +8,7 @@ USA CS5E baseline, before mod changes. Exact native records/flags/costs are in
 
 DS buttons: Y attacks, A uses suit powers, B jumps, X lifts/throws, R evades,
 L switches form, D-pad moves/aims. SELECT switches minimap/objective view.
-Observed local keyboard equivalents are Q/W/Space/T/E/R; mappings are player-local.
+Inputs below are DS buttons; emulator keyboard mappings are player-local.
 A combo “pause” means a gap between attack presses, not opening the Pause Menu.
 
 Wall crawl/run/jump, ceiling hang, swinging and object interaction provide the
@@ -97,10 +97,10 @@ recovery and traversal do not become free because a Red move launches a target.
 ## Combo meter, rewards and combat limits
 
 The native meter is a combo resource, not a hit counter. Contacts earn category
-credit; repetition and rising tiers reduce gains. Gauge spans0..100, with up to
-five tiers. Crossing100 advances a tier and subtracts75. Grace expires into decay;
-losing a tier resets gauge to75 and speeds up decay. The HUD initially appears
-only at tier>0 or gauge>30, so an early credited attack can have no visible meter.
+credit; repetition and rising tiers reduce gains. Gauge spans 0..100, with up to
+five tiers. Crossing 100 advances a tier and subtracts 75. Grace expires into decay;
+losing a tier resets gauge to 75 and speeds up decay. The HUD initially appears
+only at tier > 0 or gauge > 30, so an early credited attack can have no visible meter.
 
 The meter improves XP rewards and damage: measured 2026-10-11 on the Red
 ground string against the training dummy, each tier adds 10% (tier 5 hits for

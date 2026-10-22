@@ -103,7 +103,8 @@ def main(argv=None):
             else:
                 selected, truncated = select_lines(body, section=args.section,
                                                    start=args.start, count=args.lines)
-                print(f'Historical snapshot 2026-10-05: {entry["path"]}; current status: docs/TASKS.md')
+                snapshot_date = entry.get('snapshot_date', index['snapshot_date'])
+                print(f'Historical snapshot {snapshot_date}: {entry["path"]}; current status: docs/TASKS.md')
                 for number, line in selected:
                     print(f'{number}: {line}')
                 if truncated:

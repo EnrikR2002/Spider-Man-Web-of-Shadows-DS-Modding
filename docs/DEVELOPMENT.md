@@ -25,16 +25,22 @@ dependencies. Check availability before starting a long build.
 
 | Task | Read first in TECHNICAL | Implementation / evidence |
 |---|---|---|
+| v0.29 Skyjack/Skitter/Crane finish and current qualification | [Scoped finish](TECHNICAL.md#scoped-movement-and-chapter-finish-v0290) | `chapter_finish.py`, `_kit`, `_motion`, `_skitter`, `_audio`, `_crane`, `_lab`; `reference/chapter_finish.json` |
 | Current Midnight route/map and reliable boss/ramp contact | [Reliability correction](TECHNICAL.md#reliability-and-active-route-correction-028-research) | `midnight_reliability.py`, helpers `_combat/_rooms/_lab`; `owned_player_lab.py`; `reference/midnight_reliability.json` |
-| Current Midnight stagger/counter balance, creature anatomy/motion, encounter ramp | [Combo openings](TECHNICAL.md#combo-openings-and-coherent-creature-motion-027-research) | `midnight_finale.py`, helpers `_combat/_motion/_art`; `reference/midnight_finale.json` |
-| Current enemy contact, motion, voice and room correction | [Midnight rejection diagnosis](TECHNICAL.md#midnight-enemy-rejection-contact-diagnosis-2026-10-18) | `midnight_rebuild.py` exact0.23 post-pass; `midnight_enemy_*`, `midnight_rebuild_rooms.py`, `room_envelope.py`; `reference/midnight_rebuild.json` |
-| Enemy models, motion, attacks, voices | [Creature Forge](TECHNICAL.md#creature-forge) | `creature_forge.py`; helpers `_design`, `_art`, `_motion`, `_combat`, `_audio`; `reference/creature_forge.json` |
+| Inherited Midnight anatomy/motion and ordinary combo openings; apply the newer reliability layer too | [Combo openings](TECHNICAL.md#combo-openings-and-coherent-creature-motion-027-research) | `midnight_finale.py`, helpers `_combat/_motion/_art`; `reference/midnight_finale.json` |
+| v0.24 contact/lifecycle/voice and room-envelope corrections beneath later Midnight layers | [Midnight rejection diagnosis](TECHNICAL.md#midnight-enemy-rejection-contact-diagnosis-2026-10-18) | `midnight_rebuild.py` exact 0.23 post-pass; `midnight_enemy_*`, `midnight_rebuild_rooms.py`, `room_envelope.py`; `reference/midnight_rebuild.json` |
+| Shared enemy model/motion/attack/audio foundations | [Creature Forge](TECHNICAL.md#creature-forge), then later correction subsections | `creature_forge.py`; helpers `_design`, `_art`, `_motion`, `_combat`, `_audio`; `reference/creature_forge.json` |
 | Texture/material correction | [Creature Forge](TECHNICAL.md#creature-forge), material-size correction | `creature_texture_fix.py`; its exact parent pin and scope |
-| Current chapter staging, materials, machinery, roof pursuit | [Chapter spectacle](TECHNICAL.md#chapter-spectacle-implementation-v0230-2026-10-17) | `chapter_spectacle.py` exact0.22.1 post-pass; helpers `_rooms`, `_art`, `_events`, `_combat`, `_audio`, `_lab`; `reference/chapter_spectacle.json` |
+| v0.23 staging, materials, machinery and roof pursuit beneath later room corrections | [Chapter spectacle](TECHNICAL.md#chapter-spectacle-implementation-v0230-2026-10-17) | `chapter_spectacle.py` exact 0.22.1 post-pass; helpers `_rooms`, `_art`, `_events`, `_combat`, `_audio`, `_lab`; `reference/chapter_spectacle.json` |
 | Chapter connections/roofs/objects underneath the post-pass | [Chapter renewal](TECHNICAL.md#chapter-renewal-v0210-2026-10-17) | `chapter_renewal_rooms.py`, `midnight_walk.py`, `chapter_renewal_lab.py`; `reference/chapter_renewal.json` |
 | Room compilation and collision | [Room compiler](TECHNICAL.md#room-compiler-v0120), [Room collision tree](TECHNICAL.md#room-collision-tree-2026-10-11) | `room_compiler.py`; room/BSP tools and topic tests |
 | Player combat/hooks | [Player state machine and Red kit hooks](TECHNICAL.md#player-state-machine-and-red-kit-hooks-v020), [Kit animation authoring](TECHNICAL.md#kit-animation-authoring) | `tasm_kit.s`, `tasm_kit2.s`, `assemble_tasm_kit.py`, `kit_lab.py` |
+| Historical Skyjack drift and unshipped crowd prototype | [Movement audit](TECHNICAL.md#shared-crowd-hit-backend-candidates) | Old `tasm_kit.s` / hex reproduce the parent; the current correction is a separate frozen post-pass, not a disposable RAM patch |
 | Baseline formats, bindings, animation events | [Format boundaries](TECHNICAL.md#format-boundaries-and-confirmed-structures) | `wos_tool.py`, `actor_actions.py`, `animation_rig.py`, `model_geometry.py` |
+| Classic 2099 Black-slot appearance | [SCA / model / textures](TECHNICAL.md#sca--model--textures) | `spider2099.py`, `spider2099_art.py`; `reference/spider2099.json`; native rig/skin preservation and exact v0.29 parent |
+| Current 2099 physique/cape/blades and real draw selection | [2099 draw correction](TECHNICAL.md#sca--model--textures) | `spider2099_polish.py`, `_sculpt`, `_visual`; `reference/spider2099_polish.json`. Both forms load shared `spd`; qualify actual lists and crowded texture residency, not only previews. |
+| Cape-free Across the Spider-Verse 2099 | [SCA / model / textures](TECHNICAL.md#sca--model--textures) | `spider2099_movie.py`, `spider2099_movie_art.py`; `reference/spider2099_movie.json`. Exact v0.30.1 post-pass, existing selector literals only; the v0.30.3 I4 follow-up resolves the sampled crowd. |
+| Crowded Midnight enemy texture residency | [SCA / model / textures](TECHNICAL.md#sca--model--textures) | `spider2099_enemy_texture.py`; `reference/spider2099_enemy_texture.json`. Preserve 128px artwork/UVs, compact to I4, validate live materials on a copied-save mixed scene. |
 | Save safety and publication | AGENTS and this guide's release section | `playtest.py`, `desmume_save.py`, `save_backups.py` |
 
 Tool filenames in this table are under `tools/`. Find a CLI's actual arguments
@@ -164,6 +170,36 @@ after the older temporary purchase prefix; the real battery is never written.
 `owned-at-combat.json` must match. `WOS_CHAPTER_PLAYER_PROFILE` applies the same
 fixture to child door controls. A changed actual battery requires remeasurement.
 
+For the current reliability composition, a complete example is:
+
+```powershell
+$candidateRom = 'build/your-candidate/Versioned.nds'
+python tools/owned_player_lab.py measure --rom $candidateRom --out work/your-batch/owned
+$ownedProfile = 'work/your-batch/owned/owned-player-profile.json'
+python tools/midnight_reliability_lab.py boss --rom $candidateRom --out work/your-batch/boss-red --owned $ownedProfile --no-heal --reactive --persist
+python tools/midnight_reliability_lab.py turbine-wave --rom $candidateRom --out work/your-batch/turbine --owned $ownedProfile --no-heal
+```
+
+`chapter_finish_lab.py` adds final-ROM Skyjack open/wall/cancel, native Freight
+roof pursuit, Skitter lifecycle/currency and existing hoist/save wrappers.
+Pass `--owned <profile>` for current-owned lifecycle/combat. `midnight_enemy_lab.py`
+also accepts `--owned`; its between-program resets remain labelled fixtures.
+Use compact distinct tags: long nested labels can make the native core reject a
+valid fixture path before boot. Read each report's actual `route`, capture/audio
+paths and schema rather than constructing a filename from an older case.
+
+Kit isolation is distinct from current-owned play. A latest battery may already
+own all added rows. Qualification clears only their word2 mask in disposable RAM
+before setting each case's explicit `bits2`; native/Black/story/unknown bits stay
+intact. Do not call an OR-only fixture unowned. JIT is safe for immutable ROM
+code plus data fixtures; runtime code patches still require JIT off. `kit_lab`
+serializes core options through its child protocol; native CLI option values
+are restored as bytes there. Keep the source battery unchanged throughout.
+
+Select the other relevant cases with `--help`. The earlier version-labelled
+commands above reproduce their recorded fixtures; they are not instructions
+to replace the current composition with a v0.23/v0.25/v0.27 generator.
+
 Boss cursor/selection counts do not prove damage. The reliability post-ReceiveHit
 observer distinguishes the real boss attacker, native result and player HP.
 `native-hits-live.json` is bounded; the phase control drains only its private log
@@ -227,6 +263,30 @@ Put detailed receipts in reference, engine discoveries in TECHNICAL, shipped
 behavior in CHANGES and user acceptance/rejection in TASM_ROADMAP. Mark a new
 discovery or superseded assumption in its owning section immediately; a late
 session summary is too easy to lose. Keep session transcripts out of the docs.
+
+## Maintain documentation
+
+Use the approved ownership map in AGENTS. Check current profile/source pins,
+release history and stable/canonical metadata before updating a version claim;
+read the actual battery/checkpoint rather than copying a historical save hash.
+Keep implemented, agent-tested and player-confirmed claims separate. Preserve
+release dates and immutable receipts when later documentation is reviewed.
+
+Keep TASKS below 900 words and replace its stale objective/next action. The live
+roadmap holds current decisions, acceptance criteria and deferred concepts;
+old construction pitches must not remain a second active queue. Planning JSON
+may retain dated baseline allocations/receipts, but label that scope and point
+its current status to the live composition. Do not relabel an old artifact with
+a newer version or change a production recipe merely to refresh prose.
+
+Preserve retired designs/catalogs byte for byte in the existing archive before
+removing them from live docs. Record their snapshot dates in the index; the
+reader uses an entry's date, falling back to the original archive date.
+Use `python tools/doc_archive.py list <topic>`, then `read <name> --toc` or a
+bounded `--section`. Verify archive integrity and the fixed document set with
+`python -m unittest tests.test_doc_archive tests.test_document_layout -q`.
+Check local Markdown links/anchors and the final diff. A documentation-only
+cleanup does not add emulator coverage or player acceptance.
 
 ## Local runtime dependencies
 

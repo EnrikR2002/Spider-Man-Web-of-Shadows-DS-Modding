@@ -46,6 +46,17 @@ class KitLabTests(unittest.TestCase):
         self.assertEqual(kit_lab.spin_hits(rows), 3)
         self.assertEqual(kit_lab.spin_hits(rows[:1]), 0)
 
+    def test_added_purchase_fixture_clears_only_requested_ram_word_bits(self):
+        import ctypes, struct
+        buf = ctypes.create_string_buffer(4*1024*1024)
+        stats = 0x200000
+        struct.pack_into('<I', buf, kit_lab.STATS_POINTER-kit_lab.p.BASE, kit_lab.p.BASE+stats)
+        struct.pack_into('<3I', buf, stats+0xC, 0x12345678, 0xabcdef01, 0xa507fddf)
+        with mock.patch.object(kit_lab, 'ram_of', return_value=(ctypes.addressof(buf), buf.raw)):
+            kit_lab.clear_word2(None, kit_lab.ADDED_WORD2_MASK)
+        self.assertEqual(struct.unpack_from('<3I', buf, stats+0xC),
+                         (0x12345678, 0xabcdef01, 0xa507fddf & ~kit_lab.ADDED_WORD2_MASK))
+
     def test_teleport_moves_base_and_probes_keeping_probe_offsets(self):
         import ctypes, struct
         buf = ctypes.create_string_buffer(0x300)

@@ -243,6 +243,35 @@ PROFILE_INFO['tasm-v0.28.0'] = {
     'arm9_sha256':'ccc2e83bae9d1b31004834b3be0192dc4ba506d9ad809f9bbd9e69c1c9dd0ea9',
     'rom_sha256':'6819cb91e824961552b86690c3fdd112930bbd1cbb70d5c3c76978b5ce932a20',
 }
+PROFILE_INFO['tasm-v0.29.0'] = {
+    **PROFILE_INFO['tasm-v0.28.0'], 'version':'0.29.0', 'date':'2026-10-22',
+    'chapter_finish':True,
+    'arm9_sha256':'f3ff236785f7fc3dd96374a96d75e77f93c4a830c407b65bd3a292b4bd228490',
+    'rom_sha256':'3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2',
+}
+PROFILE_INFO['tasm-v0.30.0'] = {
+    **PROFILE_INFO['tasm-v0.29.0'], 'version':'0.30.0', 'date':'2026-10-22',
+    'spider2099':True,
+    'rom_sha256':'2ebdf894ae723ce6ead2cfbe15a4b11151243f639958bdeea18e9149bdabf088',
+}
+PROFILE_INFO['tasm-v0.30.1'] = {
+    **PROFILE_INFO['tasm-v0.30.0'], 'version':'0.30.1', 'date':'2026-10-22',
+    'spider2099_polish':True,
+    'arm9_sha256':'44bd1d1c625623dfddad87344aef3c1cc32b52872abfc4f44e35030a2d4db5e8',
+    'rom_sha256':'7286d0536b6e29d0ebdc355563c6ece8e974058534c9676024ee67928cae530c',
+}
+PROFILE_INFO['tasm-v0.30.2'] = {
+    **PROFILE_INFO['tasm-v0.30.1'], 'version':'0.30.2', 'date':'2026-10-22',
+    'spider2099_movie':True,
+    'arm9_sha256':'122bacf474acd659bb77562ba664542dc76348c5ac6243f2d1ef262dc86f4924',
+    'rom_sha256':'214282a5ddf6ac71bbbddd8b5aa3854a13754313a3c66ac29d27ceb55b4f3808',
+}
+PROFILE_INFO['tasm-v0.30.3'] = {
+    **PROFILE_INFO['tasm-v0.30.2'], 'version':'0.30.3', 'date':'2026-10-22',
+    'spider2099_enemy_texture':True,
+    'arm9_sha256':'122bacf474acd659bb77562ba664542dc76348c5ac6243f2d1ef262dc86f4924',
+    'rom_sha256':'4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c',
+}
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'
 

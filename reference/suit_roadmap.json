@@ -1,67 +1,103 @@
 {
   "active_suit": "tasm1",
   "archived_expanded_design": "TASM_EXPANDED_ROADMAP.md",
-  "current_release": "0.1.1",
+  "black_slot": "2099-classic",
+  "current_recipe": "gameplay_profile.json",
+  "current_release": "0.30.3",
   "expanded_design": "../docs/TASM_ROADMAP.md",
   "historical_notes_archive": "../docs/archive/legacy-notes.zip",
+  "historical_snapshot": {
+    "archive": "../docs/archive/legacy-notes.zip",
+    "entry": "reference/suit_roadmap.json",
+    "snapshot_date": "2026-10-21"
+  },
   "implemented_purchased_skills": [
-    "Rebound",
-    "Web Vault",
-    "Sling Strike",
-    "Oscorp Rush"
+    "Leapfrog",
+    "Skyjack",
+    "Spider Perch",
+    "Split Decision",
+    "Spin Cycle",
+    "Spider Reflex",
+    "Spider-Sense",
+    "Web Rush",
+    "Ricochet",
+    "Momentum",
+    "Overclock",
+    "Dragnet",
+    "Vortex"
   ],
-  "policy": "One combined TASM identity at a time. Fun comes first: a complete acrobatic crowd kit before skill counts, progression or balance. Existing public purchases/progress remain until an explicit qualified migration.",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. The requested cape-free Across the Spider-Verse 2099 Black appearance is published; seven Black moves remain design work. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices, third suit, shop/save expansion and branches remain deferred.",
+  "prototype_reference": "../docs/TASM_ROADMAP.md#recommended-build-order",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
   "suits": [
     {
       "id": "tasm1",
       "implemented": [
-        "clean panels and black lenses",
+        "Combined TASM1/2 identity and existing suit appearance",
         "Snap Sweep opening action",
-        "Rebound purchased Web Kick replacement (50 XP native ownership gate)",
-        "Web Vault purchased Web Launch replacement (100 XP native ownership gate)",
-        "Sling Strike purchased Mid-Air Snare replacement (150 XP native ownership gate), agent-tested; player check pending",
-        "Matched Web Vault rise, passing/turning Sling, continuous health bars and bounded HUD work; player revision check pending",
-        "Oscorp Rush purchased Spider Dance replacement (150 XP native ownership gate), fully authored anime revision agent-tested; player acceptance pending"
+        "Seven rewritten native Red purchase slots",
+        "Web Rush, Ricochet, Momentum, Overclock, Dragnet and Vortex Red rows",
+        "Both Suits Vitality I-III, existing ownership/refund rules and native traversal"
       ],
-      "kit": "Bounce off enemies, zip between targets, sling enemies through crowds and burst webs when surrounded; short attacks and responsive escapes connect the whole kit. Prototype proposed, not yet implemented.",
+      "kit": "Strike, cancel with R, reposition and resume through the existing thirteen Red purchases. Fast authored acrobatics and crowd control; native A/B/base strings and unowned evade stay intact.",
       "name": "The Amazing Spider-Man",
-      "status": "active-v0.1.1-fun-prototype-queued"
+      "status": "implemented-retained-in-v0.30.3-player-iteration-no-more-red-skills",
+      "validation_limit": "Early kit praise, Snap Sweep and original Web Vault are player evidence. v0.29 native-velocity Skyjack, wall/R and 68 kit checks pass; later feel/full-route acceptance remains a player gate."
     },
     {
       "id": "scarlet-ben",
       "kit": "Impact webs, stingers, control and setups",
       "name": "Scarlet Spider - Ben Reilly",
-      "status": "selected-backlog"
+      "status": "selected-backlog-deferred-no-implementation"
     },
     {
+      "appearance_direction": "cape-free-across-the-spider-verse",
+      "appearance_evidence": "spider2099_movie.json",
+      "archived_design": {
+        "entry": "docs/TASM_ROADMAP.md",
+        "section": "Spider-Man 2099",
+        "snapshot_date": "2026-10-21"
+      },
+      "design_reference": "../docs/TASM_ROADMAP.md#spider-man-2099-black-slot-rework",
       "id": "2099-classic",
-      "kit": "Catch, carry, crash, chase: talon pursuit, charged purchased strikes, launches and slam rebounds around unchanged native A dash/spike/slam. Seven-skill theorycraft in docs/TASM_ROADMAP.md; glide and fangs are later possibilities.",
-      "name": "Spider-Man 2099 - classic",
-      "status": "player-selected-future-black-slot-theorycraft-only",
-      "selection_date": "2026-10-11",
+      "implementation_order": "Requested 2026-10-22: appearance first, then discuss skill proposal and refinements; first mechanical prototype should establish Raking Cross.",
+      "implemented": [
+        "Guarded per-form selection in shared player model; exact Red list/texture retained",
+        "Broader chest/lats/traps/deltoids, athletic thighs and narrower jaw on unchanged native rig/animations",
+        "Six swept surface-mounted forearm blades and small talon tips",
+        "Red web cape and all cape geometry/atlas region removed",
+        "Opaque 128x128 I8 atlas: navy/cobalt, angular mask/chest spider, red shoulder panels and knee chevrons; same 16 KiB pixel pool"
+      ],
+      "kit": "Proposed catch/carry/crash/chase Black kit. Seven purchased replacements remain unimplemented; native A dash/spike/slam, ordinary B/base strings/R, ownership and progression are unchanged.",
+      "latest_feedback": {
+        "date": "2026-10-22",
+        "source_version": "0.30.1",
+        "summary": "Likes 2099 overall; make the model closer to the supplied Across the Spider-Verse movie reference and remove the red web cape."
+      },
+      "name": "Spider-Man 2099 - Across the Spider-Verse inspired",
       "replaces_form": "black",
-      "implementation_order": "After the TASM Red kit is more fleshed out",
-      "design_reference": "../docs/TASM_ROADMAP.md#spider-man-2099-future-black-kit-2026-10-11-theorycraft"
+      "selection_date": "2026-10-11",
+      "status": "cape-free-movie-appearance-retained-v0.30.3-native-black-gameplay",
+      "validation_limit": "v0.30.2 player appearance remains; v0.30.3 changes only the shared custom-creature atlas. Three Terminal enemy materials bind as I4 in fresh copied-save candidate controls; this is one scene, not whole-game residency, DeSmuME pacing or player acceptance."
     },
     {
       "id": "scarlet-kaine",
       "kit": "Aggressive close combat and burst counters",
       "name": "Scarlet Spider - Kaine",
-      "status": "selected-backlog"
+      "status": "selected-backlog-deferred-no-implementation"
     },
     {
       "id": "raimi",
       "kit": "Weighty punches, strong web pulls, resilient recovery",
       "name": "Raimi Spider-Man",
-      "status": "selected-backlog"
+      "status": "selected-backlog-deferred-no-implementation"
     },
     {
       "id": "symbiote-classic",
       "kit": "Heavy control, charges, tendril-inspired finishers",
       "name": "Classic symbiote",
-      "status": "selected-backlog"
+      "status": "selected-backlog-deferred-no-implementation"
     },
     {
       "id": "tasm2",
@@ -70,12 +106,11 @@
       "status": "identity-merged-into-tasm1"
     }
   ],
-  "updated": "2026-10-11",
+  "updated": "2026-10-22",
   "upgrade_plan": "tasm_upgrade_plan.json",
-  "upgrade_plan_status": "fun-first-core-prototype-proposed-progression-deferred",
+  "upgrade_plan_status": "implemented-current-red-rows-progression-expansion-deferred",
   "user_verified": [
     "Snap Sweep works in player testing",
     "Initial Web Vault works; player requested matched rise/no backward target drift. Revision agent-tested, player check pending."
-  ],
-  "prototype_reference": "../docs/TASM_ROADMAP.md#build-the-smallest-version-that-can-prove-the-fun"
+  ]
 }

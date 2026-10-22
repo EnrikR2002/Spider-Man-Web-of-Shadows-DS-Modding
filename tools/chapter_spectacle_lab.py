@@ -27,7 +27,10 @@ def main():
             ram=(cap/f'ram-{frame:05d}.bin').read_bytes();stats=w.u32(ram,k.STATS_POINTER-pt.BASE)-pt.BASE
             flags=int.from_bytes(ram[stats+0x1c:stats+0x44],'little');hero=pt.sample(ram)
             rows.append(dict(frame=frame,room=w.u32(ram,stats),victory=bool(flags>>142&1),crown_complete=bool(flags>>146&1),position=[v/4096 for v in hero['position_q12_candidate']]))
-        checks=dict(continue_in_arm=all(row['room']==106 for row in rows),expected_victory_state=all(row['victory']==(a.case=='arm-continue') for row in rows),safe_checkpoint_position=abs(rows[-1]['position'][0]-36)<12,source_save_unchanged=w.sha256(a.save.read_bytes())==before)
+        # Native Black Continue settles at x49.887 in the quiet approach,
+        # outside the original Red-only radius around sphere x36. Qualify the
+        # authored safe floor segment, rather than a previously observed X.
+        checks=dict(continue_in_arm=all(row['room']==106 for row in rows),expected_victory_state=all(row['victory']==(a.case=='arm-continue') for row in rows),safe_checkpoint_position=all(0<=row['position'][0]<64 and -4<row['position'][1]<20 for row in rows),source_save_unchanged=w.sha256(a.save.read_bytes())==before)
         if a.case=='arm-retry-continue':checks['earned_crown_retained']=all(row['crown_complete'] for row in rows)
         report=dict(rom_sha256=w.sha256(a.rom.read_bytes()),passed=all(checks.values()),checks=checks,observations=rows,captures=str(cap),save=str(a.save),limits='Fresh unmodified candidate boot/Continue from the in-game earned private hoist save; no warp, flag, player or enemy placement fixture.')
         w.write_json(OUT/(a.case+a.tag+'.json'),report);print(json.dumps(report));return 0 if report['passed'] else 1

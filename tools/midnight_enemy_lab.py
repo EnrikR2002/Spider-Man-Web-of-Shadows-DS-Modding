@@ -22,10 +22,14 @@ def main():
     p.add_argument('--finish',action='store_true',help='After damage observation, clear through native attacks with player refills')
     p.add_argument('--reset-between',action='store_true',help='Reset native player HP only between complete attack programs; never during a strike')
     p.add_argument('--counterplay',action='store_true',help='Respond to the windup with native jump or R through a melee foe')
+    p.add_argument('--owned',type=Path,help='Restore the measured current player values once in disposable RAM')
     a=p.parse_args();out=ROOT/'work/midnight-rebuild'/a.tag;out.mkdir(parents=True,exist_ok=True)
     config=json.loads((ROOT/'work/playtest.json').read_text(encoding='utf-8'))
     actual=Path(config['battery_directory'])/'Spider-Man-WoS-modded.dsv'
     before=actual.read_bytes();copied=out/'player-copy.dsv';copied.write_bytes(before);k.TRAINING_SAVE=copied
+    if a.owned:
+        from tools import owned_player_lab
+        owned_player_lab.install(a.owned)
     forge.OUT=out;q.OUT=out;q.RUN_TAG='-'+a.tag+'-'+a.style;forge.install(a.rom,a.capture_every)
     meta=json.loads(a.rom.with_suffix('.build.json').read_text(encoding='utf-8'))
     rt=meta['creature_forge']['runtime'];st=meta['chapter_spectacle']['scripted_runtime']
@@ -43,6 +47,8 @@ def main():
     index=('maw','ballast','spore','skitter','warden','eye').index(a.style)
     runner=k._run;audio_rows=[];audio_seen=0;pcm=[];rate=[0];resets=[];counterplay=[];actual_hits=set()
     authored_programs=meta.get('midnight_encore',meta.get('midnight_rebuild',{})).get('creatures',{}).get(a.style,{}).get('programs',[])
+    if a.style=='skitter' and meta.get('chapter_finish',{}).get('skitter'):
+        authored_programs=meta['chapter_finish']['skitter']['programs']
     def isolate(*args,**kw):
         original=kw['extra_hook']
         def hook(frame,lib):
@@ -107,7 +113,10 @@ def main():
                 if abs(dx)>wanted+1:self.buttons.add('Right' if dx>0 else 'Left')
                 elif abs(dx)<wanted-1:self.buttons.add('Left' if dx>0 else 'Right')
             elif a.counterplay:
-                if meta.get('midnight_encore'):
+                if a.style=='skitter' and meta.get('chapter_finish',{}).get('skitter'):
+                    from types import SimpleNamespace
+                    authored=SimpleNamespace(MOVES={'skitter':tuple(SimpleNamespace(**m) for m in authored_programs)})
+                elif meta.get('midnight_encore'):
                     from tools import midnight_encore_motion as authored
                 else:
                     from tools import midnight_enemy_motion as authored

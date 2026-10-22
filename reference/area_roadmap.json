@@ -14,7 +14,7 @@
           "Keep native animated hit bindings after the v0.15.1 core-rendering lesson.",
           "Bounded crew pressure, cleanup on death/exit/victory and a persistent return route."
         ],
-        "status": "implemented: guarded native core, committed grabber attacks, bounded opening crew, victory/save persistence; agent-tested, player verdict pending",
+        "status": "implemented, including v0.23 damaged guard/checkpoint and v0.29 warning/open/wreck polish; agent-tested, player verdict pending",
         "working_name": "The Long Arm"
       },
       "connections": [
@@ -324,8 +324,8 @@
           "working_title": "Breakwater"
         }
       ],
-      "status": "v0.19.0_published_agent_tested_player_pending",
-      "target_experience": "Three stacked route layers, two major exploration loops, one quiet checkpoint, an optional maintenance discovery and a boss/victory return. Roughly 45\u201360 minutes for an exploratory first visit is a pacing goal, not measured playtime.",
+      "status": "implemented_retained_in_v0.30.1_player_quality_pending",
+      "target_experience": "Twelve authored rooms, stacked routes, two exploration loops, quiet Office/Cache, Long Arm approach checkpoint and saved boss/victory returns. The original 45-60 minute first-visit goal remains unmeasured.",
       "visual_direction": [
         "Steel crane silhouettes, open sky, a grounded ship hull, warm dock lights and cooler distant water/city layers.",
         "Readable solid fronts/undersides, subtle far-background ground, visible supports and clear landing edges.",
@@ -419,7 +419,8 @@
           ],
           "working_title": "Switchback"
         }
-      ]
+      ],
+      "status": "deferred_concept_no_allocations"
     },
     {
       "district": "Residential",
@@ -510,7 +511,8 @@
           ],
           "working_title": "Skyline Relay"
         }
-      ]
+      ],
+      "status": "deferred_concept_no_allocations"
     },
     {
       "district": "Hive",
@@ -526,21 +528,37 @@
         "audit extra flags without stealing existing locals or ability bits",
         "post-story material permission; do not expose Hive_Map08..10 or Downtown_Map13/14 early"
       ],
-      "status": "post_story_concept_no_allocations"
+      "status": "deferred_post_story_concept_no_allocations"
     }
   ],
-  "authority": "Player approved the twelve-room Crane Row pitch on 2026-10-14 and instructed construction. Private implementation and qualification are active; the player has not tested it.",
+  "authority": "The twelve-room Crane Row pitch was approved and shipped, then iterated after player feedback through later shared chapter/creature passes. The current published composition is v0.30.1; chapter assets/gameplay retain v0.29.0 and the new adapter affects player rendering only. Final creature quality, full-route fun and DeSmuME pacing remain player gates. Other branches remain deferred concepts.",
   "baseline_release": "0.19.0",
   "baseline_sha256": "9b2b948f6030a60246a0ca9ae477ae51c22f4aa349645fb2c6cef367c4557582",
   "build_order": [
-    "Present this expanded pitch before beginning map construction; detailed features remain proposals.",
-    "Prove capacity, visit mapping and a reversible Pier entrance on private copies.",
-    "Build Quayside plus the Freight Exchange hub as the first representative layout/visual slice.",
-    "Prove both exploration loops and the checkpoint using existing movement before decorating all rooms.",
-    "Qualify moving cargo and the boss damage/recovery prototype; preserve the large map if those mechanics need redesign.",
-    "Complete the district, readable maps, authored scenery, encounters and persistent shortcuts.",
-    "Run real-door traversal, Red/Black combat, save/Continue, death/revisit and integrated release gates before publication."
+    "Review v0.29 full-route combat, Skitter motion/audio, retries and actual DeSmuME pacing before choosing further changes.",
+    "Skyjack native-velocity correction, complete Skitter pass and Freight Ballast/hoist polish ship in v0.29; do not reopen them as unimplemented proposals.",
+    "Refine observed vertical pursuit, warning, combo recovery or aftermath issues while retaining accepted terrain/native controls.",
+    "Extend the creature presentation approach one actor at a time only after the player accepts the complete Skitter example.",
+    "Qualify the exact changed composition, real-input doors, Red/Black play and earned saves before every new version.",
+    "Keep Grid/Skyline/Hive, timed pursuit and rideable machinery deferred; historical allocations do not authorize new branches."
   ],
+  "current_composition": {
+    "appearance_receipt": "spider2099_polish.json",
+    "crane_followup_receipts": [
+      "chapter_renewal.json",
+      "creature_forge.json",
+      "chapter_spectacle.json",
+      "midnight_rebuild.json",
+      "chapter_finish.json"
+    ],
+    "handoff": "../docs/TASKS.md",
+    "inheritance": "Chapter assets and gameplay retain v0.29.0 qualification. v0.30.1 changes player geometry/texture selection and a cosmetic draw adapter; no new chapter verdict is claimed.",
+    "latest_receipt": "chapter_finish.json",
+    "player_confirmed": false,
+    "recipe": "gameplay_profile.json",
+    "release": "0.30.1",
+    "roadmap": "../docs/TASM_ROADMAP.md"
+  },
   "evidence": [
     "work/area-research/native-survey.json",
     "work/area-research/capacity-audit.json",
@@ -639,6 +657,11 @@
     "status": "crane_runtime_allocations_shipped",
     "target_room_count": 12
   },
+  "historical_snapshot": {
+    "archive": "../docs/archive/legacy-notes.zip",
+    "entry": "reference/area_roadmap.json",
+    "snapshot_date": "2026-10-21"
+  },
   "implementation": {
     "arm9_sha256": "9b04b02a74cd634901c1435a5bb7708c073c127467cc9971b3bc9a5d1c6a10e3",
     "candidate": "build/version-0.19.0-final/Versioned.nds",
@@ -647,6 +670,7 @@
     "published": true,
     "qualification": "work/crane-row/rework/publication.json",
     "rom_sha256": "9b2b948f6030a60246a0ca9ae477ae51c22f4aa349645fb2c6cef367c4557582",
+    "scope": "Historical v0.19.0 publication receipt; later shared layers are listed in current_composition.",
     "sources": [
       "tools/crane_rooms.py",
       "tools/crane_row.py",
@@ -671,6 +695,7 @@
     "danger_room_and_gauntlet": "Separate repeatable-content ideas, not substitutes for the three authored campaign branches.",
     "midnight_express": "Retain the earlier station-network idea for later. Direct district entrances come first; a hub must not bypass story ability gates."
   },
+  "planning_scope": "Baseline hashes, first_wave allocations and target room bounds retain their historical capacity/design scope. implementation and qualification_limits describe the v0.19.0 milestone, not the current whole ROM. Follow current_composition and the live roadmap for later layers and priorities.",
   "principles": [
     "Direct optional branches of native districts; existing story paths, abilities and purchases remain intact.",
     "Original geometry and distinct identities; borrow only already-seen materials and use far outdoor backdrops.",
@@ -679,8 +704,8 @@
     "Every branch has a return route and nearby native checkpoint; native door walks, save/reload and map behavior must be qualified.",
     "Campaign room and flag allocation must share one ledger with Midnight; provisional IDs are not an implemented contract."
   ],
-  "qualification_limits": "Agent-tested; player fun and frame-rate unmeasured. Native rigs/AI retained. Natural-HP mixed fight uses an explicitly healed60-unit player; crew callback controls cap foes1HP. Reward controls use idle1HP foes with no healing; zero-set is paired. No actor placements in those fights. Separate hoist wins use no refills and copied purchased abilities. UI/art poses suppress births and use labelled held positions; they do not prove traversal.",
+  "qualification_limits": "Historical v0.19.0 qualification scope: Agent-tested; player fun and frame-rate unmeasured. Native rigs/AI retained. Natural-HP mixed fight uses an explicitly healed60-unit player; crew callback controls cap foes1HP. Reward controls use idle1HP foes with no healing; zero-set is paired. No actor placements in those fights. Separate hoist wins use no refills and copied purchased abilities. UI/art poses suppress births and use labelled held positions; they do not prove traversal.",
   "schema_version": 1,
-  "status": "crane_row_v0.19.0_published_agent_tested",
-  "updated": "2026-10-16"
+  "status": "crane_row_retained_in_v0.30.1_other_branches_deferred_player_quality_pending",
+  "updated": "2026-10-22"
 }

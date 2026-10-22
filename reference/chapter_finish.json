@@ -1,0 +1,254 @@
+{
+  "arm9_sha256": "f3ff236785f7fc3dd96374a96d75e77f93c4a830c407b65bd3a292b4bd228490",
+  "candidate": "build/chapter-finish/final-c/Versioned.nds",
+  "canonical": "build/version-0.29.0-final/Versioned.nds",
+  "changes": {
+    "crane": {
+      "hoist": "High-contrast lane limits and grabber, distinct guarded/open motor and visibly wrecked saved aftermath. Existing core damage, timing, phase, checkpoint, collision and rewards remain.",
+      "modified_resources": [
+        "zz_CS23_motor.nsbmd",
+        "zz_CS23_motor_dead.nsbmd",
+        "zz_CS23_shield.nsbmd",
+        "zz_CS23_shield_broken.nsbmd",
+        "zz_CR_hook.nsbmd",
+        "zz_CR_warning.nsbmd"
+      ],
+      "navigation": 35037172,
+      "navigation_state": 35035980,
+      "roofs": [
+        [
+          40,
+          88,
+          17,
+          20,
+          28,
+          100
+        ],
+        [
+          80,
+          124,
+          39,
+          42,
+          68,
+          136
+        ],
+        [
+          128,
+          188,
+          61,
+          64,
+          116,
+          200
+        ],
+        [
+          208,
+          268,
+          81,
+          84,
+          196,
+          280
+        ],
+        [
+          288,
+          348,
+          101,
+          104,
+          276,
+          360
+        ],
+        [
+          346,
+          388,
+          109,
+          112,
+          334,
+          390
+        ]
+      ],
+      "scope": "Freight-only Ballast edge-clear, vertical jump, return-to-roof path. Native velocity, collision, damage, hurt and death retained.",
+      "secondary": 35041372,
+      "think": 35038040
+    },
+    "skitter": {
+      "audio_rows": [
+        791,
+        792,
+        793,
+        794,
+        795,
+        820,
+        821,
+        822
+      ],
+      "lifecycle_clips": 57,
+      "native_actions": [
+        55,
+        63,
+        68
+      ],
+      "quads": 276
+    },
+    "skyjack": {
+      "bytes": 7088,
+      "code_sha256": "454bddea22b244984b6fbabebc119e4e2ff7f7a2f6b3d082f483fef1d9507365",
+      "kit_bytes": 32768,
+      "movement": "Clamped juggle correction goes to actor horizontal velocity; native physics/collision apply travel.",
+      "parent_code_sha256": "5c3c3b49fa2f99976f26e888828b28108e3f43723b754178a4e4c0e55ec54a35",
+      "scope": "First kit code only; existing entry vectors, route table, second block, ownership, prices and state layout retained."
+    }
+  },
+  "date": "2026-10-22",
+  "excluded_controls": [
+    "Parent right-wall and Freight bait failures are expected negative controls, not failures of C.",
+    "A Freight helper released at apex; corrected before B/C.",
+    "Early Sky wall cutoff and three-frame direction fixtures ended before descent/cancel entry; corrected controls retained alongside originals.",
+    "First Skitter lifecycle driver stayed outside the birth trigger; native approach corrected.",
+    "B kit OR-only ownership fixture retained already-owned extra skills. Explicit disposable clear2 produces 68/68 C controls; actual battery never edited.",
+    "Earlier Black Continue assertion used Red sphere radius. Safe floor plus victory and actual native Save Options use now confirmed.",
+    "Live/zero-wave lifecycle runs diverged; not subtracted. Direct native PCM role matches provide accepted audio evidence.",
+    "Overlong labels/core-option byte serialization failed drivers before gameplay; corrected without ROM changes."
+  ],
+  "limits": "B/C differ only in six hoist meshes, with exact ARM9, audio and other resources; inherited B controls retain B identities. Fixtures and limits are recorded per report. No actual battery writes. Auditory quality, full-route fun and actual DeSmuME pacing remain player gates.",
+  "parent_sha256": "6819cb91e824961552b86690c3fdd112930bbd1cbb70d5c3c76978b5ce932a20",
+  "parent_version": "0.28.0",
+  "pending": [],
+  "publication": {
+    "build_log": "work/chapter-finish/publication-build.log",
+    "release_record": "build/releases/3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2/release.json",
+    "report": "work/chapter-finish/publication-verification.json",
+    "verified": true
+  },
+  "qualification": {
+    "audio_report": "work/chapter-finish/skitter-rendered-audio-proof.json",
+    "audio_scope": "All eight role waveforms matched in native mix; zero clipping. Numeric review; no auditory quality verdict.",
+    "boss_limits": "Initial arena setup fixture, native fights, return landings and in-game saves. Fresh Continue controls use actual earned research saves with no warp/flag fixtures.",
+    "checkpoint_use": "work/chapter-finish/checkpoint-use-c.json",
+    "crane_directed_doors": 30,
+    "door_limits": "Native controls and arrivals, parked enemies/healed player, initial disposable compiled warp. No traversal placements; not combat difficulty proof.",
+    "final_docs": {
+      "archive_entries": 40,
+      "local_links_including_anchors": 79,
+      "report": "work/chapter-finish/docs-final-verification.json",
+      "tests": 7
+    },
+    "final_focused_tests": 31,
+    "final_test_log": "work/chapter-finish/tests-final.log",
+    "independent_build": "work/chapter-finish/independent-build.log",
+    "kit_checks": 68,
+    "midnight_directed_doors": 18,
+    "mixed_combat_limits": "Copied current-owned values, native HP and no refills. Initial room fixture, native travel within encounter. No full-route fun or timing claim.",
+    "prepublication": "work/chapter-finish/publication-preflight.json",
+    "source_tests": 106,
+    "visual_review": [
+      "work/chapter-finish/skitter-a-sheet.png",
+      "work/chapter-finish/hoist-c-review.png",
+      "build/boot-tests/3c9aeacc-walk-hoist-black-kit-f29-save-8773f31c/walk-hoist-black-kit-f29-save/frame-04800.png"
+    ]
+  },
+  "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2",
+  "schema_version": 1,
+  "scope": "work/chapter-finish/scope-b-to-c.json",
+  "selected_evidence": {
+    "conductor_Black_C": {
+      "passed": true,
+      "report": "work/chapter-finish/conductor-black-c/walk-conductor-black-save-f29c.json",
+      "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2"
+    },
+    "conductor_Continue_C": {
+      "passed": true,
+      "report": "work/chapter-finish/conductor-black-continue-c/earned-continue.json",
+      "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2"
+    },
+    "conductor_Red_B": {
+      "passed": true,
+      "report": "work/chapter-finish/conductor-red-b/walk-conductor-red-save-f29b.json",
+      "rom_sha256": "50db1d03e54565c3e8d0cf96717b26089cc70217ffd0655c615e983b2f2eb908"
+    },
+    "crane_doors_C": {
+      "passed": true,
+      "report": "work/chapter-finish/crane-doors-c/crane-doors.json",
+      "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2"
+    },
+    "freight_B_positive": {
+      "passed": true,
+      "report": "work/chapter-finish/freight-b-short/freight-roof.json",
+      "rom_sha256": "50db1d03e54565c3e8d0cf96717b26089cc70217ffd0655c615e983b2f2eb908"
+    },
+    "freight_parent_negative": {
+      "passed": false,
+      "report": "work/chapter-finish/freight-base-short/freight-roof.json",
+      "rom_sha256": "6819cb91e824961552b86690c3fdd112930bbd1cbb70d5c3c76978b5ce932a20"
+    },
+    "freight_upper_C": {
+      "passed": true,
+      "report": "work/chapter-finish/freight-upper-c/freight-roof.json",
+      "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2"
+    },
+    "hoist_Black_B": {
+      "passed": true,
+      "report": "work/chapter-finish/hoist-black-b/campaign-control.json",
+      "rom_sha256": "50db1d03e54565c3e8d0cf96717b26089cc70217ffd0655c615e983b2f2eb908"
+    },
+    "hoist_Black_C": {
+      "passed": true,
+      "report": "work/chapter-finish/hoist-black-c/campaign-control.json",
+      "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2"
+    },
+    "hoist_Black_Continue_C": {
+      "passed": true,
+      "report": "work/chapter-finish/hoist-black-continue-c2/campaign-control.json",
+      "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2"
+    },
+    "hoist_Red_B": {
+      "passed": true,
+      "report": "work/chapter-finish/hoist-red-b/campaign-control.json",
+      "rom_sha256": "50db1d03e54565c3e8d0cf96717b26089cc70217ffd0655c615e983b2f2eb908"
+    },
+    "hoist_Red_Continue_B": {
+      "passed": true,
+      "report": "work/chapter-finish/hoist-red-continue-b/campaign-control.json",
+      "rom_sha256": "50db1d03e54565c3e8d0cf96717b26089cc70217ffd0655c615e983b2f2eb908"
+    },
+    "kit_C": {
+      "passed": true,
+      "report": "work/chapter-finish/kit-qualification-c.json",
+      "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2"
+    },
+    "midnight_doors_C": {
+      "passed": true,
+      "report": "work/chapter-finish/doors-c/midnight-doors.json",
+      "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2"
+    },
+    "skitter_all_hits_C": {
+      "passed": true,
+      "report": "work/midnight-rebuild/f29c-hits/contacts-skitter.json",
+      "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2"
+    },
+    "skitter_lifecycle_B": {
+      "passed": true,
+      "report": "work/chapter-finish/skitter-life-b2/skitter-lifecycle.json",
+      "rom_sha256": "50db1d03e54565c3e8d0cf96717b26089cc70217ffd0655c615e983b2f2eb908"
+    },
+    "sky_left_C": {
+      "passed": true,
+      "report": "work/chapter-finish/sky-c-left-final/sky-left-wall.json",
+      "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2"
+    },
+    "sky_right_cancel_C": {
+      "passed": true,
+      "report": "work/chapter-finish/sky-c-wall-final/sky-right-wall-cancel.json",
+      "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2"
+    },
+    "terminal_mixed_C": {
+      "passed": true,
+      "report": "work/chapter-finish/terminal-mixed-c/result-terminal-wave-f29c.json",
+      "rom_sha256": "3c9aeacca6bbc446e2f61815b341e5c5106d0f30a4c9510bcbf9384fbea16db2"
+    }
+  },
+  "source_tests": {
+    "log": "work/chapter-finish/tests-broad.log",
+    "passed": 106
+  },
+  "status": "published through guarded playtest build; installed stable v0.29.0",
+  "version": "0.29.0"
+}
