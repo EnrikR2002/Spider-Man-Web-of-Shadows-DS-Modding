@@ -257,7 +257,7 @@ def apply_rom(rom, *, version=VERSION,include_creatures=True):
     if include_creatures:
         sound_fs=next(e for e in w.validate_rom(rom,target=True)['nitrofs'] if e['name']=='sound_data.sdat')
         replacements['sound_data.sdat'],audio_report=crane_audio.apply(rom[sound_fs['start']:sound_fs['end']])
-    staged=w.rebuild_rom(rom,replacements)
+    staged=w.rebuild_rom(rom,replacements,legacy_gaps=True)
     result,_=kit.replace_arm9(staged,bytes(new))
     checked=w.validate_rom(result,target=True)
     final_h=w.parse_header(result)

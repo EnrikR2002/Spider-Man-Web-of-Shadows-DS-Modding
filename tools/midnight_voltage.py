@@ -25,7 +25,7 @@ class Runtime:
         struct.pack_into('<2I',new,kit.TABLE_POINTERS,0x02000000+end+space,0x02000000+end+space+36)
         struct.pack_into('<I',new,kit.ARENA_LOWER,self.start+space);new[offset(self.start):offset(self.start)+len(self.data)]=self.data
         if new[kit.SOURCE:kit.SOURCE+kit.RESERVE]!=arm[kit.SOURCE:kit.SOURCE+kit.RESERVE]:raise ValueError('Player kit changed')
-        result=w.rebuild_rom(self.rom,replacements) if replacements else self.rom
+        result=w.rebuild_rom(self.rom,replacements,legacy_gaps=True) if replacements else self.rom
         result,_=kit.replace_arm9(result,bytes(new));w.validate_rom(result,target=True);return result
 
 

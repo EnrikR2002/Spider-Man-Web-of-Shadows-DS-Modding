@@ -11,7 +11,8 @@ from tools.nitro_texture import TextureArchive
 def audit(mods='mods'):
     rom,glob,manifest=mod.load_clean();entries={e['name']:e for e in manifest['entries']}
     from tools.oscorp_resources import EXTRA_NAMES
-    overlay=mod.overlay_files(mod.project_path(mods),list(entries),added_names=EXTRA_NAMES)
+    from tools.tasm_kit import EXTRA_NAMES as KIT_NAMES
+    overlay=mod.overlay_files(mod.project_path(mods),list(entries),added_names=(*EXTRA_NAMES,*KIT_NAMES))
     rows=[];dims=Counter();formats=Counter()
     for name,e in entries.items():
         if not name.endswith('.nsbtx'):continue

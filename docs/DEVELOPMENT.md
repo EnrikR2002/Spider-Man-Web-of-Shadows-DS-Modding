@@ -252,11 +252,23 @@ new version/post-pass; a pinned old generator reproduces that old release and
 is not the starting command for silently changing it. Preserve the full accepted
 composition, source recipe, original ROM, prior release and latest real battery.
 
+`python mod.py build` and `python mod.py verify` default to
+`build/candidate/Spider-Man-WoS-modded.nds`; the raw `repack-rom` command uses
+that candidate path too. Pass `--out build/Spider-Man-WoS-modded.nds` explicitly
+to verify the installed build. Raw builds do not perform publication safeguards.
+
 Close DeSmuME and publish through `python tools/playtest.py build`. The publisher
 checks the actual battery before/after, creates its content-addressed checkpoint,
-retains the previous ROM, rejects reused versions and installs the stable ROM.
+requires matching candidate metadata, retains the previous ROM/build metadata,
+rejects reused versions and installs the stable ROM. Caught publication errors
+restore the prior ROM, metadata, receipt and history; incomplete recovery reports
+the failed paths and backup location. Abrupt termination/power loss still requires
+manual recovery from the retained artifacts. Reinstalling identical bytes keeps
+the original publication receipt and its original checkpoint/predecessor links.
 Afterward compare stable/canonical SHA, boot/Options version, build/release
-metadata and the freshly read battery/checkpoint bytes. No research save writes
+metadata and the freshly read battery/checkpoint bytes. Later player saves can
+differ from that original publication checkpoint; never restore it automatically.
+No research save writes
 to the real battery and no stale emulator states across ROM changes.
 
 Update TASKS at candidate acceptance, before a long qualification batch, at

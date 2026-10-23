@@ -140,28 +140,61 @@ def build(mods='mods', config=CONFIG, store=saves.STORE):
     candidate = CANDIDATE.read_bytes()
     previous = ROM.read_bytes() if ROM.exists() else None
     log_path = CANDIDATE.with_suffix('.build.json')
-    release_log = json.loads(log_path.read_text(encoding='utf-8')) if log_path.exists() else {}
+    candidate_log = log_path.read_bytes()
+    release_log = json.loads(candidate_log)
+    digest = w.sha256(candidate)
+    if not isinstance(release_log, dict) or release_log.get('output_rom_sha256') != digest:
+        raise ValueError('Candidate build metadata does not identify this ROM')
     version = release_log.get('release_version')
     if version:
         from tools import release_info
-        release_info.check_version_reuse(version, w.sha256(candidate))
+        release_info.check_version_reuse(version, digest)
+    stable_log = ROM.with_suffix('.build.json')
+    previous_log = stable_log.read_bytes() if stable_log.exists() else None
+    receipt = RELEASES / digest / 'release.json'
+    old_receipt = receipt.read_bytes() if receipt.exists() else None
+    if old_receipt is not None:
+        published = json.loads(old_receipt)
+        if (not isinstance(published, dict) or published.get('schema_version') != 1
+                or published.get('rom_sha256') != digest or published.get('version') != version):
+            raise ValueError('Existing release receipt differs; refusing publication')
+    before = {ROM: previous, stable_log: previous_log, receipt: old_receipt}
+    if version:
+        history = release_info.HISTORY
+        before[history] = history.read_bytes() if history.exists() else None
+    for target in before: w.safe_output(target)
     if previous is not None:
         rollback = RELEASES / w.sha256(previous) / ROM.name
         if rollback.exists() and rollback.read_bytes() != previous:
             raise ValueError('Existing ROM rollback copy differs; refusing publication')
         if not rollback.exists(): w.atomic_write(rollback, previous, (mod.DEFAULT_ROM,))
-    w.atomic_write(ROM, candidate, (mod.DEFAULT_ROM,))
-    if ROM.read_bytes() != candidate: raise ValueError('Published ROM differs from validated candidate')
-    if log_path.exists(): w.atomic_write(ROM.with_suffix('.build.json'), log_path.read_bytes())
-    w.write_json(RELEASES / w.sha256(candidate) / 'release.json', {
-        'schema_version': 1, 'rom_sha256': w.sha256(candidate),
-        'version': version,
-        'previous_rom_sha256': w.sha256(previous) if previous is not None else None,
-        'battery_checkpoint': snapshot, 'stable_rom': str(ROM),
-        'battery_sha256': w.sha256(saves.read_save(path)) if path.exists() else None})
-    if version:
-        release_info.register_release(version, w.sha256(candidate), date=release_log.get('release_date'),
-                                      previous=w.sha256(previous) if previous is not None else None)
+        if previous_log is not None and not rollback.with_suffix('.build.json').exists():
+            w.atomic_write(rollback.with_suffix('.build.json'), previous_log)
+    try:
+        w.atomic_write(ROM, candidate, (mod.DEFAULT_ROM,))
+        if ROM.read_bytes() != candidate: raise ValueError('Published ROM differs from validated candidate')
+        w.atomic_write(stable_log, candidate_log)
+        if old_receipt is None:
+            w.write_json(receipt, {
+                'schema_version': 1, 'rom_sha256': digest, 'version': version,
+                'previous_rom_sha256': w.sha256(previous) if previous is not None else None,
+                'battery_checkpoint': snapshot, 'stable_rom': str(ROM),
+                'battery_sha256': w.sha256(saves.read_save(path)) if path.exists() else None})
+        if version:
+            release_info.register_release(version, digest, date=release_log.get('release_date'),
+                                          previous=w.sha256(previous) if previous is not None else None)
+    except BaseException as error:
+        failures = []
+        for target, data in reversed(tuple(before.items())):
+            try:
+                if (target.read_bytes() if target.exists() else None) == data: continue
+                if data is None: target.unlink()
+                else: w.atomic_write(target, data, (mod.DEFAULT_ROM,))
+            except (OSError, ValueError) as recovery_error:
+                failures.append(f'{target}: {recovery_error}')
+        if failures:
+            raise OSError(f'Publication failed; rollback incomplete: {failures}. Backups: {RELEASES}') from error
+        raise
     print(f'Always open: {ROM}')
     print(f'Continue uses: {path}')
     if snapshot:

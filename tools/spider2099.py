@@ -47,7 +47,7 @@ def apply_rom(rom):
     changes = [n for n,a,b in zip(names,before,blobs) if a != b]
     if sorted(changes) != sorted(CHANGED):
         raise ValueError('2099 changed unexpected resources')
-    result = w.rebuild_rom(rom,{'Glob.bin':w.pack_glob(names,blobs)})
+    result = w.rebuild_rom(rom,{'Glob.bin':w.pack_glob(names,blobs)},legacy_gaps=True)
     h, old = w.parse_header(result), w.parse_header(rom)
     arm = result[h['arm9_offset']:h['arm9_offset']+h['arm9_size']]
     if arm != rom[old['arm9_offset']:old['arm9_offset']+old['arm9_size']]:

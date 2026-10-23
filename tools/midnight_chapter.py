@@ -1302,7 +1302,7 @@ def apply_rom(rom, *, save_rooms=True):
         if name.startswith('zz_') and name.endswith(('.nsbmd', '.nsbtx')) and at % 4:
             raise ValueError(f'Appended resource is not word-aligned: {name}')
         at += len(blob)
-    staged = w.rebuild_rom(rom, {'Glob.bin': w.pack_glob(out_names, out_blobs)})
+    staged = w.rebuild_rom(rom, {'Glob.bin': w.pack_glob(out_names, out_blobs)}, legacy_gaps=True)
     table, map_list, messages, stub_call = room_table(arm9, out_names, resources, first_string, listing)
     from tools import midnight_boss
     _, core_patch = midnight_boss.core_adapter(arm9, ML_BASE + ML_SPACE - midnight_boss.ADAPTER_SPACE, resources['ML_SignalCore']['warning_model'],

@@ -94,11 +94,15 @@ def camera(raw):
     section = RoomObjects.parse(raw).records[0].sections[4]
     if not section: return ()
     first = struct.unpack_from('<H', section)[0]
-    count = next((n for n in range(1, 16) if (3 * n + 3) // 4 * 4 == first), None)
-    if count is None: raise ValueError('Unexpected camera header')
-    offsets = struct.unpack_from(f'<{count}H', section)
-    sizes = section[2 * count:3 * count]
-    if any(section[3 * count:first]): raise ValueError('Camera header padding is not zero')
+    # Padding alone cannot distinguish 3/4, 7/8 or 11/12 polygons.
+    for count in range(1, 16):
+        if (3 * count + 3) // 4 * 4 != first or first > len(section): continue
+        offsets = struct.unpack_from(f'<{count}H', section)
+        sizes = section[2 * count:3 * count]
+        if any(section[3 * count:first]): continue
+        expected = tuple(first + POINT * sum(sizes[:i]) for i in range(count))
+        if offsets == expected and first + POINT * sum(sizes) == len(section): break
+    else: raise ValueError('Invalid camera header, polygon offsets or section length')
     out, at = [], first
     for offset, size in zip(offsets, sizes):
         if offset != at: raise ValueError('Camera polygons are not contiguous')

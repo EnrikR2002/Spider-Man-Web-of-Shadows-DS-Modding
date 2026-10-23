@@ -72,7 +72,7 @@ def apply_rom(rom,*,runtime_only=False,pilot=False):
         from tools import chapter_spectacle_audio as audio
         sf=next(e for e in w.nitrofs_entries(rom) if e['name']=='sound_data.sdat')
         replacements['sound_data.sdat']=audio.sound_data(rom[sf['start']:sf['end']])
-    result=w.rebuild_rom(rom,replacements);result,_=kit.replace_arm9(result,bytes(new));w.validate_rom(result,target=True)
+    result=w.rebuild_rom(rom,replacements,legacy_gaps=True);result,_=kit.replace_arm9(result,bytes(new));w.validate_rom(result,target=True)
     report['runtime'].update(used=used);report.update(rom_sha256=w.sha256(result),arm9_sha256=w.sha256(new),
         modified_resources=[names[i] for i in sorted(modified) if blobs[i]!=originals[i]],sound_data_preserved=runtime_only)
     from tools import release_info

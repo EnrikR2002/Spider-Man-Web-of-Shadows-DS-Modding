@@ -14,6 +14,11 @@ class CrowdBackendTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             b.candidate_source('', 'unreviewed')
 
+    def test_conditional_call_misassembled_to_itself_is_rejected(self):
+        source = 'start:\n cmp r0,#0\n bleq helper\n bx lr\nhelper:\n bx lr\n.ltorg\n'
+        with self.assertRaisesRegex(ValueError, 'branch to itself'):
+            b.assemble(source)
+
     def test_isolated_candidates_validate_without_changing_published_files(self):
         source_path = b.ROOT / 'tools/tasm_kit.s'
         hex_path = source_path.with_suffix('.hex')

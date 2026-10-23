@@ -51,6 +51,8 @@ generators reproduce their pinned release; changing their bytes under an already
 published version is forbidden. Preserve the accepted composition, qualify a
 private candidate, then publish via `python tools/playtest.py build` with DeSmuME
 closed. Do not load an old emulator state over a changed ROM.
+Raw `mod.py build`/`verify` commands now default to `build/candidate/`; the player
+launcher continues to use the stable ROM installed by `tools/playtest.py build`.
 
 Historical notes: `python tools/doc_archive.py list <topic>`, then
 `read <name> --toc` or `read <name> --section '<heading>'` (80-line default).

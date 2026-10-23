@@ -183,7 +183,7 @@ def apply_rom(rom,*,contact_pilot=False,observe_audio=False,observe_requests=Fal
     replacements={'Glob.bin':w.pack_glob(names,blobs)}
     if voices:
         sf=next(e for e in w.nitrofs_entries(rom) if e['name']=='sound_data.sdat');replacements['sound_data.sdat']=audio.sound_data(rom[sf['start']:sf['end']])
-    result=w.rebuild_rom(rom,replacements)
+    result=w.rebuild_rom(rom,replacements,legacy_gaps=True)
     if data:result,_=kit.replace_arm9(result,bytes(new))
     w.validate_rom(result,target=True)
     report=dict(version=VERSION,parent_sha256=PARENT,contact_pilot=contact_pilot,audio_observer=observer,modified_resources=changed,creatures=rebuilt,sound=sound_report,rooms=room_report,shipping=shipping,ground_gate=ground_gate,

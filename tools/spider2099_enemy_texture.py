@@ -70,7 +70,7 @@ def apply_rom(rom):
     changed=[name for name,a,b in zip(names,before,blobs) if a!=b]
     if sorted(changed)!=sorted((TEXTURE,'American.strings','English.strings')):
         raise ValueError('Enemy atlas post-pass changed unexpected Glob resources')
-    result=w.rebuild_rom(rom,{'Glob.bin':w.pack_glob(names,blobs)})
+    result=w.rebuild_rom(rom,{'Glob.bin':w.pack_glob(names,blobs)},legacy_gaps=True)
     validation=w.validate_rom(result,target=True);h=w.parse_header(result)
     parent_h=w.parse_header(rom)
     for field in ('arm7','arm9'):

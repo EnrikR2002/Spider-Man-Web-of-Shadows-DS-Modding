@@ -8,7 +8,6 @@ Windows workers can be pinned to one logical CPU at below-normal priority.
 from __future__ import annotations
 
 import argparse
-import ast
 import ctypes as c
 import json
 import os
@@ -70,24 +69,12 @@ def candidate_source(source, variant):
     raise ValueError('Unknown isolated backend variant')
 
 
-def checks():
-    """Reuse the existing assembler validators without its write-on-import code."""
-    tree = ast.parse((ROOT / 'tools/assemble_tasm_kit.py').read_text(encoding='utf-8'))
-    names = ('literal_errors', 'native_branch_errors')
-    functions = [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in names]
-    if len(functions) != len(names):
-        raise ValueError('Assembler validation functions changed')
-    namespace = {'KIT_BASE': kit.KIT_BASE}
-    exec(compile(ast.Module(body=functions, type_ignores=[]), '<kit-validators>', 'exec'), namespace)
-    return namespace
-
-
 def assemble(source, base=kit.KIT_BASE):
     sys.path.insert(0, str(ROOT / 'work/research-libs'))
     from keystone import Ks, KS_ARCH_ARM, KS_MODE_ARM
     code = bytes(Ks(KS_ARCH_ARM, KS_MODE_ARM).asm(source, base)[0])
-    validators = checks()
-    errors = validators['literal_errors'](code, source) + validators['native_branch_errors'](code, source, base=base)
+    from tools.assemble_tasm_kit import literal_errors, native_branch_errors, self_branch_errors
+    errors = literal_errors(code, source) + native_branch_errors(code, source, base=base) + self_branch_errors(code)
     body = [line.split('//')[0].strip() for line in source.splitlines()]
     body = [line for line in body if line]
     if not body or body[-1] != '.ltorg' or body.count('.ltorg') != 1:

@@ -192,6 +192,16 @@ preserved. Implementation: `tools/wos_tool.py`, `mod.py`.
 Detailed original verification: archived `VALIDATION.md`, `FORMAT_NOTES.md`
 section `NitroFS / ROM`.
 
+**Gap protection correction (2026-10-23, high confidence; v0.32.1 tooling):**
+ordinary `wos_tool.rebuild_rom`/raw repacks reject writes over non-padding bytes
+in internal gaps and in the gap before used-size, as well as after used-size.
+Previously only the last case was guarded. Frozen chapter/release generators
+explicitly use `legacy_gaps=True` with their existing parent/output pins: past
+relocations left old file bytes in newly formed alignment gaps, and rejecting
+those bytes would prevent exact historical reproduction. This compatibility
+path changes no published bytes. Synthetic regressions distinguish protected
+unknown gaps from that historical relocation residue.
+
 ### Glob.bin and bounded additions
 
 Archive is `N+1` LE u32 offsets, followed immediately by resource payloads.
@@ -263,6 +273,10 @@ general format5 compressed-texture authoring does not. NSBMD supports bounded
 UV/material inspection and the read-only rig map, no topology/skin editor.
 NSBTA actor references are mapped; its payload has no local editor.
 Tools: `nitro_texture.py`, `movie_suit.py`, `visual_audit.py`, `animation_rig.py`.
+The texture census accepts the build loader's bounded Rush/kit overlay additions
+(2026-10-23, high confidence in source regression and current-overlay command).
+It inventories native archives plus their overlays; generated chapter post-pass
+resources and simultaneous texture residency require separate ROM/runtime review.
 Archive `MOVIE_SUIT_EXPERIMENT.md` and `FORMAT_NOTES.md` heading `NSBTX / TEX0`.
 
 **2099 appearance research (2026-10-22, v0.29 parent; high confidence):**
@@ -440,6 +454,16 @@ DSVv0 wrapper is lossless/validated; game payload/checksum remains opaque.
 Snapshots are byte-preserving, not a save editor. Native purchase/refund/save/
 reload checks pass for released moves; real-save protection is separate from
 copied-save fixtures. Follow [WORKFLOW](../README.md).
+
+**Publication/probe correction (2026-10-23, high confidence; v0.32.1 tooling):**
+`playtest.build` validates the candidate metadata hash, retains prior build
+metadata with its ROM, rolls back caught publication failures across the ROM,
+metadata, receipt and history, and preserves an existing matching release receipt.
+Fault-injection tests cover every write, first install, and a failed recovery
+write without skipping the other recoveries. `player_trace.sample` now requires
+aligned motion ownership even when only one player layout remains; a lone freed
+layout is not evidence of a live actor. Both are tooling/source tests, not new
+in-engine gameplay qualification.
 
 Historical authored Rush qualification (before v0.2.0): eight choreography tests,
 all 3,736-resource build check,
@@ -1264,6 +1288,13 @@ frames), 0x14 on a flying one the air juggle 42, 0x25 launches even from the
 floor. A jumping enemy (state 4) answers 0x22 with a knockdown.
 
 ### Shared crowd-hit backend candidates
+
+**Prototype validator correction (2026-10-23, high confidence; source test):**
+`crowd_backend.assemble` imports the shared validators directly and includes
+`self_branch_errors`. A conditional call that Keystone resolves to itself is
+rejected before staging. The old AST extraction was unnecessary after the shared
+assembler's writes were moved under its main guard. Published kit source/hex stay
+unchanged; the prototype remains unshipped.
 
 **v0.29 published validation, 2026-10-22 (high confidence):**
 The fresh compiled correction preserves open-air native contacts. In the same
@@ -2801,6 +2832,11 @@ tests `test_nitro_build`, `test_room_compiler`, `test_room_author`,
   view is about 58 x 43.5 units at z 0 and 82 x 62 at the back wall. The
   descriptor's bounds at +0x3C..+0x48 do **not** steer the camera (changing
   them changed nothing).
+  **Parser correction (2026-10-23, high confidence; v0.32.1 tooling source
+  tests):** padded header size alone cannot distinguish 3/4, 7/8 or 11/12
+  regions. `room_author.camera` resolves the count using all polygon offsets,
+  zero padding and exact section length. Counts 1..15 round-trip; corrupt
+  offsets/padding/lengths are rejected. Native camera bytes are unchanged.
 - **Anchor points** are record 0, section 3: 20-byte points (x, y, z, 0,
   kind) in entity-batch framing. Kinds as the training room lays them out:
   1 on a floor (2 above it, every 20 units), 2 beside a left wall, 3 beside a

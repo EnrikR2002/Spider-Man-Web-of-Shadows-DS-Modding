@@ -100,7 +100,7 @@ def apply_rom(rom,*,pilot=False,voices=True):
     replacements={'Glob.bin':w.pack_glob(names,blobs)}
     if voices:
         sf=next(e for e in w.nitrofs_entries(rom) if e['name']=='sound_data.sdat');replacements['sound_data.sdat']=audio.sound_data(rom[sf['start']:sf['end']])
-    result=w.rebuild_rom(rom,replacements);result,_=kit.replace_arm9(result,bytes(new));w.validate_rom(result,target=True)
+    result=w.rebuild_rom(rom,replacements,legacy_gaps=True);result,_=kit.replace_arm9(result,bytes(new));w.validate_rom(result,target=True)
     if new[kit.SOURCE:kit.SOURCE+kit.RESERVE]!=arm[kit.SOURCE:kit.SOURCE+kit.RESERVE]:raise ValueError('Player kit changed')
     if any(blobs[i]!=raw for i,raw in enumerate(before) if names[i] not in changed):raise ValueError('Unrelated asset changed')
     report=dict(version=VERSION,parent_sha256=PARENT,rom_sha256=w.sha256(result),arm9_sha256=w.sha256(new),pilot=pilot,creatures=creatures,sound=sound,

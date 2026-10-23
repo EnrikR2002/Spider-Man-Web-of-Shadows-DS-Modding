@@ -69,7 +69,7 @@ def apply_rom(rom):
         blobs[i]=raw+bytes((len(before[i])-len(raw))%4)
     changed=[name for name,a,b in zip(names,before,blobs) if a!=b]
     if changed!=['American.strings','English.strings']:raise ValueError('Unexpected correction resource scope')
-    result=w.rebuild_rom(result,{'Glob.bin':w.pack_glob(names,blobs)})
+    result=w.rebuild_rom(result,{'Glob.bin':w.pack_glob(names,blobs)},legacy_gaps=True)
     w.validate_rom(result,target=True)
     report=dict(version=VERSION,parent_sha256=PARENT,rom_sha256=w.sha256(result),arm9_sha256=w.sha256(new),
         modified_resources=changed,runtime=dict(entry=at,bytes=len(code),values=values,hooks=[dict(site=s,old=e,target=t) for s,e,t in hooks],

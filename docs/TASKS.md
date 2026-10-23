@@ -5,6 +5,13 @@ TECHNICAL owns contracts; CHANGES owns releases; TASM_ROADMAP owns design.
 
 ## Current objective and player direction
 
+All eight repository audit findings in developer tooling are corrected. Publisher
+recovery/receipt retention, candidate defaults, occupied-gap protection,
+prototype assembly validation, live-player sampling, current texture audit and
+camera parsing are implemented. All 563 source/regression tests pass; exact-source
+rebuild verification matches installed v0.32.1 across all 5,952 resources.
+No ROM publication is part of this maintenance task.
+
 Both Hunter's Return review findings are corrected in v0.32.1. Per-victim hit
 restoration prevents a selected target's launch from leaking into shared hit
 records. New player allocation clears a departed owner's private phase so the
@@ -27,9 +34,10 @@ branch is active. Player feel and appearance acceptance remain open.
 
 Stable build/Spider-Man-WoS-modded.nds is **v0.32.1**, installed through
 tools/playtest.py build. Accepted A, canonical final, normal-source rebuild,
-publisher candidate and stable match; boot/Options agree. Full exact scope,
-source hashes and evidence are in reference/hunters_return_fix.json. CHANGES
+publisher candidate and stable match; boot/Options agree. Publication scope,
+original source hashes and gameplay evidence are in reference/hunters_return_fix.json. CHANGES
 and releases.json record publication. Prior ROM/recipe/build metadata remain.
+This maintenance changes tooling source while reproducing the same ROM.
 
 The actual latest DSV wrapper, 512-byte payload and publication checkpoint match
 exactly. Clean original is unchanged and no research save was adopted. Never
@@ -38,7 +46,7 @@ Fresh installed-ROM Continue retains current purchases, XP, HP and checkpoint.
 
 ## Implemented and agent-tested
 
-All 59 source/regression tests pass. New checks cover both victim orders, shared
+The earlier Hunter correction's 59 source/regression tests passed. They cover both victim orders, shared
 info/contact records, native credit before restoration, skipped/ignored hits,
 nested calls, ARM ABI/flags, replaced players in both forms, reactivation, three
 hook destinations and byte scope. The 32 KiB player kit, all assets/motion/XBDs,
@@ -53,7 +61,17 @@ the corrected build clears it and activates again on the new player. Arrival
 and stale-owner injection are explicit fixtures. Red/unowned, R and stale-target
 controls pass. Earlier ineffective fixture timings remain documented in receipt.
 
+Tooling checks cover failures after every publication write, removal of a partial
+first install, continuing recovery after one restore fails, unchanged receipt
+links after more play, candidate defaults, occupied internal/trailing gaps,
+frozen relocation compatibility, self-calling assembly, lone stale/unaligned
+players, kit overlay acceptance and camera counts 1..15. Frozen generators retain
+explicit historical gap reuse under their existing pins; raw repacks are strict.
+
 ## Next exact action and remaining gates
+
+All audit corrections are qualified; no current blocker or further tooling fix
+is queued. No additional DeSmuME/DS-hardware qualification is claimed.
 
 Use the normal launcher to play the correction and review Hunter's Return/physique.
 Player feel/appearance, full-route balance and actual DeSmuME pacing stay open.

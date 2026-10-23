@@ -15,8 +15,7 @@ BLOCKS = (('tasm_kit', KIT_BASE, 0x1F00), ('tasm_kit2', 0x02155420, 0x1A00))
 
 def literal_errors(code, source):
     """Keystone silently wraps out-of-range literal loads: check every pc-relative
-    load ('ldr rX,=V' or 'ldr rX,lit_name' from a '.word' table) reads its value.
-    (tools/crowd_backend.py reuses these two validators by name: keep imports local.)"""
+    load ('ldr rX,=V' or 'ldr rX,lit_name' from a '.word' table) reads its value."""
     import re
     import struct
     value = r'(-?(?:0x[0-9a-fA-F]+|\d+))'

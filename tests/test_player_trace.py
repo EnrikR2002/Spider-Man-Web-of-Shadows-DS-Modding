@@ -8,6 +8,7 @@ class PlayerTraceTests(unittest.TestCase):
         data = bytearray(4*1024*1024)
         for offset, value in zip((0x300, 0x308, 0x314), VTABLES): struct.pack_into('<I', data, offset, value)
         struct.pack_into('<I', data, 0x330, BASE+0x600)
+        struct.pack_into('<I', data, 0x600, BASE+0x300)
         struct.pack_into('<I', data, 0x830, 3382)
         struct.pack_into('<I', data, 0x854, 56)
         struct.pack_into('<2i', data, 0x67c, -4096, 8192)
@@ -34,9 +35,24 @@ class PlayerTraceTests(unittest.TestCase):
         struct.pack_into('<I', data, 0x7f8, 0)
         self.assertIsNone(sample(data)['controller'])
         struct.pack_into('<I', data, 0x330, BASE+len(data))
-        with self.assertRaisesRegex(ValueError, 'outside'): sample(data)
+        with self.assertRaisesRegex(ValueError, 'found 0'): sample(data)
         with self.assertRaises(ValueError): sample(bytes(40))
         with self.assertRaisesRegex(ValueError, 'found 0'): sample(bytes(len(data)))
+
+    def test_lone_stale_or_unaligned_motion_is_rejected(self):
+        data = bytearray(4*1024*1024)
+        for offset, value in zip((0x300, 0x308, 0x314), VTABLES): struct.pack_into('<I', data, offset, value)
+        struct.pack_into('<I', data, 0x330, BASE+0x600)
+        for owner in (0, BASE+0x400):
+            struct.pack_into('<I', data, 0x600, owner)
+            before = bytes(data)
+            with self.assertRaisesRegex(ValueError, 'found 0'): sample(data)
+            self.assertEqual(bytes(data), before)
+        struct.pack_into('<I', data, 0x600, BASE+0x300)
+        self.assertEqual(sample(data)['actor_address'], BASE+0x300)
+        struct.pack_into('<I', data, 0x330, BASE+0x601)
+        struct.pack_into('<I', data, 0x601, BASE+0x300)
+        with self.assertRaisesRegex(ValueError, 'found 0'): sample(data)
 
     def test_stale_actor_copy_is_ignored_when_the_live_motion_points_back(self):
         data = bytearray(4*1024*1024)

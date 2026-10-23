@@ -300,7 +300,7 @@ def main(argv=None):
         p.add_argument('--rom', default=str(DEFAULT_ROM), help='Untouched validated CS5E ROM')
         if command in ('build', 'verify'):
             p.add_argument('--mods', default='mods', help='Overlay directory, relative to project')
-            p.add_argument('-o', '--out', default='build/Spider-Man-WoS-modded.nds')
+            p.add_argument('-o', '--out', default='build/candidate/Spider-Man-WoS-modded.nds')
             p.add_argument('--gameplay-profile', default='reference/gameplay_profile.json',
                            help='Known gameplay recipe, or original for an unpatched engine')
         if command == 'extract': p.add_argument('-o', '--out', default='work')

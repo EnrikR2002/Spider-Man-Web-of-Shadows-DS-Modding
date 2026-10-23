@@ -212,11 +212,13 @@ def pack_glob(names: list[str], blobs: list[bytes]) -> bytes:
     return result
 
 
-def rebuild_rom(original: bytes, replacements: dict[str, bytes]) -> bytes:
+def rebuild_rom(original: bytes, replacements: dict[str, bytes], *, legacy_gaps=False) -> bytes:
     """Preserve placements; relocate successors only on collision, within capacity.
 
     Unknown gaps/prefix/tail stay from the source; growth consumes only 00/ff
     padding after used size. Shrinking leaves vacated bytes untouched.
+    legacy_gaps retains historical gap reuse for frozen release generators
+    with separate parent/output pins; ordinary repacks reject occupied gaps.
     """
     report = validate_rom(original)
     h, entries = report['header'], report['nitrofs']
@@ -241,6 +243,13 @@ def rebuild_rom(original: bytes, replacements: dict[str, bytes]) -> bytes:
     if used > len(original): raise ValueError(f'Rebuilt used size 0x{used:X} exceeds cart capacity 0x{len(original):X}')
     if any(value not in (0, 255) for value in original[h['used_rom_size']:used]):
         raise ValueError('Growth would overwrite unknown non-padding bytes after used ROM size')
+    if not legacy_gaps:
+        gaps = [(a['end'], b['start']) for a, b in zip(ordered, ordered[1:])]
+        gaps.append((ordered[-1]['end'], h['used_rom_size']))
+        for _, start, end, _ in plan:
+            for left, right in gaps:
+                if any(value not in (0, 255) for value in original[max(start, left):min(end, right)]):
+                    raise ValueError('Growth would overwrite unknown non-padding bytes in a NitroFS gap')
     out = bytearray(original)
     for entry, start, end, blob in plan:
         out[start:end] = blob
@@ -303,7 +312,7 @@ def main(argv=None) -> int:
     p = sp.add_parser('extract-rom'); p.add_argument('rom'); p.add_argument('-o', '--out', default='work/rom')
     p = sp.add_parser('unpack-glob'); p.add_argument('glob'); p.add_argument('-o', '--out', default='work/glob')
     p = sp.add_parser('repack-glob'); p.add_argument('dir'); p.add_argument('-o', '--out', default='build/Glob.bin')
-    p = sp.add_parser('repack-rom'); p.add_argument('rom'); p.add_argument('--glob'); p.add_argument('--sdat'); p.add_argument('-o', '--out', default='build/Spider-Man-WoS-modded.nds')
+    p = sp.add_parser('repack-rom'); p.add_argument('rom'); p.add_argument('--glob'); p.add_argument('--sdat'); p.add_argument('-o', '--out', default='build/candidate/Spider-Man-WoS-modded.nds')
     p = sp.add_parser('manifest'); p.add_argument('glob'); p.add_argument('-o', '--out', default='glob_manifest.csv')
     args = ap.parse_args(argv)
     try:

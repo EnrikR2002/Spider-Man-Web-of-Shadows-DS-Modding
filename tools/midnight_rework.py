@@ -251,7 +251,7 @@ def apply_rom(rom):
     for site,word in hooks.items():struct.pack_into('<I',new,site-BASE,word)
     if new[kit.SOURCE:kit.SOURCE+kit.RESERVE]!=arm[kit.SOURCE:kit.SOURCE+kit.RESERVE]:raise ValueError('Kit bytes changed')
     sound_fs=next(e for e in w.validate_rom(rom,target=True)['nitrofs'] if e['name']=='sound_data.sdat')
-    result=w.rebuild_rom(rom,{'Glob.bin':w.pack_glob(out_names,out_blobs),'sound_data.sdat':creatures.sound_data(rom[sound_fs['start']:sound_fs['end']])})
+    result=w.rebuild_rom(rom,{'Glob.bin':w.pack_glob(out_names,out_blobs),'sound_data.sdat':creatures.sound_data(rom[sound_fs['start']:sound_fs['end']])},legacy_gaps=True)
     result,_=kit.replace_arm9(result,bytes(new));w.validate_rom(result,target=True)
     from tools import release_info
     expected=release_info.PROFILE_INFO['tasm-v'+VERSION]['arm9_sha256']

@@ -216,7 +216,7 @@ def apply_rom(rom):
     expanded=bytearray(rom)+b'\xff'*len(rom);expanded[0x14]+=1
     struct.pack_into('<H',expanded,0x15e,w.crc16(expanded[:0x15e]))
     w.validate_rom(expanded,target=True)
-    result=w.rebuild_rom(bytes(expanded),{'Glob.bin':w.pack_glob(outnames,outblobs),'sound_data.sdat':combat.sound_data(rom[sf['start']:sf['end']])})
+    result=w.rebuild_rom(bytes(expanded),{'Glob.bin':w.pack_glob(outnames,outblobs),'sound_data.sdat':combat.sound_data(rom[sf['start']:sf['end']])},legacy_gaps=True)
     result,_=kit.replace_arm9(result,bytes(new));w.validate_rom(result,target=True)
     if new[kit.SOURCE:kit.SOURCE+kit.RESERVE]!=arm[kit.SOURCE:kit.SOURCE+kit.RESERVE]:raise ValueError('Player kit changed')
     for i,raw in enumerate(outblobs[:len(originals)]):

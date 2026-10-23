@@ -1,5 +1,6 @@
 """Camera polygons and anchor points of room object files."""
 import unittest
+import struct
 
 import mod
 from tools import room_author as ra
@@ -56,6 +57,20 @@ class RoomAuthorTests(unittest.TestCase):
         self.assertEqual((len(section), section[2], section[3], section[4:7]), (8 + 60, 8, 3, bytes((20, 20, 20))))
         with self.assertRaises(ValueError): ra.anchor_section([(0, 0, 9)])
         self.assertEqual(ra.anchor_section([]), b'')
+
+    def test_every_supported_camera_count_round_trips_and_corruption_is_rejected(self):
+        raw = self.blobs['Test_Surfaces01_app.obj']
+        for count in range(1, 16):
+            with self.subTest(count=count):
+                polygons = [((i, 0), (i + 1, 0), (i + 1, 5), (i, 5)) for i in range(count)]
+                built = ra.set_camera(raw, polygons)
+                self.assertEqual(ra.camera(built), tuple(polygons))
+        section = ra.camera_section(polygons[:4])
+        bad_offset = bytearray(section); struct.pack_into('<H', bad_offset, 2, 0)
+        bad_padding = bytearray(ra.camera_section(polygons[:3])); bad_padding[9] = 1
+        for corrupt in (section[:-1], section + b'\0', bytes(bad_offset), bytes(bad_padding)):
+            with self.assertRaises(ValueError):
+                ra.camera(RoomObjects.parse(raw).replace_section(0, 4, corrupt))
 
 
 if __name__ == '__main__':

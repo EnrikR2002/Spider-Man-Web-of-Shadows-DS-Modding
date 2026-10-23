@@ -10,6 +10,7 @@ import struct
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 import mod
 from tools import wos_tool as w
 from tools import nitro_texture as nt
@@ -107,6 +108,25 @@ class RomTests(unittest.TestCase):
         changed = bytearray(self.rom); changed[0x1800] = 123
         with self.assertRaisesRegex(ValueError, 'non-padding'): w.rebuild_rom(bytes(changed), {'Glob.bin': b'x' * 4096})
 
+    def test_growth_rejects_occupied_internal_and_trailing_gaps(self):
+        for offset, size in ((0x1550, 513), (0x1700, 1024)):
+            with self.subTest(offset=offset):
+                source = bytearray(self.rom)
+                source[offset:offset + 8] = b'UNKNOWN!'
+                with self.assertRaisesRegex(ValueError, 'non-padding.*gap'):
+                    w.rebuild_rom(bytes(source), {'Glob.bin': b'x' * size})
+                unchanged_gap = w.rebuild_rom(bytes(source), {'Glob.bin': b'x'})
+                self.assertEqual(unchanged_gap[offset:offset + 8], b'UNKNOWN!')
+
+    def test_frozen_generators_can_reproduce_relocated_file_residue(self):
+        first = w.rebuild_rom(self.rom, {'Glob.bin': b'x' * 513})
+        with self.assertRaisesRegex(ValueError, 'non-padding.*gap'):
+            w.rebuild_rom(first, {'Glob.bin': b'x' * 1024})
+        legacy = w.rebuild_rom(first, {'Glob.bin': b'x' * 1024}, legacy_gaps=True)
+        entries = w.nitrofs_entries(legacy)
+        self.assertEqual(legacy[entries[0]['start']:entries[0]['end']], b'x' * 1024)
+        self.assertEqual(legacy[entries[1]['start']:entries[1]['end']], b'SDATopaque\0unknown')
+
     def test_reject_bad_fat_fnt_header(self):
         changes = [(0x800, '<I', 0x100), (0x804, '<I', 0x1300), (0x80c, '<I', len(self.rom) + 1),
                    (0x808, '<I', 0x1400), (0x4c, '<I', 15), (0x600, '<I', 0), (0x606, '<H', 0),
@@ -127,6 +147,30 @@ class RomTests(unittest.TestCase):
             with self.assertRaises(ValueError): w.atomic_write(linked, b'x', (source,))
             self.assertEqual(source.read_bytes(), self.rom)
         with self.assertRaises(ValueError): mod.build_output('work/test.nds')
+
+
+class DefaultOutputTests(unittest.TestCase):
+    def test_raw_build_and_verify_default_to_candidate_without_replacing_stable(self):
+        rom = make_rom(); e = w.nitrofs_entries(rom)[0]
+        glob = rom[e['start']:e['end']]; manifest = w.glob_manifest(glob)
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td); mods = root / 'mods'; mods.mkdir()
+            stable = root / 'build/Spider-Man-WoS-modded.nds'
+            stable.parent.mkdir(); stable.write_bytes(b'published release')
+            with patch.object(mod, 'ROOT', root), patch.object(mod, 'load_clean', return_value=(rom, glob, manifest)):
+                with contextlib.redirect_stdout(io.StringIO()):
+                    for command in ('build', 'verify'):
+                        self.assertEqual(mod.main([command, '--mods', str(mods), '--gameplay-profile', 'original']), 0)
+            self.assertEqual(stable.read_bytes(), b'published release')
+            self.assertEqual((root / 'build/candidate' / stable.name).read_bytes(), rom)
+
+    def test_raw_repack_defaults_to_candidate(self):
+        with tempfile.TemporaryDirectory() as td:
+            source = Path(td) / 'source.nds'; source.write_bytes(make_rom())
+            glob = Path(td) / 'Glob.bin'; glob.write_bytes(make_glob())
+            with patch.object(w, 'atomic_write') as write, contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(w.main(['repack-rom', str(source), '--glob', str(glob)]), 0)
+            self.assertEqual(write.call_args.args[0].as_posix(), 'build/candidate/Spider-Man-WoS-modded.nds')
 
 
 class OverlayTests(unittest.TestCase):

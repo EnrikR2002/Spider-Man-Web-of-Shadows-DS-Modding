@@ -92,7 +92,7 @@ def apply_rom(rom):
     if sorted(changed) != sorted(CHANGED):
         raise ValueError('Movie appearance changed unexpected resources')
     result, runtime = replace_selector(rom, previous, shared_report)
-    result = w.rebuild_rom(result, {'Glob.bin': w.pack_glob(names, blobs)})
+    result = w.rebuild_rom(result, {'Glob.bin': w.pack_glob(names, blobs)}, legacy_gaps=True)
     h = w.parse_header(result)
     report = {'version': VERSION, 'parent_sha256': PARENT, 'rom_sha256': w.sha256(result),
         'arm9_sha256': w.sha256(result[h['arm9_offset']:h['arm9_offset']+h['arm9_size']]),

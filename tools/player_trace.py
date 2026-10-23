@@ -34,13 +34,11 @@ def sample(ram: bytes):
                 struct.unpack_from('<I', ram, start+20)[0]) == VTABLES[1:]:
             candidates.append(start)
         start += 4
-    if len(candidates) > 1:
-        # Room transitions can leave a freed actor's bytes behind. The live
-        # actor's motion object points back to it at +0; a stale copy's does not.
-        def owned(a):
-            m = struct.unpack_from('<I', ram, a + 0x30)[0] - BASE
-            return 0 <= m <= len(ram) - 4 and struct.unpack_from('<I', ram, m)[0] == a + BASE
-        candidates = [a for a in candidates if owned(a)]
+    # A room transition may leave only a freed actor's layout behind.
+    def owned(a):
+        m = struct.unpack_from('<I', ram, a + 0x30)[0] - BASE
+        return m % 4 == 0 and 0 <= m <= len(ram) - 4 and struct.unpack_from('<I', ram, m)[0] == a + BASE
+    candidates = [a for a in candidates if owned(a)]
     if len(candidates) > 1:
         # A freed motion can retain its owner too. Its controller has been
         # released/reused; require the native controller's type and back-link

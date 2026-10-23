@@ -43,7 +43,7 @@ def apply_rom(rom):
         blobs[i]=raw;changed.add(i)
     for i,raw in enumerate(blobs):
         if i not in changed and raw!=before[i]:raise ValueError('Unrelated texture-patch resource changed')
-    result=w.rebuild_rom(rom,{'Glob.bin':w.pack_glob(names,blobs)});w.validate_rom(result,target=True)
+    result=w.rebuild_rom(rom,{'Glob.bin':w.pack_glob(names,blobs)},legacy_gaps=True);w.validate_rom(result,target=True)
     h=w.parse_header(rom);arm=rom[h['arm9_offset']:h['arm9_offset']+h['arm9_size']];hh=w.parse_header(result)
     if result[hh['arm9_offset']:hh['arm9_offset']+hh['arm9_size']]!=arm:raise ValueError('Texture patch changed executable')
     sf=lambda r:next(r[e['start']:e['end']] for e in w.nitrofs_entries(r) if e['name']=='sound_data.sdat')

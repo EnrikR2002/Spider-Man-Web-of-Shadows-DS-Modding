@@ -91,7 +91,7 @@ def apply_rom(rom):
     for at,value in ((0x020776bc,crane.branch(0x020776bc,capture)),(combat.THINK_SLOT,think),(combat.SECOND_SLOT,secondary),(combat.ENTER_SLOT,enter),(combat.UPDATE_SLOT,update),
                       (crane_audio.SITE,crane.branch(crane_audio.SITE,sound)),(BASE+chapter.GLOB_COUNT,len(outnames))):struct.pack_into('<I',new,at-BASE,value)
     sf=next(e for e in w.nitrofs_entries(rom) if e['name']=='sound_data.sdat');print('PACK',flush=True)
-    result=w.rebuild_rom(rom,{'Glob.bin':w.pack_glob(outnames,outblobs),'sound_data.sdat':audio.sound_data(rom[sf['start']:sf['end']])})
+    result=w.rebuild_rom(rom,{'Glob.bin':w.pack_glob(outnames,outblobs),'sound_data.sdat':audio.sound_data(rom[sf['start']:sf['end']])},legacy_gaps=True)
     result,_=kit.replace_arm9(result,bytes(new));w.validate_rom(result,target=True)
     if new[kit.SOURCE:kit.SOURCE+kit.RESERVE]!=arm[kit.SOURCE:kit.SOURCE+kit.RESERVE]:raise ValueError('Player kit changed')
     for i,raw in enumerate(outblobs[:len(before)]):

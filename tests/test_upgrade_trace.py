@@ -10,6 +10,7 @@ def ram_with_skills(bits=(), currency=39):
     for offset, pointer in zip((0, 8, 20), player_trace.VTABLES):
         struct.pack_into('<I', ram, actor + offset, pointer)
     struct.pack_into('<I', ram, actor + 0x30, player_trace.BASE + motion)
+    struct.pack_into('<I', ram, motion, player_trace.BASE + actor)
     struct.pack_into('<I', ram, upgrade_trace.STATS_POINTER_ADDRESS - player_trace.BASE,
                      player_trace.BASE + stats)
     struct.pack_into('<I', ram, actor + 0xE8, player_trace.BASE + stats + 12)
