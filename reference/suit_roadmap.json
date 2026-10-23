@@ -26,7 +26,7 @@
     "Dragnet",
     "Vortex"
   ],
-  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. The requested cape-free Across the Spider-Verse 2099 Black appearance is published; seven Black moves remain design work. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices, third suit, shop/save expansion and branches remain deferred.",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. The requested cape-free Across the Spider-Verse 2099 Black appearance is published; the 2026-10-23 Hunter combat design for the seven Black slots is unimplemented design work. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices, third suit, shop/save expansion and branches remain deferred.",
   "prototype_reference": "../docs/TASM_ROADMAP.md#recommended-build-order",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
@@ -59,9 +59,25 @@
         "section": "Spider-Man 2099",
         "snapshot_date": "2026-10-21"
       },
+      "combat_design": {
+        "date": "2026-10-23",
+        "reference": "../docs/TASM_ROADMAP.md#combat-the-hunter-design-2026-10-23",
+        "request": "Make Black play and fight as close as possible to Miguel O'Hara in Across the Spider-Verse; make it fun to play.",
+        "slot_map": {
+          "Black Widowmaker": "Talon Line",
+          "Ground Rebound": "Freefall",
+          "Poison Pummel": "Pin & Pound",
+          "Power Launch": "Collar Toss",
+          "Quick Charge": "Relentless",
+          "Super Charge": "Talon Pounce",
+          "Webbed Fury": "Rundown"
+        },
+        "status": "design-only-not-implemented",
+        "supersedes": "2026-10-22 catch/carry/crash/chase seven-move proposal (archived 2026-10-21 snapshot)"
+      },
       "design_reference": "../docs/TASM_ROADMAP.md#spider-man-2099-black-slot-rework",
       "id": "2099-classic",
-      "implementation_order": "Requested 2026-10-22: appearance first, then discuss skill proposal and refinements; first mechanical prototype should establish Raking Cross.",
+      "implementation_order": "Appearance shipped (v0.30.2/v0.30.3). Combat awaits the player's go-ahead: clear the space, Black-only resource, hook and body-control gates, then build Pin & Pound as the first complete slice; Freefall, Talon Pounce + Relentless, Collar Toss + Rundown and Talon Line follow one player verdict at a time.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Broader chest/lats/traps/deltoids, athletic thighs and narrower jaw on unchanged native rig/animations",
@@ -69,7 +85,7 @@
         "Red web cape and all cape geometry/atlas region removed",
         "Opaque 128x128 I8 atlas: navy/cobalt, angular mask/chest spider, red shoulder panels and knee chevrons; same 16 KiB pixel pool"
       ],
-      "kit": "Proposed catch/carry/crash/chase Black kit. Seven purchased replacements remain unimplemented; native A dash/spike/slam, ordinary B/base strings/R, ownership and progression are unchanged.",
+      "kit": "Hunter design (2026-10-23, unimplemented): hunt -> seize -> punish -> hurl on the exact native Power Dash/Hammer Spike/Hammer Slam foundation. Native rows map to Rundown, Collar Toss, Freefall, Talon Line, Pin & Pound, Talon Pounce and Relentless; ordinary B/base strings/R, ownership, dependencies and progression are unchanged.",
       "latest_feedback": {
         "date": "2026-10-22",
         "source_version": "0.30.1",
@@ -106,7 +122,7 @@
       "status": "identity-merged-into-tasm1"
     }
   ],
-  "updated": "2026-10-22",
+  "updated": "2026-10-23",
   "upgrade_plan": "tasm_upgrade_plan.json",
   "upgrade_plan_status": "implemented-current-red-rows-progression-expansion-deferred",
   "user_verified": [
