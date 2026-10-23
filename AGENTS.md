@@ -86,8 +86,10 @@ Fun and spectacle come first. Garfield's Spider-Man is fast, acrobatic and
 spider-like: combo strong/web-resistant enemies, hit behind, cancel with R to
 reposition and retain the combo. Preserve native A/B/base strings/evade. Develop
 one combined TASM1/2 kit through Red purchase slots. Overclock, Dragnet and Vortex
-are the final added skills: iterate them, add none. Prices/balance, third suit,
-shop/save expansion and other campaign branches remain deferred unless requested.
+are the final added skills: iterate them, add none. The 2099 Black kit may add
+purchased rows on free saved bits as its coherent design needs (2026-10-23).
+Prices/balance, third suit, save expansion, other shop growth and campaign
+branches remain deferred unless requested.
 
 New moves require fluid authored motion, continuous trajectories and overlap;
 per-key eased "dancing" and repackaged stock attacks were rejected. Both chapters

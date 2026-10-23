@@ -13,8 +13,9 @@ reposition -> resume**. Native A/B/base strings/evade, purchases, dependencies,
 Both Suits traversal, story gates and earned rewards remain the foundation.
 Overclock, Dragnet and Vortex are the final added Red skills. Fun and spectacle
 lead. The 2026-10-22 request activates the selected 2099 Black-slot rework,
-appearance first. The 2026-10-23 request replaces its combat proposal with the
-film-faithful Hunter design below (not implemented). Prices, third suits and
+appearance first. The 2026-10-23 requests replace its combat proposal with the
+film-faithful Hunter design below (revision 2: talon, web, air and boss pillars,
+adding Black rows as the kit needs; not implemented). Prices, third suits and
 campaign expansion remain deferred.
 
 The current release is **v0.31.0**. Vortex is now a cocoon-only tethered
@@ -27,7 +28,8 @@ actual DeSmuME pacing.
 
 | Player evidence | Decision that still matters | Later implementation / limit |
 |---|---|---|
-| 2026-10-23: make Black play and fight as close as possible to Across the Spider-Verse's Miguel O'Hara; make it fun to play | Replace the comic-style juggle proposal with a grappling pursuer (hunt -> seize -> punish -> hurl) on the exact native A foundation. | Design only, below. The first slice is Pin & Pound after the listed engineering gates; no player verdict exists until a slice ships. |
+| 2026-10-23 review of Hunter revision 1: better overall, but pin/pound dominates into one trick, pins fail on bosses, no webbing, no air combos; add as many rows as a coherent kit needs, within the base game's 2D mob/boss brawler | Four pillars (talons, webs, air, boss); pinning becomes one finisher; Vulture-style Boarding for bosses; webs on X; eight new Black rows on free saved bits. | Revision 2 design only. First a Web Yank pipeline proof, then the Sky slice; no player verdict exists until a slice ships. |
+| 2026-10-23: make Black play and fight as close as possible to Across the Spider-Verse's Miguel O'Hara; make it fun to play | Replace the comic-style juggle proposal with a film-faithful pursuer on the exact native A foundation. | Revision 1 (pin-centred), superseded the same day by revision 2; archived. |
 | 2026-10-22: Vortex is boring; keep it conditional on regular-web/Dragnet cocoons. Boss fights well but needs larger symbiote metal war-machine anatomy, one boss bar, and a low-HP damage fix. | Rework Vortex inside its existing paid row; preserve liked boss combat; separate a shared Vitality clamp defect from boss behavior. | v0.31.0 ships the tether catapult/slam, larger articulated armor, boss-only texture and raw-damage fix; native boss timings/AI remain. Agent qualification is in TASKS; player feel/appearance acceptance remains open. |
 | v0.30.2 Terminal enemies were white while the 2099 player rendered | Restore the custom enemy texture bindings in the crowded scene while retaining artwork and geometry. | v0.30.3 I4 atlas binds all three observed enemy materials. One qualified scene, not all-room or player-acceptance evidence. |
 | v0.30.1 appearance liked overall; latest supplied Across the Spider-Verse image; remove the red web cape | Use the movie's navy/red mask, angular chest spider and shoulder panels; remove cape geometry rather than hiding it. | v0.30.2 implements and agent-tests this appearance. Player visual acceptance is still open. At v0.30.2, Terminal enemies remained unbound; v0.30.3 resolves the sampled crowd. |
@@ -155,124 +157,164 @@ atlas to 8 KiB I4, which binds the sampled Terminal crowd. One mixed scene is no
 all-room residency, player visual acceptance or DeSmuME pacing. Details are in
 `reference/spider2099_movie.json` and `reference/spider2099_enemy_texture.json`.
 
-### Combat: the Hunter (design, 2026-10-23)
+### Combat: the Hunter (design rev. 2, 2026-10-23)
 
-On 2026-10-23 the player asked for Black to play and fight as close as possible
-to Miguel O'Hara in *Across the Spider-Verse*, and to be fun enough to make them
-want to play it. This **replaces** the 2026-10-22 "catch -> carry -> crash ->
-chase" proposal. Nothing below is implemented, agent-tested or player-confirmed.
+The player's 2026-10-23 review of revision 1 found the direction better but
+flawed: pinning and pounding dominated into a one-trick style, pins had no
+answer against bosses, there was no webbing and no air combo, and seven rows
+were an unnecessary limit. Add as many Black rows as a coherent kit needs, and
+keep the movie identity inside the base game: a 2D side-view brawler against
+mobs and bosses. Revision 1 and the 2026-10-22 proposal are archived as
+`RETIRED_2099_DESIGNS.md`. Nothing below is implemented, agent-tested or
+player-confirmed.
 
-**What the film shows.** Miguel is not an acrobat. He is big, serious and
-relentless: he leads the whole Spider Society after Miles, runs him down across
-Nueva York and ends the chase by pinning Miles to the roof of a speeding train.
-He is reportedly animated on ones,
-the smoothest motion in the film, so his weight comes from fluid anticipation
-and follow-through rather than stiffness
+**Movie read.** Miguel is big, serious and relentless. He leads the Spider
+Society's hunt for Miles and ends it by pinning him to a speeding train's roof.
+Against the Vulture he climbs onto the villain's back, tears off a wing and
+holds on as the Vulture rockets upward. His web lines are heavy and glowing
+(one review calls his weapon a lariat). He is reportedly animated on ones, so
+his weight comes from fluid motion, not stiffness
 ([film](https://en.wikipedia.org/wiki/Spider-Man:_Across_the_Spider-Verse),
-[chase](https://intothespiderverse.fandom.com/wiki/Hunt_for_Miles_Morales)).
+[chase](https://intothespiderverse.fandom.com/wiki/Hunt_for_Miles_Morales),
+[Vulture](https://intothespiderverse.fandom.com/wiki/Spider-Man:_Across_the_Spider-Verse)).
+
+**Game read.** Mobs arrive in crowds and already support the vocabulary this
+kit needs: stagger, knockdown, launch to about 25 units, air juggle, web yank
+and hold, floor drag and far throw (TECHNICAL "Hit pipeline"). Bosses do not:
+the Conductor turns knockdowns into standing staggers, and native mini-bosses
+sit outside the kit's enemy registry. The native combo meter gives less for
+repeated contacts, so a varied kit scores better than a one-trick one.
 
 **Identity: Red never stands still; 2099 never lets go.** Red slips around a
-crowd and resumes. 2099 picks one target, closes the gap, seizes it and turns
-its body into a weapon against the rest. The loop is
-**hunt -> seize -> punish -> hurl -> hunt**.
+crowd and resumes. 2099 takes a target where he wants it (into the air, into
+the crowd, into the floor) and uses it against the rest. What he cannot move,
+he climbs. Four pillars, each with its own verbs:
 
-- Each move is a different physical verb: pounce, tackle, throw, dive, rake,
-  pin, chain. No move is "another rake with a talon trail".
-- Power reads through mass: a low coiled crouch, shoulder-first contact, carried
-  bodies, floor impacts and enemies flying into other enemies. No freezes, slow
-  motion or player teleports.
-- Holding a target is the risk. While Miguel pins or hoists, the others can hit
-  him (native hurt interrupts). Choosing when to pin and when to throw is the skill.
-- R always lets go and evades natively. 2099 does not borrow Red's
-  combo-keeping Reflex; his continuity comes from Relentless (below).
+| Pillar | Verbs | Job |
+|---|---|---|
+| Talons | slash, hook, shred, tackle | Ground pressure that moves through and behind targets |
+| Webs | yank, reel, lasso, zip | Pull light enemies in; heavy ones pull Miguel to them |
+| Air | lift, rake, catch, dive | A complete launch -> air combo -> crash loop |
+| Boss | board, ride, rip | The Vulture answer: climb what cannot be thrown |
 
-**Native foundation stays exact.** Ground A Power Dash is the tackle, air A
-Hammer Spike the dive, air Down+A Hammer Slam the crash. Their inputs, movement,
-barrier/floor story use, B, base Y strings, unowned R and shared upgrades stay
-native and never need a target or charge. Purchases change what happens **on
-enemy contact** and add follow-ups. Unowned rows keep native behavior; no
-ownership moves, and native dependencies remain (Widowmaker before Pin & Pound,
-Super Charge before Relentless).
+**Rules.** Ground A Power Dash, air A Hammer Spike and air Down+A Hammer Slam
+keep their exact native input, movement and barrier/floor story use, and never
+need a target. Ordinary B, base Y strings, unowned R and shared upgrades stay
+native. Purchases change enemy-contact outcomes or add follow-ups; unowned rows
+behave natively and no ownership moves. R always lets go and evades. Anything
+heavy (a boss or resistant enemy) pulls Miguel to it instead of moving. No
+freezes, slow motion, player position writes or permanent stun.
 
-| Native purchase (bit) | 2099 move | Input | Ordinary enemies | Bosses and resistant enemies |
+**Webs on X.** Black has no web button: A is the dash. In Black form, X with
+no native X prompt in reach becomes Miguel's web: at range a Web Yank, up close
+a Collar Toss, split near the native Web Kick's 13-unit threshold. Lift, lever
+and grate prompts always win. If the lab shows X cannot be shared safely, pick
+a fallback input with the player before building.
+
+**The kit: fifteen rows.** The seven native Black rows keep their bits 20..26
+and native dependencies. Eight new rows use free saved bits 83..90; five free
+bits (91..95) stay spare.
+
+| Row | Move | Input | Mobs | Bosses / heavy |
 |---|---|---|---|---|
-| Webbed Fury (20) | **Rundown** | A again after a Power Dash hit; up to two more links | Each link is a real dash at the tumbling target or the next enemy ahead; the last drives its target into the floor. Pinball through a crowd. | Shoulder check that stops on contact; the boss never moves. |
-| Power Launch (21) | **Collar Toss** | Grounded Up+A | Seize the nearest enemy in front, hoist it overhead and throw it along the held direction: forward bowls it through the crowd, back turns and hurls it behind, Down slams it at Miguel's feet into a pin. | Two-hand overhead hammer strike. |
-| Ground Rebound (22) | **Freefall** | Native Down+A slam | Head-first, talons-first dive. Impact strength and radius grow with drop height up to a cap. Bystanders keep the native bounce; the enemy under Miguel stays down for Pin & Pound. | Height-scaled direct damage; no bounce. |
-| Black Widowmaker (23) | **Talon Line** | Y,Y,Y, pause, Y,Y | Three slashes that walk Miguel through his target, then a hook: the talons catch it and drag it across his body, flinging it behind him. Back hooks the enemy behind instead. | Two close slashes; no drag. |
-| Poison Pummel (24) | **Pin & Pound** | Y,Y,Y, pause, repeated Y | The signature. Miguel bears the enemy down, plants a knee and talons, and hammers once per Y up to a cap. Direction+Y or the cap ends it with a throw that way; R lets go. | Talon cling: close rakes per Y without moving the boss; R exits. |
-| Super Charge (25) | **Talon Pounce** | Hold Y, release | Miguel coils low; release fires a long flat leap, talons first, at the enemy ahead (range grows with the coil, capped). A hit tackles and lands on it: Pin & Pound if owned, otherwise a knockdown. | Pounce strike only. |
-| Quick Charge (26) | **Relentless** | Passive | Halves the coil. Y can be held through any 2099 finisher (Rundown's last link, Collar Toss, Freefall, Talon Line's hook, Pin's throw), so Pounce fires the instant it ends and the hunt never resets. One stored pounce; hurt or R clears it. | Same. |
+| Webbed Fury | **Rundown** | A again after a dash hit, up to two links | Re-dash at the tumbling target or the next enemy ahead; the last link knocks down. | Shoulder check that stops on contact. |
+| Power Launch | **Talon Lift** | Up+A; keep holding Up to rise | A rising claw launcher; holding Up carries Miguel up with the target into Sky Rake, releasing keeps him grounded. | Miguel rises to its head height instead. |
+| Ground Rebound | **Freefall** | Native Down+A slam | A head-first dive; strength and radius grow with drop height up to a cap. Bounced enemies can be juggled. | Height-scaled heavy hit: the punish from above. |
+| Black Widowmaker | **Talon Line** | Y,Y,Y, pause, Y,Y | Slashes that walk through the target, then a hook that flings it behind Miguel. | Two close slashes. |
+| Poison Pummel | **Shredder** | Y,Y,Y, pause, repeated Y | A steerable, forward-walking flurry. The last press's direction picks the ender: Up launches, Forward blasts back, Down smashes to the floor. | Flurry, then a heavy rip. |
+| Super Charge | **Talon Pounce** | Hold Y, release; Up aims high | A long talons-first leap at the enemy ahead or above: a knockdown on the ground, an air-combo starter in the air. | A strike; Up-pounce reaches its head or starts Boarding. |
+| Quick Charge | **Relentless** | Passive | Halves the coil. Any 2099 ender can cancel into Pounce or Web Yank, so the hunt flows to the next target. One stored cancel. | Same. |
+| New, bit 83 | **Web Yank** | X at range; Up+X yanks upward | A thick glowing line pulls the enemy into a talon strike, or up into a launch. | Zips Miguel to it (into Boarding if owned). |
+| New, bit 84 | **Collar Toss** | X up close | Grab, hoist and throw along the D-pad; the thrown body knocks down whoever it hits; Down slams it to the floor. | Overhead hammer strike. |
+| New, bit 85 | **Lariat** | Hold X during a Web Yank | Swing the tethered enemy around Miguel through the crowd, then fling it. A horizontal crowd sweep, unlike Red's overhead cocoon slam. | The line snaps and Miguel zips in. |
+| New, bit 86 | **Sky Rake** | Air Y in Black form | The air string becomes four talon rakes and a flip kick that pops the target higher. | Air hits at head height. |
+| New, bit 87 | **Reel In** | X in the air | Yank a grounded enemy up to Miguel to extend or restart the air combo. | Zips Miguel to it. |
+| New, bit 88 | **Meteor Catch** | Air A on an airborne enemy | Catch it, flip and spike it into the floor; it bounces once, ready for Talon Lift or Roof Pin. Native Hammer Spike otherwise. | Native Hammer Spike. |
+| New, bit 89 | **Roof Pin** | Down+Y on a downed enemy | The train-roof moment as one short finisher: pin, three tearing hits, kick away. Not a mash and not a hub. | Not available. |
+| New, bit 90 | **Boarding** | Web Yank, Up-pounce or jump into a boss/big enemy while holding toward it | Cling to its back or shoulders: Y rakes, A **Wing Ripper** forces a stagger and kicks Miguel off into the air, its attacks throw him off, R leaves. | The boss tool. |
 
-**Routes this should make possible** (purchases and nearby targets required):
+Shop chains use one-level rows: native Widowmaker -> Shredder and Super Charge
+-> Relentless remain; new chains are Web Yank -> Collar Toss -> Lariat and Sky
+Rake -> Reel In -> Meteor Catch; Roof Pin and Boarding stand alone, so every
+pillar has a cheap entry. Prices stay deferred.
 
-- **Nueva York chase:** Pounce the nearest -> Pin & Pound -> throw into the pair
-  behind -> held-Y pounce onto the one getting up -> Talon Line hook -> Rundown
-  through the rest.
-- **Bowling:** Collar Toss into a group -> Power Dash Rundown through the falling
-  bodies -> wall climb -> Freefall onto the pile.
-- **Dive bomb:** climb a Hive shaft or Crane roof -> Freefall from the ceiling ->
-  Pin & Pound the enemy left under him -> throw.
-- **Tag team:** Red cocoons a group with web or Dragnet -> L -> Collar Toss a
-  cocoon into the rest. Needs a cocoon-throw lab; Vortex stays Red-only.
-- **Boss:** Pounce strike -> Talon Line slashes -> R out of a telegraph -> climb
-  -> high Freefall -> Pounce back in. No forced boss movement, permanent stun or
-  invented armor breaks.
+**What mob fights should look like** (purchases and nearby targets required):
 
-**Starting feel targets** (tuning starts here; the player's verdict decides):
-Pounce crosses about 25 units in under half a second and never passes a wall; a
-pin lasts only while Y keeps coming, capped near six pounds; a thrown body
-knocks down each enemy it meets once and lands where the D-pad pointed;
-Freefall adds nothing below a held jump's height.
+- **Hunt:** Web Yank the enemy at the back -> Talon Line through it -> hook it
+  behind -> Relentless pounce onto the next.
+- **Sky:** Talon Lift holding Up -> Sky Rake -> Meteor Catch into the floor ->
+  Talon Lift the bounce, or Reel In a fresh victim from the air.
+- **Crowd:** Collar Toss into a group -> Rundown through the falling bodies ->
+  wall climb -> Freefall onto the pile -> Sky Rake a bounced one.
+- **Lasso:** Web Yank -> hold X for Lariat through the crowd -> fling -> Roof
+  Pin whoever lands nearest.
+- **Tag team:** Red cocoons a group -> L -> Collar Toss a cocoon into the rest
+  (needs a cocoon-throw lab).
+
+**Boss fights: the Vulture plan.** Bosses stagger but do not fly, fall or get
+thrown, so Miguel moves instead:
+
+1. **Close in:** Web Yank or Up-pounce zips him to the boss.
+2. **Board:** cling to its back, away from its front attacks; Y rakes.
+3. **Rip:** Wing Ripper's heavy tear forces a stagger and throws him clear.
+4. **Punish the stagger:** Sky Rake at head height, then Freefall from above.
+5. **Respect it:** its next attack throws a rider off; R or Kick-Off leaves,
+   and he re-boards when it recovers. Riding ends when the boss shakes him or
+   he rips, not on a timer.
+
+No forced boss movement, permanent stun or invented armor breaks. Board, rip,
+punish and get shaken off gives every boss a back-and-forth rhythm.
+
+**Starting feel targets** (tuning starts here; the player decides): Pounce
+crosses about 25 units in under half a second and never passes a wall; a Lariat
+is one swing; air combos use native juggle reactions; Boarding follows the
+boss by velocity, as Perch does, never by position writes.
 
 **Presentation.** Author every clip with continuous curves at full sample
 density, heavy anticipation, shoulder- or talon-led contacts and overlap; no
-per-key holds. Poses: a low wide crouch, splayed talons, a body stretched through
-the pounce, a head-first dive and a knee-and-talon pin. Optional cue: a brief red
-talon/eye accent while Relentless holds a pounce, if the palette path allows.
-Use native impact audio; do not rename stock punches as new moves.
+per-key holds. Poses: a low wide crouch, splayed talons, a stretched pounce, a
+head-first dive and a clinging rider. Tint 2099's web lines red if the WebLine
+colour field allows (native white is 0x7FFF). Use native impact audio; do not
+rename stock attacks as new moves.
 
 **Engineering gates before the first slice:**
 
 1. **Space:** the 32 KiB kit stays exact for Red. 2099 needs its own guarded
-   code/state block, as v0.31's autoload page did. That is a deliberate contract
-   change; measure headroom first.
-2. **Black-only resources:** list the actions/SCA/GMB used by Black string nodes
-   5..10, dash, slam, Widowmaker, Pummel and charge. Re-author only Black-only
-   ones: GroundAttack15 is shared and G11/16/17 have m6.xbd users.
-3. **Hooks:** map dash contact, slam contact, the bit-23 late branch and the
-   native hold-Y charge state in the lab. Whether a charge can start from
-   idle/run is open; if not, Pounce starts from a held strike.
-4. **Body control:** Vortex already steers enemy bodies with bounded native
-   velocity and native hit kinds (knockdown 0x1F, far throw 0x24, launch 0x25,
-   floor drag 0x26), and a floor hit on a lying enemy re-bounces it. Prove one
-   pinned-then-thrown enemy, its boss fallback and its R exit first.
+   code/state block, as v0.31's autoload page did: a deliberate contract change.
+2. **Shop:** move the Black list into the kit block as v0.10 moved Red's, append
+   rows on bits 83..90 (events 392..399) with appended strings, and keep the
+   seven native rows' bits and dependencies exact.
+3. **Inputs:** prove X sharing with native prompts, held X/Y from the kit's key
+   words, Down+Y on a downed enemy against native ground Down+Y, and air X.
+4. **Black-only animation:** route Black-form actions to appended clips. The
+   air string actions and GroundAttack15 are shared; G11/16/17 have m6.xbd users.
+5. **Bodies and webs:** reuse the proven reaction kinds and the WebLine
+   spawn/tie path from Vortex and Dragnet.
+6. **Bosses:** Boarding needs a Perch-style velocity follow, plus a
+   class-specific target adapter for native mini-bosses. Start on the Conductor.
 
-**Build order:** one complete slice at a time, each with a player verdict
-before the next.
+**Build order:** one slice at a time, each with a player verdict before the next.
 
-1. **Pin & Pound** with its throw, boss cling and R exit: the film's signature
-   moment and the body-control backend every other move reuses.
-2. **Freefall:** the cheapest spectacle; it turns vertical rooms into dive-bomb
-   arenas.
-3. **Talon Pounce + Relentless:** the glue that keeps the hunt continuous.
-4. **Collar Toss + Rundown:** crowd bowling.
-5. **Talon Line:** last, because it replaces the most animation.
+1. **Pipeline proof:** Web Yank alone (X input, red line, Black-only clip
+   routing and the heavy-target rule).
+2. **Sky slice:** Talon Lift, Sky Rake, Reel In and Meteor Catch: the first
+   loop worth playing.
+3. **Boss slice:** Boarding with Wing Ripper, Freefall and Talon Pounce +
+   Relentless, on the Conductor.
+4. **Crowd slice:** Rundown, Collar Toss, Lariat, Talon Line, Shredder and Roof
+   Pin.
 
-**From the superseded pitch:** kept native A parity, no forced boss movement, R
-exits, a single stored charge, the wall-pounce idea (now a later Pounce variant)
-and the crimson cue (now Relentless's cue). Dropped the aerial juggle routes
-(Talon Lift, manual-B follow, rebound catch), per-move charged variants and
-Raking Cross as the first prototype: they read as comic or Red-style juggling,
-not the film's grappling pursuer. The full dated pitch stays in the archive
-under this document's 2099 heading.
+**Changes from revision 1:** pinning shrinks to one finisher on downed enemies
+(Roof Pin), and Pounce, Freefall and Collar Toss no longer feed it. Poison
+Pummel becomes Shredder. Webs, a complete air loop and a Vulture-style boss
+plan arrive with eight new rows.
 
 ## Deferred work
 
 | Idea | Current boundary |
 |---|---|
-| More Red skills, extra stat rows, prices/balance, shop/save expansion | Deferred. Iterate the existing kit; Overclock/Dragnet/Vortex are the final added skills. |
-| Spider-Man 2099 combat | The Hunter design above replaces the 2026-10-22 proposal; nothing is built until the player approves the Pin & Pound slice. Preserve native A traversal, paid ownership and shared upgrades. |
+| More Red skills, extra stat rows, prices/balance, save expansion | Deferred. Iterate the existing Red kit; Overclock/Dragnet/Vortex are its final added skills. The 2099 Black rows above are the only authorized shop growth and fit existing free saved bits. |
+| Spider-Man 2099 combat | Hunter revision 2 above; nothing is built until the player approves its Web Yank pipeline proof. Preserve native A traversal, paid ownership and shared upgrades. |
 | Third suit and other suit concepts | Deferred; TASM1/2 share one kit. No suit selector or migration is implemented by this roadmap. |
 | Downtown Grid/Lost Lab, Residential Skyline Run, Hive Quarantine Heart | Deferred concepts. No new allocations are authorized by the old pitches; audit current flags/storage before any future expansion. Hive stays post-story. |
 | Midnight Express, gauntlets, timed replays, collectibles/reward systems | Backlog ideas, not unfinished work required for the current chapters. |
@@ -285,7 +327,8 @@ The full pre-cleanup roadmap and three planning catalogs are preserved byte for
 byte in the existing verified archive, snapshot 2026-10-21. They retain detailed
 early kit fantasies, rejected moves, Signal Leech/Crane construction pitches,
 old allocation estimates and the seven-skill 2099 theorycraft (superseded on
-2026-10-23 by the Hunter design). They are historical
+2026-10-23 by the Hunter design; both retired 2099 drafts are in
+`RETIRED_2099_DESIGNS.md`). They are historical
 context, not a second active plan. Later implementations and player decisions
 above supersede their original next/proposed wording.
 
@@ -294,6 +337,7 @@ python tools/doc_archive.py list roadmap
 python tools/doc_archive.py read docs/TASM_ROADMAP.md --toc
 python tools/doc_archive.py read docs/TASM_ROADMAP.md --section 'Spider-Man 2099'
 python tools/doc_archive.py read reference/tasm_upgrade_plan.json --lines 40
+python tools/doc_archive.py read RETIRED_2099_DESIGNS.md --section 'revision 1'
 ```
 
 Shipped release history stays in CHANGES; format/engine discoveries stay in

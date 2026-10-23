@@ -2,7 +2,7 @@
   "schema_version": 1,
   "snapshot_date": "2026-10-05",
   "purpose": "Historical source notes; current status is in docs/TASKS.md. Read only a selected entry/section with tools/doc_archive.py.",
-  "archive_sha256": "793e99df844875cb6218c5d71ad2e021e4ed2de527a61475d6dda78774e02224",
+  "archive_sha256": "935f3b8f47b74b2f1f85436e627ea13dc6a2589132353c64179f44e3f065f37f",
   "entries": [
     {
       "path": "AGENTS.md",
@@ -1822,6 +1822,42 @@
       "words": 2637,
       "sha256": "ae37090f8065ec0ec948f3880b670358a8526777a2ee8ad6ea4eb1c0350126c5",
       "sections": []
+    },
+    {
+      "path": "RETIRED_2099_DESIGNS.md",
+      "title": "Retired Spider-Man 2099 Black combat designs",
+      "snapshot_date": "2026-10-23",
+      "source_revision": "8ecf4b41d5860ad8a78e2e1139a215d7e7b9ce19",
+      "bytes": 12326,
+      "words": 1976,
+      "sha256": "26410578b90c9cdbc1409a69abb15498e30d75c5fc692b6c824fe3359782b79b",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Retired Spider-Man 2099 Black combat designs",
+          "level": 1
+        },
+        {
+          "line": 8,
+          "heading": "2026-10-22 catch/carry/crash/chase proposal (revision f5d1417)",
+          "level": 2
+        },
+        {
+          "line": 13,
+          "heading": "Spider-Man 2099: Black-slot rework",
+          "level": 3
+        },
+        {
+          "line": 60,
+          "heading": "2026-10-23 Hunter revision 1 (revision 8ecf4b4)",
+          "level": 2
+        },
+        {
+          "line": 67,
+          "heading": "Combat: the Hunter (design, 2026-10-23)",
+          "level": 4
+        }
+      ]
     }
   ]
 }

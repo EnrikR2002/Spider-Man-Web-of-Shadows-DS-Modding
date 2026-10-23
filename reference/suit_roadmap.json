@@ -26,7 +26,7 @@
     "Dragnet",
     "Vortex"
   ],
-  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. The requested cape-free Across the Spider-Verse 2099 Black appearance is published; the 2026-10-23 Hunter combat design for the seven Black slots is unimplemented design work. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices, third suit, shop/save expansion and branches remain deferred.",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. The requested cape-free Across the Spider-Verse 2099 Black appearance is published; the Hunter combat design (revision 2, 2026-10-23) keeps the seven native Black rows and adds eight Black rows on free saved bits, all unimplemented. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices, third suit, save expansion and branches remain deferred.",
   "prototype_reference": "../docs/TASM_ROADMAP.md#recommended-build-order",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
@@ -61,23 +61,96 @@
       },
       "combat_design": {
         "date": "2026-10-23",
-        "reference": "../docs/TASM_ROADMAP.md#combat-the-hunter-design-2026-10-23",
-        "request": "Make Black play and fight as close as possible to Miguel O'Hara in Across the Spider-Verse; make it fun to play.",
-        "slot_map": {
+        "native_rows": {
           "Black Widowmaker": "Talon Line",
           "Ground Rebound": "Freefall",
-          "Poison Pummel": "Pin & Pound",
-          "Power Launch": "Collar Toss",
+          "Poison Pummel": "Shredder",
+          "Power Launch": "Talon Lift",
           "Quick Charge": "Relentless",
           "Super Charge": "Talon Pounce",
           "Webbed Fury": "Rundown"
         },
+        "new_rows": [
+          {
+            "ability_bit": 83,
+            "event_id": 392,
+            "input": "X at range; Up+X upward",
+            "move": "Web Yank",
+            "requires": null
+          },
+          {
+            "ability_bit": 84,
+            "event_id": 393,
+            "input": "X up close",
+            "move": "Collar Toss",
+            "requires": "Web Yank"
+          },
+          {
+            "ability_bit": 85,
+            "event_id": 394,
+            "input": "Hold X during a Web Yank",
+            "move": "Lariat",
+            "requires": "Collar Toss"
+          },
+          {
+            "ability_bit": 86,
+            "event_id": 395,
+            "input": "Air Y in Black form",
+            "move": "Sky Rake",
+            "requires": null
+          },
+          {
+            "ability_bit": 87,
+            "event_id": 396,
+            "input": "X in the air",
+            "move": "Reel In",
+            "requires": "Sky Rake"
+          },
+          {
+            "ability_bit": 88,
+            "event_id": 397,
+            "input": "Air A on an airborne enemy",
+            "move": "Meteor Catch",
+            "requires": "Reel In"
+          },
+          {
+            "ability_bit": 89,
+            "event_id": 398,
+            "input": "Down+Y on a downed enemy",
+            "move": "Roof Pin",
+            "requires": null
+          },
+          {
+            "ability_bit": 90,
+            "event_id": 399,
+            "input": "Web Yank, Up-pounce or jump into a boss while holding toward it",
+            "move": "Boarding",
+            "requires": null
+          }
+        ],
+        "pillars": [
+          "talons",
+          "webs",
+          "air",
+          "boss"
+        ],
+        "reference": "../docs/TASM_ROADMAP.md#combat-the-hunter-design-rev-2-2026-10-23",
+        "request": "Make Black play and fight as close as possible to Miguel O'Hara in Across the Spider-Verse; make it fun to play. Revision 1 review: avoid one-trick pinning, give bosses a real answer, add webbing and air combos, add as many rows as a coherent kit needs within the 2D mob/boss brawler.",
+        "retired_archive": "RETIRED_2099_DESIGNS.md",
+        "revision": 2,
+        "spare_free_bits": [
+          91,
+          92,
+          93,
+          94,
+          95
+        ],
         "status": "design-only-not-implemented",
-        "supersedes": "2026-10-22 catch/carry/crash/chase seven-move proposal (archived 2026-10-21 snapshot)"
+        "supersedes": "Hunter revision 1 (pin-centred, 2026-10-23) and the 2026-10-22 catch/carry/crash/chase proposal"
       },
       "design_reference": "../docs/TASM_ROADMAP.md#spider-man-2099-black-slot-rework",
       "id": "2099-classic",
-      "implementation_order": "Appearance shipped (v0.30.2/v0.30.3). Combat awaits the player's go-ahead: clear the space, Black-only resource, hook and body-control gates, then build Pin & Pound as the first complete slice; Freefall, Talon Pounce + Relentless, Collar Toss + Rundown and Talon Line follow one player verdict at a time.",
+      "implementation_order": "Appearance shipped (v0.30.2/v0.30.3). Combat awaits the player's go-ahead: clear the space, shop, input, Black-only animation, body/web and boss-adapter gates; prove Web Yank alone, then the Sky slice (Talon Lift, Sky Rake, Reel In, Meteor Catch), the boss slice (Boarding, Freefall, Pounce + Relentless) and the crowd slice, one player verdict at a time.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Broader chest/lats/traps/deltoids, athletic thighs and narrower jaw on unchanged native rig/animations",
@@ -85,7 +158,7 @@
         "Red web cape and all cape geometry/atlas region removed",
         "Opaque 128x128 I8 atlas: navy/cobalt, angular mask/chest spider, red shoulder panels and knee chevrons; same 16 KiB pixel pool"
       ],
-      "kit": "Hunter design (2026-10-23, unimplemented): hunt -> seize -> punish -> hurl on the exact native Power Dash/Hammer Spike/Hammer Slam foundation. Native rows map to Rundown, Collar Toss, Freefall, Talon Line, Pin & Pound, Talon Pounce and Relentless; ordinary B/base strings/R, ownership, dependencies and progression are unchanged.",
+      "kit": "Hunter design revision 2 (2026-10-23, unimplemented): talon, web, air and boss pillars on the exact native Power Dash/Hammer Spike/Hammer Slam foundation; webs on X when no native X prompt is in reach; Vulture-style Boarding against bosses; pinning is one finisher. Ordinary B/base strings/R, ownership, dependencies and progression are unchanged.",
       "latest_feedback": {
         "date": "2026-10-22",
         "source_version": "0.30.1",

@@ -9,12 +9,14 @@ owns releases; TASM_ROADMAP owns design.
 ## Current objective and player direction
 
 2026-10-23 request: rework the 2099 Black plan so it plays and fights as close
-as possible to Across the Spider-Verse's Miguel O'Hara, and is fun to play.
-Delivered as design only: TASM_ROADMAP "Combat: the Hunter" replaces the old
-catch/carry/crash/chase proposal with hunt -> seize -> punish -> hurl on the
-exact native A foundation, mapping the seven Black rows to Rundown, Collar Toss,
-Freefall, Talon Line, Pin & Pound, Talon Pounce and Relentless. Nothing is
-implemented; reference/suit_roadmap.json records the slot map and status.
+as possible to Across the Spider-Verse's Miguel O'Hara, and is fun to play. The
+player reviewed revision 1 the same day: better, but pin-centred, no boss
+answer, no webbing, no air combos, and seven rows were an unnecessary limit.
+TASM_ROADMAP "Combat: the Hunter" revision 2 is design only: talon, web, air
+and boss pillars within the 2D mob/boss brawler; webs on X; Vulture-style
+Boarding for bosses; pinning is one finisher. It keeps the seven native rows and
+adds eight Black rows on free saved bits 83..90. reference/suit_roadmap.json
+records rows and status; both retired drafts are in the doc archive.
 
 The three requested fixes are implemented and agent-qualified in v0.31.0:
 conditional, more spectacular Vortex; a larger symbiote metal war-machine
@@ -67,12 +69,12 @@ and limitations are in the receipt. Room/door resources are unchanged.
 
 ## Next exact action and remaining gates
 
-Blocker for 2099 combat: the player's verdict on the Hunter design and its first
-slice. This cloud workspace has no ROM or emulator, so no prototype was attempted.
-On approval, in a ROM-equipped workspace, clear the four roadmap gates on copied
-saves (separate code/state block and headroom, Black-only action/resource audit,
-dash/slam/bit-23/hold-Y hooks, one pinned-then-thrown enemy with boss fallback
-and R exit), then build Pin & Pound as one complete slice for player review.
+Blocker for 2099 combat: the player's verdict on Hunter revision 2. This cloud
+workspace has no ROM or emulator, so no prototype was attempted. On approval, in
+a ROM-equipped workspace, clear the six roadmap gates on copied saves (separate
+code/state block, Black shop rows, X/held-key inputs, Black-only animation
+routing, body/web reuse, boss adapter), then prove Web Yank alone before the Sky
+slice (Talon Lift, Sky Rake, Reel In, Meteor Catch) for player review.
 
 Use the normal launcher to review Vortex and the larger boss. Player feel,
 appearance preference, full-route balance and actual DeSmuME pacing remain
