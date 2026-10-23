@@ -1,7 +1,9 @@
 # Current work and handoff
 
-Updated 2026-10-22 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
-workflow; TECHNICAL owns contracts; CHANGES owns releases; TASM_ROADMAP owns design.
+Updated 2026-10-23 (America/Edmonton). Current build/save qualification below is
+the 2026-10-22 v0.31.0 record; this workflow-policy update changed no game artifacts.
+Read AGENTS first. DEVELOPMENT owns workflow; TECHNICAL owns contracts; CHANGES
+owns releases; TASM_ROADMAP owns design.
 
 ## Current objective and player direction
 

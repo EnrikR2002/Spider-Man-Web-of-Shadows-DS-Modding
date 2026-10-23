@@ -41,6 +41,15 @@ milestones and before stopping; replace stale state. Record discoveries in their
 owning technical section immediately, with confidence and source version. Mark
 superseded assumptions. Distinguish implemented, agent-tested and player-confirmed.
 
+## Task completion and Git
+
+Before finishing a task, refresh docs/TASKS.md with the current objective, evidence,
+blocker and next exact action. Update other owning docs when the task changes their
+domain. Commit all and only the task's changes with a concise descriptive message.
+Preserve and exclude unrelated pre-existing edits; if changes cannot be safely
+scoped, report the commit blocker instead of including or discarding them. Do not
+push unless the user asks.
+
 Machine catalogs/recipes/receipts belong in reference/. Scratch scripts, large
 traces, captures and temporary assets belong in ignored work/ or build/. A reusable
 research tool belongs in tools/ with appropriate tests. Do not duplicate volatile
