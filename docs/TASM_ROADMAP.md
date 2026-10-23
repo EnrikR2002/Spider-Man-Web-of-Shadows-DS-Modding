@@ -32,6 +32,7 @@ actual DeSmuME pacing.
 
 | Player evidence | Decision that still matters | Later implementation / limit |
 |---|---|---|
+| 2026-10-23: select timed block -> automatic counter | Talon Guard should answer an actual blocked melee hit automatically. | Counter direction selected by the player. Proposed Up+R binding, timing, ownership placement and animation still need prototype qualification; no implementation is activated by this preference reply. |
 | 2026-10-23: flesh out the full 2099 kit, add air combos, and explore blocking or instantly countering an attack | Make ground-to-air play central; develop a planted contact counter that supports Miguel's scrapper identity. | Expanded working proposal below. Timed guard with an automatic answer is the recommended default; damage-taking reprisal remains an alternative. No new mechanic is implemented or player-tested. |
 | 2026-10-23: make 2099 taller, make his webs neon red like Across the Spider-Verse, then research/reassess his abilities | Apply the appearance change; ground the existing proposals in the film's pursuit, catches and surface pressure. | v0.33.1 ships render height and web tints. The film reassessment below is a recommendation; no extra move or mechanic is activated. |
 | 2026-10-23: implement the next 2099 skill | Talon Lift retains the native Power Launch purchase and manual B follow-up. | v0.33.0 ships the authored rake and R exit; actual air hits require holding B. Player feel verdict remains open. |
@@ -300,7 +301,9 @@ Uppercut. None of these shared abilities becomes free through a Black move.
 
 #### Talon Guard and the automatic counter
 
-**Recommended working version:** grounded **Up+R**, without horizontal steering,
+**Player-selected direction:** timed block -> automatic counter, selected
+2026-10-23. The binding, timings and purchase placement below remain proposed.
+Grounded **Up+R**, without horizontal steering,
 enters a short, forward-facing brace when Hunter's Return is owned, from neutral
 or a legitimate attack-cancel window. Horizontal steering plus R takes the native
 evasion path. Ordinary R retains evade/cancel behavior, Down+R retains the native roll,
@@ -341,14 +344,14 @@ does not manufacture damage, hits or combo gauge. The existing Red suit already
 has an evasive reversal. Miguel's proposed version waits for actual contact,
 holds his ground and answers it physically.
 
-**Alternative if the player prefers taking the hit:** a committed Reprisal can
+**Unselected alternative, retained for context:** a committed Reprisal can
 follow a real recoverable hurt event, using the existing paid Quick Recovery
 opportunity and a deliberate R/guard input. The HP loss stays; the answer occurs
 only when a valid recovery is permitted. Do not make it an always-on automatic
 attack for every received hit, or a way to cancel death, grabs, heavy knockdown
 and hazards. This is an alternative experiment, not another simultaneously
-queued mechanic or extra purchase. Pending preference, timed guard/automatic
-counter is the working recommendation.
+queued mechanic or extra purchase. The player selected timed guard/automatic
+counter on 2026-10-23; damage-taking Reprisal is not the chosen direction.
 
 #### How encounters would play
 

@@ -16,9 +16,10 @@ pressure or manual launch/jump -> air pressure -> spike/slam -> re-engage.
 Talon Guard is a proposed grounded Up+R chord in Hunter's Return's existing
 purchase. A well-timed real frontal melee contact would trigger a short
 automatic physical answer. Ordinary R/rolls and paid shared defenses remain.
-A damage-taking Reprisal through paid Quick Recovery is an alternative, not an
-always-on retaliation feature. Counter preference remains open; the timed
-block/automatic answer is the working recommendation.
+The player selected **timed block -> automatic counter** on 2026-10-23.
+Up+R, purchase placement and timing remain working proposals, not approved or
+engine-qualified details. Damage-taking Reprisal is the unselected alternative;
+paid Quick Recovery keeps its native role.
 
 The native air Y string remains. Proposed Talon Maul (former Cyclone working
 name) adds Y,Y,Up+Y,Y; charged Relentless Pursuit spends its bank on the first
@@ -71,8 +72,8 @@ visually surveyed.
 ## Expanded design and next exact action
 
 The roadmap now maps all seven Black purchases, two advanced air routes,
-finishes/exits, one-hit timed guard/automatic counter rules, an alternative
-paid-recovery reprisal, and example duel/crowd/boss sequences. The previous
+finishes/exits, the player-selected timed guard/automatic counter direction,
+the unselected paid-recovery reprisal, and example duel/crowd/boss sequences. The previous
 film-only draft and suit catalog have dated verified archive snapshots. Native
 controls and hit contracts were inspected; this task adds no emulator evidence
 or gameplay changes. Block/counter timings and air conversions are untested.

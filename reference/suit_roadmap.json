@@ -59,6 +59,13 @@
         "section": "Spider-Man 2099",
         "snapshot_date": "2026-10-21"
       },
+      "counter_selection": {
+        "date": "2026-10-23",
+        "direction": "timed block -> automatic counter",
+        "limits": "Proposed Up+R binding, timing, purchase placement and animation remain unapproved and engine-untested; damage-taking Reprisal is unselected.",
+        "selected_by": "player",
+        "status": "design-direction-selected-not-implemented"
+      },
       "design_reference": "../docs/TASM_ROADMAP.md#spider-man-2099-black-slot-rework",
       "expanded_design_reference": "../docs/TASM_ROADMAP.md#full-kit-air-routes-and-physical-counters---2026-10-23-working-proposal",
       "id": "2099-classic",
@@ -77,7 +84,7 @@
       "latest_feedback": {
         "date": "2026-10-23",
         "source_version": "0.33.1",
-        "summary": "Flesh out the full kit and how it plays, add air combos, and explore blocking or instant counterattacks because 2099 should be a scrapper. No new appearance or gameplay feel verdict is recorded."
+        "summary": "Flesh out the full kit and how it plays, add air combos, and explore blocking or instant counterattacks because 2099 should be a scrapper. No new appearance or gameplay feel verdict is recorded. The player subsequently selected timed block -> automatic counter as the counter direction."
       },
       "name": "Spider-Man 2099 - Across the Spider-Verse inspired",
       "prior_design_snapshot": {
