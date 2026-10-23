@@ -5,23 +5,34 @@ TECHNICAL owns contracts; CHANGES owns releases; TASM_ROADMAP owns design.
 
 ## Current objective and player direction
 
-The latest request is complete in **v0.33.1**: make 2099 taller, make his webs
-neon red like Across the Spider-Verse, then research and reassess the existing
-2099 ability proposals. No additional combat move is queued. Appearance and
-move feel remain unconfirmed by the player.
+The latest request develops the full 2099 kit: flesh out every move, add proper
+air combo routes, and explore blocking or instantly answering enemy attacks.
+The expanded working design is recorded in TASM_ROADMAP and the suit catalog.
+**No gameplay implementation or new release is selected by this design task.**
+Stable remains **v0.33.1**; appearance and move feel remain player-unconfirmed.
 
-2099's complete animated pose is **12.5% taller** with grounded feet and the
-fuller cape-free body retained. Native web lines and companion WebTrap/effect
-tints become scarlet. Red retains its native height and original web colors.
-Native collision/hitboxes, movement, rig, mesh, textures, clips, attacks,
-purchases, Both Suits traversal, story gates and save format remain.
+The recommended new loop is meet the attack -> counter/catch -> grounded
+pressure or manual launch/jump -> air pressure -> spike/slam -> re-engage.
+Talon Guard is a proposed grounded Up+R chord in Hunter's Return's existing
+purchase. A well-timed real frontal melee contact would trigger a short
+automatic physical answer. Ordinary R/rolls and paid shared defenses remain.
+A damage-taking Reprisal through paid Quick Recovery is an alternative, not an
+always-on retaliation feature. Counter preference remains open; the timed
+block/automatic answer is the working recommendation.
 
-Hunter's Return and Talon Lift remain the two implemented Black replacements.
-Lift keeps Power Launch's 200 XP ownership: Up+A rake, hold B, then Y for actual
-air hits; R exits. The actual player still needs to buy Lift normally. Red keeps
-the combined TASM kit; Overclock, Dragnet and Vortex are its final added skills.
-Other Black moves, prices, third suits, shop/save expansion and campaign branches
-remain deferred.
+The native air Y string remains. Proposed Talon Maul (former Cyclone working
+name) adds Y,Y,Up+Y,Y; charged Relentless Pursuit spends its bank on the first
+air Forward+Y, then actual contact permits Y,Y,Y. Both require their purchases
+and real contact for follow-ups; one advanced extension
+between landings. Native air A/Down+A, purchased Down+Y stomp, Enemy Kick-Off,
+Air Dodge and B/B swing behavior retain their distinct roles. Seven Black shop
+slots, prices, ownership/dependencies and save format remain the boundary.
+
+Hunter's Return and Talon Lift remain the only implemented Black replacements.
+Lift keeps Up+A rake -> hold B -> air Y, with native R exit. Red retains the
+combined TASM kit; Overclock, Dragnet and Vortex are its final added skills.
+Other five Black replacements, guard/air extensions, prices, third suits,
+shop/save expansion and campaign branches remain unimplemented/deferred.
 
 ## Published build and actual save
 
@@ -57,18 +68,21 @@ are retained. Perceptual listening is unavailable in this runtime. Companion
 WebTrap/effect tints are source/ABI-tested; the full effect roster is not
 visually surveyed.
 
-## Film reassessment and next exact action
+## Expanded design and next exact action
 
-TASM_ROADMAP records the sourced film research and recommended identity:
-**close/cut off -> tether or catch -> drive/slam -> re-engage**. Keep the two
-shipped moves; recommend a short Raking Cross pounce/body drive as the next
-prototype only if requested. Talon Cyclone needs the largest redesign toward a
-compact air catch/downward drive. The previous proposals have a dated verified
-archive snapshot. Research recommendations have not changed combat mechanics.
+The roadmap now maps all seven Black purchases, two advanced air routes,
+finishes/exits, one-hit timed guard/automatic counter rules, an alternative
+paid-recovery reprisal, and example duel/crowd/boss sequences. The previous
+film-only draft and suit catalog have dated verified archive snapshots. Native
+controls and hit contracts were inspected; this task adds no emulator evidence
+or gameplay changes. Block/counter timings and air conversions are untested.
 
-No implementation/publication blocker remains. Next: launch normally and review
-Black's height, red swing webs, Hunter and Lift. Player appearance/feel,
-full-route balance, exhaustive edge culling and actual DeSmuME/hardware pacing
-remain open. Do not activate another proposal automatically.
+No blocker for the design task remains. Next: discuss/refine this working kit.
+If implementation is requested, first prove one planted guard and one actual
+riposte against one ordinary melee attack, with both facings, miss/late/heavy/
+rear controls, shared/unowned R controls, contact isolation and cleanup. Then
+qualify Raking Cross and one air branch before expanding the roster or whole
+kit. This supersedes the earlier Cross-first recommendation, without queuing
+implementation automatically.
 
 Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.

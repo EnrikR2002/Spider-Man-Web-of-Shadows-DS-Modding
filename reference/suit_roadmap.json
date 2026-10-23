@@ -3,7 +3,7 @@
   "archived_expanded_design": "TASM_EXPANDED_ROADMAP.md",
   "black_slot": "2099-classic",
   "current_recipe": "gameplay_profile.json",
-  "current_release": "0.31.0",
+  "current_release": "0.33.1",
   "expanded_design": "../docs/TASM_ROADMAP.md",
   "historical_notes_archive": "../docs/archive/legacy-notes.zip",
   "historical_snapshot": {
@@ -26,7 +26,7 @@
     "Dragnet",
     "Vortex"
   ],
-  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. The requested cape-free Across the Spider-Verse 2099 Black appearance is published; seven Black moves remain design work. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices, third suit, shop/save expansion and branches remain deferred.",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Cape-free 2099 appearance, Hunter's Return and Talon Lift are published. The remaining five Black replacements and expanded air/physical-counter mechanics are design proposals only. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices, third suit, shop/save expansion and branches remain deferred.",
   "prototype_reference": "../docs/TASM_ROADMAP.md#recommended-build-order",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
@@ -53,33 +53,41 @@
     },
     {
       "appearance_direction": "cape-free-across-the-spider-verse",
-      "appearance_evidence": "spider2099_movie.json",
+      "appearance_evidence": "spider2099_presence.json",
       "archived_design": {
         "entry": "docs/TASM_ROADMAP.md",
         "section": "Spider-Man 2099",
         "snapshot_date": "2026-10-21"
       },
       "design_reference": "../docs/TASM_ROADMAP.md#spider-man-2099-black-slot-rework",
+      "expanded_design_reference": "../docs/TASM_ROADMAP.md#full-kit-air-routes-and-physical-counters---2026-10-23-working-proposal",
       "id": "2099-classic",
-      "implementation_order": "Requested 2026-10-22: appearance first, then discuss skill proposal and refinements; first mechanical prototype should establish Raking Cross.",
+      "implementation_order": "Latest request is design work. If implementation is requested, first qualify one planted contact guard/riposte against one ordinary melee attack, then Raking Cross and one advanced air route. Do not activate the whole kit automatically.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
-        "Broader chest/lats/traps/deltoids, athletic thighs and narrower jaw on unchanged native rig/animations",
+        "Fuller chest/back/arms on the preserved native rig; unrelated native motion clips retained",
         "Six swept surface-mounted forearm blades and small talon tips",
         "Red web cape and all cape geometry/atlas region removed",
-        "Opaque 128x128 I8 atlas: navy/cobalt, angular mask/chest spider, red shoulder panels and knee chevrons; same 16 KiB pixel pool"
+        "Opaque 128x128 I8 atlas: navy/cobalt, angular mask/chest spider, red shoulder panels and knee chevrons; same 16 KiB pixel pool",
+        "12.5% taller Black animated pose and scarlet native web tints; native Red height/colors retained",
+        "Purchased Hunter's Return with corrected victim isolation/owner cleanup",
+        "Purchased Talon Lift with manual held-B air follow-up and native R exit"
       ],
-      "kit": "Proposed catch/carry/crash/chase Black kit. Seven purchased replacements remain unimplemented; native A dash/spike/slam, ordinary B/base strings/R, ownership and progression are unchanged.",
+      "kit": "Proposed physical scrapper loop: meet the attack, counter/catch, choose grounded pressure or manual launch/jump, contact-gated air pressure and spike/slam/re-engage. Hunter's Return and Talon Lift are implemented. The remaining five purchased replacements, including their proposed air branches, and Talon Guard remain unimplemented; use the live roadmap for the working controls, ownership and counter alternative.",
       "latest_feedback": {
-        "date": "2026-10-22",
-        "source_version": "0.30.1",
-        "summary": "Likes 2099 overall; make the model closer to the supplied Across the Spider-Verse movie reference and remove the red web cape."
+        "date": "2026-10-23",
+        "source_version": "0.33.1",
+        "summary": "Flesh out the full kit and how it plays, add air combos, and explore blocking or instant counterattacks because 2099 should be a scrapper. No new appearance or gameplay feel verdict is recorded."
       },
       "name": "Spider-Man 2099 - Across the Spider-Verse inspired",
+      "prior_design_snapshot": {
+        "entry": "docs/TASM_ROADMAP_2099_BEFORE_AIR_COUNTER_2026-10-23.md",
+        "snapshot_date": "2026-10-23"
+      },
       "replaces_form": "black",
       "selection_date": "2026-10-11",
-      "status": "cape-free-movie-appearance-retained-v0.30.3-native-black-gameplay",
-      "validation_limit": "v0.30.2 player appearance remains; v0.30.3 changes only the shared custom-creature atlas. Three Terminal enemy materials bind as I4 in fresh copied-save candidate controls; this is one scene, not whole-game residency, DeSmuME pacing or player acceptance."
+      "status": "appearance-published-v0.33.1-two-black-skills-implemented-air-counter-design-only",
+      "validation_limit": "Published implementation evidence is in spider2099_presence.json, hunters_return.json and talon_lift.json. Expanded air branches and guard/counter mechanics are design proposals without engine testing. Player feel/appearance, full-route balance and DeSmuME/hardware pacing remain open."
     },
     {
       "id": "scarlet-kaine",
@@ -106,7 +114,7 @@
       "status": "identity-merged-into-tasm1"
     }
   ],
-  "updated": "2026-10-22",
+  "updated": "2026-10-23",
   "upgrade_plan": "tasm_upgrade_plan.json",
   "upgrade_plan_status": "implemented-current-red-rows-progression-expansion-deferred",
   "user_verified": [

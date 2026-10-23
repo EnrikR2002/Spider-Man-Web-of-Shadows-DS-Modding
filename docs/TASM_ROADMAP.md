@@ -13,8 +13,9 @@ reposition -> resume**. Native A/B/base strings/evade, purchases, dependencies,
 Both Suits traversal, story gates and earned rewards remain the foundation.
 Overclock, Dragnet and Vortex are the final added Red skills. Fun and spectacle
 lead. Hunter's Return and Talon Lift are the two implemented 2099 skills.
-The latest 2026-10-23 request adds height/neon red webs and film research;
-it does not activate another combat move. The remaining five Black moves,
+The latest 2026-10-23 request develops the full 2099 kit, specifically real air
+combo routes and a physical block/counter or hit-retaliation mechanic. This is
+design work; it does not select a new move for implementation. The remaining five Black moves,
 prices, third suits and campaign expansion remain deferred.
 
 The current appearance release is **v0.33.1**, over v0.33.0:
@@ -31,6 +32,7 @@ actual DeSmuME pacing.
 
 | Player evidence | Decision that still matters | Later implementation / limit |
 |---|---|---|
+| 2026-10-23: flesh out the full 2099 kit, add air combos, and explore blocking or instantly countering an attack | Make ground-to-air play central; develop a planted contact counter that supports Miguel's scrapper identity. | Expanded working proposal below. Timed guard with an automatic answer is the recommended default; damage-taking reprisal remains an alternative. No new mechanic is implemented or player-tested. |
 | 2026-10-23: make 2099 taller, make his webs neon red like Across the Spider-Verse, then research/reassess his abilities | Apply the appearance change; ground the existing proposals in the film's pursuit, catches and surface pressure. | v0.33.1 ships render height and web tints. The film reassessment below is a recommendation; no extra move or mechanic is activated. |
 | 2026-10-23: implement the next 2099 skill | Talon Lift retains the native Power Launch purchase and manual B follow-up. | v0.33.0 ships the authored rake and R exit; actual air hits require holding B. Player feel verdict remains open. |
 | 2026-10-23: approve both Hunter's Return review fixes | Isolate shared victim records and clear a departed player's move when the actor is replaced. Preserve the approved skill/model scope. | v0.32.1 corrects both with ARM regressions and labelled native controls. The artwork and private motion remain exact; player feel verdict remains open. |
@@ -83,9 +85,11 @@ candidate qualification is in TASKS; its new feel needs a player verdict.
 
 Review the taller 2099/web appearance and both shipped moves first. The earlier
 Vortex/boss/health fixes ship in v0.31 and retain their pending player verdicts.
-The remaining five Black proposals stay deferred. If combat work is requested
-next, the revised Raking Cross is the strongest next prototype; resolve its
-native contact/recovery before expanding the rest of the kit.
+The remaining five Black proposals stay deferred. The air/counter design request
+supersedes the prior Cross-first recommendation: if implementation is requested,
+first qualify one planted guard/riposte against one ordinary melee attack, then
+Raking Cross and one advanced air route. Neither the new defense nor the whole
+kit is an active implementation queue.
 The chapter reviews below remain player gates when campaign iteration resumes.
 
 The three requested follow-ups now ship in v0.29. Use its published route as
@@ -161,7 +165,9 @@ reference and explicitly removes the red web cape. They like the prior 2099
 overall. This supersedes the earlier classic foundation/larger-cape direction.
 The first 2026-10-23 request selects Hunter's Return and a more muscular body.
 The next-skill request activates Talon Lift; the remaining five moves stay proposals.
-The latest request adds height/neon red webs and a film-based design reassessment.
+The appearance request adds height/neon red webs and a film-based reassessment.
+The subsequent request explicitly asks for a deeper kit, air combos and a
+block/contact counter or instant retaliation after being attacked.
 The previous section, including the earlier move roles, is retained byte for byte
 in the verified archive as `docs/TASM_ROADMAP_2099_PRE_FILM_2026-10-23.md`.
 
@@ -226,38 +232,169 @@ repeated floaty relaunches and a long stationary charging pose would weaken that
 identity. This is an interpretation for a playable DS kit, not a claim that the
 film supplies these named moves or a particular martial-art system.
 
-The recommendations below supersede the earlier proposed choreography, keeping
-the same purchase slots. Only the first two moves are implemented:
+### Full kit, air routes and physical counters - 2026-10-23 working proposal
 
-| Native Black purchase | Move / status | Reassessed role and decision |
+The player correctly identifies the prior proposal's missing air detail. The
+new identity is **meet the attack -> take control -> launch or drive -> air
+pressure -> decisive landing -> re-engage**. Ground pressure remains useful
+against resistant enemies. Fast entries, a stable center of mass, short claw
+strings and visible impact/recovery give Miguel weight without slowing inputs.
+This is a gameplay interpretation, not a claim that the film contains these
+named moves or a formal guard system.
+
+Only Hunter's Return and Talon Lift are implemented. Every extra input, animation
+branch, defensive rule and timing below is a proposal. Keep seven Black shop
+slots, their current prices, native ownership/dependencies and refunds. Fold
+the proposed basic guard into the early Hunter's Return purchase, without an
+eighth row, new save bit or borrowing a Red skill. Existing owned Return saves
+would unlock it naturally in a future release; unowned behavior remains native.
+The earlier film-only draft is preserved in the verified archive as
+`docs/TASM_ROADMAP_2099_BEFORE_AIR_COUNTER_2026-10-23.md`.
+
+| Native Black purchase | Move / status | Proposed complete role |
 |---|---|---|
-| Webbed Fury | Hunter's Return (implemented) | Keep the successful-dash/optional-A catch. It is the clearest tether-and-pursuit fit. Any later motion polish should stress line tension and a forceful catch; preserve resistance and R. |
-| Power Launch | Talon Lift (implemented) | Keep the compact coil/rake and manual held-B air catch as a gameplay bridge. It is an adaptation, not a literal film attack; do not add automatic ascent or repeat launches. |
-| Ground Rebound | Predator Rebound (deferred) | Emphasize a heavy downward drive and short grounded recovery. Treat the native bounce as an optional opening, not the kit's main recurring spectacle. |
-| Black Widowmaker | Raking Cross (deferred) | Best next prototype: low rake into a short crossing pounce/body drive, then a turning claw exit. Drop the decorative passing heel kick. A wall pin needs real collision/release proof; use a grounded drive until that exists. |
-| Poison Pummel | Talon Cyclone (deferred; rethink most) | Replace the long rotation/rising-scissors concept with one compact airborne catch, brief claw contact and a downward drive. Working name can remain until selected. Preserve the existing purchase; do not infer a venom status from its native name. |
-| Super Charge | Predator Wind-Up (deferred) | A brief loaded pounce/heavy catch with readable shoulder/hip compression. Keep ordinary movement available while priming it; contact and misses need recovery. |
-| Quick Charge | Relentless Pursuit (deferred) | Support quick re-entry after one evade/manual jump, spending the carried charge on the next attempt, including a miss. It should reward the player's chase, without automatic tracking or permanent stun. |
+| Webbed Fury | Hunter's Return (existing move; guard extension proposed) | Ground A still dashes; release/tap A after contact recalls an eligible victim or makes the current physical pursuit attempt. Add the planted Talon Guard below through this same purchase. This gives the early kit both an entry and a way to answer pressure. |
+| Power Launch | Talon Lift (implemented) | Up+A coils into the rising rake while Miguel stays grounded. Hold B to jump manually, then start air Y. A counter or Cross gives a deliberate opportunity to choose Lift; neither automatically launches the player. Resistant victims keep native reactions. |
+| Ground Rebound | Predator Rebound (deferred) | Keep Down+A's native ground impact and traversal role. Eligible struck enemies bounce; after Miguel lands, choose a manual B chase or remain grounded and hit another enemy. Avoid automatic jumping and repeated floor-bounce loops. |
+| Black Widowmaker | Raking Cross (deferred) | Preserve the late Y,Y,Y,pause,Y,Y purchase entry. A low rake rolls into a short shoulder/pounce drive and close turning exit, with hip/arm overlap. It may cross a small victim through actual movement; a resistant body or wall stops it normally. A hard wall pin is deferred until release/collision ownership is proven. |
+| Poison Pummel | Talon Maul (deferred; replaces the Talon Cyclone working name) | Retain a compact purchased continuation of Cross on the ground. Its major new role is the optional two-hit air branch after two connected air Y hits: Up+Y rising rake, then Y close forearm/claw follow-through. Finish with native A or Down+A. No long spins, forced attachment, poison status or borrowed Red Snare ownership. |
+| Super Charge | Predator Wind-Up (deferred) | Hold Y through pressure to load a distinct heavy claw/body drive. A low shoulder/hip coil visibly releases through contact; ordinary movement stays available. It can use the opening after a counter, but a block does not grant free full charge. A miss spends the committed attempt and has recovery. Damage/strength remain separately measured. |
+| Quick Charge | Relentless Pursuit (deferred) | Retain faster charging, then allow one already-earned charge to survive one evade or manual jump. Forward+Y as the first air attack can spend it on a short forward body drive, followed by the remaining native Y string. The next committed attack, including a counter or miss, spends the charge. |
 
-The recommended identity is **close/cut off -> tether or catch -> drive/slam ->
-re-engage**. Air strings remain a choice after Lift, rather than the required
-destination of every attack. Show weight through anticipation, overlap, impact
-and recovery while retaining responsive inputs. Qualify continuous paths,
-misses, both facings, armor/resistant bosses and native R exits before expanding.
+#### A complete air game
 
-Native ground A dash, air spike, Down+A slam, B, base strings and unowned R keep
-their traversal/story roles without a target or charge. No forced boss movement,
-teleports, time slowing, new purchases or save expansion. A future pin or air
-catch must prove native victim ownership, release on interruption/death/room
-changes and ordinary collision first. Review the two shipped moves before
-activating any further proposal.
+**Foundation:** preserve the native four-hit Y,Y,Y,Y air string and its
+successful-contact chaining. The new kit adds choices around that foundation.
+Talon Lift, the purchased shared Launching Uppercut, an eligible rebound and
+ordinary jumps provide different ways to enter air pressure. Hold B after
+Lift; short taps are not equivalent to the qualified full jump.
+
+**Close air route:** Y,Y,Up+Y,Y selects Talon Maul when its purchase is owned
+and the first two air contacts actually connected. The rising third rake and
+compact fourth hit keep the opponent reachable for a short finishing choice.
+The authored arms/body suggest a close catch; there is no teleport, hard
+attachment or promise that a new native grab state already exists. A or Down+A
+then chooses a single-victim spike or the ground-impact finish.
+
+**Chase air route:** Forward+Y,Y,Y,Y selects Relentless Pursuit only as the
+first air attack, with an already loaded carried charge and the relevant
+purchases. Miguel spends it immediately on a brief forward forearm/body drive,
+then actual contact permits the remaining native air hits. This closes the gap
+before the string. Starting with a neutral attack or counter already spends
+the bank and removes that chase option; there is no reserved charge surviving
+two intervening attacks. If blocked by a wall or if the enemy escapes, he
+misses and continues falling normally. Without a carried charge, the same Y
+input falls back to the native air string.
+
+The player chooses **one advanced air extension between landings**, vertical
+Maul or charged forward Pursuit. No repeat relaunch, floating hold, second air
+branch or wall-state reset extends it forever. Gravity and enemy resistance
+remain active. A whiff cannot fabricate a contact to progress the branch.
+
+**Finishes and exits stay readable:** air A is Hammer Spike; Down+A is Hammer
+Slam/Predator Rebound. Down+Y remains the purchased Jackhammer Stomp, not a new
+Maul shortcut. B against an air enemy remains purchased Enemy Kick-Off; a second
+B in open air can become the native web swing, so it is not an unrestricted air
+jump. Air R remains purchased Air Dodge. Ground Up+Y retains shared Launching
+Uppercut. None of these shared abilities becomes free through a Black move.
+
+#### Talon Guard and the automatic counter
+
+**Recommended working version:** grounded **Up+R**, without horizontal steering,
+enters a short, forward-facing brace when Hunter's Return is owned, from neutral
+or a legitimate attack-cancel window. Horizontal steering plus R takes the native
+evasion path. Ordinary R retains evade/cancel behavior, Down+R retains the native roll,
+and holding R/steering retains purchased Enhanced Dodge. Air Up+R follows native
+Air Dodge rules. Invalid states or unowned inputs fall back to native behavior.
+The dedicated chord preserves existing movement contracts while we test the
+physical defense. Do not quietly reassign ordinary R to guard.
+
+Miguel sets his feet and raises his forearms/claws. Start with about **0.2 s**
+for a clean counter timing and **0.6 s** maximum total brace, then tune against
+actual logical updates. These are proposed targets, not calibrated timings.
+There is no new stamina meter or permanent block stance.
+
+- A real eligible frontal melee hit during the opening window is blocked without
+  HP loss or native hurt, then Miguel automatically answers that attacker with
+  one short elbow/body check into a claw rake. No Y is required to trigger it.
+  The response starts promptly, but damage lands at its visible contact.
+- A later ordinary frontal hit can consume the one-hit guard without giving the
+  automatic answer. The brace ends with brief pushback/recovery. Holding the
+  chord cannot refresh it; release and re-arm after recovery.
+- The unit is one distinct incoming attack, not each collision part. Duplicate
+  limbs from the same punch must not cause repeated blocks/counters or sneak
+  the original blocked hit through. Another enemy or a later distinct strike
+  can still interrupt. Counter-origin hits cannot recursively trigger counters.
+- Rear attacks, grabs, projectiles, ground hazards and deliberately unguardable
+  heavy attacks retain their normal danger. Heavy charges/overheads need a
+  readable guard-break distinction before broad rollout. The first prototype
+  supports one known ordinary melee attack, not an inferred whole roster.
+- The counter stays close and uses the actual live source of the blocked hit.
+  It can miss when that attacker moves away and can fail to stagger armor. It
+  does not force launches, cross behind the target, grant broad invulnerability,
+  clear the room, heal damage, resurrect Miguel or override a protected boss.
+
+A successful counter gives a short grounded decision: Y into pressure/Cross,
+owned Up+A into Lift and manual air play, a loaded Y heavy, or ordinary R to exit.
+The real counter hit earns normal native combo credit; guard animation alone
+does not manufacture damage, hits or combo gauge. The existing Red suit already
+has an evasive reversal. Miguel's proposed version waits for actual contact,
+holds his ground and answers it physically.
+
+**Alternative if the player prefers taking the hit:** a committed Reprisal can
+follow a real recoverable hurt event, using the existing paid Quick Recovery
+opportunity and a deliberate R/guard input. The HP loss stays; the answer occurs
+only when a valid recovery is permitted. Do not make it an always-on automatic
+attack for every received hit, or a way to cancel death, grabs, heavy knockdown
+and hazards. This is an alternative experiment, not another simultaneously
+queued mechanic or extra purchase. Pending preference, timed guard/automatic
+counter is the working recommendation.
+
+#### How encounters would play
+
+All routes below describe the proposed full kit with the named purchases;
+they are not claims that v0.33.1 already accepts the new inputs. Inputs wait for
+real contact/cancel windows, rather than being entered simultaneously.
+
+| Situation | Route and decision |
+|---|---|
+| One susceptible enemy | Dash hit -> optional A Return -> Up+A Lift -> hold B -> Y,Y -> Up+Y,Y Maul -> A spike. Return and Lift remain independently chosen. |
+| Enemy attacks first | Up+R timed brace -> automatic grounded counter -> Up+A -> hold B -> air Y string or owned Maul -> A/Down+A finish. Stay grounded with Y instead when air pressure is unsafe. |
+| Enemy drifts out of reach | Load Wind-Up, carry it through the manual jump with Pursuit -> Forward+Y -> Y,Y,Y on contact -> spike or land. No charge or lost contact means the native string/miss, not a free chase. |
+| A crowd gathers below | Launch one enemy -> manual jump and short air pressure -> Down+A into the group -> native eligible rebound -> choose manual B after landing or grounded Cross against another threat. |
+| Armor or an immovable boss | Use short ground strings/Cross, guard only qualified ordinary swipes, land a physical counter when vulnerability permits, then R out. Heavy tells, ranged pressure and protected phases demand native evasion/positioning. No guaranteed air conversion. |
+
+Counter, air branch and finish should each have readable anticipation, actual
+contact and recovery, with continuous trajectories and overlapping body motion.
+Do not add per-key pose resets, slow motion, teleport catches, new shop rows,
+save expansion or forced player jumps to manufacture spectacle. Native A dash,
+spike and slam still work for traversal without a target or charge.
+
+#### Prototype order and unresolved engine work
+
+If implementation is requested, prove **one planted guard plus one real riposte**
+first: one enemy, both facings, correct/late/missed timing, rear/heavy controls,
+one actual blocked HP event and one subsequent actual enemy HP loss. Compare
+ordinary R, Down+R, Air Dodge, Enhanced Dodge, paid Quick Recovery and unowned
+Black/Red behavior. Include duplicate contacts, two attackers, stale/dead sources,
+wall contact, interruption, suit switch and room/player replacement cleanup.
+
+The known native contact dispatcher can ignore a hit and the native air string
+requires connected contacts, but these facts do not prove the new guard or air
+branches. Some native attacks call ReceiveHit directly and bypass the general
+observer. Trace a supported attack's real path; do not fake protection by writing
+HP back or invent an attacker by scanning nearby windups. Keep shared contact
+credit isolated. Enemy resistance, actual damage arguments and ownership must
+remain explicit. Then qualify Cross and **one** Maul air route before adding the
+charged Pursuit branch or expanding counter coverage. No new engine behavior
+has been tested by this design work.
 
 ## Deferred work
 
 | Idea | Current boundary |
 |---|---|
 | More Red skills, extra stat rows, prices/balance, shop/save expansion | Deferred. Iterate the existing kit; Overclock/Dragnet/Vortex are the final added skills. |
-| Spider-Man 2099 combat | Hunter's Return ships in v0.32; Talon Lift is implemented for v0.33. The other five proposals remain deferred. Preserve native A traversal, paid ownership and shared upgrades. |
+| Spider-Man 2099 combat | Hunter's Return and Talon Lift are shipped. The other five replacements plus the guard and air extensions remain design proposals. If implementation is requested, qualify one physical guard/riposte first; retain native/shared controls and purchases. |
 | Third suit and other suit concepts | Deferred; TASM1/2 share one kit. No suit selector or migration is implemented by this roadmap. |
 | Downtown Grid/Lost Lab, Residential Skyline Run, Hive Quarantine Heart | Deferred concepts. No new allocations are authorized by the old pitches; audit current flags/storage before any future expansion. Hive stays post-story. |
 | Midnight Express, gauntlets, timed replays, collectibles/reward systems | Backlog ideas, not unfinished work required for the current chapters. |
@@ -278,6 +415,7 @@ python tools/doc_archive.py list roadmap
 python tools/doc_archive.py read docs/TASM_ROADMAP.md --toc
 python tools/doc_archive.py read docs/TASM_ROADMAP.md --section 'Spider-Man 2099'
 python tools/doc_archive.py read docs/TASM_ROADMAP_2099_PRE_FILM_2026-10-23.md --toc
+python tools/doc_archive.py read docs/TASM_ROADMAP_2099_BEFORE_AIR_COUNTER_2026-10-23.md --toc
 python tools/doc_archive.py read reference/tasm_upgrade_plan.json --lines 40
 ```
 

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "snapshot_date": "2026-10-05",
   "purpose": "Historical source notes; current status is in docs/TASKS.md. Read only a selected entry/section with tools/doc_archive.py.",
-  "archive_sha256": "d3d0e171b057c45a617c8543ae75c2e9625275fe6679c0fc65b235b228b55e0a",
+  "archive_sha256": "8094f7ffad412ebb6b0195cbc60ea026695cb66656e7b4fd71b52ba3d568142a",
   "entries": [
     {
       "path": "AGENTS.md",
@@ -1839,6 +1839,39 @@
       "source_section": "docs/TASM_ROADMAP.md / Spider-Man 2099: Black-slot rework",
       "title": "2099 proposals before Across the Spider-Verse reassessment",
       "words": 719
+    },
+    {
+      "path": "docs/TASM_ROADMAP_2099_BEFORE_AIR_COUNTER_2026-10-23.md",
+      "title": "2099 film reassessment before expanded air/counter design",
+      "snapshot_date": "2026-10-23",
+      "source_revision": "70e9f2f56fcb9b1437ee1e6031f54555b6a2968b",
+      "source_section": "docs/TASM_ROADMAP.md / Spider-Man 2099: Black-slot rework",
+      "bytes": 7550,
+      "words": 1058,
+      "sha256": "2139f494290bdfda98b39d6536db17f189f6f2bc7034480feda390bccaab3dd8",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Spider-Man 2099: Black-slot rework",
+          "level": 2
+        },
+        {
+          "line": 46,
+          "heading": "Across the Spider-Verse reassessment - 2026-10-23",
+          "level": 3
+        }
+      ]
+    },
+    {
+      "path": "reference/suit_roadmap_before_air_counter_2026-10-23.json",
+      "title": "Suit catalog before expanded 2099 air/counter design",
+      "snapshot_date": "2026-10-23",
+      "source_revision": "70e9f2f56fcb9b1437ee1e6031f54555b6a2968b",
+      "source_section": "reference/suit_roadmap.json",
+      "bytes": 5684,
+      "words": 540,
+      "sha256": "cd2c8aa8d96e6fb32b7ac0235309463a0246fd8da8c0d97379d18f881761348a",
+      "sections": []
     }
   ]
 }
