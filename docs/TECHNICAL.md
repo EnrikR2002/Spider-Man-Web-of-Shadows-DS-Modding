@@ -1135,7 +1135,7 @@ input-command queue, `+0x44` actor, `+0x54` target interface (actor+4),
 `+0x64` flags (`0x8000` Scissor repeat; `0x40` set while dodging), `+0x80`
 string node, `+0x8C` evade lock, `+0x90` node keep-alive timer, `+0x93` repeat
 count. Queue commands (`0x020CFF0C` peek / `0x020CFC34` consume): 1 attack (Y),
-2 jump (B), 3 evade (R), 4 object (X). Ability query: actor vtable `+0x184`
+2 jump (B), 3 evade (R), 4 object (X), 5 suit action (A; native Webbed Fury control). Ability query: actor vtable `+0x184`
 (bit) / `[[actor+0xE8]] & (1<<bit)`. Form: actor+0x34 = 1 Black.
 REG_KEYINPUT `0x04000130` gives held D-pad/R on ARM9 (X/Y are ARM7-only).
 
@@ -1741,6 +1741,56 @@ bounded reproduction, not a claim that every native hit must deal the same HP.
   green; melonDS). The purple bar cannot be tinted without tinting the meter.
 
 ### Kit animation authoring
+
+**Hunter's Return foundation (2026-10-23, published v0.31 control / v0.32 A;
+high confidence for the observed path):** native Webbed Fury's transition is
+`0x020B4DA0`. It checks Black bit20, state44 (or native late-string nodes),
+controller+0x64 bit0x400 contact credit, the weak last-hit reference at+0x4C,
+target eligibility and queued A (command5). A successful recall returns state42,
+action49; native arrival enters43/action50. The observed ground dash plays
+action23 after action24; action22 must not be assumed to be the only dash.
+On the copied-current-save Brute control, recall moves the enemy through native
+reaction45, then the kick dispatches kind0x20. Candidate A substitutes private
+10/9-sample continuous pull/rake clips and changes that one target's rake contact
+to native launch kind0x25. The damage argument and strength remain native.
+Do not idle-lock enemy state across recall: it erases the actual yank reaction
+and falsely makes the target unpullable. Raw controls are in
+`work/hunters-return/native-extra.json` and the native-free/candidate traces.
+
+**Published Hunter composition (2026-10-23, v0.32.0 B; high confidence within
+the scoped controls):** six native-site adapters preserve the frozen 32 KiB kit,
+including later Vortex/Vitality/boss layers. The 64-byte private state and 1660
+bytes of code occupy one 4 KiB autoload extension. Ground dash contact credit,
+Black bit 20 and a fresh weak target gate activation. Original native recall
+eligibility remains authoritative; its interface query checks target capability
+bit1, and an unavailable recall falls back only with a new neutral A, a live
+target within 24 horizontal / 5 vertical units and no held Up/Down/R.
+
+Private action 49/50 SCA routes play the 10/9-sample pull/rake. The pull's last
+authored pose exactly equals the rake's first pose across every channel. The
+full native recall contact changes kind 0x20 to 0x25 only for the owned Black
+hero, matching active target, motion/config identity and state 43 / action 50.
+Attack strength and native HP damage stay unchanged. Physical fallback uses
+the native ground-string entry/node 5 and private rake resources; velocity is
+bounded to 2 units/update, stops at 6-unit reach, and never writes position/time.
+Native hitboxes and actual ReceiveHit decide contact. Native R exits through
+the existing evade queue; hurt/form/room/owner change, death, stale registry or
+recycled motion/config clears private state. No target is held after interruption.
+
+Twelve Conductor follow-ups cause 12 real HP drops with no launch conversion;
+player healing and a cleared boss flag 147 are disposable fixtures. A separate
+eligible Brute control proves native recall/rake/launch. Mirrored native refusal
+correctly uses physical pursuit. The Terminal qualification observes two enemy
+species, not an assumed third actor: 218 crowded samples bind hero I8 and both
+enemy I4 materials. All other room/audio/motion/XBD resources stay exact.
+
+`hunters_return_art.py` reshapes the already-published Black list in bind space,
+using continuous torso volume and radial arm envelopes around unchanged pivots.
+It preserves every UV/matrix slot, 516 triangles, atlas, rig/SBC, Red GPU stream
+and the existing selector footer/literals. Only the bounding box and Black
+vertex coordinates change. Live skill captures select the actual Black list
+and bind 128x128 I8. Recipe, scope, raw evidence and limits belong in
+`reference/hunters_return.json`; player aesthetics and DeSmuME pacing remain open.
 
 `kit_choreography.Clip` channels are keyed per sample: root (pelvis position),
 yaw/pitch/roll (full flips/spins; pitch + = forward), spine, head, chest-relative

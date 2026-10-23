@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Mechanics proposed for th
 TASM rebuild are in [TASM_ROADMAP](TASM_ROADMAP.md); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.31.0. Each section records behavior,
+The latest numbered release below is v0.32.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in TASM_ROADMAP/TASKS.
@@ -18,6 +18,38 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.32.0 - 2026-10-23 - Hunter's Return and fuller 2099 physique
+
+The first planned 2099 move replaces Webbed Fury's presentation in its existing
+Black purchase: event 329 / bit 20, native 100 XP price, ownership and refund rules.
+After a successful ground dash, release A and tap A again. An eligible target
+is recalled through the native line/pull and met with an authored rising talon
+rake that uses the native launch reaction. B remains a manual jump; R exits.
+When native recall is unavailable, a short physical pursuit attempts the rake
+through actual collision. It does not force launches on the Conductor.
+Native A traversal, base strings and other purchased skills remain intact.
+
+2099 has fuller chest/back, deltoids, biceps and forearms, retaining the tapered
+waist, height, 37-node rig, mounted blades/talons, cape-free texture and 516
+triangles. Red's GPU list, both texture pools and the guarded selector remain
+exact. The native purchase tables, 32 KiB kit, rooms/doors/audio and all other
+actor bindings/clips are preserved; one 4 KiB runtime extension and three private
+motion resources implement the skill. No save migration or research save adoption.
+
+**Qualification.** Forty-nine source/regression checks plus one lab-output guard;
+12 focused owned/unowned/Red/whiff/held-A/optional-A/mirror/wall/cancel/hurt/form/
+stale controls; a separate full native recall/launch; and 12 actual damaging
+physical follow-ups against the live Conductor with zero forced launches.
+Boss healing and initial cleared-encounter/arrival fixtures are labelled.
+The latest copied-save Terminal scene keeps the player I8 and both observed
+enemy species I4 bound across 218 crowded samples; no third enemy was observed.
+Native-scale rake/launch, physical rake and crowded hurt captures were reviewed.
+The shop instructions/owned checkmark fit. Canonical, accepted candidate,
+normal-source build, publisher candidate and stable ROM match; boot/Options,
+latest DSV wrapper/payload/checkpoint and clean original agree. Details and
+diagnostic exclusions: `reference/hunters_return.json`. Player feel/physique
+preference, full-route balance and actual DeSmuME pacing remain open.
 
 ## v0.31.0 - 2026-10-22 - Tether Vortex, armored Conductor and lethal damage
 

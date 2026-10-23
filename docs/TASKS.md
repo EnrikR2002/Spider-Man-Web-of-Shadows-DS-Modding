@@ -1,65 +1,65 @@
 # Current work and handoff
 
-Updated 2026-10-23 (America/Edmonton). Current build/save qualification below is
-the 2026-10-22 v0.31.0 record; this workflow-policy update changed no game artifacts.
-Read AGENTS first. DEVELOPMENT owns workflow; TECHNICAL owns contracts; CHANGES
-owns releases; TASM_ROADMAP owns design.
+Updated 2026-10-23 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
+workflow; TECHNICAL owns contracts; CHANGES owns releases; TASM_ROADMAP owns design.
 
 ## Current objective and player direction
 
-The three requested fixes are implemented and agent-qualified in v0.31.0:
-conditional, more spectacular Vortex; a larger symbiote metal war-machine
-Conductor with one boss meter; and the repeated lethal-hit/low-HP Vitality bug.
-The player likes the boss fight behavior, which remains intact. New Vortex feel
-and boss appearance require the player's own verdict; agent clearance is distinct.
+The requested first 2099 skill and fuller Spider-Verse physique are implemented
+and agent-qualified in v0.32.0. Hunter's Return uses the existing Webbed Fury
+purchase: after a ground dash hits, release A and tap A again. Eligible targets
+are recalled into a rising talon rake; native-unrecallable targets get a short
+physical pursuit attempt. R cancels; B remains a manual jump. Already-owned
+progress remains owned. The native 100 XP price, event 329 / bit 20 and refund rules
+remain. Other six proposed Black moves are deferred; no new shop/save system.
 
-Red retains one combined TASM1/2 kit. Overclock/Dragnet/Vortex are its final
-added skills. Black mechanical proposals, prices, third suit, shop/save expansion
-and other campaign branches remain deferred. Cape-free 2099 and the compact
-Terminal crowd atlas remain. Preserve native controls, ownership/dependencies,
-traversal, story barriers and earned rewards.
+2099 has fuller chest/back, shoulders, biceps and forearms, retaining his
+cape-free texture, 37-node rig, native height/pivots and 516 triangles. Red's
+geometry/texture and previous kit/chapter/boss/Vitality work remain.
+Player feel and physique acceptance are open.
 
-## Published build
+Red retains one combined TASM1/2 kit; Overclock/Dragnet/Vortex are its final added
+skills. Preserve native abilities, ownership/dependencies, Both Suits traversal,
+story gates and earned rewards. Prices, third suit and other campaign branches
+remain deferred. Earlier environment acceptance does not accept all enemy art.
 
-Stable build/Spider-Man-WoS-modded.nds is **v0.31.0**, published through
-tools/playtest.py build. Accepted F, canonical final, normal-source rebuild,
-publisher candidate and installed stable match. Recipe, release pins/history,
-boot/Options and full scope/evidence are in reference/vortex_forge.json.
-Previous ROM/recipe/metadata are retained; no source commit/push was requested.
+## Published build and save
 
-The latest actual Battery was freshly read again. Its complete DSV wrapper,
-payload and publication checkpoint match before/after. Clean original and
-unrelated files remain intact. A fresh native Continue keeps current abilities,
-XP, initial HP and checkpoint; no research battery was adopted.
+Stable build/Spider-Man-WoS-modded.nds is **v0.32.0**, published through
+tools/playtest.py build. Accepted B, canonical final, normal-source rebuild,
+publisher candidate and installed stable match. Boot/Options agree. Full scope,
+pins, recipe and evidence are in reference/hunters_return.json; CHANGES and
+releases.json record publication. Previous ROM/recipe/build metadata are retained.
+
+The player saved and closed DeSmuME before publication. The latest actual DSV
+wrapper, 512-byte payload and new publication checkpoint match exactly; clean
+original is intact. Fresh Continue from the newly saved copy retains abilities,
+XP, initial HP and checkpoint. No research save was adopted. Older battery
+hashes remain historical observations, never restore instructions.
 
 ## Implemented and agent-tested
 
-Web with A or Dragnet, release A, then Down+Y: Vortex captures actual cocoons,
-catapults their bodies through a two-turn tether animation and slams them down.
-R/hurt interrupts cleanly; native movement/collision remain. Regular/Dragnet,
-mirror, unwebbed/unowned/Black, stale-pointer, ABI and cancellation controls pass.
-The isolated body-contact control knocks down a real bystander; it parks only
-unwebbed standing enemies through frame100. Earlier unparked interruptions are
-retained, not treated as guaranteed crowd clears.
+Native recall/rake/launch and mirrored physical fallback run through real
+contacts. Twelve focused cases cover ownership, Red, whiff, held/optional A,
+R/hurt/form/stale exits and left-wall contact. Native R and other abilities stay
+available; traversal inputs are not redirected. The 50 source/regression checks
+include ARM ABI/flags, pointer/room/form guards, private animation routing,
+purchase/32KiB-kit/resource isolation and research-output safety.
 
-The Conductor has articulated armor/turbines/pistons/exhausts, 1.28x body scale,
-a compact boss-only RGB555 texture and no duplicate red bar. All39 private
-motion timings/rotations and native attack/AI/HP/audio/collision stay exact.
-The shared I4 crowd atlas and other actors remain exact. The old boss's magenta
-palette issue is reproduced and corrected in this arena.
-
-Vitality now scales full incoming damage before the final HP clamp. A latest
-copied-save control needs eleven old-build hits to finish low HP, versus one
-real damaging hit on the corrected build. Twenty-six tests include256 damage
-combinations. Final Red victory/save/fresh Continue pass with labelled healing;
-an identical-boss E Black control earns a no-refill win/save. Exact reuse scope
-and limitations are in the receipt. Room/door resources are unchanged.
+The live Conductor receives 12 damaging physical follow-ups and no forced launch.
+That resistance study heals the player and resets only the disposable boss flag;
+it is not a balance/victory claim. The current copied-save Terminal scene keeps
+the hero I8 and both observed enemy species I4 bound across 218 crowded samples;
+no third actor was observed. Native-scale pull/rake/launch, physical rake,
+crowded hurt and shop text/owned checkmark were inspected. The same texture
+footprint/triangle count is preserved. Earlier failed fixture assumptions and
+their corrected scope are retained in the receipt.
 
 ## Next exact action and remaining gates
 
-Use the normal launcher to review Vortex and the larger boss. Player feel,
-appearance preference, full-route balance and actual DeSmuME pacing remain
-open. Prior environment improvements remain accepted; broader enemy quality
-is not implied by this boss/art/kit qualification.
+Use the normal launcher, switch to 2099/Black with L and review Hunter's Return
+and the fuller physique. Player feel/appearance, full-route balance and actual
+DeSmuME pacing remain open. Iterate this first move before requesting another
+proposal. No additional 2099 move is queued for automatic implementation.
 
 Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.

@@ -1,0 +1,381 @@
+{
+  "canonical_rom": "build/version-0.32.0-final/Versioned.nds",
+  "clean_rom_sha256": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203",
+  "composition": {
+    "added_resources": [
+      "zz_H32_Pull.sca",
+      "zz_H32_Rake.sca",
+      "zz_H32_Rake.gmb"
+    ],
+    "arm9_sha256": "dd9c85ba4966bf573dad2f1d19faba34b14e4fab4f901ad7d11f32d99d14d2d2",
+    "model": {
+      "atlas_unchanged": true,
+      "cape": false,
+      "native_rig_unchanged": true,
+      "physique": "Fuller chest/back, deltoids, biceps and forearms; waist, height and native joint pivots retained.",
+      "triangles": 516
+    },
+    "modified_resources": [
+      "American.strings",
+      "English.strings",
+      "GlobFiles.txt",
+      "spd.nsbmd"
+    ],
+    "native_red_and_other_actor_bindings_exact": true,
+    "ownership": {
+      "bit": 20,
+      "event": 329,
+      "price": 100,
+      "record_unchanged": true
+    },
+    "parent_sha256": "ce6dd4e6afc8b188447cef5a07b76f58a2b2d0b25e7e829ea83adb70b362cade",
+    "player_kit_32k_unchanged": true,
+    "rom_sha256": "4ab044d0e258e84d195774d4e3ee95a5d22ddc778600986d235490847f00e556",
+    "rooms_audio_other_skills_save_format_preserved": true,
+    "runtime": {
+      "bytes": 1660,
+      "entry": 35052136,
+      "hooks": [
+        34295200,
+        34014340,
+        34047528,
+        34028384,
+        34297656,
+        34296628
+      ],
+      "start": 35052064,
+      "state": 35052064,
+      "values": {
+        "NATIVE_TRANSITION": 35052128,
+        "OLD_CONTACT": 34942032,
+        "OLD_EVADE_GENERIC": 34941984,
+        "OLD_EVADE_STRING": 34941988,
+        "PULL_SCA": 5949,
+        "RAKE_GAB": 3355,
+        "RAKE_GMB": 5951,
+        "RAKE_SCA": 5950,
+        "STATE": 35052064
+      }
+    },
+    "shared_model": {
+      "black_dimensions": [
+        128,
+        128
+      ],
+      "black_magnification": [
+        4096,
+        4096
+      ],
+      "black_stream_bytes": 15200,
+      "default_red_list_exact": true,
+      "material_offset": 2152,
+      "metadata_offset": 30240,
+      "model_size": 30304,
+      "one_list_per_draw": true,
+      "red_dimensions": [
+        128,
+        128
+      ],
+      "red_magnification": [
+        2048,
+        2048
+      ],
+      "red_stream_bytes": 12788,
+      "shape_offset": 2236,
+      "trailer": [
+        959459923,
+        827081785,
+        2236,
+        2152,
+        16,
+        12788,
+        12804,
+        15200,
+        8388736,
+        8388736,
+        2048,
+        2048,
+        4096,
+        4096,
+        30304,
+        1345531953
+      ]
+    },
+    "version": "0.32.0"
+  },
+  "date": "2026-10-23",
+  "diagnostic_exclusions": [
+    "Earlier b matrix used an A press outside the native recall range; its whiff case actually dashed into an enemy. Corrected cases in b3/b4 are explicit.",
+    "The original right-wall placement produced no front target; b4 uses an actual left-wall contact instead.",
+    "Initial boss study inherited the player-earned defeated flag and had no live boss; fresh2 clears147 only in disposable RAM. A duplicate static-entry wrapper failed before emulation and was corrected.",
+    "Native recall eligibility can refuse a target; the mirrored example correctly takes the physical fallback, with no forced launch. Full eligible recall is separately witnessed."
+  ],
+  "limitations": [
+    "Player feel/model preference, whole-route balance and actual DeSmuME pacing are not qualified.",
+    "Other six proposed 2099 skills remain deferred; original native Black behavior outside this purchased dash follow-up stays intact."
+  ],
+  "normal_source_rom": "build/hunters-return-normal/Versioned.nds",
+  "parent_rom_sha256": "ce6dd4e6afc8b188447cef5a07b76f58a2b2d0b25e7e829ea83adb70b362cade",
+  "presentation": {
+    "limits": "Authored pull ends at the exact initial rake pose; the two arms overlap. Native-scale recall/rake/launch, manual jump, mirrored physical rake and crowded hurt captures inspected. Player aesthetic/feel verdict remains open.",
+    "model_preview": "build/version-0.32.0-final/2099-physique-preview.png",
+    "native_gif": "build/version-0.32.0-final/hunters-return-native.gif",
+    "native_sheet": "build/version-0.32.0-final/hunter-rake-sheet.png"
+  },
+  "prior_build_metadata": "build/releases/ce6dd4e6afc8b188447cef5a07b76f58a2b2d0b25e7e829ea83adb70b362cade/Spider-Man-WoS-modded.build.json",
+  "prior_recipe": "build/releases/ce6dd4e6afc8b188447cef5a07b76f58a2b2d0b25e7e829ea83adb70b362cade/gameplay_profile.json",
+  "prior_recipe_sha256": "5510e5a9f7c6272fa19fd02a82257ade372e2327d4945f5b29d43caa312fb58a",
+  "prior_rom": "build/releases/ce6dd4e6afc8b188447cef5a07b76f58a2b2d0b25e7e829ea83adb70b362cade/Spider-Man-WoS-modded.nds",
+  "publication": {
+    "all_five_roms_equal": true,
+    "battery_checkpoint": "before-build-dsv-4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+    "battery_path": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+    "battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+    "clean_original_unchanged": true,
+    "footer_words": [
+      1,
+      512,
+      1,
+      1,
+      512,
+      0
+    ],
+    "payload_sha256": "60522969684b475bc977a2d7c3478928066af9df75577f5c8b50a3bcbdd16835",
+    "previous_rom_recipe_metadata_retained": true,
+    "publisher_log": "work/hunters-return/publication.log",
+    "release": "build/releases/4ab044d0e258e84d195774d4e3ee95a5d22ddc778600986d235490847f00e556/release.json",
+    "source_build_log": "work/hunters-return/normal-build.log",
+    "stable_rom": "build/Spider-Man-WoS-modded.nds",
+    "wrapper_and_payload_checkpoint_exact": true
+  },
+  "request": "Add the first planned 2099 skill and investigate a fuller Spider-Verse physique.",
+  "rom_sha256": "4ab044d0e258e84d195774d4e3ee95a5d22ddc778600986d235490847f00e556",
+  "schema_version": 1,
+  "source_hashes": {
+    "mod.py": "9623d84fae03aa703a68f9443d7cf5440dd800f2b1bf9e0dc2660ce2f9824c6a",
+    "reference/gameplay_profile.json": "2453d0b1729866749d72a5b56cdd6e251e9a7db757d5946470edb86da217dfbc",
+    "tests/test_hunters_return.py": "4d9c97231a38608ce1b4703824c9f3eb42725562d6c232bd04cb192b73e14ddb",
+    "tools/hunters_return.py": "2f6d1b72d76db356a9ab5b9bb6f9c5271967d3d91f43f16aff3c3a8007794de7",
+    "tools/hunters_return.s": "eefcf8f6ba6b6cb09f94b86f9ec8a48c71424a533987a124afed3f63d602c242",
+    "tools/hunters_return_art.py": "f8b8e475760c854d573a6580b45f3b71303353d57d72e15d9e8b7790b291c654",
+    "tools/hunters_return_lab.py": "a14780f24c87eca1d3dfa5531630ef4afaef57d75e1c2483702429def1215cff",
+    "tools/hunters_return_motion.py": "1673222a32f8b8a35ecce0334115085d0792ccc5e83546764169469a4944fc76",
+    "tools/release_info.py": "31c2c1bda0d8cd9d2f9890cf2322f39160b257cd7dbefa13ca7f1b655ab91c45"
+  },
+  "status": "published-v0.32.0-hunters-return",
+  "validation": {
+    "boot_options_and_shop": {
+      "204": "Hunter's Return",
+      "205": "Hunter's Return",
+      "206": "After a ground dash hits, tap \ue602 again.\nRecall into a rising talon rake.\nResistant foes: short pursuit. \ue604 exits.",
+      "50": "TASM v0.32.0\nPress a button to start",
+      "74": "Options v0.32.0"
+    },
+    "byte_scope": "Only four existing Glob resources change: shared player mesh, American/English text and generated name list. Three private motion resources are appended. ARM7, other NitroFS files, all rooms/audio/native XBDs/other clips, purchases and 32KiB kit match v0.31. Six guarded native ARM hooks, resource count and autoload/arena metadata change; one 4KiB extension.",
+    "cases": {
+      "bare": {
+        "black_draw_list_exact": true,
+        "hero_textured": false,
+        "launches": 0,
+        "passed": true,
+        "pursuits": 0,
+        "report": "work/hunters-return/b3/bare/result.json",
+        "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+        "starts": 0
+      },
+      "cancel": {
+        "black_draw_list_exact": true,
+        "hero_textured": true,
+        "launches": 0,
+        "passed": true,
+        "pursuits": 0,
+        "report": "work/hunters-return/b3/cancel/result.json",
+        "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+        "starts": 1
+      },
+      "hold": {
+        "black_draw_list_exact": true,
+        "hero_textured": false,
+        "launches": 0,
+        "passed": true,
+        "pursuits": 0,
+        "report": "work/hunters-return/b3/hold/result.json",
+        "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+        "starts": 0
+      },
+      "hurt": {
+        "black_draw_list_exact": true,
+        "hero_textured": true,
+        "launches": 0,
+        "passed": true,
+        "pursuits": 0,
+        "report": "work/hunters-return/b3/hurt/result.json",
+        "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+        "starts": 1
+      },
+      "mirror": {
+        "black_draw_list_exact": true,
+        "hero_textured": true,
+        "launches": 0,
+        "passed": true,
+        "pursuits": 1,
+        "report": "work/hunters-return/b3/mirror/result.json",
+        "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+        "starts": 1
+      },
+      "red": {
+        "black_draw_list_exact": true,
+        "hero_textured": false,
+        "launches": 0,
+        "passed": true,
+        "pursuits": 0,
+        "report": "work/hunters-return/b3/red/result.json",
+        "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+        "starts": 0
+      },
+      "regular": {
+        "black_draw_list_exact": true,
+        "hero_textured": true,
+        "launches": 0,
+        "passed": true,
+        "pursuits": 1,
+        "report": "work/hunters-return/b3/regular/result.json",
+        "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+        "starts": 1
+      },
+      "stale": {
+        "black_draw_list_exact": true,
+        "hero_textured": true,
+        "launches": 0,
+        "passed": true,
+        "pursuits": 0,
+        "report": "work/hunters-return/b3/stale/result.json",
+        "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+        "starts": 1
+      },
+      "swap": {
+        "black_draw_list_exact": true,
+        "hero_textured": true,
+        "launches": 0,
+        "passed": true,
+        "pursuits": 1,
+        "report": "work/hunters-return/b3/swap/result.json",
+        "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+        "starts": 1
+      },
+      "unowned": {
+        "black_draw_list_exact": true,
+        "hero_textured": false,
+        "launches": 0,
+        "passed": true,
+        "pursuits": 0,
+        "report": "work/hunters-return/b3/unowned/result.json",
+        "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+        "starts": 0
+      },
+      "wall": {
+        "black_draw_list_exact": true,
+        "hero_textured": true,
+        "launches": 0,
+        "passed": true,
+        "pursuits": 1,
+        "report": "work/hunters-return/b4/wall/result.json",
+        "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+        "starts": 1
+      },
+      "whiff": {
+        "black_draw_list_exact": true,
+        "hero_textured": false,
+        "launches": 0,
+        "passed": true,
+        "pursuits": 0,
+        "report": "work/hunters-return/b3/whiff/result.json",
+        "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+        "starts": 0
+      }
+    },
+    "document_tests": {
+      "count": 7,
+      "log": "work/hunters-return/final-doc-tests.log",
+      "passed": true
+    },
+    "full_native_recall": {
+      "launches": 1,
+      "limits": "Current copied save; native Continue/Test Upgrades; initial positions/purchase/idle fixtures. Manual B/Y afterward, no automatic jump or guaranteed air follow-up.",
+      "report": "work/hunters-return/b2/regular/result.json"
+    },
+    "mixed_scene": {
+      "crowded_frames": 218,
+      "enemies_format": "I4",
+      "initial_three_enemy_assertion": "Superseded by explicit two-enemy scope; no third actor was observed.",
+      "limits": "Copied current save/current abilities/XP/initial HP; initial compiled Terminal arrival. Native input approach/AI/hurt and no healing. Texture/presentation scene, not whole-game residency or difficulty.",
+      "maximum_observed_enemy_count": 2,
+      "observed_species": [
+        "eye",
+        "skitter"
+      ],
+      "player_format": "I8",
+      "report": "work/hunters-return/b-mixed/texture-result.json"
+    },
+    "normal_continue": {
+      "ability_words": [
+        941621247,
+        4293918703,
+        523743
+      ],
+      "initial_hp": 77824,
+      "profile": "work/hunters-return/current-final/owned-player-profile.json",
+      "room": 65,
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "xp": 4849
+    },
+    "published_continue": {
+      "all_measured_fields_match": true,
+      "no_ram_fixtures": true,
+      "profile": "work/hunters-return/published-continue/owned-player-profile.json",
+      "unchanged_fields": [
+        "ability_words",
+        "xp",
+        "initial_hp",
+        "room",
+        "source_sha256"
+      ]
+    },
+    "resistant_boss": {
+      "forced_launches": 0,
+      "limits": "Initial arena/cleared boss flag147 in disposable RAM, measured purchases/XP/HP, native input approach/dash/follow-up. Player healing; not a difficulty or victory test.",
+      "physical_damage_frames": [
+        300,
+        384,
+        678,
+        930,
+        1014,
+        1308,
+        1392,
+        1686,
+        1938,
+        2200,
+        2442,
+        2526
+      ],
+      "pursuits": 12,
+      "report": "work/hunters-return/b-boss-fresh2/result.json"
+    },
+    "shop_review": {
+      "capture": "build/boot-tests/Versioned-4ab044d0/hunter-shop-black/frame-02380.png",
+      "observed": "Hunter title/list name and full A/rake/resistance/R instructions fit the native menu; existing owned checkmark and 4849 XP retain current progress.",
+      "report": "work/hunters-return/menu-black/result.json"
+    },
+    "tests": {
+      "additional_log": "work/hunters-return/lab-output-test.log",
+      "count": 50,
+      "counts": {
+        "final_suite": 49,
+        "lab_output_guard": 1
+      },
+      "log": "work/hunters-return/final-tests.log",
+      "passed": true
+    }
+  },
+  "version": "0.32.0"
+}

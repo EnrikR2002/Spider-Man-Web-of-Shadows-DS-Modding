@@ -1,6 +1,6 @@
 # TASM: never stand still
 
-Current design and player feedback, reviewed 2026-10-22 (America/Edmonton).
+Current design and player feedback, reviewed 2026-10-23 (America/Edmonton).
 [TASKS](TASKS.md) owns the live build and next action; [CHANGES](CHANGES.md)
 owns shipped behavior; [TECHNICAL](TECHNICAL.md) owns engine evidence and
 unknowns. Build and review procedures are in [DEVELOPMENT](DEVELOPMENT.md).
@@ -12,10 +12,13 @@ strong and web-resistant enemies. The loop is **strike -> cancel with R ->
 reposition -> resume**. Native A/B/base strings/evade, purchases, dependencies,
 Both Suits traversal, story gates and earned rewards remain the foundation.
 Overclock, Dragnet and Vortex are the final added Red skills. Fun and spectacle
-lead. The 2026-10-22 request activates the selected 2099 Black-slot rework,
-appearance first; prices, third suits and campaign expansion remain deferred.
+lead. The 2026-10-23 request activates the first 2099 Black-slot skill,
+Hunter's Return, plus a fuller Spider-Verse physique. The other six proposed
+Black moves, prices, third suits and campaign expansion remain deferred.
 
-The current release is **v0.31.0**. Vortex is now a cocoon-only tethered
+The current release is **v0.32.0**: purchased Hunter's Return and a fuller
+cape-free 2099 body. Both are agent-qualified and await the player's verdict.
+The inherited Vortex is a cocoon-only tethered
 catapult/slam, the Conductor has a larger symbiote war-machine body and one boss
 meter, and low-HP Vitality damage is corrected. The player's liked boss combat
 programs remain. Cape-free Across the Spider-Verse 2099 and the compact Terminal
@@ -25,6 +28,7 @@ actual DeSmuME pacing.
 
 | Player evidence | Decision that still matters | Later implementation / limit |
 |---|---|---|
+| 2026-10-23: add the first 2099 skill and make his model a bit more muscular like Spider-Verse | Implement Hunter's Return in the existing Webbed Fury purchase and broaden the current mesh. Keep other Black proposals deferred. | v0.32.0 implements and agent-tests the move and fuller physique. Player feel/appearance verdict remains open. |
 | 2026-10-22: Vortex is boring; keep it conditional on regular-web/Dragnet cocoons. Boss fights well but needs larger symbiote metal war-machine anatomy, one boss bar, and a low-HP damage fix. | Rework Vortex inside its existing paid row; preserve liked boss combat; separate a shared Vitality clamp defect from boss behavior. | v0.31.0 ships the tether catapult/slam, larger articulated armor, boss-only texture and raw-damage fix; native boss timings/AI remain. Agent qualification is in TASKS; player feel/appearance acceptance remains open. |
 | v0.30.2 Terminal enemies were white while the 2099 player rendered | Restore the custom enemy texture bindings in the crowded scene while retaining artwork and geometry. | v0.30.3 I4 atlas binds all three observed enemy materials. One qualified scene, not all-room or player-acceptance evidence. |
 | v0.30.1 appearance liked overall; latest supplied Across the Spider-Verse image; remove the red web cape | Use the movie's navy/red mask, angular chest spider and shoulder panels; remove cape geometry rather than hiding it. | v0.30.2 implements and agent-tests this appearance. Player visual acceptance is still open. At v0.30.2, Terminal enemies remained unbound; v0.30.3 resolves the sampled crowd. |
@@ -71,8 +75,9 @@ candidate qualification is in TASKS; its new feel needs a player verdict.
 
 ## Recommended build order
 
-The three Vortex/boss/health fixes requested on2026-10-22 take priority. The
-2099 appearance and deferred Black-kit discussion retain their previous scope.
+Review v0.32's Hunter's Return and fuller 2099 physique first. The earlier
+Vortex/boss/health fixes ship in v0.31 and retain their pending player verdicts.
+The remaining six proposed Black moves stay deferred.
 The chapter reviews below remain player gates when campaign iteration resumes.
 
 The three requested follow-ups now ship in v0.29. Use its published route as
@@ -143,14 +148,16 @@ and clearability alone do not authorize another roster-wide pass.
 
 ## Spider-Man 2099: Black-slot rework
 
-The player's latest 2026-10-22 request supplies an Across the Spider-Verse
+The player's 2026-10-22 appearance request supplies an Across the Spider-Verse
 reference and explicitly removes the red web cape. They like the prior 2099
-overall. This supersedes the earlier classic foundation/larger-cape direction;
-the seven-move combat pitch remains deferred design work.
+overall. This supersedes the earlier classic foundation/larger-cape direction.
+The 2026-10-23 request selects Hunter's Return as the first combat implementation
+and asks for a more muscular body; the remaining six moves stay proposals.
 
 Published v0.30.3 keeps the guarded shared-model selector and native Red list,
 with Black wearing the requested cape-free navy/red movie-inspired appearance.
-The 2099 model and native motion remain unchanged from v0.30.2. The same release
+That appearance is the foundation for v0.32's fuller chest/arms and two private
+Hunter motion clips; other native clips remain. The v0.30.3 release
 also changes the shared Midnight enemy atlas from 32 KiB direct color to 8 KiB I4.
 Three live enemy materials bind in the crowded Terminal capture, while the hero
 retains I8. One mixed scene establishes that scene's texture binding, not
@@ -160,11 +167,18 @@ and scope are in `reference/spider2099_enemy_texture.json` and
 `reference/spider2099_movie.json`.
 
 
-The historical seven-skill pitch remains a **proposal**, not implemented moves:
+**Hunter's Return is implemented and agent-tested in v0.32.0.** Its existing
+Webbed Fury 100 XP purchase remains; release A after the dash hit, then tap A for
+native eligible recall and a rising rake. Native-unrecallable targets receive
+a short physical attempt. R cancels, and B remains manual. The fuller model
+keeps the current atlas, rig and 516 triangles. Player feel/appearance remain
+open; scoped evidence is in `reference/hunters_return.json`.
 
-| Native Black purchase | Proposed move | Play role |
+The other six rows below remain **proposals**, not implemented new moves:
+
+| Native Black purchase | Move / status | Play role |
 |---|---|---|
-| Webbed Fury | Hunter's Return | After a successful ground dash, optional A recalls the struck eligible enemy into an upward rake. Resistant targets get a short physical pursuit attempt. |
+| Webbed Fury | Hunter's Return (implemented) | After a successful ground dash, optional A recalls the struck eligible enemy into an upward rake. Resistant targets get a short physical pursuit attempt. |
 | Power Launch | Talon Lift | Up+A performs a coiled rising rake; B manually follows a susceptible launch. |
 | Ground Rebound | Predator Rebound | Native Down+A slam can bounce enemies; choose B,Y to catch one or stay grounded. |
 | Black Widowmaker | Raking Cross | Late-pause Y branch becomes a low rake, passing heel kick and turning back rake. |
@@ -172,7 +186,8 @@ The historical seven-skill pitch remains a **proposal**, not implemented moves:
 | Super Charge | Predator Wind-Up | Hold Y during pressure to prime a distinct purchased strike, with a visible coiled pose. |
 | Quick Charge | Relentless Pursuit | Faster wind-up and one brief carried charge through evade/manual jump; the next eligible attempt spends it, including a miss. |
 
-The identity is **catch -> carry -> crash -> chase**: dash contact -> optional
+The proposed full-kit identity is **catch -> carry -> crash -> chase**;
+Hunter's Return implements only its first step. The future loop is dash contact -> optional
 Return -> Lift -> manual B -> air rake -> native slam -> choose rebound chase
 or another grounded string. Against an immovable boss, use direct close strikes,
 short pursuit and R exits; no forced launches, recalls or permanent stun. A's
@@ -184,8 +199,9 @@ and collision, valid targets, interruption/room/form cleanup and preserved buys.
 Possible refinements for discussion: a wall-to-target pounce variant within
 Raking Cross, and brief crimson talon/eye cues showing a banked charge. Neither
 is implemented or an extra Red skill. A wall route needs its own native collision
-proof and cannot commandeer barrier dash/slam inputs. First mechanical prototype
-should establish one satisfying Cross/cancel/turn sequence before expanding.
+proof and cannot commandeer barrier dash/slam inputs. The player's first-skill
+request supersedes the older Cross-first prototype order. Review Hunter's Return
+before activating another proposed move.
 The full dated pitch remains archived under this document's 2099 heading.
 
 ## Deferred work
@@ -193,7 +209,7 @@ The full dated pitch remains archived under this document's 2099 heading.
 | Idea | Current boundary |
 |---|---|
 | More Red skills, extra stat rows, prices/balance, shop/save expansion | Deferred. Iterate the existing kit; Overclock/Dragnet/Vortex are the final added skills. |
-| Spider-Man 2099 combat | Appearance is active per the new request; the seven proposed purchased moves above remain design work. Preserve native A traversal, paid ownership and shared upgrades. |
+| Spider-Man 2099 combat | Hunter's Return ships in v0.32; the other six proposals remain deferred. Preserve native A traversal, paid ownership and shared upgrades. |
 | Third suit and other suit concepts | Deferred; TASM1/2 share one kit. No suit selector or migration is implemented by this roadmap. |
 | Downtown Grid/Lost Lab, Residential Skyline Run, Hive Quarantine Heart | Deferred concepts. No new allocations are authorized by the old pitches; audit current flags/storage before any future expansion. Hive stays post-story. |
 | Midnight Express, gauntlets, timed replays, collectibles/reward systems | Backlog ideas, not unfinished work required for the current chapters. |
