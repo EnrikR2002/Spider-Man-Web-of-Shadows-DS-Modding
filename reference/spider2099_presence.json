@@ -1,0 +1,220 @@
+{
+  "build": {
+    "allocation_bytes": 0,
+    "arm9_sha256": "adf074a0165138d686cb4c09e0cd2e1ce6f27059a51b4c1263dda038fe46c15b",
+    "colors": {
+      "address": 35054536,
+      "bytes": 80,
+      "getters": [
+        33945656,
+        33944444
+      ],
+      "source_offset": 1452360
+    },
+    "height_increase_percent": 12.5,
+    "height_scale_q12": [
+      4096,
+      4608,
+      4096
+    ],
+    "modified_resources": [
+      "American.strings",
+      "English.strings"
+    ],
+    "parent_sha256": "8c7d4c59fb8c75229fdbea8453028065d702ba89ee5725d687cfa06fd798543a",
+    "rom_sha256": "7081b1287fab93faf8e4ab44475c0e2d22c1dcd2860c6a15f878992837e510aa",
+    "scope": "2099 render height and native line/web-effect tint only; native collisions, movement, rig, motion, mesh, textures, purchases, skills, rooms, audio and save format preserved. Red keeps native height and both original web colors.",
+    "selector": {
+      "address": 35043872,
+      "bytes": 524,
+      "metadata": {
+        "material_offset": 2152,
+        "metadata_offset": 30240,
+        "model_size": 30304,
+        "shape_offset": 2236
+      },
+      "source_offset": 1441696
+    },
+    "version": "0.33.1",
+    "web_color_rgb555": 5247
+  },
+  "canonical": "build\\version-0.33.1-final\\Versioned.nds",
+  "controls": {
+    "black_swing": {
+      "checks": {
+        "battery_unchanged": true,
+        "correct_color": true,
+        "real_native_swing": true,
+        "web_lines": true
+      },
+      "passed": true,
+      "report": "work\\spider2099-presence\\web-black\\result.json",
+      "rom_sha256": "7081b1287fab93faf8e4ab44475c0e2d22c1dcd2860c6a15f878992837e510aa",
+      "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-7081b128\\presence-web-black"
+    },
+    "hunter_physical": {
+      "passed": true,
+      "report": "work\\spider2099-presence\\hunter\\result.json",
+      "rom_sha256": "7081b1287fab93faf8e4ab44475c0e2d22c1dcd2860c6a15f878992837e510aa",
+      "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-7081b128\\presence-hunter"
+    },
+    "red_swing": {
+      "checks": {
+        "battery_unchanged": true,
+        "correct_color": true,
+        "real_native_swing": true,
+        "web_lines": true
+      },
+      "passed": true,
+      "report": "work\\spider2099-presence\\web-red\\result.json",
+      "rom_sha256": "7081b1287fab93faf8e4ab44475c0e2d22c1dcd2860c6a15f878992837e510aa",
+      "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-7081b128\\presence-web-red"
+    },
+    "talon_manual": {
+      "checks": {
+        "air_y_damages_launched_target": true,
+        "air_y_followup": true,
+        "black_draw_and_texture": true,
+        "manual_b_only": true,
+        "native_collision_bounds": true,
+        "native_hp_loss_and_launch": true,
+        "private_clip_selected": true,
+        "source_battery_unchanged": true
+      },
+      "passed": true,
+      "report": "work\\spider2099-presence\\talon-manual\\result.json",
+      "rom_sha256": "7081b1287fab93faf8e4ab44475c0e2d22c1dcd2860c6a15f878992837e510aa",
+      "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-7081b128\\presence-talon"
+    }
+  },
+  "implementation_source_hashes": {
+    "tests\\arm_runtime.py": "0aef0a9aed97a4f8e8eda051b36c0ac8619c0d65b88ee3ff2d58a8c7be357876",
+    "tests\\test_spider2099_presence.py": "e8d828eb853854f408f448908ee0842f76d838285752f212e377496be26abbd0",
+    "tools\\spider2099_presence.py": "b22062e748ca77491acde873d4ebf8512284cb5d18249aa503bd51ce2567a1e0"
+  },
+  "limits": [
+    "Appearance and move feel not player-confirmed.",
+    "12.5% height is cosmetic; collision dimensions remain native.",
+    "Native shading and line texture remain; no bloom/new graphics pipeline.",
+    "No full-route rebalance, exhaustive screen-edge culling survey, DeSmuME pacing or real hardware test.",
+    "No new moves, costs, paid ownership bits or save migration.",
+    "Native line tint is observed during actual swinging; companion WebTrap/type-12 effect colors are source/ABI-tested without a full visual effect-roster survey."
+  ],
+  "mixed_scene": {
+    "materials": "work\\spider2099-presence\\mixed-final\\materials.json",
+    "passed": true,
+    "report": "work\\spider2099-presence\\mixed-final\\source-check.json",
+    "scope": "One no-heal Terminal presentation sample: I8 hero and two I4 enemies bound. Player eventually dies; no clear or balance claim."
+  },
+  "normal_source": "build\\version-0.33.1-source\\Versioned.nds",
+  "normal_source_matches_canonical": true,
+  "presentation": {
+    "audio": {
+      "channels": 2,
+      "duration_seconds": 1.869842529296875,
+      "frames": 61271,
+      "peak": 13597,
+      "rate": 32768,
+      "rms": 2154.303475437394
+    },
+    "audio_limit": "Native mixed audio captured with signal present; perceptual listening unavailable to this runtime. Audio ROM bytes match the qualified parent.",
+    "height_final_comparison": "work/spider2099-presence/scout/final.json",
+    "height_parent_comparison": "work/spider2099-presence/scout/control.json",
+    "media": "work/spider2099-presence/presentation/media.json",
+    "normal_speed": "work/spider2099-presence/presentation/talon-lift-native.mp4",
+    "position_tracks_exact": true,
+    "preview": "build/version-0.33.1-final/appearance-preview.png",
+    "sampled_frames_reviewed": true,
+    "settled_red_after_L_hero_pixels_exact": true
+  },
+  "publication": {
+    "actual_battery": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+    "battery_checkpoint": "before-build-dsv-4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+    "battery_payload_sha256": "60522969684b475bc977a2d7c3478928066af9df75577f5c8b50a3bcbdd16835",
+    "battery_wrapper_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+    "boot_options": [
+      "TASM v0.33.1\nPress a button to start",
+      "Options v0.33.1",
+      "TASM v0.33.1\nPress a button to start",
+      "Options v0.33.1"
+    ],
+    "checkpoint_wrapper_and_payload_exact": true,
+    "clean_original_unchanged": true,
+    "fresh_continue_qualified_by_exact_rom_identity": true,
+    "passed": true,
+    "prior_rom_and_composition_preserved": true,
+    "recipe_pin_metadata_receipt_history_agree": true,
+    "release_receipt": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\releases\\7081b1287fab93faf8e4ab44475c0e2d22c1dcd2860c6a15f878992837e510aa\\release.json",
+    "resource_count": 5953,
+    "rom_sha256": "7081b1287fab93faf8e4ab44475c0e2d22c1dcd2860c6a15f878992837e510aa",
+    "stable_canonical_normal_source_publisher_candidate_identical": true,
+    "verification_report": "work/spider2099-presence/publication-verified.json",
+    "version": "0.33.1"
+  },
+  "real_input_control": {
+    "all_live_selection_passed": true,
+    "battery_unchanged": true,
+    "forms": [
+      0,
+      1
+    ],
+    "no_ram_fixtures": true,
+    "report": "work/2099-movie/presence-room/report.json",
+    "rooms": [
+      65,
+      76
+    ]
+  },
+  "request": "Taller Across the Spider-Verse 2099, neon red webs, then research/reassess existing Black-slot designs.",
+  "research": {
+    "archive_verified_entries": 41,
+    "archived_proposals": "docs/TASM_ROADMAP_2099_PRE_FILM_2026-10-23.md",
+    "identity": "Close/cut off -> tether or catch -> drive/slam -> re-engage",
+    "largest_rethink": "Talon Cyclone: compact air catch/downward drive instead of long spins/rising scissors.",
+    "owner": "docs/TASM_ROADMAP.md",
+    "recommended_next_prototype": "Raking Cross, only if the player requests further combat work.",
+    "sources": [
+      {
+        "kind": "Primary authored screenplay, hosted mirror",
+        "locators": "Printed pp.12-17 and130-133; distinguishes Miles crane kick from Miguel actions.",
+        "url": "https://assets.scriptslug.com/live/pdf/scripts/spider-man-across-the-spider-verse-2023.pdf?v=1729114995"
+      },
+      {
+        "kind": "Primary interview with supervising animator Daniel Pozo",
+        "scope": "Large intimidating physique and bodybuilder references.",
+        "url": "https://www.abc.net.au/news/2023-06-10/spider-man-across-the-spider-verse-animation/102463650"
+      },
+      {
+        "kind": "Official comics character profile; indexed excerpt, direct open returned403",
+        "scope": "Paralyzing fang venom belongs to the comics description; avoid treating it as a tested film mechanic.",
+        "url": "https://www.marvel.com/characters/spider-man-2099-miguel-o-hara"
+      }
+    ],
+    "status": "recommendations_only_no_combat_changes"
+  },
+  "save": {
+    "actual_and_copied_batteries_unchanged": true,
+    "actual_battery": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+    "fresh_continue_profile": "work\\spider2099-presence\\owned\\owned-player-profile.json",
+    "payload_bytes": 512,
+    "payload_sha256": "60522969684b475bc977a2d7c3478928066af9df75577f5c8b50a3bcbdd16835",
+    "player_owned_talon_at_start": false,
+    "purchases_xp_hp_checkpoint_match_parent": true,
+    "wrapper_bytes": 634,
+    "wrapper_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67"
+  },
+  "schema_version": 1,
+  "status": "published_local_stable",
+  "tests": {
+    "command": "python -m unittest discover -s tests -q",
+    "final_focused": {
+      "command": "python -m unittest tests.test_spider2099_presence tests.test_doc_archive tests.test_document_layout -q",
+      "passed": 15,
+      "report": "work/spider2099-presence/final-focused-tests.log"
+    },
+    "passed": 580,
+    "report": "work\\spider2099-presence\\full-tests.log"
+  },
+  "updated": "2026-10-23",
+  "version": "0.33.1"
+}

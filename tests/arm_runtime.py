@@ -67,7 +67,7 @@ class ArmProbe:
                 value=self.operand(word,regs);regs[word>>12&15]=value
                 if word&0x00100000:cpsr=(cpsr&0x3FFFFFFF)|(value&0x80000000)|(0x40000000 if value==0 else 0)
             elif word&0x0FE00000 in (0x03E00000,0x01E00000):regs[word>>12&15]=~self.operand(word,regs)&0xFFFFFFFF
-            elif word&0x0FE00000 in (0x02800000,0x00800000):regs[word>>12&15]=(regs[word>>16&15]+self.operand(word,regs))&0xFFFFFFFF
+            elif word&0x0FE00000 in (0x02800000,0x00800000):regs[word>>12&15]=((pc+8 if word>>16&15==15 else regs[word>>16&15])+self.operand(word,regs))&0xFFFFFFFF
             elif word&0x0FE00000 in (0x02400000,0x00400000):
                 a=regs[word>>16&15];b=self.operand(word,regs);result=(a-b)&0xFFFFFFFF;regs[word>>12&15]=result
                 if word&0x00100000:

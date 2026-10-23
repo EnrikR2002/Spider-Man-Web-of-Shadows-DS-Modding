@@ -12,13 +12,15 @@ strong and web-resistant enemies. The loop is **strike -> cancel with R ->
 reposition -> resume**. Native A/B/base strings/evade, purchases, dependencies,
 Both Suits traversal, story gates and earned rewards remain the foundation.
 Overclock, Dragnet and Vortex are the final added Red skills. Fun and spectacle
-lead. The 2026-10-23 request activates the first 2099 Black-slot skill,
-Hunter's Return, plus a fuller Spider-Verse physique. The other six proposed
-Black moves, prices, third suits and campaign expansion remain deferred.
+lead. Hunter's Return and Talon Lift are the two implemented 2099 skills.
+The latest 2026-10-23 request adds height/neon red webs and film research;
+it does not activate another combat move. The remaining five Black moves,
+prices, third suits and campaign expansion remain deferred.
 
-The current release is **v0.32.1**: purchased Hunter's Return and a fuller
-cape-free 2099 body. Both await the player's verdict. v0.32.1 corrects shared-hit isolation and
-new-player cleanup without changing the artwork or motion.
+The current appearance release is **v0.33.1**, over v0.33.0:
+12.5% taller 2099 with scarlet native web tints. Hunter's Return's hit isolation
+and owner cleanup, Talon Lift and the fuller cape-free body remain. Appearance
+and move feel await the player's verdict. TASKS owns publication status.
 The inherited Vortex is a cocoon-only tethered
 catapult/slam, the Conductor has a larger symbiote war-machine body and one boss
 meter, and low-HP Vitality damage is corrected. The player's liked boss combat
@@ -29,6 +31,8 @@ actual DeSmuME pacing.
 
 | Player evidence | Decision that still matters | Later implementation / limit |
 |---|---|---|
+| 2026-10-23: make 2099 taller, make his webs neon red like Across the Spider-Verse, then research/reassess his abilities | Apply the appearance change; ground the existing proposals in the film's pursuit, catches and surface pressure. | v0.33.1 ships render height and web tints. The film reassessment below is a recommendation; no extra move or mechanic is activated. |
+| 2026-10-23: implement the next 2099 skill | Talon Lift retains the native Power Launch purchase and manual B follow-up. | v0.33.0 ships the authored rake and R exit; actual air hits require holding B. Player feel verdict remains open. |
 | 2026-10-23: approve both Hunter's Return review fixes | Isolate shared victim records and clear a departed player's move when the actor is replaced. Preserve the approved skill/model scope. | v0.32.1 corrects both with ARM regressions and labelled native controls. The artwork and private motion remain exact; player feel verdict remains open. |
 | 2026-10-23: add the first 2099 skill and make his model a bit more muscular like Spider-Verse | Implement Hunter's Return in the existing Webbed Fury purchase and broaden the current mesh. Keep other Black proposals deferred. | v0.32.0 implements and agent-tests the move and fuller physique. Player feel/appearance verdict remains open. |
 | 2026-10-22: Vortex is boring; keep it conditional on regular-web/Dragnet cocoons. Boss fights well but needs larger symbiote metal war-machine anatomy, one boss bar, and a low-HP damage fix. | Rework Vortex inside its existing paid row; preserve liked boss combat; separate a shared Vitality clamp defect from boss behavior. | v0.31.0 ships the tether catapult/slam, larger articulated armor, boss-only texture and raw-damage fix; native boss timings/AI remain. Agent qualification is in TASKS; player feel/appearance acceptance remains open. |
@@ -77,9 +81,11 @@ candidate qualification is in TASKS; its new feel needs a player verdict.
 
 ## Recommended build order
 
-Review v0.32's Hunter's Return and fuller 2099 physique first. The earlier
+Review the taller 2099/web appearance and both shipped moves first. The earlier
 Vortex/boss/health fixes ship in v0.31 and retain their pending player verdicts.
-The remaining six proposed Black moves stay deferred.
+The remaining five Black proposals stay deferred. If combat work is requested
+next, the revised Raking Cross is the strongest next prototype; resolve its
+native contact/recovery before expanding the rest of the kit.
 The chapter reviews below remain player gates when campaign iteration resumes.
 
 The three requested follow-ups now ship in v0.29. Use its published route as
@@ -155,6 +161,9 @@ reference and explicitly removes the red web cape. They like the prior 2099
 overall. This supersedes the earlier classic foundation/larger-cape direction.
 The first 2026-10-23 request selects Hunter's Return and a more muscular body.
 The next-skill request activates Talon Lift; the remaining five moves stay proposals.
+The latest request adds height/neon red webs and a film-based design reassessment.
+The previous section, including the earlier move roles, is retained byte for byte
+in the verified archive as `docs/TASM_ROADMAP_2099_PRE_FILM_2026-10-23.md`.
 
 Published v0.30.3 keeps the guarded shared-model selector and native Red list,
 with Black wearing the requested cape-free navy/red movie-inspired appearance.
@@ -184,35 +193,64 @@ Native movement, collision, damage and launch resistance stay. No B bypass,
 automatic follow-up, new target state or save migration is needed. Agent tests
 pass in both directions; player feel/appearance acceptance remains open.
 
-The other five moves below remain **proposals**:
+**v0.33.1 appearance release:** the whole animated Black pose is 12.5% taller,
+with its feet anchored and the fuller body/cape-free artwork retained. Native
+web lines and web-effect tints become bright scarlet. Red retains its height
+and original web tints. Collision, attacks, purchases and save progress remain
+native; this appearance request does not authorize combat changes.
 
-| Native Black purchase | Move / status | Play role |
+### Across the Spider-Verse reassessment - 2026-10-23
+
+The screenplay supplies two useful references: the museum's hardlight arm
+lasso and exposed fangs, then the train chase's claw grip, waist reel and forceful
+surface pin. The train's crane kick belongs to Miles. These support a kit built
+around closing distance and controlling contact. See the authors' [screenplay,
+printed pp.12-17 and130-133](https://assets.scriptslug.com/live/pdf/scripts/spider-man-across-the-spider-verse-2023.pdf?v=1729114995).
+
+Supervising animator Daniel Pozo describes research into an intimidating, large
+physique using bodybuilder references. That supports the stronger silhouette;
+it does not prescribe slow inputs. [Pozo's interview](https://www.abc.net.au/news/2023-06-10/spider-man-across-the-spider-verse-animation/102463650).
+
+The practical film vocabulary is strength, explosive agility, gripping claws,
+fangs and bright hardlight tethers. The wrist portal system is equipment, not
+permission for a teleport attack. Marvel explicitly gives **comics** Miguel
+paralyzing fang venom; the film evidence here does not establish its gameplay
+duration, repeatable poison damage or a healing mechanic. Keep those outside
+the move plan. Avoid claiming a precognitive counter from these scenes.
+[Marvel's character profile](https://www.marvel.com/characters/spider-man-2099-miguel-o-hara).
+
+**Design inference:** make him a powerful, acrobatic pursuer: low coil, rapid
+diagonal entry, committed body contact and a weighted recovery that R can exit.
+Use claws to show grip and red tethers to show tension. Extended pirouettes,
+repeated floaty relaunches and a long stationary charging pose would weaken that
+identity. This is an interpretation for a playable DS kit, not a claim that the
+film supplies these named moves or a particular martial-art system.
+
+The recommendations below supersede the earlier proposed choreography, keeping
+the same purchase slots. Only the first two moves are implemented:
+
+| Native Black purchase | Move / status | Reassessed role and decision |
 |---|---|---|
-| Webbed Fury | Hunter's Return (implemented) | After a successful ground dash, optional A recalls the struck eligible enemy into an upward rake. Resistant targets get a short physical pursuit attempt. |
-| Power Launch | Talon Lift (implemented) | Up+A performs a coiled rising rake; hold B, then Y, to manually catch a susceptible launch. R cancels. |
-| Ground Rebound | Predator Rebound | Native Down+A slam can bounce enemies; choose B,Y to catch one or stay grounded. |
-| Black Widowmaker | Raking Cross | Late-pause Y branch becomes a low rake, passing heel kick and turning back rake. |
-| Poison Pummel | Talon Cyclone | Compact travelling claw/kick extension ends in a rising scissors kick, then offers air hits, spike, slam or owned air R. |
-| Super Charge | Predator Wind-Up | Hold Y during pressure to prime a distinct purchased strike, with a visible coiled pose. |
-| Quick Charge | Relentless Pursuit | Faster wind-up and one brief carried charge through evade/manual jump; the next eligible attempt spends it, including a miss. |
+| Webbed Fury | Hunter's Return (implemented) | Keep the successful-dash/optional-A catch. It is the clearest tether-and-pursuit fit. Any later motion polish should stress line tension and a forceful catch; preserve resistance and R. |
+| Power Launch | Talon Lift (implemented) | Keep the compact coil/rake and manual held-B air catch as a gameplay bridge. It is an adaptation, not a literal film attack; do not add automatic ascent or repeat launches. |
+| Ground Rebound | Predator Rebound (deferred) | Emphasize a heavy downward drive and short grounded recovery. Treat the native bounce as an optional opening, not the kit's main recurring spectacle. |
+| Black Widowmaker | Raking Cross (deferred) | Best next prototype: low rake into a short crossing pounce/body drive, then a turning claw exit. Drop the decorative passing heel kick. A wall pin needs real collision/release proof; use a grounded drive until that exists. |
+| Poison Pummel | Talon Cyclone (deferred; rethink most) | Replace the long rotation/rising-scissors concept with one compact airborne catch, brief claw contact and a downward drive. Working name can remain until selected. Preserve the existing purchase; do not infer a venom status from its native name. |
+| Super Charge | Predator Wind-Up (deferred) | A brief loaded pounce/heavy catch with readable shoulder/hip compression. Keep ordinary movement available while priming it; contact and misses need recovery. |
+| Quick Charge | Relentless Pursuit (deferred) | Support quick re-entry after one evade/manual jump, spending the carried charge on the next attempt, including a miss. It should reward the player's chase, without automatic tracking or permanent stun. |
 
-The proposed full-kit identity is **catch -> carry -> crash -> chase**;
-Hunter's Return and Talon Lift implement its opening. The future loop is dash contact -> optional
-Return -> Lift -> hold B -> air rake -> native slam -> choose rebound chase
-or another grounded string. Against an immovable boss, use direct close strikes,
-short pursuit and R exits; no forced launches, recalls or permanent stun. A's
-native ground dash, air spike and Down+A slam keep story traversal and do not
-require a combat target or charge. Ordinary B, base strings and native/unowned
-R remain. New choreography must be continuous and distinct, with native velocity
-and collision, valid targets, interruption/room/form cleanup and preserved buys.
+The recommended identity is **close/cut off -> tether or catch -> drive/slam ->
+re-engage**. Air strings remain a choice after Lift, rather than the required
+destination of every attack. Show weight through anticipation, overlap, impact
+and recovery while retaining responsive inputs. Qualify continuous paths,
+misses, both facings, armor/resistant bosses and native R exits before expanding.
 
-Possible refinements for discussion: a wall-to-target pounce variant within
-Raking Cross, and brief crimson talon/eye cues showing a banked charge. Neither
-is implemented or an extra Red skill. A wall route needs its own native collision
-proof and cannot commandeer barrier dash/slam inputs. The player's first-skill
-request supersedes the older Cross-first prototype order. The next-skill request
-then selects Lift. Review both implemented moves before another proposed move.
-The full dated pitch remains archived under this document's 2099 heading.
+Native ground A dash, air spike, Down+A slam, B, base strings and unowned R keep
+their traversal/story roles without a target or charge. No forced boss movement,
+teleports, time slowing, new purchases or save expansion. A future pin or air
+catch must prove native victim ownership, release on interruption/death/room
+changes and ordinary collision first. Review the two shipped moves before
+activating any further proposal.
 
 ## Deferred work
 
@@ -239,6 +277,7 @@ above supersede their original next/proposed wording.
 python tools/doc_archive.py list roadmap
 python tools/doc_archive.py read docs/TASM_ROADMAP.md --toc
 python tools/doc_archive.py read docs/TASM_ROADMAP.md --section 'Spider-Man 2099'
+python tools/doc_archive.py read docs/TASM_ROADMAP_2099_PRE_FILM_2026-10-23.md --toc
 python tools/doc_archive.py read reference/tasm_upgrade_plan.json --lines 40
 ```
 

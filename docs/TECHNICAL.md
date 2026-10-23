@@ -390,6 +390,30 @@ comparison. That v0.30.2 enemy-binding issue is resolved for the sampled Termina
 
 
 
+**2099 render height and web tint (2026-10-23, v0.33.0 parent / v0.33.1
+release; high confidence in paired training controls):** the guarded shared
+model selector can submit native GE command `0x1B` through `0x01FFC004` immediately
+before the player draw. Q12 `(4096,4608,4096)` increases the complete animated
+pose's Y extent by 12.5%, retaining the floor line, model, native rig/SBC, clips,
+collision dimensions and actor positions. The existing footer/wrapper/form
+guards restrict the command to the selected Black player list. Red submits no
+scale command; a real L switch returns to its native height. This supersedes
+the prior deliberate height preservation only for the new appearance layer.
+The shared player virtual getters `+0x198` (`0x0205F838`, native `0x7FFF`) and
+`+0x19C` (`0x0205F37C`, native `0x5967`) supply line and web-effect tints.
+Stateless adapters return RGB555 `0x147F` only for actor form 1, retaining native
+Red colors and caller registers/flags. The companion getter is used by the
+native `WebTrap.nsbmd/.nsbtx` back attachment (resource IDs `0x916/0x917`) and a
+type-12 effect path. This is source-level identification; only the line path
+has a focused live color observation. Native WebLine stores its tint at `+0xAC`;
+a real B jump/B swing produces scarlet owned lines in the candidate. Both
+adapters fit existing zero space without changing autoload/heap or the 32 KiB
+kit. Evidence starts in `work/spider2099-presence/`; final receipts belong in
+`reference/spider2099_presence.json`. Both ordinary suit/room transitions and a
+Terminal crowd bind/render correctly on the exact published composition.
+Player acceptance, exhaustive edge culling and actual
+DeSmuME/hardware presentation require separate qualification.
+
 ### Text / UI / rooms / audio
 
 **Boss-only palette rendering defect (2026-10-22; high confidence in copied-save

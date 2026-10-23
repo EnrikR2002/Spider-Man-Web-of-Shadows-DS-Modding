@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Mechanics proposed for th
 TASM rebuild are in [TASM_ROADMAP](TASM_ROADMAP.md); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.33.0. Each section records behavior,
+The latest numbered release below is v0.33.1. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in TASM_ROADMAP/TASKS.
@@ -18,6 +18,40 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.33.1 - 2026-10-23 - Taller 2099 and neon red webs
+
+2099's complete animated pose is 12.5% taller, retaining the fuller cape-free
+body, original mesh/rig/clips and grounded feet. The guarded appearance selector
+submits a native Y-scale command only for Black. Native web lines and the
+companion WebTrap/effect tint use bright scarlet RGB555 `(31,3,5)`. Red keeps its
+native height and both original tints. Native shading and line texture remain.
+
+Both cosmetic adapters fit existing zero space without heap/autoload growth.
+The 32 KiB kit, Hunter's Return, Talon Lift, other actor assets, movement,
+collision/hitboxes, purchases, rooms, audio and save format remain exact.
+Only boot/Options text resources change, displaying v0.33.1 identically.
+
+**Qualification.** All 580 source tests and 15 final appearance/archive/document
+checks pass. The tests cover the selector guards, fresh model pointers, all
+condition flags, caller registers, native Red tint defaults and exact ROM scope.
+Paired final/parent positions match; settled Red hero pixels after L are exact.
+Real B/B swinging proves scarlet owned lines and native white Red lines.
+Talon Lift's manual air damage and Hunter's Return's physical attempt pass.
+Fresh ordinary Continue and real-input suit/room transitions retain the current
+purchases, XP, HP and checkpoint. A no-heal Terminal sample binds the I8 hero and
+two I4 enemy materials; the player eventually dies, so this is presentation
+evidence rather than a clear. Native-size move frames and a normal-rate mixed
+audio capture are retained. Perceptual listening is unavailable in this runtime;
+the audio payload remains byte-identical to the qualified parent.
+
+The canonical, independent full-source rebuild, publisher's rebuild and stable
+ROM agree exactly. Publication uses `tools/playtest.py build`; the latest actual
+DSV wrapper/payload equals its fresh checkpoint, with the prior ROM/composition
+preserved and the original unchanged. No research save is adopted. Exact
+identities, controls, source/receipt links and limitations are in
+`reference/spider2099_presence.json`. Player appearance/feel, full-route balance,
+exhaustive screen-edge culling and actual DeSmuME/hardware pacing remain open.
 
 ## v0.33.0 - 2026-10-23 - 2099 Talon Lift
 

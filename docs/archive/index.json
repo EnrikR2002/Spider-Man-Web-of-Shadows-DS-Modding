@@ -2,7 +2,7 @@
   "schema_version": 1,
   "snapshot_date": "2026-10-05",
   "purpose": "Historical source notes; current status is in docs/TASKS.md. Read only a selected entry/section with tools/doc_archive.py.",
-  "archive_sha256": "793e99df844875cb6218c5d71ad2e021e4ed2de527a61475d6dda78774e02224",
+  "archive_sha256": "d3d0e171b057c45a617c8543ae75c2e9625275fe6679c0fc65b235b228b55e0a",
   "entries": [
     {
       "path": "AGENTS.md",
@@ -1822,6 +1822,23 @@
       "words": 2637,
       "sha256": "ae37090f8065ec0ec948f3880b670358a8526777a2ee8ad6ea4eb1c0350126c5",
       "sections": []
+    },
+    {
+      "bytes": 4749,
+      "path": "docs/TASM_ROADMAP_2099_PRE_FILM_2026-10-23.md",
+      "sections": [
+        {
+          "heading": "Spider-Man 2099: Black-slot rework",
+          "level": 2,
+          "line": 1
+        }
+      ],
+      "sha256": "0ed905b403377601bbb97eaae6d593717f532eab525325eaaeec9209b17c1081",
+      "snapshot_date": "2026-10-23",
+      "source_revision": "7dbb9bf8d20adcd1f40f11325d90f578e7420f87",
+      "source_section": "docs/TASM_ROADMAP.md / Spider-Man 2099: Black-slot rework",
+      "title": "2099 proposals before Across the Spider-Verse reassessment",
+      "words": 719
     }
   ]
 }
