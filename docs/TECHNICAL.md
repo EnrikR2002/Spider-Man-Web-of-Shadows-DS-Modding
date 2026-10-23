@@ -1773,6 +1773,60 @@ bounded reproduction, not a claim that every native hit must deal the same HP.
 
 ### Kit animation authoring
 
+**Talon Lift native foundation (2026-10-23, v0.32.1 control; high confidence
+for copied-save Test Upgrades):** purchased Black Power Launch (event 330 / bit 21,
+200 XP) is grounded state 45/action 128, `spd_PowerLauncherAttack` with 14 samples.
+Native GMB contact is active at samples 5..6; a Brute takes real HP loss at 5 and
+enters native launch 39. Native horizontal velocity decays from 1.3 units/update;
+the player remains grounded until manual B. A B buffered near recovery enters
+state 15, then Y enters the ordinary air string. The live SCA ID is in the model
+wrapper at `+0x1C4 + 0x78*[wrapper+0x29C]` (blend slot0/1), confirmed by the
+native animator at 0x02013BF8/0x02013884 and the loaded 14-sample SCA. Motion+0x2F4
+is the XBD ID, not the active SCA ID; older Hunter lab's `sca` observation must
+not be interpreted as proof of clip binding. Raw baseline:
+`work/talon-lift/native/result.json` and its linked native RAM/captures.
+
+**Talon Lift candidate C (2026-10-23, v0.33.0; high confidence within focused
+controls):** a private 14-sample SCA changes only the current owned Black hero's
+state 45/action 128 action record, chaining into Hunter's existing animation route.
+The second hook admits queued R through the native ground blocker; the native
+evade transition consumes it. Parent R stays locked until recovery; candidate R
+exits before contact without damage/launch. No new target/private state, movement,
+hit dispatch, ownership writes or allocation is needed. 416 bytes occupy the
+v0.32.1 unused tail. GMB/GAB, native launch resistance, every original motion/XBD,
+geometry/texture/rooms/audio and the frozen player kit remain exact. A Brute
+loses 10752 HP units at sample 5 and launches39 while the hero stays grounded.
+The low coil, staggered rising hands and recovery use continuous curves and
+planted feet; active in-engine SCA 5952, Black draw list and I8 residency agree.
+
+The early native/A controls also establish a fixture pitfall: forcing only
+controller state 0 does not cancel an existing action 63 hitbox. A bounded prefix
+must request idle re-entry (controller+4=1), then stop before contact and preserve
+actual hurt/launch states. The initial failures and corrected paired R control
+remain in `work/talon-lift/`; they are not gameplay regressions. Further controls
+and publication status belong in `reference/talon_lift.json`/TASKS.
+
+**Talon final packing correction (2026-10-23, v0.33.0 D; high confidence from
+whole-byte comparison):** C's inherited legacy packing reused occupied bytes
+after Glob.bin. D instead inserts 23,552 bytes before the entire old gap and
+shifts the subsequent sound file/tail, then uses the strict repacker. Original
+gap/tail bytes survive verbatim, the cart size stays 128 MiB, and every 5,953 resource,
+ARM9/ARM7 and audio payload is identical to C. Only FAT/used-size/header CRC and
+file positions differ. Final D manual B/Y, early R and Hunter R controls pass
+on fresh boots; unchanged payload identity justifies inheriting C mechanics,
+not DeSmuME/hardware timing. This supersedes C's packing for publication.
+
+**Manual air-follow qualification correction (2026-10-23, v0.33.0 D/F;
+high confidence from paired actual HP traces):** a six-frame B tap cuts the native
+jump short. C/D's initial manual control established input/animation execution,
+but its air Y missed the launched Brute. Holding B from 96..128, then Y 112..118,
+uses native recovery/jump/air movement and lands three real air HP losses after
+the grounded rake. No custom B cancel or jump velocity is needed. The experimental
+E hit-confirm B bypass is rejected as unnecessary; F keeps D's 416-byte runtime
+and explicitly says **Hold B** in the menu. The final manual check requires an
+additional actual HP loss, not merely state 51/action 1. Detailed traces retain
+both the short-tap misses and the successful held-jump controls.
+
 **Hunter's Return foundation (2026-10-23, published v0.31 control / v0.32 A;
 high confidence for the observed path):** native Webbed Fury's transition is
 `0x020B4DA0`. It checks Black bit20, state44 (or native late-string nodes),

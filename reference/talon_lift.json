@@ -1,0 +1,464 @@
+{
+  "build": {
+    "added_resources": [
+      "zz_T33_Lift.sca"
+    ],
+    "arm9_sha256": "40a78c78bf3dc8fef94df6fc2a4ed0d83b0b2374728d3a3547f45d1c780eb860",
+    "modified_resources": [
+      "American.strings",
+      "English.strings",
+      "GlobFiles.txt"
+    ],
+    "native_action": 128,
+    "native_contact_samples": [
+      5,
+      6
+    ],
+    "native_movement_contacts_damage_launch_and_manual_jump_preserved": true,
+    "native_state": 45,
+    "nitrofs_relocation_bytes": 23552,
+    "occupied_gap_and_other_file_bytes_preserved": true,
+    "ownership": {
+      "bit": 21,
+      "event": 330,
+      "price": 200,
+      "record_unchanged": true
+    },
+    "parent_sha256": "68800726f92ab0d2c9662892f465610b29447cc0b65866f375f22962a2f7b005",
+    "player_kit_32k_assets_other_bindings_purchases_rooms_audio_save_format_preserved": true,
+    "rom_sha256": "8c7d4c59fb8c75229fdbea8453028065d702ba89ee5725d687cfa06fd798543a",
+    "runtime": {
+      "allocation_bytes": 0,
+      "bytes": 416,
+      "entry": 35054120,
+      "hooks": [
+        {
+          "old": 3926127992,
+          "site": 34014340,
+          "target": 35054120
+        },
+        {
+          "old": 3926057166,
+          "site": 34297656,
+          "target": 35054124
+        }
+      ],
+      "remaining_zero_tail": 1624,
+      "values": {
+        "LIFT_SCA": 5952,
+        "OLD_ANIMATION": 35052140,
+        "OLD_EVADE": 35052152
+      }
+    },
+    "samples": 14,
+    "sca_id": 5952,
+    "sca_sha256": "6bba100045fbe5e95fa6512221673070caf1d77d0041a6efa6d391ac98b8fe32",
+    "version": "0.33.0"
+  },
+  "controls": {
+    "input": "Black: Up+A; hold B for full manual jump, Y for air hits; R cancels.",
+    "no_new_charge_target_or_save_state": true,
+    "purchase": "Existing Power Launch event330/bit21 at200 XP, renamed Talon Lift; native ownership/refunds/dependencies stay."
+  },
+  "date": "2026-10-23",
+  "implemented_not_player_confirmed": true,
+  "limits": [
+    "Training controls use latest-copy Continue/Test Upgrades, disposable initial form/purchase/positions and idle re-entry only before frame70; subsequent contacts/HP/launches are native. Training healing/immortality apply.",
+    "The actual save retains its purchases/XP/HP/checkpoint and does not receive a paid skill.",
+    "No full-route balance, player feel/visual acceptance, actual DeSmuME pacing or hardware qualification is claimed."
+  ],
+  "publication": {
+    "boot_options_identical": true,
+    "canonical": "build/version-0.33.0-final/Versioned.nds",
+    "clean_original_unchanged": true,
+    "method": "tools/playtest.py build",
+    "prior_normal_source_D": "build/version-0.33.0-source/Versioned.nds",
+    "prior_recipe_backup": "build/releases/68800726f92ab0d2c9662892f465610b29447cc0b65866f375f22962a2f7b005/composition/gameplay_profile.json",
+    "release_receipt": "build\\releases\\8c7d4c59fb8c75229fdbea8453028065d702ba89ee5725d687cfa06fd798543a\\release.json",
+    "resource_count": 5953,
+    "source_rebuild_and_stable_match_canonical": true,
+    "status": "published",
+    "verification": "work/talon-lift/publication-verified.json"
+  },
+  "qualification": {
+    "C_D_inheritance": {
+      "all_5953_resources_identical": true,
+      "arm9_arm7_sound_identical": true,
+      "basis": "Full resource tuple, executable and payload byte comparisons plus tests.test_talon_lift.",
+      "differences": "FAT/used-size/header CRC and sound file position only; D preserves all occupied gap bytes and the tail."
+    },
+    "D_F_inheritance": {
+      "arm9_arm7_audio_and5951_nontext_resources_identical": true,
+      "modified_resources": [
+        "American.strings",
+        "English.strings"
+      ],
+      "reason": "Hold B instruction only; no added jump cancel, velocity or targeting state."
+    },
+    "final_D": {
+      "D-cancel": {
+        "passed": true,
+        "report": "work\\talon-lift\\D-cancel\\result.json",
+        "rom_sha256": "c14c733f733e6cc2ba33ad89ca079a559207968525da174c2fe83bc72f04d4bb",
+        "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-c14c733f\\tl-dr"
+      },
+      "D-hunter-cancel": {
+        "passed": true,
+        "report": "work\\talon-lift\\D-hunter-cancel\\result.json",
+        "rom_sha256": "c14c733f733e6cc2ba33ad89ca079a559207968525da174c2fe83bc72f04d4bb",
+        "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-c14c733f\\tl-dh"
+      },
+      "D-manual": {
+        "passed": true,
+        "report": "work\\talon-lift\\D-manual\\result.json",
+        "rom_sha256": "c14c733f733e6cc2ba33ad89ca079a559207968525da174c2fe83bc72f04d4bb",
+        "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-c14c733f\\tl-d"
+      }
+    },
+    "final_F": {
+      "F-cancel": {
+        "checks": {
+          "black_draw_and_texture": true,
+          "early_native_r_exit": true,
+          "native_collision_bounds": true,
+          "no_hit_after_cancel": true,
+          "private_clip_selected": true,
+          "source_battery_unchanged": true
+        },
+        "damage": [],
+        "passed": true,
+        "report": "work\\talon-lift\\F-cancel\\result.json",
+        "rom_sha256": "8c7d4c59fb8c75229fdbea8453028065d702ba89ee5725d687cfa06fd798543a",
+        "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-8c7d4c59\\tl-f-cancel"
+      },
+      "F-manual-mirror": {
+        "checks": {
+          "air_y_damages_launched_target": true,
+          "air_y_followup": true,
+          "black_draw_and_texture": true,
+          "manual_b_only": true,
+          "native_collision_bounds": true,
+          "native_hp_loss_and_launch": true,
+          "private_clip_selected": true,
+          "source_battery_unchanged": true
+        },
+        "damage": [
+          {
+            "frame": 71,
+            "hp": 22016
+          },
+          {
+            "frame": 123,
+            "hp": 14848
+          },
+          {
+            "frame": 131,
+            "hp": 7680
+          },
+          {
+            "frame": 145,
+            "hp": 512
+          }
+        ],
+        "passed": true,
+        "report": "work\\talon-lift\\F-manual-mirror\\result.json",
+        "rom_sha256": "8c7d4c59fb8c75229fdbea8453028065d702ba89ee5725d687cfa06fd798543a",
+        "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-8c7d4c59\\tl-f-manual-mirror"
+      },
+      "F-presentation": {
+        "checks": {
+          "air_y_damages_launched_target": true,
+          "air_y_followup": true,
+          "black_draw_and_texture": true,
+          "manual_b_only": true,
+          "native_collision_bounds": true,
+          "native_hp_loss_and_launch": true,
+          "private_clip_selected": true,
+          "source_battery_unchanged": true
+        },
+        "damage": [
+          {
+            "frame": 71,
+            "hp": 22016
+          },
+          {
+            "frame": 123,
+            "hp": 14848
+          },
+          {
+            "frame": 131,
+            "hp": 7680
+          },
+          {
+            "frame": 145,
+            "hp": 512
+          }
+        ],
+        "passed": true,
+        "report": "work\\talon-lift\\F-presentation\\result.json",
+        "rom_sha256": "8c7d4c59fb8c75229fdbea8453028065d702ba89ee5725d687cfa06fd798543a",
+        "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-8c7d4c59\\tl33-film-f"
+      },
+      "F-vortex": {
+        "passed": true,
+        "report": "work\\talon-lift\\F-vortex\\result.json",
+        "rom_sha256": "8c7d4c59fb8c75229fdbea8453028065d702ba89ee5725d687cfa06fd798543a",
+        "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-8c7d4c59\\tl-vf"
+      },
+      "F-whiff": {
+        "checks": {
+          "black_draw_and_texture": true,
+          "grounded_whiff_recovers": true,
+          "native_collision_bounds": true,
+          "private_clip_selected": true,
+          "source_battery_unchanged": true
+        },
+        "damage": [],
+        "passed": true,
+        "report": "work\\talon-lift\\F-whiff\\result.json",
+        "rom_sha256": "8c7d4c59fb8c75229fdbea8453028065d702ba89ee5725d687cfa06fd798543a",
+        "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-8c7d4c59\\tl-f-whiff"
+      }
+    },
+    "final_source": {
+      "command": "python -m unittest tests.test_talon_lift -q",
+      "passed": true,
+      "report": "work/talon-lift/tests-F-final.log",
+      "tests": 9
+    },
+    "focused_C": {
+      "air": {
+        "checks": {
+          "no_talon_route": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "report": "work\\talon-lift\\C-air\\result.json",
+        "rom_sha256": "cfff1d73c6d3f881b4e39c04535a5cbbc3790f4b942e51e3703e66772e524953"
+      },
+      "cancel": {
+        "checks": {
+          "black_draw_and_texture": true,
+          "early_native_r_exit": true,
+          "native_collision_bounds": true,
+          "no_hit_after_cancel": true,
+          "private_clip_selected": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "report": "work\\talon-lift\\C-cancel\\result.json",
+        "rom_sha256": "cfff1d73c6d3f881b4e39c04535a5cbbc3790f4b942e51e3703e66772e524953"
+      },
+      "manual": {
+        "checks": {
+          "air_y_followup": true,
+          "black_draw_and_texture": true,
+          "manual_b_only": true,
+          "native_collision_bounds": true,
+          "native_hp_loss_and_launch": true,
+          "private_clip_selected": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "report": "work\\talon-lift\\C-manual\\result.json",
+        "rom_sha256": "cfff1d73c6d3f881b4e39c04535a5cbbc3790f4b942e51e3703e66772e524953"
+      },
+      "mirror": {
+        "checks": {
+          "black_draw_and_texture": true,
+          "manual_b_only": true,
+          "native_collision_bounds": true,
+          "native_hp_loss_and_launch": true,
+          "private_clip_selected": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "report": "work\\talon-lift\\C-mirror\\result.json",
+        "rom_sha256": "cfff1d73c6d3f881b4e39c04535a5cbbc3790f4b942e51e3703e66772e524953"
+      },
+      "red": {
+        "checks": {
+          "no_talon_route": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "report": "work\\talon-lift\\C-red\\result.json",
+        "rom_sha256": "cfff1d73c6d3f881b4e39c04535a5cbbc3790f4b942e51e3703e66772e524953"
+      },
+      "regular": {
+        "checks": {
+          "black_draw_and_texture": true,
+          "manual_b_only": true,
+          "native_collision_bounds": true,
+          "native_hp_loss_and_launch": true,
+          "private_clip_selected": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "report": "work\\talon-lift\\C-regular\\result.json",
+        "rom_sha256": "cfff1d73c6d3f881b4e39c04535a5cbbc3790f4b942e51e3703e66772e524953"
+      },
+      "swap": {
+        "checks": {
+          "black_draw_and_texture": true,
+          "native_collision_bounds": true,
+          "native_suit_switch_recovers": true,
+          "private_clip_selected": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "report": "work\\talon-lift\\C2-swap\\result.json",
+        "rom_sha256": "cfff1d73c6d3f881b4e39c04535a5cbbc3790f4b942e51e3703e66772e524953"
+      },
+      "traversal": {
+        "checks": {
+          "native_dash_and_air_slam": true,
+          "no_talon_route": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "report": "work\\talon-lift\\C2-traversal\\result.json",
+        "rom_sha256": "cfff1d73c6d3f881b4e39c04535a5cbbc3790f4b942e51e3703e66772e524953"
+      },
+      "unowned": {
+        "checks": {
+          "no_talon_route": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "report": "work\\talon-lift\\C-unowned\\result.json",
+        "rom_sha256": "cfff1d73c6d3f881b4e39c04535a5cbbc3790f4b942e51e3703e66772e524953"
+      },
+      "wall": {
+        "checks": {
+          "black_draw_and_texture": true,
+          "grounded_whiff_recovers": true,
+          "native_collision_bounds": true,
+          "private_clip_selected": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "report": "work\\talon-lift\\C-wall\\result.json",
+        "rom_sha256": "cfff1d73c6d3f881b4e39c04535a5cbbc3790f4b942e51e3703e66772e524953"
+      },
+      "whiff": {
+        "checks": {
+          "black_draw_and_texture": true,
+          "grounded_whiff_recovers": true,
+          "native_collision_bounds": true,
+          "private_clip_selected": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "report": "work\\talon-lift\\C-whiff\\result.json",
+        "rom_sha256": "cfff1d73c6d3f881b4e39c04535a5cbbc3790f4b942e51e3703e66772e524953"
+      }
+    },
+    "fresh_final_continue": {
+      "matches_parent_ability_words_xp_hp_room_and_source_save": true,
+      "profile": "work/talon-lift/F-owned/owned-player-profile.json",
+      "rom_sha256": "8c7d4c59fb8c75229fdbea8453028065d702ba89ee5725d687cfa06fd798543a"
+    },
+    "legacy_kit": {
+      "actually_rerun_parent_cases": [
+        "q_ricochet_crowd",
+        "q_dragnet",
+        "q_dragnet_release",
+        "q_vortex",
+        "q_vortex_direct_early",
+        "q_vortex_direct_late",
+        "q_vortex_direct_fast",
+        "q_vortex_cancel",
+        "q_vortex_area"
+      ],
+      "additional_parent_failures": [
+        "dragnet_webs_the_enemies_in_front",
+        "dragnet_yank_brings_them_to_spidey"
+      ],
+      "all_candidate_failures_reproduced_on_parent": true,
+      "checks": 68,
+      "current_Vortex_control": "work/talon-lift/F-vortex/result.json",
+      "failed_expectations": [
+        "dragnet_release_drops_the_lines_and_leaves_them_webbed",
+        "dragnet_yank_continues_into_vortex",
+        "dragnet_yank_plays_the_heave",
+        "ricochet_floors_a_real_bystander",
+        "vortex_cancel_resumes_its_web_steps",
+        "vortex_direct_early",
+        "vortex_direct_fast",
+        "vortex_direct_late",
+        "vortex_pause_plays_its_three_steps",
+        "vortex_reaches_enemies_around"
+      ],
+      "limits": "Only nine parent cases generating ten failed legacy expectations were rerun. Other observations are explicitly reused from C solely to evaluate the legacy checker. Not a new full-parent qualification. Vortex assumptions predate its v0.31 redesign.",
+      "native_gate_snare_Black_parity": true,
+      "parent_replay": "work/talon-lift/kit-baseline/result.json",
+      "passed_all_legacy_expectations": false,
+      "passed_expectations": 58,
+      "report": "work/talon-lift/kit/result.json",
+      "rom_scope": "C; F shares its gameplay runtime/resources."
+    },
+    "manual_followup_correction": {
+      "experimental_E_B_bypass": "Excluded as unnecessary; F keeps the416-byte D adapter and native B behavior.",
+      "final_air_hp_losses": 3,
+      "final_proof": "work/talon-lift/F-presentation/result.json",
+      "initial_short_tap": "C/D and first E traces play an air animation without a further HP drop; not catch proof.",
+      "native_held_control": "work/talon-lift/D-hold-112-0/result.json"
+    },
+    "native_parent_R_control": {
+      "expected_early_exit": false,
+      "observed_early_exit": false,
+      "report": "work/talon-lift/native-cancel-clean/result.json"
+    },
+    "presentation": {
+      "audio_sample_rate": 32768,
+      "fps": 59.89830780029297,
+      "native_size": [
+        256,
+        192
+      ],
+      "report": "work/talon-lift/F-presentation/media.json",
+      "scope": "Exact F ROM. Native-size coil/contact/recovery and held-B actual air contacts; normal-speed file includes captured native mixed audio. No player fun/visual-acceptance claim.",
+      "sheet": "work/talon-lift/F-native-sheet.png",
+      "video": "work/talon-lift/F-presentation/talon-lift-native.mp4"
+    },
+    "source_suite": {
+      "command": "python -m unittest discover -s tests -q",
+      "note": "Full570-test run before final packing/instruction refinements; final generator/ABI/native-B/scope covered separately by9 final tests.",
+      "passed": true,
+      "report": "work/talon-lift/source-suite.log",
+      "tests": 570
+    },
+    "superseded_fixtures": {
+      "limits": "Early idle-state-only fixture left an existing attack hitbox active; corrected prefix requests native idle re-entry before contact. Early L cannot interrupt native Power Launch; a later L demonstrates recovery/switch. Hammer Slam is states35/36; old assertion49 was the wrong native state. No ROM mechanic was changed to satisfy those cases.",
+      "reports": [
+        "work/talon-lift/A-regular/result.json",
+        "work/talon-lift/native-cancel-idle/result.json",
+        "work/talon-lift/C-swap/result.json",
+        "work/talon-lift/C-traversal/result.json"
+      ]
+    }
+  },
+  "save": {
+    "payload_sha256": "60522969684b475bc977a2d7c3478928066af9df75577f5c8b50a3bcbdd16835",
+    "player_owned_talon_at_start": false,
+    "research_save_adopted": false,
+    "source_battery_unchanged": true,
+    "source_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+    "wrapper_payload_and_checkpoint_exact": true
+  },
+  "schema_version": 1,
+  "scope": {
+    "32k_player_kit_geometry_textures_rooms_audio_purchases_other_actor_bindings_exact": true,
+    "native_action": 128,
+    "native_gmb_gab_contacts_damage_and_resistance_exact": true,
+    "native_state": 45,
+    "new_sca": "zz_T33_Lift.sca",
+    "nitrofs_file_shift_bytes": 23552,
+    "occupied_archive_gap_preserved": true,
+    "samples": 14,
+    "two_runtime_hooks_only": true
+  },
+  "status": "published; agent-tested; player feel/appearance acceptance open",
+  "version": "0.33.0"
+}

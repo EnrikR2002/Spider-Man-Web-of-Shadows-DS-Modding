@@ -5,76 +5,71 @@ TECHNICAL owns contracts; CHANGES owns releases; TASM_ROADMAP owns design.
 
 ## Current objective and player direction
 
-All eight repository audit findings in developer tooling are corrected. Publisher
-recovery/receipt retention, candidate defaults, occupied-gap protection,
-prototype assembly validation, live-player sampling, current texture audit and
-camera parsing are implemented. All 563 source/regression tests pass; exact-source
-rebuild verification matches installed v0.32.1 across all 5,952 resources.
-No ROM publication is part of this maintenance task.
+The next requested 2099 skill, **Talon Lift**, is implemented and published in
+**v0.33.0**. No further move is queued. The other five 2099 proposals remain
+deferred pending a new request. Player feel/appearance acceptance stays open.
 
-Both Hunter's Return review findings are corrected in v0.32.1. Per-victim hit
-restoration prevents a selected target's launch from leaking into shared hit
-records. New player allocation clears a departed owner's private phase so the
-move remains available after reload. Native hit credit and damage arguments
-remain intact; 324 bytes fit the existing zero tail with no heap/autoload growth.
+Talon Lift keeps the existing Power Launch purchase: 200 XP, event 330 / bit 21,
+native ownership, dependencies and refunds. In Black form, Up+A coils low into
+a rising talon rake while staying grounded. **Hold B**, then Y, manually catches
+the launch with actual air hits. R cancels early. B, air strings, movement,
+collision, hitboxes, damage and launch resistance stay native.
 
-2099's controls remain: after a ground dash hits, release A and tap A again for
-eligible recall into a rising rake; native-unrecallable foes get a short physical
-attempt. R cancels; B remains manual. The existing Webbed Fury 100 XP purchase,
-event 329 / bit 20 and owned/refund progress stay. His fuller cape-free chest/arms,
-37-node rig, texture and 516 triangles are unchanged from v0.32. Other six
-proposed Black moves remain deferred.
+Hunter's Return keeps its current dash-hit recall/physical attempt and v0.32.1
+hit-isolation/owner correction. Red retains the combined TASM kit; Overclock,
+Dragnet and Vortex remain its final added skills. No price rebalance, third suit,
+shop/save expansion or campaign branch is active. Native traversal, purchases,
+Both Suits, story gates and rewards remain.
 
-Red retains the combined TASM1/2 kit; Overclock/Dragnet/Vortex are its final added
-skills. Native abilities, dependencies, Both Suits traversal, story gates and
-earned rewards stay. No new prices, third suit, shop/save expansion or campaign
-branch is active. Player feel and appearance acceptance remain open.
+## Published build and actual save
 
-## Published build and save
+Stable `build/Spider-Man-WoS-modded.nds` is **v0.33.0**, installed by
+`tools/playtest.py build`. Canonical F, publisher's normal-source rebuild and
+stable ROM match exactly; boot/Options, recipe, pin, metadata and history agree.
+Identities, release receipt and verification are in `reference/talon_lift.json`.
 
-Stable build/Spider-Man-WoS-modded.nds is **v0.32.1**, installed through
-tools/playtest.py build. Accepted A, canonical final, normal-source rebuild,
-publisher candidate and stable match; boot/Options agree. Publication scope,
-original source hashes and gameplay evidence are in reference/hunters_return_fix.json. CHANGES
-and releases.json record publication. Prior ROM/recipe/build metadata remain.
-This maintenance changes tooling source while reproducing the same ROM.
-
-The actual latest DSV wrapper, 512-byte payload and publication checkpoint match
-exactly. Clean original is unchanged and no research save was adopted. Never
-restore a historical battery hash. All testing uses private copies/volatile RAM.
-Fresh installed-ROM Continue retains current purchases, XP, HP and checkpoint.
+The freshly read actual DSV wrapper and 512-byte payload match the publication
+checkpoint exactly. Fresh Continue from the exact final ROM preserves purchases,
+XP, HP and checkpoint. The current player does not own bit 21: buy Talon Lift
+normally. No research save was adopted, and no historical battery was restored.
+Prior ROM/metadata/recipe/overlays and the current release composition are retained.
+The clean original is unchanged.
 
 ## Implemented and agent-tested
 
-The earlier Hunter correction's 59 source/regression tests passed. They cover both victim orders, shared
-info/contact records, native credit before restoration, skipped/ignored hits,
-nested calls, ARM ABI/flags, replaced players in both forms, reactivation, three
-hook destinations and byte scope. The 32 KiB player kit, all assets/motion/XBDs,
-rooms/audio, purchases, ARM7 and other NitroFS files match v0.32.
+A continuous private 14-sample SCA and stateless 416-byte adapter fit the existing
+zero tail without heap/autoload growth. The 32 KiB player kit, Hunter's Return,
+Red, other actor bindings/motion, geometry/textures, rooms and audio remain exact.
+Archive growth shifts the following file by 23 KiB, preserving the entire
+occupied gap and file tail.
 
-Native crowd control damages both opponents, launches the selected target and
-keeps the bystander in normal knockdown. It uses temporary NPC eligibility,
-one-time bystander placement and an idle prefix; no balance claim. That alignment
-also passes on v0.32: the target-first leak is established by the ARM regression.
-The parent native reload control keeps the old phase and cannot reactivate;
-the corrected build clears it and activates again on the new player. Arrival
-and stale-owner injection are explicit fixtures. Red/unowned, R and stale-target
-controls pass. Earlier ineffective fixture timings remain documented in receipt.
+The full source run passed 570 tests before final packing/instruction refinements.
+Nine final Talon tests pass, covering ABI, pointer/ownership/controller isolation,
+native B timing, R queue, animation and exact resource/text/executable scope,
+including occupied-gap preservation. All 5,953 final resources validate.
 
-Tooling checks cover failures after every publication write, removal of a partial
-first install, continuing recovery after one restore fails, unchanged receipt
-links after more play, candidate defaults, occupied internal/trailing gaps,
-frozen relocation compatibility, self-calling assembly, lone stale/unaligned
-players, kit overlay acceptance and camera counts 1..15. Frozen generators retain
-explicit historical gap reuse under their existing pins; raw repacks are strict.
+Eleven focused C controls pass and carry forward through explicit executable/
+resource identity. Final F proves real held-B air damage in both directions, R,
+miss recovery, current Vortex and fresh Continue. D's Hunter R control remains
+applicable through exact gameplay payload identity. Native-size frames and a
+normal-speed capture with native mixed audio are retained.
+
+Short B taps initially played an air animation without hitting. Holding B for
+the native full jump lands three actual air HP losses after the grounded rake.
+The unnecessary experimental B bypass is excluded. The final manual check
+requires additional actual damage, not just animation/counters.
+
+The legacy 68-check kit run passes 58 expectations. All ten failures also fail
+on v0.32.1 in nine selected replay cases; two further Dragnet expectations fail
+only in the parent replay. Those fixture/AI and pre-v0.31 Vortex assumptions are
+not new regressions. Native gate/snare/Black parity and current Vortex pass.
+Full receipts and limits are in the catalog.
 
 ## Next exact action and remaining gates
 
-All audit corrections are qualified; no current blocker or further tooling fix
-is queued. No additional DeSmuME/DS-hardware qualification is claimed.
-
-Use the normal launcher to play the correction and review Hunter's Return/physique.
-Player feel/appearance, full-route balance and actual DeSmuME pacing stay open.
-Other 2099 proposals require a new request; no further move is queued.
+Use the normal launcher and review Talon Lift's coil/rake, held-B air catch and
+R exit. Implementation/publication have no remaining blocker or queued code fix.
+Player feel/appearance, full-route balance and actual DeSmuME/hardware pacing
+remain unconfirmed. Do not activate another proposal automatically.
 
 Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.

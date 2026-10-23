@@ -153,8 +153,8 @@ and clearability alone do not authorize another roster-wide pass.
 The player's 2026-10-22 appearance request supplies an Across the Spider-Verse
 reference and explicitly removes the red web cape. They like the prior 2099
 overall. This supersedes the earlier classic foundation/larger-cape direction.
-The 2026-10-23 request selects Hunter's Return as the first combat implementation
-and asks for a more muscular body; the remaining six moves stay proposals.
+The first 2026-10-23 request selects Hunter's Return and a more muscular body.
+The next-skill request activates Talon Lift; the remaining five moves stay proposals.
 
 Published v0.30.3 keeps the guarded shared-model selector and native Red list,
 with Black wearing the requested cape-free navy/red movie-inspired appearance.
@@ -176,12 +176,20 @@ a short physical attempt. R cancels, and B remains manual. The fuller model
 keeps the current atlas, rig and 516 triangles. Player feel/appearance remain
 open; scoped evidence is in `reference/hunters_return.json`.
 
-The other six rows below remain **proposals**, not implemented new moves:
+**Talon Lift is published in v0.33.0** through the guarded publisher.
+It retains Power Launch's native 200 XP purchase, event 330 / bit 21 and ownership.
+Up+A coils low into an authored rising rake while staying grounded. Hold B for
+the native full jump, then Y to catch the launch with real air hits; R cancels.
+Native movement, collision, damage and launch resistance stay. No B bypass,
+automatic follow-up, new target state or save migration is needed. Agent tests
+pass in both directions; player feel/appearance acceptance remains open.
+
+The other five moves below remain **proposals**:
 
 | Native Black purchase | Move / status | Play role |
 |---|---|---|
 | Webbed Fury | Hunter's Return (implemented) | After a successful ground dash, optional A recalls the struck eligible enemy into an upward rake. Resistant targets get a short physical pursuit attempt. |
-| Power Launch | Talon Lift | Up+A performs a coiled rising rake; B manually follows a susceptible launch. |
+| Power Launch | Talon Lift (implemented) | Up+A performs a coiled rising rake; hold B, then Y, to manually catch a susceptible launch. R cancels. |
 | Ground Rebound | Predator Rebound | Native Down+A slam can bounce enemies; choose B,Y to catch one or stay grounded. |
 | Black Widowmaker | Raking Cross | Late-pause Y branch becomes a low rake, passing heel kick and turning back rake. |
 | Poison Pummel | Talon Cyclone | Compact travelling claw/kick extension ends in a rising scissors kick, then offers air hits, spike, slam or owned air R. |
@@ -189,8 +197,8 @@ The other six rows below remain **proposals**, not implemented new moves:
 | Quick Charge | Relentless Pursuit | Faster wind-up and one brief carried charge through evade/manual jump; the next eligible attempt spends it, including a miss. |
 
 The proposed full-kit identity is **catch -> carry -> crash -> chase**;
-Hunter's Return implements only its first step. The future loop is dash contact -> optional
-Return -> Lift -> manual B -> air rake -> native slam -> choose rebound chase
+Hunter's Return and Talon Lift implement its opening. The future loop is dash contact -> optional
+Return -> Lift -> hold B -> air rake -> native slam -> choose rebound chase
 or another grounded string. Against an immovable boss, use direct close strikes,
 short pursuit and R exits; no forced launches, recalls or permanent stun. A's
 native ground dash, air spike and Down+A slam keep story traversal and do not
@@ -202,8 +210,8 @@ Possible refinements for discussion: a wall-to-target pounce variant within
 Raking Cross, and brief crimson talon/eye cues showing a banked charge. Neither
 is implemented or an extra Red skill. A wall route needs its own native collision
 proof and cannot commandeer barrier dash/slam inputs. The player's first-skill
-request supersedes the older Cross-first prototype order. Review Hunter's Return
-before activating another proposed move.
+request supersedes the older Cross-first prototype order. The next-skill request
+then selects Lift. Review both implemented moves before another proposed move.
 The full dated pitch remains archived under this document's 2099 heading.
 
 ## Deferred work
@@ -211,7 +219,7 @@ The full dated pitch remains archived under this document's 2099 heading.
 | Idea | Current boundary |
 |---|---|
 | More Red skills, extra stat rows, prices/balance, shop/save expansion | Deferred. Iterate the existing kit; Overclock/Dragnet/Vortex are the final added skills. |
-| Spider-Man 2099 combat | Hunter's Return ships in v0.32; the other six proposals remain deferred. Preserve native A traversal, paid ownership and shared upgrades. |
+| Spider-Man 2099 combat | Hunter's Return ships in v0.32; Talon Lift is implemented for v0.33. The other five proposals remain deferred. Preserve native A traversal, paid ownership and shared upgrades. |
 | Third suit and other suit concepts | Deferred; TASM1/2 share one kit. No suit selector or migration is implemented by this roadmap. |
 | Downtown Grid/Lost Lab, Residential Skyline Run, Hive Quarantine Heart | Deferred concepts. No new allocations are authorized by the old pitches; audit current flags/storage before any future expansion. Hive stays post-story. |
 | Midnight Express, gauntlets, timed replays, collectibles/reward systems | Backlog ideas, not unfinished work required for the current chapters. |

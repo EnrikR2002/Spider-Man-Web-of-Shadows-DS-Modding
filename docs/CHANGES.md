@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Mechanics proposed for th
 TASM rebuild are in [TASM_ROADMAP](TASM_ROADMAP.md); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.32.1. Each section records behavior,
+The latest numbered release below is v0.33.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in TASM_ROADMAP/TASKS.
@@ -18,6 +18,43 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.33.0 - 2026-10-23 - 2099 Talon Lift
+
+Talon Lift replaces Power Launch's presentation in its existing Black purchase:
+200 XP, event 330 / bit 21, with native ownership, dependencies and refunds.
+Up+A coils low into an authored rising talon rake while staying grounded.
+Hold B for the native full jump, then Y to catch the launch with air hits.
+R cancels early through the native evade queue. Native movement, collision,
+hitboxes, damage and launch resistance remain; B and the air string stay native.
+There is no automatic follow-up or custom jump/target state.
+
+One private 14-sample SCA and a 416-byte stateless adapter fit the existing image
+tail without heap/autoload growth. The 32 KiB player kit, Hunter's Return,
+other actor bindings/motion, geometry/textures, purchases, rooms and audio stay
+exact. Archive growth shifts the following file by 23 KiB to preserve the entire
+occupied gap and file tail. No save migration or research save adoption occurs.
+
+**Qualification.** The full source run passed 570 tests; nine final Talon tests
+cover ABI, pointer/ownership isolation, native B, R, animation and exact scope,
+including occupied-gap preservation. Eleven focused C controls carry forward
+through explicit executable/resource identity. Final F proves actual held-B air
+damage in both directions, R exit, miss recovery, current Vortex and fresh Continue.
+Earlier short B taps played an air animation but missed; those traces establish
+why the final manual check requires actual additional HP loss. Native-scale
+frames and a normal-speed capture with native mixed audio are retained.
+
+The legacy 68-check kit run passes 58 expectations. All ten failures also fail on
+v0.32.1 in nine selected replay cases; two further Dragnet expectations fail only
+in the parent replay. Those fixture/AI and pre-v0.31 Vortex expectations are not
+new regressions. Native gate/snare/Black parity and the current Vortex control
+pass. Scope, raw reports and limits are in `reference/talon_lift.json`.
+
+Canonical F, publisher's normal-source build and installed stable ROM match;
+boot/Options agree. The actual latest DSV wrapper and 512-byte payload match the
+publication checkpoint exactly. Prior ROM, metadata and recipe/overlays remain.
+Player feel/appearance, full-route balance and actual DeSmuME/hardware pacing
+remain open.
 
 ## v0.32.1 - 2026-10-23 - Isolate Hunter hits and reset replaced owners
 
