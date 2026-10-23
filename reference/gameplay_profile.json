@@ -1,6 +1,6 @@
 {
-  "profile": "tasm-v0.32.0",
-  "release_version": "0.32.0",
+  "profile": "tasm-v0.32.1",
+  "release_version": "0.32.1",
   "required_overlays": {
     "American.strings": "b05a7040f5ca3d591641a64ef6062773ee2e6f16f4235af99d7a4522ed754e3d",
     "English.strings": "b05a7040f5ca3d591641a64ef6062773ee2e6f16f4235af99d7a4522ed754e3d",

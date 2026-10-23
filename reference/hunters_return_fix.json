@@ -1,0 +1,205 @@
+{
+  "composition": {
+    "arm9_sha256": "5e9e566142c9cc58477bd4e3f8c80bb53384e4f8563fb27e7e5c67a0021a41ae",
+    "assets_purchases_save_format_and_other_runtime_preserved": true,
+    "modified_resources": [
+      "American.strings",
+      "English.strings"
+    ],
+    "parent_sha256": "4ab044d0e258e84d195774d4e3ee95a5d22ddc778600986d235490847f00e556",
+    "per_victim_restore": "Save in unused native argument copies; restore after native credit, before the victim loop advances.",
+    "player_cleanup": "A current native player replacing the cached owner clears the old move without dereferencing it.",
+    "rom_sha256": "68800726f92ab0d2c9662892f465610b29447cc0b65866f375f22962a2f7b005",
+    "runtime": {
+      "allocation_bytes": 0,
+      "bytes": 324,
+      "entry": 35053796,
+      "hooks": [
+        {
+          "old": 3926119696,
+          "site": 34047528,
+          "target": 35053796
+        },
+        {
+          "old": 3852271620,
+          "site": 34047596,
+          "target": 35053800
+        },
+        {
+          "old": 3925868798,
+          "site": 35052148,
+          "target": 35053804
+        }
+      ],
+      "remaining_zero_tail": 2040,
+      "values": {
+        "OLD_CONTACT": 34942032,
+        "OLD_RAKE": 35052952,
+        "OLD_UPDATE": 35053172,
+        "STATE": 35052064
+      }
+    },
+    "version": "0.32.1"
+  },
+  "date": "2026-10-23",
+  "diagnostics": [
+    "Initial crowd timing selected the short physical fallback and did not reach recall; excluded as an isolation control.",
+    "An intermediate target at14 units sometimes selected long Dash rather than nearby Dash Slam and had no qualifying hit. Final fixtures use10 units; no production movement changed.",
+    "Crowd placement/capability/idle fixtures isolate native hit reactions; they do not establish difficulty or normal enemy behavior."
+  ],
+  "limitations": [
+    "Full campaign balance, player feel and actual DeSmuME pacing remain open.",
+    "The broader v0.32 art/kit evidence is inherited only with exact byte scope."
+  ],
+  "parent_rom_sha256": "4ab044d0e258e84d195774d4e3ee95a5d22ddc778600986d235490847f00e556",
+  "publication": {
+    "all_five_roms_equal": true,
+    "battery_checkpoint": "before-build-dsv-4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+    "battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+    "canonical": "build\\version-0.32.1-final\\Versioned.nds",
+    "clean_original_sha256": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203",
+    "footer_words": [
+      1,
+      512,
+      1,
+      1,
+      512,
+      0
+    ],
+    "no_research_save_adopted": true,
+    "normal": "build/hunter-fix-normal/Versioned.nds",
+    "payload_sha256": "60522969684b475bc977a2d7c3478928066af9df75577f5c8b50a3bcbdd16835",
+    "prior_build_metadata": "build\\releases\\4ab044d0e258e84d195774d4e3ee95a5d22ddc778600986d235490847f00e556\\Spider-Man-WoS-modded.build.json",
+    "prior_recipe": "build\\releases\\4ab044d0e258e84d195774d4e3ee95a5d22ddc778600986d235490847f00e556\\gameplay_profile.json",
+    "prior_rom": "build\\releases\\4ab044d0e258e84d195774d4e3ee95a5d22ddc778600986d235490847f00e556\\Spider-Man-WoS-modded.nds",
+    "publisher_log": "work/hunter-fix/publication.log",
+    "release": "build/releases/68800726f92ab0d2c9662892f465610b29447cc0b65866f375f22962a2f7b005/release.json",
+    "wrapper_payload_checkpoint_exact": true
+  },
+  "request": "Fix both review findings: launch leakage across shared victim records and a stale active phase after player replacement.",
+  "rom_sha256": "68800726f92ab0d2c9662892f465610b29447cc0b65866f375f22962a2f7b005",
+  "schema_version": 1,
+  "source_hashes": {
+    "mod.py": "6e73755659de073d8179892417f046c5a3656c376484537b0df387d009de20fc",
+    "reference/gameplay_profile.json": "1cba60822d4c32f43056a0a2a2fdec0ec7352f2b7dfb047be8fc153fd993e8bf",
+    "tests/test_hunters_return_fix.py": "837d488622c46762992bebf5d26c1f0b622e6c7b70df8f1d2c10b36f682642c0",
+    "tools/hunters_return_fix.py": "4daebf234d1eb9249e2527c6dbc8058d3ba6c357c4d91558c90cd6a30378823e",
+    "tools/hunters_return_fix.s": "21224b09797c512e6793ec776d2fcf49cf6a53366479bdd76c750228b98a28d0",
+    "tools/hunters_return_lab.py": "318593a2733c8353fcf3898ed10d73eb04e5ae6cd86d7dea4a616f14c89e1708",
+    "tools/release_info.py": "a014cced92cbe53123ba45c328187e77446c798fd5a7e8755d80b0a00e1d7f0a"
+  },
+  "status": "published-v0.32.1-hunter-isolation-owner-fix",
+  "validation": {
+    "before_continue": "work/hunter-fix/current/owned-player-profile.json",
+    "boot_options": {
+      "50": "TASM v0.32.1\nPress a button to start",
+      "74": "Options v0.32.1"
+    },
+    "cases": {
+      "cancel": {
+        "launches": 0,
+        "limits": "Latest measured battery copy and ordinary Continue/Test Upgrades; disposable purchase/form, initial positions and idle prefix through70. Training healing/immortality apply. Hurt is a labelled state-only interruption; stale corrupts only private target state. No actual battery writes or campaign-balance claim.",
+        "passed": true,
+        "proof": {},
+        "pursuits": 1,
+        "report": "work/hunter-fix/final-cancel4/result.json",
+        "starts": 1
+      },
+      "crowd": {
+        "launches": 1,
+        "limits": "Latest measured battery copy and ordinary Continue/Test Upgrades; disposable purchase/form, initial positions and idle prefix through70. Training healing/immortality apply. Hurt is a labelled state-only interruption; stale corrupts only private target state. No actual battery writes or campaign-balance claim. Crowd temporarily enables the selected NPC recall capability during104..110 and places one bystander once at recall entry, keeping it idle until the rake while preserving hurt states. Actual hit detection, damage and reactions are native.",
+        "passed": true,
+        "proof": {
+          "both_damaged": true,
+          "bystander": 36472188,
+          "bystander_hp": 32768,
+          "bystander_launched": false,
+          "setup_frame": 107,
+          "target": 36483616,
+          "target_hp": 22016,
+          "target_launched": true
+        },
+        "pursuits": 0,
+        "report": "work/hunter-fix/final-crowd4/result.json",
+        "starts": 1
+      },
+      "red": {
+        "launches": 0,
+        "limits": "Latest measured battery copy and ordinary Continue/Test Upgrades; disposable purchase/form, initial positions and idle prefix through70. Training healing/immortality apply. Hurt is a labelled state-only interruption; stale corrupts only private target state. No actual battery writes or campaign-balance claim.",
+        "passed": true,
+        "proof": {},
+        "pursuits": 0,
+        "report": "work/hunter-fix/final-red/result.json",
+        "starts": 0
+      },
+      "reload": {
+        "launches": 0,
+        "limits": "Latest measured battery copy and ordinary Continue/Test Upgrades; disposable purchase/form, initial positions and idle prefix through70. Training healing/immortality apply. Hurt is a labelled state-only interruption; stale corrupts only private target state. No actual battery writes or campaign-balance claim. Reload injects an unfinished private owner after the native training transition, then requires cleanup and a new button-driven skill activation.",
+        "passed": true,
+        "proof": {
+          "new_player": 36427056,
+          "old_move_cleared": true,
+          "old_player": 36455276
+        },
+        "pursuits": 1,
+        "report": "work/hunter-fix/final-reload4/result.json",
+        "starts": 1
+      },
+      "stale": {
+        "launches": 0,
+        "limits": "Latest measured battery copy and ordinary Continue/Test Upgrades; disposable purchase/form, initial positions and idle prefix through70. Training healing/immortality apply. Hurt is a labelled state-only interruption; stale corrupts only private target state. No actual battery writes or campaign-balance claim.",
+        "passed": true,
+        "proof": {},
+        "pursuits": 1,
+        "report": "work/hunter-fix/final-stale4/result.json",
+        "starts": 1
+      },
+      "unowned": {
+        "launches": 0,
+        "limits": "Latest measured battery copy and ordinary Continue/Test Upgrades; disposable purchase/form, initial positions and idle prefix through70. Training healing/immortality apply. Hurt is a labelled state-only interruption; stale corrupts only private target state. No actual battery writes or campaign-balance claim.",
+        "passed": true,
+        "proof": {},
+        "pursuits": 0,
+        "report": "work/hunter-fix/final-unowned/result.json",
+        "starts": 0
+      }
+    },
+    "documentation_tests": {
+      "count": 7,
+      "log": "work/hunter-fix/final-doc-tests.log",
+      "passed": true
+    },
+    "native_crowd_parent_control": {
+      "limit": "This alignment also leaves the bystander unlaunched on v0.32; the target-first shared-record failure and both victim orders are established separately in ARM regressions.",
+      "report": "work/hunter-fix/parent-crowd4/result.json"
+    },
+    "parent_reload": {
+      "expected_failure": true,
+      "new_player": 36427056,
+      "old_phase_stuck": true,
+      "old_player": 36455276,
+      "report": "work/hunter-fix/parent-reload/result.json",
+      "subsequent_activations": 0
+    },
+    "published_continue": {
+      "all_measured_fields_match": true,
+      "fields": [
+        "ability_words",
+        "xp",
+        "initial_hp",
+        "room",
+        "source_sha256"
+      ],
+      "no_ram_fixtures": true,
+      "profile": "work/hunter-fix/published-continue/owned-player-profile.json"
+    },
+    "scope": "Only American/English version strings change in Glob. All models, textures, motion, XBDs, rooms, audio and purchases are exact. ARM7/other NitroFS files and the 32KiB kit match. Three ARM branches plus 324 bytes in the existing zero tail change; ARM9 size/autoload/arena remain exact.",
+    "tests": {
+      "count": 59,
+      "final_wiring_checks": "work/hunter-fix/final-fix-tests.log",
+      "log": "work/hunter-fix/regression-tests.log",
+      "passed": true
+    }
+  },
+  "version": "0.32.1"
+}

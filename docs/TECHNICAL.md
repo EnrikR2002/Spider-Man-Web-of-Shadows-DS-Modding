@@ -1792,6 +1792,31 @@ vertex coordinates change. Live skill captures select the actual Black list
 and bind 128x128 I8. Recipe, scope, raw evidence and limits belong in
 `reference/hunters_return.json`; player aesthetics and DeSmuME pacing remain open.
 
+**Hunter isolation/owner correction (2026-10-23, v0.32.1 A; high confidence from
+native disassembly and ARM regressions, published with scoped native controls):**
+v0.32's isolated victim test did not establish target-only behavior. The native
+dispatcher loops at 0x020784D4 with the same info at SP+0x8C; changing its kind
+and the nested contact kind without restoration leaks the launch to later
+victims. Its saved argument copies SP+0x80..0x88 are not read after entry and
+are discarded at return. A records originals there per victim, preserves native
+ReceiveHit/credit with the converted kind, then restores at 0x0207866C before the
+next iteration. Skipped victims retain a pointer rather than the 0x20 marker;
+nested dispatch uses independent call frames. The old post-hit observer stays.
+
+The v0.32 update also returned on a different current-player address before
+clearing private state; the 120-update timeout could never advance. Real room
+captures show actor replacement. A first recognizes the native player type and
+clears a departed owner without reading its old address, then runs the old
+guarded update. The 324-byte adapter fits the previous image's zero tail: no new
+autoload allocation, asset/motion/purchase/save changes or old-generator edits.
+These findings supersede the earlier multi-victim/reallocated-player cleanup
+assumptions; preserve v0.32 and its limited evidence as published. Canonical/
+normal/published v0.32.1 match. The native reload control fails on the parent and
+passes with cleanup plus another real button-driven activation. Native crowd
+control preserves normal bystander knockdown; this alignment also passes on the
+parent, so the target-first multi-victim regression is specifically the ARM
+proof. Detailed fixtures and limits are in `reference/hunters_return_fix.json`.
+
 `kit_choreography.Clip` channels are keyed per sample: root (pelvis position),
 yaw/pitch/roll (full flips/spins; pitch + = forward), spine, head, chest-relative
 hand targets, pelvis-relative foot targets (or `plant_*` world ankles), knee/elbow

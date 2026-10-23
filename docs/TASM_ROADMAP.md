@@ -16,8 +16,9 @@ lead. The 2026-10-23 request activates the first 2099 Black-slot skill,
 Hunter's Return, plus a fuller Spider-Verse physique. The other six proposed
 Black moves, prices, third suits and campaign expansion remain deferred.
 
-The current release is **v0.32.0**: purchased Hunter's Return and a fuller
-cape-free 2099 body. Both are agent-qualified and await the player's verdict.
+The current release is **v0.32.1**: purchased Hunter's Return and a fuller
+cape-free 2099 body. Both await the player's verdict. v0.32.1 corrects shared-hit isolation and
+new-player cleanup without changing the artwork or motion.
 The inherited Vortex is a cocoon-only tethered
 catapult/slam, the Conductor has a larger symbiote war-machine body and one boss
 meter, and low-HP Vitality damage is corrected. The player's liked boss combat
@@ -28,6 +29,7 @@ actual DeSmuME pacing.
 
 | Player evidence | Decision that still matters | Later implementation / limit |
 |---|---|---|
+| 2026-10-23: approve both Hunter's Return review fixes | Isolate shared victim records and clear a departed player's move when the actor is replaced. Preserve the approved skill/model scope. | v0.32.1 corrects both with ARM regressions and labelled native controls. The artwork and private motion remain exact; player feel verdict remains open. |
 | 2026-10-23: add the first 2099 skill and make his model a bit more muscular like Spider-Verse | Implement Hunter's Return in the existing Webbed Fury purchase and broaden the current mesh. Keep other Black proposals deferred. | v0.32.0 implements and agent-tests the move and fuller physique. Player feel/appearance verdict remains open. |
 | 2026-10-22: Vortex is boring; keep it conditional on regular-web/Dragnet cocoons. Boss fights well but needs larger symbiote metal war-machine anatomy, one boss bar, and a low-HP damage fix. | Rework Vortex inside its existing paid row; preserve liked boss combat; separate a shared Vitality clamp defect from boss behavior. | v0.31.0 ships the tether catapult/slam, larger articulated armor, boss-only texture and raw-damage fix; native boss timings/AI remain. Agent qualification is in TASKS; player feel/appearance acceptance remains open. |
 | v0.30.2 Terminal enemies were white while the 2099 player rendered | Restore the custom enemy texture bindings in the crowded scene while retaining artwork and geometry. | v0.30.3 I4 atlas binds all three observed enemy materials. One qualified scene, not all-room or player-acceptance evidence. |
@@ -167,7 +169,7 @@ and scope are in `reference/spider2099_enemy_texture.json` and
 `reference/spider2099_movie.json`.
 
 
-**Hunter's Return is implemented and agent-tested in v0.32.0.** Its existing
+**Hunter's Return is implemented in v0.32.0 and corrected in v0.32.1.** Its existing
 Webbed Fury 100 XP purchase remains; release A after the dash hit, then tap A for
 native eligible recall and a rising rake. Native-unrecallable targets receive
 a short physical attempt. R cancels, and B remains manual. The fuller model

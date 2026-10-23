@@ -4,12 +4,13 @@ Private USA CS5E research. ROMs/extracted assets/builds/saves stay private.
 
 **Play:** `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
 The agent handles the stable ROM, releases and progress backups.
-Current release: **v0.32.0**. 2099's first skill is Hunter's Return, in the
+Current release: **v0.32.1**. 2099's first skill is Hunter's Return, in the
 existing Webbed Fury purchase slot: after a ground dash hits, release A and tap
 A again for recall into a rising talon rake; R cancels. Native-resistant targets
 get a short physical pursuit attempt. His cape-free model has fuller chest,
 shoulders and arms. Earlier Red kit/chapter/boss/Vitality work remains.
-Player feel and appearance preference are still open.
+The v0.32.1 correction isolates launches per victim and clears a departed
+player's move after room reloads. Player feel and appearance preference remain open.
 Details: [Changes](docs/CHANGES.md). Next priorities: [Roadmap](docs/TASM_ROADMAP.md#recommended-build-order).
 
 ## Find what you need

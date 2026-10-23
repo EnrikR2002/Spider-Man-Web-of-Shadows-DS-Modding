@@ -1,65 +1,62 @@
 # Current work and handoff
 
-Updated 2026-10-23 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
-workflow; TECHNICAL owns contracts; CHANGES owns releases; TASM_ROADMAP owns design.
+Updated 2026-10-23 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns workflow;
+TECHNICAL owns contracts; CHANGES owns releases; TASM_ROADMAP owns design.
 
 ## Current objective and player direction
 
-The requested first 2099 skill and fuller Spider-Verse physique are implemented
-and agent-qualified in v0.32.0. Hunter's Return uses the existing Webbed Fury
-purchase: after a ground dash hits, release A and tap A again. Eligible targets
-are recalled into a rising talon rake; native-unrecallable targets get a short
-physical pursuit attempt. R cancels; B remains a manual jump. Already-owned
-progress remains owned. The native 100 XP price, event 329 / bit 20 and refund rules
-remain. Other six proposed Black moves are deferred; no new shop/save system.
+Both Hunter's Return review findings are corrected in v0.32.1. Per-victim hit
+restoration prevents a selected target's launch from leaking into shared hit
+records. New player allocation clears a departed owner's private phase so the
+move remains available after reload. Native hit credit and damage arguments
+remain intact; 324 bytes fit the existing zero tail with no heap/autoload growth.
 
-2099 has fuller chest/back, shoulders, biceps and forearms, retaining his
-cape-free texture, 37-node rig, native height/pivots and 516 triangles. Red's
-geometry/texture and previous kit/chapter/boss/Vitality work remain.
-Player feel and physique acceptance are open.
+2099's controls remain: after a ground dash hits, release A and tap A again for
+eligible recall into a rising rake; native-unrecallable foes get a short physical
+attempt. R cancels; B remains manual. The existing Webbed Fury 100 XP purchase,
+event 329 / bit 20 and owned/refund progress stay. His fuller cape-free chest/arms,
+37-node rig, texture and 516 triangles are unchanged from v0.32. Other six
+proposed Black moves remain deferred.
 
-Red retains one combined TASM1/2 kit; Overclock/Dragnet/Vortex are its final added
-skills. Preserve native abilities, ownership/dependencies, Both Suits traversal,
-story gates and earned rewards. Prices, third suit and other campaign branches
-remain deferred. Earlier environment acceptance does not accept all enemy art.
+Red retains the combined TASM1/2 kit; Overclock/Dragnet/Vortex are its final added
+skills. Native abilities, dependencies, Both Suits traversal, story gates and
+earned rewards stay. No new prices, third suit, shop/save expansion or campaign
+branch is active. Player feel and appearance acceptance remain open.
 
 ## Published build and save
 
-Stable build/Spider-Man-WoS-modded.nds is **v0.32.0**, published through
-tools/playtest.py build. Accepted B, canonical final, normal-source rebuild,
-publisher candidate and installed stable match. Boot/Options agree. Full scope,
-pins, recipe and evidence are in reference/hunters_return.json; CHANGES and
-releases.json record publication. Previous ROM/recipe/build metadata are retained.
+Stable build/Spider-Man-WoS-modded.nds is **v0.32.1**, installed through
+tools/playtest.py build. Accepted A, canonical final, normal-source rebuild,
+publisher candidate and stable match; boot/Options agree. Full exact scope,
+source hashes and evidence are in reference/hunters_return_fix.json. CHANGES
+and releases.json record publication. Prior ROM/recipe/build metadata remain.
 
-The player saved and closed DeSmuME before publication. The latest actual DSV
-wrapper, 512-byte payload and new publication checkpoint match exactly; clean
-original is intact. Fresh Continue from the newly saved copy retains abilities,
-XP, initial HP and checkpoint. No research save was adopted. Older battery
-hashes remain historical observations, never restore instructions.
+The actual latest DSV wrapper, 512-byte payload and publication checkpoint match
+exactly. Clean original is unchanged and no research save was adopted. Never
+restore a historical battery hash. All testing uses private copies/volatile RAM.
+Fresh installed-ROM Continue retains current purchases, XP, HP and checkpoint.
 
 ## Implemented and agent-tested
 
-Native recall/rake/launch and mirrored physical fallback run through real
-contacts. Twelve focused cases cover ownership, Red, whiff, held/optional A,
-R/hurt/form/stale exits and left-wall contact. Native R and other abilities stay
-available; traversal inputs are not redirected. The 50 source/regression checks
-include ARM ABI/flags, pointer/room/form guards, private animation routing,
-purchase/32KiB-kit/resource isolation and research-output safety.
+All 59 source/regression tests pass. New checks cover both victim orders, shared
+info/contact records, native credit before restoration, skipped/ignored hits,
+nested calls, ARM ABI/flags, replaced players in both forms, reactivation, three
+hook destinations and byte scope. The 32 KiB player kit, all assets/motion/XBDs,
+rooms/audio, purchases, ARM7 and other NitroFS files match v0.32.
 
-The live Conductor receives 12 damaging physical follow-ups and no forced launch.
-That resistance study heals the player and resets only the disposable boss flag;
-it is not a balance/victory claim. The current copied-save Terminal scene keeps
-the hero I8 and both observed enemy species I4 bound across 218 crowded samples;
-no third actor was observed. Native-scale pull/rake/launch, physical rake,
-crowded hurt and shop text/owned checkmark were inspected. The same texture
-footprint/triangle count is preserved. Earlier failed fixture assumptions and
-their corrected scope are retained in the receipt.
+Native crowd control damages both opponents, launches the selected target and
+keeps the bystander in normal knockdown. It uses temporary NPC eligibility,
+one-time bystander placement and an idle prefix; no balance claim. That alignment
+also passes on v0.32: the target-first leak is established by the ARM regression.
+The parent native reload control keeps the old phase and cannot reactivate;
+the corrected build clears it and activates again on the new player. Arrival
+and stale-owner injection are explicit fixtures. Red/unowned, R and stale-target
+controls pass. Earlier ineffective fixture timings remain documented in receipt.
 
 ## Next exact action and remaining gates
 
-Use the normal launcher, switch to 2099/Black with L and review Hunter's Return
-and the fuller physique. Player feel/appearance, full-route balance and actual
-DeSmuME pacing remain open. Iterate this first move before requesting another
-proposal. No additional 2099 move is queued for automatic implementation.
+Use the normal launcher to play the correction and review Hunter's Return/physique.
+Player feel/appearance, full-route balance and actual DeSmuME pacing stay open.
+Other 2099 proposals require a new request; no further move is queued.
 
 Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.

@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Mechanics proposed for th
 TASM rebuild are in [TASM_ROADMAP](TASM_ROADMAP.md); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.32.0. Each section records behavior,
+The latest numbered release below is v0.32.1. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in TASM_ROADMAP/TASKS.
@@ -18,6 +18,32 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.32.1 - 2026-10-23 - Isolate Hunter hits and reset replaced owners
+
+Hunter's Return now restores both shared hit-type fields after a victim's native
+ReceiveHit and hit credit finish, before the dispatcher advances to another
+victim. Only the selected target receives the launch override. Skipped/ignored
+victims and nested dispatches are covered. A current player allocated at a new
+address also clears a departed owner's private phase, so room reloads cannot
+leave the move locked out. Native movement, damage arguments and hit credit stay.
+
+The 324-byte correction occupies the previous image's unused tail. There is no
+new heap/autoload reservation. Models, textures, private motion, other actors,
+rooms/audio, purchases, save format and the 32 KiB kit match v0.32; only two version
+strings, three branches and the correction code change. v0.32 remains immutable.
+
+**Qualification.** All 59 source/regression checks pass, including target-first/
+last shared records, nested/ignored/skipped hits, ABI/flags, new-player cleanup,
+reactivation and exact scope. Native crowd control damages both opponents,
+launches the selected target and leaves the bystander in normal knockdown.
+That particular alignment also passes on the parent; the shared-record leak is
+proved by the ARM regression. The old build fails native reload/reactivation;
+the correction passes. Red/unowned, R and stale-target controls pass. Arrival,
+NPC eligibility/bystander setup and stale-owner injections are labelled private
+fixtures. Accepted/canonical/normal/publisher/stable ROMs, boot/Options and latest
+DSV/checkpoint bytes agree. Details: `reference/hunters_return_fix.json`.
+No research save was adopted. Full-route balance and DeSmuME pacing remain open.
 
 ## v0.32.0 - 2026-10-23 - Hunter's Return and fuller 2099 physique
 

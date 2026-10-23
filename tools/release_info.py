@@ -284,6 +284,12 @@ PROFILE_INFO['tasm-v0.32.0'] = {
     'arm9_sha256':'dd9c85ba4966bf573dad2f1d19faba34b14e4fab4f901ad7d11f32d99d14d2d2',
     'rom_sha256':'4ab044d0e258e84d195774d4e3ee95a5d22ddc778600986d235490847f00e556',
 }
+PROFILE_INFO['tasm-v0.32.1'] = {
+    **PROFILE_INFO['tasm-v0.32.0'], 'version':'0.32.1', 'date':'2026-10-23',
+    'hunters_return_fix':True,
+    'arm9_sha256':'5e9e566142c9cc58477bd4e3f8c80bb53384e4f8563fb27e7e5c67a0021a41ae',
+    'rom_sha256':'68800726f92ab0d2c9662892f465610b29447cc0b65866f375f22962a2f7b005',
+}
 PROFILES = tuple(PROFILE_INFO)
 HISTORY = Path(__file__).resolve().parents[1] / 'reference/releases.json'
 
