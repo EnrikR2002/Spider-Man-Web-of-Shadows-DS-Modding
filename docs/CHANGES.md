@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Mechanics proposed for th
 TASM rebuild are in [TASM_ROADMAP](TASM_ROADMAP.md); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.30.3. Each section records behavior,
+The latest numbered release below is v0.31.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in TASM_ROADMAP/TASKS.
@@ -18,6 +18,45 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.31.0 - 2026-10-22 - Tether Vortex, armored Conductor and lethal damage
+
+Vortex keeps its existing paid Red row and now requires an actual webbed enemy.
+Web with regular A or Dragnet, release A, then Down+Y: capture up to four nearby
+cocoons, swing their bodies through a continuous two-turn catapult and haul
+them into a floor slam. Bodies can knock nearby enemies down. R/hurt/jump exits
+release the private move. The old Y,Y,Down+Y/seven-strike entry is superseded.
+Motion uses native actor velocity/collision; no position or clock writes ship.
+Native A/B/base strings/evade, purchases and Both Suits abilities remain.
+
+The Conductor is 28% larger, with broad engine-block armor, rib plates, visible
+turbines, piston gauntlets, exhausts and a symbiote split jaw. Its 39 private
+motion routes retain exact rotations/timing and its liked native attack programs,
+HP, AI, voices and collision remain. A compact boss-only 64px RGB555 texture
+also fixes a persistent magenta palette defect reproduced on the old build;
+the shared Terminal I4 atlas and other actors remain exact. The duplicate red
+enemy bar is suppressed only for this boss; the native top meter remains.
+
+Vitality previously scaled old HP minus the already-clamped remainder. Lethal
+hits therefore removed a fraction of remaining HP repeatedly. The corrected
+operand uses full native incoming damage, applies room/Vitality scaling, then
+clamps once. The latest copied-save 1536-Q12 control takes eleven damaging hits
+to die on the old release and one on the corrected build. Vitality still gives
+its intended protection. Ownership, prices, save format, rooms/doors, rewards,
+2099 and the 32KiB kit reserve remain.
+
+**Qualification.** Twenty-six scoped tests include 256 damage combinations,
+ownership/cocoon gates, interrupt/stale-pointer handling and HUD ABI/flags.
+Native regular/Dragnet, mirrored and cancellation examples run; an isolated
+body-contact example hits a real bystander. It parks unwebbed standing enemies
+through frame100 and is not ordinary-play crowd-balance proof. Final composition
+earns Red victory/save with labelled player healing and retains it through fresh
+Continue; an identical-boss/Black-path control earns a no-refill Black win/save.
+Earlier failed crowd interruptions and exact byte-scope reuse are retained.
+Fresh unmodified normal Continue preserves current abilities, XP, HP and save.
+Canonical/normal/published identities, boot/Options, latest DSV/checkpoint bytes
+and clean original agree. Full evidence: `reference/vortex_forge.json`.
+Player feel/appearance acceptance and actual DeSmuME pacing remain open.
 
 ## v0.30.3 - 2026-10-22 - Restore crowded Midnight enemy textures
 

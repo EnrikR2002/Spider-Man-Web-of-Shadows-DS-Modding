@@ -378,6 +378,15 @@ comparison. That v0.30.2 enemy-binding issue is resolved for the sampled Termina
 
 ### Text / UI / rooms / audio
 
+**Boss-only palette rendering defect (2026-10-22; high confidence in copied-save
+v0.30.3 and v0.31 research arena controls):** the Conductor renders persistently
+magenta even without incoming player hits. Both old and newly sculpted meshes
+show it, while the live material reports bound I4/128px. Thus a nonzero bound
+format alone does not prove valid colors, and the v0.30.3 Terminal qualification
+does not cover the boss. A compact boss-only 64px RGB555 texture with halved UVs
+is qualified in v0.31.0 with format7 and actual rendered colors; shared crowd I4 artwork remains unchanged. The precise
+native palette ownership failure is unconfirmed.
+
 English/American STRINGS: hash-bounded Huffman tree plus1,049 UTF-16LE slots
 round-trip; unknown prefix and untouched slot tails survive. Same-slot localized
 names/input/prerequisite edits are supported, other languages unproved. Native
@@ -1624,7 +1633,41 @@ bits 0x10000 Overclock, 0x20000 Dragnet, 0x40000 Vortex (ability bits
   `dragnet`, `dragnetrelease`, `vortex`; four sparring Brutes placed 21,
   30, 38, 46 units ahead and held idle until the web is out.
 
-### Vortex entry and recovery (v0.15.1)
+### Conditional tether Vortex and Conductor armor (v0.31 research)
+
+Source: `vortex_forge.py`, `_art.py`, `.s`, `_lab.py`, exact published v0.30.3
+parent. This supersedes the old four-step Vortex entry below. Ability82 remains
+the same paid Red row. Down+Y in a grounded string/idle or native web hold
+captures at most four fresh common-health actors in actual cocoon state46,
+within30 horizontal/12 vertical units. Regular A and Dragnet share that native
+reaction. An unwebbed, stale or out-of-range target cannot arm it. Native queued
+Y is consumed only after eligibility; Black/unowned behavior falls through.
+Native web-hold entry uses its exact stack epilogue. The armed timestamp lasts
+two native ticks; captured pointers also retain motion/config ownership.
+
+The single19-sample WebSlam route plays an authored continuous two-turn body
+coil and overhead catapult, then a downward haul. Native kind25 launches each
+cocoon; bounded actor X/Y velocities steer the tether arc through native physics
+and collision. No player/enemy coordinate stores or clock writes ship. Native
+kind1F delivers the finish. Actual nearby bystanders can receive body/ground
+impact hits, once per fresh registry slot in each phase. R/hurt/jump or lost
+ownership releases the private move; web actors expire through the existing
+line system. The32KiB kit reserve and paid/native ownership remain; four helper
+entries, the web-hold branch and raw-damage operand are scoped patches, with
+the new adapter/state in one guarded SDK-autoload extension page.
+
+The Conductor alone gains a500-quad engine/armor mesh and1.28x body translation
+scale across all39 private SCA routes. Rotations, sample counts, scale tracks,
+GMB/GAB attack windows, programs, HP/difficulty, voices and native collision
+stay exact. A boss-only64px RGB555 atlas uses8KiB, halved UV coordinates and
+one appended texture group reference; it fixes observed magenta I4 colors in
+this arena. The shared crowd I4 atlas remains exact. A cheap-HUD observer
+filter suppresses only the exact NormalEnemy/private-Conductor config and
+retains its native prologue/flags for all other actors. The top boss meter stays
+native. Agent-tested presentation is distinct from player approval; final
+qualification/publication identity belongs in `reference/vortex_forge.json`.
+
+### Vortex entry and recovery (v0.15.1, superseded by v0.31)
 
 Published `160d01cb` after the player's short/clunky/hard-to-enter feedback.
 Red ability bit82/word2 `0x40000` gates everything. Y,Y,Down+Y starts from
@@ -1662,6 +1705,21 @@ pass. Evidence: `work/kit/v0.15.1/qualification.json` (68 checks),
 `vortexcancel.json`. Revised feel remains a player check.
 
 ### Player health and the top-screen HUD (v0.11.0)
+
+**Confirmed low-HP Vitality defect (2026-10-22, published v0.30.3 source/native
+disassembly):** `0x0205F40C` computes raw remaining HP into r0; r3 is clamped
+to zero before the kit HP-store hook at `0x0205F420`. `k2_damage` incorrectly
+reconstructs damage as old HP minus clamped r3. With a protective multiplier,
+every lethal native hit therefore removes only a fraction of remaining HP,
+creating a geometrically shrinking tail. This is shared player damage, not a
+Conductor-specific shield. A new composition must scale the original damage
+(old HP minus raw r0) and clamp only the final result. Native raw subtraction
+and its stack copies remain intact. The v0.31 raw-operand correction passes
+256 damage combinations (all Vitality levels, four room scales, small/ordinary/
+lethal hits), preserving the native no-Vitality route. A fresh actual-DSV-copy
+standstill control at1536 Q12 HP needs eleven damaging hits to die on v0.30.3;
+the corrected candidate dies on its first actual damaging contact. This is a
+bounded reproduction, not a claim that every native hit must deal the same HP.
 
 - **Health calls.** Spidey's vtable (`0x0212E3F0`) +0x15C `0x0205F388` sets
   health (clamped to 0..max), +0x160 `0x0205F3F0` subtracts damage, +0x170 /

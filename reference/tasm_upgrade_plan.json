@@ -7,7 +7,7 @@
     "resume"
   ],
   "current_recipe": "gameplay_profile.json",
-  "current_release": "0.30.1",
+  "current_release": "0.31.0",
   "current_shared_costs": {
     "Air Dodge": 50,
     "Drill Kick": 100,
@@ -119,11 +119,14 @@
     },
     {
       "ability_bit": 82,
+      "behavior": "Conditional tethered body catapult and floor slam; requires an actual cocoon.",
       "current_cost": 500,
       "current_name": "Vortex",
       "id": "vortex",
+      "input": "Web with regular A or Dragnet; release A, Down+Y; R cancels.",
       "original": null,
-      "status": "implemented"
+      "status": "implemented",
+      "validation": "Agent-qualified v0.31.0; player feel verdict pending. See vortex_forge.json."
     }
   ],
   "historical_snapshot": {

@@ -15,15 +15,17 @@ Overclock, Dragnet and Vortex are the final added Red skills. Fun and spectacle
 lead. The 2026-10-22 request activates the selected 2099 Black-slot rework,
 appearance first; prices, third suits and campaign expansion remain deferred.
 
-The current release is **v0.30.3**. The player's cape-free Across the
-Spider-Verse 2099 appearance remains in Black. This release also packs the shared
-Midnight creature atlas as 128x128 I4; three live enemy materials now bind in the
-crowded Terminal control. Player appearance/kit, native Red/Black gameplay,
-purchases and prior chapter work remain. These implementation checks do not
-establish full-route balance, player visual acceptance or DeSmuME pacing.
+The current release is **v0.31.0**. Vortex is now a cocoon-only tethered
+catapult/slam, the Conductor has a larger symbiote war-machine body and one boss
+meter, and low-HP Vitality damage is corrected. The player's liked boss combat
+programs remain. Cape-free Across the Spider-Verse 2099 and the compact Terminal
+atlas remain. Native purchases, traversal and chapter progression stay intact.
+Agent qualification does not establish player feel/appearance acceptance or
+actual DeSmuME pacing.
 
 | Player evidence | Decision that still matters | Later implementation / limit |
 |---|---|---|
+| 2026-10-22: Vortex is boring; keep it conditional on regular-web/Dragnet cocoons. Boss fights well but needs larger symbiote metal war-machine anatomy, one boss bar, and a low-HP damage fix. | Rework Vortex inside its existing paid row; preserve liked boss combat; separate a shared Vitality clamp defect from boss behavior. | v0.31.0 ships the tether catapult/slam, larger articulated armor, boss-only texture and raw-damage fix; native boss timings/AI remain. Agent qualification is in TASKS; player feel/appearance acceptance remains open. |
 | v0.30.2 Terminal enemies were white while the 2099 player rendered | Restore the custom enemy texture bindings in the crowded scene while retaining artwork and geometry. | v0.30.3 I4 atlas binds all three observed enemy materials. One qualified scene, not all-room or player-acceptance evidence. |
 | v0.30.1 appearance liked overall; latest supplied Across the Spider-Verse image; remove the red web cape | Use the movie's navy/red mask, angular chest spider and shoulder panels; remove cape geometry rather than hiding it. | v0.30.2 implements and agent-tests this appearance. Player visual acceptance is still open. At v0.30.2, Terminal enemies remained unbound; v0.30.3 resolves the sampled crowd. |
 | v0.30 appearance is a good start, but cape and forearm blades look bad; correct placement and add Spider-Verse-like muscle | Prioritize the web cape, surface-mounted blades and a stronger upper-body silhouette before combat implementation. | 0.30.1 E ships actual shared-mesh selection, a larger crimson web and balanced muscle volume; the player's new visual verdict is open. |
@@ -61,14 +63,16 @@ The current move/price catalog is [suit metadata](../reference/suit_roadmap.json
 and [upgrade metadata](../reference/tasm_upgrade_plan.json). Prices are retained,
 with balance tuning deferred.
 
-Vortex has the v0.15.1 directional entry: Y, Y, Down+Y, then release Down and
-continue Y. Pause/Dragnet entries remain. Its longer string and R resume are
-agent-tested; the revised feel is not player-confirmed. Further move work should
-improve continuity, targeting and exits within the existing kit.
+The v0.15.1 seven-contact Vortex was rejected as boring on2026-10-22. Its
+replacement uses Down+Y with an actually webbed nearby enemy (regular A or
+Dragnet), then one continuous tethered catapult and floor slam; R can cancel.
+Keep the same paid Red row and the original A/B/base strings/evade. Current
+candidate qualification is in TASKS; its new feel needs a player verdict.
 
 ## Recommended build order
 
-The requested 2099 appearance and Black-kit discussion are the current priority.
+The three Vortex/boss/health fixes requested on2026-10-22 take priority. The
+2099 appearance and deferred Black-kit discussion retain their previous scope.
 The chapter reviews below remain player gates when campaign iteration resumes.
 
 The three requested follow-ups now ship in v0.29. Use its published route as

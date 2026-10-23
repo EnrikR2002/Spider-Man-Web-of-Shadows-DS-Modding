@@ -4,12 +4,12 @@ Private USA CS5E research. ROMs/extracted assets/builds/saves stay private.
 
 **Play:** `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
 The agent handles the stable ROM, releases and progress backups.
-Current release: **v0.30.3**, with the cape-free Spider-Man 2099 Black slot,
-plus a compact shared-creature atlas that binds the previously white enemies in
-the crowded Midnight Terminal scene. The atlas keeps its 128x128 UVs and artwork
-with 16 colors. Press L to switch suits. Native Black gameplay/purchases remain.
-All v0.29 chapter/kit fixes stay. The crowd scene is agent-qualified; full-route
-balance, player visual preference and DeSmuME pacing await review.
+Current release: **v0.31.0**. Vortex now requires a webbed enemy: web with A
+or Dragnet, release A, then Down+Y for a tethered catapult and slam; R cancels.
+The Conductor has larger symbiote machinery armor and only its top boss meter.
+Vitality correctly handles lethal damage at low HP. Cape-free 2099, the compact
+Terminal creature atlas and earlier chapter/kit work remain. Player feel and
+appearance preference are still open.
 Details: [Changes](docs/CHANGES.md). Next priorities: [Roadmap](docs/TASM_ROADMAP.md#recommended-build-order).
 
 ## Find what you need

@@ -1,0 +1,289 @@
+{
+  "accepted_candidate": "build\\version-0.31.0-f\\Versioned.nds",
+  "arm9_sha256": "e56fe38249c22f776ac655fc97c93ec548eae5ffaba9da694c6bdb7a33cc56c5",
+  "boss": {
+    "black_control": "Current-owned E no-heal win/save.",
+    "black_victory": "work\\vortex-forge\\e-boss-black\\walk-conductor-black-save-efb.json",
+    "fresh_continue": "work\\vortex-forge\\f-boss-red\\earned-continue.json",
+    "red_control": "Current-owned with player healing; enemy HP and native victory/save remain earned.",
+    "red_victory": "work\\vortex-forge\\f-boss-red\\walk-conductor-red-save-ffr.json",
+    "visual": "work/vortex-forge/e-visual/result.json"
+  },
+  "canonical": "build\\version-0.31.0-final\\Versioned.nds",
+  "composition": {
+    "added_resources": [
+      "zz_V31_align.bin",
+      "zz_V31_Conductor.nsbtx"
+    ],
+    "arm9_sha256": "e56fe38249c22f776ac655fc97c93ec548eae5ffaba9da694c6bdb7a33cc56c5",
+    "conductor_model": {
+      "direction": "symbiote foundry war machine: turbines, piston gauntlets, rib armor, exhausts and split jaw",
+      "quads": 500,
+      "scale": 1.28,
+      "shared_texture": "Forge128",
+      "stored_matrices": 18,
+      "vertices": 2000
+    },
+    "conductor_motion_count": 39,
+    "conductor_motion_scale": 1.28,
+    "conductor_texture": {
+      "dimensions": [
+        64,
+        64
+      ],
+      "format": 7,
+      "pixel_bytes": 8192,
+      "shared_creature_atlas_unchanged": true
+    },
+    "health_fix": "Scale old HP minus raw native remaining r0, then clamp once.",
+    "modified_resources": [
+      "American.strings",
+      "English.strings",
+      "GlobFiles.txt",
+      "model_sheet.xbd",
+      "zz_kit_WebSlam.sca",
+      "zz_F22_conductor.nsbmd",
+      "zz_F22_conductor_brt_BlockIdle.sca",
+      "zz_F22_conductor_brt_BlockImpact.sca",
+      "zz_F22_conductor_brt_BreakingOutOfGrapple.sca",
+      "zz_F22_conductor_brt_Die.sca",
+      "zz_F22_conductor_brt_DropDownAttack.sca",
+      "zz_F22_conductor_brt_Fall.sca",
+      "zz_F22_conductor_brt_GrappledByWeb.sca",
+      "zz_F22_conductor_brt_GrappledByWebAlt1.sca",
+      "zz_F22_conductor_brt_GroundAttack1.sca",
+      "zz_F22_conductor_brt_GroundAttack2.sca",
+      "zz_F22_conductor_brt_GroundRangedAttack1.sca",
+      "zz_F22_conductor_brt_HammerSlamLand.sca",
+      "zz_F22_conductor_brt_HurtAirHitA.sca",
+      "zz_F22_conductor_brt_HurtAirHitB.sca",
+      "zz_F22_conductor_brt_HurtFall.sca",
+      "zz_F22_conductor_brt_HurtHitA.sca",
+      "zz_F22_conductor_brt_HurtHitB.sca",
+      "zz_F22_conductor_brt_HurtKnockBack.sca",
+      "zz_F22_conductor_brt_HurtKnockBackFast.sca",
+      "zz_F22_conductor_brt_HurtKnockDown.sca",
+      "zz_F22_conductor_brt_HurtKnockFowardFast.sca",
+      "zz_F22_conductor_brt_HurtKnockUp.sca",
+      "zz_F22_conductor_brt_HurtLand.sca",
+      "zz_F22_conductor_brt_HurtLandFaceToBack.sca",
+      "zz_F22_conductor_brt_HurtLandGetUp.sca",
+      "zz_F22_conductor_brt_HurtLandGetUpAttack1.sca",
+      "zz_F22_conductor_brt_HurtLandHit.sca",
+      "zz_F22_conductor_brt_HurtLandTumble.sca",
+      "zz_F22_conductor_brt_Idle.sca",
+      "zz_F22_conductor_brt_Jump.sca",
+      "zz_F22_conductor_brt_JumpPrep.sca",
+      "zz_F22_conductor_brt_JumpStartForward.sca",
+      "zz_F22_conductor_brt_JumpStartUp.sca",
+      "zz_F22_conductor_brt_Land.sca",
+      "zz_F22_conductor_brt_NoticeSpidey.sca",
+      "zz_F22_conductor_brt_Run.sca",
+      "zz_F22_conductor_brt_RunAttack.sca",
+      "zz_F22_conductor_brt_ThrowObject.sca",
+      "zz_F22_conductor_brt_Walk.sca"
+    ],
+    "native_boss_attacks_and_collision_preserved": true,
+    "parent_sha256": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c",
+    "patches": [
+      {
+        "address": 34957256,
+        "old": 3912056880,
+        "target": 35048224
+      },
+      {
+        "address": 34956944,
+        "old": 3912057072,
+        "target": 35048228
+      },
+      {
+        "address": 34957608,
+        "old": 3912057840,
+        "target": 35048232
+      },
+      {
+        "address": 34937120,
+        "old": 3912060940,
+        "target": 35048236
+      },
+      {
+        "address": 34299952,
+        "target": 35048240
+      },
+      {
+        "address": 34953708,
+        "new": 3763421184,
+        "old": 3763421187
+      }
+    ],
+    "player_kit_reserve": 32768,
+    "rom_sha256": "ce6dd4e6afc8b188447cef5a07b76f58a2b2d0b25e7e829ea83adb70b362cade",
+    "rooms_audio_purchases_save_format_preserved": true,
+    "runtime": {
+      "bytes": 1816,
+      "entry": 35048224,
+      "start": 35047968,
+      "state": 35047968,
+      "symbols": {
+        "h_yank": 34956688,
+        "k2_damage": 34953704,
+        "k2_owned": 34952400,
+        "web_hit": 34955632,
+        "web_line": 34955304,
+        "web_node": 34956944,
+        "web_try": 34957256,
+        "web_update": 34957608
+      }
+    },
+    "version": "0.31.0",
+    "vortex": "Owned Red Down+Y captures up to four actual native webbed targets; continuous velocity-driven catapult and slam; R interrupts."
+  },
+  "current_owned_profile": "work/vortex-forge/owned/owned-player-profile.json",
+  "date": "2026-10-22",
+  "e_to_final_scope": {
+    "all_resources_exact": true,
+    "kit_hp_operand_and_boss_combat_exact": true,
+    "only_differing_arm9_bytes": "New Vortex adapter page; floor-yank velocity and bystander contact phases only. Current F assembly/ownership/HUD/interrupt tests and direct Dragnet/cancel/regular-body controls rerun."
+  },
+  "final_identity": {
+    "accepted_canonical_normal_publisher_stable_match": true,
+    "actual_wrapper_payload_checkpoint_exact": true,
+    "boot_options_match": true,
+    "clean_original_unchanged": true
+  },
+  "fresh_unmodified_continue": "work/vortex-forge/final-native-continue/owned-player-profile.json",
+  "gates": {
+    "e-bare": {
+      "passed": true,
+      "path": "work\\vortex-forge\\e-bare\\result.json",
+      "rom_sha256": "d8cce74e287eee41e8f888b2909d9b1238c653590cc5accc014b4b6db66bc4f7"
+    },
+    "e-black": {
+      "passed": true,
+      "path": "work\\vortex-forge\\e-black\\result.json",
+      "rom_sha256": "d8cce74e287eee41e8f888b2909d9b1238c653590cc5accc014b4b6db66bc4f7"
+    },
+    "e-mirror": {
+      "passed": true,
+      "path": "work\\vortex-forge\\e-mirror\\result.json",
+      "rom_sha256": "d8cce74e287eee41e8f888b2909d9b1238c653590cc5accc014b4b6db66bc4f7"
+    },
+    "e-unowned": {
+      "passed": true,
+      "path": "work\\vortex-forge\\e-unowned\\result.json",
+      "rom_sha256": "d8cce74e287eee41e8f888b2909d9b1238c653590cc5accc014b4b6db66bc4f7"
+    },
+    "e-visual": {
+      "passed": true,
+      "path": "work\\vortex-forge\\e-visual\\result.json",
+      "rom_sha256": "d8cce74e287eee41e8f888b2909d9b1238c653590cc5accc014b4b6db66bc4f7"
+    },
+    "f-body-isolated": {
+      "passed": true,
+      "path": "work\\vortex-forge\\f-body-isolated\\result.json",
+      "rom_sha256": "ce6dd4e6afc8b188447cef5a07b76f58a2b2d0b25e7e829ea83adb70b362cade"
+    },
+    "f-cancel": {
+      "passed": true,
+      "path": "work\\vortex-forge\\f-cancel\\result.json",
+      "rom_sha256": "ce6dd4e6afc8b188447cef5a07b76f58a2b2d0b25e7e829ea83adb70b362cade"
+    },
+    "f-dragnet": {
+      "passed": true,
+      "path": "work\\vortex-forge\\f-dragnet\\result.json",
+      "rom_sha256": "ce6dd4e6afc8b188447cef5a07b76f58a2b2d0b25e7e829ea83adb70b362cade"
+    }
+  },
+  "health": {
+    "candidate": "work/vortex-forge/e-lowview/result.json",
+    "candidate_after_hits": [
+      0
+    ],
+    "initial_q12": 1536,
+    "parent": "work/vortex-forge/parent-low2/result.json",
+    "parent_after_hits": [
+      660,
+      284,
+      123,
+      53,
+      23,
+      10,
+      5,
+      3,
+      2,
+      1,
+      0
+    ]
+  },
+  "implementation_source_sha256": {
+    "mod.py": "c1f541f51fce66345f2c615a7e4922c0c4acd6f3a27e44ad955a326cba3c7c9d",
+    "tools\\release_info.py": "99e0d69956d0c80a6315483773a31dc796ce769f8dd8ec65756ba18c12fa0c6a",
+    "tools\\vortex_forge.py": "51873394512d6ffe0e08977bf20153bb5d7224ca4ec2099e3eaef16b64f3e591",
+    "tools\\vortex_forge.s": "da2c778f11628596e051cd72e0cd28cfd9ccef80528cfeb49c0ac9277a7ca4b6",
+    "tools\\vortex_forge_art.py": "6f8577ec734483b8fde3fcfedfc8d038a387a8830946072f1a4ed93abb06af8a",
+    "tools\\vortex_forge_lab.py": "753e01895431c059eb77049086f1781dbca3148c9de55bff1782c1b2ece2b9d3"
+  },
+  "limits": [
+    "Bystander isolation parks only unwebbed standing enemies through frame100; natural crowded attempts were interrupted and are retained, not treated as guaranteed clears.",
+    "Initial room/ownership/HP fixtures remain labelled. Agent execution/presentation are distinct from player feel and actual DeSmuME pacing.",
+    "No rooms/doors changed; existing directed-door qualification retained with exact resource scope."
+  ],
+  "native_texts": {
+    "American.strings": {
+      "1066": "Web an enemy with \ue602 or Dragnet.\nDown + \ue601: tether catapult + slam.\n\ue604 cancels. Needs a webbed enemy.",
+      "50": "TASM v0.31.0\nPress a button to start",
+      "74": "Options v0.31.0"
+    },
+    "English.strings": {
+      "1066": "Web an enemy with \ue602 or Dragnet.\nDown + \ue601: tether catapult + slam.\n\ue604 cancels. Needs a webbed enemy.",
+      "50": "TASM v0.31.0\nPress a button to start",
+      "74": "Options v0.31.0"
+    }
+  },
+  "native_visual_review": {
+    "conductor": "build/version-0.31.0-final/conductor-native.png",
+    "review": "Final F gameplay frames reviewed at native scale; authored motion, physical body contact, armored anatomy and top-only boss HUD observed.",
+    "vortex": "build/version-0.31.0-final/vortex-native.png"
+  },
+  "normal_source_rebuild": "build\\version-0.31.0-normal\\Versioned.nds",
+  "parent_rom_sha256": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c",
+  "publication": {
+    "battery_checkpoint": "before-build-dsv-b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+    "battery_sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+    "previous_rom_sha256": "4a282d637be8bb277dbf8a36c86a6dc9ff69820ca377d6cb1b8abc406816472c",
+    "rom_sha256": "ce6dd4e6afc8b188447cef5a07b76f58a2b2d0b25e7e829ea83adb70b362cade",
+    "schema_version": 1,
+    "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+    "version": "0.31.0"
+  },
+  "retained_failed_probes": [
+    "work/vortex-forge/e-bystander/result.json",
+    "work/vortex-forge/f-bystander/result.json",
+    "work/vortex-forge/f-bystander-early/result.json"
+  ],
+  "rom_sha256": "ce6dd4e6afc8b188447cef5a07b76f58a2b2d0b25e7e829ea83adb70b362cade",
+  "schema_version": 1,
+  "scope": "work/vortex-forge/f-scope/scope.json",
+  "source_battery": {
+    "footer_words": [
+      1,
+      512,
+      1,
+      1,
+      512,
+      0
+    ],
+    "path": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+    "payload_sha256": "ad97e262189a8f3e1f494b1c85b43404985d7199a46141bfb166e82286eb2c89",
+    "sha256": "b800c4ec48cd9f8f1f20a38e92272fe15f9cdceb28b2500a1ba2b79be18eb8a0",
+    "size": 634
+  },
+  "stable_build_metadata_sha256": "deeb259cccc65c0980db936c70dc5d8b9e5fc69d0b07fcbddb8720153f632989",
+  "status": "published",
+  "tests": {
+    "damage_matrix_cases": 256,
+    "passed": 26,
+    "report": "work/vortex-forge/tests-final.log"
+  },
+  "version": "0.31.0"
+}
