@@ -1,0 +1,579 @@
+{
+  "build": {
+    "added_resources": [
+      "zz_H34_Yank.sca",
+      "zz_H34_Yank.gmb",
+      "zz_H34_Rake.sca",
+      "zz_H34_Rake.gmb"
+    ],
+    "arm9_sha256": "c487ea0dfd4f0312e9e6ecd49a41522ed2e676461f9126619069f3b8ca239aaa",
+    "close_samples": 12,
+    "modified_resources": [
+      "American.strings",
+      "English.strings",
+      "GlobFiles.txt"
+    ],
+    "native_resources_bindings_rooms_audio_save_format_preserved": true,
+    "nitrofs_relocation_bytes": 51200,
+    "ownership": {
+      "bit": 83,
+      "event": 392,
+      "native_black_rows_exact": true,
+      "price": 300,
+      "price_provisional": true
+    },
+    "parent_sha256": "7081b1287fab93faf8e4ab44475c0e2d22c1dcd2860c6a15f878992837e510aa",
+    "player_kit_32k_unchanged": true,
+    "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+    "runtime": {
+      "allocation_bytes": 4096,
+      "bytes": 2676,
+      "entry": 35056552,
+      "hooks": [
+        {
+          "old": 3912057072,
+          "site": 34304540,
+          "target": 35056552
+        },
+        {
+          "old": 3926015633,
+          "site": 34353636,
+          "target": 35056556
+        },
+        {
+          "old": 3926128487,
+          "site": 34014340,
+          "target": 35056560
+        },
+        {
+          "old": 3926124483,
+          "site": 34028384,
+          "target": 35056564
+        },
+        {
+          "old": 3926057424,
+          "site": 34296628,
+          "target": 35056568
+        },
+        {
+          "old": 3926057659,
+          "site": 34297656,
+          "target": 35056572
+        }
+      ],
+      "shop": 35056288,
+      "start": 35056160,
+      "state": 35056160,
+      "values": {
+        "BOSS_CONFIG": 34972972,
+        "NATIVE_OBJECT": 35056544,
+        "OLD_ANIMATION": 35054120,
+        "OLD_GENERIC": 35054124,
+        "OLD_NODE": 34942000,
+        "OLD_STRING": 35052156,
+        "OLD_UPDATE": 35052148,
+        "SHORT_GMB": 5956,
+        "SHORT_SCA": 5955,
+        "STATE": 35056160,
+        "WEB_HAND": 34955016,
+        "WEB_HIT": 34955632,
+        "WEB_RELEASE": 34955200,
+        "YANK_GAB": 3352,
+        "YANK_GMB": 5954,
+        "YANK_SCA": 5953
+      }
+    },
+    "samples": 24,
+    "text_id": 1138,
+    "version": "0.34.0"
+  },
+  "canonical": "build\\version-0.34.0-final\\Versioned.nds",
+  "controls": {
+    "air": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "no_custom_activation": true
+      },
+      "damage": [],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-air\\result.json",
+      "report_sha256": "2d6f49a7740e0b358410816009fa52ee25c07362c9e6a6a30cce4fbb7b59e718",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 0,
+      "strikes": 0,
+      "yanks": 0
+    },
+    "boss": {
+      "checks": {
+        "actual_boss_hp_loss": true,
+        "boss_never_launched_or_yanked": true,
+        "heavy_zip_used": true,
+        "source_battery_unchanged": true
+      },
+      "drops": [
+        {
+          "frame": 110,
+          "hp": 539348
+        },
+        {
+          "frame": 174,
+          "hp": 535252
+        },
+        {
+          "frame": 460,
+          "hp": 531156
+        },
+        {
+          "frame": 568,
+          "hp": 527060
+        }
+      ],
+      "limits": "Latest actual battery copy and measured current ownership/XP. Initial room arrival, cleared already-earned boss flag147, bit83 and player healing are disposable fixtures. Boss AI, player approach/X/L, movement and actual HP loss are native; no boss state/position/HP fixture, no victory, balance or player-acceptance claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-boss\\result.json",
+      "report_sha256": "8e344b53d404f95c99d7388eb10a92bad6f346ce9f361d735907ad8c87cae220",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67"
+    },
+    "cancel": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "native_r_exit": true,
+        "no_rake_after_interruption": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "damage": [],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-cancel\\result.json",
+      "report_sha256": "24decc99c20eb9ee7f4b2127ce430980c8b9b241605a01b85b6e319693f543fb",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 1,
+      "strikes": 0,
+      "yanks": 0
+    },
+    "close": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "cleanup_complete": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "damage": [
+        {
+          "frame": 73,
+          "hp": 28672
+        }
+      ],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-close\\result.json",
+      "report_sha256": "341b105dc4f2a69c6f626c3b2d982ebe739c3d824b4e61b31789ac7f10d5296f",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 1,
+      "strikes": 1,
+      "yanks": 0
+    },
+    "hold": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "cleanup_complete": true,
+        "native_yank_zip_or_close_strike": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "damage": [
+        {
+          "frame": 99,
+          "hp": 28672
+        }
+      ],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-hold\\result.json",
+      "report_sha256": "508c05abb65797bb0bfa4e32f74154c69109c458529f40cca29993a752139a9a",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 1,
+      "strikes": 1,
+      "yanks": 0
+    },
+    "hurt": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "fixture_applied": true,
+        "no_rake_after_interruption": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "damage": [],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-hurt\\result.json",
+      "report_sha256": "e5729f61e44aed20f1da836e08d7e53c8c98431bde1869d3435a59203d2bbbb5",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 1,
+      "strikes": 0,
+      "yanks": 0
+    },
+    "mirror": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "cleanup_complete": true,
+        "native_yank_zip_or_close_strike": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "damage": [
+        {
+          "frame": 99,
+          "hp": 28672
+        }
+      ],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-mirror\\result.json",
+      "report_sha256": "43746ed295b723f78c1ba2bc372147d907a489a8b8512cdd9566df60d8efcce8",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 1,
+      "strikes": 1,
+      "yanks": 0
+    },
+    "native-lift": {
+      "checks": {
+        "air_y_damages_launched_target": true,
+        "air_y_followup": true,
+        "black_draw_and_texture": true,
+        "manual_b_only": true,
+        "native_collision_bounds": true,
+        "native_hp_loss_and_launch": true,
+        "private_clip_selected": true,
+        "source_battery_unchanged": true
+      },
+      "damage": [
+        {
+          "frame": 71,
+          "hp": 22016
+        },
+        {
+          "frame": 123,
+          "hp": 14848
+        },
+        {
+          "frame": 131,
+          "hp": 7680
+        },
+        {
+          "frame": 145,
+          "hp": 512
+        }
+      ],
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades. Disposable initial form, purchase bit21, positions and idle enemy prefix through70; native AI/contact/damage/reactions afterward. Training healing/immortality apply. No actual save writes or campaign-balance/DeSmuME-pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-native-lift\\result.json",
+      "report_sha256": "27a0f4eab0ddd6bf454af54c07886f9738e48f205874900d583480e1e29fe64d",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67"
+    },
+    "native-return": {
+      "limits": "Latest measured battery copy and ordinary Continue/Test Upgrades; disposable purchase/form, initial positions and idle prefix through70. Training healing/immortality apply. Hurt is a labelled state-only interruption; stale corrupts only private target state. No actual battery writes or campaign-balance claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-native-return\\result.json",
+      "report_sha256": "f46e678a711b8ad38f03b38b349065549c4d51df990ca741f5c36be4a4b30f1c",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "source_battery_unchanged": true,
+      "starts": 1
+    },
+    "red": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "no_custom_activation": true
+      },
+      "damage": [],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-red\\result.json",
+      "report_sha256": "aca67f863ec47ea3a44662c80f52bf62a556d7005010205b0ceb9e9debeeb1b5",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 0,
+      "strikes": 0,
+      "yanks": 0
+    },
+    "regular": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "cleanup_complete": true,
+        "native_yank_zip_or_close_strike": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "damage": [
+        {
+          "frame": 99,
+          "hp": 28672
+        }
+      ],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-regular\\result.json",
+      "report_sha256": "5aa3be111049f8afb9777299d8a8d564aaefc4137390b8d876045d4c58a463c6",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 1,
+      "strikes": 1,
+      "yanks": 0
+    },
+    "shop": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "fresh_continue_keeps_purchase": true,
+        "native_checkpoint_and_hp": true,
+        "native_purchase": true,
+        "native_refund": true,
+        "native_repurchase": true
+      },
+      "limits": "Latest actual DSV copy; ordinary Continue, native shop inputs, refund/repurchase and in-game save. No purchase/XP/room/HP RAM writes; the earned SRAM snapshot stays private in work/. No research save adoption or player-acceptance claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-shop\\result.json",
+      "report_sha256": "e0d9ae2ce808ffa0725c42fe009e42e4de533e088dcfcdee7ca53b91c233c182",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67"
+    },
+    "stale": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "fixture_applied": true,
+        "no_rake_after_interruption": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "damage": [],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-stale\\result.json",
+      "report_sha256": "ba888698362d5086a975170930bdfe729106893f423f4aab3067fa99d1ef39bd",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 1,
+      "strikes": 0,
+      "yanks": 1
+    },
+    "swap": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "no_rake_after_interruption": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "damage": [],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-swap\\result.json",
+      "report_sha256": "e5892e8b38b9e2f68df8192a1e6f4dd9d8859341897930b376b855dad493c287",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 1,
+      "strikes": 0,
+      "yanks": 0
+    },
+    "unowned": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "no_custom_activation": true
+      },
+      "damage": [],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-unowned\\result.json",
+      "report_sha256": "beafde4142b8d386a632f0c204172c419d7fb9d6091d37667b86b38b64787c55",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 0,
+      "strikes": 0,
+      "yanks": 0
+    },
+    "up": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "cleanup_complete": true,
+        "native_yank_zip_or_close_strike": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true,
+        "rake_launches": true
+      },
+      "damage": [
+        {
+          "frame": 99,
+          "hp": 28672
+        }
+      ],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-up\\result.json",
+      "report_sha256": "f22883adc8693185d23f7165f073821172b8162a634eb01f81bdf6324aa69398",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 1,
+      "strikes": 1,
+      "yanks": 0
+    },
+    "whiff": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "no_custom_activation": true
+      },
+      "damage": [],
+      "heavies": 0,
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\hunter-kit\\c-whiff\\result.json",
+      "report_sha256": "dcd34ce9678ed738b19e0a02a34850eaed1205722f5a4dc3846f16f13629ab42",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "starts": 0,
+      "strikes": 0,
+      "yanks": 0
+    }
+  },
+  "implementation_source_hashes": {
+    "mod.py": "fb5bdd69225017c38e21d6825221a05984b56ad5c59a94e1cedd8195674fba17",
+    "tests/test_hunter_kit.py": "d0032ded4db5c9fe09772b166e6dbac50fa5d98fc573bee6192b54a72de410e9",
+    "tools/hunter_kit.py": "33396fd6eb40918ceff3baa855389a71dd663c471778c7e90644a30fc2902f94",
+    "tools/hunter_kit.s": "74b1f46daa5a099bc02d8d59d6893daf2c60e5a1e7fc99bdf257713c6cc74a07",
+    "tools/hunter_kit_art.py": "4343a3f308fa5fddec73de5125648dd101ca1cb87936438f304b0b8561aa9a4e",
+    "tools/hunter_kit_lab.py": "dd00b563885e463193e8eca7dadd6ffdba329ddbde05749e5836c5456cbf6fdf",
+    "tools/release_info.py": "914dce50de3420a6210f93462fb1a7950aceb95cacf5ba3e82a519c424f6cb02"
+  },
+  "limits": [
+    "Only Web Yank of the revision-3 kit is implemented; Hunter's Return and manual-jump Talon Lift remain until their slices qualify.",
+    "Conductor heavy behavior is qualified. Native mini-bosses outside the common-health registry are excluded pending a class adapter.",
+    "Brute mechanics use copied saves, disposable initial positions/purchase bit and an idle-re-entry prefix; training healing applies.",
+    "Conductor arrival, cleared earned flag147, bit83 and player healing are disposable fixtures; boss AI/motion/HP stay native.",
+    "Shop purchase/refund/save/fresh Continue use native inputs without purchase/XP/HP/room RAM writes.",
+    "300 XP is provisional; existing prices are unchanged.",
+    "Player feel, perceptual audio and DeSmuME/hardware pacing remain unconfirmed."
+  ],
+  "normal_source": {
+    "matches_canonical": true,
+    "path": "build\\hunter-0.34.0-normal\\Versioned.nds",
+    "sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb"
+  },
+  "presentation": {
+    "menu_reviewed": true,
+    "mixed_audio_captured": true,
+    "native_frames_reviewed": true,
+    "native_rate_close_rake": "work/hunter-kit/c-close/Close-Rake-native-rate.mp4",
+    "native_rate_web_yank": "work/hunter-kit/c-mirror/Web-Yank-native-rate.mp4",
+    "normal_rate": true,
+    "perceptual_audio_review": false,
+    "player_confirmed": false
+  },
+  "publication": {
+    "battery_payload_checkpoint_exact": true,
+    "battery_wrapper_checkpoint_exact": true,
+    "boot_options": [
+      "TASM v0.34.0\nPress a button to start",
+      "Options v0.34.0",
+      "TASM v0.34.0\nPress a button to start",
+      "Options v0.34.0"
+    ],
+    "clean_original_unchanged": true,
+    "fresh_continue": {
+      "actual_battery_unchanged": true,
+      "no_ram_fixtures": true,
+      "passed": true,
+      "purchases_xp_hp_checkpoint_exact": true,
+      "report": "work\\hunter-kit\\published-continue\\owned-player-profile.json",
+      "report_sha256": "ee27966c755d786b16292fbcf1ddd5092de99cfa3d0d41a880c6a189afae0e0b",
+      "room": 65
+    },
+    "prior_recipe_retained": true,
+    "prior_rom_and_metadata_retained": true,
+    "receipt": {
+      "battery_checkpoint": "before-build-dsv-4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "previous_rom_sha256": "7081b1287fab93faf8e4ab44475c0e2d22c1dcd2860c6a15f878992837e510aa",
+      "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "schema_version": 1,
+      "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+      "version": "0.34.0"
+    },
+    "release_receipt": "build\\releases\\a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb\\release.json",
+    "rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+    "stable_canonical_normal_source_publisher_identical": true,
+    "version": "0.34.0"
+  },
+  "request": {
+    "design": "Hunter revision 3; Web Yank pipeline proof first; remaining slices await player verdict",
+    "primary_branch": "claude/zen-clarke-p0wo8j",
+    "source_commit": "2a93b9b11ef86cc0757366c7fbe3532713ea9754"
+  },
+  "save": {
+    "actual_path": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+    "earned_research_save_adopted": false,
+    "payload_bytes": 512,
+    "payload_sha256": "60522969684b475bc977a2d7c3478928066af9df75577f5c8b50a3bcbdd16835",
+    "prior_recipe": "build\\releases\\7081b1287fab93faf8e4ab44475c0e2d22c1dcd2860c6a15f878992837e510aa\\gameplay_profile.json",
+    "source_unchanged": true,
+    "wrapper_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67"
+  },
+  "schema_version": 1,
+  "status": "published-agent-qualified-player-verdict-open",
+  "tests": {
+    "additional_scope": {
+      "log": "work/hunter-kit/scope-extra.log",
+      "passed": true
+    },
+    "documentation": {
+      "log": "work/hunter-kit/final-doc-tests.log",
+      "passed": true,
+      "tests": 26
+    },
+    "feature": {
+      "log": "work/hunter-kit/feature-final-tests.log",
+      "passed": true,
+      "tests": 15
+    },
+    "full_suite": {
+      "log": "work/hunter-kit/final-tests.log",
+      "passed": true,
+      "tests": 613
+    }
+  },
+  "updated": "2026-10-23",
+  "version": "0.34.0"
+}

@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.33.1. Each section records behavior,
+The latest numbered release below is v0.34.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,36 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.34.0 - 2026-10-23 - 2099 Web Yank
+
+First published slice of the approved Hunter revision-3 kit. **Web Yank** is a
+new independent Black upgrade for 300 XP: ground X ties a scarlet web and yanks
+the nearest enemy ahead into an authored talon rake; Up+X launches at the rake.
+Close targets skip the pull and get a quick authored strike. A resistant target
+draws Miguel toward it through bounded native velocity; the Conductor receives
+a standing strike, with no boss yank or launch. R exits through native evasion.
+Native X prompts take priority; unowned, Red and air X retain native behavior.
+
+The seven original Black rows, other purchases/dependencies, native A/B/base
+strings, frozen 32 KiB kit, original assets/bindings, rooms, audio and save format
+are preserved. Hunter's Return and manual-jump Talon Lift remain until their
+revision-3 slices qualify. The short close rake fixes the prototype's excessive
+wind-up beside an attacking Brute. No free purchase or research save is adopted.
+
+Validation: 613 full-suite tests and 15 focused feature tests pass; canonical,
+normal-source rebuild, publisher candidate and installed bytes match. Seventeen
+copied-save controls cover real HP loss, both facings, launch, close strike,
+ownership/interruption cleanup, the Conductor, native buy/refund/rebuy/save and
+fresh Continue, plus existing Return/Lift regressions. Actual battery wrapper
+and payload match the publication checkpoint; the clean original is unchanged.
+Receipts, fixture limits and native-rate mixed-audio footage:
+`reference/hunter_kit.json`.
+
+Limits: native mini-bosses outside the common-health registry await a class
+adapter. The 300 XP price is provisional. Player feel, perceptual audio and
+DeSmuME/hardware pacing remain unconfirmed; further Hunter slices wait for the
+player's verdict on this one.
 
 ## v0.33.1 - 2026-10-23 - Taller 2099 and neon red webs
 

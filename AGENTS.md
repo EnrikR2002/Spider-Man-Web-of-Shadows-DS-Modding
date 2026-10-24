@@ -3,6 +3,8 @@
 Private Nintendo DS Spider-Man: Web of Shadows research/modding, USA CS5E.
 User instructions override older plans. Never overwrite the clean ROM in
 original/ or externally publish ROMs/extracted copyrighted assets.
+Primary design/policy source: `origin/claude/zen-clarke-p0wo8j`; its decisions
+override conflicting local work (player instruction, 2026-10-23).
 
 ## Start and find the current truth
 
@@ -16,8 +18,7 @@ original/ or externally publish ROMs/extracted copyrighted assets.
    tools/release_info.py, reference/releases.json and the stable ROM metadata.
    Past save hashes are observations, not instructions; always read the actual
    latest battery.
-4. Read only the sections you need. DEVELOPMENT covers the build stack, new
-   features, qualification and publishing. TECHNICAL has a topic map; search
+4. DEVELOPMENT covers builds/validation; TECHNICAL has a topic map. Search
    headings and read bounded sections. Find tools with
    `python tools/tool_index.py <word>`; read `--help` before use.
    Never bulk-read TECHNICAL, CHANGES, catalogs or the archive.

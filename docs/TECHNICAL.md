@@ -17,6 +17,7 @@ objective/build and next action: [TASKS](TASKS.md).
 | Current room envelopes, roofs, shutters and persistence | [Room/contact correction (0.24)](#midnight-enemy-rejection-contact-diagnosis-2026-10-18), [active-route correction (0.28)](#reliability-and-active-route-correction-028-research) | [Chapter spectacle](#chapter-spectacle-implementation-v0230-2026-10-17), [chapter renewal](#chapter-renewal-v0210-2026-10-17), [Crane terrain](#crane-row-terrain-overhaul-v0170-2026-10-15) |
 | Rooms/collision/doors/maps | [Room compiler](#room-compiler-v0120), [collision tree](#room-collision-tree-2026-10-11), [native doors](#native-doors-spawns-and-game-variables) | [Minimap screens](#minimap-screens-and-area-room-lists-v070) |
 | Player kit and native combat | [Player state machine and Red kit hooks](#player-state-machine-and-red-kit-hooks-v020), [animation authoring](#kit-animation-authoring) | Later named kit sections describe extensions; use the current release recipe |
+| Hunter revision-3 X input, Web Yank, Black shop row and heavy approach | [Web Yank](#hunter-revision-3-web-yank-v0340), [input correction](#transitions-states-and-inputs) | Earlier Hunter's Return/Talon Lift remain baseline mechanics until their revision-3 slices qualify |
 | Skyjack velocity correction | [Scoped finish (0.29)](#scoped-movement-and-chapter-finish-v0290) | [Parent audit and unshipped prototypes](#shared-crowd-hit-backend-candidates); the old source/hex still reproduce their historical releases |
 | Binary formats and preservation | [Format boundaries](#format-boundaries-and-confirmed-structures), [SCA/rig contract](#animation-authoring-and-current-evidence) | [Baseline inventory](#rom-baseline-and-inventory) |
 | Emulator/rendering and performance | [Performance and visuals](#performance-and-visuals) | Dated renderer/JIT observations are not current performance guarantees |
@@ -1187,9 +1188,26 @@ input-command queue, `+0x44` actor, `+0x54` target interface (actor+4),
 `+0x64` flags (`0x8000` Scissor repeat; `0x40` set while dodging), `+0x80`
 string node, `+0x8C` evade lock, `+0x90` node keep-alive timer, `+0x93` repeat
 count. Queue commands (`0x020CFF0C` peek / `0x020CFC34` consume): 1 attack (Y),
-2 jump (B), 3 evade (R), 4 object (X), 5 suit action (A; native Webbed Fury control). Ability query: actor vtable `+0x184`
+2 jump (B), 3 evade (R), 4 suit switch (L), 5 suit action (A; native Webbed Fury control),
+6 object (X). Ability query: actor vtable `+0x184`
 (bit) / `[[actor+0xE8]] & (1<<bit)`. Form: actor+0x34 = 1 Black.
 REG_KEYINPUT `0x04000130` gives held D-pad/R on ARM9 (X/Y are ARM7-only).
+
+**Hunter input correction (2026-10-23, v0.33.1; high confidence from native
+disassembly and copied-current-save input/queue observation):** the earlier
+command-4-as-X note was wrong. L enters native state59/action155 through
+`0x020B4C00`; an unhandled real X leaves command6 in the native queue.
+`0x020B721C` checks command6, calls `0x020619FC` to select a liftable into the
+actor+0xC0 weak reference and consumes X only for a successful state82 return.
+Web Yank must defer to native interactions before consuming command6.
+Sources: `work/hunter-kit/native-x.json` and its exact-ROM RAM captures.
+The existing kit's `kit_keys`/held word only reads REG_KEYINPUT; it cannot see
+X/Y. The native pad update at `0x020067F0` ORs that register with ARM7's
+`0x027FFFA8`, inverts mask 0x2FFF, and calls `0x0202294C` on `0x02145A48`.
+That object stores held/previous/new/released u16 keys at +2/+4/+6/+8.
+The copied-save X capture reads held 0x400 and returns to zero on release;
+Y's expected 0x800 is not yet separately observed. The earlier design's
+"held X/Y from kit key words" assumption is superseded by this native pad path.
 
 | State | Meaning (observed) | State | Meaning |
 |---:|---|---:|---|
@@ -1949,6 +1967,67 @@ into a back hop), `web_whip` (57, 17: uncoil into a backhand lash at samples
 arm at 4 and 9), `web_slam` (59, 19: overhead two-handed slam at 4-5; the
 native action carries him about 12 units forward). In-game sheets:
 `work/kit/web5-c.png`, `web5-d.png`.
+
+### Hunter revision-3 Web Yank (v0.34.0)
+
+2026-10-23, published candidate C over exact v0.33.1. High confidence from
+native disassembly, ARM regressions, resource comparisons and copied-save
+mechanics. Publication and final evidence belong in `reference/hunter_kit.json`;
+no player verdict is implied. This implements the authoritative Hunter revision-3
+Web Yank slice, not the retired seven-row guard/air design.
+
+The native Black shop pointer/count at 0x02120178/0x02120190 now selects a
+private copy of the seven exact original records followed by Web Yank, event 392
+/ bit 83 (third-word mask 0x80000). Existing extended event bounds support it;
+the player ability getter still asserts below 73, so runtime ownership reads
+the saved third word directly. Three text slots are appended to both supported
+English resources. The new row costs 300 XP provisionally; existing prices,
+dependencies, ownership and the 512-byte save format stay exact.
+
+Code/state/shop occupy one added 4 KiB autoload page; the frozen 32 KiB kit stays
+byte-identical. Six wrappers chain the published node, animation, update and R
+adapters. Ground object transition 0x020B721C runs its original function first;
+successful native X use wins, and a selected actor+0xC0 object also excludes the
+new move. Only grounded owned Black X (queue command 6, never L's command 4),
+without R, may consume X for a live fighter ahead within 45 horizontal / 8 vertical
+units. Native air X is retained. Real native shop purchase/refund/repurchase and
+save/fresh Continue have been exercised on a copy of the latest actual battery.
+
+The move uses native state 46/action 49 as a shell. Its private SCA/GMB routes
+never change original action resources or XBD/m6 bindings. Newly authored motion
+uses 24 samples for cast/heave/rake, or 12 for an initially close target (under 13
+units). GMBs retain corresponding initial idle collision records; the native
+heave GAB supplies no offensive hit. The short branch exists because B's long
+wind-up let a real close Brute interrupt before the rake; C's authored rake
+contacts at sample 5, rather than long sample 18, and recovers at 11/23.
+
+At long sample 4 a private scarlet native WebLine is tied to the actual target,
+then zero-damage native kind 0x21 requests its yank. A taken result 4 permits the
+native flight; result 1 selects the heavy approach. The Conductor is explicitly
+heavy before any yank. Heavy motion writes only Miguel's X velocity, bounded
+to 2 units/update and stopping 6 units away; the boss is never moved or launched.
+Actual target distance gates the one rake (10 horizontal / 8 vertical units):
+kind 0x04, or Up+X kind 0x25 on a susceptible target, with a separate 4096-Q12
+HP argument. Native yank settles victims 6..10 units ahead: the first 8-unit rake
+missed at 8.8, so C uses the observed 10-unit envelope. Native protection still
+decides whether a hit lands; no area hit, HP restoration or built-hit chain is added.
+
+Private intrusive weak references track target and line. The registry must still
+see the target; motion/config identity, motion ownership, current hero/controller,
+form, HP, room and action must agree. R enters the existing native evade path;
+hurt/death, switch, replacement, stale/dead target and room changes retract and
+unlink. No old hero pointer is dereferenced on player replacement. The line
+follows the real target and updates from the hero's native hand anchor.
+
+Lab corrections: Test Upgrades contains four live fighters. Placing only three
+left an unplaced fourth in range. Even an idle-re-entry prefix can retain AI
+movement; a 65-unit initial gap closed below 45 before X, invalidating that
+whiff control. The current lab places all four and starts the whiff farther away.
+Actual flag 147 is earned in the latest battery; the Conductor fixture clears it
+before room init in disposable RAM, never in the real save. These fixture
+failures remain in `work/hunter-kit/`; they are not successful qualifications.
+Native-size frames and normal-rate mixed-audio captures are retained; player
+feel, auditory judgment and hardware pacing remain separate from mechanics.
 
 ### Freeze root cause and crash hunting (v0.4.1)
 

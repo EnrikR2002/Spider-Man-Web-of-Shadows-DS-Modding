@@ -3,7 +3,7 @@
   "archived_expanded_design": "TASM_EXPANDED_ROADMAP.md",
   "black_slot": "2099-classic",
   "current_recipe": "gameplay_profile.json",
-  "current_release": "0.33.1",
+  "current_release": "0.34.0",
   "expanded_design": "../docs/ROADMAP.md",
   "historical_notes_archive": "../docs/archive/legacy-notes.zip",
   "historical_snapshot": {
@@ -26,7 +26,7 @@
     "Dragnet",
     "Vortex"
   ],
-  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. The cape-free Across the Spider-Verse 2099 Black appearance is published; the Hunter combat design (revision 3, 2026-10-24) has 14 skills: the seven native Black rows plus seven Black rows on free saved bits 83..89, revision 3 unimplemented. Hunter's Return and manual-jump Talon Lift remain published in v0.33.1. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices, third suit, save expansion and branches remain deferred.",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 is authoritative: Web Yank is its first published slice in v0.34.0, alongside the retained taller cape-free appearance, Hunter's Return and manual-jump Talon Lift. Remaining revision-3 moves await their slices and player verdicts. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices/balance, third suit, save expansion and branches remain deferred.",
   "prototype_reference": "../docs/ROADMAP.md#now",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
@@ -96,9 +96,15 @@
         "new_rows": [
           {
             "ability_bit": 83,
+            "agent_tested": true,
             "event_id": 392,
+            "evidence": "hunter_kit.json",
+            "implemented_version": "0.34.0",
             "input": "X on the ground with no native X prompt; Up+X upward",
             "move": "Web Yank",
+            "player_confirmed": false,
+            "price": 300,
+            "price_provisional": true,
             "requires": null
           },
           {
@@ -171,12 +177,12 @@
           94,
           95
         ],
-        "status": "design-approved-not-implemented",
+        "status": "web-yank-published-remaining-slices-designed",
         "supersedes": "Hunter revision 2 (15 rows, 2026-10-23), revision 1 and the 2026-10-22 catch/carry/crash/chase proposal; local 2026-10-23 seven-row air/guard proposal (archived at docs/TASM_ROADMAP-local-2026-10-23.md)"
       },
       "design_reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
       "id": "2099-classic",
-      "implementation_order": "Player requested implementation: prove the code/state, shop, X-prompt and Black-only animation gates, then Web Yank pipeline on v0.33.1. Publish one slice at a time with a player verdict between, as ROADMAP specifies.",
+      "implementation_order": "Await player verdict on v0.34.0 Web Yank, then the ROADMAP Sky slice. Retain the authoritative claude/zen-clarke-p0wo8j design over earlier local proposals; qualify native mini-boss adapters before expanding boss coverage.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Fuller chest/back/arms on the preserved native rig; unrelated native motion clips retained",
@@ -185,23 +191,24 @@
         "Opaque 128x128 I8 atlas: navy/cobalt, angular mask/chest spider, red shoulder panels and knee chevrons; same 16 KiB pixel pool",
         "12.5% taller Black animated pose and scarlet native web tints; native Red height/colors retained",
         "Purchased Hunter's Return with corrected victim isolation/owner cleanup",
-        "Purchased Talon Lift with manual held-B air follow-up and native R exit"
+        "Purchased Talon Lift with manual held-B air follow-up and native R exit",
+        "Purchased Web Yank: X/Up+X with native prompt priority, scarlet native line, authored close/distant rakes, weak-reference cleanup and Conductor/resistant-target velocity approach; independent bit83/event392 row at provisional 300 XP"
       ],
-      "kit": "Hunter design revision 3 (2026-10-24, unimplemented): 14 skills across talon, web, air, boss and meter pillars on the exact native Power Dash/Hammer Spike/Hammer Slam foundation; webs on X when no native X prompt is in reach; Vulture-style Boarding against bosses; Apex Predator rewards combo tiers. Ordinary B/base strings/R, ownership, dependencies and progression are unchanged. The published baseline additionally retains Hunter's Return and manual-jump Talon Lift; their revision-3 redesigns are not implemented.",
+      "kit": "Hunter revision 3 (14 planned skills): Web Yank is the first published slice, on grounded X/Up+X in owned Black form; native X prompts win and R exits. The prior Hunter's Return and manual-jump Talon Lift remain until their replacement slices qualify. Other revision-3 behavior is designed, not implemented. Native A/B/base strings/R, ownership, dependencies and progression remain.",
       "latest_feedback": {
         "date": "2026-10-22",
         "source_version": "0.30.1",
         "summary": "Likes 2099 overall; make the model closer to the supplied Across the Spider-Verse movie reference and remove the red web cape."
       },
       "name": "Spider-Man 2099 - Across the Spider-Verse inspired",
-      "replaces_form": "black",
-      "selection_date": "2026-10-11",
-      "status": "v0.33.1-appearance-and-two-skills-published-hunter-revision-3-starting",
-      "validation_limit": "Published implementation evidence is in spider2099_presence.json, hunters_return.json and talon_lift.json. Hunter revision 3 are design proposals without engine testing. Player feel/appearance, full-route balance and DeSmuME/hardware pacing remain open.",
       "prior_design_snapshot": {
         "entry": "docs/TASM_ROADMAP_2099_BEFORE_AIR_COUNTER_2026-10-23.md",
         "snapshot_date": "2026-10-23"
-      }
+      },
+      "replaces_form": "black",
+      "selection_date": "2026-10-11",
+      "status": "v0.34.0-web-yank-published-remaining-hunter-revision-3-designed",
+      "validation_limit": "See hunter_kit.json for 17 focused controls and exact source/publisher/stable composition. Conductor heavy behavior is qualified; native mini-bosses outside the common-health registry remain excluded pending a class adapter. Price is provisional. Player feel, perceptual audio and DeSmuME/hardware pacing remain unconfirmed."
     },
     {
       "id": "scarlet-kaine",

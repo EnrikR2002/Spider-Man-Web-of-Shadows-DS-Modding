@@ -17,8 +17,8 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Implementation requested (revision 3, 14 skills) | On v0.33.1: engineering gates, then Web Yank pipeline proof |
-| 2 | v0.33.1 review: taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Web Yank slice shipped in v0.34.0; rest of revision 3 designed | Player verdict on Web Yank, then the Sky slice |
+| 2 | Taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
 | 5 | [Creature presentation](#creature-presentation) beyond Rail Skitter | Waiting on the Skitter verdict | Expand one species at a time only after it passes |
@@ -41,12 +41,17 @@ save expansion and new campaign branches wait until the player asks.
 ## Spider-Man 2099 Black kit: the Hunter
 
 **Status:** Designed and approved by the player, revision 3 (2026-10-24).
+The player explicitly made `claude/zen-clarke-p0wo8j` authoritative over
+conflicting local plans on 2026-10-23.
 Implementation requested locally on 2026-10-23 after importing the remote
 revision-3 design. The installed baseline is v0.33.1: taller cape-free appearance,
 scarlet webs, Hunter's Return and manual-jump Talon Lift already ship; receipts
 are `reference/spider2099_presence.json`, `reference/hunters_return.json` and
-`reference/talon_lift.json`. The fourteen-skill revision-3 behavior below is
-unimplemented; retain those existing mechanics until each replacement qualifies.
+`reference/talon_lift.json`. Web Yank now ships as the first revision-3 slice in
+v0.34.0 (300 XP; X/Up+X, native prompt priority, fast close rake, resistant-target
+zip and native R exit). Its receipt is `reference/hunter_kit.json`; player feel
+is unconfirmed. Remaining revision-3 behavior below is designed; retain baseline
+mechanics until each replacement qualifies.
 The remote design's 2026-10-24 dates are retained as source provenance. Machine-readable rows are in
 [suit metadata](../reference/suit_roadmap.json) under `2099-classic`.
 
@@ -319,7 +324,7 @@ Engine facts to reuse, all in TECHNICAL:
 
 | Need | Section |
 |---|---|
-| States, input queue (X is command 4), ability query, Black form, string nodes 5..10 and late branches | [Player state machine](TECHNICAL.md#player-state-machine-and-red-kit-hooks-v020) |
+| States, input queue (X is command 6; L is command 4), ability query, Black form, string nodes 5..10 and late branches | [Player state machine](TECHNICAL.md#player-state-machine-and-red-kit-hooks-v020) |
 | Built hits, reaction kinds, ReceiveHit result and health argument | [Hit pipeline](TECHNICAL.md#hit-pipeline-v040-runtime-probed) |
 | WebLine spawn/tie/release and colour | [Web lines](TECHNICAL.md#web-lines-built-hits-and-the-web-skills-v0130) |
 | Moving enemy bodies with bounded velocity | [Tether Vortex](TECHNICAL.md#conditional-tether-vortex-and-conductor-armor-v031-research) |
@@ -374,6 +379,11 @@ Engine facts to reuse, all in TECHNICAL:
 4. **Ground slice:** Rundown, Talon Line, Shredder, Roof Pin.
 5. **Meter capstone:** Apex Predator, last because it modifies the others.
    Tiers 2..5 must be distinguishable side by side in native-scale footage.
+
+**v0.34.0 progress:** Web Yank's own code/state, first appended Black row,
+native X priority and Black-only clips are qualified. Conductor heavy behavior
+is qualified; the native mini-boss adapter, Boarding follow and capstone gates
+remain open. The first slice is published and awaits the player's verdict.
 
 ## Red kit: the Amazing Spider-Man
 
@@ -465,6 +475,7 @@ Newest first. Record each new verdict here the day it is given.
 |---|---|---|
 | 2026-10-24, 2099 rev. 3 | Revision 3 is good. Shockwave Talons at tier 3+; tier 5 gets a little life steal because 2099 scraps and takes more damage; give every tier a visible upgrade, maybe a red glow at tier 5 | Approved for a later implementation session; Feeding Frenzy and tier visuals added |
 | 2026-10-24, 2099 rev. 2 | X for webs is fine and the kit is liked; remove Collar Toss and Lariat; add a skill that rewards a full combo meter | Revision 3: 14 skills, Apex Predator added |
+| 2026-10-23, imported Hunter rev. 3 | Prioritize all changes from claude/zen-clarke-p0wo8j; they may override existing work | That branch's design/policy is authoritative; superseded local proposals stay archived |
 | 2026-10-23, v0.33.1 / imported Hunter rev. 3 | Pull GitHub changes and start the new 2099 skills | Merge both histories, retain the verified local build and start Web Yank pipeline proof |
 | 2026-10-23, 2099 rev. 1 | Better, but pin/pound dominates; pins fail on bosses; no webbing; no air combos; add as many rows as needed within the 2D mob/boss brawler | Revision 2: four pillars, Boarding, webs on X |
 | 2026-10-23 | Make Black play like Across the Spider-Verse's Miguel and make it fun | Hunter direction replaces the comic-style juggle proposal |

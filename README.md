@@ -4,11 +4,11 @@ Private USA CS5E research. ROMs/extracted assets/builds/saves stay private.
 
 **Play:** `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
 The agent handles the stable ROM, releases and progress backups.
-Current release: **v0.33.1**. Taller cape-free 2099 has scarlet webs,
-purchased Hunter's Return and Talon Lift (Up+A, hold B, then air Y).
-The Red kit, chapter/boss work, ownership and save progress remain.
-The approved Hunter revision 3 starts with Web Yank; it is not shipped yet.
-Player feel and appearance preference remain open.
+Current release: **v0.34.0**. Buy **Web Yank** for 300 XP in Black upgrades:
+ground X yanks into a talon rake, Up+X launches, and R cancels. Close targets
+get a quick rake; resistant targets pull Miguel toward them. Native X prompts
+take priority. The taller cape-free 2099, scarlet webs, Hunter's Return,
+manual-jump Talon Lift, Red kit and chapters remain. Player feel is open.
 Details: [Changes](docs/CHANGES.md). What comes next: [Roadmap](docs/ROADMAP.md#now).
 
 ## Find what you need
