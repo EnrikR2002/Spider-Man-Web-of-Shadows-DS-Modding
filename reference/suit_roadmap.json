@@ -4,7 +4,7 @@
   "black_slot": "2099-classic",
   "current_recipe": "gameplay_profile.json",
   "current_release": "0.31.0",
-  "expanded_design": "../docs/TASM_ROADMAP.md",
+  "expanded_design": "../docs/ROADMAP.md",
   "historical_notes_archive": "../docs/archive/legacy-notes.zip",
   "historical_snapshot": {
     "archive": "../docs/archive/legacy-notes.zip",
@@ -26,8 +26,8 @@
     "Dragnet",
     "Vortex"
   ],
-  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. The requested cape-free Across the Spider-Verse 2099 Black appearance is published; the Hunter combat design (revision 2, 2026-10-23) keeps the seven native Black rows and adds eight Black rows on free saved bits, all unimplemented. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices, third suit, save expansion and branches remain deferred.",
-  "prototype_reference": "../docs/TASM_ROADMAP.md#recommended-build-order",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. The cape-free Across the Spider-Verse 2099 Black appearance is published; the Hunter combat design (revision 3, 2026-10-24) has 14 skills: the seven native Black rows plus seven Black rows on free saved bits 83..89, all unimplemented. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices, third suit, save expansion and branches remain deferred.",
+  "prototype_reference": "../docs/ROADMAP.md#now",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
   "suits": [
@@ -60,7 +60,13 @@
         "snapshot_date": "2026-10-21"
       },
       "combat_design": {
-        "date": "2026-10-23",
+        "apex_predator_tiers": {
+          "2": "Fast Hunt 1.10x",
+          "3": "Heavy Line: yank lane catches up to two more",
+          "4": "Fast Hunt 1.20x",
+          "5": "Shockwave Talons on every 2099 ender"
+        },
+        "date": "2026-10-24",
         "native_rows": {
           "Black Widowmaker": "Talon Line",
           "Ground Rebound": "Freefall",
@@ -74,57 +80,50 @@
           {
             "ability_bit": 83,
             "event_id": 392,
-            "input": "X at range; Up+X upward",
+            "input": "X on the ground with no native X prompt; Up+X upward",
             "move": "Web Yank",
             "requires": null
           },
           {
             "ability_bit": 84,
             "event_id": 393,
-            "input": "X up close",
-            "move": "Collar Toss",
+            "input": "X in the air",
+            "move": "Reel In",
             "requires": "Web Yank"
           },
           {
             "ability_bit": 85,
             "event_id": 394,
-            "input": "Hold X during a Web Yank",
-            "move": "Lariat",
-            "requires": "Collar Toss"
-          },
-          {
-            "ability_bit": 86,
-            "event_id": 395,
             "input": "Air Y in Black form",
             "move": "Sky Rake",
             "requires": null
           },
           {
-            "ability_bit": 87,
-            "event_id": 396,
-            "input": "X in the air",
-            "move": "Reel In",
+            "ability_bit": 86,
+            "event_id": 395,
+            "input": "Air A with an airborne enemy in reach",
+            "move": "Meteor Catch",
             "requires": "Sky Rake"
           },
           {
-            "ability_bit": 88,
-            "event_id": 397,
-            "input": "Air A on an airborne enemy",
-            "move": "Meteor Catch",
-            "requires": "Reel In"
-          },
-          {
-            "ability_bit": 89,
-            "event_id": 398,
-            "input": "Down+Y on a downed enemy",
+            "ability_bit": 87,
+            "event_id": 396,
+            "input": "Down+Y next to a downed enemy",
             "move": "Roof Pin",
             "requires": null
           },
           {
-            "ability_bit": 90,
-            "event_id": 399,
-            "input": "Web Yank, Up-pounce or jump into a boss while holding toward it",
+            "ability_bit": 88,
+            "event_id": 397,
+            "input": "Web Yank zip, Up-pounce or jump into a boss while holding toward it",
             "move": "Boarding",
+            "requires": null
+          },
+          {
+            "ability_bit": 89,
+            "event_id": 398,
+            "input": "Passive, by native combo tier",
+            "move": "Apex Predator",
             "requires": null
           }
         ],
@@ -132,13 +131,23 @@
           "talons",
           "webs",
           "air",
-          "boss"
+          "boss",
+          "meter"
         ],
-        "reference": "../docs/TASM_ROADMAP.md#combat-the-hunter-design-rev-2-2026-10-23",
-        "request": "Make Black play and fight as close as possible to Miguel O'Hara in Across the Spider-Verse; make it fun to play. Revision 1 review: avoid one-trick pinning, give bosses a real answer, add webbing and air combos, add as many rows as a coherent kit needs within the 2D mob/boss brawler.",
-        "retired_archive": "RETIRED_2099_DESIGNS.md",
-        "revision": 2,
+        "reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
+        "removed_in_revision_3": [
+          "Collar Toss",
+          "Lariat"
+        ],
+        "request": "Make Black play and fight as close as possible to Miguel O'Hara in Across the Spider-Verse; make it fun. Revision 1 review: avoid one-trick pinning, answer bosses, add webbing and air combos, add rows as needed within the 2D mob/boss brawler. Revision 2 review: X for webs approved; remove Collar Toss and Lariat; add one skill that rewards a full combo meter like Red's Momentum/Overclock.",
+        "retired_archive": [
+          "RETIRED_2099_DESIGNS.md",
+          "docs/TASM_ROADMAP-2026-10-24.md"
+        ],
+        "revision": 3,
+        "skill_count": 14,
         "spare_free_bits": [
+          90,
           91,
           92,
           93,
@@ -146,11 +155,11 @@
           95
         ],
         "status": "design-only-not-implemented",
-        "supersedes": "Hunter revision 1 (pin-centred, 2026-10-23) and the 2026-10-22 catch/carry/crash/chase proposal"
+        "supersedes": "Hunter revision 2 (15 rows, 2026-10-23), revision 1 and the 2026-10-22 catch/carry/crash/chase proposal"
       },
-      "design_reference": "../docs/TASM_ROADMAP.md#spider-man-2099-black-slot-rework",
+      "design_reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
       "id": "2099-classic",
-      "implementation_order": "Appearance shipped (v0.30.2/v0.30.3). Combat awaits the player's go-ahead: clear the space, shop, input, Black-only animation, body/web and boss-adapter gates; prove Web Yank alone, then the Sky slice (Talon Lift, Sky Rake, Reel In, Meteor Catch), the boss slice (Boarding, Freefall, Pounce + Relentless) and the crowd slice, one player verdict at a time.",
+      "implementation_order": "Appearance shipped (v0.30.2/v0.30.3). Combat awaits the player's go-ahead: clear the code-space, shop, input, Black-only animation and boss-adapter gates; then publish one slice at a time with a player verdict between: Web Yank pipeline proof, Sky slice, Boss slice, Ground slice, Apex Predator.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Broader chest/lats/traps/deltoids, athletic thighs and narrower jaw on unchanged native rig/animations",
@@ -158,7 +167,7 @@
         "Red web cape and all cape geometry/atlas region removed",
         "Opaque 128x128 I8 atlas: navy/cobalt, angular mask/chest spider, red shoulder panels and knee chevrons; same 16 KiB pixel pool"
       ],
-      "kit": "Hunter design revision 2 (2026-10-23, unimplemented): talon, web, air and boss pillars on the exact native Power Dash/Hammer Spike/Hammer Slam foundation; webs on X when no native X prompt is in reach; Vulture-style Boarding against bosses; pinning is one finisher. Ordinary B/base strings/R, ownership, dependencies and progression are unchanged.",
+      "kit": "Hunter design revision 3 (2026-10-24, unimplemented): 14 skills across talon, web, air, boss and meter pillars on the exact native Power Dash/Hammer Spike/Hammer Slam foundation; webs on X when no native X prompt is in reach; Vulture-style Boarding against bosses; Apex Predator rewards combo tiers. Ordinary B/base strings/R, ownership, dependencies and progression are unchanged.",
       "latest_feedback": {
         "date": "2026-10-22",
         "source_version": "0.30.1",
@@ -195,7 +204,7 @@
       "status": "identity-merged-into-tasm1"
     }
   ],
-  "updated": "2026-10-23",
+  "updated": "2026-10-24",
   "upgrade_plan": "tasm_upgrade_plan.json",
   "upgrade_plan_status": "implemented-current-red-rows-progression-expansion-deferred",
   "user_verified": [

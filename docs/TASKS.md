@@ -1,84 +1,76 @@
 # Current work and handoff
 
-Updated 2026-10-23 (America/Edmonton). Current build/save qualification below is
-the 2026-10-22 v0.31.0 record; the 2026-10-23 workflow-policy and 2099 design
-updates changed no game artifacts.
-Read AGENTS first. DEVELOPMENT owns workflow; TECHNICAL owns contracts; CHANGES
-owns releases; TASM_ROADMAP owns design.
+Updated 2026-10-24 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
+workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design and
+player feedback.
 
-## Current objective and player direction
+## Current objective
 
-2026-10-23 request: rework the 2099 Black plan so it plays and fights as close
-as possible to Across the Spider-Verse's Miguel O'Hara, and is fun to play. The
-player reviewed revision 1 the same day: better, but pin-centred, no boss
-answer, no webbing, no air combos, and seven rows were an unnecessary limit.
-TASM_ROADMAP "Combat: the Hunter" revision 2 is design only: talon, web, air
-and boss pillars within the 2D mob/boss brawler; webs on X; Vulture-style
-Boarding for bosses; pinning is one finisher. It keeps the seven native rows and
-adds eight Black rows on free saved bits 83..90. reference/suit_roadmap.json
-records rows and status; both retired drafts are in the doc archive.
+Two player requests on 2026-10-24, both delivered as documents and tooling; no
+game artifacts changed and the published build is still v0.31.0.
 
-The three requested fixes are implemented and agent-qualified in v0.31.0:
-conditional, more spectacular Vortex; a larger symbiote metal war-machine
-Conductor with one boss meter; and the repeated lethal-hit/low-HP Vitality bug.
-The player likes the boss fight behavior, which remains intact. New Vortex feel
-and boss appearance require the player's own verdict; agent clearance is distinct.
+1. **2099 Black kit, revision 3 (designed, not built).** The player approved X
+   for webs and the revision 2 kit, removed Collar Toss and Lariat, and asked
+   for one skill that rewards a full combo meter like Red's Momentum and
+   Overclock. ROADMAP "Spider-Man 2099 Black kit: the Hunter" now specifies 14
+   skills: the seven native Black rows reworked plus Web Yank, Reel In, Sky Rake,
+   Meteor Catch, Roof Pin, Boarding and Apex Predator on free saved bits 83..89.
+   Each skill lists input, mob and boss behavior, and fallthrough; the section
+   adds a control map, rules, engine-fact links, gates, slice acceptance and a
+   build order. `reference/suit_roadmap.json` holds the rows.
+2. **Repository sweep for faster agent work.** `docs/TASM_ROADMAP.md` became
+   `docs/ROADMAP.md`, a whole-game roadmap (Now table, 2099 spec, Red kit,
+   chapters, idea backlog, feedback log). The old file is archived byte for byte
+   as `docs/TASM_ROADMAP-2026-10-24.md`. DEVELOPMENT gained "Know your
+   environment", "How a release is built" and "Add a feature as a new
+   post-pass". New tools: `run_tests.py` (fresh-clone-aware test runner),
+   `tool_index.py` (tool finder), `doc_links.py` (link/anchor checker, also run
+   by the document test) and `doc_archive.py add`. AGENTS was condensed, the
+   duplicated v0.30.3 CHANGES section removed and run-together words fixed.
 
-Red retains one combined TASM1/2 kit. Overclock/Dragnet/Vortex are its final
-added skills. Black combat waits for the player's go-ahead on the Hunter design.
-Prices, third suit, shop/save expansion and other campaign branches remain
-deferred. Cape-free 2099 and the compact
-Terminal crowd atlas remain. Preserve native controls, ownership/dependencies,
-traversal, story barriers and earned rewards.
+Evidence: in this ROM-less cloud workspace, `python tools/run_tests.py` passes,
+counting tests that need the ROM, build/work files or Keystone as skips;
+`--strict` shows the 121 errors that need a full local setup. The archive
+verifies and every local doc link and anchor resolves.
 
 ## Published build
 
-Stable build/Spider-Man-WoS-modded.nds is **v0.31.0**, published through
-tools/playtest.py build. Accepted F, canonical final, normal-source rebuild,
-publisher candidate and installed stable match. Recipe, release pins/history,
-boot/Options and full scope/evidence are in reference/vortex_forge.json.
-Previous ROM/recipe/metadata are retained; no source commit/push was requested.
+The stable `build/Spider-Man-WoS-modded.nds` is **v0.31.0**, published on
+2026-10-22 through `tools/playtest.py build`. The accepted candidate, a
+normal-source rebuild and the installed stable ROM have the same hash. Recipe,
+release pins, boot/Options version and full evidence are in
+`reference/vortex_forge.json`; the previous ROM and recipe are retained.
 
-The latest actual Battery was freshly read again. Its complete DSV wrapper,
-payload and publication checkpoint match before/after. Clean original and
-unrelated files remain intact. A fresh native Continue keeps current abilities,
-XP, initial HP and checkpoint; no research battery was adopted.
+At publication the latest actual battery was read before and after; its DSV
+wrapper, payload and publication checkpoint matched. A fresh native Continue
+kept abilities, XP, initial HP and checkpoint. No research save was adopted.
 
-## Implemented and agent-tested
+## v0.31.0 contents (agent-tested, player verdict open)
 
-Web with A or Dragnet, release A, then Down+Y: Vortex captures actual cocoons,
-catapults their bodies through a two-turn tether animation and slams them down.
-R/hurt interrupts cleanly; native movement/collision remain. Regular/Dragnet,
-mirror, unwebbed/unowned/Black, stale-pointer, ABI and cancellation controls pass.
-The isolated body-contact control knocks down a real bystander; it parks only
-unwebbed standing enemies through frame100. Earlier unparked interruptions are
-retained, not treated as guaranteed crowd clears.
+- **Vortex:** web an enemy with A or Dragnet, release A, then Down+Y. Up to four
+  real cocoons are tethered, swung through a two-turn catapult and slammed down.
+  R or getting hurt interrupts cleanly; movement uses native velocity and
+  collision. Unwebbed, unowned, Black-form and stale-pointer controls pass.
+- **Conductor:** larger articulated symbiote war-machine armor at 1.28x scale,
+  a boss-only texture and only the native top boss meter. All 39 private motion
+  timings and native attacks, AI, HP, audio and collision are unchanged; the
+  player liked this fight's behavior.
+- **Vitality:** damage is now scaled before the final HP clamp, fixing the
+  low-HP case where eleven old-build hits were needed instead of one. 26 tests
+  cover 256 damage combinations; a Red boss win, save and fresh Continue pass,
+  and a Black control earns a win and save without refills.
 
-The Conductor has articulated armor/turbines/pistons/exhausts, 1.28x body scale,
-a compact boss-only RGB555 texture and no duplicate red bar. All39 private
-motion timings/rotations and native attack/AI/HP/audio/collision stay exact.
-The shared I4 crowd atlas and other actors remain exact. The old boss's magenta
-palette issue is reproduced and corrected in this arena.
+## Blockers and next exact action
 
-Vitality now scales full incoming damage before the final HP clamp. A latest
-copied-save control needs eleven old-build hits to finish low HP, versus one
-real damaging hit on the corrected build. Twenty-six tests include256 damage
-combinations. Final Red victory/save/fresh Continue pass with labelled healing;
-an identical-boss E Black control earns a no-refill win/save. Exact reuse scope
-and limitations are in the receipt. Room/door resources are unchanged.
-
-## Next exact action and remaining gates
-
-Blocker for 2099 combat: the player's verdict on Hunter revision 2. This cloud
-workspace has no ROM or emulator, so no prototype was attempted. On approval, in
-a ROM-equipped workspace, clear the six roadmap gates on copied saves (separate
-code/state block, Black shop rows, X/held-key inputs, Black-only animation
-routing, body/web reuse, boss adapter), then prove Web Yank alone before the Sky
-slice (Talon Lift, Sky Rake, Reel In, Meteor Catch) for player review.
-
-Use the normal launcher to review Vortex and the larger boss. Player feel,
-appearance preference, full-route balance and actual DeSmuME pacing remain
-open. Prior environment improvements remain accepted; broader enemy quality
-is not implied by this boss/art/kit qualification.
+1. **2099 combat** waits for the player's go on revision 3. Then, in a
+   workspace with the ROM and emulator, clear the ROADMAP gates on copied saves
+   (own code/state block, Black shop rows, X and held-key inputs, Black-only
+   clip routing, boss adapter) and build the Web Yank pipeline proof as the
+   first published slice.
+2. **v0.31.0 review:** the player plays Vortex and the larger boss through the
+   normal launcher. Feel, appearance, full-route balance and DeSmuME pacing are
+   open. Earlier environment acceptance does not imply enemy acceptance.
+3. This cloud workspace has no ROM or emulator; nothing here was played or
+   qualified in-engine.
 
 Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.

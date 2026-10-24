@@ -557,7 +557,7 @@
     "player_confirmed": false,
     "recipe": "gameplay_profile.json",
     "release": "0.30.1",
-    "roadmap": "../docs/TASM_ROADMAP.md"
+    "roadmap": "../docs/ROADMAP.md"
   },
   "evidence": [
     "work/area-research/native-survey.json",

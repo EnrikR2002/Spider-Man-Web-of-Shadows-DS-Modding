@@ -2,7 +2,7 @@
   "schema_version": 1,
   "snapshot_date": "2026-10-05",
   "purpose": "Historical source notes; current status is in docs/TASKS.md. Read only a selected entry/section with tools/doc_archive.py.",
-  "archive_sha256": "935f3b8f47b74b2f1f85436e627ea13dc6a2589132353c64179f44e3f065f37f",
+  "archive_sha256": "771d20033ef1e98d391bad14451b5b6033fa695f01f6e8210ba7df55efad654c",
   "entries": [
     {
       "path": "AGENTS.md",
@@ -1856,6 +1856,82 @@
           "line": 67,
           "heading": "Combat: the Hunter (design, 2026-10-23)",
           "level": 4
+        }
+      ]
+    },
+    {
+      "path": "docs/TASM_ROADMAP-2026-10-24.md",
+      "title": "TASM roadmap, last version before docs/ROADMAP.md (Hunter revision 2)",
+      "snapshot_date": "2026-10-24",
+      "source_revision": "07e06e1502cccb18efa1e2d26ddef474ae6c90ac",
+      "bytes": 26093,
+      "words": 4080,
+      "sha256": "9179b1d43380d06ad14bf12e6ce50d3a1b8d6660e67eb083f0acdce4543b553c",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "TASM: never stand still",
+          "level": 1
+        },
+        {
+          "line": 8,
+          "heading": "Current direction and acceptance",
+          "level": 2
+        },
+        {
+          "line": 48,
+          "heading": "Current player kit",
+          "level": 2
+        },
+        {
+          "line": 77,
+          "heading": "Recommended build order",
+          "level": 2
+        },
+        {
+          "line": 92,
+          "heading": "1. Establish the v0.29 full-route verdict",
+          "level": 3
+        },
+        {
+          "line": 107,
+          "heading": "2. Refine encounter decisions from the replay",
+          "level": 3
+        },
+        {
+          "line": 116,
+          "heading": "3. Review Crane's complete vertical route and payoff",
+          "level": 3
+        },
+        {
+          "line": 127,
+          "heading": "4. Extend creature presentation only after the example works",
+          "level": 3
+        },
+        {
+          "line": 135,
+          "heading": "Acceptance for a future candidate",
+          "level": 2
+        },
+        {
+          "line": 149,
+          "heading": "Spider-Man 2099: Black-slot rework",
+          "level": 2
+        },
+        {
+          "line": 160,
+          "heading": "Combat: the Hunter (design rev. 2, 2026-10-23)",
+          "level": 3
+        },
+        {
+          "line": 312,
+          "heading": "Deferred work",
+          "level": 2
+        },
+        {
+          "line": 324,
+          "heading": "Historical designs",
+          "level": 2
         }
       ]
     }

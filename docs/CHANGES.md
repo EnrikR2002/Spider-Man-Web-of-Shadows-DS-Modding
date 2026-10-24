@@ -1,13 +1,13 @@
 # Implemented changes and releases
 
-Current stable release status is in [TASKS](TASKS.md). Mechanics proposed for the
-TASM rebuild are in [TASM_ROADMAP](TASM_ROADMAP.md); a proposal is not shipped
+Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
+in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
 The latest numbered release below is v0.31.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
-instructions. The current design queue and verdicts are in TASM_ROADMAP/TASKS.
+instructions. The current design queue and verdicts are in ROADMAP/TASKS.
 
 ## Version policy
 
@@ -49,7 +49,7 @@ its intended protection. Ownership, prices, save format, rooms/doors, rewards,
 ownership/cocoon gates, interrupt/stale-pointer handling and HUD ABI/flags.
 Native regular/Dragnet, mirrored and cancellation examples run; an isolated
 body-contact example hits a real bystander. It parks unwebbed standing enemies
-through frame100 and is not ordinary-play crowd-balance proof. Final composition
+through frame 100 and is not ordinary-play crowd-balance proof. Final composition
 earns Red victory/save with labelled player healing and retains it through fresh
 Continue; an identical-boss/Black-path control earns a no-refill Black win/save.
 Earlier failed crowd interruptions and exact byte-scope reuse are retained.
@@ -57,34 +57,6 @@ Fresh unmodified normal Continue preserves current abilities, XP, HP and save.
 Canonical/normal/published identities, boot/Options, latest DSV/checkpoint bytes
 and clean original agree. Full evidence: `reference/vortex_forge.json`.
 Player feel/appearance acceptance and actual DeSmuME pacing remain open.
-
-## v0.30.3 - 2026-10-22 - Restore crowded Midnight enemy textures
-
-Custom Midnight enemies appeared white in the Terminal crowd because their
-shared 128x128 direct-color creature atlas used 32 KiB and stayed unbound in
-live enemy materials. An exact resource-only experiment keeps the atlas artwork,
-UVs, material names/palette IDs, model sheet and every XBD/model/animation byte
-exact, while packing it as 128x128 I4: 16 colors and 8 KiB of pixels. In a fresh
-copied-save encounter, all three observed enemy materials bind as I4; the 2099
-player still binds its original I8 texture. This supports texture-residency
-pressure as the cause, though format and footprint change together.
-
-The shared artwork is quantized without dithering. Model geometry, texture UVs,
-128x128 material dimensions, rooms, enemy AI/HP, movement, audio, ARM9/ARM7,
-the player suit, its I8 atlas, purchases and the entire 32 KiB kit remain exact
-to v0.30.2. Only the creature atlas and English/American version strings change.
-This fixes the sampled Terminal enemy textures; it does not qualify all rooms
-or DeSmuME pacing.
-
-**Qualification.** The resource-only residency experiment and the full numbered
-candidate bind three live enemy materials in the crowded Terminal scene. The
-native route passes from a copied latest save with only initial room/current-owned/
-initial-HP fixtures; native enemy AI, damage and positions run after arrival, with
-no healing. The actual battery remains unchanged. Player appearance/gameplay
-and enemy model/motion/XBD data retain v0.30.2. Full normal-source/canonical/
-accepted/installed identities, release pins, fresh battery checkpoint and
-version labels agree; exact evidence is in
-`reference/spider2099_enemy_texture.json`.
 
 ## v0.30.3 - 2026-10-22 - Restore crowded Midnight enemy textures
 
@@ -307,7 +279,7 @@ SHA-256 `6819cb91e824961552b86690c3fdd112930bbd1cbb70d5c3c76978b5ce932a20`.
 The publisher retained v0.27 and preserved the then-current real battery against
 its pre-build checkpoint. 190 broad checks and 45 focused/publication checks passed.
 Current-owned Red and Black saves, fresh Continue, boss phase programs, the four
-ramp rooms, removed-room entry, legacy recovery and all18 directed doors pass on
+ramp rooms, removed-room entry, legacy recovery and all 18 directed doors pass on
 the qualified candidates with the unchanged-byte inheritance recorded in the
 receipt. No-R pressure loses to native damage; reactive R/B
 controls win. Player confirmation of full-route fun and actual DeSmuME pacing
@@ -328,14 +300,14 @@ remains punishable, and HP damage/death/rewards remain native throughout.
   working claws/scythes and articulated plates/aperture replace crown/shard
   clutter. Carried hand targets, restrained body turns, coordinated weight
   shifts and longer boss recovery improve continuity. Native lifecycle routes,
-  including get-up attacks, remain complete. Final meshes use298..364 quads
+  including get-up attacks, remain complete. Final meshes use 298..364 quads
   and retain the existing shared painted atlas/material-tint behavior.
 - Terminal, Floodworks, Turbine Rise and Observatory use progressively stronger
   mixed encounters. Native cost budgets are8/8/7/12 with live limits3/3/3/4;
   these are cost units, not enemy counts. Sanctuaries and the return corridor
   retain breathing room. Room geometry, collisions, maps and doors stay exact.
-- Audio/voices, Crane creature resources and the32KiB player kit remain exact
-  to0.26. Native A/B/evade, purchases, ownership, Both Suits abilities and
+- Audio/voices, Crane creature resources and the 32KiB player kit remain exact
+  to 0.26. Native A/B/evade, purchases, ownership, Both Suits abilities and
   rewards retain their contracts. No skills, prices, save fields or branches
   are added.
 
@@ -346,11 +318,11 @@ only four meshes. B's no-refill base-Y control observes68 standing staggers,
 30 HP reductions during counter armour,15 responses and five real player hits,
 then wins/returns. Final C's healed full-phase run crosses contacts in all four
 normal programs; all four expanded full-HP room rosters clear, with later-spawn
-waits in the first three. All22 directed doors pass native-input qualification.
+waits in the first three. All 22 directed doors pass native-input qualification.
 Skitter/Warden A and Eye B each demonstrate actual HP contact in all three
 programs; ordinary motion/contact resources stay exact across these candidates.
 Native-scale final boss/mixed presentation was reviewed separately.177 changed
-binary resources round-trip;180 relevant broad tests and16 publication/document
+binary resources round-trip;180 relevant broad tests and 16 publication/document
 checks pass with explicit inheritance. Early weak-counter/dense-mesh candidates
 remain in the receipt. These fixtures establish mechanics/clearance, not fun,
 complete-route balance or actual DeSmuME pacing.
@@ -369,7 +341,7 @@ The player found0.25 somewhat better but still slow and easy to combo-lock;
 Midnight enemies seemed silent. This correction makes incoming hit pressure
 cause an actual physical escape/return attack and restores audible effects.
 
-- **Reactive Conductor:** three real HP reductions within80 decision updates
+- **Reactive Conductor:** three real HP reductions within 80 decision updates
   queue a backward leap and returning strike, including from flinch. Matching
   running clips consume hurt transitions without restarting. Actual HP damage,
   vulnerable recovery, death, native rewards and the original boss bar remain.
@@ -381,17 +353,17 @@ cause an actual physical escape/return attack and restores audible effects.
   native velocity, gravity and collision. No player/actor coordinate writes.
 - **Audible creatures:**0.25 voices/tells were extremely quiet despite accepted
   sound requests.57 owned samples now use role-based RMS levels, peak control,
-  PCM16 and hostile-cue priority. An isolated alert renders about11x stronger.
-  Actual Skitter/Warden live/muted pairs have matching gameplay and about0.99
+  PCM16 and hostile-cue priority. An isolated alert renders about 11x stronger.
+  Actual Skitter/Warden live/muted pairs have matching gameplay and about 0.99
   tell/strike waveform matches. Eye's divergent control is labelled; its live
-  tell/burst also match about0.99. Native/player/music rows remain unchanged.
+  tell/burst also match about 0.99. Native/player/music rows remain unchanged.
 - **Preservation:** accepted rooms, collision, maps, textures, other actor
-  bindings, purchases/abilities and32KiB kit remain exact. The complete0.25
+  bindings, purchases/abilities and 32KiB kit remain exact. The complete0.25
   lifecycle is retained, including the get-up attack's synchronized GMB/GAB.
 
 Red/Black controls earn native boss victories/saves without refills and both
 earned batteries pass fresh unmodified Continue on final E. A healed pursuit
-control observes22 counter responses.455 broad D checks and17 final focused /
+control observes22 counter responses.455 broad D checks and 17 final focused /
 document checks pass; C/D/E inheritance is byte/template-scoped.33 existing
 resources change and one private GAB is appended;31 changed binary resources
 parse/round-trip. Boot/Options0.26 and actual-player-copy Continue are visually
@@ -413,10 +385,10 @@ were rejected. The accepted terrain remains byte exact.
 - **Creature motion:** crossing figure-eight slashes, larger torso/hip loads,
   delayed head/shoulder motion, raking follow-through, twisting low pounces and
   recoil.125 private SCA payloads actually change; native lifecycle clips remain.
-  87 contact geometries and52 event streams match the shorter attack programs.
+  87 contact geometries and 52 event streams match the shorter attack programs.
 - **The Conductor:** tapered mask, articulated serrated forearms, faster native
   pursuit, advancing multi-hit combinations, travelling floor shocks, a long-range
-  execution beam and a half-health leaping slam. Base HP rises to132. Floor tells
+  execution beam and a half-health leaping slam. Base HP rises to 132. Floor tells
   can overlap the creature's attacks. Limited committed-attack/get-up counter
   poise prevents repeated knockdowns from suppressing the whole fight; actual
   HP damage, vulnerable openings and native death/rewards still apply.
@@ -433,18 +405,18 @@ were rejected. The accepted terrain remains byte exact.
 Both suits earn native boss victories/saves without refills; fresh unmodified
 Continue retains victory and reaches the cleared arena. The final B candidate
 also passes real-player-copy Continue, native Maw escapes and the full mixed
-Freight clear. All22 programs have observed native HP-loss controls. Original
+Freight clear. All 22 programs have observed native HP-loss controls. Original
 Mega Venom HUD, Observatory mixed play and six species contact/base-string clears
 are covered by selected A controls with explicit A-to-B byte/template inheritance.
-447 broad A tests,8 focused B tests and2 document checks pass.754 regenerated
+447 broad A tests,8 focused B tests and 2 document checks pass.754 regenerated
 payloads parse/round-trip;267 actually differ. Rooms/maps/bindings/textures and
-the32KiB kit are exact to0.24. Boot and Options visually show0.25.0. Clean-source
+the 32KiB kit are exact to 0.24. Boot and Options visually show0.25.0. Clean-source
 reproduction and guarded publication produce the same final ROM; the latest
 actual634-byte DSV equals its publisher checkpoint and remains unchanged.
 
 Native-scale captures and mixed PCM were inspected; selected mixes do not clip.
 Presentation/fun acceptance, full-route balance and actual DeSmuME pacing still
-need player replay. The unchanged Ballast elevated-pursuit limitation from0.24
+need player replay. The unchanged Ballast elevated-pursuit limitation from 0.24
 remains separate from ground attack coverage. Exact identity, selected/failed
 receipts, inheritance and source hashes: `reference/midnight_encore.json`.
 
@@ -464,7 +436,7 @@ repeated rectangular envelopes with different playable shapes and proportions.
   Warden/Ballast fists meet their planted feet at impact; the Conductor conducts
   its Fugue and loads its Crownfall landing. The private lifecycle includes
   native recoil, knockdown, prone, get-up and death.347 clips are regenerated;
-  230 SCA and234 GMB payloads actually differ from0.23.
+  230 SCA and 234 GMB payloads actually differ from 0.23.
 - **Audio:**57 frozen recording-based cues give the seven species their own
   voices, short tells, footsteps and move-specific strikes. Exact actor ownership
   is checked at the queued spatial request, covering stock events missed by the
@@ -472,7 +444,7 @@ repeated rectangular envelopes with different playable shapes and proportions.
 - **Midnight structures:** an L-shaped street/tower, T-shaped terminal, bent
   service hall, diagonal turbine shaft, sunken sloping Observatory, vaulted
   checkpoint chapel, stepped Crown descent and crowned boss amphitheatre.
-  Signal House shrinks to80x56, Pump Refuge becomes112x48, Sanctuary128x80,
+  Signal House shrinks to 80x56, Pump Refuge becomes112x48, Sanctuary128x80,
   Crown Return256x112; Observatory gains16 units below its old floor with rooted
   combat terraces. Collision, visible trim, cameras, anchors, doors, detailed maps
   and overview silhouettes follow the new layouts. Existing terrain materials stay.
@@ -480,12 +452,12 @@ repeated rectangular envelopes with different playable shapes and proportions.
 Published ROM SHA `c31bae4c60869133f9cf4dd3e8b0b2895123d1a2e99d91599231cc8d983b1393`;
 128MiB, boot/Options0.24.0. The full clean-ROM/overlay production recipe reproduces
 these exact bytes. Source/qualification/publication: `reference/midnight_rebuild.json`.
-All813 regenerated resources parse/round-trip;570 actually change. The32KiB player
+All 813 regenerated resources parse/round-trip;570 actually change. The32KiB player
 kit, original actor bindings/clips, first two SDK rows, native abilities,
 purchases, ownership, reactions, rewards and save schema remain. Crane room
-geometry stays exact to0.23; its three creature styles receive the enemy changes.
+geometry stays exact to 0.23; its three creature styles receive the enemy changes.
 
-Agent checks: all18 regular programs cause actual player HP loss, with native
+Agent checks: all 18 regular programs cause actual player HP loss, with native
 base-string clears; exact ARM/audio/private-resource comparisons carry selected
 F/G/I cases to the final J, and Ballast is checked on J. All four final Conductor
 programs cause HP loss after actual half-HP progression. J passes22 directed
@@ -495,7 +467,7 @@ clears. Mixed controls heal the player; they are not balance tests. Both suits
 clear both bosses without refills: Conductor uses the actual19-unit maximum,
 hoist uses the labelled copied-save Vitality/kit fixture. Both earned saves
 survive fresh unmodified Continue. Final mixed PCM has no clipping.440 broad
-and13 final focused checks pass; native boot/Options were visually confirmed.
+and 13 final focused checks pass; native boot/Options were visually confirmed.
 
 The latest actual battery is unchanged and matches its exact publisher
 checkpoint;0.23 ROM/metadata/recipe remain available for rollback. Failed
@@ -525,7 +497,7 @@ spaces, encounters and consequences while retaining their accepted connections.
   Crane's map now selects its own area; its overview marks the new checkpoint.
   Crown's two native waves each use the three enemy roles, replacing the longer
   repeating heavy roster; the unlocked hoist route leads straight to its save.
-- **Shared:** all22 active rooms receive new materials and architectural depth.
+- **Shared:** all 22 active rooms receive new materials and architectural depth.
   Seven creature meshes have heavier limbs/body mass and side-facing cores that
   remain visible when turning. Existing authored moves now respond to spacing;
   native-velocity obstacle recovery replaces several vertical pursuit stalls.
@@ -536,8 +508,8 @@ ROM SHA `534c9df52d91f6dbb4102f4deb9143fbaea6b8324f9e7525db4a3880d226e18c`;
 128MiB, boot/Options0.23.0. Recipe/pins/canonical output reproduce byte for byte.
 Sources: `chapter_spectacle` tools; exact receipts: `reference/chapter_spectacle.json`.
 The32KiB player kit, native abilities, purchases, ownership, reactions, rewards
-and save schema remain. All3910 existing motion/actor-binding resources are exact
-to0.22.1. Enemy HP still uses the native strength dial; room budgets/compositions
+and save schema remain. All 3910 existing motion/actor-binding resources are exact
+to 0.22.1. Enemy HP still uses the native strength dial; room budgets/compositions
 are deliberately changed.
 
 J's52 directed door controls pass with real inputs; K carries them by exact room,
@@ -572,7 +544,7 @@ preservation. ROM SHA
 ARM9 `571d0d51090d427e024306b55a86728c7adcfda2068e8683c47e125c3eee5eb2`.
 
 On the exact final ROM, all six full-HP isolated native-input duels clear with
-contacts in all18 species moves. Conductor executes all four moves after actual
+contacts in all 18 species moves. Conductor executes all four moves after actual
 damage unlocks Crownfall, then dies through native damage. These runs heal the
 player and isolate rosters. Fresh boot/Continue from an earned copied battery
 retains victory and returns to the cleared boss. The actual634-byte DSV and its
@@ -620,7 +592,7 @@ ordered stock attacks and oscillator voices. This pass replaces those layers.
   Native collision, gravity, damage, interruptions and physical rewards remain.
 
 The accepted0.21 room resources, connections, roofs, doors and maps are exact.
-Player abilities, purchases, ownership and the32KiB kit are retained. Creature
+Player abilities, purchases, ownership and the 32KiB kit are retained. Creature
 HP is14/20/10 for Crane,12/18/10 for Midnight,80 for Conductor before the existing
 room strength dial. Enemy counts/costs and chapter progress IDs remain.
 
@@ -658,7 +630,7 @@ Boot/Options0.21.0;128MiB. Sources: `chapter_renewal` tools and `actor_actions`.
   requests are silenced only inside the two chapters. Native impact foley and
   every other area's sounds remain. All six species' attack waves are observed
   in actual emulator mixes (correlation0.488..0.989); five-category authoring
-  includes reserved alert/idle samples, not a claim all35 are heard in play.
+  includes reserved alert/idle samples, not a claim all 35 are heard in play.
 - **Ten-room Midnight circuit:** eight main-route rooms plus two save branches.
   Terminal, floodworks, turbine climb, observatory, sanctuary and Conductor
   form a readable loop with a victory return. Old room/save IDs retain recovery
@@ -671,7 +643,7 @@ Boot/Options0.21.0;128MiB. Sources: `chapter_renewal` tools and `actor_actions`.
   the lower automatic exit. Port aisles are cleared; the wall-crawl channel is
   retained. Turbine's long final gap has intermediate landings. Maps/arrivals
   reflect the actual circuit, with short Objectives.
-- **Preservation:** original creature/sound resources, exact32KiB player kit, purchases, rewards and
+- **Preservation:** original creature/sound resources, exact 32KiB player kit, purchases, rewards and
   saved IDs remain. Latest634-byte DSVb800c4ec is protected by a content-addressed
   checkpoint; the prior0.20.0 ROM/composition is retained. The larger image and
   backward autoload copy provide space without rebasing the kit.
@@ -697,7 +669,7 @@ diagnostics are retained and do not qualify production behavior.
 Published through playtest in response to the request to remove sewer/Hive
 recolours, author original places like Substation, introduce distinct creatures
 and make the finale an actual combat encounter. Implemented and agent-tested;
-player rejected animation/AI, connections and repetition on2026-10-17; see0.21.0.
+player rejected animation/AI, connections and repetition on 2026-10-17; see0.21.0.
 
 Release `4b4e739eb9e85699942afe29cb0f9e809d7f9302dcee9154e338717516139888`,
 ARM9 `854b07a0e37faa49df3dd895df126aa4eb32e0243ca986190e0373aafe24f8b7`.
@@ -725,7 +697,7 @@ rebuild is byte exact. Boot/Options both show0.20.0. Cartridge remains64MiB.
   unlocks both exits, stops scheduled hazards and persists on flag147; legacy246
   is also retained. Old completed saves can fight this replacement. No timed
   auto-victory, new skill, full-screen boss HUD, slow motion or player teleport.
-- **Preservation:** exact32KiB player kit, purchases/native abilities, accepted
+- **Preservation:** exact 32KiB player kit, purchases/native abilities, accepted
   Crane room assets/code and saved room IDs/arrival IDs. Its shared area5 map
   count changes at Crane block+0x6DC; other Crane bytes remain exact. Three rebuilt saves
   plus Service Bay remain. Latest actual634-byte battery `3d21ee63` is byte exact;
@@ -750,11 +722,11 @@ Evidence: `work/midnight-rework/publication.json`, scope audit, door manifest,
 audio/reward/save reports and `chapter-preview.png`; machine catalog
 `reference/midnight_rework.json`. Agent controls do not establish player fun,
 difficulty, average duration or emulator frame rate. Current source composition
-uses2188/2560 new runtime bytes; native texture allocation stays below128KiB.
+uses 2188/2560 new runtime bytes; native texture allocation stays below 128KiB.
 
 ## v0.19.0 - 2026-10-16 - Crane Row rework
 
-Comprehensive response to the player's rejection of0.18.0: recognizable enemy
+Comprehensive response to the player's rejection of 0.18.0: recognizable enemy
 reactions/shared voices, missing rewards/death tint, sparse saved revisits and
 cluttered text/coarse repeated art. Published through playtest; implemented and agent-tested. Player acceptance
 is pending.
@@ -762,9 +734,9 @@ is pending.
 Release `9b2b948f6030a60246a0ca9ae477ae51c22f4aa349645fb2c6cef367c4557582`,
 ARM9 `9b04b02a74cd634901c1435a5bb7708c073c127467cc9971b3bc9a5d1c6a10e3`,
 `build/version-0.19.0-final/Versioned.nds`. Boot and Options both display0.19.0;
-normal composition is byte-exact. Crane code uses7864/8192 bytes; max365 room quads.
+normal composition is byte-exact. Crane code uses 7864/8192 bytes; max365 room quads.
 
-- **Creature identity:** revised Maw/Ballast/Spore silhouettes and154 authored
+- **Creature identity:** revised Maw/Ballast/Spore silhouettes and 154 authored
   animation routes, covering movement, attacks, bound/hurt/air reactions and
   deaths. The earlier47 routes left recognizable native reactions. Native rigs
   and AI framework remain. Texture-based face colour allows the engine's native
@@ -772,13 +744,13 @@ normal composition is byte-exact. Crane code uses7864/8192 bytes; max365 room qu
 - **Original sound:**15 deterministic synthesized alert/attack/death/hurt/idle
   voices. Scoped native sound routing selects them only in Crane rooms; Spore
   gets explicit native state-entry cues because its chassis emitted no voice
-  request. All582 original sound entries and unrelated files remain exact.
+  request. All 582 original sound entries and unrelated files remain exact.
 - **Real rewards:** cloned enemy configs had copied a zero reward-set field.
   Private set31 now uses native physical XP/HP orbs,10..12 XP and small health
   rolls. It preserves native LP behavior and does not directly credit stats.
   Reward controls disable player healing and measure actual currency at+0x44.
 - **Pressure and coverage:** persistent cleared crews retain callback-free
-  patrols; Engine/Shaft/Breakwater gain encounters. Main crews use12 total/4 live
+  patrols; Engine/Shaft/Breakwater gain encounters. Main crews use 12 total/4 live
   spawn-cost units; patrols8/4. Upper Quay/Shaft/Gantry use a bounded4/2 central
   wave; global live-cost ceiling4 stays intact. Spawning reaches roofs/shelves,
   and Quay gains a suspended upper combat loft. Office/Cache remain safe.
@@ -797,9 +769,9 @@ normal composition is byte-exact. Crane code uses7864/8192 bytes; max365 room qu
 Validation:387 automated tests;9 expanded adapter/driver/reward regressions;
 30 Crane real-door cases;13 Midnight native routes;11 arrival/revisit patrol
 probes;8 power/cache/save/safety and Red/Black no-refill hoist controls. All pass.
-Native-HP mixed Freight fight damages all3 and earns its actual clear callback
+Native-HP mixed Freight fight damages all 3 and earns its actual clear callback
 (XP1850->2028). Separate Dry Dock/Crown controls earn their callbacks and Crown
-opens its shortcut. All three isolated native kills collect10XP and1024/1024/
+opens its shortcut. All three isolated native kills collect10XP and 1024/1024/
 2048 Q12 health for Maw/Spore/Ballast; paired zero-set real kill awards0/0.
 Private voice calls and recorded PCM waveform matches establish all three death
 sounds render. Four goal/Objective phases and final Quay/Engine/native Pier UI
@@ -809,7 +781,7 @@ Stable publication matches the qualified ROM exactly. Latest634-byte battery
 `3d21ee63` and DSV wrapper remain byte-exact; its lossless checkpoint, prior ROM
 and compositions are retained. Player continues through the usual launcher.
 Final receipts: `work/crane-row/rework/publication.json`; research and explicit
-lab limitations in TECHNICAL. The natural-HP mixed fight heals the60-unit lab
+lab limitations in TECHNICAL. The natural-HP mixed fight heals the 60-unit lab
 player; separate callback and reward controls cap foes. These do not establish
 encounter difficulty. No frame-rate or player-fun claim.
 
@@ -835,11 +807,11 @@ Boot and Options both display0.18.0.
   inside the same native17 samples. It takes real combo damage with both suits.
 - **Lantern Spore:** hovering bell/core and tentacles, with new casting and
   melee motion. Its ranged attacks land in native story-context controls.
-- **Mixed pressure:** main crews use8 total/4 live native spawn-cost units,
+- **Mixed pressure:** main crews use 8 total/4 live native spawn-cost units,
   admitting all three types together (costs1/2/1 for Maw/Ballast/Spore).
-  Patrols use3/2 and the hoist opens with one Maw. Nominal HP10/14/7 is applied
+  Patrols use 3/2 and the hoist opens with one Maw. Nominal HP10/14/7 is applied
   before existing room scaling; these numbers are not attack damage.
-- **Original authored assets:** three models and47 SCA routes, including31
+- **Original authored assets:** three models and 47 SCA routes, including31
   attack routes, use preserved native rigs/AI/controllers and defeat callbacks.
   Models fit a conservative6144-vertex crowd budget. Original actor resources
   and config tables remain intact; appended groups/private records are selected
@@ -849,7 +821,7 @@ Boot and Options both display0.18.0.
   crew clears stay earned; repeatable patrols and uncleared encounters use the
   new roster. No save migration is required.
 
-Qualification on the exact release:374 tests, all30 Crane door cases, all13
+Qualification on the exact release:374 tests, all 30 Crane door cases, all 13
 Midnight routes, three native crew callbacks, Red extra-kit/Vitality and Black
 Vitality no-refill hoist wins with cleanup/exit/revisit, plus a production mixed
 fight with all three species concurrently (max4 live) and real defeat callback.
@@ -906,15 +878,15 @@ Boot and Options both display0.17.0.
   Midnight block, native assets/mission/ownership code and overview/goal screens
   remain exact; no new skill, stat balance or slow-motion effect is introduced.
 
-Qualification:357 unit tests, all30 Crane door cases, seven complete native-input
-terrain routes, all13 Midnight routes, six lever/cache/save/hazard controls,
+Qualification:357 unit tests, all 30 Crane door cases, seven complete native-input
+terrain routes, all 13 Midnight routes, six lever/cache/save/hazard controls,
 three native crew callbacks, and Red extra-kit/Vitality plus Black Vitality III
 no-refill hoist victories/cleanup/exit/revisit pass on the exact final ROM.
 Midnight Span needed one retry; its earlier failure remains recorded. The Crown
 chase fixture twice waited outside the reinforcement zone after the first crew;
 returning into the arena with native D-pad input fixes that driver stall without
 changing game waves. Failed reports/RAM and earlier terrain/controller trials
-remain in `work/crane-row/overhaul/`. Crew checks use1HP enemies/chase placements;
+remain in `work/crane-row/overhaul/`. Crew checks use 1HP enemies/chase placements;
 they establish callbacks rather than difficulty. Movement routes use native
 inputs after room arrival, parked enemies and bounded live destination checks.
 Visual
@@ -959,16 +931,16 @@ Agent-tested; player verdict on this navigation repair is pending.
   clear after five native seconds, restoring the map while play continues;
   the lever refreshes its next goal without leaving the room.
 - **Progress and gameplay preserved.** No migration/new paid moves or balance
-  changes. Kit/dial and Midnight code are byte-exact to0.16.2. All collision,
+  changes. Kit/dial and Midnight code are byte-exact to 0.16.2. All collision,
   door destinations/input modes, spawns, anchors and cameras remain exact.
   Encounter logic is unchanged apart from messages and first-visit selection;
   moved entity callback indices resolve to the same named groups. Two scoped
   native UI adapters preserve other rooms/areas and native Objectives fallback.
 
 Passed:352 full-suite tests,37 navigation/build checks,19 post-probe/document/
-release checks, then10 post-publication metadata checks; all30 Crane real-door
-cases with live arrivals, all13 Midnight
-routes (Signal entry needed one rerun), and eight gameplay controls. All29 exit
+release checks, then10 post-publication metadata checks; all 30 Crane real-door
+cases with live arrivals, all 13 Midnight
+routes (Signal entry needed one rerun), and eight gameplay controls. All 29 exit
 boards/12 detailed maps/four map-and-Objectives phases/native UI fallback were
 reviewed in emulator captures. Real lever -> Office save -> fresh native
 Continue restores the earned power goal. Red extra kit/Vitality and Black
@@ -993,29 +965,29 @@ Player reported major improvements in0.16.1 but invisible exits/ceilings;
 the player subsequently confirmed visual improvements, then prioritized map
 connections and next-action clarity (addressed in0.16.3).
 
-- **Visible exits throughout the district.** All29 Crane shutters now face
+- **Visible exits throughout the district.** All 29 Crane shutters now face
   the room, correcting back-face culling. Recessed steel jambs and a lintel
   lamp make each doorway legible from either approach. High hatches retain X;
   ground exits keep their walk-in behavior.
 - **Visible ceilings and finished upper corners.** Nine formerly hidden
   ceiling shells gain steel undersides at their actual collision boundary.
-  All12 rooms receive roof fascia, hazard edging and flush trim. World-scale
+  All 12 rooms receive roof fascia, hazard edging and flush trim. World-scale
   texture repeats avoid giant flat patches at upper corners.
 - **A destination at every exit.** Labels follow the actual links, including
   Freight's Engine House return. Compact boards clear stacked Engine House
   landings and Crown's low platform; their depth clears Warren cargo and
   Engine pipes. Old floating bars, overlapping Office text and duplicate signs
   are removed; Quay's district sign moves clear of the Pier label.
-- **Existing gameplay remains exact.** The only changed resources are the12
+- **Existing gameplay remains exact.** The only changed resources are the 12
   Crane model/texture pairs and English/American version labels. ARM9
   `abfbb112...`, all BSP/OBJ, doors, anchors, cameras, scripts, maps, native
-  assets and kit are byte-identical to0.16.1. No enemy, purchase or balance
+  assets and kit are byte-identical to 0.16.1. No enemy, purchase or balance
   changes. Boot and Options display0.16.2.
 
 Passed:342 full-suite tests,25 targeted tests,10 document/release checks,
-11 post-driver checks, all30 Crane real-door cases and8 gameplay controls,
-exact-byte scope/version audit, and65 reviewed emulator poses (29 exits/36
-roof-and-corner views) covering all12 rooms. All13 corrected Midnight routes
+11 post-driver checks, all 30 Crane real-door cases and 8 gameplay controls,
+exact-byte scope/version audit, and 65 reviewed emulator poses (29 exits/36
+roof-and-corner views) covering all 12 rooms. All 13 corrected Midnight routes
 pass on this exact ROM (Signal entry needed one rerun). The old Span masher
 stalled at its native12-unit neck on both
 0.16.1 and this ROM; native duck/roll inputs pass the full route on both.
@@ -1055,7 +1027,7 @@ improvements but reported invisible exits/ceilings;0.16.2 addresses those.
   prices and progress are preserved.
 
 Validation:339 full-suite tests, then30 targeted checks after correcting the
-Roof lab driver; all30 Crane door cases and all13 Midnight routes pass on this
+Roof lab driver; all 30 Crane door cases and all 13 Midnight routes pass on this
 exact ROM. Signal entry needed one rerun. The former Roof gather helper left
 fighters below melee range; the corrected fixture leaves enemy movement native,
 keeps its player chase away from doors and settles after earned victory. It
@@ -1100,7 +1072,7 @@ The previous v0.15.1 ROM and both active compositions are retained.
   resource stay exact. Existing kit, native A/B, purchases, dependencies,
   prices and save progress are preserved. No new skills or time slowing.
 
-Validation: 332 unit-suite checks plus3 health-window tests; all30 Crane and
+Validation: 332 unit-suite checks plus3 health-window tests; all 30 Crane and
 13 Midnight real-door cases;12 crash seeds. Full68-kit regression passed
 before the final hoist refinement. Final native gate/snare/Black controls
 match that baseline; an equivalence audit proves only the hoist's three
@@ -1181,7 +1153,7 @@ Agent-tested; player verdict pending.
   marked, with the native player marker. The chapter overview gains the
   bay's save icon and branch arrows.
 - **Roof wave stall:** a defeated NormalEnemy could retain a non-null weak
-  reference and active spawn cost forever. A small router scoped to room93
+  reference and active spawn cost forever. A small router scoped to room 93
   sends zero-HP enemies through native list cleanup. Living enemies keep
   the wave active; there is no automatic timed win. The next crew can start
   before the last corpse finishes fading, with the existing 45-frame gap.
@@ -1190,7 +1162,7 @@ Agent-tested; player verdict pending.
   and retain RAM on an aborted walk. The boss driver steps off a shelf
   before attacking a ground core; this changes lab inputs only.
 
-Validation: 300 unit tests, all13 real-door routes, new checkpoint native
+Validation: 300 unit tests, all 13 real-door routes, new checkpoint native
 save/Yes -> fresh Continue, map/player-marker captures, reproduced stalled
 wave -> fixed stress pass, living-crew/no-victory control. Boot and Options
 use v0.15.0. Kit code is identical to the v0.14.0 qualified kit; its 63 checks

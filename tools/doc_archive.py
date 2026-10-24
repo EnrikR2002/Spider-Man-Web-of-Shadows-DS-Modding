@@ -1,10 +1,12 @@
-"""Read one historical project note without loading the entire documentation archive."""
+"""Read, verify or append historical project notes without loading the whole documentation archive."""
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
+import subprocess
 import sys
 import zipfile
 
@@ -73,6 +75,41 @@ def verify_archive(index_path=INDEX):
     return len(paths)
 
 
+def note_sections(body):
+    """Markdown headings outside fenced code blocks, as the index records them."""
+    sections, fenced = [], False
+    for number, line in enumerate(body.splitlines(), 1):
+        if line.lstrip().startswith('```'):
+            fenced = not fenced
+        elif not fenced and line.startswith('#'):
+            sections.append({'line': number, 'heading': line.lstrip('#').strip(),
+                             'level': len(line) - len(line.lstrip('#'))})
+    return sections
+
+
+def add_entry(name, raw, *, title, snapshot_date, source_revision, index_path=INDEX):
+    """Append one retired note byte for byte and re-pin the archive hash."""
+    index, archive = load_index(index_path)
+    name = name.replace('\\', '/')
+    if any(entry['path'].casefold() == name.casefold() for entry in index['entries']):
+        raise ValueError(f'Archive already holds {name!r}; choose a dated name')
+    if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', snapshot_date):
+        raise ValueError('Snapshot date must be YYYY-MM-DD')
+    body = raw.decode('utf-8')
+    info = zipfile.ZipInfo(name, date_time=tuple(map(int, snapshot_date.split('-'))) + (0, 0, 0))
+    info.compress_type = zipfile.ZIP_DEFLATED
+    info.external_attr = 0o600 << 16
+    with zipfile.ZipFile(archive, 'a') as target:
+        target.writestr(info, raw)
+    index['entries'].append({'path': name, 'title': title, 'snapshot_date': snapshot_date,
+                             'source_revision': source_revision, 'bytes': len(raw),
+                             'words': len(body.split()), 'sha256': hashlib.sha256(raw).hexdigest(),
+                             'sections': note_sections(body)})
+    index['archive_sha256'] = hashlib.sha256(archive.read_bytes()).hexdigest()
+    Path(index_path).write_text(json.dumps(index, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    return verify_archive(index_path)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
@@ -85,10 +122,23 @@ def main(argv=None):
     reading.add_argument('--start', type=int, help='Absolute source line number')
     reading.add_argument('--lines', type=int, default=80)
     commands.add_parser('verify', help='Check ZIP, index, lengths and all SHA256s')
+    adding = commands.add_parser('add', help='Archive a retired file byte for byte before removing it')
+    adding.add_argument('name', help='Unique archive name, e.g. docs/OLD_NOTE-2026-10-24.md')
+    adding.add_argument('--from', dest='source', type=Path, required=True, help='File to archive')
+    adding.add_argument('--title', required=True)
+    adding.add_argument('--date', required=True, help='Snapshot date YYYY-MM-DD')
+    adding.add_argument('--revision', help='Git revision the bytes come from (default HEAD)')
     args = parser.parse_args(argv)
     try:
         index, archive = load_index()
-        if args.command == 'verify':
+        if args.command == 'add':
+            revision = args.revision or subprocess.run(
+                ['git', 'rev-parse', 'HEAD'], cwd=ROOT, check=True, capture_output=True,
+                text=True).stdout.strip()
+            count = add_entry(args.name, args.source.read_bytes(), title=args.title,
+                              snapshot_date=args.date, source_revision=revision)
+            print(f'Archived {args.name}; {count} archived notes verified')
+        elif args.command == 'verify':
             print(f'{verify_archive()} archived notes verified')
         elif args.command == 'list':
             for entry in index['entries']:
@@ -109,7 +159,7 @@ def main(argv=None):
                     print(f'{number}: {line}')
                 if truncated:
                     print(f'More in this section/note; resume with --start {selected[-1][0] + 1}')
-    except (KeyError, ValueError, OSError, zipfile.BadZipFile) as exc:
+    except (KeyError, ValueError, OSError, zipfile.BadZipFile, subprocess.SubprocessError) as exc:
         parser.exit(1, f'{exc}\n')
 
 

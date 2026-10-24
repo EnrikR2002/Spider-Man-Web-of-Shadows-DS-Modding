@@ -10,20 +10,26 @@ The Conductor has larger symbiote machinery armor and only its top boss meter.
 Vitality correctly handles lethal damage at low HP. Cape-free 2099, the compact
 Terminal creature atlas and earlier chapter/kit work remain. Player feel and
 appearance preference are still open.
-Details: [Changes](docs/CHANGES.md). Next priorities: [Roadmap](docs/TASM_ROADMAP.md#recommended-build-order).
+Details: [Changes](docs/CHANGES.md). What comes next: [Roadmap](docs/ROADMAP.md#now).
 
 ## Find what you need
 
 Start with [instructions](AGENTS.md) and the [current handoff](docs/TASKS.md).
 Then read the relevant section; routine startup does not require every document.
 
+```powershell
+python tools/run_tests.py          # tests; a fresh clone skips private-input cases
+python tools/tool_index.py vortex  # find a tool by name or purpose
+python tools/doc_links.py          # check local doc links and anchors
+```
+
 | Need | Document |
 |---|---|
-| Commands, tool selection, qualification, evidence and publishing | [Development guide](docs/DEVELOPMENT.md) |
+| Build stack, adding a feature, qualification and publishing | [Development guide](docs/DEVELOPMENT.md) |
 | Engine/format knowledge and task-to-topic map | [Technical notebook](docs/TECHNICAL.md) |
 | Original gameplay | [Native behavior](docs/OG_GAMEPLAY.md) |
 | Shipped behavior and release history | [Changes](docs/CHANGES.md) |
-| Design, player feedback and deferred work | [TASM roadmap](docs/TASM_ROADMAP.md) |
+| Plans, designs, player feedback and ideas | [Roadmap](docs/ROADMAP.md) |
 
 TASKS describes current work; source recipes, release pins and verified build
 metadata establish exact build identity. Dated sections retain historical facts;
@@ -35,7 +41,8 @@ scripts, captures and large reports belong in ignored work/ or build/.
 
 Python 3.10+ and Windows PowerShell; production art/ARM tools have additional
 [local dependencies](docs/DEVELOPMENT.md#local-runtime-dependencies). A new clone
-contains source/metadata, not private ROMs, overlays, batteries or local research dependencies.
+contains source/metadata, not private ROMs, overlays, batteries or local research
+dependencies: see [Know your environment](docs/DEVELOPMENT.md#know-your-environment).
 Clean ROM: `original/Spider-Man - Web of Shadows (USA) (En,Fr).nds`, 64 MiB,
 SHA256 `61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203`.
 Never overwrite it. Initial inventory/round-trip setup, when needed:
