@@ -18,7 +18,7 @@
     "Quick Recovery": 150
   },
   "date": "2026-10-22",
-  "design_reference": "../docs/TASM_ROADMAP.md#current-player-kit",
+  "design_reference": "../docs/ROADMAP.md#red-kit-the-amazing-spider-man",
   "design_status": "implemented-red-kit-final-skill-list-player-iteration",
   "entries": [
     {
@@ -136,7 +136,7 @@
   },
   "implemented_reference": "../docs/CHANGES.md",
   "known_movement_debt": "The prior direct-position Skyjack juggle drift is corrected in published v0.29 by a scoped native-velocity post-pass. Both walls, open contacts/R exits and 68 kit checks pass. Broader crowd backend remains unshipped; player feel verdict is pending.",
-  "next_iteration": "../docs/TASM_ROADMAP.md#recommended-build-order",
+  "next_iteration": "../docs/ROADMAP.md#now",
   "priority": "Reliable, fast acrobatic combat and convincing presentation in the existing chapters. Preserve native ownership/dependencies, story traversal and rewards.",
   "progression": "Preserve existing Red and Both Suits rows and paid ownership. No grant, refund migration, new stat row, shop expansion or save expansion is planned.",
   "schema_version": 1,

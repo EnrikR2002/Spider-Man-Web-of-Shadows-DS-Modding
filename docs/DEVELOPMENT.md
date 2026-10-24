@@ -2,7 +2,26 @@
 
 Read the section for the task; this guide is not mandatory startup reading.
 AGENTS owns constraints, TASKS owns the live handoff, TECHNICAL owns engine facts,
-CHANGES owns shipped behavior, and TASM_ROADMAP owns design and player feedback.
+CHANGES owns shipped behavior, and ROADMAP owns design and player feedback.
+
+## Know your environment
+
+Check what this workspace can do before planning work:
+
+| Workspace | Signs | You can | You cannot |
+|---|---|---|---|
+| Full local setup (Windows) | Clean ROM in `original/`, `build/`, `work/emulator`, `work/research-libs` | Build, run labs, qualify and publish | - |
+| Fresh clone or cloud container | `original/` holds only `PUT_ROM_HERE.txt`; no `build/` or `work/` | Edit docs, design and Python; run `python tools/run_tests.py` | Build ROMs, run emulator labs, read batteries or claim in-game results |
+
+In a fresh clone, `python tools/run_tests.py` reports tests blocked by a missing
+ROM, `build/`/`work/` file or the Keystone assembler as "private input missing"
+skips, and fails only on real errors. On a full setup, or with `--strict`, every
+error counts. Plain `python -m unittest` still works but shows those as errors.
+
+Find tools with `python tools/tool_index.py <word>`: it lists every `tools/`
+module with its purpose, grouped by feature family. Check links and anchors with
+`python tools/doc_links.py`, and every documentation rule with
+`python tools/doc_contract.py check` (both run by `tests.test_document_layout`).
 
 ## Establish the current state
 
@@ -20,6 +39,63 @@ verdict remains separate. Dated save hashes describe that observation only.
 Always re-read the actual battery via `work/playtest.json`; never select a save
 from old notes. A new clone lacks private ROMs, overlays, batteries and research
 dependencies. Check availability before starting a long build.
+
+## How a release is built
+
+`python mod.py build` reads `reference/gameplay_profile.json` (the profile name
+and the hash of every required overlay in `mods/`), packs those overlays into
+`Glob.bin`, applies `tools/combat_profile.apply_rom` for the profile's compose
+parent, then runs the post-passes in `mod.create_build` in a fixed order. Each
+post-pass runs only when `tools/release_info.PROFILE_INFO[profile]` sets its
+flag: `chapter`, `crane`, `midnight_rework`, `chapter_renewal`,
+`creature_forge`, `creature_texture_fix`, `chapter_spectacle`,
+`midnight_rebuild`, `midnight_encore`, `midnight_voltage`, `midnight_finale`,
+`midnight_reliability`, `chapter_finish`, `spider2099`, `spider2099_polish`,
+`spider2099_movie`, `spider2099_enemy_texture`, `vortex_forge`,
+`hunters_return`, `hunters_return_fix`, `talon_lift`, `spider2099_presence`. Recent
+profiles copy their parent's flags and add one (v0.31.0 is v0.30.3 plus
+`vortex_forge`), so the current release is the whole stack. A post-pass refuses
+any input except its exact published parent ROM and checks its output against
+the release pin.
+
+`python tools/playtest.py build` wraps that build, protects the actual battery,
+installs the stable ROM and records the release. Older generators reproduce
+their own release only; never change their bytes under a published version.
+
+## Add a feature as a new post-pass
+
+New gameplay or art ships as one more post-pass over the current published ROM.
+Copy the established shape (`tools/vortex_forge.py`, `.s`, `_art.py`,
+`_lab.py`, `tests/test_vortex_forge.py`, `reference/vortex_forge.json`):
+
+1. Start only from a ROADMAP item the player approved, with acceptance criteria.
+2. `tools/<feature>.py` pins `PARENT` to the published ROM SHA
+   (`release_info.PROFILE_INFO['tasm-v<current>']['rom_sha256']`) and its path
+   under `build/version-<current>-final/`. `apply_rom(rom)` rejects any other
+   parent, changes only an explicit allow-list of resources and ARM9 ranges,
+   rewrites the boot/Options version strings (string slots 50 and 74), compares
+   against its release pin when one exists, and returns `(rom, log)`.
+   `generate(out)` writes a candidate under `build/` with `.build.json`,
+   `gameplay_profile.json` and `changes.json`.
+3. ARM code goes in `tools/<feature>.s`, assembled with Keystone from
+   `work/research-libs`; run the literal/branch checks from
+   `tools/assemble_tasm_kit.py`. Keep the 32 KiB player kit exact unless the
+   change deliberately extends it, and give new code its own guarded block.
+4. Authored motion uses `tools/kit_choreography.py` (see TECHNICAL
+   [Kit animation authoring](TECHNICAL.md#kit-animation-authoring)).
+5. `tools/<feature>_lab.py` runs cases on copied latest batteries and disposable
+   RAM with an explicit `--rom`.
+6. `tests/test_<feature>.py`: pure-Python checks that run anywhere; guard
+   ROM-dependent classes with `unittest.skipUnless(mod.DEFAULT_ROM.exists(), ...)`.
+7. Register the release: add `PROFILE_INFO['tasm-v<next>']` as
+   `{**PROFILE_INFO['tasm-v<current>'], 'version': ..., 'date': ..., '<feature>': True}`,
+   add the guarded block (and its log key) at the end of `mod.create_build`,
+   then add the ROM/ARM9 pins once the candidate is accepted.
+8. Qualify (below), publish with `playtest.py build`, then record the receipt in
+   `reference/<feature>.json`, the release as a new top CHANGES section, the
+   README "Current release" line and TASKS "Published build" (the contract
+   checks that all of them name the same version), then run
+   `python tools/doc_contract.py freeze` to freeze the new CHANGES section.
 
 ## Find the implementation
 
@@ -47,6 +123,8 @@ dependencies. Check availability before starting a long build.
 | Cape-free Across the Spider-Verse 2099 | [SCA / model / textures](TECHNICAL.md#sca--model--textures) | `spider2099_movie.py`, `spider2099_movie_art.py`; `reference/spider2099_movie.json`. Exact v0.30.1 post-pass, existing selector literals only; the v0.30.3 I4 follow-up resolves the sampled crowd. |
 | Crowded Midnight enemy texture residency | [SCA / model / textures](TECHNICAL.md#sca--model--textures) | `spider2099_enemy_texture.py`; `reference/spider2099_enemy_texture.json`. Preserve 128px artwork/UVs, compact to I4, validate live materials on a copied-save mixed scene. |
 | Save safety and publication | AGENTS and this guide's release section | `playtest.py`, `desmume_save.py`, `save_backups.py` |
+| Shop rows, ability bits and prices | [Purchase records](TECHNICAL.md#purchase-records-and-native-ownership), [Shop tables](TECHNICAL.md#shop-tables-menu-and-free-ownership-bits-v0100) | `tasm_kit.py` (Red/Both Suits rows), `release_info.py` (prices), `upgrade_trace.py` |
+| Spider-Man 2099 Black kit (designed, not built) | ROADMAP [implementation guide](ROADMAP.md#implementation-guide) | Proposed `hunter_kit.py` family; follow [Add a feature](#add-a-feature-as-a-new-post-pass) |
 
 Tool filenames in this table are under `tools/`. Find a CLI's actual arguments
 with `--help`; do not infer a new command from a similar older tool. Search topic
@@ -98,7 +176,7 @@ native play. `continue` requires `work/creature-forge/conductor-earned.sav` and
 fresh-boots it; never substitute the actual battery. Initial room arrival and
 roster isolation are lab fixtures. Read each report's limits before making claims.
 
-For0.27 generate a new private candidate with `midnight_finale.py --out <build-dir>`.
+For v0.27 generate a new private candidate with `midnight_finale.py --out <build-dir>`.
 `midnight_voltage_lab.py boss|press --rom <candidate> --out <work-dir>` selects
 the candidate's current counter state and contact timings from its metadata.
 `midnight_enemy_lab.py` resolves the candidate's actual roster-table pointers;
@@ -111,7 +189,7 @@ the current full-HP wave, waits for later native spawns and clears again; the
 player is healed and contained by inputs. Pair with `observatory` for the late
 mixed roster. These are clearance controls, not difficulty/player-acceptance tests.
 
-For0.23 use `chapter_spectacle_lab.py --help`. Its `duel` fixture targets the
+For v0.23 use `chapter_spectacle_lab.py --help`. Its `duel` fixture targets the
 new per-room pattern/goal tables; older isolation fixtures no longer isolate
 the production roster. `freight` uses the live native cost budget (Ballast costs
 two), so two simultaneous species and actual damage/clearance of all three is
@@ -121,7 +199,7 @@ and `pump` cover the new sequence; pass an explicit ROM and unique tag.
 progress preset; pair its result with `arm-retry-continue --save <private.sav>`.
 A RAM flag observation alone cannot establish a successful save.
 
-For0.25, `midnight_encore_lab.py conductor --rom <candidate> --no-heal --persist`
+For v0.25, `midnight_encore_lab.py conductor --rom <candidate> --no-heal --persist`
 observes the native boss meter alongside an earned victory/save. `--reactive`
 adds native R/B responses; it does not make the run a no-damage demonstration.
 `pressure` labels between-program player refills and real HP phase progression;
@@ -131,7 +209,7 @@ Continue may use the native room's entry spawn rather than the save sphere's
 last X; drive the actual chapel/door from observed state. Fixed short scripts
 can stop before a wider room's exit and falsely report a persistence failure.
 
-For0.24 use `midnight_enemy_lab.py --rom $candidateRom --style <style>` for
+For v0.24 use `midnight_enemy_lab.py --rom $candidateRom --style <style>` for
 actual player-HP contact checks. `--reset-between` restores the native player
 maximum between programs; `--finish` permits separate refills during the ending
 base-string clear. `--counterplay` uses native R/B inputs. Reports distinguish
@@ -216,7 +294,7 @@ the exit input.
 
 ## Read the lab evidence correctly
 
-For0.26 sound, use `midnight_voltage_lab.py analyze --live <probe-dir> --muted
+For v0.26 sound, use `midnight_voltage_lab.py analyze --live <probe-dir> --muted
 <zero-owned-wave-dir> --style <species> --out <work-dir>` with the bundled NumPy
 runtime. The zero-wave control keeps sequence priority, file sizes and timing.
 Only subtract mixes when the gameplay traces match exactly; otherwise use
@@ -269,19 +347,32 @@ manual recovery from the retained artifacts. Reinstalling identical bytes keeps
 the original publication receipt and its original checkpoint/predecessor links.
 Afterward compare stable/canonical SHA, boot/Options version, build/release
 metadata and the freshly read battery/checkpoint bytes. Later player saves can
-differ from that original publication checkpoint; never restore it automatically.
-No research save writes
-to the real battery and no stale emulator states across ROM changes.
+differ from the publication checkpoint; never restore it automatically.
+No research save writes to the real battery and no stale emulator states across
+ROM changes. Then add the CHANGES section, update README and TASKS to the new
+version and run `python tools/doc_contract.py freeze` followed by `check`.
 
 Update TASKS at candidate acceptance, before a long qualification batch, at
 publication and before handing off. Record only current objective, candidate /
 published identity, completed evidence, unresolved issue and next exact action.
 Put detailed receipts in reference, engine discoveries in TECHNICAL, shipped
-behavior in CHANGES and user acceptance/rejection in TASM_ROADMAP. Mark a new
+behavior in CHANGES and user acceptance/rejection in the ROADMAP feedback log. Mark a new
 discovery or superseded assumption in its owning section immediately; a late
 session summary is too easy to lose. Keep session transcripts out of the docs.
 
 ## Maintain documentation
+
+`reference/doc_contract.json` is the machine-checked contract for every
+document: what it owns, word limits, required headings and text, an edit policy,
+routing (which content goes where), forbidden edits, the version sources that
+must agree and the frozen CHANGES sections. `python tools/doc_contract.py check`
+lists every violation and `tests.test_document_layout` runs one test per rule.
+Before editing a document, read its contract entry. When a check fails, fix the
+document; change the contract only when the user changes documentation policy.
+A published CHANGES section is frozen: re-freeze it with
+`python tools/doc_contract.py freeze --update <version>` only when the user asked
+for that correction. ROADMAP and TASKS are written for the player; the other
+documents are written for agents and may favor dense, exact reference text.
 
 Use the approved ownership map in AGENTS. Check current profile/source pins,
 release history and stable/canonical metadata before updating a version claim;
@@ -289,7 +380,7 @@ read the actual battery/checkpoint rather than copying a historical save hash.
 Keep implemented, agent-tested and player-confirmed claims separate. Preserve
 release dates and immutable receipts when later documentation is reviewed.
 
-Keep TASKS below 900 words and replace its stale objective/next action. The live
+Replace TASKS' stale objective/next action rather than appending. The live
 roadmap holds current decisions, acceptance criteria and deferred concepts;
 old construction pitches must not remain a second active queue. Planning JSON
 may retain dated baseline allocations/receipts, but label that scope and point
@@ -297,18 +388,19 @@ its current status to the live composition. Do not relabel an old artifact with
 a newer version or change a production recipe merely to refresh prose.
 
 Preserve retired designs/catalogs byte for byte in the existing archive before
-removing them from live docs. Record their snapshot dates in the index; the
-reader uses an entry's date, falling back to the original archive date.
-Use `python tools/doc_archive.py list <topic>`, then `read <name> --toc` or a
-bounded `--section`. Verify archive integrity and the fixed document set with
+removing them from live docs:
+`python tools/doc_archive.py add <unique-name> --from <file> --title <title> --date <YYYY-MM-DD>`
+appends the bytes, records the snapshot date and source revision, and re-pins
+the archive hash. Read with `python tools/doc_archive.py list <topic>`, then
+`read <name> --toc` or a bounded `--section`. Verify the archive and the whole
+documentation contract with
 `python -m unittest tests.test_doc_archive tests.test_document_layout -q`.
-Check local Markdown links/anchors and the final diff. A documentation-only
-cleanup does not add emulator coverage or player acceptance.
+A documentation-only cleanup does not add emulator coverage or player acceptance.
 
 ## Local runtime dependencies
 
 Production generators use standard-library Python plus the existing pinned ARM
-assembler support (`work/research-libs`, loaded by the kit tools), plus Pillow
+assembler support (Keystone in `work/research-libs`, loaded by the kit tools), plus Pillow
 when building painted creature materials. Emulator tools
 use the pinned melonDS core under `work/emulator`; its fetch/integrity code is in
 `emulator_smoke.py`. Image review also needs Pillow. Offline sound authoring additionally

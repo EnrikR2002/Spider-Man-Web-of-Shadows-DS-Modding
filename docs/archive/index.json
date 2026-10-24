@@ -2,7 +2,7 @@
   "schema_version": 1,
   "snapshot_date": "2026-10-05",
   "purpose": "Historical source notes; current status is in docs/TASKS.md. Read only a selected entry/section with tools/doc_archive.py.",
-  "archive_sha256": "8094f7ffad412ebb6b0195cbc60ea026695cb66656e7b4fd71b52ba3d568142a",
+  "archive_sha256": "0a44708bf880b3c800cabcb36c2fbb5a535fd4fbf6715a126d4472161321b2d8",
   "entries": [
     {
       "path": "AGENTS.md",
@@ -1872,6 +1872,219 @@
       "words": 540,
       "sha256": "cd2c8aa8d96e6fb32b7ac0235309463a0246fd8da8c0d97379d18f881761348a",
       "sections": []
+    },
+    {
+      "path": "RETIRED_2099_DESIGNS.md",
+      "title": "Retired Spider-Man 2099 Black combat designs",
+      "snapshot_date": "2026-10-23",
+      "source_revision": "8ecf4b41d5860ad8a78e2e1139a215d7e7b9ce19",
+      "bytes": 12326,
+      "words": 1976,
+      "sha256": "26410578b90c9cdbc1409a69abb15498e30d75c5fc692b6c824fe3359782b79b",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Retired Spider-Man 2099 Black combat designs",
+          "level": 1
+        },
+        {
+          "line": 8,
+          "heading": "2026-10-22 catch/carry/crash/chase proposal (revision f5d1417)",
+          "level": 2
+        },
+        {
+          "line": 13,
+          "heading": "Spider-Man 2099: Black-slot rework",
+          "level": 3
+        },
+        {
+          "line": 60,
+          "heading": "2026-10-23 Hunter revision 1 (revision 8ecf4b4)",
+          "level": 2
+        },
+        {
+          "line": 67,
+          "heading": "Combat: the Hunter (design, 2026-10-23)",
+          "level": 4
+        }
+      ]
+    },
+    {
+      "path": "docs/TASM_ROADMAP-2026-10-24.md",
+      "title": "TASM roadmap, last version before docs/ROADMAP.md (Hunter revision 2)",
+      "snapshot_date": "2026-10-24",
+      "source_revision": "07e06e1502cccb18efa1e2d26ddef474ae6c90ac",
+      "bytes": 26093,
+      "words": 4080,
+      "sha256": "9179b1d43380d06ad14bf12e6ce50d3a1b8d6660e67eb083f0acdce4543b553c",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "TASM: never stand still",
+          "level": 1
+        },
+        {
+          "line": 8,
+          "heading": "Current direction and acceptance",
+          "level": 2
+        },
+        {
+          "line": 48,
+          "heading": "Current player kit",
+          "level": 2
+        },
+        {
+          "line": 77,
+          "heading": "Recommended build order",
+          "level": 2
+        },
+        {
+          "line": 92,
+          "heading": "1. Establish the v0.29 full-route verdict",
+          "level": 3
+        },
+        {
+          "line": 107,
+          "heading": "2. Refine encounter decisions from the replay",
+          "level": 3
+        },
+        {
+          "line": 116,
+          "heading": "3. Review Crane's complete vertical route and payoff",
+          "level": 3
+        },
+        {
+          "line": 127,
+          "heading": "4. Extend creature presentation only after the example works",
+          "level": 3
+        },
+        {
+          "line": 135,
+          "heading": "Acceptance for a future candidate",
+          "level": 2
+        },
+        {
+          "line": 149,
+          "heading": "Spider-Man 2099: Black-slot rework",
+          "level": 2
+        },
+        {
+          "line": 160,
+          "heading": "Combat: the Hunter (design rev. 2, 2026-10-23)",
+          "level": 3
+        },
+        {
+          "line": 312,
+          "heading": "Deferred work",
+          "level": 2
+        },
+        {
+          "line": 324,
+          "heading": "Historical designs",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/TASM_ROADMAP-local-2026-10-23.md",
+      "title": "Local v0.33.1 seven-row air and timed-guard proposal before Hunter revision 3 merge",
+      "snapshot_date": "2026-10-23",
+      "source_revision": "64e216fccaf805f63eb1d7a9383ce0d24ae6adc1",
+      "bytes": 33892,
+      "words": 4986,
+      "sha256": "5e3e5fe28d7da02c61b091ceff5bb6a053264c8be3a17c4f9ffb028184fc57e1",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "TASM: never stand still",
+          "level": 1
+        },
+        {
+          "line": 8,
+          "heading": "Current direction and acceptance",
+          "level": 2
+        },
+        {
+          "line": 56,
+          "heading": "Current player kit",
+          "level": 2
+        },
+        {
+          "line": 85,
+          "heading": "Recommended build order",
+          "level": 2
+        },
+        {
+          "line": 105,
+          "heading": "1. Establish the v0.29 full-route verdict",
+          "level": 3
+        },
+        {
+          "line": 120,
+          "heading": "2. Refine encounter decisions from the replay",
+          "level": 3
+        },
+        {
+          "line": 129,
+          "heading": "3. Review Crane's complete vertical route and payoff",
+          "level": 3
+        },
+        {
+          "line": 140,
+          "heading": "4. Extend creature presentation only after the example works",
+          "level": 3
+        },
+        {
+          "line": 148,
+          "heading": "Acceptance for a future candidate",
+          "level": 2
+        },
+        {
+          "line": 162,
+          "heading": "Spider-Man 2099: Black-slot rework",
+          "level": 2
+        },
+        {
+          "line": 209,
+          "heading": "Across the Spider-Verse reassessment - 2026-10-23",
+          "level": 3
+        },
+        {
+          "line": 236,
+          "heading": "Full kit, air routes and physical counters - 2026-10-23 working proposal",
+          "level": 3
+        },
+        {
+          "line": 265,
+          "heading": "A complete air game",
+          "level": 4
+        },
+        {
+          "line": 302,
+          "heading": "Talon Guard and the automatic counter",
+          "level": 4
+        },
+        {
+          "line": 356,
+          "heading": "How encounters would play",
+          "level": 4
+        },
+        {
+          "line": 376,
+          "heading": "Prototype order and unresolved engine work",
+          "level": 4
+        },
+        {
+          "line": 395,
+          "heading": "Deferred work",
+          "level": 2
+        },
+        {
+          "line": 407,
+          "heading": "Historical designs",
+          "level": 2
+        }
+      ]
     }
   ]
 }

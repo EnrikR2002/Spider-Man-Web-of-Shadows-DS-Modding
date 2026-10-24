@@ -1,7 +1,10 @@
 """Archive integrity and bounded reading; no ROM/emulator required."""
 import hashlib
 import io
+import shutil
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 from tools import doc_archive as docs
@@ -49,6 +52,26 @@ class DocumentationArchiveTests(unittest.TestCase):
                     docs.main(['read', 'NOTE.md', '--lines', '1'])
                 self.assertIn(f'Historical snapshot {expected}: NOTE.md', output.getvalue())
 
+    def test_add_appends_one_note_and_repins_the_archive(self):
+        with tempfile.TemporaryDirectory() as folder:
+            index_path = Path(folder) / 'index.json'
+            shutil.copy(docs.INDEX, index_path)
+            shutil.copy(docs.INDEX.with_name('legacy-notes.zip'), Path(folder) / 'legacy-notes.zip')
+            before = docs.verify_archive(index_path)
+            raw = '# Retired\n```text\n# not a heading\n```\n## Kept part\nbody\n'.encode()
+            self.assertEqual(docs.add_entry('docs/RETIRED-TEST.md', raw, title='Retired test',
+                                            snapshot_date='2026-10-24', source_revision='abc',
+                                            index_path=index_path), before + 1)
+            index, archive = docs.load_index(index_path)
+            entry = docs.resolve_entry(index['entries'], 'RETIRED-TEST.md')
+            self.assertEqual(docs.read_entry(archive, entry).encode(), raw)
+            self.assertEqual([s['heading'] for s in entry['sections']], ['Retired', 'Kept part'])
+            with self.assertRaisesRegex(ValueError, 'already holds'):
+                docs.add_entry('docs/retired-test.md', raw, title='Again', snapshot_date='2026-10-24',
+                               source_revision='abc', index_path=index_path)
+            with self.assertRaisesRegex(ValueError, 'YYYY-MM-DD'):
+                docs.add_entry('docs/OTHER.md', raw, title='Bad date', snapshot_date='24/10/2026',
+                               source_revision='abc', index_path=index_path)
 
 if __name__ == '__main__':
     unittest.main()

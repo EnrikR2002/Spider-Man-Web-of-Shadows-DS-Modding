@@ -4,7 +4,7 @@
   "black_slot": "2099-classic",
   "current_recipe": "gameplay_profile.json",
   "current_release": "0.33.1",
-  "expanded_design": "../docs/TASM_ROADMAP.md",
+  "expanded_design": "../docs/ROADMAP.md",
   "historical_notes_archive": "../docs/archive/legacy-notes.zip",
   "historical_snapshot": {
     "archive": "../docs/archive/legacy-notes.zip",
@@ -26,8 +26,8 @@
     "Dragnet",
     "Vortex"
   ],
-  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Cape-free 2099 appearance, Hunter's Return and Talon Lift are published. The remaining five Black replacements and expanded air/physical-counter mechanics are design proposals only. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices, third suit, shop/save expansion and branches remain deferred.",
-  "prototype_reference": "../docs/TASM_ROADMAP.md#recommended-build-order",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. The cape-free Across the Spider-Verse 2099 Black appearance is published; the Hunter combat design (revision 3, 2026-10-24) has 14 skills: the seven native Black rows plus seven Black rows on free saved bits 83..89, revision 3 unimplemented. Hunter's Return and manual-jump Talon Lift remain published in v0.33.1. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices, third suit, save expansion and branches remain deferred.",
+  "prototype_reference": "../docs/ROADMAP.md#now",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
   "suits": [
@@ -59,17 +59,124 @@
         "section": "Spider-Man 2099",
         "snapshot_date": "2026-10-21"
       },
-      "counter_selection": {
-        "date": "2026-10-23",
-        "direction": "timed block -> automatic counter",
-        "limits": "Proposed Up+R binding, timing, purchase placement and animation remain unapproved and engine-untested; damage-taking Reprisal is unselected.",
-        "selected_by": "player",
-        "status": "design-direction-selected-not-implemented"
+      "combat_design": {
+        "apex_predator_tiers": {
+          "2": {
+            "effect": "Fast Hunt 1.10x",
+            "visual": "eye lenses and talon tips red"
+          },
+          "3": {
+            "effect": "Heavy Line (yank lane catches up to two more) and Shockwave Talons on every 2099 ender",
+            "visual": "red web lines; chest spider and shoulder panels brighten"
+          },
+          "4": {
+            "effect": "Fast Hunt 1.20x",
+            "visual": "red accents pulse"
+          },
+          "5": {
+            "effect": "Feeding Frenzy life steal: 5% of HP removed banks; restore per quarter unit; max one unit per 300 updates",
+            "visual": "whole suit glows red; HUD bar flashes on each heal"
+          }
+        },
+        "approved": {
+          "by": "player",
+          "changes": "Shockwave Talons moved to tier 3+; tier 5 life steal; a visible upgrade per tier",
+          "date": "2026-10-24"
+        },
+        "date": "2026-10-24",
+        "native_rows": {
+          "Black Widowmaker": "Talon Line",
+          "Ground Rebound": "Freefall",
+          "Poison Pummel": "Shredder",
+          "Power Launch": "Talon Lift",
+          "Quick Charge": "Relentless",
+          "Super Charge": "Talon Pounce",
+          "Webbed Fury": "Rundown"
+        },
+        "new_rows": [
+          {
+            "ability_bit": 83,
+            "event_id": 392,
+            "input": "X on the ground with no native X prompt; Up+X upward",
+            "move": "Web Yank",
+            "requires": null
+          },
+          {
+            "ability_bit": 84,
+            "event_id": 393,
+            "input": "X in the air",
+            "move": "Reel In",
+            "requires": "Web Yank"
+          },
+          {
+            "ability_bit": 85,
+            "event_id": 394,
+            "input": "Air Y in Black form",
+            "move": "Sky Rake",
+            "requires": null
+          },
+          {
+            "ability_bit": 86,
+            "event_id": 395,
+            "input": "Air A with an airborne enemy in reach",
+            "move": "Meteor Catch",
+            "requires": "Sky Rake"
+          },
+          {
+            "ability_bit": 87,
+            "event_id": 396,
+            "input": "Down+Y next to a downed enemy",
+            "move": "Roof Pin",
+            "requires": null
+          },
+          {
+            "ability_bit": 88,
+            "event_id": 397,
+            "input": "Web Yank zip, Up-pounce or jump into a boss while holding toward it",
+            "move": "Boarding",
+            "requires": null
+          },
+          {
+            "ability_bit": 89,
+            "event_id": 398,
+            "input": "Passive, by native combo tier",
+            "move": "Apex Predator",
+            "requires": null
+          }
+        ],
+        "pillars": [
+          "talons",
+          "webs",
+          "air",
+          "boss",
+          "meter"
+        ],
+        "reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
+        "removed_in_revision_3": [
+          "Collar Toss",
+          "Lariat"
+        ],
+        "request": "Make Black play and fight as close as possible to Miguel O'Hara in Across the Spider-Verse; make it fun. Revision 1 review: avoid one-trick pinning, answer bosses, add webbing and air combos, add rows as needed within the 2D mob/boss brawler. Revision 2 review: X for webs approved; remove Collar Toss and Lariat; add one skill that rewards a full combo meter like Red's Momentum/Overclock.",
+        "retired_archive": [
+          "RETIRED_2099_DESIGNS.md",
+          "docs/TASM_ROADMAP-2026-10-24.md"
+        ],
+        "revision": 3,
+        "skill_count": 14,
+        "spare_free_bits": [
+          90,
+          91,
+          92,
+          93,
+          94,
+          95
+        ],
+        "status": "design-approved-not-implemented",
+        "supersedes": "Hunter revision 2 (15 rows, 2026-10-23), revision 1 and the 2026-10-22 catch/carry/crash/chase proposal; local 2026-10-23 seven-row air/guard proposal (archived at docs/TASM_ROADMAP-local-2026-10-23.md)"
       },
-      "design_reference": "../docs/TASM_ROADMAP.md#spider-man-2099-black-slot-rework",
-      "expanded_design_reference": "../docs/TASM_ROADMAP.md#full-kit-air-routes-and-physical-counters---2026-10-23-working-proposal",
+      "design_reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
       "id": "2099-classic",
-      "implementation_order": "Latest request is design work. If implementation is requested, first qualify one planted contact guard/riposte against one ordinary melee attack, then Raking Cross and one advanced air route. Do not activate the whole kit automatically.",
+      "implementation_order": "Player requested implementation: prove the code/state, shop, X-prompt and Black-only animation gates, then Web Yank pipeline on v0.33.1. Publish one slice at a time with a player verdict between, as ROADMAP specifies.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Fuller chest/back/arms on the preserved native rig; unrelated native motion clips retained",
@@ -80,21 +187,21 @@
         "Purchased Hunter's Return with corrected victim isolation/owner cleanup",
         "Purchased Talon Lift with manual held-B air follow-up and native R exit"
       ],
-      "kit": "Proposed physical scrapper loop: meet the attack, counter/catch, choose grounded pressure or manual launch/jump, contact-gated air pressure and spike/slam/re-engage. Hunter's Return and Talon Lift are implemented. The remaining five purchased replacements, including their proposed air branches, and Talon Guard remain unimplemented; use the live roadmap for the working controls, ownership and counter alternative.",
+      "kit": "Hunter design revision 3 (2026-10-24, unimplemented): 14 skills across talon, web, air, boss and meter pillars on the exact native Power Dash/Hammer Spike/Hammer Slam foundation; webs on X when no native X prompt is in reach; Vulture-style Boarding against bosses; Apex Predator rewards combo tiers. Ordinary B/base strings/R, ownership, dependencies and progression are unchanged. The published baseline additionally retains Hunter's Return and manual-jump Talon Lift; their revision-3 redesigns are not implemented.",
       "latest_feedback": {
-        "date": "2026-10-23",
-        "source_version": "0.33.1",
-        "summary": "Flesh out the full kit and how it plays, add air combos, and explore blocking or instant counterattacks because 2099 should be a scrapper. No new appearance or gameplay feel verdict is recorded. The player subsequently selected timed block -> automatic counter as the counter direction."
+        "date": "2026-10-22",
+        "source_version": "0.30.1",
+        "summary": "Likes 2099 overall; make the model closer to the supplied Across the Spider-Verse movie reference and remove the red web cape."
       },
       "name": "Spider-Man 2099 - Across the Spider-Verse inspired",
+      "replaces_form": "black",
+      "selection_date": "2026-10-11",
+      "status": "v0.33.1-appearance-and-two-skills-published-hunter-revision-3-starting",
+      "validation_limit": "Published implementation evidence is in spider2099_presence.json, hunters_return.json and talon_lift.json. Hunter revision 3 are design proposals without engine testing. Player feel/appearance, full-route balance and DeSmuME/hardware pacing remain open.",
       "prior_design_snapshot": {
         "entry": "docs/TASM_ROADMAP_2099_BEFORE_AIR_COUNTER_2026-10-23.md",
         "snapshot_date": "2026-10-23"
-      },
-      "replaces_form": "black",
-      "selection_date": "2026-10-11",
-      "status": "appearance-published-v0.33.1-two-black-skills-implemented-air-counter-design-only",
-      "validation_limit": "Published implementation evidence is in spider2099_presence.json, hunters_return.json and talon_lift.json. Expanded air branches and guard/counter mechanics are design proposals without engine testing. Player feel/appearance, full-route balance and DeSmuME/hardware pacing remain open."
+      }
     },
     {
       "id": "scarlet-kaine",
