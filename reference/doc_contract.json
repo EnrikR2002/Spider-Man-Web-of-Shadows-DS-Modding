@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "purpose": "Machine-checked documentation rules. tools/doc_contract.py check enforces every rule here and tests.test_document_layout runs it. Change this file only when the user changes documentation policy; never weaken a rule to make a check pass.",
+  "documents": [
+    {
+      "path": "AGENTS.md",
+      "owns": "Stable constraints, startup procedure and documentation policy",
+      "audience": "agent",
+      "max_words": 900,
+      "required_headings": [
+        "# Project instructions",
+        "## Start and find the current truth",
+        "## Documentation ownership",
+        "## Task completion and Git",
+        "## Safety and validation",
+        "## Player direction"
+      ],
+      "edit_policy": "Change only when the user changes direction or policy; keep the ownership table in step with this contract."
+    },
+    {
+      "path": "README.md",
+      "owns": "Short entry point, play instructions, current release and document map",
+      "audience": "player and agent",
+      "required_headings": [
+        "# Spider-Man: Web of Shadows DS modding",
+        "## Find what you need",
+        "## Local setup"
+      ],
+      "required_patterns": [
+        "Current release: \\*\\*v\\d+\\.\\d+\\.\\d+\\*\\*"
+      ],
+      "edit_policy": "Update the current-release sentence at each publication; keep it short."
+    },
+    {
+      "path": "mods/README.md",
+      "owns": "Overlay-loader rules for private mods/",
+      "audience": "agent",
+      "required_headings": [
+        "# Personal overlays"
+      ],
+      "edit_policy": "The only non-asset file the overlay loader ignores; change only with the loader."
+    },
+    {
+      "path": "docs/TASKS.md",
+      "owns": "Current objective, published build, evidence, blocker and next exact action",
+      "audience": "player and agent",
+      "max_words": 900,
+      "required_headings": [
+        "# Current work and handoff",
+        "## Current objective",
+        "## Published build",
+        "## Blockers and next exact action"
+      ],
+      "required_patterns": [
+        "^Updated \\d{4}-\\d{2}-\\d{2}"
+      ],
+      "edit_policy": "Replace stale state at milestones and before stopping; never append a history log."
+    },
+    {
+      "path": "docs/DEVELOPMENT.md",
+      "owns": "Environment, build stack, feature recipe, qualification, evidence and release workflow",
+      "audience": "agent",
+      "required_headings": [
+        "# Development and validation",
+        "## Know your environment",
+        "## Establish the current state",
+        "## How a release is built",
+        "## Add a feature as a new post-pass",
+        "## Find the implementation",
+        "## Run focused qualification",
+        "## Release and handoff",
+        "## Maintain documentation"
+      ],
+      "edit_policy": "Reusable workflow only; engine facts go to TECHNICAL and results to reference/ receipts."
+    },
+    {
+      "path": "docs/TECHNICAL.md",
+      "owns": "Engine/format contracts, discoveries, unknowns and evidence",
+      "audience": "agent",
+      "required_headings": [
+        "# ROM technical knowledge",
+        "## Topic map"
+      ],
+      "edit_policy": "Add each discovery to its owning topic section with date, confidence and source version; mark superseded claims instead of deleting them; add a topic-map row for a new topic; never bulk-rewrite."
+    },
+    {
+      "path": "docs/OG_GAMEPLAY.md",
+      "owns": "Original game behavior before modifications",
+      "audience": "agent",
+      "required_headings": [
+        "# Original game behavior"
+      ],
+      "edit_policy": "Native behavior only; mod behavior goes to CHANGES."
+    },
+    {
+      "path": "docs/CHANGES.md",
+      "owns": "Shipped behavior, numbered release history and validation limits",
+      "audience": "agent",
+      "required_headings": [
+        "# Implemented changes and releases",
+        "## Version policy"
+      ],
+      "edit_policy": "Add one section per publication above the previous one; published sections are frozen by hash (freeze with tools/doc_contract.py freeze)."
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "owns": "Whole-game designs, Now table, idea backlog and player feedback log",
+      "audience": "player and agent",
+      "required_headings": [
+        "# Roadmap",
+        "## Now",
+        "## Player direction",
+        "## Idea backlog",
+        "## Player feedback log",
+        "## Historical designs"
+      ],
+      "edit_policy": "Record player verdicts newest first the day they are given; archive a retired design with tools/doc_archive.py add before removing it."
+    }
+  ],
+  "routing": [
+    {
+      "content": "Engine or format discovery, address, unknown, confidence",
+      "destination": "docs/TECHNICAL.md",
+      "how": "owning topic section; date, confidence, source version"
+    },
+    {
+      "content": "Reusable command, workflow, tool usage or trap",
+      "destination": "docs/DEVELOPMENT.md",
+      "how": "matching workflow section"
+    },
+    {
+      "content": "Published behavior and validation limits",
+      "destination": "docs/CHANGES.md",
+      "how": "new top section at publication, then freeze"
+    },
+    {
+      "content": "Player verdict, request or design decision",
+      "destination": "docs/ROADMAP.md",
+      "how": "feedback log row (newest first) and the owning design section"
+    },
+    {
+      "content": "Current objective, build, blocker, next action",
+      "destination": "docs/TASKS.md",
+      "how": "replace stale state"
+    },
+    {
+      "content": "Native game behavior",
+      "destination": "docs/OG_GAMEPLAY.md",
+      "how": "matching section"
+    },
+    {
+      "content": "Exact hashes, receipts, recipes, catalogs, fixture limits",
+      "destination": "reference/*.json",
+      "how": "compact receipt per feature/release"
+    },
+    {
+      "content": "Retired design or catalog",
+      "destination": "docs/archive (tools/doc_archive.py add)",
+      "how": "archive first, then remove from the live doc"
+    },
+    {
+      "content": "Scratch scripts, traces, captures, large reports",
+      "destination": "work/ or build/ (ignored)",
+      "how": "never committed"
+    }
+  ],
+  "forbidden": [
+    "Any Markdown file outside the documents list",
+    "Per-session, per-release or handoff notes",
+    "Changing a frozen CHANGES section without the user asking (then refreeze with --update)",
+    "Copying volatile hashes, runtime addresses or test logs into AGENTS, TASKS or README",
+    "Removing a retired design before archiving it",
+    "Claiming in-game results from a workspace without the ROM and emulator"
+  ],
+  "version_sources": [
+    "reference/gameplay_profile.json release_version",
+    "reference/releases.json last release",
+    "docs/CHANGES.md first version heading",
+    "README.md \"Current release\"",
+    "docs/TASKS.md \"## Published build\" first **vX.Y.Z**"
+  ],
+  "changes_heading_pattern": "^## v(\\d+)\\.(\\d+)\\.(\\d+) - (\\d{4}-\\d{2}-\\d{2}) - \\S",
+  "spacing_pattern": "\\b(on|On|all|All|and|at|the|of|to|For|for|with|from|use|uses|across|about)\\d",
+  "feedback_log_heading": "## Player feedback log",
+  "suit_catalog": {
+    "path": "reference/suit_roadmap.json",
+    "suit_id": "2099-classic",
+    "roadmap_section": "## Spider-Man 2099 Black kit: the Hunter",
+    "native_row_count": 7,
+    "free_bits": [
+      83,
+      95
+    ],
+    "used_bits": [
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82
+    ],
+    "event_offset": 309
+  },
+  "frozen_changes_sections": {
+    "0.31.0": "8ccece545757c34eb42a09e5153858a82c74ea6c3f8e0f77cd0f0d4325e287f7",
+    "0.30.3": "6951a6b25c07e9442d3a537e1c5cc0a6ba9df9d6e484d5a8f7a62b45bf2ec26b",
+    "0.30.2": "649371b3514a3747009eed741789a0073c41f1915be27d0fb323790581bd7102",
+    "0.30.1": "80888c13cc3c382505353b3c70bb5b8ce5e87d209851bff4e21092e54415f7b5",
+    "0.30.0": "6e90ea987c8bbcaaa8d3e34e45d4e2da6f53b590105f7cc2248494d2472a92ee",
+    "0.29.0": "a5b361e9355da6f0fcd8664304d9c4d1e1fb4206a2f4a235774111c251da0e93",
+    "0.28.0": "ccbb1c79f7ab6a7b98ee9d1fe876dd6b71f9ccc96c4e84db4a7acfa265dd782a",
+    "0.27.0": "e6b38e4290c0b260846bc12b845367d2d8dfdf154595b1e903f0cd46e2c7962e",
+    "0.26.0": "71b3c040a455bd3cf70598b340a8ae38c7b4c4ad0a59a5c7375064400c028e2e",
+    "0.25.0": "38b541cb9e16404c25ce41ac87c8785b19165cdcf8749f3d689c66994993b99d",
+    "0.24.0": "fe1247cf369b3d870a0383aba3ac3fb4f86f9897356c97ee6ed860d8e1e70dad",
+    "0.23.0": "bbda2e02d4d5953c43a53fd4740c40969792bd19ba57f85393b484b7f0fb89f2",
+    "0.22.1": "4277f07e000d9c9c1e820db8c3dab53560c28545ff6e8032f9d476942fa512e8",
+    "0.22.0": "1c38b7ed0f4a64c3cfb1d3ac382dce99950558e96abe48bbb0cd6b62951e0c33",
+    "0.21.0": "5e8e0128cb3cf165944385fbe748756733ab9d1f3089a6a1fedfefe513d4e1c7",
+    "0.20.0": "75d5db2955cb3cc62d8e20def8724c9d5f44dbe04a0745c3c573e52f40e3f122",
+    "0.19.0": "7903e90501820497c97d6d7bc1c0f96de7f702da276b0e989e932b087b33c031",
+    "0.18.0": "caeb1c89a1b5b62adfa3a66576dfe3ed505cb342a6f8e1618296d06c18e33e92",
+    "0.17.0": "eaa7ac43e1d385342c1789bd3dc3baf4384442a69f55b412b9875bffc5365b0d",
+    "0.16.3": "9d3acf45bc4d681368bc88f85089b46b68cd1cd69078d0ed1d2f07d4d9dcdf32",
+    "0.16.2": "1ec96054301fd48e34d3d06889245b5a866f545b84924bacbb280e8c37a62ea2",
+    "0.16.1": "a6e00ece4ea098ba54451ef493940db6d808071f8783e8f4e8819595cbc3205d",
+    "0.16.0": "0df5da8a120ccb9c9fdf61ea50f49ec5e2bd309b2e8581345cae6c0506b55f85",
+    "0.15.1": "0bde6816b8e21ad6f46be6b2df284e2fe2fa1d8a2563a2d85e52e546e53f4576",
+    "0.15.0": "ca546deee5b87305a90c2dcc1b9de280e41973c0284fb3fe95aced6b4dcc1294",
+    "0.14.0": "d306166aa0d54702ca34893b50d3aa4cb2b79ae1f7c029945f2a64ba9cea2612",
+    "0.13.0": "764343bc06f29f5c3676fd818cc253c92635ae8a6f66302c8959d3eb209268f4",
+    "0.12.0": "b10589f9b49e5f4f5775ec628740cc2e9464b959207388f1acb07a210cd5940c",
+    "0.11.0": "e02a72f9781b354518c8893a34e154acc9392ce294f6f3bec69a3af4881ec137",
+    "0.10.0": "c4a5e9aadd9e539a2a8883a9075c0030985f2ea271cffa5d45fe8ec3c8a9cfd1",
+    "0.9.0": "b0fbbff08f441f28e136797d603a92013910a603d7ff3821240eca3962bcc4fd",
+    "0.8.1": "9f72b16a46db36c385755b792f03d31c185e8fdc0182ba952a3273420c3c11f2",
+    "0.8.0": "54e824b2457d2cc1900983ebf40dd14e968a28ff075cb985eb96eb58ee7f620c",
+    "0.7.0": "ce2741c6090dc35cec4067c7cfcf1870db98e623ebef2b4831bd6cf0fbe2540b",
+    "0.6.1": "52cbbc7d25570bae8e005dcaae3b4eda06e82686a85e239a42fb78d87a5daa0d",
+    "0.6.0": "1c2f53cbcb566bc554373a2ac775594614b9d7a949480688a93421adf828c7c5",
+    "0.5.0": "6edc370e3f360c4236b5f35ad22155e2c1c0a23c7b7d9b85e11d4966c88979ed",
+    "0.4.1": "e557aaff3be43580ff2bd1c2732dec65224bb8eab16cb22192c58a7b2184fcb3",
+    "0.4.0": "63fce32d4971481e86ce47980e098dda182b7d39e98f72fb9d53799ca741235c",
+    "0.3.0": "49b987bd6d97403423c22ce3d3ba389ff4a565519ea351f615b7c428ae8a7c4b",
+    "0.2.1": "0be4cba82f080f9ca59a949018b1a937140052393d3b22a3116dd3536c41b13e",
+    "0.2.0": "f9d4849117206ede5b7ebcb4d6c52b1e7c09c6cb90061eef64cbaf6948c15a88",
+    "0.1.1": "f47f5d08de6a9c16223fdee123af807611dff085f26620b4c646641d1a94c0b2",
+    "0.1.0": "e306fb2855ace0e2fc1fb894f558008e64d84bc143079fe730b514f125be9ec6"
+  }
+}

@@ -37,14 +37,16 @@ original/ or externally publish ROMs/extracted copyrighted assets.
 | docs/ROADMAP.md | Whole-game design, player feedback log and idea backlog |
 
 README is the short entry point; mods/README is the overlay-loader exception.
-Keep this set; add a document only when the user authorizes it and a new
-ownership boundary is necessary. No per-session/release/handoff Markdown.
-Before removing a retired design from a live doc, archive the file with
-`tools/doc_archive.py add`. Keep AGENTS/TASKS under 900 words. Record
-discoveries in their owning TECHNICAL section immediately, with confidence and
-source version; mark superseded assumptions. Distinguish implemented,
-agent-tested and player-confirmed. Record player verdicts in ROADMAP's feedback
-log.
+`reference/doc_contract.json` is the machine-checked documentation contract:
+document set, word limits, required headings, routing (what goes where),
+forbidden edits, one current version and frozen CHANGES sections.
+`python tools/doc_contract.py check` (run by tests.test_document_layout) must
+pass before every commit. Change the contract only when the user changes
+documentation policy, never to make a check pass. Archive a retired design with
+`tools/doc_archive.py add` before removing it. Record discoveries in their
+owning TECHNICAL section immediately, with confidence and source version; mark
+superseded assumptions. Distinguish implemented, agent-tested and
+player-confirmed. Record player verdicts in ROADMAP's feedback log.
 
 ## Task completion and Git
 
@@ -55,10 +57,9 @@ pre-existing edits, or report the blocker if they cannot be separated. Do not
 push unless the user asks; in an ephemeral cloud session, push only to the
 branch that session designates.
 
-Machine catalogs/recipes/receipts belong in reference/. Scratch scripts, large
-traces, captures and temporary assets belong in ignored work/ or build/. A
-reusable research tool belongs in tools/ with a docstring and tests. Do not
-duplicate volatile hashes, runtime addresses or test logs across startup docs.
+Receipts/catalogs go in reference/; scratch, traces and captures in ignored
+work/ or build/. A reusable research tool belongs in tools/ with a docstring
+and tests.
 
 ## Safety and validation
 

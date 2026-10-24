@@ -61,10 +61,27 @@
       },
       "combat_design": {
         "apex_predator_tiers": {
-          "2": "Fast Hunt 1.10x",
-          "3": "Heavy Line: yank lane catches up to two more",
-          "4": "Fast Hunt 1.20x",
-          "5": "Shockwave Talons on every 2099 ender"
+          "2": {
+            "effect": "Fast Hunt 1.10x",
+            "visual": "eye lenses and talon tips red"
+          },
+          "3": {
+            "effect": "Heavy Line (yank lane catches up to two more) and Shockwave Talons on every 2099 ender",
+            "visual": "red web lines; chest spider and shoulder panels brighten"
+          },
+          "4": {
+            "effect": "Fast Hunt 1.20x",
+            "visual": "red accents pulse"
+          },
+          "5": {
+            "effect": "Feeding Frenzy life steal: 5% of HP removed banks; restore per quarter unit; max one unit per 300 updates",
+            "visual": "whole suit glows red; HUD bar flashes on each heal"
+          }
+        },
+        "approved": {
+          "by": "player",
+          "changes": "Shockwave Talons moved to tier 3+; tier 5 life steal; a visible upgrade per tier",
+          "date": "2026-10-24"
         },
         "date": "2026-10-24",
         "native_rows": {
@@ -154,7 +171,7 @@
           94,
           95
         ],
-        "status": "design-only-not-implemented",
+        "status": "design-approved-not-implemented",
         "supersedes": "Hunter revision 2 (15 rows, 2026-10-23), revision 1 and the 2026-10-22 catch/carry/crash/chase proposal"
       },
       "design_reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
@@ -176,7 +193,7 @@
       "name": "Spider-Man 2099 - Across the Spider-Verse inspired",
       "replaces_form": "black",
       "selection_date": "2026-10-11",
-      "status": "cape-free-movie-appearance-retained-v0.30.3-native-black-gameplay",
+      "status": "cape-free-movie-appearance-retained-v0.30.3-hunter-kit-approved-unimplemented",
       "validation_limit": "v0.30.2 player appearance remains; v0.30.3 changes only the shared custom-creature atlas. Three Terminal enemy materials bind as I4 in fresh copied-save candidate controls; this is one scene, not whole-game residency, DeSmuME pacing or player acceptance."
     },
     {

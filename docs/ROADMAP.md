@@ -17,7 +17,7 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Designed (revision 3, 14 skills); waiting for the player's go | Engineering gates, then the Web Yank pipeline proof |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Designed and approved (revision 3, 14 skills) | In a later session with the ROM: engineering gates, then the Web Yank pipeline proof |
 | 2 | v0.31.0 review: tether Vortex, armored Conductor, Vitality fix | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
@@ -40,7 +40,8 @@ save expansion and new campaign branches wait until the player asks.
 
 ## Spider-Man 2099 Black kit: the Hunter
 
-**Status:** Designed, revision 3 (2026-10-24). Nothing is implemented. The
+**Status:** Designed and approved by the player, revision 3 (2026-10-24).
+Nothing is implemented; building starts in a later session. The
 appearance (cape-free Across the Spider-Verse look) shipped in v0.30.2/v0.30.3;
 receipts are `reference/spider2099_movie.json` and
 `reference/spider2099_enemy_texture.json`. Machine-readable rows are in
@@ -50,7 +51,9 @@ receipts are `reference/spider2099_movie.json` and
 revision 1 (too pin-centred) -> revision 2 (talon/web/air/boss pillars, 15
 rows) -> revision 3: the player approved X for webs and the overall kit, cut
 Collar Toss and Lariat, and asked for one skill that rewards a full combo meter
-the way Red's Momentum and Overclock do. Earlier drafts are archived as
+the way Red's Momentum and Overclock do. The player approved revision 3, moving
+Shockwave Talons to tier 3, adding tier-5 life steal and a visual for each
+tier. Earlier drafts are archived as
 `RETIRED_2099_DESIGNS.md` and `docs/TASM_ROADMAP-2026-10-24.md`.
 
 ### Identity
@@ -101,9 +104,9 @@ a varied kit also scores better.
    Miguel to them; they are never yanked, launched, thrown or pinned.
 5. **R always lets go.** R, getting hurt, death, a room change or a form switch
    ends any 2099 move, releases its web line and clears its state.
-6. **No chains from built hits.** Hits the kit builds never trigger other kit
-   effects (the Overclock rule). No freezes, slow motion, timers that stop the
-   game or permanent stun.
+6. **No chains from built hits.** Hits the kit builds never trigger further kit
+   hits (the Overclock rule); Feeding Frenzy's healing is the only effect they
+   feed. No freezes, slow motion, timers that stop the game or permanent stun.
 7. **Original motion.** Every move gets its own continuous authored clip; never
    rename a stock attack as a new move.
 
@@ -236,20 +239,44 @@ Miguel clear into the air. When the boss starts an attack it throws a rider off;
 R leaves at any time. Riding ends when the boss shakes him or he rips, not on
 a timer.
 
-**14. Apex Predator (new).** Passive. Rewards a full combo meter the way Red's
-Momentum (speed by tier) and Overclock (tier-5 web shot) do. It reads the native
-combo tier every update; effects stack by tier and vanish the moment the tier
-drops. It never spends the meter and adds no damage beyond native tier scaling.
+**14. Apex Predator (new).** Passive. 2099 scraps instead of evading, so the
+meter both raises his power and keeps him in the fight, the way Red's Momentum
+(speed by tier) and Overclock (tier-5 web shot) reward Red. It reads the native
+combo tier every update; effects and visuals stack by tier and vanish the moment
+the tier drops. It never spends the meter and adds no damage beyond native tier
+scaling.
 
-| Tier | Effect |
-|---|---|
-| 2+ | **Fast Hunt:** Black attacks and 2099 moves play at 1.10x |
-| 3+ | **Heavy Line:** Web Yank and Reel In also catch up to two more enemies in a narrow lane along the line and drag them in together; each arrival takes one light knockdown |
-| 4+ | Fast Hunt rises to 1.20x |
-| 5 | **Shockwave Talons:** every 2099 ender (Rundown's last link, Talon Lift, Freefall, Talon Line's hook, Shredder's ender, Meteor Catch, Roof Pin's kick, Wing Ripper) also knocks down every other standing enemy within about 14 units; heavy targets take one stagger. Web lines and talon/eye accents turn red while tier 5 holds, if the palette path allows |
+| Tier | Effect | Visual (must read at native scale) |
+|---|---|---|
+| 0-1 | None | Normal navy/red suit |
+| 2+ | **Fast Hunt:** Black attacks and 2099 moves play at 1.10x | Eye lenses and talon tips light up red |
+| 3+ | **Heavy Line:** Web Yank and Reel In also catch up to two more enemies in a narrow lane along the line and drag them in together; each arrival takes one light knockdown. **Shockwave Talons:** every 2099 ender (Rundown's last link, Talon Lift, Freefall, Talon Line's hook, Shredder's ender, Meteor Catch, Roof Pin's kick, Wing Ripper) also knocks down every other standing enemy within about 14 units; heavy targets take one stagger | Web lines turn red; chest spider and shoulder panels brighten red |
+| 4+ | Fast Hunt rises to 1.20x | Red accents pulse slowly |
+| 5 | **Feeding Frenzy:** a little life steal (below) | The whole suit glows red with a slow pulse; the HUD health bar flashes on each heal |
 
-If tier 5 proves rare in play, move Shockwave Talons to tier 4, as Momentum was
-moved a tier earlier in v0.11.0.
+**Feeding Frenzy.** At tier 5, every point of HP Miguel removes from an enemy or
+boss (native and kit-built hits alike) adds 5% of it to a hidden heal bank.
+Each time the bank holds a quarter health unit (1024 of a unit's 4096), restore
+it through the native clamped health setter. About 13 to 20 ordinary hits
+restore one segment of the roughly six-segment bar. Caps: at most one health unit per 300
+updates; no healing at zero HP, during the near-death minigame or above max.
+The bank keeps its contents when the tier drops but fills only at tier 5.
+Healing is not a hit, so it does not break rule 6. Life steal was chosen over
+heal-on-kill (no sustain in boss fights) and damage reduction (rewards
+passivity): it pays for aggression against mobs and bosses alike.
+
+Open questions for the capstone lab:
+
+- Does the HUD draw partial segments? If not, restore whole units so every heal
+  is visible.
+- Does taking a hit drop combo tiers (TECHNICAL notes a native penalty path
+  that subtracts two tiers, trigger unconfirmed)? If so, tier 5 may vanish just
+  when healing matters: move Feeding Frenzy to tier 4 before raising its rate.
+- In Black form the purple HUD bar shares palette colours 29..31 with the combo
+  meter, so a heal flash tints both; that is acceptable.
+- Suit glow: pre-bake one palette per tier into the 2099 texture and let the
+  existing player draw adapter (`spider2099_visual`) select it. If no material
+  palette field can be switched, fall back to red web lines plus HUD tint.
 
 ### What fights should look like
 
@@ -260,8 +287,9 @@ moved a tier earlier in v0.11.0.
 - **Crowd:** Shredder's Forward ender into a group -> Rundown through the
   falling bodies -> wall climb -> Freefall onto the pile -> Sky Rake a bounced
   one -> Roof Pin whoever lands nearest.
-- **Meter:** keep the string varied to reach tier 5, then every ender knocks
-  the room flat while Heavy Line drags three at a time.
+- **Meter:** vary the string to reach tier 3 and every ender knocks the room
+  flat while Heavy Line drags three at a time; hold tier 5 and every hit feeds
+  health back while the suit glows red.
 - **Boss (the Vulture plan):** Web Yank or Up-pounce to close in -> Boarding,
   raking from behind -> Wing Ripper forces a stagger and throws Miguel clear ->
   Sky Rake at head height -> Freefall from above -> the next boss attack throws
@@ -296,6 +324,8 @@ Engine facts to reuse, all in TECHNICAL:
 | Shop tables, rows, free bits and strings | [Purchase records](TECHNICAL.md#purchase-records-and-native-ownership), [Shop tables](TECHNICAL.md#shop-tables-menu-and-free-ownership-bits-v0100) |
 | Clip authoring, sample counts and contact clocks | [Kit animation authoring](TECHNICAL.md#kit-animation-authoring) |
 | Mini-boss class, registry exclusion and boss meter | [Character route](TECHNICAL.md#character-route-concrete-engine-starting-points) |
+| Player health setter, health units and HUD bar colours | [Player health](TECHNICAL.md#player-health-and-the-top-screen-hud-v0110) |
+| Player draw adapter, 2099 mesh and texture | [SCA / model / textures](TECHNICAL.md#sca--model--textures) |
 
 **Gates before the first slice** (lab only, no release):
 
@@ -313,6 +343,9 @@ Engine facts to reuse, all in TECHNICAL:
    m6.xbd users and are not spare.
 5. **Bosses:** a Perch-style velocity follow for Boarding, plus a class-specific
    target adapter for native mini-bosses. Start on the Conductor.
+6. **Tier visuals and healing** (before the capstone): a switchable material
+   palette in the player draw adapter, partial-segment HUD drawing, and whether
+   damage drops combo tiers.
 
 **Acceptance for every slice:**
 
@@ -335,6 +368,7 @@ Engine facts to reuse, all in TECHNICAL:
    Relentless.
 4. **Ground slice:** Rundown, Talon Line, Shredder, Roof Pin.
 5. **Meter capstone:** Apex Predator, last because it modifies the others.
+   Tiers 2..5 must be distinguishable side by side in native-scale footage.
 
 ## Red kit: the Amazing Spider-Man
 
@@ -424,6 +458,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-10-24, 2099 rev. 3 | Revision 3 is good. Shockwave Talons at tier 3+; tier 5 gets a little life steal because 2099 scraps and takes more damage; give every tier a visible upgrade, maybe a red glow at tier 5 | Approved for a later implementation session; Feeding Frenzy and tier visuals added |
 | 2026-10-24, 2099 rev. 2 | X for webs is fine and the kit is liked; remove Collar Toss and Lariat; add a skill that rewards a full combo meter | Revision 3: 14 skills, Apex Predator added |
 | 2026-10-23, 2099 rev. 1 | Better, but pin/pound dominates; pins fail on bosses; no webbing; no air combos; add as many rows as needed within the 2D mob/boss brawler | Revision 2: four pillars, Boarding, webs on X |
 | 2026-10-23 | Make Black play like Across the Spider-Verse's Miguel and make it fun | Hunter direction replaces the comic-style juggle proposal |

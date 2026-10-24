@@ -4,7 +4,9 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from tools import doc_links, run_tests, tool_index
+import json
+
+from tools import doc_contract, doc_links, run_tests, tool_index
 
 
 class PrivateInputTests(unittest.TestCase):
@@ -79,6 +81,55 @@ class DocLinkTests(unittest.TestCase):
             self.assertEqual(doc_links.broken_links(('A.md',), root),
                              ['A.md:1: B.md#absent (missing anchor)', 'A.md:1: C.md (missing file)'])
 
+
+class DocContractTests(unittest.TestCase):
+    PATTERN = r'^## v(\d+)\.(\d+)\.(\d+) - (\d{4}-\d{2}-\d{2}) - \S'
+
+    def tree(self, files):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        root = Path(folder.name)
+        for name, text in files.items():
+            (root / name).parent.mkdir(parents=True, exist_ok=True)
+            (root / name).write_text(text, encoding='utf-8')
+        return root
+
+    def test_changes_order_freeze_and_tamper_are_caught(self):
+        changes = ('# Log\n## Version policy\n\n## v0.2.0 - 2026-10-02 - Two\nbody two\n\n'
+                   '## v0.1.0 - 2026-10-01 - One\nbody one\n')
+        root = self.tree({'docs/CHANGES.md': changes})
+        contract_path = root / 'contract.json'
+        contract_path.write_text(json.dumps({'changes_heading_pattern': self.PATTERN}), encoding='utf-8')
+        contract = {'changes_heading_pattern': self.PATTERN}
+        self.assertEqual(len(doc_contract.check_changes(contract, root)), 2)
+        self.assertEqual(doc_contract.freeze(path=contract_path, root=root), ['0.2.0', '0.1.0'])
+        frozen = doc_contract.load(contract_path)
+        self.assertEqual(doc_contract.check_changes(frozen, root), [])
+        (root / 'docs/CHANGES.md').write_text(changes.replace('body one', 'rewritten'), encoding='utf-8')
+        self.assertEqual(doc_contract.check_changes(frozen, root),
+                         ['docs/CHANGES.md: frozen v0.1.0 section changed'])
+        (root / 'docs/CHANGES.md').write_text(changes.replace('v0.1.0 - 2026-10-01', 'v0.3.0 - 2026-10-03'),
+                                              encoding='utf-8')
+        self.assertTrue(any('not below' in p for p in doc_contract.check_changes(frozen, root)))
+
+    def test_feedback_log_must_be_newest_first(self):
+        log = ('# Roadmap\n## Player feedback log\n\n| Date / build | Said | Decided |\n|---|---|---|\n'
+               '| 2026-10-20 | a | b |\n| 2026-10-22 | c | d |\n')
+        root = self.tree({'docs/ROADMAP.md': log})
+        contract = {'feedback_log_heading': '## Player feedback log'}
+        self.assertEqual(doc_contract.check_feedback_log(contract, root),
+                         ['docs/ROADMAP.md: feedback log not newest first at 2026-10-22'])
+
+    def test_required_headings_words_and_spacing(self):
+        root = self.tree({'A.md': '# Title\nfour words in here on2026\n'})
+        contract = {'documents': [{'path': 'A.md', 'max_words': 3, 'required_headings': ['# Title', '## Gone'],
+                                   'required_patterns': [r'^Updated ']}],
+                    'spacing_pattern': r'\b(on|all)\d'}
+        self.assertEqual(len(doc_contract.check_documents(contract, root)), 3)
+        self.assertEqual(doc_contract.check_spacing(contract, root), ["A.md:2: run-together 'on2'"])
+
+    def test_live_catalog_bits_are_free_and_match_the_roadmap(self):
+        self.assertEqual(doc_contract.check_suit_catalog(doc_contract.load()), [])
 
 if __name__ == '__main__':
     unittest.main()

@@ -8,13 +8,15 @@ ignored. Exit status 1 lists every broken link.
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCUMENTS = ('AGENTS.md', 'README.md', 'mods/README.md', 'docs/TASKS.md', 'docs/DEVELOPMENT.md',
-             'docs/TECHNICAL.md', 'docs/OG_GAMEPLAY.md', 'docs/CHANGES.md', 'docs/ROADMAP.md')
+# The document list is owned by the documentation contract.
+DOCUMENTS = tuple(doc['path'] for doc in json.loads(
+    (ROOT / 'reference/doc_contract.json').read_text(encoding='utf-8'))['documents'])
 LINK = re.compile(r'(?<!!)\[[^\]]*\]\(([^)\s]+)\)')
 
 

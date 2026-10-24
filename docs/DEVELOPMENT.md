@@ -20,7 +20,8 @@ error counts. Plain `python -m unittest` still works but shows those as errors.
 
 Find tools with `python tools/tool_index.py <word>`: it lists every `tools/`
 module with its purpose, grouped by feature family. Check links and anchors with
-`python tools/doc_links.py` (also run by `tests.test_document_layout`).
+`python tools/doc_links.py`, and every documentation rule with
+`python tools/doc_contract.py check` (both run by `tests.test_document_layout`).
 
 ## Establish the current state
 
@@ -90,8 +91,10 @@ Copy the shape of the latest one (`tools/vortex_forge.py`, `.s`, `_art.py`,
    add the guarded block (and its log key) at the end of `mod.create_build`,
    then add the ROM/ARM9 pins once the candidate is accepted.
 8. Qualify (below), publish with `playtest.py build`, then record the receipt in
-   `reference/<feature>.json`, the release in CHANGES and `releases.json`, and
-   the state in TASKS.
+   `reference/<feature>.json`, the release as a new top CHANGES section, the
+   README "Current release" line and TASKS "Published build" (the contract
+   checks that all of them name the same version), then run
+   `python tools/doc_contract.py freeze` to freeze the new CHANGES section.
 
 ## Find the implementation
 
@@ -329,7 +332,9 @@ checks the actual battery before/after, creates its content-addressed checkpoint
 retains the previous ROM, rejects reused versions and installs the stable ROM.
 Afterward compare stable/canonical SHA, boot/Options version, build/release
 metadata and the freshly read battery/checkpoint bytes. No research save writes
-to the real battery and no stale emulator states across ROM changes.
+to the real battery and no stale emulator states across ROM changes. Then add
+the CHANGES section, update README and TASKS to the new version and run
+`python tools/doc_contract.py freeze` followed by `check`.
 
 Update TASKS at candidate acceptance, before a long qualification batch, at
 publication and before handing off. Record only current objective, candidate /
@@ -341,13 +346,25 @@ session summary is too easy to lose. Keep session transcripts out of the docs.
 
 ## Maintain documentation
 
+`reference/doc_contract.json` is the machine-checked contract for every
+document: what it owns, word limits, required headings and text, an edit policy,
+routing (which content goes where), forbidden edits, the version sources that
+must agree and the frozen CHANGES sections. `python tools/doc_contract.py check`
+lists every violation and `tests.test_document_layout` runs one test per rule.
+Before editing a document, read its contract entry. When a check fails, fix the
+document; change the contract only when the user changes documentation policy.
+A published CHANGES section is frozen: re-freeze it with
+`python tools/doc_contract.py freeze --update <version>` only when the user asked
+for that correction. ROADMAP and TASKS are written for the player; the other
+documents are written for agents and may favor dense, exact reference text.
+
 Use the approved ownership map in AGENTS. Check current profile/source pins,
 release history and stable/canonical metadata before updating a version claim;
 read the actual battery/checkpoint rather than copying a historical save hash.
 Keep implemented, agent-tested and player-confirmed claims separate. Preserve
 release dates and immutable receipts when later documentation is reviewed.
 
-Keep TASKS below 900 words and replace its stale objective/next action. The live
+Replace TASKS' stale objective/next action rather than appending. The live
 roadmap holds current decisions, acceptance criteria and deferred concepts;
 old construction pitches must not remain a second active queue. Planning JSON
 may retain dated baseline allocations/receipts, but label that scope and point
@@ -359,8 +376,8 @@ removing them from live docs:
 `python tools/doc_archive.py add <unique-name> --from <file> --title <title> --date <YYYY-MM-DD>`
 appends the bytes, records the snapshot date and source revision, and re-pins
 the archive hash. Read with `python tools/doc_archive.py list <topic>`, then
-`read <name> --toc` or a bounded `--section`. Verify archive integrity, the
-fixed document set and every local link/anchor with
+`read <name> --toc` or a bounded `--section`. Verify the archive and the whole
+documentation contract with
 `python -m unittest tests.test_doc_archive tests.test_document_layout -q`.
 A documentation-only cleanup does not add emulator coverage or player acceptance.
 
