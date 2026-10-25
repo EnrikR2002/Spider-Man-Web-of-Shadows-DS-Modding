@@ -4,10 +4,12 @@ Private USA CS5E research. ROMs/extracted assets/builds/saves stay private.
 
 **Play:** `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
 The agent handles the stable ROM, releases and progress backups.
-Current release: **v0.34.1**. Buy **Web Yank** for 300 XP in Black upgrades:
-ground X firmly reels enemies into an arrival-timed rake, Up+X launches, and R cancels. Close targets
-get a quick rake; resistant targets pull Miguel toward them. Native X prompts
-take priority. The taller cape-free 2099, scarlet webs, Hunter's Return,
+Current release: **v0.34.2**. **Web Yank** (300 XP in Black upgrades) uses ground
+Down+A, including during a ground combo, to pull up to five distant enemies
+into melee range. Choose Y or Up+A (Talon Lift) afterward; R cancels. The close
+slap, automatic rake, upward yank and false catch impact flash are removed.
+Resistant targets still pull Miguel toward them. X uses native interactions.
+The taller cape-free 2099, scarlet webs, Hunter's Return,
 manual-jump Talon Lift, Red kit and chapters remain. Player feel is open.
 Details: [Changes](docs/CHANGES.md). What comes next: [Roadmap](docs/ROADMAP.md#now).
 

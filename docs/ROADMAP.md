@@ -1,7 +1,7 @@
 # Roadmap
 
 The whole-game list of what the player wants to add and why it should be fun,
-reviewed 2026-10-24 (America/Edmonton). Renamed from `docs/TASM_ROADMAP.md`
+reviewed 2026-10-25 (America/Edmonton). Renamed from `docs/TASM_ROADMAP.md`
 on 2026-10-24: the project is no longer only a TASM kit. [TASKS](TASKS.md) owns
 the live build and next action; [CHANGES](CHANGES.md) owns shipped behavior;
 [TECHNICAL](TECHNICAL.md) owns engine facts; [DEVELOPMENT](DEVELOPMENT.md) owns
@@ -17,7 +17,7 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Refined Web Yank shipped in v0.34.1; rest of revision 3 designed | Player reviews the firm reel before any further slice |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Five-target pure Web Yank shipped in v0.34.2; rest of revision 3 designed | Player reviews Down+A gathering and chosen follow-ups before another slice |
 | 2 | Taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
@@ -48,10 +48,13 @@ revision-3 design. The appearance/earlier-move baseline is v0.33.1: taller cape-
 scarlet webs, Hunter's Return and manual-jump Talon Lift already ship; receipts
 are `reference/spider2099_presence.json`, `reference/hunters_return.json` and
 `reference/talon_lift.json`. Web Yank now ships as the first revision-3 slice in
-v0.34.0; v0.34.1 replaces its rejected pull/placement with an upright reel and
-arrival-timed rake (300 XP; X/Up+X, native prompt priority, close rake, heavy zip
-and native R exit). Receipts are `reference/hunter_kit.json` and
-`reference/web_yank_fix.json`; refined feel is player-unconfirmed.
+v0.34.0. The player says v0.34.1's upright reel feels better, but rejects the
+catch marker, slap, X combat input and upward variant. v0.34.2 makes it a pure
+Down+A pull of up to five targets; choose Y or Up+A afterward. Its existing
+300 XP row, heavy zip and native R exit remain. Receipts are
+`reference/hunter_kit.json`, `reference/web_yank_fix.json` and
+`reference/web_yank_combo.json`; the five-target revision is agent-tested,
+with its player verdict still pending.
 Remaining revision-3 behavior below is designed; retain baseline
 mechanics until each replacement qualifies.
 The remote design's 2026-10-24 dates are retained as source provenance. Machine-readable rows are in
@@ -134,13 +137,14 @@ a varied kit also scores better.
 | Up+A on the ground | Talon Lift |
 | Air A | Native Hammer Spike; Meteor Catch when an airborne enemy is in reach |
 | Air Down+A | Native Hammer Slam with Freefall's height bonus |
-| X, no lift/lever/grate prompt in reach | Web Yank (Up+X yanks upward) |
-| Air X | Reel In |
+| Down+A on the ground or in a ground combo | Web Yank: pure pull into melee range; no point-blank attack |
+| Air Reel In | Combat binding to choose before its slice; X stays native |
 | Web Yank zip, Up-pounce or jump into a boss while holding toward it | Boarding; while riding, Y rakes and A is Wing Ripper |
 | R | Native evade; lets go of any 2099 move |
 | B | Native jump, swing and Enemy Kick-Off |
 
-Native X prompts (lift, lever, grate) always win over Web Yank.
+X stays with native interactions. Air Down+A retains the native slam; A-again
+retains the dash follow-up. No upward Web Yank or automatic arrival attack.
 
 ### The fourteen skills
 
@@ -208,21 +212,22 @@ Miguel stays airborne for Sky Rake. Heavy: a strike; an Up-pounce into a boss
 while holding toward it starts Boarding. Never passes through walls.
 
 **7. Relentless (Quick Charge).** Passive. Halves the Pounce coil. During any
-2099 ender's recovery, holding Y fires Pounce and pressing X fires Web Yank the
+2099 ender's recovery, holding Y fires Pounce and Down+A fires Web Yank the
 moment the ender ends, so the hunt moves to the next target without a reset.
 One stored cancel; hurt, R, a form switch or a room change clears it.
 
-**8. Web Yank (new; pull refined after the 2026-10-24 rejection).** Ground X
-with no native prompt ties a scarlet line to the nearest enemy ahead within
-about 45 units. A firm grounded reel keeps it upright and brings it six units
-in front of Miguel; actual arrival starts the authored talon rake. Up+X launches
-at that strike. Within eight units, skip the pull and rake immediately. Let the
-player flow into a normal follow-up without waiting through a floor bounce.
-Heavy: Miguel zips to the target by native velocity and strikes; holding toward
-it with Boarding owned starts Boarding once that later skill ships. The original
-pipeline-proof pull design is archived before replacement.
+**8. Web Yank (new; pure-pull revision approved 2026-10-25).** Ground Down+A,
+including during a ground combo, ties separate scarlet lines to up to five enemies
+ahead outside melee range and within about 45 units. A firm upright reel gathers
+them just in front of Miguel, then releases control for a chosen Y or Talon Lift.
+An enemy already in melee range is ineligible; repeated input never becomes a
+slap attack. No upward variant or automatic rake, launch, damage or hit flash.
+Heavy: Miguel zips to melee range by native velocity and chooses his next move.
+Holding toward it can start Boarding once that later skill ships. Earlier X,
+launch and rake controls are archived before replacement.
 
-**9. Reel In (new, requires Web Yank).** X in the air: tie the nearest enemy
+**9. Reel In (new, requires Web Yank).** Air combat binding to choose before the
+Sky slice; X stays native. Tie the nearest enemy
 below or ahead and pull it up to Miguel's height to extend or restart an air
 combo. Heavy: Miguel zips to it. Lab question: whether a built yank toward an
 airborne player lifts the enemy, or a timed launch is needed instead.
@@ -264,9 +269,14 @@ scaling.
 |---|---|---|
 | 0-1 | None | Normal navy/red suit |
 | 2+ | **Fast Hunt:** Black attacks and 2099 moves play at 1.10x | Eye lenses and talon tips light up red |
-| 3+ | **Heavy Line:** Web Yank and Reel In also catch up to two more enemies in a narrow lane along the line and drag them in together; each arrival takes one light knockdown. **Shockwave Talons:** every 2099 ender (Rundown's last link, Talon Lift, Freefall, Talon Line's hook, Shredder's ender, Meteor Catch, Roof Pin's kick, Wing Ripper) also knocks down every other standing enemy within about 14 units; heavy targets take one stagger | Web lines turn red; chest spider and shoulder panels brighten red |
+| 3+ | **Shockwave Talons:** every 2099 ender (Rundown's last link, Talon Lift, Freefall, Talon Line's hook, Shredder's ender, Meteor Catch, Roof Pin's kick, Wing Ripper) also knocks down every other standing enemy within about 14 units; heavy targets take one stagger | Web lines turn red; chest spider and shoulder panels brighten red |
 | 4+ | Fast Hunt rises to 1.20x | Red accents pulse slowly |
 | 5 | **Feeding Frenzy:** a little life steal (below) | The whole suit glows red with a slow pulse; the HUD health bar flashes on each heal |
+
+The former Heavy Line tier bonus is superseded by the player's 2026-10-25
+request for five targets in base Web Yank, with no automatic arrival attack.
+Its old proposal is archived; decide any replacement only before the capstone
+slice. Reel In's target-count contract remains open for its own slice.
 
 **Feeding Frenzy.** At tier 5, every point of HP Miguel removes from an enemy or
 boss (native and kit-built hits alike) adds 5% of it to a hidden heal bank.
@@ -302,7 +312,7 @@ Open questions for the capstone lab:
   falling bodies -> wall climb -> Freefall onto the pile -> Sky Rake a bounced
   one -> Roof Pin whoever lands nearest.
 - **Meter:** vary the string to reach tier 3 and every ender knocks the room
-  flat while Heavy Line drags three at a time; hold tier 5 and every hit feeds
+  flat; base Web Yank gathers up to five. Hold tier 5 and every hit feeds
   health back while the suit glows red.
 - **Boss (the Vulture plan):** Web Yank or Up-pounce to close in -> Boarding,
   raking from behind -> Wing Ripper forces a stagger and throws Miguel clear ->
@@ -349,9 +359,10 @@ Engine facts to reuse, all in TECHNICAL:
 2. **Shop:** move the native Black list into the new block (as v0.10.0 moved
    Red's), append the seven rows with appended strings, and keep the native
    rows' bits, events and dependencies exact.
-3. **Inputs:** X shared safely with native prompts; held X/Y readable from the
-   kit's key words; Down+Y next to a downed enemy distinguished from native
-   Down+Y; air X free.
+3. **Inputs:** ground/combo Down+A for pure Web Yank; preserve native X
+   interactions and other A actions. Held X/Y uses the native combined pad.
+   Distinguish any future downed-target Down+Y from native Down+Y; choose an
+   air combat chord before Reel In's slice.
 4. **Black-only animation:** route Black-form actions to appended clips. Air
    string actions are shared with Red; GroundAttack15 is shared; G11/16/17 have
    m6.xbd users and are not spare.
@@ -375,7 +386,7 @@ Engine facts to reuse, all in TECHNICAL:
 
 **Build order**, one published slice at a time with a player verdict between:
 
-1. **Pipeline proof:** Web Yank alone (X input, web line, Black-only clip
+1. **Pipeline proof:** Web Yank alone (ground Down+A, web lines, Black-only clip
    routing, heavy rule, one new shop row).
 2. **Sky slice:** Talon Lift, Sky Rake, Reel In, Meteor Catch.
 3. **Boss slice:** Boarding with Wing Ripper, Freefall, Talon Pounce,
@@ -385,11 +396,13 @@ Engine facts to reuse, all in TECHNICAL:
    Tiers 2..5 must be distinguishable side by side in native-scale footage.
 
 **Web Yank slice progress:** Web Yank's own code/state, first appended Black row,
-native X priority and Black-only clips are qualified. Conductor heavy behavior
+Down+A combo entry, five independent lines and Black-only clips are qualified.
+Native X is restored; Y/Talon Lift are chosen separately. Conductor heavy behavior
 is qualified; the native mini-boss adapter, Boarding follow and capstone gates
 remain open. The first slice's pull/placement was rejected on 2026-10-24;
-v0.34.1's firm reel and arrival rake are agent-tested and published. Wait for the
-player's refined-move verdict before starting the Sky slice.
+v0.34.1's firmer reel received a partial positive verdict, then v0.34.2 removed
+the rejected rake/upward/input behavior. The pure five-target revision is
+agent-tested and published. Wait for its player verdict before the Sky slice.
 
 ## Red kit: the Amazing Spider-Man
 
@@ -479,6 +492,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-10-25, v0.34.1 Web Yank | Pull feels better; blue marker is misplaced, close slap spam is silly, X is awkward in combos. Remove upward yank. Pure pull: choose Y or Talon Lift afterward; use combat combinations and pull up to five at once | Ground Down+A for pure five-target Web Yank; no close slap, automatic rake or launch. X stays native; preserve air Down+A and other A follow-ups; retire Heavy Line's extra-target/arrival-hit proposal |
 | 2026-10-24, v0.34.0 Web Yank | Clunky and buggy; the way it yanks and places enemies feels really bad and limp | Rework the pull, arrival and impact before any further Hunter slice; quality remains player-unconfirmed |
 | 2026-10-24, 2099 rev. 3 | Revision 3 is good. Shockwave Talons at tier 3+; tier 5 gets a little life steal because 2099 scraps and takes more damage; give every tier a visible upgrade, maybe a red glow at tier 5 | Approved for a later implementation session; Feeding Frenzy and tier visuals added |
 | 2026-10-24, 2099 rev. 2 | X for webs is fine and the kit is liked; remove Collar Toss and Lariat; add a skill that rewards a full combo meter | Revision 3: 14 skills, Apex Predator added |

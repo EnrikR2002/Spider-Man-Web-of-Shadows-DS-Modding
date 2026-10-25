@@ -194,6 +194,7 @@ def boss(a):
     meta = json.loads(a.rom.with_suffix('.build.json').read_text(encoding='utf-8'))
     private = meta['hunter_kit']['runtime']['state']-k.p.BASE
     config = meta['hunter_kit']['runtime']['values']['BOSS_CONFIG']
+    utility = bool(meta.get('web_yank_combo'))
     native, rows, cast_at = lab.Walker.tick, [], [-1000]
 
     def tick(self, frame, lib):
@@ -226,10 +227,10 @@ def boss(a):
                 if abs(dx) > 34 or face != desired:
                     self.buttons.add('Right' if desired else 'Left')
                 elif current.state in (0, 1, 4, 5, 6) and frame-cast_at[0] >= 90:
-                    self.buttons.add('X')
+                    self.buttons.update(('Down','A') if utility else ('X',))
                     cast_at[0] = frame
                 elif 0 < frame-cast_at[0] < 6:
-                    self.buttons.add('X')
+                    self.buttons.update(('Down','A') if utility else ('X',))
             elif current.pos[0] < 100:
                 self.buttons.add('Right')
         rows.append(dict(frame=frame, private=list(struct.unpack_from('<32I', ram, private)),
@@ -246,11 +247,17 @@ def boss(a):
     checks = dict(heavy_zip_used=any(r['private'][18] for r in rows), actual_boss_hp_loss=bool(drops),
         boss_never_launched_or_yanked=all(e['state'] not in (39, 44, 45, 46, 48, 49) for r in live for e in r['enemies']),
         source_battery_unchanged=actual.read_bytes() == before and copied.read_bytes() == before)
+    if utility:
+        del checks['actual_boss_hp_loss']
+        checks['pure_zip_no_boss_damage']=not drops
+        checks['zip_reaches_melee']=any(abs(e['position'][0]/4096-r['hero_pos'][0])<=10 for r in live for e in r['enemies'])
     report = dict(passed=all(checks.values()), checks=checks, route=route, drops=drops, rows=rows,
         rom_sha256=w.sha256(a.rom.read_bytes()), source_battery_sha256=w.sha256(before),
         limits='Latest actual battery copy and measured current ownership/XP. Initial room arrival, cleared '
         'already-earned boss flag147, bit83 and '
-        'player healing are disposable fixtures. Boss AI, player approach/X/L, movement and actual HP loss '
+        'player healing are disposable fixtures. Boss AI, player approach/'
+        + ('Down+A' if utility else 'X') + '/L, movement and '
+        + ('zero-HP zip ' if utility else 'actual HP loss ') +
         'are native; no boss state/position/HP fixture, no victory, balance or player-acceptance claim.')
     w.write_json(a.out/'result.json', report)
     print(json.dumps(dict(passed=report['passed'], checks=checks, drops=drops)), flush=True)

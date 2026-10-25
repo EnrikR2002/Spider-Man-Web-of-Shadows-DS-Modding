@@ -1,0 +1,740 @@
+{
+  "build": {
+    "allocation_bytes": 8192,
+    "arm9_sha256": "aa7b06873d6f1514ea2099cc5120272ae1c56c7c8c83d60f3d2dab94257c20f3",
+    "binding": "Ground/combo Down+A; native direction and queued A",
+    "min_target_distance_q12": 53248,
+    "modified_resources": [
+      "American.strings",
+      "English.strings"
+    ],
+    "native_effect_skip_site": 34165820,
+    "parent_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa",
+    "player_kit_32k_unchanged": true,
+    "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+    "runtime": {
+      "allocation_bytes": 8192,
+      "block_source_offset": 1458080,
+      "bytes": 3644,
+      "entry": 35060768,
+      "hooks": [
+        {
+          "old": 3926057776,
+          "site": 34295200,
+          "value": 35060768
+        },
+        {
+          "old": 3926056545,
+          "site": 34304540,
+          "value": 3912057072
+        },
+        {
+          "old": 3788636850,
+          "site": 34165820,
+          "value": 35060796
+        },
+        {
+          "old": 3926044272,
+          "site": 34353636,
+          "value": 35060772
+        },
+        {
+          "old": 3926129097,
+          "site": 34014340,
+          "value": 35060776
+        },
+        {
+          "old": 3926125587,
+          "site": 34028384,
+          "value": 35060780
+        },
+        {
+          "old": 3926058527,
+          "site": 34296628,
+          "value": 35060784
+        },
+        {
+          "old": 3926058271,
+          "site": 34297656,
+          "value": 35060788
+        }
+      ],
+      "max_targets": 5,
+      "record_bytes": 128,
+      "records": 35060256,
+      "remaining_zero_tail": 4036,
+      "source_offset": 1458592,
+      "state": 35056160,
+      "values": {
+        "BOSS_CONFIG": 34972972,
+        "NATIVE_OBJECT": 35056544,
+        "OLD_A": 35052136,
+        "OLD_ANIMATION": 35054120,
+        "OLD_GENERIC": 35054124,
+        "OLD_NODE": 34942000,
+        "OLD_STRING": 35052156,
+        "OLD_UPDATE": 35052148,
+        "RECORDS": 35060256,
+        "SHARED_ACTIVE": 35057660,
+        "SHARED_OWNED": 35057080,
+        "SHARED_RAM_OK": 35057036,
+        "SHARED_UNLINK_TARGET": 35059224,
+        "SHARED_XY": 35057276,
+        "SHORT_GMB": 5956,
+        "SHORT_SCA": 5955,
+        "STATE": 35056160,
+        "WEB_HAND": 34955016,
+        "WEB_HIT": 34955632,
+        "WEB_RELEASE": 34955200,
+        "YANK_GAB": 3352,
+        "YANK_GMB": 5954,
+        "YANK_SCA": 5953
+      }
+    },
+    "scope": "Up to five independent weak targets/lines; pure pull/zip and native idle return; close targets skipped. No auto rake/launch. Native X restored; A/Up+A/air Down+A delegate. Native hit FX retained outside the owned zero-HP catch.",
+    "utility_damage_q12": 0,
+    "version": "0.34.2"
+  },
+  "candidate_status": "Published v0.34.2; agent-tested, player feel pending",
+  "canonical_candidate": "build\\version-0.34.2-final\\Versioned.nds",
+  "control_count": 27,
+  "controls": {
+    "air": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_custom_activation": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-air\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 0
+    },
+    "boss": {
+      "checks": {
+        "boss_never_launched_or_yanked": true,
+        "heavy_zip_used": true,
+        "pure_zip_no_boss_damage": true,
+        "source_battery_unchanged": true,
+        "zip_reaches_melee": true
+      },
+      "limits": "Latest actual battery copy and measured current ownership/XP. Initial room arrival, cleared already-earned boss flag147, bit83 and player healing are disposable fixtures. Boss AI, player approach/Down+A/L, movement and zero-HP zip are native; no boss state/position/HP fixture, no victory, balance or player-acceptance claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-boss\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098"
+    },
+    "cancel": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "native_r_exit": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-cancel\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "close": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_custom_activation": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-close\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 0
+    },
+    "combo": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "arrival_in_melee_and_native_idle": true,
+        "chosen_followup_damages": true,
+        "chosen_native_y": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true,
+        "upright_reel": true,
+        "zero_hp_catch_flash_suppressed": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-combo\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "far": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "arrival_in_melee_and_native_idle": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true,
+        "pure_pull_no_damage": true,
+        "upright_reel": true,
+        "zero_hp_catch_flash_suppressed": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-far\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "followup": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "arrival_in_melee_and_native_idle": true,
+        "chosen_followup_damages": true,
+        "chosen_native_y": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true,
+        "upright_reel": true,
+        "zero_hp_catch_flash_suppressed": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-followup\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "four": {
+      "caught": [
+        36485164,
+        36496056,
+        36500172,
+        36504268
+      ],
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_and_line_refs_clean": true,
+        "all_target_records_clean": true,
+        "arrival_in_melee_and_native_idle": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "independent_crowd_targets": true,
+        "never_binds_more_than_five": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true,
+        "pure_pull_no_damage": true,
+        "upright_reel": true,
+        "zero_hp_catch_flash_suppressed": true
+      },
+      "fixture": null,
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "peak_bound": 4,
+      "report": "work\\web-yank-combo\\final-four\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "hold": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "arrival_in_melee_and_native_idle": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true,
+        "pure_pull_no_damage": true,
+        "upright_reel": true,
+        "zero_hp_catch_flash_suppressed": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-hold\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "hurt": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "fixture_applied": true,
+        "hero_weak_head_unlinked": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-hurt\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "lift": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "arrival_in_melee_and_native_idle": true,
+        "chosen_followup_damages": true,
+        "chosen_talon_lift": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true,
+        "upright_reel": true,
+        "zero_hp_catch_flash_suppressed": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-lift\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "manual-lift": {
+      "checks": {
+        "air_y_damages_launched_target": true,
+        "air_y_followup": true,
+        "black_draw_and_texture": true,
+        "manual_b_only": true,
+        "native_collision_bounds": true,
+        "native_hp_loss_and_launch": true,
+        "private_clip_selected": true,
+        "source_battery_unchanged": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades. Disposable initial form, purchase bit21, positions and idle enemy prefix through70; native AI/contact/damage/reactions afterward. Training healing/immortality apply. No actual save writes or campaign-balance/DeSmuME-pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-manual-lift\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098"
+    },
+    "mirror": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "arrival_in_melee_and_native_idle": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true,
+        "pure_pull_no_damage": true,
+        "upright_reel": true,
+        "zero_hp_catch_flash_suppressed": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-mirror\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "moving": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "arrival_in_melee_and_native_idle": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true,
+        "pure_pull_no_damage": true,
+        "upright_reel": true,
+        "zero_hp_catch_flash_suppressed": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-moving\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "plain-a": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_custom_activation": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-plain-a\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 0
+    },
+    "red": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_custom_activation": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-red\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 0
+    },
+    "regular": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "arrival_in_melee_and_native_idle": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true,
+        "pure_pull_no_damage": true,
+        "upright_reel": true,
+        "zero_hp_catch_flash_suppressed": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-regular\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "repeat-qualified": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "arrival_in_melee_and_native_idle": true,
+        "cleanup_complete": true,
+        "four_distinct_casts": true,
+        "hero_weak_head_unlinked": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true,
+        "pure_pull_no_damage": true,
+        "upright_reel": true,
+        "zero_hp_catch_flash_suppressed": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and pre-input layout/idle re-entry until ten frames after input (before each of four casts for repeat). Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-repeat-qualified\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 4
+    },
+    "return": {
+      "black_draw_list_selected": true,
+      "hero_textured": true,
+      "launches": 0,
+      "limits": "Latest measured battery copy and ordinary Continue/Test Upgrades; disposable purchase/form, initial positions and idle prefix through70. Training healing/immortality apply. Hurt is a labelled state-only interruption; stale corrupts only private target state. No actual battery writes or campaign-balance claim.",
+      "passed": true,
+      "proof": {},
+      "pursuits": 1,
+      "report": "work\\web-yank-combo\\final-return\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "source_battery_unchanged": true,
+      "starts": 1
+    },
+    "six": {
+      "caught": [
+        36485296,
+        36496156,
+        36500272,
+        36504412,
+        36508284
+      ],
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_and_line_refs_clean": true,
+        "all_target_records_clean": true,
+        "arrival_in_melee_and_native_idle": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "independent_crowd_targets": true,
+        "never_binds_more_than_five": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true,
+        "pure_pull_no_damage": true,
+        "upright_reel": true,
+        "zero_hp_catch_flash_suppressed": true
+      },
+      "fixture": {
+        "enemy_count": 6,
+        "executable_and_other_assets_exact": true,
+        "modified_resource": "Test_Combat01_app.obj",
+        "source_rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098"
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "peak_bound": 5,
+      "report": "work\\web-yank-combo\\final-six\\result.json",
+      "rom_sha256": "b503643b56083e41ed081a79350423668d640bf6d3c5b2bcc4a6868a8c601ab5",
+      "starts": 1
+    },
+    "stale": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "fixture_applied": true,
+        "hero_weak_head_unlinked": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and pre-input layout/idle re-entry until ten frames after input (before each of four casts for repeat). Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-stale\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "swap": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_utility_damage": true,
+        "owned_down_a_cast": true,
+        "private_cast_clip": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-swap\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 1
+    },
+    "unowned": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_custom_activation": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-unowned\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 0
+    },
+    "up-a": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_custom_activation": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-up-a\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 0
+    },
+    "up-x": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_custom_activation": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-up-x\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 0
+    },
+    "whiff": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_custom_activation": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-whiff\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 0
+    },
+    "x": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "all_target_records_clean": true,
+        "cleanup_complete": true,
+        "hero_weak_head_unlinked": true,
+        "no_custom_activation": true
+      },
+      "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and one pre-input layout; enemy idle re-entry until ten frames after input. Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+      "passed": true,
+      "report": "work\\web-yank-combo\\final-x\\result.json",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "starts": 0
+    }
+  },
+  "date": "2026-10-25",
+  "five_target_proof": {
+    "all_selected_hp_unchanged": true,
+    "caught": [
+      36485296,
+      36496156,
+      36500272,
+      36504412,
+      36508284
+    ],
+    "fixture_limit": "Only disposable Test_Combat01_app.obj grows four native Brutes to six; this room is never published. Exact production four-target crowd also passed.",
+    "fixture_rom_sha256": "b503643b56083e41ed081a79350423668d640bf6d3c5b2bcc4a6868a8c601ab5",
+    "production_executable_and_other_assets_exact": true,
+    "sixth_not_bound": [
+      36512256
+    ]
+  },
+  "full_suite": {
+    "count": 648,
+    "log": "work/web-yank-combo/full-tests-final.log",
+    "result": "pass",
+    "seconds": 593.577
+  },
+  "limitations": [
+    "Native mini-bosses outside the common-health registry still need a class adapter; Conductor/resistant zip is covered.",
+    "Pure pull gathers eligible distant enemies in front; point-blank foes are skipped. Native queued A outside supported ground states retains native behavior.",
+    "Price remains the existing provisional 300 XP; no future Hunter slice or new binding implemented."
+  ],
+  "presentation": {
+    "five_motion": "work/web-yank-combo/final-six/motion",
+    "limits": "Captured native mixed PCM; no perceptual audio, player feel, full-route balance or DeSmuME/hardware pacing verdict.",
+    "menu": {
+      "actual_battery_unchanged": true,
+      "passed": true,
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "route": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Versioned-1068aba4\\wyc-menu-final",
+      "source_sha256": "7181d14751a151b1d3231acacdc0f0f32fd3d170c65cf4f114d66d78c77a5ec4"
+    },
+    "pcm": {
+      "combo": {
+        "clipped": 0,
+        "path": "work\\web-yank-combo\\final-combo\\motion.wav",
+        "peak": 12060,
+        "rate": 32768,
+        "seconds": 1.81976318359375
+      },
+      "followup": {
+        "clipped": 0,
+        "path": "work\\web-yank-combo\\final-followup\\motion.wav",
+        "peak": 12638,
+        "rate": 32768,
+        "seconds": 1.81976318359375
+      },
+      "lift": {
+        "clipped": 0,
+        "path": "work\\web-yank-combo\\final-lift\\motion.wav",
+        "peak": 10909,
+        "rate": 32768,
+        "seconds": 1.81976318359375
+      },
+      "mirror": {
+        "clipped": 0,
+        "path": "work\\web-yank-combo\\final-mirror\\motion.wav",
+        "peak": 11080,
+        "rate": 32768,
+        "seconds": 1.81976318359375
+      },
+      "regular": {
+        "clipped": 0,
+        "path": "work\\web-yank-combo\\final-regular\\motion.wav",
+        "peak": 11021,
+        "rate": 32768,
+        "seconds": 1.81976318359375
+      },
+      "six": {
+        "clipped": 0,
+        "path": "work\\web-yank-combo\\final-six\\motion.wav",
+        "peak": 16384,
+        "rate": 32768,
+        "seconds": 1.81976318359375
+      }
+    },
+    "review": "Native-size cast/reel/arrival and five-line crowd frames inspected; no catch flash, automatic rake or upward launch. Menu glyphs/text fit."
+  },
+  "profile": "work/web-yank-combo/owned-latest/owned-player-profile.json",
+  "publication": {
+    "canonical_candidate_stable_equal": true,
+    "checkpoint_wrapper_and_payload_exact": true,
+    "clean_original_unchanged": true,
+    "metadata_version": "0.34.2",
+    "normal_build_log": "work/web-yank-combo/publication.log",
+    "payload_bytes": 512,
+    "payload_sha256": "9f259f0e1d806e7ef122cfea442267e1906419f47ef248d013a070d9c2d73157",
+    "previous_rom_recipe_preserved": true,
+    "receipt": {
+      "battery_checkpoint": "before-build-dsv-7181d14751a151b1d3231acacdc0f0f32fd3d170c65cf4f114d66d78c77a5ec4",
+      "battery_sha256": "7181d14751a151b1d3231acacdc0f0f32fd3d170c65cf4f114d66d78c77a5ec4",
+      "previous_rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa",
+      "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+      "schema_version": 1,
+      "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+      "version": "0.34.2"
+    },
+    "version_text": {
+      "American.strings": [
+        "TASM v0.34.2\nPress a button to start",
+        "Options v0.34.2"
+      ],
+      "English.strings": [
+        "TASM v0.34.2\nPress a button to start",
+        "Options v0.34.2"
+      ]
+    },
+    "wrapper_sha256": "7181d14751a151b1d3231acacdc0f0f32fd3d170c65cf4f114d66d78c77a5ec4"
+  },
+  "published_continue": {
+    "actual_fields_preserved": [
+      "ability_words",
+      "xp",
+      "initial_hp",
+      "room",
+      "source_sha256"
+    ],
+    "profile": "work/web-yank-combo/published-continue/owned-player-profile.json",
+    "ram_fixtures": false,
+    "rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+    "web_yank_already_owned": true
+  },
+  "retained_failures": [
+    {
+      "path": "work/web-yank-combo/release-hold/result.json",
+      "reason": "Earlier candidate allowed native duck at cast clock6 while Down was held; fixed and exact-final hold passed."
+    },
+    {
+      "path": "work/web-yank-combo/final-repeat/result.json",
+      "reason": "Only first cast had a distant target/layout. Later close/hurt inputs exercised native buffered A after Down release, causing native dash damage. Replacement repeat-qualified explicitly stages four distant casts and asserts four starts and zero damage; original failure retained."
+    }
+  ],
+  "schema_version": 1,
+  "scope": {
+    "executable": "Eight guarded hook words, loader metadata and new 8 KiB code/record block. Frozen 32 KiB kit and all other prior executable bytes exact.",
+    "inherited": "Other kit/chapter/traversal composition preserved by byte scope; native input isolation, Return and manual Lift also rerun.",
+    "resources": "English/American boot, Options and existing Web Yank description only; all native/private clips, bindings, shop data, rooms, audio, ownership and save format exact."
+  },
+  "source_battery_sha256": "7181d14751a151b1d3231acacdc0f0f32fd3d170c65cf4f114d66d78c77a5ec4",
+  "unit_tests": {
+    "count": 17,
+    "log": "work/web-yank-combo/unit-held-fix.log",
+    "result": "pass"
+  }
+}

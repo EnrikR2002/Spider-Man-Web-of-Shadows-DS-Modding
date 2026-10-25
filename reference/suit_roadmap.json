@@ -3,7 +3,7 @@
   "archived_expanded_design": "TASM_EXPANDED_ROADMAP.md",
   "black_slot": "2099-classic",
   "current_recipe": "gameplay_profile.json",
-  "current_release": "0.34.0",
+  "current_release": "0.34.2",
   "expanded_design": "../docs/ROADMAP.md",
   "historical_notes_archive": "../docs/archive/legacy-notes.zip",
   "historical_snapshot": {
@@ -26,7 +26,7 @@
     "Dragnet",
     "Vortex"
   ],
-  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 is authoritative: Web Yank is its first published slice in v0.34.0, alongside the retained taller cape-free appearance, Hunter's Return and manual-jump Talon Lift. Remaining revision-3 moves await their slices and player verdicts. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices/balance, third suit, save expansion and branches remain deferred.",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 is authoritative: Web Yank is its first published slice, refined to a pure five-target Down+A gather in v0.34.2, alongside the retained taller cape-free appearance, Hunter's Return and manual-jump Talon Lift. Remaining revision-3 moves await their slices and player verdicts. Preserve native controls, ownership/dependencies, Both Suits traversal and rewards. Prices/balance, third suit, save expansion and branches remain deferred.",
   "prototype_reference": "../docs/ROADMAP.md#now",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
@@ -66,7 +66,7 @@
             "visual": "eye lenses and talon tips red"
           },
           "3": {
-            "effect": "Heavy Line (yank lane catches up to two more) and Shockwave Talons on every 2099 ender",
+            "effect": "Shockwave Talons on every 2099 ender; former Heavy Line extra-target/arrival-hit proposal superseded by base five-target pure Web Yank",
             "visual": "red web lines; chest spider and shoulder panels brighten"
           },
           "4": {
@@ -98,9 +98,9 @@
             "ability_bit": 83,
             "agent_tested": true,
             "event_id": 392,
-            "evidence": "hunter_kit.json",
-            "implemented_version": "0.34.0",
-            "input": "X on the ground with no native X prompt; Up+X upward",
+            "evidence": "web_yank_combo.json",
+            "implemented_version": "0.34.2",
+            "input": "Ground/combo Down+A: pure pull of up to five distant enemies ahead; choose Y or Up+A afterward; R exits",
             "move": "Web Yank",
             "player_confirmed": false,
             "price": 300,
@@ -110,7 +110,7 @@
           {
             "ability_bit": 84,
             "event_id": 393,
-            "input": "X in the air",
+            "input": "Air combat binding TBD before its slice; X remains native",
             "move": "Reel In",
             "requires": "Web Yank"
           },
@@ -182,7 +182,7 @@
       },
       "design_reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
       "id": "2099-classic",
-      "implementation_order": "Await player verdict on v0.34.0 Web Yank, then the ROADMAP Sky slice. Retain the authoritative claude/zen-clarke-p0wo8j design over earlier local proposals; qualify native mini-boss adapters before expanding boss coverage.",
+      "implementation_order": "Await player verdict on v0.34.2 pure five-target Web Yank, then the ROADMAP Sky slice. Retain authoritative claude/zen-clarke-p0wo8j design with later player overrides; qualify native mini-boss adapters before expanding boss coverage.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Fuller chest/back/arms on the preserved native rig; unrelated native motion clips retained",
@@ -192,13 +192,13 @@
         "12.5% taller Black animated pose and scarlet native web tints; native Red height/colors retained",
         "Purchased Hunter's Return with corrected victim isolation/owner cleanup",
         "Purchased Talon Lift with manual held-B air follow-up and native R exit",
-        "Purchased Web Yank: X/Up+X with native prompt priority, scarlet native line, authored close/distant rakes, weak-reference cleanup and Conductor/resistant-target velocity approach; independent bit83/event392 row at provisional 300 XP"
+        "Purchased Web Yank: grounded/combo Down+A gathers up to five distant enemies with independent scarlet lines and weak refs; pure zero-HP pull, no close/rake/upward attack or catch impact flash; Conductor/resistant-target hero zip. Independent bit83/event392 row stays provisional 300 XP."
       ],
-      "kit": "Hunter revision 3 (14 planned skills): Web Yank is the first published slice, on grounded X/Up+X in owned Black form; native X prompts win and R exits. The prior Hunter's Return and manual-jump Talon Lift remain until their replacement slices qualify. Other revision-3 behavior is designed, not implemented. Native A/B/base strings/R, ownership, dependencies and progression remain.",
+      "kit": "Hunter revision 3 (14 planned skills): Web Yank is the first published slice, refined in v0.34.2 to pure ground/combo Down+A pulling up to five enemies. Choose Y/Talon Lift afterward; X is native and R exits. Retain Hunter's Return, manual-jump Talon Lift, other native A/B/strings/R, ownership, dependencies and progression. Remaining revision-3 moves are designed.",
       "latest_feedback": {
-        "date": "2026-10-22",
-        "source_version": "0.30.1",
-        "summary": "Likes 2099 overall; make the model closer to the supplied Across the Spider-Verse movie reference and remove the red web cape."
+        "date": "2026-10-25",
+        "source_version": "0.34.1",
+        "summary": "Pull feels better; rejects misplaced blue marker, point-blank slap, X combat and upward variant. Requests pure Down+A pull, chosen Y/Talon Lift and up to five enemies at once."
       },
       "name": "Spider-Man 2099 - Across the Spider-Verse inspired",
       "prior_design_snapshot": {
@@ -207,8 +207,8 @@
       },
       "replaces_form": "black",
       "selection_date": "2026-10-11",
-      "status": "v0.34.0-web-yank-published-remaining-hunter-revision-3-designed",
-      "validation_limit": "See hunter_kit.json for 17 focused controls and exact source/publisher/stable composition. Conductor heavy behavior is qualified; native mini-bosses outside the common-health registry remain excluded pending a class adapter. Price is provisional. Player feel, perceptual audio and DeSmuME/hardware pacing remain unconfirmed."
+      "status": "v0.34.2-pure-five-target-web-yank-published-remaining-hunter-revision-3-designed",
+      "validation_limit": "See web_yank_combo.json for 648 full-suite tests, 17 focused tests, 27 emulator controls, exact publication and fresh Continue. Five-of-six proof uses a labelled training-only OBJ with exact production executable/other assets. Conductor zip is qualified; native mini-bosses outside common-health registry need an adapter. Price provisional; player feel, perceptual audio, full-route balance and DeSmuME/hardware pacing unconfirmed."
     },
     {
       "id": "scarlet-kaine",

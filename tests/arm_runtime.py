@@ -22,7 +22,7 @@ class ArmProbe:
         raise AssertionError('Unmodelled rotate operand')
     def run(self,regs,cpsr,stops,stubs=None):
         regs=list(regs);stubs=stubs or {}
-        for _ in range(600):
+        for _ in range(10000):
             pc=regs[15]
             if pc in stops:return regs,cpsr,pc
             if pc in stubs:

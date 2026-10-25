@@ -2074,6 +2074,66 @@ then cleanup unlinks it from the actual hero head. Repeated native casts and
 interruption/ownership controls qualify this exact corrected composition. The
 moving-input control also preserves upright placement and the native rake.
 
+### Pure-pull input and catch effects (v0.34.2 research)
+
+2026-10-25, high confidence from v0.34.1 disassembly and copied-latest-save
+candidate C controls. Native ground Down+A falls through to A's charge/dash;
+the new owned chord can specialize it while retaining plain A and air Down+A.
+Transition 0x020B4DA0 precedes the string blocker in the default think list,
+so its scoped wrapper can accept a ground-combo pull before the native stay.
+Native A direction is controller+0x24 (6 Down, 2 Up), with queued command5.
+Unlike Y, A has no direction payload returned by 0x020CFFE8; the first prototype
+wrongly assumed a shared payload. Use the same direction source as native Up+A.
+
+Native state change 0x02077844 runs exit, action request and entry callbacks.
+Candidate C uses it to end the pure pull in idle and restore a valid saved Black
+combo node/keep-alive. Copied-save controls prove zero HP damage/launch, an upright
+arrival, native idle, correct weak-list cleanup and a separately chosen Up+A
+Talon Lift. X is restored to its original object function.
+
+The zero-HP built stagger still reaches the enemy's impact VFX path at
+0x0209543C..0x02095670. The pure catch's synchronous guard skips that cosmetic
+block for its exact attacker/victim only; ordinary hit effects follow the native
+LDRH/flag path. The callback still returns taken4 and preserves the native hurt
+reaction. This removes the false hit flash from the utility move rather than
+changing real attacks. Source: `web_yank_combo.py/.s`; retained candidate C proof
+in `work/web-yank-combo/c-regular` and `c-lift`.
+
+The five-target expansion uses the existing master plus four separate 128-byte
+records in an added 8 KiB block. Each owns independent target/hero weak links,
+motion/config identity, a full four-word native line slot and velocity state.
+Nearest eligible targets are gathered once, capped at five; close targets are
+skipped. Native velocity gathers them 6..9 units ahead. Heavy handling retains
+one closest zip; its arrival/death stops owned hero velocity while light targets
+continue. Signed arrival checks prevent a heavy zip leaving a light target behind.
+Unit controls cover six candidates, an invalid primary and complete weak-list
+cleanup. A six-Brute training-only OBJ fixture proves five simultaneous real
+pulls/lines and an unselected sixth; its production executable/assets are exact.
+The native zero-HP catch effect is suppressed only for the synchronous guarded
+target/attacker and actual zero fifth-argument damage. Real attacks retain FX.
+
+Final-candidate ARM regression also checks the hero's intrusive weak token,
+not only a raw address/controller pair: a cleared token at a reused address
+must release old records without changing the new actor's state. A native held
+Down+A control exposed another real failure: at cast clock6 the string blocker
+allowed duck5, retracting the lines before any reel velocity. The private cast
+now returns stay46 from both blocker hooks while active, except queued R/L
+which retain native exits. It consumes neither exit command. The corrected held
+control finishes the pull once, then naturally ducks while Down remains held.
+Source: `work/web-yank-combo/final-hold/result.json`, v0.34.2 candidate
+`1068aba4`; high confidence from native trace and direct ARM ABI regression.
+
+Exact final `1068aba4` is published as v0.34.2. Qualification is 648 full-suite
+tests, 17 focused ARM/composition tests and 27 copied-save emulator controls,
+including real five-of-six targets, exact production four-target crowd, four
+separately staged casts, both facings, combo/Y/Lift/native inputs, interruptions
+and Conductor. The first repeat fixture staged only one distant cast: later
+close/hurt input let native buffered A run after Down release, so its subsequent
+native dash damage was not a second utility hit. The qualified repeat fixture
+lays out a distant target before each press and asserts four starts/zero damage;
+the failed report is retained. Source/limits and publication/fresh Continue
+evidence are in `reference/web_yank_combo.json`; no player-feel verdict is implied.
+
 ### Freeze root cause and crash hunting (v0.4.1)
 
 Player report (2026-10-06, v0.4.0): in a crowd, spamming Y and R with Both Suits

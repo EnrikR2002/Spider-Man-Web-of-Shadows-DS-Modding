@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.34.1. Each section records behavior,
+The latest numbered release below is v0.34.2. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,38 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.34.2 - 2026-10-25 - Five-target pure Web Yank on Down+A
+
+Ground Down+A, also during a ground string, gathers up to five eligible distant
+enemies ahead into melee range. Each has an independent native scarlet line,
+weak references and native reel velocity, settling 6..9 units ahead. Choose Y
+or Up+A Talon Lift afterward. Point-blank enemies are skipped; the automatic
+rake, close slap and upward variant are removed. X returns to native object
+interactions; plain A, A-again Return, Up+A and air Down+A retain native routing.
+R and suit switch can exit; holding Down+A completes one pull before ducking.
+The synchronous zero-HP catch no longer emits the misplaced impact flash;
+ordinary hits retain native effects. Resistant enemies retain the hero zip rule.
+
+Validation: 648 full-suite tests, 17 focused tests and 27 copied-save emulator
+controls pass. These cover both facings, long/moving/combo entry, chosen Y/Lift,
+four distinct casts, held input, close/whiff/native actions, ownership, cleanup,
+interruptions, Return/manual Lift and Conductor. Five-of-six proof uses a labelled
+training-only OBJ with the exact production executable and every other asset;
+the exact production four-target crowd also passes. No chapter room changed.
+
+Only eight hook words, loader metadata, an added 8 KiB code/record block and two
+instruction/version resources change over v0.34.1. Other code, clips/bindings,
+the frozen 32 KiB kit, shop data, rooms, audio and save format remain exact.
+Canonical, normal publisher and installed ROM match; boot/Options both say
+v0.34.2. Latest actual Battery wrapper/payload and purchases survive unchanged,
+including a fresh ordinary Continue; no ability or research save was adopted.
+The prior ROM/recipe are preserved. Evidence: `reference/web_yank_combo.json`.
+
+Native-size motion/menu were inspected and mixed PCM captured. Player feel,
+perceptual audio, full-route balance and hardware pacing remain unconfirmed.
+Native mini-bosses outside the common-health registry still need their adapter.
+The existing 300 XP price remains provisional; later Hunter slices wait.
 
 ## v0.34.1 - 2026-10-24 - Firm Web Yank and arrival rake
 

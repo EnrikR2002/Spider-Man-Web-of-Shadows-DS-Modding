@@ -270,6 +270,13 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
         report = w.validate_rom(result, target=True)
         ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
         new_glob = result[ge['start']:ge['end']]
+    web_yank_combo = None
+    if release.get('web_yank_combo'):
+        from tools import web_yank_combo as yank_combo
+        result, web_yank_combo = yank_combo.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
+        new_glob = result[ge['start']:ge['end']]
     log = {'schema_version': 1, 'clean_rom_sha256': w.sha256(rom), 'output_rom_sha256': w.sha256(result),
            'clean_glob_sha256': manifest['sha256'], 'output_glob_sha256': w.sha256(new_glob),
            'rom_size': len(result), 'used_rom_size': report['header']['used_rom_size'],
@@ -279,7 +286,7 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
            'added_assets':added, 'midnight_line': chapter, 'crane_row': crane, 'midnight_rework': midnight_rework,
            'chapter_renewal':chapter_renewal, 'creature_forge':creature_forge, 'creature_texture_fix':creature_texture_fix, 'chapter_spectacle':chapter_spectacle,
            'midnight_rebuild':midnight_rebuild, 'midnight_encore':midnight_encore, 'midnight_voltage':midnight_voltage, 'midnight_finale':midnight_finale, 'midnight_reliability':midnight_reliability, 'chapter_finish':chapter_finish, 'spider2099':spider2099, 'spider2099_polish':spider2099_polish, 'spider2099_movie':spider2099_movie, 'spider2099_enemy_texture':spider2099_enemy_texture,
-           'vortex_forge':vortex_forge, 'hunters_return':hunters_return, 'hunters_return_fix':hunters_return_fix, 'talon_lift':talon_lift, 'spider2099_presence':spider2099_presence, 'hunter_kit':hunter_kit, 'web_yank_fix':web_yank_fix,
+           'vortex_forge':vortex_forge, 'hunters_return':hunters_return, 'hunters_return_fix':hunters_return_fix, 'talon_lift':talon_lift, 'spider2099_presence':spider2099_presence, 'hunter_kit':hunter_kit, 'web_yank_fix':web_yank_fix, 'web_yank_combo':web_yank_combo,
            'verified_resource_count': len(w.parse_glob(new_glob)[1]), 'unchanged_resource_count': len(names) - len(replacements)-len(added)}
     if gameplay_profile in release_info.PROFILES:
         release = release_info.PROFILE_INFO[gameplay_profile]

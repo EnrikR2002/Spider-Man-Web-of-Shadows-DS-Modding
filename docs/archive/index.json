@@ -2,7 +2,7 @@
   "schema_version": 1,
   "snapshot_date": "2026-10-05",
   "purpose": "Historical source notes; current status is in docs/TASKS.md. Read only a selected entry/section with tools/doc_archive.py.",
-  "archive_sha256": "a1f042f6328c0a9ae4c2edaf68a03e067812f1a9ab9ce562a468cd0e1991e89a",
+  "archive_sha256": "bec597eeb7b22009258f11336f8905a578a7d01fda4a427bc044fd176260647b",
   "entries": [
     {
       "path": "AGENTS.md",
@@ -2101,6 +2101,47 @@
           "level": 1
         }
       ]
+    },
+    {
+      "path": "docs/WEB_YANK_CONTROLS-2026-10-25.md",
+      "title": "Web Yank X, upward variant and automatic rake before pure-pull revision",
+      "snapshot_date": "2026-10-25",
+      "source_revision": "3807437571b391ebdf201ed2874a620ab5f0ee3a",
+      "bytes": 2028,
+      "words": 377,
+      "sha256": "731ca2300c849c142008f6df24dd58d703f3a0492be7aa9da54e75cbdb56354f",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Web Yank before pure-pull controls",
+          "level": 1
+        },
+        {
+          "line": 3,
+          "heading": "Controls in Black form (all rows owned)",
+          "level": 3
+        }
+      ]
+    },
+    {
+      "path": "docs/HEAVY_LINE-before-five-target-yank-2026-10-25.md",
+      "title": "Heavy Line tier proposal before base five-target pure Web Yank",
+      "snapshot_date": "2026-10-25",
+      "source_revision": "3807437571b391ebdf201ed2874a620ab5f0ee3a",
+      "bytes": 2878,
+      "words": 512,
+      "sha256": "1ab1214ba46ca11d2f0a01ad9bd2b381e6cac5db73658e07d119dee8bca5ff77",
+      "sections": []
+    },
+    {
+      "path": "docs/HUNTER-input-gates-before-DownA-2026-10-25.md",
+      "title": "Hunter pipeline gates before ground Down+A and native X restoration",
+      "snapshot_date": "2026-10-25",
+      "source_revision": "3807437571b391ebdf201ed2874a620ab5f0ee3a",
+      "bytes": 1164,
+      "words": 171,
+      "sha256": "0ea444179f31650db0f64781499f1c177a68369c41443d7dbceb45b903c524c2",
+      "sections": []
     }
   ]
 }
