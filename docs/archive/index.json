@@ -2,7 +2,7 @@
   "schema_version": 1,
   "snapshot_date": "2026-10-05",
   "purpose": "Historical source notes; current status is in docs/TASKS.md. Read only a selected entry/section with tools/doc_archive.py.",
-  "archive_sha256": "0a44708bf880b3c800cabcb36c2fbb5a535fd4fbf6715a126d4472161321b2d8",
+  "archive_sha256": "a1f042f6328c0a9ae4c2edaf68a03e067812f1a9ab9ce562a468cd0e1991e89a",
   "entries": [
     {
       "path": "AGENTS.md",
@@ -2083,6 +2083,22 @@
           "line": 407,
           "heading": "Historical designs",
           "level": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/WEB_YANK_PIPELINE_PROOF-2026-10-24.md",
+      "title": "Original Hunter revision-3 Web Yank pipeline proof before pull refinement",
+      "snapshot_date": "2026-10-24",
+      "source_revision": "991f02a9a2c73218d959348f0f2083634af2f781",
+      "bytes": 565,
+      "words": 101,
+      "sha256": "bf1211f0f4cacf7b2e7784a4a400a341f3185b11ff738698a566c6c5af45e6d6",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "First Web Yank pipeline proof",
+          "level": 1
         }
       ]
     }

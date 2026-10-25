@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.34.0. Each section records behavior,
+The latest numbered release below is v0.34.1. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,36 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.34.1 - 2026-10-24 - Firm Web Yank and arrival rake
+
+Reworks the player-rejected limp pull. Ground X now reels normal enemies upright
+to six units in front of Miguel; actual arrival starts a short authored talon
+rake. The early floor bounce and fixed delayed strike are removed. Up+X launches
+at impact, very close targets get the quick rake, and a normal Y follow-up can
+connect before the old recovery ended. R retains the native exit. Resistant
+targets still draw Miguel toward them through native velocity and collision.
+
+The cast and arrival rake share a loaded stance and keep native gravity and
+collision. Both actors have guarded weak references; releasing the line and
+ending/interruption unlink their references correctly. Four consecutive native
+casts qualify the corrected state layout. The existing private code page holds
+the change; original action bindings/assets, the 32 KiB player kit, other moves,
+shop rows/prices/dependencies, rooms, audio and save format remain exact.
+
+Validation: 631 full-suite tests, 17 focused tests and 21 copied-save emulator
+controls pass. These cover real pulls at medium/long distance in both directions,
+moving input, placement, real HP loss, Up+X, close rake, Y follow-up, repeat casts,
+native R and other interruptions, ownership, Conductor, Return/Lift and native
+buy/refund/save/fresh Continue. Canonical, publisher candidate and installed ROM
+match; actual Battery wrapper/payload match the publication checkpoint and the
+clean original is unchanged. No research save or purchase was granted.
+
+Native-size motion was inspected; normal-rate mixed-audio footage and exact
+evidence are retained in `reference/web_yank_fix.json`. Player feel, perceptual
+audio, full-route balance and hardware pacing remain unconfirmed. Native
+mini-bosses outside the common-health registry still need their class adapter;
+the 300 XP price is provisional and later Hunter slices remain designed.
 
 ## v0.34.0 - 2026-10-23 - 2099 Web Yank
 

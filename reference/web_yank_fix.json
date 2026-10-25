@@ -1,0 +1,769 @@
+{
+  "build": {
+    "allocation_bytes": 0,
+    "arm9_sha256": "d36c494159a38af8d26ea5afefe6677ece06c9d5e8d9ecb191195518c50d4c1d",
+    "arrival": "Native action re-entry into the short rake at actual gap <=7 units",
+    "cast_sample": 2,
+    "contact_sample": 3,
+    "max_reel_velocity_q12": 24576,
+    "modified_resources": [
+      "American.strings",
+      "English.strings",
+      "zz_H34_Yank.sca",
+      "zz_H34_Yank.gmb",
+      "zz_H34_Rake.sca",
+      "zz_H34_Rake.gmb"
+    ],
+    "parent_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+    "player_kit_32k_unchanged": true,
+    "rake_samples": 8,
+    "reel_stop_q12": 24576,
+    "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa",
+    "runtime": {
+      "bytes": 3344,
+      "entry": 35056552,
+      "remaining_zero_tail": 360,
+      "source_offset": 1454376
+    },
+    "samples": 18,
+    "scope": "Existing private Web Yank code/cast and version text only; native collision/gravity, shop, ownership, other moves, bindings, rooms, audio and save format preserved.",
+    "version": "0.34.1"
+  },
+  "candidate_status": "E published and verified as v0.34.1; player feel unconfirmed",
+  "canonical_candidate": "build\\version-0.34.1-final\\Versioned.nds",
+  "clean_rom_sha256_before": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203",
+  "control_count": 21,
+  "controls": {
+    "air": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "no_custom_activation": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-air\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "boss": {
+      "checks": {
+        "actual_boss_hp_loss": true,
+        "boss_never_launched_or_yanked": true,
+        "heavy_zip_used": true,
+        "source_battery_unchanged": true
+      },
+      "limits": "Latest actual battery copy and measured current ownership/XP. Initial room arrival, cleared already-earned boss flag147, bit83 and player healing are disposable fixtures. Boss AI, player approach/X/L, movement and actual HP loss are native; no boss state/position/HP fixture, no victory, balance or player-acceptance claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-boss\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "cancel": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "native_r_exit": true,
+        "no_rake_after_interruption": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-cancel\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "close": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "cleanup_complete": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-close\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "far": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "arrival_in_front_at_rake": true,
+        "arrival_rake_clip_selected": true,
+        "cleanup_complete": true,
+        "genuine_distant_reel": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "native_yank_zip_or_close_strike": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true,
+        "upright_reel_without_floor_bounce": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-far\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "followup": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "arrival_in_front_at_rake": true,
+        "arrival_rake_clip_selected": true,
+        "cleanup_complete": true,
+        "genuine_distant_reel": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "native_y_followup_before_old_recovery": true,
+        "native_yank_zip_or_close_strike": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true,
+        "upright_reel_without_floor_bounce": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-followup\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "hold": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "arrival_in_front_at_rake": true,
+        "arrival_rake_clip_selected": true,
+        "cleanup_complete": true,
+        "genuine_distant_reel": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "native_yank_zip_or_close_strike": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true,
+        "upright_reel_without_floor_bounce": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-hold\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "hurt": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "fixture_applied": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "no_rake_after_interruption": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-hurt\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "mirror": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "arrival_in_front_at_rake": true,
+        "arrival_rake_clip_selected": true,
+        "cleanup_complete": true,
+        "genuine_distant_reel": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "native_yank_zip_or_close_strike": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true,
+        "upright_reel_without_floor_bounce": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-mirror\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "moving": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "arrival_in_front_at_rake": true,
+        "arrival_rake_clip_selected": true,
+        "cleanup_complete": true,
+        "genuine_distant_reel": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "native_yank_zip_or_close_strike": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true,
+        "upright_reel_without_floor_bounce": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work/web-yank-fix/e-moving/result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "native-lift": {
+      "checks": {
+        "air_y_damages_launched_target": true,
+        "air_y_followup": true,
+        "black_draw_and_texture": true,
+        "manual_b_only": true,
+        "native_collision_bounds": true,
+        "native_hp_loss_and_launch": true,
+        "private_clip_selected": true,
+        "source_battery_unchanged": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades. Disposable initial form, purchase bit21, positions and idle enemy prefix through70; native AI/contact/damage/reactions afterward. Training healing/immortality apply. No actual save writes or campaign-balance/DeSmuME-pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-native-lift\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "native-return": {
+      "checks": null,
+      "limits": "Latest measured battery copy and ordinary Continue/Test Upgrades; disposable purchase/form, initial positions and idle prefix through70. Training healing/immortality apply. Hurt is a labelled state-only interruption; stale corrupts only private target state. No actual battery writes or campaign-balance claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-native-return\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "red": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "no_custom_activation": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-red\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "regular": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "arrival_in_front_at_rake": true,
+        "arrival_rake_clip_selected": true,
+        "cleanup_complete": true,
+        "genuine_distant_reel": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "native_yank_zip_or_close_strike": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true,
+        "upright_reel_without_floor_bounce": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-regular\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "repeat": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "cleanup_complete": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "native_yank_zip_or_close_strike": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true,
+        "repeated_native_casts": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-repeat\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "shop": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "fresh_continue_keeps_purchase": true,
+        "native_checkpoint_and_hp": true,
+        "native_purchase": true,
+        "native_refund": true,
+        "native_repurchase": true
+      },
+      "limits": "Latest actual DSV copy; ordinary Continue, native shop inputs, refund/repurchase and in-game save. No purchase/XP/room/HP RAM writes; the earned SRAM snapshot stays private in work/. No research save adoption or player-acceptance claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-shop\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "stale": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "fixture_applied": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "no_rake_after_interruption": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-stale\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "swap": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "no_rake_after_interruption": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-swap\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "unowned": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "no_custom_activation": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-unowned\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "up": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "actual_rake_damage": true,
+        "arrival_in_front_at_rake": true,
+        "arrival_rake_clip_selected": true,
+        "cleanup_complete": true,
+        "genuine_distant_reel": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "native_yank_zip_or_close_strike": true,
+        "owned_black_cast": true,
+        "private_clip_selected": true,
+        "rake_launches": true,
+        "upright_reel_without_floor_bounce": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-up\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    },
+    "whiff": {
+      "checks": {
+        "actual_battery_unchanged": true,
+        "cleanup_complete": true,
+        "hero_weak_reference_unlinked_at_exit": true,
+        "no_custom_activation": true
+      },
+      "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+      "passed": true,
+      "report": "work\\web-yank-fix\\e-whiff\\result.json",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+    }
+  },
+  "discarded_candidate_D": {
+    "build": {
+      "allocation_bytes": 0,
+      "arm9_sha256": "699ff2b27d5256d8dd811dba1e9862e7654584c6d965e496383826d65f4970a8",
+      "arrival": "Native action re-entry into the short rake at actual gap <=7 units",
+      "cast_sample": 2,
+      "contact_sample": 3,
+      "max_reel_velocity_q12": 24576,
+      "modified_resources": [
+        "American.strings",
+        "English.strings",
+        "zz_H34_Yank.sca",
+        "zz_H34_Yank.gmb",
+        "zz_H34_Rake.sca",
+        "zz_H34_Rake.gmb"
+      ],
+      "parent_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "player_kit_32k_unchanged": true,
+      "rake_samples": 8,
+      "reel_stop_q12": 24576,
+      "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d",
+      "runtime": {
+        "bytes": 3344,
+        "entry": 35056552,
+        "remaining_zero_tail": 360,
+        "source_offset": 1454376
+      },
+      "samples": 18,
+      "scope": "Existing private Web Yank code/cast and version text only; native collision/gravity, shop, ownership, other moves, bindings, rooms, audio and save format preserved.",
+      "version": "0.34.1"
+    },
+    "control_count": 18,
+    "controls": {
+      "air": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "no_custom_activation": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-air\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "boss": {
+        "checks": {
+          "actual_boss_hp_loss": true,
+          "boss_never_launched_or_yanked": true,
+          "heavy_zip_used": true,
+          "source_battery_unchanged": true
+        },
+        "limits": "Latest actual battery copy and measured current ownership/XP. Initial room arrival, cleared already-earned boss flag147, bit83 and player healing are disposable fixtures. Boss AI, player approach/X/L, movement and actual HP loss are native; no boss state/position/HP fixture, no victory, balance or player-acceptance claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-boss\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "cancel": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "native_r_exit": true,
+          "no_rake_after_interruption": true,
+          "owned_black_cast": true,
+          "private_clip_selected": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-cancel\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "close": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_rake_damage": true,
+          "cleanup_complete": true,
+          "owned_black_cast": true,
+          "private_clip_selected": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-close\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "far": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_rake_damage": true,
+          "arrival_in_front_at_rake": true,
+          "cleanup_complete": true,
+          "genuine_distant_reel": true,
+          "native_yank_zip_or_close_strike": true,
+          "owned_black_cast": true,
+          "private_clip_selected": true,
+          "upright_reel_without_floor_bounce": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-far\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "followup": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_rake_damage": true,
+          "arrival_in_front_at_rake": true,
+          "cleanup_complete": true,
+          "genuine_distant_reel": true,
+          "native_y_followup_before_old_recovery": true,
+          "native_yank_zip_or_close_strike": true,
+          "owned_black_cast": true,
+          "private_clip_selected": true,
+          "upright_reel_without_floor_bounce": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-followup\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "hold": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_rake_damage": true,
+          "arrival_in_front_at_rake": true,
+          "arrival_rake_clip_selected": true,
+          "cleanup_complete": true,
+          "genuine_distant_reel": true,
+          "native_yank_zip_or_close_strike": true,
+          "owned_black_cast": true,
+          "private_clip_selected": true,
+          "upright_reel_without_floor_bounce": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-hold\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "hurt": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "fixture_applied": true,
+          "no_rake_after_interruption": true,
+          "owned_black_cast": true,
+          "private_clip_selected": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-hurt\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "mirror": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_rake_damage": true,
+          "arrival_in_front_at_rake": true,
+          "cleanup_complete": true,
+          "genuine_distant_reel": true,
+          "native_yank_zip_or_close_strike": true,
+          "owned_black_cast": true,
+          "private_clip_selected": true,
+          "upright_reel_without_floor_bounce": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-mirror\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "native-lift": {
+        "checks": {
+          "air_y_damages_launched_target": true,
+          "air_y_followup": true,
+          "black_draw_and_texture": true,
+          "manual_b_only": true,
+          "native_collision_bounds": true,
+          "native_hp_loss_and_launch": true,
+          "private_clip_selected": true,
+          "source_battery_unchanged": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades. Disposable initial form, purchase bit21, positions and idle enemy prefix through70; native AI/contact/damage/reactions afterward. Training healing/immortality apply. No actual save writes or campaign-balance/DeSmuME-pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-native-lift\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "native-return": {
+        "checks": null,
+        "limits": "Latest measured battery copy and ordinary Continue/Test Upgrades; disposable purchase/form, initial positions and idle prefix through70. Training healing/immortality apply. Hurt is a labelled state-only interruption; stale corrupts only private target state. No actual battery writes or campaign-balance claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-native-return\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "red": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "no_custom_activation": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-red\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "shop": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "fresh_continue_keeps_purchase": true,
+          "native_checkpoint_and_hp": true,
+          "native_purchase": true,
+          "native_refund": true,
+          "native_repurchase": true
+        },
+        "limits": "Latest actual DSV copy; ordinary Continue, native shop inputs, refund/repurchase and in-game save. No purchase/XP/room/HP RAM writes; the earned SRAM snapshot stays private in work/. No research save adoption or player-acceptance claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-shop\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "stale": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "fixture_applied": true,
+          "no_rake_after_interruption": true,
+          "owned_black_cast": true,
+          "private_clip_selected": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-stale\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "swap": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "no_rake_after_interruption": true,
+          "owned_black_cast": true,
+          "private_clip_selected": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-swap\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "unowned": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "no_custom_activation": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-unowned\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "up": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_rake_damage": true,
+          "arrival_in_front_at_rake": true,
+          "arrival_rake_clip_selected": true,
+          "cleanup_complete": true,
+          "genuine_distant_reel": true,
+          "native_yank_zip_or_close_strike": true,
+          "owned_black_cast": true,
+          "private_clip_selected": true,
+          "rake_launches": true,
+          "upright_reel_without_floor_bounce": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-up\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      },
+      "whiff": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "no_custom_activation": true
+        },
+        "limits": "Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. Hurt/stale cases label their one private-RAM interruption; training healing applies. No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.",
+        "passed": true,
+        "report": "work\\web-yank-fix\\d-whiff\\result.json",
+        "rom_sha256": "660b947a89f4624a2cc519c10978bf0170d18f006c3e4d45aa3d7c1e8c08fc7d"
+      }
+    }
+  },
+  "failed_controls": [
+    {
+      "reason": "Pre-input 45-unit fixture walked outside the native activation bound; no activation. Retained failed qualification, then actual long pull qualified from 42-unit layout.",
+      "report": "work\\web-yank-fix\\d-regular\\result.json"
+    }
+  ],
+  "full_suite": {
+    "count": 631,
+    "log": "work/web-yank-fix/full-tests-e.log",
+    "result": "pass",
+    "seconds": 587.467
+  },
+  "player_status": "v0.34.0 pull rejected as limp; v0.34.1 feel awaits player verdict",
+  "presentation": {
+    "native_frame_dirs": [
+      "work\\web-yank-fix\\e-regular\\motion",
+      "work\\web-yank-fix\\e-far\\motion",
+      "work\\web-yank-fix\\e-mirror\\motion",
+      "work\\web-yank-fix\\e-up\\motion",
+      "work\\web-yank-fix\\e-close\\motion",
+      "work\\web-yank-fix\\e-followup\\motion"
+    ],
+    "normal_rate_video": "work\\web-yank-fix\\Web-Yank-v0.34.1.mp4",
+    "pcm": {
+      "close": {
+        "clipped": 0,
+        "path": "work\\web-yank-fix\\e-close\\motion.wav",
+        "peak": 8416,
+        "rate": 32768,
+        "seconds": 1.48583984375
+      },
+      "far": {
+        "clipped": 0,
+        "path": "work\\web-yank-fix\\e-far\\motion.wav",
+        "peak": 11687,
+        "rate": 32768,
+        "seconds": 1.48583984375
+      },
+      "followup": {
+        "clipped": 0,
+        "path": "work\\web-yank-fix\\e-followup\\motion.wav",
+        "peak": 10943,
+        "rate": 32768,
+        "seconds": 1.48583984375
+      },
+      "mirror": {
+        "clipped": 0,
+        "path": "work\\web-yank-fix\\e-mirror\\motion.wav",
+        "peak": 10985,
+        "rate": 32768,
+        "seconds": 1.48583984375
+      },
+      "regular": {
+        "clipped": 0,
+        "path": "work\\web-yank-fix\\e-regular\\motion.wav",
+        "peak": 10726,
+        "rate": 32768,
+        "seconds": 1.48583984375
+      },
+      "up": {
+        "clipped": 0,
+        "path": "work\\web-yank-fix\\e-up\\motion.wav",
+        "peak": 10943,
+        "rate": 32768,
+        "seconds": 1.48583984375
+      }
+    },
+    "review": "Native-size captured cast, heave, upright arrival, rake and native Y follow-up inspected. PCM/mixed-audio captured; no perceptual audio or hardware pacing verdict."
+  },
+  "profile": "work\\web-yank-fix\\owned-current\\owned-player-profile.json",
+  "publication": {
+    "actual_battery": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+    "canonical_candidate_stable_equal": true,
+    "checkpoint_wrapper_and_payload_exact": true,
+    "clean_original_unchanged": true,
+    "metadata_version": "0.34.1",
+    "normal_build_log": "work/web-yank-fix/publication.log",
+    "payload_bytes": 512,
+    "payload_sha256": "60522969684b475bc977a2d7c3478928066af9df75577f5c8b50a3bcbdd16835",
+    "receipt": {
+      "battery_checkpoint": "before-build-dsv-4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+      "previous_rom_sha256": "a1557f5ada6134cc459aa42ee3edcda72b74e3640fe9d711317264e3d8b022bb",
+      "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa",
+      "schema_version": 1,
+      "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+      "version": "0.34.1"
+    },
+    "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa",
+    "version_text": {
+      "American.strings": [
+        "TASM v0.34.1\nPress a button to start",
+        "Options v0.34.1"
+      ],
+      "English.strings": [
+        "TASM v0.34.1\nPress a button to start",
+        "Options v0.34.1"
+      ]
+    },
+    "wrapper_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67"
+  },
+  "published_continue": {
+    "actual_fields_preserved": [
+      "ability_words",
+      "xp",
+      "initial_hp",
+      "room",
+      "source_sha256"
+    ],
+    "profile": "work/web-yank-fix/published-continue/owned-player-profile.json",
+    "ram_fixtures": false,
+    "rom_sha256": "1b7c36928363fcfc821a4a0024e777a3b22c0c2735888709278d3a4f561c0bfa"
+  },
+  "schema_version": 1,
+  "scope": {
+    "executable": "Only the existing private Web Yank code/tail; all preceding executable bytes and the frozen 32 KiB player kit exact",
+    "inherited": "Other movement, Red, traversal and chapter composition inherited by byte scope; Return and manual Lift also rerun on final candidate",
+    "resources": "Four existing private Web Yank SCA/GMBs and boot/Options text only; original assets/bindings, shop rows, prices, dependencies, rooms, audio and save format exact"
+  },
+  "source_battery_sha256": "4077cee56007eff1a7f0028f97bb21f73f995d2e5ef3397446f2a337e9497b67",
+  "unit_tests": {
+    "count": 17,
+    "log": "work/web-yank-fix/feature-e-tests.log",
+    "result": "pass"
+  }
+}

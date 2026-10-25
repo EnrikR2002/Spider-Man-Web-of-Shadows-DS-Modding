@@ -33,6 +33,12 @@ def run(a):
         inputs.append(dict(start=70, end=76, buttons=['L']))
     if a.case == 'air':
         inputs.append(dict(start=46, end=76, buttons=['B']))
+    if a.case == 'followup':
+        inputs.append(dict(start=94, end=100, buttons=['Y']))
+    if a.case == 'repeat':
+        inputs += [dict(start=t, end=t+6, buttons=['X']) for t in (115, 165, 215)]
+    if a.case == 'moving':
+        inputs.append(dict(start=30, end=75, buttons=['Right']))
     meta = json.loads(a.rom.with_suffix('.build.json').read_text(encoding='utf-8'))
     rt = meta['hunter_kit']['runtime']
     state = rt['state']-k.p.BASE
@@ -41,13 +47,22 @@ def run(a):
     def hook(frame, lib):
         nonlocal injected
         ptr, ram = k.ram_of(lib)
-        if a.case in ('regular', 'mirror', 'close') and frame == 50:
+        if frame == 58:
+            # One pre-input layout fixture; actual cast distance/trajectory are recorded afterward.
+            sample = k.p.sample(ram)
+            px, py = sample['position_q12_candidate']
+            fighters = sorted(k.enemies(ram), key=lambda e: abs(e['position'][0]-(px+dx*4096)))
+            for e, gap in zip(fighters, (dx, -75*side, -85*side, -95*side)):
+                motion = w.u32(ram, e['actor']-k.p.BASE+0x30)-k.p.BASE
+                k.teleport(ptr, ram, motion, px+round(gap*4096), py+246)
+            ptr, ram = k.ram_of(lib)
+        if a.case in ('regular', 'mirror', 'close', 'up', 'followup') and frame == 50:
             info = (ct.c_byte*40)()
             lib.retro_get_system_av_info.argtypes = [ct.c_void_p]
             lib.retro_get_system_av_info(ct.byref(info))
             rate[0] = round(struct.unpack_from('<d', bytes(info), 32)[0])
             lib._wos_audio_sink = lambda f, data: pcm.append(data) if k.TRAINING_START+50 <= f < k.TRAINING_START+140 else None
-        if a.case in ('regular', 'mirror', 'close') and 50 <= frame < 140 and frame % 2 == 0:
+        if a.case in ('regular', 'mirror', 'close', 'up', 'followup') and 50 <= frame < 140 and frame % 2 == 0:
             video, pixel = lib._wos_video
             w.atomic_write(a.out/'motion'/f'frame-{(frame-50)//2:03d}.png', k.emu.frame_png(video, pixel))
         if -20 <= frame < 70:
@@ -70,19 +85,21 @@ def run(a):
         mot = sample['motion_address']-k.p.BASE
         wrapper = w.u32(ram, mot+0x58)-k.p.BASE
         slot = w.u32(ram, wrapper+0x29c)
-        rows.append(dict(frame=frame, private=private, form=w.u32(ram, sample['actor_address']-k.p.BASE+0x34),
+        rows.append(dict(frame=frame, private=private, hero_weak_head=w.u32(ram, sample['actor_address']-k.p.BASE+4),
+            form=w.u32(ram, sample['actor_address']-k.p.BASE+0x34),
+            hero_pos=sample['position_q12_candidate'], hero_state=sample['controller']['state_id_candidate'],
             sca=w.u32(ram, wrapper+0x1c4+0x78*slot), enemies=k.enemies(ram)))
 
     native = k.rows_from
     k.rows_from = lambda path: v.current_prefix(path) if str(path).endswith('oscorp-owned.json') else native(path)
-    dx = 7 if a.case == 'close' else 110 if a.case == 'whiff' else 25
+    dx = 6 if a.case == 'close' else 110 if a.case == 'whiff' else getattr(a, 'distance', 42)
     if mirror:
         dx = -dx
     side = -1 if mirror else 1
     try:
-        route, obs = k._run(a.rom, a.tag, inputs, frames=180, bits=0,
+        route, obs = k._run(a.rom, a.tag, inputs, frames=290 if a.case == 'repeat' else 180, bits=0,
             bits2=0 if a.case == 'unowned' else 1<<19, clear2=1<<19, sparring=True,
-            start_x=100*4096, place=tuple((d*4096, 246) for d in (dx, -75*side, -85*side, -95*side)),
+            start_x=100*4096, place=tuple((round(d*4096), 246) for d in (dx, -75*side, -85*side, -95*side)),
             save=copied, caps=tuple(range(60, 112, 4)), rams=(62, 74, 98), extra_hook=hook,
             core_options={b'melonds_jit_enable': b'enabled', b'melonds_jit_block_size': b'12'})
     finally:
@@ -119,14 +136,33 @@ def run(a):
         else:
             checks['actual_rake_damage'] = strikes >= 1 and bool(damage)
             if a.case == 'up':
-                checks['rake_launches'] = any(e and e['state'] == 39 for e in foes[90:])
+                checks['rake_launches'] = any(e and e['state'] == 39 for e in foes[70:])
             if a.case != 'close':
                 checks['native_yank_zip_or_close_strike'] = yanks >= 1 or heavies >= 1 or (pull_distance is not None and pull_distance < 13)
+    placement = []
+    if meta.get('web_yank_fix') and a.case in ('regular', 'mirror', 'up', 'hold', 'followup', 'moving'):
+        checks['genuine_distant_reel'] = yanks >= 1 and pull_distance is not None and pull_distance >= 13
+        checks['arrival_rake_clip_selected'] = any(r['private'][30] and r['sca'] == rt['values']['SHORT_SCA'] for r in rows)
+        for r, foe in zip(rows, foes):
+            if foe and r['private'][23] and not r['private'][21]:
+                placement.append(dict(frame=r['frame'], dx=(foe['position'][0]-r['hero_pos'][0])/4096,
+                                      dy=(foe['position'][1]-r['hero_pos'][1])/4096, state=foe['state']))
+        checks['upright_reel_without_floor_bounce'] = bool(placement) and all(r['state'] == 37 and abs(r['dy']) < 1 for r in placement)
+        contact = next((r for r in rows if r['private'][21]), None)
+        foe = next((e for e in contact['enemies'] if e['actor'] == target), None) if contact else None
+        signed_gap = (foe['position'][0]-contact['hero_pos'][0])/4096 * side if foe else None
+        checks['arrival_in_front_at_rake'] = signed_gap is not None and 4 <= signed_gap <= 9
+        if a.case == 'followup':
+            checks['native_y_followup_before_old_recovery'] = any(94 <= r['f'] < 109 and r['st'] == 46 and r['act'] != 49 for r in obs) and len(damage) >= 2
+    if meta.get('web_yank_fix'):
+        checks['hero_weak_reference_unlinked_at_exit'] = all(r['hero_weak_head'] != rt['state']+112 for r in rows if r['private'][6] == 0)
+        if a.case == 'repeat':
+            checks['repeated_native_casts'] = starts >= 3 and strikes >= 3 and len(damage) >= 3
     report = dict(case=a.case, passed=all(checks.values()), checks=checks, starts=starts, yanks=yanks, strikes=strikes, heavies=heavies,
         rom_sha256=w.sha256(a.rom.read_bytes()), source_battery_sha256=w.sha256(before), target=target, damage=damage,
-        route=str(route), sequence=k.seq(obs), rows=rows, distance_at_pull_sample=pull_distance,
+        route=str(route), sequence=k.seq(obs), rows=rows, placement=placement, distance_at_pull_sample=pull_distance,
         limits='Latest actual DSV copy, ordinary Continue/Test Upgrades; disposable new bit83, initial positions, '
-        'training XP fixture and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. '
+        'training XP fixture, one enemy layout at frame58 and idle enemy re-entry through frame69. Native AI/contact/reactions afterward. '
         'Hurt/stale cases label their one private-RAM interruption; training healing applies. '
         'No actual save writes, campaign balance, player acceptance or DeSmuME/hardware pacing claim.')
     w.write_json(a.out/'result.json', report)
@@ -286,7 +322,8 @@ if __name__ == '__main__':
     p.add_argument('--out', type=Path, required=True)
     p.add_argument('--owned', type=Path, required=True)
     p.add_argument('--case', choices=('regular', 'mirror', 'up', 'close', 'unowned', 'red', 'whiff', 'air',
-                                     'cancel', 'swap', 'hurt', 'stale', 'hold', 'boss', 'shop'), default='regular')
+                                     'cancel', 'swap', 'hurt', 'stale', 'hold', 'followup', 'repeat', 'moving', 'boss', 'shop'), default='regular')
+    p.add_argument('--distance', type=float, default=42, help='Pre-input training enemy gap in units; actual cast gap is measured')
     p.add_argument('--tag', required=True)
     a = p.parse_args()
     sys.exit(boss(a) if a.case == 'boss' else shop(a) if a.case == 'shop' else run(a))

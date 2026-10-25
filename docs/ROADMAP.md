@@ -17,7 +17,7 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Web Yank slice shipped in v0.34.0; rest of revision 3 designed | Player verdict on Web Yank, then the Sky slice |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Refined Web Yank shipped in v0.34.1; rest of revision 3 designed | Player reviews the firm reel before any further slice |
 | 2 | Taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
@@ -44,13 +44,15 @@ save expansion and new campaign branches wait until the player asks.
 The player explicitly made `claude/zen-clarke-p0wo8j` authoritative over
 conflicting local plans on 2026-10-23.
 Implementation requested locally on 2026-10-23 after importing the remote
-revision-3 design. The installed baseline is v0.33.1: taller cape-free appearance,
+revision-3 design. The appearance/earlier-move baseline is v0.33.1: taller cape-free appearance,
 scarlet webs, Hunter's Return and manual-jump Talon Lift already ship; receipts
 are `reference/spider2099_presence.json`, `reference/hunters_return.json` and
 `reference/talon_lift.json`. Web Yank now ships as the first revision-3 slice in
-v0.34.0 (300 XP; X/Up+X, native prompt priority, fast close rake, resistant-target
-zip and native R exit). Its receipt is `reference/hunter_kit.json`; player feel
-is unconfirmed. Remaining revision-3 behavior below is designed; retain baseline
+v0.34.0; v0.34.1 replaces its rejected pull/placement with an upright reel and
+arrival-timed rake (300 XP; X/Up+X, native prompt priority, close rake, heavy zip
+and native R exit). Receipts are `reference/hunter_kit.json` and
+`reference/web_yank_fix.json`; refined feel is player-unconfirmed.
+Remaining revision-3 behavior below is designed; retain baseline
 mechanics until each replacement qualifies.
 The remote design's 2026-10-24 dates are retained as source provenance. Machine-readable rows are in
 [suit metadata](../reference/suit_roadmap.json) under `2099-classic`.
@@ -210,13 +212,15 @@ while holding toward it starts Boarding. Never passes through walls.
 moment the ender ends, so the hunt moves to the next target without a reset.
 One stored cancel; hurt, R, a form switch or a room change clears it.
 
-**8. Web Yank (new).** X on the ground with no native X prompt in reach: a
-thick web line (red if the WebLine colour field allows; native white is 0x7FFF)
-ties the nearest enemy ahead within about 45 units, and a built yank (kind
-0x21) pulls it into a talon strike. Up+X builds a launch (0x25) instead.
-Closer than the native Web Kick split (about 13 units), skip the pull and strike
-at once. Heavy: Miguel zips to the target by velocity along the line and
-strikes; holding toward it with Boarding owned starts Boarding.
+**8. Web Yank (new; pull refined after the 2026-10-24 rejection).** Ground X
+with no native prompt ties a scarlet line to the nearest enemy ahead within
+about 45 units. A firm grounded reel keeps it upright and brings it six units
+in front of Miguel; actual arrival starts the authored talon rake. Up+X launches
+at that strike. Within eight units, skip the pull and rake immediately. Let the
+player flow into a normal follow-up without waiting through a floor bounce.
+Heavy: Miguel zips to the target by native velocity and strikes; holding toward
+it with Boarding owned starts Boarding once that later skill ships. The original
+pipeline-proof pull design is archived before replacement.
 
 **9. Reel In (new, requires Web Yank).** X in the air: tie the nearest enemy
 below or ahead and pull it up to Miguel's height to extend or restart an air
@@ -380,10 +384,12 @@ Engine facts to reuse, all in TECHNICAL:
 5. **Meter capstone:** Apex Predator, last because it modifies the others.
    Tiers 2..5 must be distinguishable side by side in native-scale footage.
 
-**v0.34.0 progress:** Web Yank's own code/state, first appended Black row,
+**Web Yank slice progress:** Web Yank's own code/state, first appended Black row,
 native X priority and Black-only clips are qualified. Conductor heavy behavior
 is qualified; the native mini-boss adapter, Boarding follow and capstone gates
-remain open. The first slice is published and awaits the player's verdict.
+remain open. The first slice's pull/placement was rejected on 2026-10-24;
+v0.34.1's firm reel and arrival rake are agent-tested and published. Wait for the
+player's refined-move verdict before starting the Sky slice.
 
 ## Red kit: the Amazing Spider-Man
 
@@ -473,6 +479,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-10-24, v0.34.0 Web Yank | Clunky and buggy; the way it yanks and places enemies feels really bad and limp | Rework the pull, arrival and impact before any further Hunter slice; quality remains player-unconfirmed |
 | 2026-10-24, 2099 rev. 3 | Revision 3 is good. Shockwave Talons at tier 3+; tier 5 gets a little life steal because 2099 scraps and takes more damage; give every tier a visible upgrade, maybe a red glow at tier 5 | Approved for a later implementation session; Feeding Frenzy and tier visuals added |
 | 2026-10-24, 2099 rev. 2 | X for webs is fine and the kit is liked; remove Collar Toss and Lariat; add a skill that rewards a full combo meter | Revision 3: 14 skills, Apex Predator added |
 | 2026-10-23, imported Hunter rev. 3 | Prioritize all changes from claude/zen-clarke-p0wo8j; they may override existing work | That branch's design/policy is authoritative; superseded local proposals stay archived |

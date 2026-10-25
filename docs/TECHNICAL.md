@@ -2029,6 +2029,51 @@ failures remain in `work/hunter-kit/`; they are not successful qualifications.
 Native-size frames and normal-rate mixed-audio captures are retained; player
 feel, auditory judgment and hardware pacing remain separate from mechanics.
 
+**Pull/placement diagnosis (2026-10-24, published v0.34.0; high confidence
+from source and retained native traces):** the player rejects the yank's limp
+placement. The long branch's sample-4 kind0x21 reaches the native stopping
+distance well before the sample-18 rake: the retained `b4-regular` trace reaches
+state48 at sample9 and bounces until contact, then kind4 knocks it down again.
+The final `c-regular`/`c-mirror` controls instead approach inside 13 units before
+the pull check, skip kind0x21 entirely and wait for the long rake. Their passing
+contact checks therefore do not qualify an actual pull. Supersedes any assumption
+that those two cases proved the published yank's presentation. The correction
+must measure actual cast distance, reel/arrival and normal follow-up behavior.
+
+**Firm-reel implementation (2026-10-24, published v0.34.1 E over exact v0.34.0;
+high confidence within twenty-one copied-save controls and ARM regressions):** a
+zero-HP kind0x16 requests standing hurt37 rather than the native floor bounce.
+The shared actor update hook runs after each controller and before collision;
+a guarded victim-only pass writes bounded horizontal velocity toward six units
+ahead of Miguel. Native gravity/Y and world coordinates remain untouched. Both
+actors use private intrusive weak references; target identity, ownership, room,
+form, HP and actual hurt state gate movement. Impact/interruption stops owned
+reel velocity. Native ignored reactions retain the heavy zip rule.
+
+At actual arrival within seven units, motion+0x2FC bit2 requests native action
+re-entry and selects the private eight-sample rake, without writing animation
+clocks. The 18-sample cast and rake meet in the same loaded stance; rake contact
+is sample3. Long controls in both facings and the medium control reach six units,
+stay upright and lose real HP at contact. The medium control takes a normal Y
+follow-up before v0.34.0's old recovery.
+The cast's native hurt pause remains native; no extra hitstop or slowed time is
+introduced. Source: `web_yank_fix.py`, `.s`, `_art`; local evidence in
+`reference/web_yank_fix.json` and `work/web-yank-fix/e-followup/`. The lab now lays out all four enemies once just
+before input and records the real pull gap; an initial 45-unit gap can walk
+outside the native 45-unit activation bound and is not a successful yank.
+
+**Release-slot audit (2026-10-24, v0.34.1 E; high confidence from the frozen
+`web_release` helper and ARM regression):** `WEB_RELEASE` clears four words at
+its supplied slot, including its actor/age metadata. Candidate D incorrectly
+placed the hero weak link in the last two words of that span, so impact cleared
+the link without unlinking the hero's intrusive head. D must not publish.
+E keeps the native line's full 96..111 span reserved, puts the hero weak link
+at 112/116, facing at 124 and the owned-velocity flag at 92; the rake phase remains
+at 120. The impact regression checks that line release preserves the hero link,
+then cleanup unlinks it from the actual hero head. Repeated native casts and
+interruption/ownership controls qualify this exact corrected composition. The
+moving-input control also preserves upright placement and the native rake.
+
 ### Freeze root cause and crash hunting (v0.4.1)
 
 Player report (2026-10-06, v0.4.0): in a crowd, spamming Y and R with Both Suits
