@@ -39,6 +39,11 @@ class ArmProbe:
                 value&=0xFFFFFFFF;regs[word>>16&15]=value
                 if word&0x00100000:cpsr=(cpsr&0x3FFFFFFF)|(value&0x80000000)|(0x40000000 if value==0 else 0)
             elif word==0xE12FFF1E:regs[15]=regs[14]
+            elif word&0x0FFFFFF0 in (0x012FFF10,0x012FFF30):
+                target=regs[word&15]
+                if word&0x20:regs[14]=pc+4
+                if target&1:raise AssertionError('Thumb adapter call is not modelled')
+                regs[15]=target
             elif word&0x0E000000==0x0A000000:
                 delta=word&0xFFFFFF
                 if delta&0x800000:delta-=1<<24

@@ -264,18 +264,36 @@ def boss(a):
     return 0 if report['passed'] else 1
 
 
-def shop(a):
+def shop_price(rom, row, bit):
+    """Read the selected ROM's active Black row, including later price post-passes."""
+    from tools import hunter_kit as h, tasm_kit as kit
+    header = w.parse_header(rom)
+    arm = rom[header['arm9_offset']:header['arm9_offset']+header['arm9_size']]
+    if not 0 <= row < w.u32(arm, h.BLACK_COUNT):
+        raise ValueError('Black shop row is out of range')
+    offset = kit.SOURCE+w.u32(arm, h.BLACK_POINTER)-kit.TARGET+row*32
+    w.check_range(arm, offset, 32, 'Black shop row')
+    if w.u32(arm, offset) != bit+309:
+        raise ValueError('Black row does not own the expected bit')
+    return w.u32(arm, offset+28)
+
+
+def shop(a, *, row=7, bit=83, price=None):
     """Real purchase, refund, repurchase, save and fresh Continue on a private battery."""
-    from tools import emulator_smoke as emu, hunter_kit as h
+    from tools import emulator_smoke as emu
     if not a.out.resolve().is_relative_to((ROOT/'work').resolve()):
         raise ValueError('Hunter kit lab evidence must stay in work/')
+    current_price = shop_price(a.rom.read_bytes(), row, bit)
+    if price is not None and price != current_price:
+        raise ValueError('Shop control price differs from the selected ROM')
+    price = current_price
     actual, before, copied = v.copy_current(a.out)
     script = [r for r in v.current_prefix(None) if r['start'] <= 1620]
     def press(button, frame):
         return dict(start=frame, end=frame+6, buttons=[button])
     script += [press(button, frame) for frame, button in
                ((1800, 'X'), (1860, 'Down'), (1920, 'A'), (2200, 'R'), (2260, 'R'))]
-    script += [press('Down', 2340+40*i) for i in range(7)]
+    script += [press('Down', 2340+40*i) for i in range(row)]
     script += [press(button, frame) for frame, button in (
         (2660, 'A'), (2700, 'A'), (2800, 'A'), (2840, 'A'), (2940, 'A'), (2980, 'A'),
         (3100, 'B'), (3160, 'B'), (3220, 'X'), (3280, 'A'), (3360, 'A'), (3440, 'A'))]
@@ -305,11 +323,11 @@ def shop(a):
         frame_hook=continued, core_options={b'melonds_jit_enable': b'enabled', b'melonds_jit_block_size': b'12'})
     base = seen['before']
     words = [*base['words']]
-    words[2] |= 1<<19
-    checks = dict(native_purchase=seen['bought']['words'] == words and seen['bought']['xp'] == base['xp']-h.PRICE,
+    words[bit//32] |= 1<<(bit%32)
+    checks = dict(native_purchase=seen['bought']['words'] == words and seen['bought']['xp'] == base['xp']-price,
         native_refund=seen['refunded']['words'] == base['words'] and seen['refunded']['xp'] == base['xp'],
-        native_repurchase=seen['rebought']['words'] == words and seen['rebought']['xp'] == base['xp']-h.PRICE,
-        fresh_continue_keeps_purchase=reloaded.get('words') == words and reloaded.get('xp') == base['xp']-h.PRICE,
+        native_repurchase=seen['rebought']['words'] == words and seen['rebought']['xp'] == base['xp']-price,
+        fresh_continue_keeps_purchase=reloaded.get('words') == words and reloaded.get('xp') == base['xp']-price,
         native_checkpoint_and_hp=reloaded.get('room') == base['room'] and reloaded.get('hp') == base['hp'],
         actual_battery_unchanged=actual.read_bytes() == before and copied.read_bytes() == before)
     report = dict(passed=all(checks.values()), checks=checks, observations=seen, continued=reloaded,

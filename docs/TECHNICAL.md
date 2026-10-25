@@ -1819,6 +1819,77 @@ bounded reproduction, not a claim that every native hit must deal the same HP.
 
 ### Kit animation authoring
 
+**Sky Rake adapter (2026-10-25, v0.35.0 SHA65dc457f; high confidence from
+ARM/composition tests and copied-save controls):** the owned Black bit85
+(event394, third-word mask0x200000) routes only current player air51 actions1..4
+to four private SCA/GMB/GAB sets (11/7/8/17 samples). No original binding, velocity,
+position or persistent target state is changed. Native chain eligibility and
+gravity remain; the opener's two contact windows and GAB reset give four claws
+before the separate flip kick. All original resource bytes except version/text
+and the filename table stay exact; m6 and shared action users keep their clips.
+
+The contact wrapper substitutes its scoped ReceiveHit callback, whose local
+0x40-byte info and 0x20-byte contact copies preserve the original records for
+native credit and every later victim. Native kind14 stays air juggle; the kind16
+kick becomes launch25. Known Conductor hits use stagger4; an ignored light launch
+gets one native stagger attempt. The fifth HP argument and strength stay exact.
+There is no built-hit recursion or retained victim pointer. Three hooks, the
+shop/routes and 896-byte runtime use 1,232 existing zero-tail bytes; the 32 KiB
+kit and autoload/heap allocation contract stay exact. The active Black table
+copies its eight old records with price-word changes and appends Sky Rake; all
+events, parents/dependents and saved ownership remain native. Nine prices total
+850 XP within the approved fourteen-row 1,600 XP budget.
+
+Natural input, both facings, wall launch, owned/unowned Red/Black, paid/unpaid R,
+hurt, native A, actual ground switch, real shop/save/Continue and pure Web Yank
+controls qualify this composition. Chapter kill uses one initial 4096-HP enemy
+fixture; natural boss rakes and a separately labelled native finisher action
+probe qualify heavy damage/stagger, not a full standing-boss air combo. Native
+mini-boss coverage, perceptual audio and hardware pacing remain separate gates.
+Source: `sky_rake.py/.s/_art.py/_lab.py`, `reference/sky_rake.json`.
+
+**Native air-chain baseline (2026-10-25, v0.34.2; high confidence in the copied-save
+training control):** actions 1..4 share Red/Black resource bindings. Native SCA/GMB
+counts are 6/5/7/17, attack-channel active samples 5/2/3/5. A held manual B after
+Talon Lift followed by Y gives real air HP losses, with native air state51 and
+the first three actions; a fourth action needs the native continuation conditions.
+Source: `work/sky-rake/baseline/result.json`, original action/GMB parse. New Black
+clips must route per owned hero rather than edit these shared resources.
+
+**Air contact reset (2026-10-25, Sky Rake A over v0.34.2; high confidence in
+the single native training chain):** two separate active GMB windows at samples
+3/8 plus GAB event7 at sample 5 produce two real HP losses in action1. Actions2/3 supply
+the other two rakes; the fourth action remains subject to native continuation.
+The native dispatch's attacker cell may be on the DTCM stack (`0x027E0000..`
+`0x027FFFFC`), while its actor/motion remain in main RAM. A main-RAM-only cell
+guard silently skipped the first finisher adapter; the scoped guard must admit
+an aligned native stack cell before checking its actor. Unit coverage includes
+both storage regions. Source: `work/sky-rake/a-chain/result.json`, `sky_rake.s`
+and `tests/test_sky_rake.py`. The first finisher landed but knocked down rather
+than popped upward; that failed candidate is retained and must not publish.
+
+**Native R gate (2026-10-25, Sky Rake C over v0.34.2; high confidence in paired
+copied-save controls):** bypassing the air stay blocker admits native R only
+when Both Suits Air Dodge bit10 is owned. Clearing that bit leaves the air
+string running. An owned Sky Rake may instead consume R and return native
+fall19 when Air Dodge is unowned; it must never grant that paid bit. With the
+bit owned, R remains queued for the native dodge. Source:
+`work/sky-rake/c-cancel/result.json`, `c-cancel-plain/result.json`; ARM regression
+checks queue ownership, unchanged purchase word and return state. C is not a
+publishable candidate; D adds this release path.
+
+**Qualification boundaries (2026-10-25, Sky Rake C/D over v0.34.2; high
+confidence from native disassembly and traces):** native L transition
+`0x020B4C00` excludes air51; preserve that rule and test an actual ground switch
+after landing. Wall contact may reduce HP before its launch39 appears two
+updates later; check the subsequent native reaction, not only the HP-drop row.
+Training Brutes refill at zero, so a low-HP training fixture does not prove a
+death. Standing heavies do not enter light-enemy air-juggle42; a natural shallow
+jump can land before the fifth hit. Keep natural heavy rakes distinct from a
+scoped finisher reaction probe. Sources: `work/sky-rake/c-wall`, `c-swap`,
+`c-kill`, `c-boss-shallow` and `d-boss-kick`; these failed expectations do not
+establish a broken room, death, air switch or full standing-boss juggle.
+
 **Talon Lift native foundation (2026-10-23, v0.32.1 control; high confidence
 for copied-save Test Upgrades):** purchased Black Power Launch (event 330 / bit 21,
 200 XP) is grounded state 45/action 128, `spd_PowerLauncherAttack` with 14 samples.

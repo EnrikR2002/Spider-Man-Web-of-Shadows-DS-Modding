@@ -53,7 +53,7 @@ flag: `chapter`, `crane`, `midnight_rework`, `chapter_renewal`,
 `midnight_reliability`, `chapter_finish`, `spider2099`, `spider2099_polish`,
 `spider2099_movie`, `spider2099_enemy_texture`, `vortex_forge`,
 `hunters_return`, `hunters_return_fix`, `talon_lift`, `spider2099_presence`,
-`hunter_kit`, `web_yank_fix`, `web_yank_combo`. Recent
+`hunter_kit`, `web_yank_fix`, `web_yank_combo`, `sky_rake`. Recent
 profiles copy their parent's flags and add one (v0.31.0 is v0.30.3 plus
 `vortex_forge`), so the current release is the whole stack. A post-pass refuses
 any input except its exact published parent ROM and checks its output against
@@ -116,6 +116,7 @@ Copy the established shape (`tools/vortex_forge.py`, `.s`, `_art.py`,
 | Firm Web Yank and arrival-timed rake | [Web Yank](TECHNICAL.md#hunter-revision-3-web-yank-v0340) | `web_yank_fix.py`, `.s`, `_art`; `reference/web_yank_fix.json`. Exact v0.34.0 post-pass in the existing private page; `hunter_kit_lab.py --distance` measures actual gaps after its pre-input layout fixture. |
 | Down+A pure pull and five-target lines | [Pure-pull research](TECHNICAL.md#pure-pull-input-and-catch-effects-v0342-research) | `web_yank_combo.py`, `.s`, `_lab`; `reference/web_yank_combo.json`. Exact v0.34.1 post-pass; extra 8 KiB block, five weak target/line records and guarded zero-HP catch VFX. `--six-enemies` changes only the disposable training OBJ; its executable/other assets match production. |
 | Purchased 2099 Talon Lift | [Kit animation authoring](TECHNICAL.md#kit-animation-authoring) | `talon_lift.py`, `.s`, `_lab`; `reference/talon_lift.json`. Exact v0.32.1 post-pass; private 14-sample SCA and native R queue, retaining Power Launch movement/contact/damage and native held B. |
+| Purchased Black air string and affordable Hunter shop | [Kit animation authoring](TECHNICAL.md#kit-animation-authoring) | `sky_rake.py`, `.s`, `_art`, `_lab`; `reference/sky_rake.json`. Exact v0.34.2 post-pass; private clips and stateless native-hit receiver, bit85 row, nine implemented Black prices within the fourteen-row budget. |
 | Taller 2099 and neon red webs | [SCA / model / textures](TECHNICAL.md#sca--model--textures) | `spider2099_presence.py`; `reference/spider2099_presence.json`. Exact v0.33.0 post-pass; guarded whole-pose draw scale and form-specific native web tints, with native collisions and assets retained. |
 | Conditional Vortex, Conductor armor/HUD and low-HP Vitality correction | [Conditional tether Vortex](TECHNICAL.md#conditional-tether-vortex-and-conductor-armor-v031-research), [Player health](TECHNICAL.md#player-health-and-the-top-screen-hud-v0110) | `vortex_forge.py`, `_art`, `.s`, `_lab`; `reference/vortex_forge.json`. The old kit sources/hex remain immutable. |
 | Hunter hit isolation and player replacement | [Kit animation authoring](TECHNICAL.md#kit-animation-authoring) | `hunters_return_fix.py`, `.s`; `reference/hunters_return_fix.json`. Exact v0.32 post-pass in the unused image tail; preserve per-victim native credit and reset replaced player owners. |

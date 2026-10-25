@@ -4,13 +4,12 @@ Private USA CS5E research. ROMs/extracted assets/builds/saves stay private.
 
 **Play:** `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
 The agent handles the stable ROM, releases and progress backups.
-Current release: **v0.34.2**. **Web Yank** (300 XP in Black upgrades) uses ground
-Down+A, including during a ground combo, to pull up to five distant enemies
-into melee range. Choose Y or Up+A (Talon Lift) afterward; R cancels. The close
-slap, automatic rake, upward yank and false catch impact flash are removed.
-Resistant targets still pull Miguel toward them. X uses native interactions.
-The taller cape-free 2099, scarlet webs, Hunter's Return,
-manual-jump Talon Lift, Red kit and chapters remain. Player feel is open.
+Current release: **v0.35.0**. **Sky Rake** costs 100 XP in Black upgrades:
+air Y chains four talon rakes and a rising flip kick. Up+A (Talon Lift), hold B,
+then keep tapping Y; R exits. Black's nine current rows cost 50..150 XP,
+including Web Yank at 75 XP; the full fourteen-skill budget is 1,600 XP.
+Existing purchases stay owned. Down+A Web Yank, native traversal, the Red kit
+and both chapters remain. Sky Rake feel and campaign balance await player review.
 Details: [Changes](docs/CHANGES.md). What comes next: [Roadmap](docs/ROADMAP.md#now).
 
 ## Find what you need

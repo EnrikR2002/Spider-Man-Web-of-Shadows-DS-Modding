@@ -1,0 +1,504 @@
+{
+  "build": {
+    "added_resources": [
+      "zz_S35_Air1.sca",
+      "zz_S35_Air1.gmb",
+      "zz_S35_Air1.gab",
+      "zz_S35_Air2.sca",
+      "zz_S35_Air2.gmb",
+      "zz_S35_Air2.gab",
+      "zz_S35_Air3.sca",
+      "zz_S35_Air3.gmb",
+      "zz_S35_Air3.gab",
+      "zz_S35_Air4.sca",
+      "zz_S35_Air4.gmb",
+      "zz_S35_Air4.gab"
+    ],
+    "arm9_sha256": "41749bf4187dbadf8b3e3fc7031fa0efea66ebcb60f97ce53d7ea4d682390404",
+    "black_prices": {
+      "current": [
+        50,
+        75,
+        100,
+        100,
+        125,
+        150,
+        75,
+        75,
+        100
+      ],
+      "planned_fourteen": [
+        50,
+        75,
+        100,
+        100,
+        125,
+        150,
+        75,
+        75,
+        100,
+        100,
+        125,
+        150,
+        175,
+        200
+      ],
+      "planned_total": 1600,
+      "previous": [
+        100,
+        200,
+        600,
+        400,
+        600,
+        800,
+        1000,
+        300
+      ]
+    },
+    "contact_samples": [
+      [
+        3,
+        8
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5
+      ]
+    ],
+    "frozen_32k_kit_original_assets_bindings_rooms_audio_and_save_format_unchanged": true,
+    "modified_resources": [
+      "American.strings",
+      "English.strings",
+      "GlobFiles.txt"
+    ],
+    "nitrofs_relocation_bytes": 49664,
+    "ownership": {
+      "bit": 85,
+      "event": 394,
+      "previous_rows_owned_unchanged": true,
+      "price": 100
+    },
+    "parent_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+    "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5",
+    "runtime": {
+      "allocation_bytes": 0,
+      "block_bytes": 1232,
+      "block_start": 35064412,
+      "bytes": 896,
+      "entry": 35064748,
+      "hooks": [
+        {
+          "old": 3926130151,
+          "site": 34014340,
+          "target": 35064748
+        },
+        {
+          "old": 3926120109,
+          "site": 34047528,
+          "target": 35064752
+        },
+        {
+          "old": 3926027338,
+          "site": 34306840,
+          "target": 35064756
+        }
+      ],
+      "remaining_zero_tail": 2804,
+      "routes": 35064700,
+      "shop": 35064412,
+      "source_offset": 1462236,
+      "values": {
+        "BOSS_CONFIG": 34972972,
+        "OLD_AIR": 34942024,
+        "OLD_ANIMATION": 35060776,
+        "OLD_CONTACT": 35053796,
+        "ROUTES": 35064700
+      }
+    },
+    "samples": [
+      11,
+      7,
+      8,
+      17
+    ],
+    "text_id": 1141,
+    "version": "0.35.0"
+  },
+  "date": "2026-10-25",
+  "earlier_failures": {
+    "a-chain": "Main-RAM-only attacker-cell gate skipped the finisher on native DTCM; corrected before publication.",
+    "c-boss / c-boss-shallow / d-boss-kick": "Natural standing-boss air chains landed before the kick; these do not prove full boss juggles.",
+    "c-cancel-plain": "R did not end Sky Rake without paid Air Dodge; corrected to native fall19 without granting bit10.",
+    "c-kill": "Training immortality refills HP at zero; chapter kill fixture is used instead.",
+    "c-swap": "Native L excludes air51; actual ground switch is tested instead.",
+    "c-wall": "HP-drop row preceded launch39 by two updates; subsequent native trajectory proves the launch.",
+    "d-boss-finisher / d-boss-finisher-once": "Discarded node/re-entry fixtures did not select the final action; final fixture selects native action4/node2 and observes original kind16 contacts.",
+    "d-whiff": "Later queued Y became native ground attacks after landing; only air contacts define this air whiff control."
+  },
+  "feature": "Purchased Black Sky Rake and affordable fourteen-skill Hunter budget",
+  "limits": [
+    "Standing heavies do not enter light-enemy air juggle; natural boss rakes and the explicit finisher action/node reaction probe are separate.",
+    "Chapter kill control uses one initial 4096-HP enemy fixture and player healing.",
+    "Training controls use disposable initial layout/ownership/HP and native AI afterward.",
+    "Native-size motion and mixed PCM are captured; perceptual audio, full-route economy and hardware pacing need player checks."
+  ],
+  "normal_source_reproduction": {
+    "console": "work/sky-rake/normal-source-console.txt",
+    "passed": true,
+    "path": "build/sky-rake-normal-source/Versioned.nds",
+    "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+  },
+  "parent_version": "0.34.2",
+  "player_feedback": {
+    "sky_rake": "Not yet player tested.",
+    "source_version": "0.34.2",
+    "web_yank": "Player likes the Down+A move; next ability and affordable fourteen-skill prices requested."
+  },
+  "presentation": {
+    "gif_duration_ms": 33,
+    "gif_frame_interval_emulator_frames": 2,
+    "mixed_pcm": {
+      "full_scale_samples": 0,
+      "path": "work/sky-rake/d-approach/mixed.wav",
+      "peak": 8859,
+      "sample_rate": 32768,
+      "seconds": 2.487548828125
+    },
+    "native_size": [
+      256,
+      192
+    ],
+    "perceptual_audio_reviewed": false,
+    "preview": "work/sky-rake/sky-rake-preview.gif",
+    "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5",
+    "sheet": "work/sky-rake/final-contact-sheet.png"
+  },
+  "publication": {
+    "actual_battery_equals_checkpoint_and_pre_task_copy": true,
+    "battery_checkpoint": "before-build-dsv-7181d14751a151b1d3231acacdc0f0f32fd3d170c65cf4f114d66d78c77a5ec4",
+    "battery_payload_bytes": 512,
+    "battery_payload_sha256": "9f259f0e1d806e7ef122cfea442267e1906419f47ef248d013a070d9c2d73157",
+    "battery_sha256": "7181d14751a151b1d3231acacdc0f0f32fd3d170c65cf4f114d66d78c77a5ec4",
+    "battery_wrapper_bytes": 634,
+    "canonical_normal_source_publisher_stable_equal": true,
+    "clean_rom_unchanged": true,
+    "console": "work/sky-rake/publication-console.txt",
+    "previous_rom_metadata_and_recipe_preserved": true,
+    "previous_rom_sha256": "1068aba45653cbd300925b140320724e37d145433ed18fb3f06d8001e9625098",
+    "publisher_exit_code": 0,
+    "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5",
+    "schema_version": 1,
+    "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+    "version": "0.35.0"
+  },
+  "published_continue": {
+    "observation": {
+      "ability_words": [
+        943718399,
+        4293918703,
+        1048031
+      ],
+      "captures": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Spider-Man-WoS-modded-65dc457f\\owned-profile-7181d147",
+      "initial_hp": 77824,
+      "limits": "Fresh normal Continue from latest actual DSV copy; no training/purchase/warp fixtures in this observation.",
+      "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5",
+      "room": 38,
+      "source_save": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\work\\sky-rake\\published-continue\\current-player-copy.dsv",
+      "source_sha256": "7181d14751a151b1d3231acacdc0f0f32fd3d170c65cf4f114d66d78c77a5ec4",
+      "xp": 4382
+    },
+    "passed": true,
+    "profile": "work/sky-rake/published-continue/owned-player-profile.json"
+  },
+  "qualification": {
+    "controls": {
+      "d-air-a": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "no_private_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-air-a/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "d-air-down-a": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "no_private_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-air-down-a/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "d-approach": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "all_four_actions": true,
+          "collision_bounds": true,
+          "five_air_contacts": true,
+          "kick_pops_up": true,
+          "private_black_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-approach/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "d-boss-finisher-action": {
+        "checks": {
+          "actual_air_hp_loss": true,
+          "heavy_never_launched": true,
+          "kick_contact": true,
+          "source_battery_unchanged": true
+        },
+        "limits": "Copied latest actual battery and measured current purchases/XP. Disposable initial room arrival, cleared already-earned boss flag147 for boss cases, Sky Rake ownership and player healing. Enemy HP/state/position, AI and subsequent player L/B/Y/directional movement stay native. Encounter alone gives the first close enemy one initial 4096-HP lifecycle fixture. Boss-finisher alone presets air node2, action4 and native resource refresh once per initial air action to isolate the kick; it does not prove a full natural five-hit combo on a standing heavy. No victory, balance or player-verdict claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-boss-finisher-action/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "d-cancel": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "interruption_exits": true,
+          "no_later_contacts": true,
+          "private_black_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-cancel/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "d-cancel-plain": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "interruption_exits": true,
+          "no_later_contacts": true,
+          "private_black_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-cancel-plain/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "d-encounter-kill": {
+        "checks": {
+          "actual_air_hp_loss": true,
+          "native_air_kill": true,
+          "source_battery_unchanged": true
+        },
+        "limits": "Copied latest actual battery and measured current purchases/XP. Disposable initial room arrival, cleared already-earned boss flag147 for boss cases, Sky Rake ownership and player healing. Enemy HP/state/position, AI and subsequent player L/B/Y/directional movement stay native. Encounter alone gives the first close enemy one initial 4096-HP lifecycle fixture. Boss-finisher alone presets air node3 and native re-entry once per initial air action to isolate the kick; it does not prove a full natural five-hit combo on a standing heavy. No victory, balance or player-verdict claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-encounter-kill/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "d-ground": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "no_private_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-ground/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "d-red": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "no_private_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-red/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "d-shop": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "fresh_continue_keeps_purchase": true,
+          "native_checkpoint_and_hp": true,
+          "native_purchase": true,
+          "native_refund": true,
+          "native_repurchase": true
+        },
+        "limits": "Latest actual DSV copy; ordinary Continue, native shop inputs, refund/repurchase and in-game save. No purchase/XP/room/HP RAM writes; the earned SRAM snapshot stays private in work/. No research save adoption or player-acceptance claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-shop/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "d-swap": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "native_ground_form_switch": true,
+          "no_private_route_after_switch": true,
+          "private_black_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-swap/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "d-unowned": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "no_private_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-unowned/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "d-wall": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "all_four_actions": true,
+          "collision_bounds": true,
+          "five_air_contacts": true,
+          "kick_pops_up": true,
+          "private_black_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/d-wall/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "final-boss": {
+        "checks": {
+          "actual_air_hp_loss": true,
+          "heavy_never_launched": true,
+          "source_battery_unchanged": true
+        },
+        "limits": "Copied latest actual battery and measured current purchases/XP. Disposable initial room arrival, cleared already-earned boss flag147 for boss cases, Sky Rake ownership and player healing. Enemy HP/state/position, AI and subsequent player L/B/Y/directional movement stay native. Encounter alone gives the first close enemy one initial 4096-HP lifecycle fixture. Boss-finisher alone presets air node2, action4 and native resource refresh once per initial air action to isolate the kick; it does not prove a full natural five-hit combo on a standing heavy. No victory, balance or player-verdict claim.",
+        "passed": true,
+        "report": "work/sky-rake/final-boss/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "final-hurt": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "interruption_exits": true,
+          "no_later_contacts": true,
+          "private_black_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/final-hurt/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "final-mirror": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "all_four_actions": true,
+          "collision_bounds": true,
+          "five_air_contacts": true,
+          "kick_pops_up": true,
+          "private_black_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/final-mirror/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "final-shop": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "fresh_continue_keeps_purchase": true,
+          "native_checkpoint_and_hp": true,
+          "native_purchase": true,
+          "native_refund": true,
+          "native_repurchase": true
+        },
+        "limits": "Latest actual DSV copy; ordinary Continue, native shop inputs, refund/repurchase and in-game save. No purchase/XP/room/HP RAM writes; the earned SRAM snapshot stays private in work/. No research save adoption or player-acceptance claim.",
+        "passed": true,
+        "report": "work/sky-rake/final-shop/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "final-whiff": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "no_air_contact_on_whiff": true,
+          "private_black_air_route": true
+        },
+        "limits": "Copied latest actual battery; ordinary Continue/Test Upgrades. Disposable initial form/ownership, one initial target layout/HP fixture and idle enemy prefix through70; native movement/contact/AI afterward. Hurt case injects one controller interruption. Training healing/immortality apply. No actual save writes, campaign-balance, perceptual audio or hardware-pacing claim.",
+        "passed": true,
+        "report": "work/sky-rake/final-whiff/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "final-yank": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "all_target_and_line_refs_clean": true,
+          "all_target_records_clean": true,
+          "arrival_in_melee_and_native_idle": true,
+          "cleanup_complete": true,
+          "hero_weak_head_unlinked": true,
+          "independent_crowd_targets": true,
+          "never_binds_more_than_five": true,
+          "no_utility_damage": true,
+          "owned_down_a_cast": true,
+          "private_cast_clip": true,
+          "pure_pull_no_damage": true,
+          "upright_reel": true,
+          "zero_hp_catch_flash_suppressed": true
+        },
+        "limits": "Fresh latest actual DSV copy; disposable bit83, training XP/healing, initial positions and pre-input layout/idle re-entry until ten frames after input (before each of four casts for repeat). Native AI/collision/reactions afterward. Hurt/stale controls inject one labelled private-RAM interruption. No real save writes or balance/feel claim.",
+        "passed": true,
+        "report": "work/sky-rake/final-yank/result.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      },
+      "published-continue": {
+        "checks": {
+          "actual_save_unchanged": true,
+          "ordinary_continue_preserves_measured_purchases_xp_hp_room": true
+        },
+        "limits": "Fresh normal Continue from latest actual DSV copy; no training/purchase/warp fixtures in this observation.",
+        "passed": true,
+        "report": "work/sky-rake/published-continue/owned-player-profile.json",
+        "rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5"
+      }
+    },
+    "final_focused_tests": {
+      "console": "work/sky-rake/final-focused-tests.txt",
+      "passed": true,
+      "scope": "Includes actual-row price-reader checks after the full suite; ROM bytes unchanged.",
+      "tests": 7
+    },
+    "focused_tests": 7,
+    "full_suite": {
+      "console": "work/sky-rake/full-suite-console.txt",
+      "passed": true,
+      "seconds": 643.795,
+      "tests": 655
+    },
+    "passed_emulator_controls": 20
+  },
+  "schema_version": 1,
+  "status": "published",
+  "version": "0.35.0",
+  "version_labels": {
+    "American.strings": {
+      "50": "TASM v0.35.0\nPress a button to start",
+      "74": "Options v0.35.0"
+    },
+    "English.strings": {
+      "50": "TASM v0.35.0\nPress a button to start",
+      "74": "Options v0.35.0"
+    }
+  }
+}

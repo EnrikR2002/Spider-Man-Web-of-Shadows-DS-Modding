@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.34.2. Each section records behavior,
+The latest numbered release below is v0.35.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,43 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.35.0 - 2026-10-25 - Sky Rake and affordable Hunter prices
+
+Sky Rake is a new independent 100 XP Black row (event394 / bit85). Air Y uses
+four original talon rakes and a rising flip kick: the opener has two separate
+native contacts, then two more claws and the kick. Talon Lift still needs a
+manual held B jump; native air-chain eligibility, velocity/collision and damage
+scaling remain. Light targets juggle and the kick launches; the Conductor takes
+standing staggers. R uses native Air Dodge when owned, or releases into native
+fall without granting that paid ability. Native air L stays native; a ground
+suit switch selects the correct form's resources.
+
+The nine Black prices are 50/75/100/100/125/150/75/75/100 XP in shop order;
+Web Yank drops from 300 to 75. They total 850 XP. The full planned fourteen-row
+budget is 1,600 XP, with later rows reserved at 100/125/150/175/200 XP.
+Only implemented rows enter the shop. Purchases/dependencies, current XP,
+Red/Both Suits prices, rewards and the 512-byte save format are retained.
+
+Validation: 655 full-suite tests and seven focused ARM/composition tests pass.
+Copied-save controls cover native approach/both facings, wall launch, whiff,
+ownership, Red/native A actions, paid/unpaid R, hurt, ground form switch,
+shop purchase/refund/repurchase/save/fresh Continue and preserved pure Web Yank.
+A chapter kill control uses one initial 4096-HP enemy fixture. Natural boss air
+hits stagger; a separate native action4/node2 fixture proves the real kind16
+finisher also damages/staggers without launching the heavy. It does not prove
+a full five-hit natural combo against a standing boss. Native-size motion/menu
+were inspected and mixed PCM captured. Player feel, perceptual audio,
+full-route economy and hardware pacing remain unconfirmed.
+
+Only private SCA/GMB/GAB resources, version/skill strings, three guarded hook
+words, the active Black shop pointer/count and existing zero tail change.
+The adapter is 896 bytes; code/shop/routes use 1,232 existing zero bytes with
+no new allocation. Original clips/bindings, the frozen 32 KiB kit, rooms and
+audio stay exact. Clean-ROM reproduction, canonical and publisher bytes match
+SHA65dc457f (ARM9 41749bf4). Publication uses `tools/playtest.py build`, preserving
+the previous ROM/metadata/recipe and the latest actual DSV checkpoint. Receipt:
+`reference/sky_rake.json`.
 
 ## v0.34.2 - 2026-10-25 - Five-target pure Web Yank on Down+A
 
