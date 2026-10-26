@@ -1,0 +1,476 @@
+{
+  "build": {
+    "arm9_sha256": "6f497bd40759ad8127f0358a48d9f6875a36d609be42f0a9c15679a85ddae6a2",
+    "black_prices": {
+      "current": [
+        75,
+        125,
+        150,
+        150,
+        200,
+        225,
+        125,
+        100,
+        150
+      ],
+      "current_total": 1300,
+      "planned_fourteen": [
+        75,
+        125,
+        150,
+        150,
+        200,
+        225,
+        125,
+        100,
+        150,
+        150,
+        200,
+        225,
+        275,
+        300
+      ],
+      "planned_total": 2450,
+      "previous": [
+        50,
+        75,
+        100,
+        100,
+        125,
+        150,
+        75,
+        75,
+        100
+      ]
+    },
+    "modified_resources": [
+      "American.strings",
+      "English.strings",
+      "zz_S35_Air1.sca",
+      "zz_S35_Air2.sca",
+      "zz_S35_Air3.sca",
+      "zz_S35_Air4.sca"
+    ],
+    "nitrofs_relocation_bytes": 0,
+    "parent_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5",
+    "rom_sha256": "76e6049eab8e511da388854c76c33a739649e6ea77ca08a99bc763fefaceae3f",
+    "runtime_contacts_events_32k_kit_original_bindings_rooms_audio_save_unchanged": true,
+    "samples": [
+      11,
+      7,
+      8,
+      17
+    ],
+    "shop_source_offset": 1462236,
+    "version": "0.35.1"
+  },
+  "clean_rom_sha256": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203",
+  "date": "2026-10-25",
+  "feature": "Sky Rake presentation polish and moderate Hunter prices",
+  "independent_review": {
+    "candidate": "C / canonical version-0.35.1-final",
+    "evidence": [
+      "work/sky-rake-polish/c-chain/result.json",
+      "work/sky-rake-polish/c-boss/result.json",
+      "work/sky-rake-polish/final-mirror/result.json",
+      "work/sky-rake-polish/final-cancel/result.json",
+      "work/sky-rake-polish/final-cancel-no-air-dodge/result.json",
+      "work/sky-rake-polish/final-whiff/result.json",
+      "work/sky-rake-polish/final-hurt/result.json"
+    ],
+    "feel": {
+      "collision_ownership_hurt_reliability": 1.0,
+      "input_response_and_R_control": 2.75,
+      "natural_lift_jump_chain_whiff_landing_flow": 1.75,
+      "rhythm_impact_and_readable_next_action": 2.5,
+      "total": 8.0
+    },
+    "look": {
+      "2099_weight_aggression_distinct_progression": 1.75,
+      "contact_reaction_sync": 1.5,
+      "continuous_transitions_and_overlap": 2.25,
+      "native_size_silhouette_and_claw_heel_path": 2.5,
+      "total": 8.0
+    },
+    "measured": {
+      "air_contacts": [
+        118,
+        130,
+        144,
+        162,
+        184
+      ],
+      "first_Y_and_action_frame": 112,
+      "first_air_contact_frame": 118,
+      "hurt_exit_frame": 120,
+      "hurt_injection_frame": 119,
+      "natural_boss_action2_contact_frame": 1000,
+      "natural_boss_double_contact_frames": [
+        364,
+        376
+      ],
+      "owned_R_and_exit_frame": 118,
+      "unowned_air_dodge_R_and_exit_frame": 118
+    },
+    "minimum_each": 8,
+    "native_visual_sheets": [
+      "work/sky-rake-polish/review/c-sequence-0.png",
+      "work/sky-rake-polish/review/c-sequence-1.png",
+      "work/sky-rake-polish/review/c-sequence-2.png",
+      "work/sky-rake-polish/review/c-sequence-3.png",
+      "work/sky-rake-polish/review/c-boss-double.png",
+      "work/sky-rake-polish/review/final-mirror.png",
+      "work/sky-rake-polish/review/final-cancel.png",
+      "work/sky-rake-polish/review/final-cancel-no-air-dodge.png",
+      "work/sky-rake-polish/review/final-whiff.png",
+      "work/sky-rake-polish/review/final-hurt.png"
+    ],
+    "quality_gate_passed": true,
+    "reason": [
+      "The first descending claw and following rising hook have separate readable silhouettes, extended reach and shoulder-led follow-through.",
+      "A long trailing leg and the opposite arm counterbalance each stroke; the body no longer collapses into a repeated compact guard.",
+      "The fourth rake coils into a clear extended-heel flip, then uncoils into native fall and landing without an ugly pose reset.",
+      "Hand reach now meets the native impact, so visual effort and enemy reaction agree.",
+      "Native six-frame first contact, five-contact timing and same-frame R release preserve responsive control; whiff and hurt exit cleanly.",
+      "The animation remains legible both facings and against the natural train/boss background, not only the gray training wall."
+    ],
+    "remaining_limits": [
+      "These are independent agent scores based on native 256x192 emulator frame sequences at recorded source timing and real scripted B/Y/R input behavior; they are not a human player verdict.",
+      "Mixed-audio perception, DeSmuME presentation pacing, hardware latency and campaign pricing balance were not graded.",
+      "Training chain initially arranges one durable foe and grants ownership only in disposable RAM; the natural Conductor evidence proves stagger contacts/continuation, not a complete five-hit standing-heavy juggle.",
+      "This is visual/gameplay quality acceptance of exact SHA above, not release publication authorization or a substitute for the remaining composition tests."
+    ],
+    "reviewer": "independent sky_rake_review sub-agent",
+    "rom_sha256": "76e6049eab8e511da388854c76c33a739649e6ea77ca08a99bc763fefaceae3f"
+  },
+  "iterations": [
+    {
+      "candidate": "v0.35.0 baseline",
+      "feel": 6,
+      "look": 3.5
+    },
+    {
+      "candidate": "A",
+      "feel": 6.5,
+      "look": 5.5
+    },
+    {
+      "candidate": "B",
+      "feel": 7.5,
+      "look": 7
+    },
+    {
+      "candidate": "C final",
+      "feel": 8,
+      "look": 8
+    }
+  ],
+  "limits": [
+    "Independent agent native-emulator/input scores are separate from player acceptance and DeSmuME/hardware pacing.",
+    "Training uses initial layout, durable-foe HP and ownership fixtures only in disposable RAM; native contact, movement, AI and interruption paths follow.",
+    "Natural boss rakes and the explicitly preset finisher reaction are separate; no full five-contact standing-heavy combo claim.",
+    "Chapter kill uses one initial low-HP foe fixture and player healing; full-route difficulty/economy and perceptual audio remain unconfirmed."
+  ],
+  "normal_source_reproduction": {
+    "console": "work/sky-rake-polish/clean-build-console.txt",
+    "passed": true,
+    "path": "build/sky-rake-polish-clean/Versioned.nds",
+    "rom_sha256": "76e6049eab8e511da388854c76c33a739649e6ea77ca08a99bc763fefaceae3f"
+  },
+  "parent_version": "0.35.0",
+  "player_feedback": {
+    "source_version": "0.35.0",
+    "summary": "Animation rejected; feel okay but improvable. Prices too low. Independent look and feel scores must each reach 8/10."
+  },
+  "pre_task_battery_sha256": "7181d14751a151b1d3231acacdc0f0f32fd3d170c65cf4f114d66d78c77a5ec4",
+  "presentation": {
+    "captured_emulator_frame_step": 2,
+    "duration_ms": 2130,
+    "mixed_pcm": "work/sky-rake-polish/c-chain/mixed.wav",
+    "native_size": [
+      256,
+      192
+    ],
+    "preview": "work/sky-rake-polish/sky-rake-v0.35.1.gif",
+    "sheet": "work/sky-rake-polish/c-sheet.png",
+    "wall_sheet": "work/sky-rake-polish/wall-review.png"
+  },
+  "prior_recipe": "work/sky-rake-polish/prior-gameplay_profile.json",
+  "prior_recipe_sha256": "be027427274906773aedf039df89692124ea4077df6d193ff9977d61dd0b4cac",
+  "publication": {
+    "actual_battery_equals_pre_task_and_checkpoint": true,
+    "battery_checkpoint": "before-build-dsv-7181d14751a151b1d3231acacdc0f0f32fd3d170c65cf4f114d66d78c77a5ec4",
+    "battery_payload_bytes": 512,
+    "battery_payload_sha256": "9f259f0e1d806e7ef122cfea442267e1906419f47ef248d013a070d9c2d73157",
+    "battery_sha256": "7181d14751a151b1d3231acacdc0f0f32fd3d170c65cf4f114d66d78c77a5ec4",
+    "battery_wrapper_bytes": 634,
+    "boot_options_labels": {
+      "American.strings": [
+        "TASM v0.35.1\nPress a button to start",
+        "Options v0.35.1"
+      ],
+      "English.strings": [
+        "TASM v0.35.1\nPress a button to start",
+        "Options v0.35.1"
+      ]
+    },
+    "canonical_clean_publisher_stable_equal": true,
+    "clean_original_unchanged": true,
+    "console": "work/sky-rake-polish/publication-console.txt",
+    "previous_rom_metadata_and_recipe_preserved": true,
+    "previous_rom_sha256": "65dc457f346e071cd9755e3d67db69c9be09cc99392725eee52c5b1512c0aab5",
+    "publisher_exit_code": 0,
+    "rom_sha256": "76e6049eab8e511da388854c76c33a739649e6ea77ca08a99bc763fefaceae3f",
+    "schema_version": 1,
+    "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+    "version": "0.35.1"
+  },
+  "published_continue": {
+    "actual_battery_unchanged": true,
+    "console": "work/sky-rake-polish/published-continue-console.txt",
+    "current_ownership_xp_hp_room_preserved": true,
+    "passed": true,
+    "profile": {
+      "ability_words": [
+        943718399,
+        4293918703,
+        1048031
+      ],
+      "captures": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\boot-tests\\Spider-Man-WoS-modded-76e6049e\\owned-profile-7181d147",
+      "initial_hp": 77824,
+      "limits": "Fresh normal Continue from latest actual DSV copy; no training/purchase/warp fixtures in this observation.",
+      "rom_sha256": "76e6049eab8e511da388854c76c33a739649e6ea77ca08a99bc763fefaceae3f",
+      "room": 38,
+      "source_save": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\work\\sky-rake-polish\\published-continue\\current-player-copy.dsv",
+      "source_sha256": "7181d14751a151b1d3231acacdc0f0f32fd3d170c65cf4f114d66d78c77a5ec4",
+      "xp": 4382
+    }
+  },
+  "schema_version": 1,
+  "tests": {
+    "documentation_contract": {
+      "frozen_new_section": "0.35.1",
+      "passed": true,
+      "prior_frozen_sections_unchanged": true
+    },
+    "final_focused": {
+      "console": "work/sky-rake-polish/final-focused-tests-fixed.txt",
+      "count": 18,
+      "passed": true,
+      "seconds": 15.135
+    },
+    "focused_cases": [
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "all_four_actions": true,
+          "collision_bounds": true,
+          "five_air_contacts": true,
+          "kick_pops_up": true,
+          "private_black_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/c-chain/result.json"
+      },
+      {
+        "checks": {
+          "actual_air_hp_loss": true,
+          "heavy_never_launched": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/c-boss/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "no_private_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-air-a/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "no_private_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-air-down-a/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "all_four_actions": true,
+          "collision_bounds": true,
+          "five_air_contacts": true,
+          "kick_pops_up": true,
+          "private_black_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-approach/result.json"
+      },
+      {
+        "checks": {
+          "actual_air_hp_loss": true,
+          "heavy_never_launched": true,
+          "kick_contact": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-boss-finisher/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "interruption_exits": true,
+          "no_later_contacts": true,
+          "private_black_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-cancel/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "interruption_exits": true,
+          "no_later_contacts": true,
+          "private_black_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-cancel-no-air-dodge/result.json"
+      },
+      {
+        "checks": {
+          "actual_air_hp_loss": true,
+          "native_air_kill": true,
+          "source_battery_unchanged": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-encounter/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "no_private_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-ground/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "interruption_exits": true,
+          "no_later_contacts": true,
+          "private_black_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-hurt/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "all_four_actions": true,
+          "collision_bounds": true,
+          "five_air_contacts": true,
+          "kick_pops_up": true,
+          "private_black_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-mirror/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "no_private_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-red/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "fresh_continue_keeps_purchase": true,
+          "native_checkpoint_and_hp": true,
+          "native_purchase": true,
+          "native_refund": true,
+          "native_repurchase": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-shop/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "native_ground_form_switch": true,
+          "no_private_route_after_switch": true,
+          "private_black_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-swap/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "no_private_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-unowned/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "all_four_actions": true,
+          "collision_bounds": true,
+          "five_air_contacts": true,
+          "kick_pops_up": true,
+          "private_black_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-wall/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "collision_bounds": true,
+          "no_air_contact_on_whiff": true,
+          "private_black_air_route": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-whiff/result.json"
+      },
+      {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "all_target_records_clean": true,
+          "arrival_in_melee_and_native_idle": true,
+          "cleanup_complete": true,
+          "hero_weak_head_unlinked": true,
+          "no_utility_damage": true,
+          "owned_down_a_cast": true,
+          "private_cast_clip": true,
+          "pure_pull_no_damage": true,
+          "upright_reel": true,
+          "zero_hp_catch_flash_suppressed": true
+        },
+        "passed": true,
+        "path": "work/sky-rake-polish/final-yank/result.json"
+      }
+    ],
+    "full_suite": {
+      "console": "work/sky-rake-polish/full-suite-console.txt",
+      "count": 658,
+      "passed": true,
+      "seconds": 736.463
+    }
+  },
+  "version": "0.35.1"
+}

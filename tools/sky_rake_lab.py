@@ -225,5 +225,5 @@ if __name__=='__main__':
     a=p.parse_args()
     if a.case=='shop':
         from tools.hunter_kit_lab import shop
-        sys.exit(shop(a,row=8,bit=s.BIT,price=s.PRICE))
+        sys.exit(shop(a,row=8,bit=s.BIT))
     sys.exit(boss(a) if a.case.startswith('boss') or a.case=='encounter' else run(a))

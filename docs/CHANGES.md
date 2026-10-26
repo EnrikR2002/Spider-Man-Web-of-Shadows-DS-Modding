@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.35.0. Each section records behavior,
+The latest numbered release below is v0.35.1. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,39 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.35.1 - 2026-10-25 - Connected Sky Rake and moderate Hunter prices
+
+Sky Rake's four private clips now form one continuous phrase. Descending claws
+alternate with rising hooks; shoulder recoil and trailing limbs carry each
+stroke into the next, with a fully extended heel in the flip finisher. The
+open silhouette and raised reach make the strikes meet the visible contact.
+Independent sub-agent review scores the exact final ROM **8/10 look and 8/10
+feel**, meeting the player's gate. These are native-emulator/input assessments,
+separate from a player verdict. Air Y, Talon Lift -> held B -> Y, native chain
+eligibility, damage clocks and paid/unpaid R exits retain their behavior.
+
+The nine Black prices rise to 75/125/150/150/200/225/125/100/150 XP: 1,300 total,
+including Sky Rake at 150 and Web Yank at 100. The fourteen-row planned budget
+is 2,450 XP; later rows remain designed. Existing purchases, dependencies, XP,
+Red/Both Suits prices, rewards and the 512-byte save format are preserved.
+
+Qualification: 658 full-suite tests and nineteen final-ROM copied-save cases
+pass, covering both facings/native approach, wall launch, R, whiff/landing,
+hurt, ownership/Red/native A isolation, ground suit switch, real shop
+purchase/refund/repurchase/save/fresh Continue and preserved pure Web Yank.
+Natural Conductor rakes stagger; a separately labelled native action4/node2
+fixture checks the actual finisher without claiming a full five-hit juggle on
+a standing heavy. The chapter kill has one initial low-HP foe fixture. Perceptual
+audio, player feel, full-route economy and DeSmuME/hardware pacing remain open.
+
+Only the four private SCA clips, boot/Options strings and nine Black price
+words change from v0.35.0. Native runtime, private GMB/GAB, original clips and
+bindings, frozen 32 KiB kit, rooms and audio remain exact. Clean-source,
+canonical, publisher and stable ROMs match SHA76e6049e / ARM9 6f497bd4. Protected
+installation preserves the previous ROM/metadata/recipe and the latest actual
+DSV checkpoint; actual save bytes stay unchanged. Receipt:
+`reference/sky_rake_polish.json`.
 
 ## v0.35.0 - 2026-10-25 - Sky Rake and affordable Hunter prices
 

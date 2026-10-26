@@ -53,7 +53,7 @@ flag: `chapter`, `crane`, `midnight_rework`, `chapter_renewal`,
 `midnight_reliability`, `chapter_finish`, `spider2099`, `spider2099_polish`,
 `spider2099_movie`, `spider2099_enemy_texture`, `vortex_forge`,
 `hunters_return`, `hunters_return_fix`, `talon_lift`, `spider2099_presence`,
-`hunter_kit`, `web_yank_fix`, `web_yank_combo`, `sky_rake`. Recent
+`hunter_kit`, `web_yank_fix`, `web_yank_combo`, `sky_rake`, `sky_rake_polish`. Recent
 profiles copy their parent's flags and add one (v0.31.0 is v0.30.3 plus
 `vortex_forge`), so the current release is the whole stack. A post-pass refuses
 any input except its exact published parent ROM and checks its output against

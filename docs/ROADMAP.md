@@ -17,7 +17,7 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Down+A Web Yank player-liked; Sky Rake and affordable Black prices shipped in v0.35.0 | Player reviews the air chain before Reel In's binding and next ability |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Down+A Web Yank player-liked; Sky Rake polished in v0.35.1, independent look/feel 8/10 each; Black prices moderately raised | Player reviews the revised air chain before Reel In's binding and next ability |
 | 2 | Taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
@@ -35,9 +35,9 @@ differently on purpose:
   wants them and climbs what he cannot move. Add the rows its kit needs.
 
 Preserve native controls, purchases, ownership/dependencies, Both Suits
-traversal, story barriers and earned rewards. Affordable Black prices were
-requested on 2026-10-25; a third suit, save expansion and new campaign branches
-wait until the player asks.
+traversal, story barriers and earned rewards. The player requested affordable
+Black prices on 2026-10-25, then a moderate increase after finding v0.35.0 too
+cheap. A third suit, save expansion and new campaign branches wait until asked.
 
 ## Spider-Man 2099 Black kit: the Hunter
 
@@ -57,9 +57,15 @@ independent ownership, heavy zip and native R exit remain. Receipts are
 `reference/web_yank_combo.json`; the five-target revision is agent-tested,
 with the player saying Down+A feels much better on 2026-10-25 and requesting
 the next ability. v0.35.0 adds the individual Sky Rake air-combo move for 100 XP
-and reduces Web Yank to 75 XP. Nine Black rows now total 850 XP within the
-fourteen-row 1,600 XP budget; the new move's receipt is `reference/sky_rake.json`.
-Sky Rake is agent-tested, awaiting the player's verdict.
+and reduces Web Yank to 75 XP. Its original nine-row 850 XP / fourteen-row
+1,600 XP budget is recorded in `reference/sky_rake.json` and CHANGES.
+The player rejected v0.35.0's animation on 2026-10-25: feel is okay but needs
+improvement, and the prices are too low. Rework Sky Rake before another move;
+an independent sub-agent must rate both look and feel at least 8/10 from
+in-engine evidence. v0.35.1 meets that gate at 8/10 each with connected,
+open claw silhouettes and a clear heel kick. Sky Rake now costs 150 XP, Web
+Yank 100; nine rows total 1,300 within a full planned 2,450 XP budget. Purchases
+stay owned. Receipt: `reference/sky_rake_polish.json`. Player verdict remains open.
 Remaining revision-3 behavior below is designed; retain baseline
 mechanics until each replacement qualifies.
 The remote design's 2026-10-24 dates are retained as source provenance. Machine-readable rows are in
@@ -177,10 +183,12 @@ Distances and timings below are starting values for tuning, not measurements.
 
 Shop rows are one level each with at most one parent and one dependent, the
 native rule. Every pillar has a row without a parent. The player requested
-affordable prices on 2026-10-25 because this kit has fourteen skills. Budget:
-native slots 50/75/100/100/125/150/75 XP; Web Yank 75, Reel In 100, Sky Rake 100,
-Meteor Catch 125, Roof Pin 150, Boarding 175, Apex Predator 200. Total 1,600 XP;
-only implemented rows enter the shop. Existing purchases stay owned.
+affordable prices on 2026-10-25 because this kit has fourteen skills, then
+rejected v0.35.0's 1,600 XP budget as too cheap. The moderate v0.35.1 budget is:
+native slots 75/125/150/150/200/225/125 XP; Web Yank 100, Reel In 150, Sky Rake
+150, Meteor Catch 200, Roof Pin 225, Boarding 275, Apex Predator 300. Total
+2,450 XP; only implemented rows enter the shop (1,300 XP now). Existing
+purchases stay owned.
 
 **1. Rundown (Webbed Fury).** After a Power Dash hit, press A again within the
 native Webbed Fury window to dash again at the still-tumbling target or the
@@ -241,12 +249,15 @@ below or ahead and pull it up to Miguel's height to extend or restart an air
 combo. Heavy: Miguel zips to it. Lab question: whether a built yank toward an
 airborne player lifts the enemy, or a timed launch is needed instead.
 
-**10. Sky Rake (shipped v0.35.0, 100 XP).** Black's air Y string plays four talon rakes (air
+**10. Sky Rake (polished v0.35.1, 150 XP).** Black's air Y string plays four talon rakes (air
 juggle 0x14) and a flip kick that pops the target higher. The native air-chain
 rules still decide whether the next press chains. Red's air string stays exact,
 using private Black-only clips. Heavy: the same hits land as staggers.
 The agent-tested release preserves native air-chain eligibility; R exits even
-without paid Air Dodge by entering native fall. Player feel remains open.
+without paid Air Dodge by entering native fall. Descending cuts alternate with
+rising hooks, sharing a continuous phrase with shoulder recoil and a fully
+extended heel. Independent agent look/feel scores are 8/10 each; player feel
+and hardware pacing remain open.
 
 **11. Meteor Catch (new, requires Sky Rake).** Air A with an airborne enemy
 within about 10 units in front: grab it, flip and fall together (both by
@@ -416,8 +427,10 @@ the rejected rake/upward/input behavior. The pure five-target revision is
 agent-tested and published. The player likes Down+A and has requested the next
 ability. Sky Rake is now shipped individually in v0.35.0 with native approach,
 five real contacts, interruption/ownership controls and copied-save persistence.
-Its final composition and price changes qualify; seek its player verdict before
-Reel In, whose air combat binding still needs a decision.
+The player rejected that animation and found the prices too low. v0.35.1's
+connected phrase and moderate price increase qualify, including the required
+independent 8/10 look/feel gate. Seek the player's revised verdict before Reel
+In, whose air combat binding still needs a decision.
 
 ## Red kit: the Amazing Spider-Man
 
@@ -493,7 +506,7 @@ Ideas the player may want later. None is scheduled; ask before starting one.
 
 | Idea | What it needs first |
 |---|---|
-| Prices and balance pass | Black prices shipped with Sky Rake: nine rows total 850 XP, full fourteen-row budget 1,600 XP; player reviews campaign affordability |
+| Prices and balance pass | v0.35.1 moderately raises Black prices after player feedback: nine rows total 1,300 XP, full fourteen-row budget 2,450 XP; player reviews campaign affordability |
 | Third suit (Scarlet Spider Ben/Kaine, Raimi, classic symbiote) | Player request; no suit selector or migration exists |
 | Downtown Grid/Lost Lab, Residential Skyline Run, Hive Quarantine Heart | Audit current flags/storage first; Hive stays post-story |
 | Midnight Express, gauntlets, timed replays, collectibles | Backlog only; not required by current chapters |
@@ -508,6 +521,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-10-25, v0.35.0 Sky Rake | Animation looks bad; feel is okay but can improve. Skills are priced too low. Rework Sky Rake until an independent sub-agent rates both look and feel at least 8/10 | v0.35.1 ships open, connected descending/rising claws and a clear heel kick; independent look/feel 8/10 each. Sky Rake 150 XP, nine Black rows 1,300; purchases retained. Player verdict pending |
 | 2026-10-25, v0.34.2 Web Yank | Liked Web Yank; feels much better on Down+A. Implement the next 2099 ability and balance prices for fourteen skills so the kit is affordable | Sky Rake next; 1,600 XP total Black-kit budget, 50..200 XP per row; preserve existing purchases |
 | 2026-10-25, v0.34.1 Web Yank | Pull feels better; blue marker is misplaced, close slap spam is silly, X is awkward in combos. Remove upward yank. Pure pull: choose Y or Talon Lift afterward; use combat combinations and pull up to five at once | Ground Down+A for pure five-target Web Yank; no close slap, automatic rake or launch. X stays native; preserve air Down+A and other A follow-ups; retire Heavy Line's extra-target/arrival-hit proposal |
 | 2026-10-24, v0.34.0 Web Yank | Clunky and buggy; the way it yanks and places enemies feels really bad and limp | Rework the pull, arrival and impact before any further Hunter slice; quality remains player-unconfirmed |

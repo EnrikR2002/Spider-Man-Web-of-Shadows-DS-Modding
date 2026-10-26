@@ -1819,6 +1819,25 @@ bounded reproduction, not a claim that every native hit must deal the same HP.
 
 ### Kit animation authoring
 
+**Sky Rake projection calibration (2026-10-25, v0.35.1 candidate C; high
+confidence from native-size captures, FK and unchanged contact traces):** the
+first v0.35.0 polish attempt lengthened the legs but left the claw below the
+visible contact. Its sample3 wrist world Y was 2.87 with pelvis Y3.92; the native
+launched target base stayed about 8.5 units above the player in that fixture.
+Combined positive pelvis/spine pitch folded the shoulder forward/down. Correcting
+the shoulder angle, raising the wrist arc and adding continuous *visual SCA*
+root follow-through brings the hand into the existing contact. This is skeleton
+motion, not an actor-position or velocity write. A single 41-sample phrase,
+sliced at 0/10/16/23 into 11/7/8/17 samples, shares identical seam poses; downward
+left claws alternate with rising right hooks and feed a fully extended heel.
+All original clips, private GMB/GAB, native runtime and damage clocks stay exact.
+The sub-agent rejected A/B despite mechanically passing contacts; exact C passed
+independent look 8/10 and feel 8/10, nineteen focused final-ROM cases and the
+658-test suite. Native first Y/contact remain frames112/118; paid/unpaid R both
+exit at frame118. These are agent/emulator observations, not player or hardware
+confirmation. Sources: `sky_rake_polish_art.py`, `reference/sky_rake_polish.json`
+and `work/sky-rake-polish/review/c-final-review.json`.
+
 **Sky Rake adapter (2026-10-25, v0.35.0 SHA65dc457f; high confidence from
 ARM/composition tests and copied-save controls):** the owned Black bit85
 (event394, third-word mask0x200000) routes only current player air51 actions1..4

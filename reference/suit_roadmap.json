@@ -3,7 +3,7 @@
   "archived_expanded_design": "TASM_EXPANDED_ROADMAP.md",
   "black_slot": "2099-classic",
   "current_recipe": "gameplay_profile.json",
-  "current_release": "0.35.0",
+  "current_release": "0.35.1",
   "expanded_design": "../docs/ROADMAP.md",
   "historical_notes_archive": "../docs/archive/legacy-notes.zip",
   "historical_snapshot": {
@@ -26,7 +26,7 @@
     "Dragnet",
     "Vortex"
   ],
-  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 is authoritative with later player overrides: player-liked Down+A Web Yank and v0.35.0 Sky Rake ship alongside the taller cape-free appearance, Hunter's Return and manual-jump Talon Lift. Nine Black rows cost 850 XP within a 1,600-XP fourteen-row budget. Preserve purchases, native controls and progression; later abilities await individual qualification and player verdicts.",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 is authoritative with later player overrides: player-liked Down+A Web Yank, v0.35.1 polished Sky Rake and moderately raised Black prices ship alongside the taller cape-free appearance, Hunter's Return and manual-jump Talon Lift. Nine Black rows cost 1,300 XP within a 2,450-XP fourteen-row budget. Preserve purchases, native controls and progression; later abilities await individual qualification and player verdicts.",
   "prototype_reference": "../docs/ROADMAP.md#now",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
@@ -102,11 +102,11 @@
             "implemented_version": "0.34.2",
             "input": "Ground/combo Down+A: pure pull of up to five distant enemies ahead; choose Y or Up+A afterward; R exits",
             "move": "Web Yank",
-            "planned_price": 75,
+            "planned_price": 100,
             "player_confirmed": true,
-            "price": 75,
+            "price": 100,
             "price_provisional": false,
-            "price_version": "0.35.0",
+            "price_version": "0.35.1",
             "requires": null
           },
           {
@@ -114,21 +114,23 @@
             "event_id": 393,
             "input": "Air combat binding TBD before its slice; X remains native",
             "move": "Reel In",
-            "planned_price": 100,
+            "planned_price": 150,
             "requires": "Web Yank"
           },
           {
             "ability_bit": 85,
             "agent_tested": true,
             "event_id": 394,
-            "evidence": "sky_rake.json",
+            "evidence": "sky_rake_polish.json",
             "implemented_version": "0.35.0",
-            "input": "Owned Black air Y: four talon rakes and rising flip kick; native air-chain eligibility. R uses owned Air Dodge or exits to native fall.",
+            "input": "Owned Black air Y: connected descending talons and rising hooks, then extended heel flip; native chain eligibility. R uses owned Air Dodge or native fall.",
             "move": "Sky Rake",
-            "planned_price": 100,
+            "planned_price": 150,
             "player_confirmed": false,
-            "price": 100,
+            "polished_version": "0.35.1",
+            "price": 150,
             "price_provisional": false,
+            "price_version": "0.35.1",
             "requires": null
           },
           {
@@ -136,7 +138,7 @@
             "event_id": 395,
             "input": "Air A with an airborne enemy in reach",
             "move": "Meteor Catch",
-            "planned_price": 125,
+            "planned_price": 200,
             "requires": "Sky Rake"
           },
           {
@@ -144,7 +146,7 @@
             "event_id": 396,
             "input": "Down+Y next to a downed enemy",
             "move": "Roof Pin",
-            "planned_price": 150,
+            "planned_price": 225,
             "requires": null
           },
           {
@@ -152,7 +154,7 @@
             "event_id": 397,
             "input": "Web Yank zip, Up-pounce or jump into a boss while holding toward it",
             "move": "Boarding",
-            "planned_price": 175,
+            "planned_price": 275,
             "requires": null
           },
           {
@@ -160,7 +162,7 @@
             "event_id": 398,
             "input": "Passive, by native combo tier",
             "move": "Apex Predator",
-            "planned_price": 200,
+            "planned_price": 300,
             "requires": null
           }
         ],
@@ -172,27 +174,29 @@
           "meter"
         ],
         "price_budget": {
+          "implemented_total_xp": 1300,
           "native_rows_xp": [
-            50,
             75,
-            100,
-            100,
             125,
             150,
-            75
+            150,
+            200,
+            225,
+            125
           ],
           "new_rows_xp": [
-            75,
             100,
-            100,
-            125,
             150,
-            175,
-            200
+            150,
+            200,
+            225,
+            275,
+            300
           ],
-          "planned_total_xp": 1600,
+          "planned_total_xp": 2450,
+          "price_version": "0.35.1",
           "requested": "2026-10-25",
-          "scope": "Apply only implemented rows; preserve owned bits, dependencies and XP. Full-route economy remains a player test."
+          "scope": "Moderate increase requested after v0.35.0 was judged too cheap. Apply only implemented rows; preserve owned bits, dependencies and XP. Full-route economy remains a player test."
         },
         "reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
         "removed_in_revision_3": [
@@ -214,12 +218,12 @@
           94,
           95
         ],
-        "status": "sky-rake-and-affordable-black-prices-published-remaining-slices-designed",
+        "status": "sky-rake-polished-prices-raised-remaining-slices-designed",
         "supersedes": "Hunter revision 2 (15 rows, 2026-10-23), revision 1 and the 2026-10-22 catch/carry/crash/chase proposal; local 2026-10-23 seven-row air/guard proposal (archived at docs/TASM_ROADMAP-local-2026-10-23.md)"
       },
       "design_reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
       "id": "2099-classic",
-      "implementation_order": "Player reviews v0.35.0 Sky Rake before Reel In; choose its air combat binding before implementation. Retain authoritative claude/zen-clarke-p0wo8j design with later player overrides; qualify native mini-boss adapters before expanding targeting/Boarding coverage.",
+      "implementation_order": "Player reviews revised v0.35.1 Sky Rake before Reel In; choose its air combat binding before implementation. Retain authoritative claude/zen-clarke-p0wo8j design with later player overrides; qualify native mini-boss adapters before expanding targeting/Boarding coverage.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Fuller chest/back/arms on the preserved native rig; unrelated native motion clips retained",
@@ -229,15 +233,15 @@
         "12.5% taller Black animated pose and scarlet native web tints; native Red height/colors retained",
         "Purchased Hunter's Return with corrected victim isolation/owner cleanup",
         "Purchased Talon Lift with manual held-B air follow-up and native R exit",
-        "Purchased Web Yank: grounded/combo Down+A gathers up to five distant enemies with independent scarlet lines and weak refs; pure zero-HP pull, no close/rake/upward attack or catch impact flash; Conductor/resistant-target hero zip. Independent bit83/event392; price reduced to 75 XP in v0.35.0.",
-        "Purchased Sky Rake (bit85/event394, 100 XP): four original air claws and rising flip kick through private Black-only clips; native chain/movement/contact credit; paid Air Dodge or native-fall R exit.",
-        "Nine Black rows repriced to 50/75/100/100/125/150/75/75/100 XP; 850 XP now and 1,600 XP for the full planned fourteen rows. Owned bits and dependencies retained."
+        "Purchased Web Yank: grounded/combo Down+A gathers up to five distant enemies with independent scarlet lines and weak refs; pure zero-HP pull, no close/rake/upward attack or catch impact flash; Conductor/resistant-target hero zip. Independent bit83/event392; v0.35.1 price 100 XP.",
+        "Purchased Sky Rake (bit85/event394, 150 XP): four original air claws reauthored as a connected phrase with shoulder recoil, open silhouettes and an extended heel flip; native chain/movement/contact credit and paid/unpaid R exits. Independent agent look 8/10 and feel 8/10 on the exact final ROM; player verdict pending.",
+        "Nine Black rows cost 75/125/150/150/200/225/125/100/150 XP: 1,300 XP now and 2,450 XP for the full planned fourteen rows. Owned bits, dependencies and other prices retained."
       ],
-      "kit": "Hunter revision 3 (14 planned skills): player-liked pure Down+A Web Yank plus v0.35.0 owned air-Y Sky Rake. Up+A Talon Lift -> hold B -> keep tapping Y; R exits. Retain Hunter's Return and other native A/B/strings/traversal, purchases and dependencies. Nine implemented Black rows total 850 XP; remaining five rows stay designed.",
+      "kit": "Hunter revision 3 (14 planned skills): player-liked pure Down+A Web Yank plus polished v0.35.1 owned air-Y Sky Rake. Up+A Talon Lift -> hold B -> keep tapping Y; R exits. Retain Hunter's Return and other native A/B/strings/traversal, purchases and dependencies. Nine implemented Black rows total 1,300 XP; remaining five rows stay designed.",
       "latest_feedback": {
         "date": "2026-10-25",
-        "source_version": "0.34.2",
-        "summary": "Likes Web Yank; Down+A feels much better. Requests the next 2099 ability and affordable prices for fourteen skills."
+        "source_version": "0.35.0",
+        "summary": "Sky Rake animation rejected; feel okay but improvable, prices too low. Requires independent look/feel scores of at least 8/10 each. v0.35.1 meets the agent gate; player verdict pending."
       },
       "name": "Spider-Man 2099 - Across the Spider-Verse inspired",
       "prior_design_snapshot": {
@@ -246,8 +250,8 @@
       },
       "replaces_form": "black",
       "selection_date": "2026-10-11",
-      "status": "v0.35.0-sky-rake-and-affordable-hunter-prices-published",
-      "validation_limit": "See sky_rake.json: 655 full-suite tests, seven focused tests, twenty copied-save controls and exact source/canonical/publisher/stable identity. Real shop/save/fresh Continue preserve progress. A chapter kill uses one initial low-HP fixture; natural Conductor rakes and a labelled finisher action/node probe establish heavy stagger, not a full standing-boss air combo. Web Yank input/feel is player-liked; Sky Rake feel, full-route economy, perceptual audio and hardware pacing remain open. Native mini-boss targeting/Boarding adapters remain pending."
+      "status": "v0.35.1-sky-rake-polished-moderate-hunter-prices-published",
+      "validation_limit": "See sky_rake_polish.json: 658 full-suite tests, nineteen focused final-ROM copied-save cases, independent look 8/10 and feel 8/10, and exact source/canonical/publisher/stable identity. Real 150-XP purchase/refund/repurchase/save/fresh Continue and ordinary installed-ROM Continue preserve progress. Chapter kill uses an initial low-HP fixture; natural Conductor rakes and a separate finisher action/node probe establish heavy staggers, not a full standing-boss air combo. Web Yank is player-liked; revised Sky Rake player feel, full-route economy, perceptual audio and hardware pacing remain open. Native mini-boss targeting/Boarding adapters remain pending."
     },
     {
       "id": "scarlet-kaine",
