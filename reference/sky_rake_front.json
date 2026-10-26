@@ -1,0 +1,73 @@
+{
+  "before_change": {
+    "action4_frame": 184,
+    "enemy_x": 113.517,
+    "enemy_x_velocity_units_per_update": -0.35,
+    "evidence": "work/sky-rake-polish/c-chain/result.json",
+    "note": "The saved v0.35.1 native trace shows the kind25 kick carrying the target back toward Spider-Man; nearer contacts can cross his X before landing.",
+    "rom_sha256": "76e6049eab8e511da388854c76c33a739649e6ea77ca08a99bc763fefaceae3f",
+    "spider_x": 104.282
+  },
+  "build": {
+    "arm9_sha256": "86bc22e5cfe329393277101c78fbe8c2089b2614719cebd6e4d9a0a833c86a40",
+    "black_prices_ownership_contact_clock_original_binds_and_save_format_unchanged": true,
+    "helper": {
+      "address": 35065644,
+      "allocation_bytes": 0,
+      "bytes": 136,
+      "remaining_zero_tail": 2668,
+      "site": 35065192,
+      "site_offset": 1463016,
+      "source_offset": 1463468
+    },
+    "launch": {
+      "initial_velocity": "one-thirty-second of the difference from a three-unit forward landing goal",
+      "light_targets_only": true,
+      "native_kind": 37,
+      "target_landing_offset_goal_q12": 12288,
+      "velocity_limit_q12": 1536,
+      "vertical_launch_unchanged": true
+    },
+    "modified_resources": [
+      "American.strings",
+      "English.strings"
+    ],
+    "parent_sha256": "76e6049eab8e511da388854c76c33a739649e6ea77ca08a99bc763fefaceae3f",
+    "rom_sha256": "05072b4173728eb3673b2ede81651d234f3430222bcb2685333da8e16110f300",
+    "version": "0.35.2"
+  },
+  "clean_original_sha256": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203",
+  "date": "2026-10-25",
+  "feature": "Sky Rake finisher forward landing",
+  "limits": [
+    "The v0.35.2 candidate builds from the exact published v0.35.1 parent and passes in-build ROM, assembly branch and zero-tail guards.",
+    "No unit suite or emulator was run for this small follow-up.",
+    "The horizontal impulse aims to settle around three units in front; native vertical launch, gravity, collision and enemy reactions remain active.",
+    "The previous player battery and v0.35.1 release remain preserved until guarded installation.",
+    "No post-change emulator or test-suite run; the new horizontal landing remains for the player to confirm."
+  ],
+  "parent": {
+    "rom_sha256": "76e6049eab8e511da388854c76c33a739649e6ea77ca08a99bc763fefaceae3f",
+    "version": "0.35.1"
+  },
+  "prior_recipe_sha256": "87f0c36a17b514f8c98388b9401cfe542c728c9727e6db643e4409f0f70bccdf",
+  "publication": {
+    "actual_battery_equals_checkpoint": true,
+    "battery_checkpoint": "before-build-dsv-07c2b3b020400977cf03e37321a28df13aa04861e0fbebb899f9e090f62774ae",
+    "battery_payload_bytes": 512,
+    "battery_sha256": "07c2b3b020400977cf03e37321a28df13aa04861e0fbebb899f9e090f62774ae",
+    "battery_wrapper_bytes": 634,
+    "canonical_publisher_stable_equal": true,
+    "console": "work/sky-rake-front/publication-console.txt",
+    "previous_recipe_preserved": true,
+    "previous_release_and_metadata_preserved": true,
+    "previous_rom_sha256": "76e6049eab8e511da388854c76c33a739649e6ea77ca08a99bc763fefaceae3f",
+    "rom_sha256": "05072b4173728eb3673b2ede81651d234f3430222bcb2685333da8e16110f300",
+    "schema_version": 1,
+    "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+    "version": "0.35.2"
+  },
+  "schema_version": 1,
+  "source": "tools/sky_rake_front.py/.s",
+  "version": "0.35.2"
+}

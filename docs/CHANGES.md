@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.35.1. Each section records behavior,
+The latest numbered release below is v0.35.2. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,25 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.35.2 - 2026-10-25 - Forward Sky Rake finisher
+
+On an accepted light-target Sky Rake finisher (native kind0x25), a stateless
+helper sets capped horizontal velocity toward a point about three units ahead
+of Spider-Man. The aim is to keep the kicked enemy on his forward side through
+the native fall. The upward launch, gravity and collision still run. Conductor
+stagger, ignored hits, other attacks, ownership, prices and contact timing stay
+unchanged.
+
+The finisher callback branches to a 136-byte helper in the v0.35.1 ARM9 zero
+tail. It adds no allocation and changes no player position, saved data, 32 KiB
+kit, animation, contact asset or vertical velocity. English and American
+boot/Options strings advance together. Receipt: reference/sky_rake_front.json.
+
+The protected build reproduces the pinned candidate; canonical, publisher and
+stable ROMs match SHA05072b41 / ARM9 86bc22e5. The previous v0.35.1 release and
+latest actual DSV checkpoint are preserved. No emulator run was made for this
+follow-up; player confirmation remains open.
 
 ## v0.35.1 - 2026-10-25 - Connected Sky Rake and moderate Hunter prices
 

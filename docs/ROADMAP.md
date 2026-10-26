@@ -17,7 +17,7 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Down+A Web Yank player-liked; Sky Rake polished in v0.35.1, independent look/feel 8/10 each; Black prices moderately raised | Player reviews the revised air chain before Reel In's binding and next ability |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Down+A Web Yank player-liked; v0.35.2 adds a forward landing bias to the Sky Rake finisher after its independent 8/10 look/feel gate | Player checks the landing before Reel In's binding and next ability |
 | 2 | Taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
@@ -257,7 +257,10 @@ The agent-tested release preserves native air-chain eligibility; R exits even
 without paid Air Dodge by entering native fall. Descending cuts alternate with
 rising hooks, sharing a continuous phrase with shoulder recoil and a fully
 extended heel. Independent agent look/feel scores are 8/10 each; player feel
-and hardware pacing remain open.
+and hardware pacing remain open. v0.35.2 biases the light finisher's horizontal
+launch toward a three-unit point ahead while retaining native vertical launch
+and collision. This follow-up has not been checked in the emulator; player
+confirmation remains open.
 
 **11. Meteor Catch (new, requires Sky Rake).** Air A with an airborne enemy
 within about 10 units in front: grab it, flip and fall together (both by
@@ -521,6 +524,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-10-25, v0.35.1 Sky Rake finisher | Enemy gets kicked behind Spider-Man instead of landing slightly ahead | v0.35.2 biases the accepted light-target launch toward a three-unit forward landing while retaining native vertical launch and collision. Player confirmation is pending; no emulator check ran for this follow-up |
 | 2026-10-25, v0.35.0 Sky Rake | Animation looks bad; feel is okay but can improve. Skills are priced too low. Rework Sky Rake until an independent sub-agent rates both look and feel at least 8/10 | v0.35.1 ships open, connected descending/rising claws and a clear heel kick; independent look/feel 8/10 each. Sky Rake 150 XP, nine Black rows 1,300; purchases retained. Player verdict pending |
 | 2026-10-25, v0.34.2 Web Yank | Liked Web Yank; feels much better on Down+A. Implement the next 2099 ability and balance prices for fourteen skills so the kit is affordable | Sky Rake next; 1,600 XP total Black-kit budget, 50..200 XP per row; preserve existing purchases |
 | 2026-10-25, v0.34.1 Web Yank | Pull feels better; blue marker is misplaced, close slap spam is silly, X is awkward in combos. Remove upward yank. Pure pull: choose Y or Talon Lift afterward; use combat combinations and pull up to five at once | Ground Down+A for pure five-target Web Yank; no close slap, automatic rake or launch. X stays native; preserve air Down+A and other A follow-ups; retire Heavy Line's extra-target/arrival-hit proposal |

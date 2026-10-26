@@ -1838,6 +1838,19 @@ exit at frame118. These are agent/emulator observations, not player or hardware
 confirmation. Sources: `sky_rake_polish_art.py`, `reference/sky_rake_polish.json`
 and `work/sky-rake-polish/review/c-final-review.json`.
 
+**Sky Rake landing direction (2026-10-25, v0.35.2; source-guided, not
+emulator-requalified):** the preserved v0.35.1 chain records the forward target
+at X113.52 and Spidey at X104.28 on the kind0x25 kick. The hit's native X
+velocity then points back toward Spidey at about 0.35 units per update, enough
+to put closer targets behind him before they land. The v0.35.2 finisher wrapper
+changes only a successfully accepted light-target launch: it reads both
+actors' native X positions and gives the enemy a capped horizontal impulse that
+eases toward a three-unit forward landing goal. Kind0x25's native vertical
+launch, gravity, collision and later reactions still run; Conductor staggers,
+ignored hits and other attacks are untouched. This has not been checked in the
+emulator after the change. Source: sky_rake_front.py/.s and
+reference/sky_rake_front.json.
+
 **Sky Rake adapter (2026-10-25, v0.35.0 SHA65dc457f; high confidence from
 ARM/composition tests and copied-save controls):** the owned Black bit85
 (event394, third-word mask0x200000) routes only current player air51 actions1..4
