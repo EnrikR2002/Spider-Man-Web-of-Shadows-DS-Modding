@@ -1,7 +1,7 @@
 # Roadmap
 
 The whole-game list of what the player wants to add and why it should be fun,
-reviewed 2026-10-25 (America/Edmonton). Renamed from `docs/TASM_ROADMAP.md`
+reviewed 2026-10-26 (America/Edmonton). Renamed from `docs/TASM_ROADMAP.md`
 on 2026-10-24: the project is no longer only a TASM kit. [TASKS](TASKS.md) owns
 the live build and next action; [CHANGES](CHANGES.md) owns shipped behavior;
 [TECHNICAL](TECHNICAL.md) owns engine facts; [DEVELOPMENT](DEVELOPMENT.md) owns
@@ -17,7 +17,7 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Down+A Web Yank player-liked; v0.35.2 adds a forward landing bias to the Sky Rake finisher after its independent 8/10 look/feel gate | Player checks the landing before Reel In's binding and next ability |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Reel In shipped in v0.36.0; independent review 8.5/10, player verdict open | Try air Up+A -> Y on a fresh foe during an air combo; give a verdict before Meteor Catch |
 | 2 | Taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
@@ -66,6 +66,13 @@ in-engine evidence. v0.35.1 meets that gate at 8/10 each with connected,
 open claw silhouettes and a clear heel kick. Sky Rake now costs 150 XP, Web
 Yank 100; nine rows total 1,300 within a full planned 2,450 XP budget. Purchases
 stay owned. Receipt: `reference/sky_rake_polish.json`. Player verdict remains open.
+The player requested the next skill on 2026-10-26 and an independent review of
+at least 8/10 before completion. Reel In is the next sky-slice move, with airborne
+Up+A chosen locally to preserve X, plain air A and air Down+A. Its reviewer also
+requires 8/10 separately for presentation and feel. v0.36.0 passes at 8.5 overall,
+8.2 presentation and 8.4 feel; 674 tests and 28 final-ROM gameplay/save cases pass.
+Ten Black rows total 1,450 XP. Receipt: `reference/reel_in.json`. This request and
+agent review do not confirm the previous finisher landing or the new skill.
 Remaining revision-3 behavior below is designed; retain baseline
 mechanics until each replacement qualifies.
 The remote design's 2026-10-24 dates are retained as source provenance. Machine-readable rows are in
@@ -149,7 +156,7 @@ a varied kit also scores better.
 | Air A | Native Hammer Spike; Meteor Catch when an airborne enemy is in reach |
 | Air Down+A | Native Hammer Slam with Freefall's height bonus |
 | Down+A on the ground or in a ground combo | Web Yank: pure pull into melee range; no point-blank attack |
-| Air Reel In | Combat binding to choose before its own slice; X stays native |
+| Air Up+A | Reel In on an eligible foe below/ahead; otherwise native air A |
 | Web Yank zip, Up-pounce or jump into a boss while holding toward it | Boarding; while riding, Y rakes and A is Wing Ripper |
 | R | Native evade; lets go of any 2099 move |
 | B | Native jump, swing and Enemy Kick-Off |
@@ -243,11 +250,17 @@ Heavy: Miguel zips to melee range by native velocity and chooses his next move.
 Holding toward it can start Boarding once that later skill ships. Earlier X,
 launch and rake controls are archived before replacement.
 
-**9. Reel In (new, requires Web Yank).** Air combat binding to choose before its
-own slice; X stays native. Tie the nearest enemy
-below or ahead and pull it up to Miguel's height to extend or restart an air
-combo. Heavy: Miguel zips to it. Lab question: whether a built yank toward an
-airborne player lifts the enemy, or a timed launch is needed instead.
+**9. Reel In (shipped v0.36.0, requires Web Yank, 150 XP).** Air Up+A ties the nearest
+eligible foe ahead, or nearby below even behind Miguel. Turn natively toward
+the catch and reel it up into claw range to extend or restart an air combo.
+The airborne cast, two-arm recoil and open-claw recovery get their own continuous
+clip; the catch deals no damage and the player chooses Y afterward. Heavy:
+Miguel zips toward it. R/hurt/death/form/room changes and a real landing release
+the line. Plain air A, air Down+A and native X remain. The agent-tested move uses
+a zero-HP native launch plus bounded X/Y velocity, with natural gravity/collision;
+a reel from a descending claw string gives one brief upward recoil to make the
+next catch usable. Independent review is 8.5/10 overall, 8.2 presentation and
+8.4 feel; the player's verdict remains open.
 
 **10. Sky Rake (polished v0.35.1, 150 XP).** Black's air Y string plays four talon rakes (air
 juggle 0x14) and a flip kick that pops the target higher. The native air-chain
@@ -387,7 +400,7 @@ Engine facts to reuse, all in TECHNICAL:
 3. **Inputs:** ground/combo Down+A for pure Web Yank; preserve native X
    interactions and other A actions. Held X/Y uses the native combined pad.
    Distinguish any future downed-target Down+Y from native Down+Y; choose an
-   air combat chord before Reel In's slice.
+   air combat chord before Reel In's slice (air Up+A chosen 2026-10-26).
 4. **Black-only animation:** route Black-form actions to appended clips. Air
    string actions are shared with Red; GroundAttack15 is shared; G11/16/17 have
    m6.xbd users and are not spare.
@@ -432,8 +445,10 @@ ability. Sky Rake is now shipped individually in v0.35.0 with native approach,
 five real contacts, interruption/ownership controls and copied-save persistence.
 The player rejected that animation and found the prices too low. v0.35.1's
 connected phrase and moderate price increase qualify, including the required
-independent 8/10 look/feel gate. Seek the player's revised verdict before Reel
-In, whose air combat binding still needs a decision.
+independent 8/10 look/feel gate. The player's 2026-10-26 instruction authorizes
+Reel In next with its own independent 8/10 gate. v0.36.0 meets it and ships air
+Up+A while preserving the other native controls. The player checks Reel In
+before Meteor Catch; prior and new player quality verdicts remain separate.
 
 ## Red kit: the Amazing Spider-Man
 
@@ -524,6 +539,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-10-26, after v0.35.2 | Implement the next 2099 skill; make it fun/impressive; a subagent must review and score it at least 8/10 before completion | v0.36.0 ships Reel In on airborne Up+A. Independent weighted score 8.53/10: presentation 8.2, feel 8.4, correctness9.0, evidence 8.5; no must-fix issue. Its overall and separate presentation/feel gates pass. Agent-tested; no new player verdict implied |
 | 2026-10-25, v0.35.1 Sky Rake finisher | Enemy gets kicked behind Spider-Man instead of landing slightly ahead | v0.35.2 biases the accepted light-target launch toward a three-unit forward landing while retaining native vertical launch and collision. Player confirmation is pending; no emulator check ran for this follow-up |
 | 2026-10-25, v0.35.0 Sky Rake | Animation looks bad; feel is okay but can improve. Skills are priced too low. Rework Sky Rake until an independent sub-agent rates both look and feel at least 8/10 | v0.35.1 ships open, connected descending/rising claws and a clear heel kick; independent look/feel 8/10 each. Sky Rake 150 XP, nine Black rows 1,300; purchases retained. Player verdict pending |
 | 2026-10-25, v0.34.2 Web Yank | Liked Web Yank; feels much better on Down+A. Implement the next 2099 ability and balance prices for fourteen skills so the kit is affordable | Sky Rake next; 1,600 XP total Black-kit budget, 50..200 XP per row; preserve existing purchases |

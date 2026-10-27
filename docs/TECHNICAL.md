@@ -18,6 +18,7 @@ objective/build and next action: [TASKS](TASKS.md).
 | Rooms/collision/doors/maps | [Room compiler](#room-compiler-v0120), [collision tree](#room-collision-tree-2026-10-11), [native doors](#native-doors-spawns-and-game-variables) | [Minimap screens](#minimap-screens-and-area-room-lists-v070) |
 | Player kit and native combat | [Player state machine and Red kit hooks](#player-state-machine-and-red-kit-hooks-v020), [animation authoring](#kit-animation-authoring) | Later named kit sections describe extensions; use the current release recipe |
 | Hunter revision-3 X input, Web Yank, Black shop row and heavy approach | [Web Yank](#hunter-revision-3-web-yank-v0340), [input correction](#transitions-states-and-inputs) | Earlier Hunter's Return/Talon Lift remain baseline mechanics until their revision-3 slices qualify |
+| Airborne Reel In and native landing/reaction ownership | [Reel In](#airborne-reel-in-v036-research) | [Pure pull](#pure-pull-input-and-catch-effects-v0342-research), [kit extension](#kit-extension-contract) |
 | Skyjack velocity correction | [Scoped finish (0.29)](#scoped-movement-and-chapter-finish-v0290) | [Parent audit and unshipped prototypes](#shared-crowd-hit-backend-candidates); the old source/hex still reproduce their historical releases |
 | Binary formats and preservation | [Format boundaries](#format-boundaries-and-confirmed-structures), [SCA/rig contract](#animation-authoring-and-current-evidence) | [Baseline inventory](#rom-baseline-and-inventory) |
 | Emulator/rendering and performance | [Performance and visuals](#performance-and-visuals) | Dated renderer/JIT observations are not current performance guarantees |
@@ -2236,6 +2237,90 @@ native dash damage was not a second utility hit. The qualified repeat fixture
 lays out a distant target before each press and asserts four starts/zero damage;
 the failed report is retained. Source/limits and publication/fresh Continue
 evidence are in `reference/web_yank_combo.json`; no player-feel verdict is implied.
+
+### Airborne Reel In (v0.36 research)
+
+2026-10-26, v0.36 candidates B/C through final E over exact v0.35.2. High
+confidence from ARM regressions, copied-latest-battery native traces and E's
+independent visual qualification. Airborne Up+A uses direction1..3/command5.
+Independent event393/bit84 requires parent392/bit83. The guarded think wrapper
+uses native air51 with private no-attack SCA/GMB/GAB, leaving hero gravity
+untouched. A zero-HP kind0x25 puts a light victim in launch39; its own
+post-controller update steers bounded X/Y velocity toward six units ahead at
+the hero's height. The chosen Y at arrival re-enters a fresh native air string:
+B's first Y at 98 contacts at 104 and continues through all five Sky Rake contacts.
+Returning to fall and hoping native Y resumes instead caused a 20-frame delay.
+
+Original Sky Rake routing would overwrite the private utility route. The
+owned utility therefore supplies its resource record and resumes native
+0x02070488, retaining CMP flags; all other animation requests delegate.
+Native line release retains its full four-word slot96..111; hero/target
+intrusive weak tokens and motion/config/room checks gate ownership. Cleanup
+must stop enemy X only in the captured launch39; a later native reaction owns
+its new velocity. Directly-below selection must be symmetric across facings.
+
+C's low falling cast reached the floor at 120 but stayed air51 until 140:
+its original broad landing predicate was inadequate and is superseded.
+Motion+0x2AC is the collision normal's Y component (air0, flat floor4096 in
+retained RAM; native collision helpers operate on motion+0x264). D releases
+on a positive floor normal with nonpositive hero Y velocity and requests native
+land24. The stricter lab requires release within two updates of actual contact;
+walls, ceilings and still-rising contacts must not force landing.
+D's native trace observes floor normal4096 at 122 and land24 with fully released
+links at 124. Regular, mirrored and held catches retain all five separately
+chosen Sky Rake contacts. Its real Conductor run walks into the spawn trigger,
+then qualifies native-input heavy zip/arrival and chosen air damage without
+launching the boss. The failed older-entry-prefix and stationary-corridor
+fixtures are not boss evidence. Source: `work/reel-in/d-falling`, `d-regular`,
+`d-mirror`, `d-hold`, `d-boss-v3` and `tests/test_reel_in.py`; player verdict open.
+
+**D review correction (2026-10-26; high confidence):** the tied WebLine's enemy
+interface+0x4C resolves to 0x02074CD0, which returns actor base XY. The native
+line adds its cosmetic relative offset+0x80/+0x84. In boss frame84 the Conductor's
+posed body rises roughly26 pixels above that endpoint, leaving a detached rope.
+Mechanics/counters do not qualify this presentation; D is not approved to ship.
+Native GMB helper0x02074ECC can return a transformed channel center, but the
+Jump/Fall body channels stay at fixed height and omit the posed tag9 marker.
+A verified posed visual anchor is still required. The later `d-extend` control
+also shows launch39 becoming fall48 before a late air-combo reel settles, with
+carried X velocity and insufficient remaining hero altitude. The regular jump
+control did not establish that extension path; qualify it separately.
+
+**E correction (2026-10-26, high confidence from native disassembly, live RAM,
+ARM regressions and independent posed-body review):** wrapper+0x190 is the native
+model bound-sphere center. Apply motion scale+0x0C/+0x10/+0x14 once, rotation
++0x20..+0x40, then draw translation+0x44/+0x48/+0x4C. At D frame84 that center
+is Y17.474 versus logical Y5.767; native draw depth also changes during the leap.
+The private helper changes only line relative offsets+0x80/+0x84, retaining the
+native weak tie/retraction. Bounded center/scale/rotation inputs keep its Q12
+products within signed 32-bit range; invalid render ownership releases the move.
+Source: `work/reel-in/review-native-anchor.json`, `reel_in.s`, regression tests.
+
+Air51 re-entry can expose the previous clip's clock for one update. E waits
+two private age ticks before testing the new cast clock. Its light X cap is four
+units/update. A reel entered from an already descending air attack gets one
+0x1800 upward velocity impulse at the cast, after native controller work;
+ordinary jumps/falls and heavy zips get none. Native gravity resumes immediately.
+This supplies finite physical recoil instead of freezing height or changing time.
+The native-input extension fixture lands on foe one at 118, reels foe two at 128,
+and then lands all five air contacts 156/168/183/200/222 in the probe. Its two
+initial HP/layout fixtures and native AI after 74 are separate from player feel.
+The Conductor's actual native jump entry is state11/action111; action38 is Fall.
+Requesting Fall alone cannot initialize its cosmetic jump offsets. The normal
+setter0x02077844(controller,11) runs entry0x02099114, which initializes actor
++0x34/+0x38/+0x3C and controller timer+0x28; update0x020991BC advances them.
+An isolated presentation fixture must invoke that native entry and disclose it,
+while unmodified candidate runs separately establish heavy behavior. Source:
+native dispatch table0x02132D98 and `work/reel-in/review-pose-fixture.json`.
+
+The final native-jump diagnostic independently shows the line entering the
+raised forearm/body instead of its logical floor position. In the later short
+`rpa` capture, the live tether is at local668..689 / absolute3698..3719;
+absolute3594 belongs to the earlier run and is not evidence for this one.
+The forced entrance-depth pose exaggerates the model's size, and the diagnostic
+does not pass its chosen-Y damage predicate. It qualifies the visual anchor
+only; unmodified E's separate Conductor run qualifies heavy mechanics. Source:
+`work/reel-in/review-final/review.json` and `reference/reel_in.json`.
 
 ### Freeze root cause and crash hunting (v0.4.1)
 

@@ -53,7 +53,7 @@ flag: `chapter`, `crane`, `midnight_rework`, `chapter_renewal`,
 `midnight_reliability`, `chapter_finish`, `spider2099`, `spider2099_polish`,
 `spider2099_movie`, `spider2099_enemy_texture`, `vortex_forge`,
 `hunters_return`, `hunters_return_fix`, `talon_lift`, `spider2099_presence`,
-`hunter_kit`, `web_yank_fix`, `web_yank_combo`, `sky_rake`, `sky_rake_polish`, `sky_rake_front`. Recent
+`hunter_kit`, `web_yank_fix`, `web_yank_combo`, `sky_rake`, `sky_rake_polish`, `sky_rake_front`, `reel_in`. Recent
 profiles copy their parent's flags and add one (v0.31.0 is v0.30.3 plus
 `vortex_forge`), so the current release is the whole stack. A post-pass refuses
 any input except its exact published parent ROM and checks its output against
@@ -129,7 +129,8 @@ Copy the established shape (`tools/vortex_forge.py`, `.s`, `_art.py`,
 | Crowded Midnight enemy texture residency | [SCA / model / textures](TECHNICAL.md#sca--model--textures) | `spider2099_enemy_texture.py`; `reference/spider2099_enemy_texture.json`. Preserve 128px artwork/UVs, compact to I4, validate live materials on a copied-save mixed scene. |
 | Save safety and publication | AGENTS and this guide's release section | `playtest.py`, `desmume_save.py`, `save_backups.py` |
 | Shop rows, ability bits and prices | [Purchase records](TECHNICAL.md#purchase-records-and-native-ownership), [Shop tables](TECHNICAL.md#shop-tables-menu-and-free-ownership-bits-v0100) | `tasm_kit.py` (Red/Both Suits rows), `release_info.py` (prices), `upgrade_trace.py` |
-| Spider-Man 2099 Black kit (designed, not built) | ROADMAP [implementation guide](ROADMAP.md#implementation-guide) | Proposed `hunter_kit.py` family; follow [Add a feature](#add-a-feature-as-a-new-post-pass) |
+| Purchased airborne Reel In | [Reel In](TECHNICAL.md#airborne-reel-in-v036-research) | `reel_in.py`, `.s`, `_art`, `_lab`; exact v0.35.2 post-pass, bit84 with Web Yank dependency. Lab `--case` covers native controls, real floor-contact release, heavy zip and native purchase/save. |
+| Remaining 2099 Black kit | ROADMAP [implementation guide](ROADMAP.md#implementation-guide) | Follow [Add a feature](#add-a-feature-as-a-new-post-pass); native mini-boss adapters still require qualification. |
 
 Tool filenames in this table are under `tools/`. Find a CLI's actual arguments
 with `--help`; do not infer a new command from a similar older tool. Search topic
@@ -413,3 +414,9 @@ needs NumPy and FFmpeg (`creature_forge_sound_author.py` declares its local path
 shipping builds consume frozen sample hashes and do not regenerate that bank.
 Check these once, use the configured interpreter, and record a dependency failure
 instead of rediscovering/installing alternate runtimes throughout the task.
+
+Keep emulator tags short and unique. During Reel In pose review, long repeated
+tags were associated with native-core faults before emulated execution; a short
+tag retry succeeded. A path-length limit is suspected, not proven. Such a host
+failure is not a gameplay result. The Reel In boss lab uses its tag once; retain
+failed logs when retrying the same explicit candidate with a shorter tag.

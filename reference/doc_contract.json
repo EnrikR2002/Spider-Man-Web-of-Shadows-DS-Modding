@@ -205,6 +205,7 @@
     "event_offset": 309
   },
   "frozen_changes_sections": {
+    "0.36.0": "4a60ac786944ba036e38de5b2fc5f849a55e2465d50878f5c690b44509c17a0e",
     "0.35.2": "c4e9ec584d236a0654f5d44e718ccbbd00cd0e22effddbe2107d365bfd418095",
     "0.35.1": "1df3fa0f7c3c7fca672176899ac281d860d608f2077ab749390a53a4e0a4fa07",
     "0.35.0": "6bdae8c71a7869e9500ad6a23b8d2a24b8672977d2fcf67f91ae772c49d1e4b3",

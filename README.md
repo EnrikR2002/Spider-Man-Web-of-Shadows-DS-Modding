@@ -4,13 +4,13 @@ Private USA CS5E research. ROMs/extracted assets/builds/saves stay private.
 
 **Play:** `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
 The agent handles the stable ROM, releases and progress backups.
-Current release: **v0.35.2**. **Sky Rake** costs 150 XP in Black upgrades:
-air Y chains connected descending claws, rising hooks and an extended heel kick.
-Up+A (Talon Lift), hold B, then keep tapping Y; R exits. Independent agent review:
-8/10 look and 8/10 feel. The finisher aims to land light foes slightly in front.
-Black's nine current rows total 1,300 XP; Web Yank costs 100 XP. Existing
-purchases stay owned. Down+A Web Yank, native traversal, the
-Red kit and both chapters remain. Player feel and campaign balance await review.
+Current release: **v0.36.0**. **Reel In** costs 150 XP in Black upgrades and
+requires Web Yank. Air **Up+A** catches a foe below/ahead and reels it into claw
+range; tap **Y** to continue Sky Rake. Heavy foes pull Miguel toward them.
+Try Talon Lift -> hold B -> Y -> air Up+A on a fresh foe -> Y. R lets go.
+Independent agent review: **8.5/10 overall**, 8.2 presentation and 8.4 feel.
+Black's ten current rows total 1,450 XP. Existing purchases, native controls,
+Red and both chapters remain. Player feel and campaign balance await review.
 Details: [Changes](docs/CHANGES.md). What comes next: [Roadmap](docs/ROADMAP.md#now).
 
 ## Find what you need

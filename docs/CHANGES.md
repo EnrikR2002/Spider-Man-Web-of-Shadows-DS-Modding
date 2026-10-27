@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.35.2. Each section records behavior,
+The latest numbered release below is v0.36.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,43 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.36.0 - 2026-10-26 - Reel In aerial combo extension
+
+Reel In is a new 150 XP Black row (event393 / bit84), requiring Web Yank.
+Airborne Up+A catches the nearest eligible foe ahead or nearby below, including
+behind Miguel, and reels it into claw range. The player chooses Y to continue
+Sky Rake; the utility deals zero HP damage. Heavy or launch-resistant targets
+pull Miguel toward them. Native velocity, gravity and collision run throughout;
+a catch entered from a descending air string gets one brief upward recoil.
+
+A private 14-sample cast, two-arm heave and open-claw recovery form one continuous
+motion. The scarlet line follows the target's live draw pose. R, actual landing,
+hurt, death, form/room changes and target death release its owned state/links.
+Native X, ground A/Up+A, air A/Down+A, Red and existing purchases remain.
+Ten Black rows total 1,450 XP within the unchanged 2,450 XP planned budget.
+
+Independent subagent review passes at **8.5/10 overall** (8.53 weighted):
+presentation 8.2, feel 8.4, correctness/isolation 9.0 and evidence/lean 8.5.
+There are no must-fix findings. All 674 strict tests pass with zero skips, run
+across 94 module subprocesses; incomplete single-process attempts are retained
+separately. Twenty-eight final-ROM gameplay/save cases pass, including a real
+first-foe air hit -> second-foe reel -> all five chosen air contacts, native
+Conductor zip, interruption/ownership controls and native purchase/refund/
+repurchase/save/fresh Continue. Seven paired parent controls preserve native
+input trajectories, with disclosed adjacent-frame clock handoffs.
+
+Raised heavy tether presentation uses a separately declared native-jump
+diagnostic; its exaggerated entrance-depth pose and failed chosen-Y predicate
+are retained. It proves the attachment only. Unmodified final-ROM boss input
+proves mechanics. Player feel, perceptual audio, hardware pacing and full-route
+economy remain open; native mini-boss adapters remain deferred.
+
+Clean-source, canonical, protected publisher and stable ROMs match SHA399bf220 /
+ARM9 8e497f9d. The previous v0.35.2 ROM, metadata and recipe are preserved;
+the freshly read actual DSV equals its checkpoint byte for byte. No research
+save was adopted. Original assets/bindings, rooms, audio, the 32 KiB kit and
+save format stay exact. Receipt: `reference/reel_in.json`.
 
 ## v0.35.2 - 2026-10-25 - Forward Sky Rake finisher
 

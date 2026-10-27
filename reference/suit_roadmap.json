@@ -3,7 +3,7 @@
   "archived_expanded_design": "TASM_EXPANDED_ROADMAP.md",
   "black_slot": "2099-classic",
   "current_recipe": "gameplay_profile.json",
-  "current_release": "0.35.2",
+  "current_release": "0.36.0",
   "expanded_design": "../docs/ROADMAP.md",
   "historical_notes_archive": "../docs/archive/legacy-notes.zip",
   "historical_snapshot": {
@@ -26,7 +26,7 @@
     "Dragnet",
     "Vortex"
   ],
-  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 is authoritative with later player overrides: player-liked Down+A Web Yank, v0.35.1 polished Sky Rake and v0.35.2 forward-biased finisher ship alongside the taller cape-free appearance, Hunter's Return and manual-jump Talon Lift. Nine Black rows cost 1,300 XP within a 2,450-XP fourteen-row budget. Preserve purchases, native controls and progression; later abilities await individual qualification and player verdicts.",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 is authoritative with later player overrides: player-liked Down+A Web Yank, polished Sky Rake/forward finisher and v0.36.0 airborne Up+A Reel In ship alongside the taller cape-free appearance, Hunter's Return and manual-jump Talon Lift. Ten Black rows cost 1,450 XP within a 2,450-XP fourteen-row budget. Preserve purchases, native controls and progression; later abilities await individual qualification and player verdicts.",
   "prototype_reference": "../docs/ROADMAP.md#now",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
@@ -111,10 +111,17 @@
           },
           {
             "ability_bit": 84,
+            "agent_tested": true,
             "event_id": 393,
-            "input": "Air combat binding TBD before its slice; X remains native",
+            "evidence": "reel_in.json",
+            "implemented_version": "0.36.0",
+            "input": "Owned Black airborne Up+A: reel an eligible foe below/ahead into claw range; choose Y for Sky Rake. Heavy targets pull Miguel. R lets go; native air A/Down+A/X remain.",
             "move": "Reel In",
             "planned_price": 150,
+            "player_confirmed": false,
+            "price": 150,
+            "price_provisional": false,
+            "price_version": "0.36.0",
             "requires": "Web Yank"
           },
           {
@@ -175,7 +182,7 @@
           "meter"
         ],
         "price_budget": {
-          "implemented_total_xp": 1300,
+          "implemented_total_xp": 1450,
           "native_rows_xp": [
             75,
             125,
@@ -219,12 +226,12 @@
           94,
           95
         ],
-        "status": "sky-rake-polished-prices-raised-remaining-slices-designed",
+        "status": "reel-in-shipped-remaining-slices-designed",
         "supersedes": "Hunter revision 2 (15 rows, 2026-10-23), revision 1 and the 2026-10-22 catch/carry/crash/chase proposal; local 2026-10-23 seven-row air/guard proposal (archived at docs/TASM_ROADMAP-local-2026-10-23.md)"
       },
       "design_reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
       "id": "2099-classic",
-      "implementation_order": "Player checks the v0.35.2 Sky Rake finisher landing before Reel In; choose Reel In's air combat binding before implementation. Retain authoritative claude/zen-clarke-p0wo8j design with later player overrides; qualify native mini-boss adapters before expanding targeting/Boarding coverage.",
+      "implementation_order": "Player checks v0.36.0 Reel In before Meteor Catch. Its independent 8/10 gate passes; airborne Up+A preserves native X/plain air A/air Down+A. Retain authoritative claude/zen-clarke-p0wo8j design with later player overrides; qualify native mini-boss adapters before expanding targeting/Boarding coverage.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Fuller chest/back/arms on the preserved native rig; unrelated native motion clips retained",
@@ -236,13 +243,14 @@
         "Purchased Talon Lift with manual held-B air follow-up and native R exit",
         "Purchased Web Yank: grounded/combo Down+A gathers up to five distant enemies with independent scarlet lines and weak refs; pure zero-HP pull, no close/rake/upward attack or catch impact flash; Conductor/resistant-target hero zip. Independent bit83/event392; v0.35.1 price 100 XP.",
         "Purchased Sky Rake (bit85/event394, 150 XP): connected private Black-only air claws and heel flip (v0.35.1), with v0.35.2 horizontal launch bias toward a three-unit forward landing. Native upward launch/gravity/collision, chain/hit timing and paid/unpaid R remain. Independent look/feel review on v0.35.1 was 8/10 each; v0.35.2 landing remains player-unconfirmed and was not rechecked in emulator.",
-        "Nine Black rows cost 75/125/150/150/200/225/125/100/150 XP: 1,300 XP now and 2,450 XP for the full planned fourteen rows. Owned bits, dependencies and other prices retained."
+        "Purchased Reel In (bit84/event393, 150 XP, requires Web Yank): airborne Up+A uses one scarlet tether and continuous cast/heave/recovery to bring a foe below/ahead into claw range for chosen Y. Heavy targets zip Miguel. Native velocity/gravity/collision, floor/R/interruption release and unchanged other inputs. Independent review 8.53/10 overall, presentation 8.2 and feel 8.4; player verdict pending.",
+        "Ten Black rows cost 75/125/150/150/200/225/125/100/150/150 XP: 1,450 XP now and 2,450 XP for the full planned fourteen rows. Existing owned bits, dependencies and prices retained."
       ],
-      "kit": "Hunter revision 3 (14 planned skills): player-liked pure Down+A Web Yank plus polished v0.35.2 air-Y Sky Rake. Up+A Talon Lift -> hold B -> keep tapping Y; the light-target finisher aims to land slightly ahead; R exits. Retain Hunter's Return and other native A/B/strings/traversal, purchases and dependencies. Nine implemented Black rows total 1,300 XP; remaining five rows stay designed.",
+      "kit": "Hunter revision 3 (14 planned skills): player-liked pure Down+A Web Yank, polished air-Y Sky Rake and v0.36.0 airborne Up+A Reel In. Talon Lift -> hold B -> Y -> air Up+A catches a fresh foe -> chosen Y continues; heavy targets pull Miguel. R exits. Retain Hunter's Return and native A/B/strings/traversal, purchases and dependencies. Ten current Black rows total 1,450 XP; four remaining new rows stay designed.",
       "latest_feedback": {
-        "date": "2026-10-25",
-        "source_version": "0.35.1",
-        "summary": "Requests that the final Sky Rake kick land slightly in front of Spider-Man rather than behind. v0.35.2 adds a native-velocity forward landing bias; player confirmation is pending."
+        "date": "2026-10-26",
+        "source_version": "0.35.2",
+        "summary": "Implement the next 2099 skill; make it fun/impressive; require independent subagent review of at least 8/10. Reel In ships in v0.36.0 after an independent 8.53/10 weighted score, with presentation 8.2 and feel 8.4. This request and agent review do not imply a new player quality verdict."
       },
       "name": "Spider-Man 2099 - Across the Spider-Verse inspired",
       "prior_design_snapshot": {
@@ -251,8 +259,8 @@
       },
       "replaces_form": "black",
       "selection_date": "2026-10-11",
-      "status": "v0.35.2-forward-sky-rake-finisher-player-check-pending",
-      "validation_limit": "See sky_rake_front.json: exact pinned post-pass build, protected installation and byte-identical actual battery checkpoint. The 0.35.1 look/feel review remains 8/10 each. No emulator recheck was run for the 0.35.2 landing tweak; player confirmation is pending. Prices, ownership, hit timing, vertical launch, collision and prior qualification remain unchanged. Native mini-boss targeting/Boarding adapters remain pending."
+      "status": "v0.36.0-reel-in-agent-tested-player-verdict-pending",
+      "validation_limit": "See reel_in.json: 674 strict tests with zero skips across 94 modules, 28 exact final-ROM gameplay/save cases, seven paired native controls, independent 8.53/10 review and protected exact-hash installation with unchanged actual battery/checkpoint. A declared native-jump diagnostic proves posed tether attachment only; unmodified E Conductor input proves heavy mechanics. Player feel, perceptual audio, full campaign balance and hardware pacing remain open. Native mini-boss adapters remain deferred; unhandled targets retain native A."
     },
     {
       "id": "scarlet-kaine",
@@ -279,7 +287,7 @@
       "status": "identity-merged-into-tasm1"
     }
   ],
-  "updated": "2026-10-23",
+  "updated": "2026-10-26",
   "upgrade_plan": "tasm_upgrade_plan.json",
   "upgrade_plan_status": "implemented-current-red-rows-progression-expansion-deferred",
   "user_verified": [

@@ -1,0 +1,559 @@
+{
+  "arm9_sha256": "8e497f9da68f18d2fd66835a2f8d6d8035299a186373bc44b6ba7eb8808ca3c9",
+  "candidate": "build/version-0.36.0-final/Versioned.nds",
+  "candidate_matches_focused_rom": true,
+  "date": "2026-10-26",
+  "independent_review": {
+    "canonical_matches": true,
+    "checks": {
+      "focused_passed": true,
+      "independent_focused_tests": 16,
+      "paired_native_controls": 7,
+      "qualified_production_cases": 28,
+      "shop_native_purchase_refund_repurchase_and_fresh_continue": true,
+      "strict_receipt_modules": 94,
+      "strict_receipt_skips": 0,
+      "strict_receipt_tests": 674
+    },
+    "date": "2026-10-26",
+    "display_score": 8.5,
+    "gate": {
+      "minimum_feel": 8,
+      "minimum_overall": 8,
+      "minimum_presentation": 8,
+      "no_must_fix": true,
+      "passed": true
+    },
+    "gate_passed": true,
+    "must_fix": [],
+    "not_checked": [
+      "Physical DS hardware",
+      "Personal human play feel",
+      "Full campaign balance",
+      "Native mini-boss adapter coverage; unhandled targets keep native A"
+    ],
+    "overall": 8.53,
+    "production_files_changed_by_reviewer": false,
+    "production_rom_sha256": "399bf220c8d3f036f95a6a748b24aada27b4b71a6b2d61e3de3c08f7c106875d",
+    "reviewer": "independent subagent /root/review_reel_in_final",
+    "rubric": [
+      {
+        "metric": "presentation",
+        "reason": "Distinct cast, two-arm heave and open-claw recovery read at native resolution in both directions. Scarlet tether follows the catch. Native draw-pose anchor enters the raised heavy forearm/body instead of the floor. It remains a brief utility animation with native line presentation, rather than a major cinematic.",
+        "score": 8.2,
+        "weight": 0.3
+      },
+      {
+        "metric": "feel",
+        "reason": "The second-foe reel preserves the first-foe aerial sequence, catches within roughly 0.37 seconds in the recorded training cases, then accepts chosen Y into five contacts. Native fall/gravity, collision and R release keep agency. No automatic damage or repeated button hold activation.",
+        "score": 8.4,
+        "weight": 0.3
+      },
+      {
+        "metric": "correctness_and_isolation",
+        "reason": "Exact parent hash and immutable output pin; own autoload space and assets; original 32 KiB kit and other files preserved. Saved bit84 requires83. Intrusive weak owners, room/form/death checks, bounded velocities, scoped zero-HP effect suppression and native knockback-preserving cleanup are covered in executable ARM tests and final E labs.",
+        "score": 9.0,
+        "weight": 0.3
+      },
+      {
+        "metric": "evidence_and_lean_implementation",
+        "reason": "Reuses the native controllers, line, saved flags, shop and allocator. Independently reran16 tests and checked full674-test/28-case receipts, paired controls and native purchase/refund/save observations. Failed experiments and presentation-only fixture are disclosed separately. No hardware, player or broad mini-boss verdict.",
+        "score": 8.5,
+        "weight": 0.1
+      }
+    ],
+    "source_sha256": {
+      "tests/test_reel_in.py": "08e1b858ace9187e63677691be955ce9961c110cc32758c41d3809d08984b1e0",
+      "tools/reel_in.py": "a7c941739a4503470780c9b028ec7ac5cd20d703464ad76ad70ee9b1520ce138",
+      "tools/reel_in.s": "db0232f148073c55dd6c4009ad768c70ac98df6a81376e35a5240850eaa9b880",
+      "tools/reel_in_art.py": "80c8ffd85cdf1cfa34c0573e0000b84e108233250ffb6d2ef3150d3c83e55d6d"
+    },
+    "verdict": "Ship this exact production candidate after protected publication checks.",
+    "visual_evidence": {
+      "method": "Native 256x192 frames sampled against recorded GIF durations and consecutive raw captures; no image resizing within review contact sheets.",
+      "pose_only": {
+        "critical_raw_frames": [
+          3708,
+          3710,
+          3712,
+          3714,
+          3716,
+          3718
+        ],
+        "evidence": "work/reel-in/review-final/review-pose-closeups-live.png",
+        "note": "Local live line starts668, absolute3698; frame3594 is not the live tether in this later rpa run. Native jump fixture creates exaggerated entrance-depth appearance. Its overallfalse/chosen_air_y_damages=false is retained; only visual anchor proof is used.",
+        "result": "work/reel-in/review-pose-closeups/result.json",
+        "rom_sha256": "681d36927fd0a32548b931400c906a5aaba01369799cf88ef58fc1bf0ffa8470"
+      },
+      "production": [
+        "work/reel-in/reel-in-extension.gif",
+        "work/reel-in/review-final/extension-timeline.png",
+        "work/reel-in/review-final/regular-timeline.png",
+        "work/reel-in/review-final/mirror-timeline.png",
+        "work/reel-in/review-final/production-boss-timeline.png"
+      ]
+    }
+  },
+  "limits": [
+    "Emulator evidence; no player feel or hardware verdict.",
+    "Native mini-boss target adapter remains deferred; unhandled targets retain native A.",
+    "Training controls use initial HP/layout/ownership fixtures and native AI afterward; normal boss uses native enemy state/HP/positions/AI.",
+    "Separate declared diagnostic pose fixture is presentation evidence only and must never be installed."
+  ],
+  "move": {
+    "ability_bit": 84,
+    "behavior": "One scarlet tether reels an eligible foe below/ahead into claw range; choose Y for native Sky Rake. Heavy targets zip Miguel. R and interruption release.",
+    "event": 393,
+    "input": "Owned Black airborne Up+A",
+    "late_combo": "One 0x1800 upward velocity recoil only after entering from a descending air string; native gravity continues.",
+    "motion": "14 authored continuous cast/heave/recovery samples; private no-attack GMB/GAB",
+    "name": "Reel In",
+    "preserved_native_inputs": [
+      "X",
+      "ground A",
+      "ground Up+A",
+      "air A",
+      "air Down+A",
+      "B",
+      "Red kit"
+    ],
+    "price": 150,
+    "requires_event": 392,
+    "velocity_limits_q12": {
+      "enemy_x": 16384,
+      "enemy_y": 16384,
+      "heavy_zip": 10240
+    },
+    "visual_anchor": "Native MDL bounding center scaled/rotated/translated by live draw pose; cosmetic native-line offsets only"
+  },
+  "parent_rom_sha256": "05072b4173728eb3673b2ede81651d234f3430222bcb2685333da8e16110f300",
+  "preservation": {
+    "clean_rom_read_only": true,
+    "no_actual_save_adoption": true,
+    "no_player_or_enemy_position_writes": true,
+    "no_time_scaling": true,
+    "original_assets_bindings_rooms_audio_and_save_format_preserved": true,
+    "player_kit_32k_unchanged": true
+  },
+  "publication": {
+    "actual_battery_equals_pre_task_and_checkpoint": true,
+    "battery_checkpoint": "before-build-dsv-07c2b3b020400977cf03e37321a28df13aa04861e0fbebb899f9e090f62774ae",
+    "battery_payload_bytes": 512,
+    "battery_payload_sha256": "20cfcf02de45f4948f992e352f010f8505bd849fcaca43b0f5d24e9d9a48c4f8",
+    "battery_sha256": "07c2b3b020400977cf03e37321a28df13aa04861e0fbebb899f9e090f62774ae",
+    "battery_wrapper_bytes": 634,
+    "boot_options_labels": {
+      "American.strings": [
+        "TASM v0.36.0\nPress a button to start",
+        "Options v0.36.0"
+      ],
+      "English.strings": [
+        "TASM v0.36.0\nPress a button to start",
+        "Options v0.36.0"
+      ]
+    },
+    "canonical_clean_publisher_stable_equal": true,
+    "clean_original_unchanged": true,
+    "console": "work/reel-in/publication-console.txt",
+    "previous_rom_metadata_and_recipe_preserved": true,
+    "previous_rom_sha256": "05072b4173728eb3673b2ede81651d234f3430222bcb2685333da8e16110f300",
+    "publisher_exit_code": 0,
+    "rom_sha256": "399bf220c8d3f036f95a6a748b24aada27b4b71a6b2d61e3de3c08f7c106875d",
+    "schema_version": 1,
+    "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+    "version": "0.36.0"
+  },
+  "qualification": {
+    "case_count": 28,
+    "emulator_cases": [
+      {
+        "case": "regular",
+        "checks": {
+          "actual_airborne_arrival": true,
+          "actual_battery_unchanged": true,
+          "chosen_air_y_damages": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-regular/result.json"
+      },
+      {
+        "case": "extend",
+        "checks": {
+          "actual_airborne_arrival": true,
+          "actual_battery_unchanged": true,
+          "chosen_air_y_damages": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "extends_a_real_native_air_combo": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-extend/result.json"
+      },
+      {
+        "case": "mirror",
+        "checks": {
+          "actual_airborne_arrival": true,
+          "actual_battery_unchanged": true,
+          "chosen_air_y_damages": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-mirror/result.json"
+      },
+      {
+        "case": "hold",
+        "checks": {
+          "actual_airborne_arrival": true,
+          "actual_battery_unchanged": true,
+          "chosen_air_y_damages": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-hold/result.json"
+      },
+      {
+        "case": "below",
+        "checks": {
+          "actual_airborne_arrival": true,
+          "actual_battery_unchanged": true,
+          "chosen_air_y_damages": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-below/result.json"
+      },
+      {
+        "case": "below-behind",
+        "checks": {
+          "actual_airborne_arrival": true,
+          "actual_battery_unchanged": true,
+          "chosen_air_y_damages": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-below-behind/result.json"
+      },
+      {
+        "case": "falling",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "native_landing_releases": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-falling/result.json"
+      },
+      {
+        "case": "near",
+        "checks": {
+          "actual_airborne_arrival": true,
+          "actual_battery_unchanged": true,
+          "chosen_air_y_damages": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-near/result.json"
+      },
+      {
+        "case": "wall",
+        "checks": {
+          "actual_airborne_arrival": true,
+          "actual_battery_unchanged": true,
+          "chosen_air_y_damages": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-wall/result.json"
+      },
+      {
+        "case": "unowned",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_reel_started": true
+        },
+        "result": "work/reel-in/e-unowned/result.json"
+      },
+      {
+        "case": "no-parent",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_reel_started": true
+        },
+        "result": "work/reel-in/e-no-parent/result.json"
+      },
+      {
+        "case": "red",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_reel_started": true
+        },
+        "result": "work/reel-in/e-red/result.json"
+      },
+      {
+        "case": "whiff",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_reel_started": true
+        },
+        "result": "work/reel-in/e-whiff/result.json"
+      },
+      {
+        "case": "ground",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_reel_started": true
+        },
+        "result": "work/reel-in/e-ground/result.json"
+      },
+      {
+        "case": "ground-a",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_reel_started": true
+        },
+        "result": "work/reel-in/e-ground-a/result.json"
+      },
+      {
+        "case": "air-a",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_reel_started": true
+        },
+        "result": "work/reel-in/e-air-a/result.json"
+      },
+      {
+        "case": "air-down-a",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_reel_started": true
+        },
+        "result": "work/reel-in/e-air-down-a/result.json"
+      },
+      {
+        "case": "air-x",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_reel_started": true
+        },
+        "result": "work/reel-in/e-air-x/result.json"
+      },
+      {
+        "case": "cancel",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "r_leaves_native_air_state": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-cancel/result.json"
+      },
+      {
+        "case": "cancel-no-air-dodge",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "r_leaves_native_air_state": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-cancel-no-air-dodge/result.json"
+      },
+      {
+        "case": "hurt",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-hurt/result.json"
+      },
+      {
+        "case": "death",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-death/result.json"
+      },
+      {
+        "case": "room",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-room/result.json"
+      },
+      {
+        "case": "form",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-form/result.json"
+      },
+      {
+        "case": "target-dead",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-target-dead/result.json"
+      },
+      {
+        "case": "swap",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "reel_started_once": true,
+          "scarlet_line_lived": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-swap/result.json"
+      },
+      {
+        "case": "shop",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "fresh_continue_keeps_purchase": true,
+          "native_checkpoint_and_hp": true,
+          "native_purchase": true,
+          "native_refund": true,
+          "native_repurchase": true
+        },
+        "result": "work/reel-in/e-shop/result.json"
+      },
+      {
+        "case": "boss",
+        "checks": {
+          "actual_arrival": true,
+          "chosen_air_y_damages": true,
+          "cleanup_complete": true,
+          "heavy_never_launched": true,
+          "heavy_zip": true,
+          "reel_starts": true,
+          "scarlet_line": true,
+          "source_battery_unchanged": true,
+          "utility_zero_damage": true
+        },
+        "result": "work/reel-in/e-boss/result.json"
+      }
+    ],
+    "native_paired_controls": {
+      "all_pass": true,
+      "count": 7,
+      "limits": "Same input/state/action/velocity/relative trajectory; initial layout offsets and a single adjacent-frame clock rollover at native action handoff are disclosed.",
+      "report": "work/reel-in/native-pairs-e.json"
+    },
+    "native_speed_clip": "work/reel-in/reel-in-extension.gif",
+    "post_publication_checks": {
+      "all_passed": true,
+      "document_contract_tests": 8,
+      "focused_tests": 16,
+      "logs": [
+        "work/reel-in/final-reel-tests.log",
+        "work/reel-in/final-release-info-tests.log",
+        "work/reel-in/final-document-tests.log"
+      ],
+      "new_python_files_compile": true,
+      "release_metadata_tests": 8
+    },
+    "source_battery_sha256": "07c2b3b020400977cf03e37321a28df13aa04861e0fbebb899f9e090f62774ae",
+    "strict_tests": {
+      "errors": 0,
+      "failures": 0,
+      "limits": "Two single-process attempts stopped without a complete result and are not counted.",
+      "mode": "strict per-module subprocesses",
+      "report": "work/reel-in/strict-modules/result.json",
+      "skips": 0,
+      "tests": 674
+    }
+  },
+  "rom_sha256": "399bf220c8d3f036f95a6a748b24aada27b4b71a6b2d61e3de3c08f7c106875d",
+  "schema_version": 1,
+  "shop": {
+    "existing_prices_and_ownership_preserved": true,
+    "implemented_rows": 10,
+    "planned_fourteen_total_xp": 2450,
+    "total_xp": 1450
+  },
+  "status": "published-agent-tested-player-verdict-pending",
+  "version": "0.36.0"
+}
