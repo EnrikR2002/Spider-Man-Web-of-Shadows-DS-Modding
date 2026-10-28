@@ -20,6 +20,11 @@ rooms with short necks, and `tools/crane_map.py` is a structure-found, chainable
 post-pass for it (receipt `reference/crane_map.json`; TECHNICAL "Crane Row ring
 map"). It must run last on the composed candidate.
 
+Third slice, same date, **unpublished**: `tools/crane_vista.py` opens the Long
+Arm's backdrop (lattice towers, rail, moored freighter, far quay; collision
+byte-identical; receipt `reference/crane_vista.json`). The map and vista passes
+commute; chain them after the composed `crane_arm` build.
+
 Evidence: 11 new unit checks run the assembled ARM against fixtures and the
 script edits against the published room. Native-input Black no-refill and Red
 hoist fights reach all three acts; Red wins untouched, the Black bot is

@@ -523,13 +523,19 @@ touching rooms with short necks, red locked halves and a dotted Pier exit
 hardware, is the current room obvious, does the bridge over Yard and Dock read
 as the power shortcut.
 
+**Backdrop (built 2026-10-28, unpublished candidate `tools/crane_vista.py`):** the
+Long Arm's steel slab and two tall pillars are gone. See-through lattice towers and
+a deck rail stand in front; a moored freighter, a far container quay and lamps fill
+the bay behind. Scenery only; collision is byte-identical. Player questions: does
+the arena feel open, is the freighter attractive or distracting behind the motor,
+are the lanes and green refuges still obvious.
+
 **Advisor diagnosis, still unbuilt (ranked):** (1) nine rooms are the same
 spawner fight with no ramp (Quay Maw only, Yard Spore on roofs, Freight introduces
 Ballast, Engine/Breakwater quiet, Gantry Maw ambush, Crown the largest crew; use
 existing goal pairs); (2) the crane never acts: Freight could have the hook deliver
 its crew, reusing the hoist objects but needing hook motion for room 97; (3) the
-Long Arm backdrop is a quiet wall: open it onto the harbour with Crown's far-box
-technique; (4) test whether live hazard strips hurt enemies, which would let Web
+Long Arm backdrop is a quiet wall (built, see below); (4) test whether live hazard strips hurt enemies, which would let Web
 Yank throw foes under the hook. Do not add new creature meshes before the Skitter
 verdict, a fourth material pass, rideable loads, timers or counterweight crushes.
 

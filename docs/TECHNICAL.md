@@ -6010,6 +6010,33 @@ Glob like `crane_arm.py` (512 bytes on v0.37.0). Entry type byte 1 marks the
 Office as a save row; it draws no visible sprite (capture), so saves are pixel
 glyphs.
 
+### Long Arm harbour vista (v0.38 candidate, 2026-10-28)
+
+Advisor item 3 and the player's "make Crane Row impressive". **Unpublished,
+agent-tested**; receipt `reference/crane_vista.json`. The published hoist room had
+a 68x24 steel slab (`crane_rooms`, z -22..-12) and two 6x92 pillars
+(`chapter_spectacle_art`, z -42..-34) in front of the bay; the back wall was
+already open, so only the foreground hid the water.
+
+`tools/crane_vista.py` is a post-pass, not an edit of those modules (published
+releases must keep rebuilding byte for byte). It rebuilds the room from the
+published plan (`chapter_spectacle_rooms.geometry(106)`, which reproduces the ROM's
+`zz_R21_AR_LongArm` model, textures and collision exactly), removes exactly the
+slab and pillar quads (refuses if any is missing), adds lattice towers, a rail, a
+far quay on the left half and a freighter behind the arena, and replaces only the
+`.nsbmd` and `.nsbtx` resources. 297 -> 431 quads (Dry Dock, the busiest published
+room, has 531); the compiled collision must be byte-identical or the pass raises.
+Everything added sits behind z -19.9. Applied after or before `crane_map` it gives
+the same ROM, and twice it is a no-op. The Glob grows by about 13.8 KB, which
+needs verified cart padding like every earlier pass.
+
+Lab (melonDS, this worktree): `crane_walk.py view AR_LongArm 40,5 ... --rom` shows
+the vista; the native-input Red hoist fight (`machine --no-heal --purchased-kit`)
+still wins at frame 2058 with lanes, pads, motor and hook readable. Design traps:
+a full-width quay of stacks rebuilt the wall (first candidate hid the freighter),
+and a texture-dark hull looked like a wall until brightened with a red waterline
+and portholes. No player verdict; hardware is untested.
+
 ### Native parent-area maps
 
 The actual runtime order was observed from `0x0213B840`, not guessed:

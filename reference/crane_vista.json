@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "status": "unpublished candidate; agent-tested; no player verdict",
+  "feature": "Long Arm harbour vista",
+  "source": "tools/crane_vista.py",
+  "tests": "tests/test_crane_vista.py",
+  "applies_to": "any Crane Row ROM whose zz_R21_AR_LongArm model is the published one",
+  "parent_checked": "build/version-0.37.0-final/Versioned.nds (c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6)",
+  "candidate": "build/crane-vista-c/Versioned.nds (ignored; regenerate with python tools/crane_vista.py --out build/crane-vista-c --source build/version-0.37.0-final/Versioned.nds)",
+  "candidate_sha256": "48f7dc8ddcfc9e23775b3867aa147780e24890da56a63ae83ac1f57324a9602b",
+  "changed_resources": [
+    "zz_R21_AR_LongArm.nsbmd",
+    "zz_R21_AR_LongArm.nsbtx"
+  ],
+  "quads": {
+    "published": 297,
+    "vista": 431,
+    "busiest_published_room": 531
+  },
+  "collision": "byte-identical (asserted at build time and in tests)",
+  "nitrofs_relocation_bytes": 13824,
+  "composition": "map pass then vista equals vista then map (same ROM sha); both are idempotent",
+  "evidence": {
+    "unit": "7 tests: only the published slab and pillar quads leave, everything added is behind z -19.9, collision identical, quad cap, resource scope, idempotence, order independence with crane_map, other ROMs refused",
+    "engine": "melonDS views along the room and the native-input Red hoist fight (crane_walk machine --no-heal --purchased-kit): wins at frame 2058, victory saved in RAM; frames show lanes, pads, motor and hook readable against the freighter"
+  },
+  "limits": [
+    "Only v0.37.0 was patched and captured; chaining after the cargo-drop build is the composer's job.",
+    "Looks, readability and any frame-rate effect of 134 extra quads are player or hardware judgements; the lab does not time frames.",
+    "No door sweep: no door, solid, object or script changed."
+  ]
+}
