@@ -5,74 +5,60 @@ workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design.
 
 ## Current objective
 
-Crane Row feels lame next to Midnight Line (player, 2026-10-28). An Opus
-advisor diagnosed nine same-spawner rooms with no ramp, a crane that never acts
-and a wall-box hoist with no boss meter. First slice, **unpublished and
-agent-tested only**: `tools/crane_arm.py` makes the Long Arm a three-act fight
-(no start add; Maw backup at two thirds health; 28-frame tells, chained second
-slam and a left-side Maw at a third) with the native boss meter. Receipt:
-`reference/crane_arm.json`; design: ROADMAP "Crane Row"; contracts: TECHNICAL
-"Long Arm three acts".
+Boarding with Wing Ripper is implemented, qualified and published as v0.38.0.
+Previous work was pushed to GitHub main through `28620b1` before implementation.
+Task source is on `codex/2099-boarding`; new work is committed locally, not pushed.
+No additional skill or sound rework is requested.
 
-Second slice, same date, **unpublished**: the player also found the Crane map
-weird and unconnected. `tools/crane_navigation.py` now draws one ring of touching
-rooms with short necks, and `tools/crane_map.py` is a structure-found, chainable
-post-pass for it (receipt `reference/crane_map.json`; TECHNICAL "Crane Row ring
-map"). It must run last on the composed candidate.
+The independent 275 XP Black row (event397/bit88) latches a supported boss during
+a jump or heavy Web Yank zip while holding toward. Y rakes; A tears and kicks
+off; R releases. Native attacks shake the rider off. Twelve Black rows total
+1,925 XP; prior purchase records, abilities and the 32 KiB kit remain exact.
+Conductor and MiniBoss29/2A/2C/2D are qualified; Mega Venom and future Up-pounce
+integration remain unqualified. Riding has no timer or NPC movement writes.
 
-Third slice, same date, **unpublished**: `tools/crane_vista.py` opens the Long
-Arm's backdrop (lattice towers, rail, moored freighter, far quay; collision
-byte-identical; receipt `reference/crane_vista.json`). The map and vista passes
-commute; chain them after the composed `crane_arm` build.
+GPT-6.1 Terra closes all six metrics: presentation8.0, feel8.0, gameplay8.5,
+safety8.5, regression/save8.5 and evidence/scope8.0. The player watched the exact
+normal-speed preview and says it looks pretty good. The bad existing Conductor
+effect is explicitly a separate deferred issue. This is preview-motion
+acceptance, not an in-game, audio-quality or hardware verdict by the model.
 
-Fourth slice, same date, **unpublished**: `tools/crane_drop.py`, composed into
-`tools/crane_arm.py`, makes the crane act. Freight and Dry Dock hang a container
-that lowers on its hook when the player nears, lands, opens and releases the crew;
-Crown's Hunters arrive the same way (TECHNICAL "Crane cargo drops"). Scenery only;
-the published crew spawners and callbacks are untouched. `tools/crane_arm.py` now
-chains the vista and map passes itself: `python tools/crane_arm.py --out
-build/crane-final` gives the composed ROM (sha `372dfecc...`; `--bare` skips them),
-and it also rebases onto a later ROM with `--source <rom>`, asserting every hook,
-room and table and bumping the next minor.
+Crane Row finale, merged onto v0.38.0 and being released as v0.39.0 (player,
+2026-10-28: Crane Row felt lame next to Midnight Line). `tools/crane_arm.py`
+makes the Long Arm a three-act fight with the native boss meter, makes the
+Freight, Dry Dock and Crown crews arrive by crane cargo drop (`crane_drop.py`)
+and chains the ring map (`crane_map.py`) and harbour backdrop (`crane_vista.py`).
+Receipts: `reference/crane_arm.json`, `crane_map.json`, `crane_vista.json`;
+contracts: TECHNICAL "Long Arm three acts", "Crane cargo drops", "Crane Row ring
+map"; design: ROADMAP "Crane Row". Agent-tested only.
 
-Evidence: 24 unit checks for the hoist and cargo drops run the assembled ARM
-against fixtures and the script edits against the published rooms. Native-input
-Red hoist fights win untouched on the cargo and the composed candidates (frame
-2044) with a saved win, 700 quiet frames and a cleared revisit; the Black bot is
-marginal. Lab frame sheets show the drop in Freight and Dry Dock; Crown's was
-traced by variables. Six of nine cleared-room door crossings pass; the other three
-fail identically on v0.37.0. No gameplay or release bytes were published.
 
 ## Published build
 
-Stable `build/Spider-Man-WoS-modded.nds` remains **v0.37.0** and matches its
-immutable publication pin, build metadata, recipe and release history. No ROM
-was rebuilt or published for these tooling fixes. The previous v0.36.0 ROM,
-metadata and recipe remain preserved.
+Stable `build/Spider-Man-WoS-modded.nds` is **v0.38.0**, SHA256
+`21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca`.
+Protected playtest publication matches the canonical clean build, metadata,
+recipe and release history. American/English boot and Options both show
+v0.38.0. Previous v0.37 ROM/metadata and recipe remain preserved.
 
-The freshly read actual Battery has a valid 634-byte DSV wrapper and 512-byte
-payload. It contains later progress than the publication checkpoint; that old
-checkpoint is an observation, not a restore instruction. No research save was
-adopted or written to the actual Battery.
+Latest actual Battery: valid 634-byte DSV, opaque 512-byte payload, SHA256
+`dc013246987865a5cd2d32dffe04e2e23254a233f8b43cd04b5bb6aa2c7133c7`.
+It matches the new before-build checkpoint byte-for-byte; no research save was
+adopted. Future saves may legitimately differ; read them freshly.
 
-Meteor Catch still costs 200 XP after Sky Rake; eleven Black rows total 1,650
-XP. Its prior six-metric Terra gate, 30 gameplay/save cases and six native input
-pairs are recorded in `reference/meteor_catch.json`. Those results belong to the
-published game; this tooling task adds no gameplay qualification or player verdict.
+All 727 strict tests pass with zero skips, plus 26 exact-ROM gameplay/save
+controls, six code-identical exact-position/timing native pairs, independent
+focused/doc tests and both-facing/small-rig every-frame motion review.
+Fixtures and limits are in `reference/boarding.json`; final protection checks
+are `work/boarding/publication-verification.json`. The nested-worktree doc-check
+fix preserves the separate `.claude/worktrees/` checkout and the contract policy.
 
 ## Blockers and next exact action
 
-The composed candidate is agent-tested only. Not verified: the Conductor's boss
-meter in-engine (build with `--no-meter` to drop the change), the full 30-door and
-Midnight sweeps, the Black no-refill fight on the cargo build, any save/Continue
-case and any hardware run; the JIT-warp labs fail in a fresh worktree and
-`crane_walk entry` and three ground-door crossings fail on the published build too
-(DEVELOPMENT "Labs in a fresh git worktree"). Fairness and fun are player gates.
-Next exact action: the player tries `build/crane-final/Versioned.nds` (regenerate it
-with the command above) and gives a verdict; to publish, rebase onto the
-then-current published ROM (the unpublished boarding v0.38 candidate lives on
-another branch), add the profile, run the missing controls serially and use
-`tools/playtest.py build`. Unbuilt follow-ups are in ROADMAP. Meteor Catch's
-verdict is still pending.
+The Crane build is not yet qualified or published. Not verified: the Conductor's
+meter in-engine, the full 30-door and Midnight sweeps, the Black no-refill fight
+on the cargo build, any save/Continue case and any hardware run. Fairness and fun
+are player gates. Next exact action: see the end of this file once the release
+step lands.
 
 Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.

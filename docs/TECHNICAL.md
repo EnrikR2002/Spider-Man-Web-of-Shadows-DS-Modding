@@ -2345,6 +2345,58 @@ does not pass its chosen-Y damage predicate. It qualifies the visual anchor
 only; unmodified E's separate Conductor run qualifies heavy mechanics. Source:
 `work/reel-in/review-final/review.json` and `reference/reel_in.json`.
 
+### Boarding (v0.38 research)
+
+**Published v0.38.0, 2026-10-28 (SHA21c7a051):** the
+exact-v0.37 post-pass adds independent Black event397/bit88 for 275 XP, preserving
+all eleven prior purchase records. Four chained think/resource/update/effect
+hooks use a separate 8 KiB autoload allocation; the original 32 KiB player kit,
+native assets, rooms, audio and opaque save format remain exact. Authored
+latch/hold/rake/rip/kick clips have 6/24/14/15/16 samples and facing-specific
+near-camera SCA variants. Idle GMB collision retains no attack channel.
+
+Only the player receives bounded follow/kick velocities; native collision and
+gravity resolve them. Held toward during an airborne approach or heavy Web Yank
+zip latches the shoulder. Its side stays fixed through boss turns. Native
+player-rig scale calibrates smaller bosses' grip height (1.2 -> eight units;
+1.4 -> ten, bounded); Conductor stays ten. Native attack/committed escape states
+shake the rider off. Hold has no timer. R, hurt/death, form/room changes and
+target loss release. Six horizontal units and eight around the shoulder gate
+both follow and strike, preventing remote hits after collision separation.
+
+Hero/target tokens are native intrusive weak links, with motion/controller,
+class/configuration and room checks. MiniBoss has a separate vtable/subtype/
+parameter/HP adapter (+0xFC/+0x100), never NormalEnemy health or registry layout.
+Its observed target has a two-tick/room stamp. An all-OBJ scan finds one MiniBoss
+placement in each of four original rooms and none in appended rooms. Conductor
+or already-proven ignored Web Yank targets are heavy; ordinary enemies are not
+probed or displaced. Known native hurt/get-up63/65/67/68/74/75/77/79 are not attacks.
+
+Y's built kind4 takes 0x1000 HP; A's takes 0x2000. Strength remains separate.
+Each phase resets its result and hit flag, so an earlier rake/ride cannot skip
+the next tear. Accepted tear immediately kicks off. After lethal destruction,
+only a revalidated rider is needed; no target dereference follows. A changed
+room/owner instead cancels safely. Collision may shorten kick travel.
+
+Original encounters require native Boss Trigger/Gate_Spawn/Miniboss_Spawn setup;
+partial record0/entry-tunnel placements were rejected. Retry defeated flags are
+167/168/170/171 for kinds29/2A/2C/2D. The wall control alone parks its target with
+a precompiled idle thinker, sends fresh Y in hold, and demonstrates separation
+release before acceptance; it does not claim an accepted blocked strike.
+
+Exact candidate: 727 strict tests, 26 gameplay/save controls, clean-source hash
+match and six code-identical native input pairs pass. Both-facing and smallest-
+rig same-ride rakes/tears have every-frame native-size sheets, two-frame action
+entry and stable anchors. Terra closes all six metrics at 8.0..8.5 using its
+code/frame/timing review and the player's direct normal-speed playback verdict.
+The player says motion looks pretty good and explicitly defers the bad existing
+Conductor sound as separate. Neither model claims auditory perception. The
+protected publisher installs exact reviewed bytes, preserves v0.37 ROM/metadata/
+recipe, and leaves the actual battery byte-identical to its validated checkpoint.
+In-game feel, hardware pacing and full-route balance remain unconfirmed.
+Mega Venom and later Talon Pounce integration remain unqualified. Sources: `boarding*`,
+`tests/test_boarding.py`, `reference/boarding.json` and `work/boarding/readable/`.
+
 ### Meteor Catch (v0.37 research)
 
 **Published final Q (2026-10-27; high confidence within the declared fixtures):**
@@ -3781,6 +3833,17 @@ reproduction addresses are in this section.
   segments. Do not infer persistence or cleanup from the room-local name.
 
 #### Character route: concrete engine starting points
+
+**Boarding native MiniBoss probe (2026-10-28, v0.37.0; confirmed in a
+disposable compiled placement fixture):** native kind0x29 in Sewer_Map09 uses
+actor vtable0x0212CE38, interface0x0212CE54, controller0x02133C18 with
+controller+0x44/motion+0 ownership. Actual current/max HP are actor+0xFC/+0x100
+(327680 Q12 in this fixture); actor+0xF4 is subtype0 and +0xF8 is parameter
+0x0213754C. Observed native attacks include states37/38/42/43/45/46/91;
+state0 is also observed. This does not put MiniBoss in the NormalEnemy registry.
+The probe forces an original placement through an init action in a private ROM;
+it proves live layout, not an ordinary campaign entrance or Boarding behavior.
+Source: `work/boarding/mini-probe/result.json` and its frame500 RAM.
 
 Native 24-byte character placements have type 2 at +12, character kind
 at +22, and death EG at +23. Preserve unknown bytes at +16..21. Useful

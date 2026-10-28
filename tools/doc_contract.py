@@ -74,9 +74,28 @@ def digest(text):
 def check_document_set(contract, root=ROOT):
     expected = {doc['path'] for doc in contract['documents']}
     actual = set()
+    registered = set()
+    common = root / '.git'
+    try:
+        if common.is_file():
+            target = common.read_text(encoding='utf-8').strip()
+            if target.startswith('gitdir: '):
+                admin = root / target[8:]
+                common = (admin / (admin/'commondir').read_text(encoding='utf-8').strip()).resolve()
+    except (OSError, ValueError):
+        common = root / '.git'
+    for pointer in (common / 'worktrees').glob('*/gitdir'):
+        try:
+            marker = (pointer.parent / pointer.read_text(encoding='utf-8').strip()).resolve()
+            target = marker.read_text(encoding='utf-8').strip()
+            if target.startswith('gitdir: ') and (marker.parent / target[8:]).resolve() == pointer.parent.resolve():
+                registered.add(marker.parent)
+        except (OSError, ValueError):
+            continue
     for directory, children, files in os.walk(root):
         children[:] = [name for name in children if name not in {'.git', '__pycache__'}
-                       and not (Path(directory) == root and name in {'work', 'build', 'original'})]
+                       and not (Path(directory) == root and name in {'work', 'build', 'original'})
+                       and (Path(directory) / name).resolve() not in registered]
         actual.update((Path(directory) / name).relative_to(root).as_posix()
                       for name in files if name.lower().endswith('.md'))
     return ([f'{name}: Markdown file outside the contract' for name in sorted(actual - expected)] +

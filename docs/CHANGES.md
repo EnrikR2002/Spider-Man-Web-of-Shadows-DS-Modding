@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.37.0. Each section records behavior,
+The latest numbered release below is v0.38.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,47 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.38.0 - 2026-10-28 - Boarding and Wing Ripper
+
+Boarding adds an independent 275 XP Black row (event397 / bit88). Jump into a
+supported boss while holding toward it, or maintain that direction during a
+heavy Web Yank zip, to latch onto its shoulder. Y selects a one-HP rake; A
+selects a two-HP tear and immediate kick-off. The shoulder side stays fixed
+through boss turns, with continuous private latch/hold/rake/rip/kick motion,
+near-side silhouettes and grip height calibrated for native mini-boss scale.
+Movement remains bounded velocity with native gravity and collision; walls and
+ceilings can limit the escape. No boss position or velocity is written.
+
+There is no riding timer. Native boss attacks/committed escapes, R, hurt,
+death, room/form changes and target loss release state and lines. Close-range
+checks prevent damage when collision separates the rider. Each phase clears
+its hit result/flag, preserving rake -> tear and later rides. A lethal tear
+revalidates only the rider before kick-off; it never reads the destroyed target.
+Unowned/Red and ordinary traversal/input paths remain native. All eleven prior
+Black purchase records stay exact; twelve rows total 1,925 XP within the planned
+2,450 XP fourteen-row budget. No new Red skill or save expansion is included.
+
+The Conductor and native MiniBoss kinds29/2A/2C/2D are qualified in their original
+encounters. Mega Venom and later Talon Pounce integration remain unqualified.
+All 727 strict tests pass with zero skips, plus 26 exact-candidate gameplay/save
+controls and same-ride combo/lethal regressions. Six native input pairs on
+identical ARM9/GMB code match state/action/position/timing exactly. Latest copied
+battery purchase, refund, repurchase, in-game save and fresh Continue pass.
+Warp/retry flags, pre-input layouts, healing, named fault/one-HP fixtures and the
+parked wall target are disclosed in `reference/boarding.json`; this is not a
+full-route or difficulty qualification. Production rooms/assets/audio stay exact.
+
+GPT-6.1 Terra closes every metric at 8/10 or above: presentation8.0, feel8.0,
+gameplay8.5, safety8.5, regression/save8.5 and evidence/scope8.0. The player
+watched normal-speed preview footage and says it looks pretty good. The bad
+Conductor effect is explicitly deferred as a separate issue; neither model
+claims auditory perception. Hardware pacing, campaign balance and in-game
+player feel remain unconfirmed. The protected publisher installs exact
+SHA256 `21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca`,
+matching the clean/canonical build, with boot/Options both v0.38.0. The actual
+634-byte DSV matches its checkpoint exactly, and prior ROM/metadata/recipe remain
+preserved. No research save is adopted. Receipt: `reference/boarding.json`.
 
 ## v0.37.0 - 2026-10-27 - Meteor Catch grab, flip and floor slam
 

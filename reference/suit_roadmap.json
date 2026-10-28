@@ -3,7 +3,7 @@
   "archived_expanded_design": "TASM_EXPANDED_ROADMAP.md",
   "black_slot": "2099-classic",
   "current_recipe": "gameplay_profile.json",
-  "current_release": "0.37.0",
+  "current_release": "0.38.0",
   "expanded_design": "../docs/ROADMAP.md",
   "historical_notes_archive": "../docs/archive/legacy-notes.zip",
   "historical_snapshot": {
@@ -26,7 +26,7 @@
     "Dragnet",
     "Vortex"
   ],
-  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 with later player overrides remains authoritative. Player-confirmed Reel In and Web Yank, Sky Rake and v0.37.0 Meteor Catch ship alongside the retained appearance and earlier abilities. Eleven Black rows cost 1,650 XP within the 2,450-XP fourteen-row budget. Preserve purchases, native controls and progression; later skills await individual qualification and player verdicts.",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 with later player overrides remains authoritative. Player-confirmed Reel In, Web Yank and v0.37.0 Meteor Catch ship with Sky Rake alongside the retained appearance and earlier abilities. Boarding preview motion is accepted; its twelve Black rows cost 1,925 XP within the 2,450-XP fourteen-row budget. Preserve purchases, native controls and progression; later skills await individual qualification and player verdicts.",
   "prototype_reference": "../docs/ROADMAP.md#now",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
@@ -150,11 +150,13 @@
             "input": "Owned Black plain air A near an airborne light foe: grab, flip, fall and floor knockdown with one small bounce. Choose Up+A afterward; R releases. Heavy/no-target retains native Hammer Spike; air Up+A Reel In and air Down+A remain.",
             "move": "Meteor Catch",
             "planned_price": 200,
-            "player_confirmed": false,
+            "player_confirmed": true,
             "price": 200,
             "price_provisional": false,
             "price_version": "0.37.0",
-            "requires": "Sky Rake"
+            "requires": "Sky Rake",
+            "player_feedback_date": "2026-10-28",
+            "player_feedback": "Feels pretty good overall; next skill requested."
           },
           {
             "ability_bit": 87,
@@ -167,10 +169,19 @@
           {
             "ability_bit": 88,
             "event_id": 397,
-            "input": "Web Yank zip, Up-pounce or jump into a boss while holding toward it",
+            "input": "Owned Black jump or heavy Web Yank zip while holding toward a supported boss: latch shoulder; Y rake, A tear/kick, R releases. Native attacks shake off. Conductor and MiniBoss29/2A/2C/2D qualified; Mega Venom/later Up-pounce remain unqualified.",
             "move": "Boarding",
             "planned_price": 275,
-            "requires": null
+            "requires": null,
+            "agent_tested": true,
+            "evidence": "boarding.json",
+            "implemented_version": "0.38.0",
+            "price": 275,
+            "price_provisional": false,
+            "price_version": "0.38.0",
+            "player_confirmed": false,
+            "preview_motion_accepted": true,
+            "player_feedback_date": "2026-10-28"
           },
           {
             "ability_bit": 89,
@@ -189,7 +200,7 @@
           "meter"
         ],
         "price_budget": {
-          "implemented_total_xp": 1650,
+          "implemented_total_xp": 1925,
           "native_rows_xp": [
             75,
             125,
@@ -233,12 +244,12 @@
           94,
           95
         ],
-        "status": "meteor-catch-shipped-remaining-slices-designed",
+        "status": "boarding-shipped-remaining-slices-designed",
         "supersedes": "Hunter revision 2 (15 rows, 2026-10-23), revision 1 and the 2026-10-22 catch/carry/crash/chase proposal; local 2026-10-23 seven-row air/guard proposal (archived at docs/TASM_ROADMAP-local-2026-10-23.md)"
       },
       "design_reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
       "id": "2099-classic",
-      "implementation_order": "Player checks v0.37.0 Meteor Catch before the next slice. GPT-6.1 Terra passes all six metrics at least 8/10; Reel In was player-confirmed on 2026-10-27. Native mini-boss adapters remain deferred.",
+      "implementation_order": "Boarding v0.38.0 ships with every Terra metric at least 8/10; preview motion accepted and existing Conductor sound deferred. Player in-game verdict before the next skill. Later Freefall/Talon Pounce/Relentless and capstone remain designed; Mega Venom adapter remains unqualified.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Fuller chest/back/arms on the preserved native rig; unrelated native motion clips retained",
@@ -251,14 +262,15 @@
         "Purchased Web Yank: grounded/combo Down+A gathers up to five distant enemies with independent scarlet lines and weak refs; pure zero-HP pull, no close/rake/upward attack or catch impact flash; Conductor/resistant-target hero zip. Independent bit83/event392; v0.35.1 price 100 XP.",
         "Purchased Sky Rake (bit85/event394, 150 XP): connected private Black-only air claws and heel flip (v0.35.1), with v0.35.2 horizontal launch bias toward a three-unit forward landing. Native upward launch/gravity/collision, chain/hit timing and paid/unpaid R remain. Independent look/feel review on v0.35.1 was 8/10 each; v0.35.2 landing remains player-unconfirmed and was not rechecked in emulator.",
         "Purchased Reel In (bit84/event393, 150 XP, requires Web Yank): airborne Up+A uses one scarlet tether and continuous cast/heave/recovery to bring a foe below/ahead into claw range for chosen Y. Heavy targets zip Miguel. Native velocity/gravity/collision, floor/R/interruption release and unchanged other inputs. Independent review 8.53/10 overall, presentation 8.2 and feel 8.4; player tested it and says it feels great (2026-10-27).",
-        "Purchased Meteor Catch (bit86/event395, 200 XP, requires Sky Rake): private continuous grab/flip/dive/impact, native collision and two-HP floor hit plus one small bounce; native input and cleanup controls qualify. Terra scores every metric at least 8/10; player verdict pending.",
-        "Eleven Black rows total 1,650 XP; the planned fourteen-row total remains 2,450 XP. Existing purchases, prior prices and dependencies remain."
+        "Purchased Meteor Catch (bit86/event395, 200 XP, requires Sky Rake): private continuous grab/flip/dive/impact, native collision and two-HP floor hit plus one small bounce; native input and cleanup controls qualify. Terra scores every metric at least 8/10; overall feel accepted by the player (2026-10-28).",
+        "Purchased Boarding / Wing Ripper (bit88/event397, 275 XP): native jump/heavy-zip shoulder entry, authored Y rake/A tear and kick-off, native attack shake-off and R/interruption/lifetime cleanup. Conductor and four native MiniBoss types qualified; no riding timer or NPC position/velocity writes. All six Terra metrics >=8 and preview motion accepted; in-game verdict remains open.",
+        "Twelve Black rows total 1,925 XP; the planned fourteen-row total remains 2,450 XP. Existing purchases, prior prices and dependencies remain."
       ],
-      "kit": "Hunter revision 3: player-liked pure Down+A Web Yank and Reel In, polished Sky Rake and v0.37.0 Meteor Catch. Talon Lift -> hold B -> Y -> plain air A -> chosen Up+A on the bounce. Air Up+A stays Reel In; air Down+A stays native. R releases. Eleven current Black rows total 1,650 XP; later slices remain designed.",
+      "kit": "Hunter revision 3 retains Talon Lift, pure Down+A Web Yank, Sky Rake, Reel In and player-liked Meteor Catch. Boarding now latches a supported boss during jump/heavy zip while holding toward: Y rakes, A tears/kicks, R releases. Twelve Black rows total 1,925 XP; remaining slices stay designed.",
       "latest_feedback": {
-        "date": "2026-10-27",
-        "source_version": "0.36.0",
-        "summary": "Player tested Reel In and says it feels great. Requested Meteor Catch next with a GPT-6.1 Terra rubric and every metric at least 8/10. v0.37.0 passes all six metrics; this does not imply player acceptance of Meteor Catch."
+        "date": "2026-10-28",
+        "source_version": "0.38.0",
+        "summary": "Player likes Boarding preview motion. Existing Conductor effect sounds bad but is explicitly a separate deferred issue. Terra closes all six metrics8.0..8.5 using direct player playback observation plus its own code/frame/timing review; no in-game/hardware/full-route verdict implied."
       },
       "name": "Spider-Man 2099 - Across the Spider-Verse inspired",
       "prior_design_snapshot": {
@@ -267,8 +279,8 @@
       },
       "replaces_form": "black",
       "selection_date": "2026-10-11",
-      "status": "v0.37.0-meteor-catch-agent-tested-player-verdict-pending",
-      "validation_limit": "See meteor_catch.json: 691 strict tests with zero skips across 95 modules, 30 exact final-ROM gameplay/save cases, six controlled native pairs, six Terra review metrics >=8/10, and protected clean/canonical/stable hash equality with unchanged actual battery/checkpoint. Native mini-boss adapters, player feel, perceptual audio, full-route balance and hardware pacing remain open."
+      "status": "v0.38.0-boarding-shipped-preview-motion-accepted-ingame-verdict-open",
+      "validation_limit": "See boarding.json:727 strict tests,26 gameplay/save controls, six code-identical native pairs, exact clean/canonical/stable hash, unchanged actual battery/checkpoint, all Terra metrics >=8. Original Conductor and four native MiniBoss types qualify; Mega Venom and later Up-pounce remain unqualified. Hardware pacing/full-route balance/in-game feel remain open; Conductor sound deferred."
     },
     {
       "id": "scarlet-kaine",

@@ -4,14 +4,14 @@ Private USA CS5E research. ROMs/extracted assets/builds/saves stay private.
 
 **Play:** `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
 The agent handles the stable ROM, releases and progress backups.
-Current release: **v0.37.0**. **Meteor Catch** costs 200 XP in Black upgrades
-and requires Sky Rake. Tap air **A** near an airborne foe to grab, flip and
-slam it into the floor, then choose a follow-up on the small bounce.
-Try Talon Lift -> hold B -> Y -> A -> Up+A. R lets go.
-Reel In stays on air Up+A; air Down+A keeps the native slam.
-GPT-6.1 Terra rated every review metric **8/10 or higher**.
-Black's eleven rows total 1,650 XP; existing purchases remain. Meteor Catch's
-player feel, hardware pacing and full-route balance await a verdict.
+Current release: **v0.38.0**. **Boarding** costs 275 XP in Black upgrades.
+Jump into a supported boss while holding toward it, or hold toward during a
+heavy Web Yank zip. Y rakes; A tears and kicks off; R releases.
+Boss attacks shake Miguel off. The Conductor and four native mini-boss types
+are qualified. Existing purchases remain; twelve Black rows total 1,925 XP.
+GPT-6.1 Terra rated every metric **8/10 or higher**. The player likes the
+preview motion; in-game feel, hardware pacing and full-route balance remain open.
+The existing Conductor sound issue is deferred at the player's request.
 Details: [Changes](docs/CHANGES.md). What comes next: [Roadmap](docs/ROADMAP.md#now).
 
 ## Find what you need
