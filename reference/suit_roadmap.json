@@ -26,7 +26,7 @@
     "Dragnet",
     "Vortex"
   ],
-  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 with later player overrides remains authoritative. Player-confirmed Reel In and Web Yank, Sky Rake and v0.37.0 Meteor Catch ship alongside the retained appearance and earlier abilities. Eleven Black rows cost 1,650 XP within the 2,450-XP fourteen-row budget. Preserve purchases, native controls and progression; later skills await individual qualification and player verdicts.",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 with later player overrides remains authoritative. Player-confirmed Reel In, Web Yank and v0.37.0 Meteor Catch ship with Sky Rake alongside the retained appearance and earlier abilities. Eleven Black rows cost 1,650 XP within the 2,450-XP fourteen-row budget. Preserve purchases, native controls and progression; later skills await individual qualification and player verdicts.",
   "prototype_reference": "../docs/ROADMAP.md#now",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
@@ -150,11 +150,13 @@
             "input": "Owned Black plain air A near an airborne light foe: grab, flip, fall and floor knockdown with one small bounce. Choose Up+A afterward; R releases. Heavy/no-target retains native Hammer Spike; air Up+A Reel In and air Down+A remain.",
             "move": "Meteor Catch",
             "planned_price": 200,
-            "player_confirmed": false,
+            "player_confirmed": true,
             "price": 200,
             "price_provisional": false,
             "price_version": "0.37.0",
-            "requires": "Sky Rake"
+            "requires": "Sky Rake",
+            "player_feedback_date": "2026-10-28",
+            "player_feedback": "Feels pretty good overall; next skill requested."
           },
           {
             "ability_bit": 87,

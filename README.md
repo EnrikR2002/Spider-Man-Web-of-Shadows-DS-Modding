@@ -11,7 +11,7 @@ Try Talon Lift -> hold B -> Y -> A -> Up+A. R lets go.
 Reel In stays on air Up+A; air Down+A keeps the native slam.
 GPT-6.1 Terra rated every review metric **8/10 or higher**.
 Black's eleven rows total 1,650 XP; existing purchases remain. Meteor Catch's
-player feel, hardware pacing and full-route balance await a verdict.
+overall feel is player-confirmed; hardware pacing and full-route balance remain open.
 Details: [Changes](docs/CHANGES.md). What comes next: [Roadmap](docs/ROADMAP.md#now).
 
 ## Find what you need

@@ -17,7 +17,7 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Meteor Catch v0.37.0 ships; Terra rates every metric at least 8/10. Reel In player-confirmed | Buy Meteor Catch after Sky Rake; try air A -> Up+A on the bounce and give a verdict |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Meteor Catch v0.37.0 player-confirmed overall feel; Boarding requested | Build Boarding with Wing Ripper; GPT-6.1 Terra must rate every chosen metric at least 8/10 |
 | 2 | Taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
@@ -285,7 +285,8 @@ and against heavy targets, the native Hammer Spike runs. The agent-tested move
 has continuous private grab/flip, dive and planted impact clips, one two-HP
 floor hit and one small bounce. R/interruption and target loss release it;
 the player chooses the next attack. GPT-6.1 Terra rates all six metrics at least
-8/10, with presentation/feel 8.0 each. Player feel remains open; Roof Pin is later.
+8/10, with presentation/feel 8.0 each. The player says its overall feel is pretty
+good on 2026-10-28 and requests Boarding next; Roof Pin is later.
 
 **12. Roof Pin (new).** Down+Y on the ground with a downed enemy within about 10
 units in front: the train-roof moment as one short fixed finisher. Pin it with a
@@ -548,6 +549,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-10-28, v0.37.0 Meteor Catch | Tested the previous skill (called meteor crash); feels pretty good overall. Build the next 2099 skill; GPT-6.1 Terra decides metrics and must rate every one at least 8/10. Publish all previous work to GitHub first | Prior commits pushed through 28620b1 before implementation. Meteor Catch's overall feel is player-confirmed. Boarding with Wing Ripper is next in the approved build order; its six-metric review gate is pending |
 | 2026-10-27, v0.36.0 Reel In | Tested Reel In; feels great. Implement the next skill with a GPT-6.1 Terra reviewer creating criteria; every metric must reach 8/10 | Reel In player-confirmed. v0.37.0 ships Meteor Catch after Terra scores presentation/feel/lean 8.0 and gameplay/correctness/evidence 8.5, with no must-fix findings. Meteor Catch remains player-unconfirmed |
 | 2026-10-26, after v0.35.2 | Implement the next 2099 skill; make it fun/impressive; a subagent must review and score it at least 8/10 before completion | v0.36.0 ships Reel In on airborne Up+A. Independent weighted score 8.53/10: presentation 8.2, feel 8.4, correctness9.0, evidence 8.5; no must-fix issue. Its overall and separate presentation/feel gates pass. Agent-tested; no new player verdict implied |
 | 2026-10-25, v0.35.1 Sky Rake finisher | Enemy gets kicked behind Spider-Man instead of landing slightly ahead | v0.35.2 biases the accepted light-target launch toward a three-unit forward landing while retaining native vertical launch and collision. Player confirmation is pending; no emulator check ran for this follow-up |

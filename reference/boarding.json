@@ -1,0 +1,791 @@
+{
+  "actual_battery": {
+    "path": "F:\\Enrik Desktop Files\\PROJECTS\\DsSmuMe\\Battery\\Spider-Man-WoS-modded.dsv",
+    "payload_bytes": 512,
+    "research_save_adopted": false,
+    "sha256_after": "dc013246987865a5cd2d32dffe04e2e23254a233f8b43cd04b5bb6aa2c7133c7",
+    "sha256_before": "dc013246987865a5cd2d32dffe04e2e23254a233f8b43cd04b5bb6aa2c7133c7",
+    "wrapper_bytes": 634
+  },
+  "behavior": [
+    "Owned Black jump/heavy-zip approach while holding toward latches the near shoulder; the side stays fixed when the boss turns.",
+    "Y selects one authored rake for one HP; A selects a two-HP tear and immediate native kick-off on acceptance. Attack strength remains separate from the fifth HP argument.",
+    "Native boss attacks/committed escapes, R, hurt, death, form/room changes and target loss release; known native damage/get-up reactions are not attacks.",
+    "Hold has no ride timer. Only player velocity is written; native collision/gravity remain. Close movement/strike range gates prevent remote hits.",
+    "A lethal accepted tear can kick the still-owned rider after the victim is destroyed; a changed room/owner cancels it safely."
+  ],
+  "candidate": {
+    "path": "build\\boarding-readable\\Versioned.nds",
+    "canonical": "build/version-0.38.0-final/Versioned.nds",
+    "rom_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+    "arm9_sha256": "74b42403eece523064223654d33ae27b6450c1fd17a5fb5d49f62d2d591a20b7",
+    "clean_source_composition_matches": true
+  },
+  "date": "2026-10-28",
+  "feature": "Boarding / Wing Ripper",
+  "limits": [
+    "Initial arena arrival is a compiled four-word entry fixture; original native boss encounter events and retry flags are used. Door/campaign entrance is not qualified.",
+    "Ownership, initial layouts, player healing, explicitly named interruptions and lethal one-HP setup are disposable fixtures on a copied latest battery. Normal boss moves have no NPC position/state/velocity/HP writes.",
+    "The wall target alone is parked. Its fresh hold input ends through separation before strike acceptance; no remote damage is observed.",
+    "Native collision can limit kick travel. Native mini-bosses 29/2A/2C/2D and the Conductor are qualified; Mega Venom has no new adapter. Later Talon Pounce/Freefall/Relentless changes are not implemented.",
+    "Hardware pacing, full-route balance and player acceptance remain unconfirmed. Perceptual audio review depends on reviewer capability; mixed native PCM is retained."
+  ],
+  "media": {
+    "combo": "work/boarding/review-final/combo.mp4",
+    "mirror": "work/boarding/review-final/mirror.mp4",
+    "regular": "work/boarding/review-final/regular.mp4",
+    "timed_frames": "work/boarding/review-final/",
+    "playback_clip": "work/boarding/readable/Boarding-preview.mp4"
+  },
+  "ownership": {
+    "bit": 88,
+    "event": 397,
+    "existing_rows_exact": true,
+    "implemented_black_rows": 12,
+    "parent": null,
+    "planned_full_budget": 2450,
+    "price": 275,
+    "total_xp": 1925
+  },
+  "parent": {
+    "rom_sha256": "c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6",
+    "version": "0.37.0"
+  },
+  "preservation": {
+    "added_resources": [
+      "zz_B38_Latch.sca",
+      "zz_B38_LatchLeft.sca",
+      "zz_B38_Latch.gmb",
+      "zz_B38_Latch.gab",
+      "zz_B38_Hold.sca",
+      "zz_B38_HoldLeft.sca",
+      "zz_B38_Hold.gmb",
+      "zz_B38_Hold.gab",
+      "zz_B38_Rake.sca",
+      "zz_B38_RakeLeft.sca",
+      "zz_B38_Rake.gmb",
+      "zz_B38_Rake.gab",
+      "zz_B38_Rip.sca",
+      "zz_B38_RipLeft.sca",
+      "zz_B38_Rip.gmb",
+      "zz_B38_Rip.gab",
+      "zz_B38_Kick.sca",
+      "zz_B38_KickLeft.sca",
+      "zz_B38_Kick.gmb",
+      "zz_B38_Kick.gab"
+    ],
+    "arm7_and_unrelated_nitrofs_exact": true,
+    "final_build_metadata_sha256": "a8b99fad0205c5b62ea1b9f7d6246bacdf349169667e4ef21c42b1e903d7c675",
+    "modified_resources": [
+      "American.strings",
+      "English.strings",
+      "GlobFiles.txt"
+    ],
+    "native_models_textures_clips_bindings_rooms_audio_exact": true,
+    "parent_sha256": "c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6",
+    "passed": true,
+    "player_kit_32k_exact": true,
+    "rom_sha256": "d900ed98f3a1f39ea89be90c4c092dc3b504bd9bb42317b4f2eca056b588bd18"
+  },
+  "publication": {
+    "installed": false,
+    "required_review_passed": false
+  },
+  "qualification": {
+    "clean_build_log": "work/boarding/clean-readable.log",
+    "document_tests": 9,
+    "focused_boarding_tests": 21,
+    "focused_log": "work/boarding/focused-final.log",
+    "gameplay_save_cases": [
+      {
+        "case": "conductor-lethal0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-lethal0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "chosen_rip": true,
+          "cleanup_complete": true,
+          "kick_off_native_escape": true,
+          "native_hp_hit": true,
+          "native_victory_at_tear": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-rake0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-rake0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "chosen_rake": true,
+          "cleanup_complete": true,
+          "native_hp_hit": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-combo0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-combo0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "chosen_rip": true,
+          "cleanup_complete": true,
+          "kick_off_native_escape": true,
+          "native_hp_hit": true,
+          "owned_gate": true,
+          "rake_then_tear_in_one_ride": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-regular0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-regular0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "chosen_rip": true,
+          "cleanup_complete": true,
+          "kick_off_native_escape": true,
+          "native_hp_hit": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-shake0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-shake0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "native_attack_shakes_off": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-zip0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-zip0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "native_heavy_yank_handoff": true,
+          "native_yank_line_existed": true,
+          "no_jump_substitution": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-mirror0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-mirror0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "chosen_rip": true,
+          "cleanup_complete": true,
+          "kick_off_native_escape": true,
+          "native_hp_hit": true,
+          "owned_gate": true,
+          "rake_then_tear_in_one_ride": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-cancel0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-cancel0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-cancel-no-air-dodge0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-cancel-no-air-dodge0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-swap0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-swap0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-unowned0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-unowned0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-red0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-red0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-hurt0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-hurt0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "fault_releases": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-death0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-death0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "fault_releases": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-room0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-room0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "fault_releases": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-form0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-form0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "fault_releases": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-target-dead0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-target-dead0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "fault_releases": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "conductor-target-stale0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\conductor-target-stale0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "fault_releases": true,
+          "owned_gate": true,
+          "real_target": true
+        },
+        "fixture_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "mini-regular0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\mini-regular0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "chosen_rip": true,
+          "cleanup_complete": true,
+          "kick_off_native_escape": true,
+          "native_hp_hit": true,
+          "owned_gate": true,
+          "real_target": true,
+          "single_native_boss": true
+        },
+        "fixture_sha256": "a295222b40ed95634c5cd031b4238b96ab3e7a9b68d1366a63415737a0ed65e0",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "mini-regular1",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\mini-regular1\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "chosen_rip": true,
+          "cleanup_complete": true,
+          "kick_off_native_escape": true,
+          "native_hp_hit": true,
+          "owned_gate": true,
+          "real_target": true,
+          "single_native_boss": true
+        },
+        "fixture_sha256": "1daf07f1d2d35e492e33d419fdf116a138e4d62b3ea6aa075f791ae873411623",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "mini-regular2",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\mini-regular2\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "chosen_rip": true,
+          "cleanup_complete": true,
+          "kick_off_native_escape": true,
+          "native_hp_hit": true,
+          "owned_gate": true,
+          "real_target": true,
+          "single_native_boss": true
+        },
+        "fixture_sha256": "1f3bdb1c1b152122d9c3cd4f6f705a86dfe5c5647021ccd42742cc796abf20fd",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "mini-regular3",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\mini-regular3\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "chosen_rip": true,
+          "cleanup_complete": true,
+          "kick_off_native_escape": true,
+          "native_hp_hit": true,
+          "owned_gate": true,
+          "real_target": true,
+          "single_native_boss": true
+        },
+        "fixture_sha256": "769675ece8746dd0bd6a478b1c0822353ef39aff4db0501d93ca5c35684ec4dc",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "mini-wall0",
+        "passed": true,
+        "receipt": "work/boarding/readable/wall-idle/result.json",
+        "checks": {
+          "active_close_wall_separation": true,
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "fresh_strike_in_hold": true,
+          "native_wall_stops_player": true,
+          "no_damage_through_wall": true,
+          "owned_gate": true,
+          "real_target": true,
+          "separation_releases_before_attack": true,
+          "single_native_boss": true,
+          "target_remains_across_wall": true
+        },
+        "fixture_sha256": "43b4e673a3a5d6e02c9e57058e6da64f13ec0b4e6ad531953361d88aee49f161",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary, with a precompiled idle-only thinker for that fixture; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "mini-shake0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\mini-shake0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "native_attack_shakes_off": true,
+          "owned_gate": true,
+          "real_target": true,
+          "single_native_boss": true
+        },
+        "fixture_sha256": "a295222b40ed95634c5cd031b4238b96ab3e7a9b68d1366a63415737a0ed65e0",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      },
+      {
+        "case": "shop-regular0",
+        "passed": true,
+        "receipt": "work\\boarding\\requalified\\shop-regular0\\result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "fresh_continue_keeps_purchase": true,
+          "native_checkpoint_and_hp": true,
+          "native_purchase": true,
+          "native_refund": true,
+          "native_repurchase": true
+        },
+        "fixture_sha256": null,
+        "limits": "Latest actual DSV copy; ordinary Continue, native shop inputs, refund/repurchase and in-game save. No purchase/XP/room/HP RAM writes; the earned SRAM snapshot stays private in work/. No research save adoption or player-acceptance claim."
+      },
+      {
+        "case": "mini-zip0",
+        "passed": true,
+        "receipt": "work/boarding/readable/zip-held/result.json",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "native_mini_zip_then_latch": true,
+          "owned_gate": true,
+          "real_target": true,
+          "single_native_boss": true
+        },
+        "fixture_sha256": "a295222b40ed95634c5cd031b4238b96ab3e7a9b68d1366a63415737a0ed65e0",
+        "limits": "Latest actual DSV copy, measured current ownership/XP, compiled initial room arrival, disposable Boarding bit and player healing. Mini uses its own original native arena, placement, encounter script and pre-input player layouts; dialogue is dismissed with A and the defeated flag is reset in disposable RAM. Wall uses a parked native target across Test_Combat01 boundary, with a precompiled idle-only thinker for that fixture; only that target is parked during the move. Otherwise approach/jump/Y/A/R/L, boss AI, HP, gravity and collision remain native. Named hurt/death/room/form/target fault cases inject only that interruption after boarding; lethal alone sets the linked boss to one HP once before the real tear. No research save adoption, campaign entrance, victory, difficulty or player-acceptance claim."
+      }
+    ],
+    "native_control_initial_attempts": "Unisolated comparisons saw unrelated NPC contact/initial displacement. Final controls use initial separation and parked standing AI; native reactions and player physics are unchanged. These are input-route controls, not battle balance.",
+    "native_control_pairs": {
+      "cases": [
+        {
+          "candidate": "work\\boarding\\native-controls\\ground-a-candidate\\result.json",
+          "case": "ground-a",
+          "checks": {
+            "action": {
+              "events": 6,
+              "matching": true,
+              "max_jitter_frames": 0,
+              "max_x_delta_q12": 0
+            },
+            "state": {
+              "events": 6,
+              "matching": true,
+              "max_jitter_frames": 0,
+              "max_x_delta_q12": 0
+            }
+          },
+          "parent": "work\\boarding\\native-controls\\ground-a-parent\\result.json",
+          "passed": true
+        },
+        {
+          "candidate": "work\\boarding\\native-controls\\air-a-candidate\\result.json",
+          "case": "air-a",
+          "checks": {
+            "action": {
+              "events": 9,
+              "matching": true,
+              "max_jitter_frames": 0,
+              "max_x_delta_q12": 0
+            },
+            "state": {
+              "events": 7,
+              "matching": true,
+              "max_jitter_frames": 0,
+              "max_x_delta_q12": 0
+            }
+          },
+          "parent": "work\\boarding\\native-controls\\air-a-parent\\result.json",
+          "passed": true
+        },
+        {
+          "candidate": "work\\boarding\\native-controls\\air-down-a-candidate\\result.json",
+          "case": "air-down-a",
+          "checks": {
+            "action": {
+              "events": 8,
+              "matching": true,
+              "max_jitter_frames": 0,
+              "max_x_delta_q12": 0
+            },
+            "state": {
+              "events": 6,
+              "matching": true,
+              "max_jitter_frames": 0,
+              "max_x_delta_q12": 0
+            }
+          },
+          "parent": "work\\boarding\\native-controls\\air-down-a-parent\\result.json",
+          "passed": true
+        },
+        {
+          "candidate": "work\\boarding\\native-controls\\air-x-candidate\\result.json",
+          "case": "air-x",
+          "checks": {
+            "action": {
+              "events": 8,
+              "matching": true,
+              "max_jitter_frames": 0,
+              "max_x_delta_q12": 0
+            },
+            "state": {
+              "events": 6,
+              "matching": true,
+              "max_jitter_frames": 0,
+              "max_x_delta_q12": 0
+            }
+          },
+          "parent": "work\\boarding\\native-controls\\air-x-parent\\result.json",
+          "passed": true
+        },
+        {
+          "candidate": "work\\boarding\\native-controls\\regular-candidate\\result.json",
+          "case": "regular",
+          "checks": {
+            "action": {
+              "events": 10,
+              "matching": true,
+              "max_jitter_frames": 0,
+              "max_x_delta_q12": 0
+            },
+            "state": {
+              "events": 7,
+              "matching": true,
+              "max_jitter_frames": 0,
+              "max_x_delta_q12": 0
+            }
+          },
+          "parent": "work\\boarding\\native-controls\\regular-parent\\result.json",
+          "passed": true
+        },
+        {
+          "candidate": "work\\boarding\\native-controls\\red-candidate\\result.json",
+          "case": "red",
+          "checks": {
+            "action": {
+              "events": 9,
+              "matching": true,
+              "max_jitter_frames": 0,
+              "max_x_delta_q12": 0
+            },
+            "state": {
+              "events": 8,
+              "matching": true,
+              "max_jitter_frames": 0,
+              "max_x_delta_q12": 0
+            }
+          },
+          "parent": "work\\boarding\\native-controls\\red-parent\\result.json",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "rule": "Owned Boarding bit88 set in both ROMs. Initial enemies placed away from the player before inputs, standing AI parked; native reactions/hits remain. Compare controlled movement from frame30, normalize native idle99/100, retain state/action events for >=2 frames. X exact; transition jitter <=2 video frames."
+    },
+    "strict_log": "work/boarding/strict-readable.log",
+    "strict_skips": 0,
+    "strict_tests": 727,
+    "superseded_wall": "The first final wall trial was interrupted by an old NPC attack. The isolated control parks idle target from the entry prefix with native idle reentry, produces a fresh Y edge in hold, then releases before attack acceptance. It does not claim an accepted blocked strike.",
+    "art_only_scope": "work/boarding/readable/art-scope.json",
+    "native_control_inheritance": "The full ARM9 code/state and every GMB/GAB/native resource are byte-identical to the d900 candidate used for the six exact native input comparisons; only ten private near-camera SCA offsets changed.",
+    "extra_frame_sequences": [
+      {
+        "case": "combo",
+        "receipt": "work/boarding/readable/combo/result.json",
+        "frame_review": "work/boarding/readable/combo/review/metrics.json"
+      },
+      {
+        "case": "mirror-combo",
+        "receipt": "work/boarding/readable/mirror-combo/result.json",
+        "frame_review": "work/boarding/readable/mirror-combo/review/metrics.json"
+      },
+      {
+        "case": "small-combo",
+        "receipt": "work/boarding/readable/small-combo/result.json",
+        "frame_review": "work/boarding/readable/small-combo/review/metrics.json"
+      }
+    ]
+  },
+  "review": {
+    "criteria": [
+      "Presentation",
+      "Feel",
+      "Gameplay correctness",
+      "Safety",
+      "Regression/save",
+      "Evidence/scope"
+    ],
+    "metrics": {
+      "presentation": {
+        "score": 8.0,
+        "basis": "Visual-only review of exact native-size every-frame sequences; near-side silhouette and distinct kick. Playback/audio not perceived."
+      },
+      "feel": {
+        "score": 8.0,
+        "basis": "Timing/motion evidence only: two-video-frame action entry, continuous sampled paths and stable shoulder; not a human fun verdict."
+      },
+      "gameplay_correctness": {
+        "score": 8.5,
+        "basis": "Implemented jump/heavy-zip paths, real HP, native shake-off and honest supported-target coverage."
+      },
+      "safety": {
+        "score": 8.5,
+        "basis": "Ownership/weak references, interrupts, stale-result and lethal/room-change ARM regressions plus live lethal control."
+      },
+      "regression_save": {
+        "score": 8.5,
+        "basis": "Independent focused/doc tests, native pairs and copied latest-battery purchase/refund/repurchase/save/Continue."
+      },
+      "evidence_scope": {
+        "score": 8.0,
+        "basis": "Exact hashes, clean composition, disclosed fixtures and replayable controls."
+      }
+    },
+    "minimum_per_metric": 8,
+    "model": "GPT-6.1 Terra",
+    "status": "numeric-scores-pass-original-playback-gate-pending",
+    "provisional_previous_candidate_metrics": {
+      "presentation": 7.5,
+      "feel": 7.5,
+      "gameplay": 7.5,
+      "safety": 8.5,
+      "regression_save": 8.5,
+      "evidence_scope": 8.0
+    },
+    "latest_qualitative_feedback": "Both-facing and small-rig sequences are readable, track the sampled shoulder, and separate clearly; no obvious large discontinuity beyond the intended kick. Audio/player/hardware verdict remains open.",
+    "all_numeric_metrics_at_least_8": true,
+    "complete_original_gate_passed": false,
+    "unresolved": "Terra cannot watch normal-speed playback or hear audio through its interface; root audio tool also explicitly rejects audio input. Actual playback observation is requested from the player before asking Terra to close its gate.",
+    "frame_evidence": [
+      "work/boarding/readable/combo/review/metrics.json",
+      "work/boarding/readable/mirror-combo/review/metrics.json",
+      "work/boarding/readable/small-combo/review/metrics.json"
+    ]
+  },
+  "runtime": {
+    "allocation_bytes": 8192,
+    "bytes": 4908,
+    "entry": 35077280,
+    "hooks": [
+      {
+        "old": 3926063378,
+        "site": 34293896,
+        "target": 35077280
+      },
+      {
+        "old": 3926133268,
+        "site": 34014340,
+        "target": 35077284
+      },
+      {
+        "old": 3926129758,
+        "site": 34028384,
+        "target": 35077288
+      },
+      {
+        "old": 3926095400,
+        "site": 34165820,
+        "target": 35077292
+      }
+    ],
+    "shop": 35076896,
+    "source_offset": 1474464,
+    "start": 35076640,
+    "state": 35076640,
+    "values": {
+      "BOSS_CONFIG": 34972972,
+      "HOLD_GAB": 5988,
+      "HOLD_GMB": 5987,
+      "HOLD_LEFT_SCA": 5986,
+      "HOLD_SCA": 5985,
+      "KICK_GAB": 6000,
+      "KICK_GMB": 5999,
+      "KICK_LEFT_SCA": 5998,
+      "KICK_SCA": 5997,
+      "LATCH_GAB": 5984,
+      "LATCH_GMB": 5983,
+      "LATCH_LEFT_SCA": 5982,
+      "LATCH_SCA": 5981,
+      "METEOR_STATE": 35072544,
+      "OLD_ANIMATION": 35073244,
+      "OLD_EFFECT": 35073252,
+      "OLD_THINK": 35073240,
+      "OLD_UPDATE": 35073248,
+      "RAKE_GAB": 5992,
+      "RAKE_GMB": 5991,
+      "RAKE_LEFT_SCA": 5990,
+      "RAKE_SCA": 5989,
+      "REEL_STATE": 35068448,
+      "RIP_GAB": 5996,
+      "RIP_GMB": 5995,
+      "RIP_LEFT_SCA": 5994,
+      "RIP_SCA": 5993,
+      "SHARED_ACTIVE": 35057660,
+      "SHARED_OWNED": 35057080,
+      "SHARED_RAM_OK": 35057036,
+      "SHARED_UNLINK_TARGET": 35059224,
+      "SHARED_XY": 35057276,
+      "STATE": 35076640,
+      "WEB_HAND": 34955016,
+      "WEB_HIT": 34955632,
+      "WEB_RELEASE": 34955200,
+      "YANK_CLEAR": 35062728,
+      "YANK_RECORDS": 35060256,
+      "YANK_STATE": 35056160
+    }
+  },
+  "schema_version": 1,
+  "source_files": [
+    "tools/boarding.py",
+    "tools/boarding.s",
+    "tools/boarding_art.py",
+    "tools/boarding_lab.py",
+    "tests/test_boarding.py"
+  ],
+  "status": "implementation-qualified-playback-gate-pending",
+  "version": "0.38.0",
+  "prior_qualified_candidate": {
+    "arm9_sha256": "74b42403eece523064223654d33ae27b6450c1fd17a5fb5d49f62d2d591a20b7",
+    "canonical": "build\\version-0.38.0-final\\Versioned.nds",
+    "clean_source_composition_matches": true,
+    "path": "build\\boarding-final\\Versioned.nds",
+    "rom_sha256": "d900ed98f3a1f39ea89be90c4c092dc3b504bd9bb42317b4f2eca056b588bd18"
+  }
+}
