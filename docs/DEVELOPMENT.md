@@ -246,6 +246,8 @@ Run topic tests while iterating, then the appropriate broader suite once the
 candidate is stable. Example enemy checks:
 `python -m unittest tests.test_creature_forge tests.test_creature_texture_fix tests.test_chapter_renewal -q`.
 Inspect the final summary and exit status, including when output is redirected.
+Qualification CLIs return exit 1 for failed cases or batches; direct navigator
+functions still return report dictionaries for callers.
 Reuse earlier controls only with an explicit byte-scope or unchanged-mechanics
 argument; identify which ROM was actually tested. Re-run after relevant changes,
 failures or unresolved concerns, rather than repeatedly running every suite.
@@ -353,7 +355,10 @@ to verify the installed build. Raw builds do not perform publication safeguards.
 Close DeSmuME and publish through `python tools/playtest.py build`. The publisher
 checks the actual battery before/after, creates its content-addressed checkpoint,
 requires matching candidate metadata, retains the previous ROM/build metadata,
-rejects reused versions and installs the stable ROM. Caught publication errors
+rejects differing existing rollback ROM/metadata copies and reused versions,
+then installs the stable ROM. Checkpoints appear under their final name only
+after both data and metadata pass verification; caught checkpoint failures can
+be retried without removing a partial named snapshot. Caught publication errors
 restore the prior ROM, metadata, receipt and history; incomplete recovery reports
 the failed paths and backup location. Abrupt termination/power loss still requires
 manual recovery from the retained artifacts. Reinstalling identical bytes keeps
@@ -408,6 +413,10 @@ the archive hash. Read with `python tools/doc_archive.py list <topic>`, then
 `read <name> --toc` or a bounded `--section`. Verify the archive and the whole
 documentation contract with
 `python -m unittest tests.test_doc_archive tests.test_document_layout -q`.
+Archive appends retain the original ZIP/index pair until the new pair verifies.
+Caught failures restore both files. Recovery write errors identify the retained
+`.archive-recovery-*` directory; an interruption can leave it beside the archive.
+Preserve that pair for manual recovery after an interruption or failed rollback.
 A documentation-only cleanup does not add emulator coverage or player acceptance.
 
 ## Local runtime dependencies

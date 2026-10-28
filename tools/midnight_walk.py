@@ -587,6 +587,7 @@ def run_child(rom_path, name, spec=None, tag=''):
     w.write_json(OUT / f'walk-{name}{tag}.json', report)
     w.write_json(OUT / f'walk-{name}{tag}-{source_hash[:8]}.json', report)
     print('ML_WALK_REPORT ' + str(OUT / f'walk-{name}{tag}.json'), flush=True)
+    return report
 
 
 def run(rom, name, tag=''):
@@ -635,11 +636,14 @@ def main(argv=None):
         return 0 if report['passed'] else 1
     if args.command == 'all' and metadata.exists() and json.loads(metadata.read_text()).get('midnight_rework'):
         from tools import midnight_rework_lab
-        return midnight_rework_lab.main(['all','--rom',args.rom,'--jobs',str(args.jobs)])
+        report=midnight_rework_lab.main(['all','--rom',args.rom,'--jobs',str(args.jobs)])
+        return 0 if report['passed'] else 1
     if args.command == 'list':
         for name, (start, spawn, preset, steps) in routes().items(): print(f'{name}: from {start}, {len(steps)} steps')
-    elif args.command == '_child': run_child(args.rom, args.name, tag=args.tag)
-    elif args.command == 'run': print(json.dumps(summary(run(args.rom, args.name, args.tag))))
+    elif args.command in ('run', '_child'):
+        report = run_child(args.rom, args.name, tag=args.tag) if args.command == '_child' else run(args.rom, args.name, args.tag)
+        if args.command == 'run': print(json.dumps(summary(report)))
+        return 0 if report['passed'] else 1
     else:
         from concurrent.futures import ThreadPoolExecutor
         results, pending, attempts = {}, list(routes()), {}

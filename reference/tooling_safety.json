@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-28",
+  "published_version": "0.37.0",
+  "scope": "Six repository-audit tooling fixes; no ROM build or publication.",
+  "fixes": [
+    {
+      "id": 1,
+      "change": "Failed qualification cases and batches exit 1; navigator report APIs remain available.",
+      "sources": [
+        "tools/creature_forge_lab.py",
+        "tools/chapter_renewal_lab.py",
+        "tools/crane_walk.py",
+        "tools/midnight_rework_lab.py",
+        "tools/midnight_walk.py",
+        "tools/midnight_line.py"
+      ],
+      "tests": [
+        "tests.test_lab_commands"
+      ]
+    },
+    {
+      "id": 2,
+      "change": "Enemy scans require motion ownership to point back to the actor; owned zero-HP actors remain observable.",
+      "sources": [
+        "tools/kit_lab.py"
+      ],
+      "tests": [
+        "tests.test_kit_lab"
+      ]
+    },
+    {
+      "id": 3,
+      "change": "Verify staged checkpoints before promoting the final name; failed writes can retry and listings ignore internal staging.",
+      "sources": [
+        "tools/save_backups.py",
+        "tools/playtest.py"
+      ],
+      "tests": [
+        "tests.test_save_backups",
+        "tests.test_playtest"
+      ]
+    },
+    {
+      "id": 4,
+      "change": "Prepare archive changes before installation, recover both original files on failure, and retain recovery copies if rollback fails or is interrupted.",
+      "sources": [
+        "tools/doc_archive.py"
+      ],
+      "tests": [
+        "tests.test_doc_archive"
+      ]
+    },
+    {
+      "id": 5,
+      "change": "Refresh the spectacle lab's copy from the configured current battery on every invocation.",
+      "sources": [
+        "tools/chapter_spectacle_lab.py"
+      ],
+      "tests": [
+        "tests.test_lab_commands"
+      ]
+    },
+    {
+      "id": 6,
+      "change": "Reject an existing rollback metadata copy that differs from the prior stable metadata.",
+      "sources": [
+        "tools/playtest.py"
+      ],
+      "tests": [
+        "tests.test_playtest"
+      ]
+    }
+  ],
+  "validation": {
+    "focused": {
+      "passed": true,
+      "tests": 45,
+      "skips": 0,
+      "log": "work/ponytail-fixes-focused.log"
+    },
+    "full_strict": {
+      "passed": true,
+      "tests": 705,
+      "skips": 0,
+      "seconds": 251.926,
+      "module_subprocesses": 96,
+      "workers": 3,
+      "receipt": "work/ponytail-fixes-strict/summary.json"
+    },
+    "final_archive_source": {
+      "passed": true,
+      "tests": 8,
+      "skips": 0,
+      "log": "work/ponytail-fixes-archive-final.log",
+      "detail": "Includes a second interruption during rollback; verifies that both original recovery files survive."
+    },
+    "private_dependencies": "New command regressions import with Keystone, NumPy and Pillow deliberately unavailable.",
+    "documentation": {
+      "command": "python tools/doc_contract.py check",
+      "log": "work/ponytail-fixes-documentation.log"
+    }
+  },
+  "protected_files": {
+    "before": {
+      "release_version": "0.37.0",
+      "clean_rom_sha256": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203",
+      "stable_rom_sha256": "c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6",
+      "actual_battery_sha256": "dc013246987865a5cd2d32dffe04e2e23254a233f8b43cd04b5bb6aa2c7133c7",
+      "battery_wrapper_bytes": 634,
+      "battery_payload_bytes": 512
+    },
+    "after": {
+      "release_version": "0.37.0",
+      "clean_rom_sha256": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203",
+      "stable_rom_sha256": "c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6",
+      "actual_battery_sha256": "dc013246987865a5cd2d32dffe04e2e23254a233f8b43cd04b5bb6aa2c7133c7",
+      "battery_wrapper_bytes": 634,
+      "battery_payload_bytes": 512
+    },
+    "unchanged": true,
+    "note": "Battery hashes are dated observations of the actual configured save, not restore instructions."
+  },
+  "limits": [
+    "CLI tests use mocked duel reports or synthetic door manifests; no emulator was started.",
+    "Fault injection uses disposable files and stale-actor tests use synthetic RAM; the actual player save is never a fixture.",
+    "No new in-engine traversal, presentation, gameplay feel, hardware timing or perceptual audio qualification.",
+    "Abrupt termination can require manual recovery from the retained archive ZIP/index pair."
+  ]
+}

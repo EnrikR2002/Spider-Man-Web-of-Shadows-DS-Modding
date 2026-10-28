@@ -1,6 +1,7 @@
 """Archive integrity and bounded reading; no ROM/emulator required."""
 import hashlib
 import io
+from contextlib import ExitStack
 import shutil
 import tempfile
 import unittest
@@ -11,6 +12,65 @@ from tools import doc_archive as docs
 
 
 class DocumentationArchiveTests(unittest.TestCase):
+    def copied_archive(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        index_path = Path(temporary.name) / 'index.json'
+        shutil.copy(docs.INDEX, index_path)
+        shutil.copy(docs.INDEX.with_name('legacy-notes.zip'), index_path.with_name('legacy-notes.zip'))
+        return index_path
+
+    def test_failed_archive_update_restores_both_files_and_allows_retry(self):
+        write = docs.w.atomic_write
+        for failure in ('legacy-notes.zip', 'index.json', 'verification'):
+            with self.subTest(failure=failure):
+                index_path = self.copied_archive()
+                before = {p: p.read_bytes() for p in (index_path, index_path.with_name('legacy-notes.zip'))}
+                count = docs.verify_archive(index_path)
+                failed = False
+                def fail_after_write(path, data, sources=()):
+                    nonlocal failed
+                    write(path, data, sources)
+                    if Path(path) == index_path.with_name(failure) and not failed:
+                        failed = True
+                        raise OSError('injected archive failure')
+                with ExitStack() as stack:
+                    stack.enter_context(patch.object(docs.w, 'atomic_write', side_effect=fail_after_write))
+                    if failure == 'verification':
+                        stack.enter_context(patch.object(docs, 'verify_archive', side_effect=ValueError('verification failed')))
+                    with self.assertRaises((OSError, ValueError)):
+                        docs.add_entry('RETRY.md', b'# Retry\n', title='Retry', snapshot_date='2026-10-28',
+                                       source_revision='fixture', index_path=index_path)
+                for path, raw in before.items(): self.assertEqual(path.read_bytes(), raw)
+                self.assertEqual(docs.verify_archive(index_path), count)
+                self.assertEqual(list(index_path.parent.glob('.archive-recovery-*')), [])
+                self.assertEqual(docs.add_entry('RETRY.md', b'# Retry\n', title='Retry', snapshot_date='2026-10-28',
+                                               source_revision='fixture', index_path=index_path), count+1)
+
+    def test_incomplete_archive_rollback_retains_exact_recovery_copies(self):
+        for recovery_error in (OSError, KeyboardInterrupt):
+            with self.subTest(recovery_error=recovery_error):
+                index_path = self.copied_archive(); archive = index_path.with_name('legacy-notes.zip')
+                before = {p: p.read_bytes() for p in (index_path, archive)}
+                write = docs.w.atomic_write
+                failed = False
+                def fail_update_and_archive_recovery(path, data, sources=()):
+                    nonlocal failed
+                    path = Path(path)
+                    if path == archive and failed: raise recovery_error('archive recovery locked')
+                    write(path, data, sources)
+                    if path == index_path and not failed:
+                        failed = True
+                        raise OSError('index write failed')
+                message = 'rollback incomplete.*Backups:' if recovery_error is OSError else 'recovery locked'
+                with patch.object(docs.w, 'atomic_write', side_effect=fail_update_and_archive_recovery):
+                    with self.assertRaisesRegex(recovery_error, message):
+                        docs.add_entry('FAILED.md', b'# Failed\n', title='Failed', snapshot_date='2026-10-28',
+                                       source_revision='fixture', index_path=index_path)
+                recovery, = index_path.parent.glob('.archive-recovery-*')
+                for path, raw in before.items(): self.assertEqual((recovery/path.name).read_bytes(), raw)
+                self.assertEqual(index_path.read_bytes(), before[index_path])
+
     def test_complete_historical_archive_hashes(self):
         index, archive = docs.load_index()
         self.assertEqual(docs.verify_archive(), len(index['entries']))

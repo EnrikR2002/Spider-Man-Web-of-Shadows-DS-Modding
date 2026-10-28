@@ -1,7 +1,10 @@
 import json
+import io
+from contextlib import redirect_stdout
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 from tools import save_backups as saves
 from tools import wos_tool as w
 
@@ -41,6 +44,28 @@ class SaveBackupTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'mismatch'): saves.restore('checkpoint', self.save, self.store)
         self.assertEqual(self.save.read_bytes(), self.original)
 
+    def test_failed_backup_leaves_no_partial_snapshot_and_can_retry(self):
+        write = w.atomic_write
+        for filename in ('save.dsv', 'snapshot.json'):
+            with self.subTest(filename=filename):
+                def fail_after_write(path, data, sources=()):
+                    write(path, data, sources)
+                    if Path(path).name == filename: raise OSError('injected checkpoint failure')
+                with patch.object(w, 'atomic_write', side_effect=fail_after_write):
+                    with self.assertRaisesRegex(OSError, 'injected checkpoint failure'):
+                        saves.backup(self.save, 'checkpoint', self.store)
+                self.assertEqual(list(self.store.iterdir()), [])
+                self.assertEqual(self.save.read_bytes(), self.original)
+        with patch.object(saves, 'load_snapshot', side_effect=ValueError('verification failed')):
+            with self.assertRaisesRegex(ValueError, 'verification failed'):
+                saves.backup(self.save, 'checkpoint', self.store)
+        with patch.object(Path, 'rename', side_effect=OSError('rename failed')):
+            with self.assertRaisesRegex(OSError, 'rename failed'):
+                saves.backup(self.save, 'checkpoint', self.store)
+        self.assertEqual(list(self.store.iterdir()), [])
+        saves.backup(self.save, 'checkpoint', self.store)
+        self.assertEqual(saves.load_snapshot('checkpoint', self.store)[1], self.original)
+
     def test_corrupt_metadata_and_format_conversion_rejected(self):
         saves.backup(self.save, 'checkpoint', self.store)
         with self.assertRaisesRegex(ValueError, 'convert'):
@@ -64,6 +89,23 @@ class SaveBackupTests(unittest.TestCase):
         path = self.store / 'checkpoint/save.dsv'
         with self.assertRaises(ValueError): saves.restore('checkpoint', path, self.store)
         with self.assertRaises(ValueError): saves.backup(path, 'copy', self.store)
+
+    def test_checkpoint_lists_ignore_incomplete_internal_staging(self):
+        from tools import playtest
+        saves.backup(self.save, 'checkpoint', self.store)
+        (self.store/(saves.STAGING_PREFIX+'interrupted')).mkdir()
+        output = io.StringIO()
+        with redirect_stdout(output): playtest.list_snapshots(self.store)
+        self.assertIn('checkpoint:', output.getvalue())
+        self.assertNotIn('interrupted', output.getvalue())
+        load = saves.load_snapshot
+        output = io.StringIO()
+        with patch.object(saves, 'STORE', self.store), \
+             patch.object(saves, 'load_snapshot', side_effect=lambda name: load(name, self.store)), \
+             redirect_stdout(output):
+            self.assertEqual(saves.main(['list']), 0)
+        self.assertIn('checkpoint ', output.getvalue())
+        self.assertNotIn('interrupted', output.getvalue())
 
     def test_existing_bad_safety_snapshot_blocks_restore(self):
         saves.backup(self.save, 'checkpoint', self.store)

@@ -168,8 +168,11 @@ def build(mods='mods', config=CONFIG, store=saves.STORE):
         if rollback.exists() and rollback.read_bytes() != previous:
             raise ValueError('Existing ROM rollback copy differs; refusing publication')
         if not rollback.exists(): w.atomic_write(rollback, previous, (mod.DEFAULT_ROM,))
-        if previous_log is not None and not rollback.with_suffix('.build.json').exists():
-            w.atomic_write(rollback.with_suffix('.build.json'), previous_log)
+        if previous_log is not None:
+            rollback_log = rollback.with_suffix('.build.json')
+            if rollback_log.exists() and rollback_log.read_bytes() != previous_log:
+                raise ValueError('Existing build metadata rollback copy differs; refusing publication')
+            if not rollback_log.exists(): w.atomic_write(rollback_log, previous_log)
     try:
         w.atomic_write(ROM, candidate, (mod.DEFAULT_ROM,))
         if ROM.read_bytes() != candidate: raise ValueError('Published ROM differs from validated candidate')
@@ -226,7 +229,7 @@ def list_snapshots(store=saves.STORE):
         print('No checkpoints yet.')
         return
     for directory in sorted(Path(store).iterdir(), key=lambda p: p.name):
-        if directory.is_dir():
+        if directory.is_dir() and not directory.name.startswith(saves.STAGING_PREFIX):
             metadata, _ = saves.load_snapshot(directory.name, store)
             print(f'{directory.name}: {metadata["size"]} bytes; {metadata["sha256"]}')
 

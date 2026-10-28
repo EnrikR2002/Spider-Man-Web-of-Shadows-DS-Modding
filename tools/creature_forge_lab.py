@@ -51,11 +51,11 @@ def install(rom,capture=0):
         k._run=dense
     return meta
 
-def main():
+def main(argv=None):
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('command',choices=('view','passive','duel','duel-all','boss','phase','roster','idle','pair','continue'))
     ap.add_argument('--rom',type=Path,required=True);ap.add_argument('--creature',choices=d.STYLES,default='warden');ap.add_argument('--capture-every',type=int,default=0)
     ap.add_argument('--tag',default='');ap.add_argument('--black',action='store_true');ap.add_argument('--no-heal',action='store_true');ap.add_argument('--persist',action='store_true')
-    args=ap.parse_args()
+    args=ap.parse_args(argv)
     if args.command=='duel-all':
         from concurrent.futures import ThreadPoolExecutor,as_completed
         import subprocess
@@ -74,7 +74,7 @@ def main():
             for future in as_completed([pool.submit(run,style) for style in d.STYLES[:6]]):
                 style,value=future.result();cases[style]=value;print(json.dumps([style,value]),flush=True)
         report=dict(rom_sha256=w.sha256(args.rom.read_bytes()),passed=all(v['passed'] for v in cases.values()),cases=cases)
-        w.write_json(OUT/('duel-all'+args.tag+'.json'),report);return
+        w.write_json(OUT/('duel-all'+args.tag+'.json'),report);return 0 if report['passed'] else 1
     q.RUN_TAG=args.tag
     if args.command=='duel' and args.creature in ('maw','ballast','spore'):
         q.OUT=OUT
@@ -82,7 +82,7 @@ def main():
             native=k._run
             def dense(*a,**kw):kw['caps']=tuple(range(0,kw['frames'],args.capture_every));return native(*a,**kw)
             k._run=dense
-        result=q.duel(args.rom,args.creature);print(json.dumps(dict(passed=result.get('passed'))));return
+        result=q.duel(args.rom,args.creature);print(json.dumps(dict(passed=result.get('passed'))));return 0 if result['passed'] else 1
     install(args.rom,args.capture_every)
     if args.command=='view':
         if args.creature in ('skitter','warden','eye'):q.ISOLATE=args.creature
@@ -98,4 +98,5 @@ def main():
     elif args.command=='pair':result=q.pair(args.rom,'ML_Station',2)
     else:result=q.run(args.rom,'forge-idle','ML_Station',1,[mw.wait(1500)],combat=True)
     print(json.dumps(dict(passed=result.get('passed') if isinstance(result,dict) else result)))
-if __name__=='__main__':main()
+    return 0 if (result['passed'] if isinstance(result,dict) else result) else 1
+if __name__=='__main__':raise SystemExit(main())

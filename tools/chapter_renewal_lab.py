@@ -212,7 +212,7 @@ def continue_earned(rom):
     for frame in (3000,4100):
         ram=(captures/f'ram-{frame:05d}.bin').read_bytes();stats=w.u32(ram,k.STATS_POINTER-p.BASE)-p.BASE
         flags=int.from_bytes(ram[stats+0x1c:stats+0x44],'little');sample=p.sample(ram)
-        enemies=[e for e in k.enemies(ram) if e['hp']>0 and w.u32(ram,w.u32(ram,e['actor']-p.BASE+0x30)-p.BASE)==e['actor']]
+        enemies=[e for e in k.enemies(ram) if e['hp']>0]
         rows.append(dict(frame=frame,room=w.u32(ram,stats),earned=bool(flags>>147&1),position=sample['position_q12_candidate'],enemies=len(enemies)))
     checks=dict(continue_at_sanctuary=rows[0]['room']==87,earned_flag=all(r['earned'] for r in rows),
         native_return_to_cleared_boss=rows[1]['room']==89 and rows[1]['enemies']==0,source_save_unchanged=w.sha256(save.read_bytes())==before)
@@ -249,7 +249,8 @@ def main(argv=None):
         with ThreadPoolExecutor(args.jobs) as pool:
             for future in as_completed([pool.submit(one,s) for s in ('maw','ballast','spore','skitter','warden','eye')]):
                 s,passed=future.result();results[s]=passed;print(json.dumps([s,passed]),flush=True)
-        w.write_json(OUT/'duel-all.json',dict(rom_sha256=w.sha256(Path(args.rom).read_bytes()),passed=all(results.values()),creatures=results));return results
+        report=dict(rom_sha256=w.sha256(Path(args.rom).read_bytes()),passed=all(results.values()),creatures=results)
+        w.write_json(OUT/'duel-all.json',report);return report
     if args.command=='_crane':
         cw.OUT=CRANE_OUT
         lab.JIT=True;k._run=lab.static_warp_runner(k._run)
@@ -338,4 +339,4 @@ def main(argv=None):
         limits='Native arrivals and controller movement. Enemies parked and player healed. Initial warp compiled into disposable ROM before JIT. No traversal placement fixtures.')
     w.write_json(OUT/'midnight-doors.json',result);print(json.dumps(result));return result
 
-if __name__=='__main__':main()
+if __name__=='__main__':raise SystemExit(0 if main()['passed'] else 1)

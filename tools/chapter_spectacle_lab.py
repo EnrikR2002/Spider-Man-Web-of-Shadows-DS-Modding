@@ -2,7 +2,7 @@
 import argparse,json,sys,ctypes as ct,struct,wave
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
-from tools import creature_forge_lab as forge,chapter_renewal_lab as q,midnight_walk as mw,kit_lab as k,wos_tool as w
+from tools import creature_forge_lab as forge,chapter_renewal_lab as q,midnight_walk as mw,kit_lab as k,wos_tool as w,playtest
 OUT=ROOT/'work/chapter-spectacle'
 
 
@@ -13,9 +13,9 @@ def main():
     p.add_argument('--creature',choices=('skitter','warden','eye'),default='warden');a=p.parse_args()
     if a.no_heal and a.case in ('duel','freight','crown','phase'):raise ValueError('This control deliberately heals the player; use the no-heal boss controls for a separate survival check')
     OUT.mkdir(parents=True,exist_ok=True)
-    config=json.loads((ROOT/'work/playtest.json').read_text());actual=Path(config['battery_directory'])/'Spider-Man-WoS-modded.dsv'
+    actual=playtest.current_save()
     copied=OUT/'current-player-copy.dsv'
-    if not copied.exists():copied.write_bytes(actual.read_bytes())
+    w.atomic_write(copied,actual.read_bytes(),(actual,))
     k.TRAINING_SAVE=copied
     if a.case in ('arm-continue','arm-retry-continue'):
         from tools import emulator_smoke as emu,player_trace as pt

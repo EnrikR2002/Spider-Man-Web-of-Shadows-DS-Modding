@@ -11,12 +11,14 @@ import json
 from pathlib import Path
 import re
 import sys
+import tempfile
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from tools import wos_tool as w
 
 STORE = w.PROJECT / 'work/save-backups'
 SUFFIXES = {'.sav', '.dsv'}
 MAX_SIZE = 16 * 1024 * 1024
+STAGING_PREFIX = '.snapshot-'
 
 
 def snapshot_path(store, name):
@@ -56,12 +58,14 @@ def backup(source, name, store=STORE):
     data = read_save(source)
     metadata = {'schema_version': 1, 'source_path': str(source.resolve()),
                 'suffix': source.suffix.lower(), 'size': len(data), 'sha256': w.sha256(data)}
-    # Reserve the name exclusively: never overwrite an existing snapshot.
     directory.parent.mkdir(parents=True, exist_ok=True)
-    directory.mkdir(exist_ok=False)
-    w.atomic_write(directory / ('save' + metadata['suffix']), data, (source,))
-    w.write_json(directory / 'snapshot.json', metadata)
-    load_snapshot(name, store)
+    with tempfile.TemporaryDirectory(prefix=STAGING_PREFIX, dir=directory.parent) as temporary:
+        staged = Path(temporary) / name
+        w.atomic_write(staged / ('save' + metadata['suffix']), data, (source,))
+        w.write_json(staged / 'snapshot.json', metadata)
+        load_snapshot(name, temporary)
+        if directory.exists(): raise FileExistsError(f'Snapshot already exists: {directory}')
+        staged.rename(directory)
     return metadata
 
 
@@ -127,7 +131,7 @@ def main(argv=None):
             if safety: print(f'Previous save preserved as {safety}')
         elif STORE.exists():
             for directory in sorted(STORE.iterdir(), key=lambda p: p.name):
-                if directory.is_dir():
+                if directory.is_dir() and not directory.name.startswith(STAGING_PREFIX):
                     metadata, _ = load_snapshot(directory.name)
                     print(f'{directory.name} {metadata["suffix"]} {metadata["size"]} bytes {metadata["sha256"]}')
         else:

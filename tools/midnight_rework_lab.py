@@ -371,4 +371,4 @@ def main(argv=None):
                 limit='Native arrivals and controller traversal through every replacement room. Four entry words compiled before boot; JIT enabled. The unchanged Relay upper doorway uses its established landing-placement fixture; this does not qualify its full active-arc ascent. Enemies parked; player healed; defeated flags preset.')
     w.write_json(OUT/'real-doors.json',report);print(json.dumps(report));return report
 
-if __name__=='__main__':main()
+if __name__=='__main__':raise SystemExit(0 if main()['passed'] else 1)

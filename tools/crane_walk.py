@@ -308,15 +308,15 @@ def main(argv=None):
         bottom=cr.LOWER.get(cr.NAMES.index(dest),0)
         steps += [nav(name,group),mw.wait(80),mw.until('setpiece_real_exit',
             lambda s:s.room==wanted and s.pos is not None and 0<s.pos[0]<dw and bottom<s.pos[1]<dh,600)]
-        run(args.rom,'setpiece-'+args.name+args.tag,name,spawn,steps,tuple(cr.FLAGS.values()))
+        return run(args.rom,'setpiece-'+args.name+args.tag,name,spawn,steps,tuple(cr.FLAGS.values()))
     elif args.command=='entry':
-        run(args.rom,'pier-entry','Pier_Save02',1,[mw.wait(60),mw.fixtures(fight=False),nav('Pier_Save02',2),
+        return run(args.rom,'pier-entry','Pier_Save02',1,[mw.wait(60),mw.fixtures(fight=False),nav('Pier_Save02',2),
             mw.wait(60),mw.check('native_pier_to_crane',lambda s:s.room==96),nav(cr.NAMES[0],1),mw.wait(60),
             mw.check('crane_to_native_pier',lambda s:s.room==38)])
     elif args.command=='cross':
         destination=cr.LINKS[args.name,args.group][0]
         wanted=cr.IDS.get(destination,38)
-        run(args.rom,'cross-'+args.name+str(args.group),args.name,args.spawn,[mw.fixtures(fight=args.fight),mw.wait(60),
+        return run(args.rom,'cross-'+args.name+str(args.group),args.name,args.spawn,[mw.fixtures(fight=args.fight),mw.wait(60),
             mw.check('starts_in_room',lambda s:s.room==cr.IDS[args.name] and s.pos is not None),
             nav(args.name,args.group),mw.fixtures(fight=False),mw.wait(80),
             mw.until('real_exit',lambda s:s.room==wanted and s.pos is not None,600)],
@@ -326,12 +326,12 @@ def main(argv=None):
         for i,point in enumerate(args.points):
             x,y=map(float,point.split(','));steps += [*mw.put(x,y),mw.wait(50),mw.mark('view'+str(i))]
         if not args.points:steps.append(mw.wait(60))
-        run(args.rom,'view-'+args.name,args.name,args.spawn,steps,
+        return run(args.rom,'view-'+args.name,args.name,args.spawn,steps,
             tuple(cr.VISITS.values())+tuple(cr.FLAGS[n] for n in args.preset.split(',') if n))
     elif args.command=='save':
         from tools import midnight_line
         midnight_line.OUT=OUT
-        midnight_line.refuge_save_child(args.rom,'crane-office',cr.NAMES[2])
+        return midnight_line.refuge_save_child(args.rom,'crane-office',cr.NAMES[2])
     elif args.command=='machine':
         # Explicit combat setup placement; movement into the start trigger and
         # every strike are native inputs. This is not a traversal qualification.
@@ -359,7 +359,7 @@ def main(argv=None):
                 nav(cr.NAMES[11],1),mw.wait(80),mw.until('earned_cleared_revisit',
                     lambda s:s.room==106 and s.pos is not None and bool(s.flags>>142&1)
                     and bool(s.room_vars) and s.room_vars[0]==0,600)]
-        run(args.rom,label,cr.NAMES[10],1,steps)
+        return run(args.rom,label,cr.NAMES[10],1,steps)
     elif args.command=='map':
         from tools import kit_lab as k
         native_run=k._run
@@ -368,12 +368,12 @@ def main(argv=None):
             return native_run(*pos,**kw)
         k._run=touched
         try:
-            run(args.rom,'map-'+args.name,args.name,args.spawn,[mw.wait(120),mw.mark('overview'),
+            return run(args.rom,'map-'+args.name,args.name,args.spawn,[mw.wait(120),mw.mark('overview'),
                 mw.wait(140),mw.mark('world'),mw.wait(160),mw.mark('detail'),mw.wait(160),mw.mark('overview_return')],
                 tuple(cr.VISITS.values()))
         finally:k._run=native_run
     elif args.command=='power':
-        run(args.rom,'cargo-power',cr.NAMES[5],1,[mw.wait(60),mw.fixtures(fight=False),
+        return run(args.rom,'cargo-power',cr.NAMES[5],1,[mw.wait(60),mw.fixtures(fight=False),
             ('travel',146,1200),mw.wait(45),mw.hold('X',6),mw.wait(45),
             mw.check('lever_restores_cargo_power',mw.flag(cr.FLAGS['power'])),nav(cr.NAMES[5],2),
             mw.wait(60),mw.check('powered_door_to_counterweight',lambda s:s.room==102)])
@@ -394,6 +394,6 @@ def main(argv=None):
             for future in as_completed(pending):
                 result=future.result();results.append(result);print(json.dumps(result),flush=True)
                 w.write_json(OUT/'all-progress.json',{'rom':str(args.rom),'results':results,'passed':all(r[1] for r in results)})
-        if not all(r[1] for r in results):raise SystemExit(1)
+        return dict(rom=str(args.rom),results=results,passed=all(r[1] for r in results))
 
-if __name__=='__main__':main()
+if __name__=='__main__':raise SystemExit(0 if main()['passed'] else 1)

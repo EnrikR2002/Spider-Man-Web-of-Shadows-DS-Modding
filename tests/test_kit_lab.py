@@ -1,12 +1,27 @@
 """Kit research lab: tracked input scripts stay valid; parity comparison tolerates only a phase."""
 import unittest
 import tempfile
+import struct
 from pathlib import Path
 from unittest import mock
 from tools import emulator_smoke, kit_lab
 
 
 class KitLabTests(unittest.TestCase):
+    def test_enemy_scan_rejects_reused_motion_but_keeps_owned_death_actors(self):
+        base, actor, motion, controller = 0x02000000, 0x1000, 0x2000, 0x3000
+        for hp in (0, 4096):
+            for owner in (0, base+actor, base+actor+0x100):
+                with self.subTest(hp=hp, owner=owner):
+                    ram = bytearray(4*1024*1024)
+                    for at, value in ((actor, kit_lab.ENEMY_VTABLE), (actor+0x30, base+motion),
+                                      (actor+0x44, hp), (actor+0x48, 4096), (motion, owner),
+                                      (motion+0x1f8, base+controller), (controller+0x14, 6 if not hp else 0)):
+                        struct.pack_into('<I', ram, at, value)
+                    enemies = kit_lab.enemies(ram)
+                    self.assertEqual([e['actor'] for e in enemies], [base+actor] if owner == base+actor else [])
+                    if enemies: self.assertEqual(enemies[0]['hp'], hp)
+
     def test_runtime_patch_cannot_replace_published_qualification_evidence(self):
         published = kit_lab.ROOT / 'work/kit/evidence.json'
         for options in ({}, {'out': published, 'label_prefix': 'candidate-'},

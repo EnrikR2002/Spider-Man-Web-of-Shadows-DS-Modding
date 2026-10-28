@@ -496,6 +496,28 @@ aligned motion ownership even when only one player layout remains; a lone freed
 layout is not evidence of a live actor. Both are tooling/source tests, not new
 in-engine gameplay qualification.
 
+**Tooling audit correction (2026-10-28, high confidence; v0.37.0 tooling):**
+`kit_lab.enemies` now requires the motion object's owner to point back to the
+actor. Its previous "live" label was too broad: a freed layout with a reused
+motion pointer passed the old scan. Owned zero-HP actors remain available for
+death/lifecycle observations. Qualification CLIs propagate failed reports as
+exit 1, including early duel returns, batches and the Crane/Midnight child
+routes; navigator functions keep their report dictionaries for callers.
+`chapter_spectacle_lab` refreshes its copy from the configured actual battery
+on every invocation. No research save is adopted.
+
+Save checkpoints are verified in staging before their final name appears;
+caught write/verification/rename failures permit a clean retry. Archive appends
+prepare the ZIP/index pair before installation, retain both originals on disk
+and roll back caught failures. Failed or interrupted rollback keeps recovery
+copies; caught recovery write errors name their directory. Publication refuses
+an existing rollback metadata file that differs from the prior stable metadata.
+Fault tests use disposable files
+and synthetic RAM, not the player battery. Sources: `tests/test_lab_commands.py`,
+`test_kit_lab.py`, `test_save_backups.py`, `test_doc_archive.py` and
+`test_playtest.py` under `tests/`. These corrections change no published ROM
+bytes and establish no new in-engine gameplay result.
+
 Historical authored Rush qualification (before v0.2.0): eight choreography tests,
 all 3,736-resource build check,
 both-facing contact/HP/credit/final-position parity. Prior compact source passed

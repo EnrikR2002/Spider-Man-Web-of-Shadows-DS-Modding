@@ -151,6 +151,24 @@ class PlaytestTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'receipt'): p.build(config=self.config, store=self.store)
         self.assertEqual(self.rom.read_bytes(), b'earlier rom')
 
+    def test_existing_rollback_metadata_must_match_before_installation(self):
+        old_rom, old_log = b'earlier rom', b'exact prior composition'
+        self.rom.write_bytes(old_rom)
+        stable_log = self.rom.with_suffix('.build.json'); stable_log.write_bytes(old_log)
+        backup = p.RELEASES / p.w.sha256(old_rom) / self.rom.name
+        p.w.atomic_write(backup, old_rom)
+        backup_log = backup.with_suffix('.build.json'); backup_log.write_bytes(b'corrupted metadata')
+        with patch.object(p, 'assert_closed'), patch.object(p.mod, 'main', return_value=0):
+            with self.assertRaisesRegex(ValueError, 'metadata rollback copy differs'):
+                p.build(config=self.config, store=self.store)
+            self.assertEqual(self.rom.read_bytes(), old_rom)
+            self.assertEqual(stable_log.read_bytes(), old_log)
+            self.assertEqual(backup_log.read_bytes(), b'corrupted metadata')
+            self.assertFalse(self.history.exists())
+            backup_log.write_bytes(old_log)
+            self.assertEqual(p.build(config=self.config, store=self.store), 0)
+        self.assertEqual(backup_log.read_bytes(), old_log)
+
     def test_live_emulator_blocks_build_before_backup_or_rom_write(self):
         self.destination.write_bytes(b'progress')
         result = subprocess.CompletedProcess([], 0, '"DeSmuME_0.9.13_x64.exe","42"\n', '')

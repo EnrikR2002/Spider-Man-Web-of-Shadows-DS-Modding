@@ -72,6 +72,7 @@ def enemies(ram):
         hp, maximum = struct.unpack_from('<2i', ram, at + 0x44)
         motion = struct.unpack_from('<I', ram, at + 0x30)[0] - p.BASE
         if not 0 < motion < len(ram) - 0x300 or motion % 4 or not 0 < maximum < 0x1000000: continue
+        if struct.unpack_from('<I', ram, motion)[0] != p.BASE + at: continue
         xy = [struct.unpack_from('<i', ram, motion + b)[0] + struct.unpack_from('<i', ram, motion + l)[0]
               for b, l in ((0x7C, 0x160), (0x80, 0x164))]
         ctl = struct.unpack_from('<I', ram, motion + 0x1F8)[0]

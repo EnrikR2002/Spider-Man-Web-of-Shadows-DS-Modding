@@ -3,14 +3,20 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from tools import wos_tool as w
+
 INDEX = ROOT / 'docs/archive/index.json'
 
 
@@ -89,7 +95,9 @@ def note_sections(body):
 
 def add_entry(name, raw, *, title, snapshot_date, source_revision, index_path=INDEX):
     """Append one retired note byte for byte and re-pin the archive hash."""
+    index_path = w.safe_output(Path(index_path))
     index, archive = load_index(index_path)
+    w.safe_output(archive)
     name = name.replace('\\', '/')
     if any(entry['path'].casefold() == name.casefold() for entry in index['entries']):
         raise ValueError(f'Archive already holds {name!r}; choose a dated name')
@@ -99,15 +107,43 @@ def add_entry(name, raw, *, title, snapshot_date, source_revision, index_path=IN
     info = zipfile.ZipInfo(name, date_time=tuple(map(int, snapshot_date.split('-'))) + (0, 0, 0))
     info.compress_type = zipfile.ZIP_DEFLATED
     info.external_attr = 0o600 << 16
-    with zipfile.ZipFile(archive, 'a') as target:
+    before = {archive: archive.read_bytes(), index_path: index_path.read_bytes()}
+    staged = io.BytesIO(before[archive])
+    with zipfile.ZipFile(staged, 'a') as target:
         target.writestr(info, raw)
     index['entries'].append({'path': name, 'title': title, 'snapshot_date': snapshot_date,
                              'source_revision': source_revision, 'bytes': len(raw),
                              'words': len(body.split()), 'sha256': hashlib.sha256(raw).hexdigest(),
                              'sections': note_sections(body)})
-    index['archive_sha256'] = hashlib.sha256(archive.read_bytes()).hexdigest()
-    Path(index_path).write_text(json.dumps(index, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-    return verify_archive(index_path)
+    archive_bytes = staged.getvalue()
+    index['archive_sha256'] = hashlib.sha256(archive_bytes).hexdigest()
+    index_bytes = (json.dumps(index, indent=2, ensure_ascii=False) + '\n').encode('utf-8')
+    recovery = Path(tempfile.mkdtemp(prefix='.archive-recovery-', dir=archive.parent)).resolve()
+    if not recovery.is_relative_to(archive.parent.resolve()):
+        raise ValueError('Archive recovery directory escaped its parent')
+    keep_recovery = False
+    try:
+        for path, data in before.items(): w.atomic_write(recovery / path.name, data)
+        keep_recovery = True
+        try:
+            w.atomic_write(archive, archive_bytes)
+            w.atomic_write(index_path, index_bytes)
+            count = verify_archive(index_path)
+            keep_recovery = False
+            return count
+        except BaseException as error:
+            failures = []
+            for path, data in reversed(tuple(before.items())):
+                try:
+                    if (path.read_bytes() if path.exists() else None) != data: w.atomic_write(path, data)
+                except (OSError, ValueError) as recovery_error:
+                    failures.append(f'{path}: {recovery_error}')
+            if failures:
+                raise OSError(f'Archive update failed; rollback incomplete: {failures}. Backups: {recovery}') from error
+            keep_recovery = False
+            raise
+    finally:
+        if not keep_recovery: shutil.rmtree(recovery)
 
 
 def main(argv=None):

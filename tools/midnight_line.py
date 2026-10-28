@@ -642,6 +642,7 @@ def refuge_save_child(rom_path, label, room_name='ML_Refuge'):
     w.write_json(OUT / f'{label}.json', report)
     w.write_json(OUT / f'{label}-{source_hash[:8]}.json', report)
     print('ML_ROOM_REPORT ' + str(OUT / f'{label}.json'), flush=True)
+    return report
 
 
 def puzzle_child(rom_path):
