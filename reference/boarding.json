@@ -28,7 +28,7 @@
     "Ownership, initial layouts, player healing, explicitly named interruptions and lethal one-HP setup are disposable fixtures on a copied latest battery. Normal boss moves have no NPC position/state/velocity/HP writes.",
     "The wall target alone is parked. Its fresh hold input ends through separation before strike acceptance; no remote damage is observed.",
     "Native collision can limit kick travel. Native mini-bosses 29/2A/2C/2D and the Conductor are qualified; Mega Venom has no new adapter. Later Talon Pounce/Freefall/Relentless changes are not implemented.",
-    "Hardware pacing, full-route balance and player acceptance remain unconfirmed. Perceptual audio review depends on reviewer capability; mixed native PCM is retained."
+    "Player accepted normal-speed preview motion and identified bad existing Conductor sound, explicitly deferred outside this skill. Neither model claims auditory perception. Hardware pacing, full-route balance and player in-game feel remain unconfirmed."
   ],
   "media": {
     "combo": "work/boarding/review-final/combo.mp4",
@@ -75,7 +75,7 @@
       "zz_B38_Kick.gab"
     ],
     "arm7_and_unrelated_nitrofs_exact": true,
-    "final_build_metadata_sha256": "a8b99fad0205c5b62ea1b9f7d6246bacdf349169667e4ef21c42b1e903d7c675",
+    "final_build_metadata_sha256": "fce6bdd7809b8d9bde6f6209ee57e0a231eae54b4d82b1976bcb3e0cdaf51fc4",
     "modified_resources": [
       "American.strings",
       "English.strings",
@@ -85,11 +85,19 @@
     "parent_sha256": "c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6",
     "passed": true,
     "player_kit_32k_exact": true,
-    "rom_sha256": "d900ed98f3a1f39ea89be90c4c092dc3b504bd9bb42317b4f2eca056b588bd18"
+    "rom_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca"
   },
   "publication": {
-    "installed": false,
-    "required_review_passed": false
+    "installed": true,
+    "required_review_passed": true,
+    "verification": "work/boarding/publication-verification.json",
+    "battery_checkpoint": "before-build-dsv-dc013246987865a5cd2d32dffe04e2e23254a233f8b43cd04b5bb6aa2c7133c7",
+    "battery_sha256": "dc013246987865a5cd2d32dffe04e2e23254a233f8b43cd04b5bb6aa2c7133c7",
+    "previous_rom_sha256": "c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6",
+    "rom_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+    "schema_version": 1,
+    "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+    "version": "0.38.0"
   },
   "qualification": {
     "clean_build_log": "work/boarding/clean-readable.log",
@@ -680,7 +688,7 @@
     },
     "minimum_per_metric": 8,
     "model": "GPT-6.1 Terra",
-    "status": "numeric-scores-pass-original-playback-gate-pending",
+    "status": "complete",
     "provisional_previous_candidate_metrics": {
       "presentation": 7.5,
       "feel": 7.5,
@@ -691,13 +699,20 @@
     },
     "latest_qualitative_feedback": "Both-facing and small-rig sequences are readable, track the sampled shoulder, and separate clearly; no obvious large discontinuity beyond the intended kick. Audio/player/hardware verdict remains open.",
     "all_numeric_metrics_at_least_8": true,
-    "complete_original_gate_passed": false,
-    "unresolved": "Terra cannot watch normal-speed playback or hear audio through its interface; root audio tool also explicitly rejects audio input. Actual playback observation is requested from the player before asking Terra to close its gate.",
+    "complete_original_gate_passed": true,
+    "unresolved": null,
     "frame_evidence": [
       "work/boarding/readable/combo/review/metrics.json",
       "work/boarding/readable/mirror-combo/review/metrics.json",
       "work/boarding/readable/small-combo/review/metrics.json"
-    ]
+    ],
+    "player_playback_feedback": {
+      "date": "2026-10-28",
+      "motion": "Looks pretty good actually.",
+      "sound": "Bad Conductor effect; separate issue explicitly deferred by the player.",
+      "scope": "Normal-speed preview accepted; no claim of in-game/hardware/full-route acceptance."
+    },
+    "closure": "GPT-6.1 Terra confirmed the gate complete for exact21c7 after the human playback observation; all six scores remain8.0..8.5 with no outstanding must-fix."
   },
   "runtime": {
     "allocation_bytes": 8192,
@@ -779,7 +794,7 @@
     "tools/boarding_lab.py",
     "tests/test_boarding.py"
   ],
-  "status": "implementation-qualified-playback-gate-pending",
+  "status": "published-agent-tested-preview-motion-player-accepted",
   "version": "0.38.0",
   "prior_qualified_candidate": {
     "arm9_sha256": "74b42403eece523064223654d33ae27b6450c1fd17a5fb5d49f62d2d591a20b7",

@@ -17,7 +17,7 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Meteor Catch v0.37.0 player-confirmed overall feel; Boarding requested | Build Boarding with Wing Ripper; GPT-6.1 Terra must rate every chosen metric at least 8/10 |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Boarding v0.38.0 ships; Terra every metric 8.0..8.5; preview motion accepted | Buy Boarding, try jump/heavy zip -> hold toward -> Y -> A; give an in-game verdict |
 | 2 | Taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
@@ -196,7 +196,7 @@ affordable prices on 2026-10-25 because this kit has fourteen skills, then
 rejected v0.35.0's 1,600 XP budget as too cheap. The moderate v0.35.1 budget is:
 native slots 75/125/150/150/200/225/125 XP; Web Yank 100, Reel In 150, Sky Rake
 150, Meteor Catch 200, Roof Pin 225, Boarding 275, Apex Predator 300. Total
-2,450 XP; only implemented rows enter the shop (1,650 XP now). Existing
+2,450 XP; only implemented rows enter the shop (1,925 XP now). Existing
 purchases stay owned.
 
 **1. Rundown (Webbed Fury).** After a Power Dash hit, press A again within the
@@ -294,14 +294,16 @@ knee and talons, three tearing hits (each re-bounces it in place), then kick it
 away (0x1F). About a second, no mashing, no repeat. Otherwise native Down+Y.
 Not available on heavy targets.
 
-**13. Boarding (new).** Reaching a boss or heavy enemy by Web Yank zip,
-Up-pounce or jump while holding toward it makes Miguel cling to its back or
-shoulder: each update a bounded velocity steers him to an anchor on the boss, as
-Spider Perch follows an enemy. Y rakes (stagger hits from behind). A is **Wing
-Ripper**: a heavy tear that forces a stagger, then a kick-off jump that throws
-Miguel clear into the air. When the boss starts an attack it throws a rider off;
-R leaves at any time. Riding ends when the boss shakes him or he rips, not on
-a timer.
+**13. Boarding (shipped v0.38.0, 275 XP).** Jump into a supported boss or heavy
+Web Yank zip while holding toward it to cling to the shoulder. Its side remains
+fixed through boss turns. Y rakes for one HP; A is **Wing Ripper**, a two-HP tear
+and immediate native kick-off, including after a lethal tear when the rider is
+still valid. Boss attacks shake Miguel off; R and interruptions release. Riding
+has no timer, and native collision limits movement. The Conductor and four
+native mini-boss types qualify; Mega Venom and the later Up-pounce rewrite are
+not claimed. All six Terra metrics reach 8.0..8.5. The player likes the normal-
+speed preview motion and defers the bad existing Conductor sound as separate.
+In-game feel, hardware pacing and full-route balance remain player gates.
 
 **14. Apex Predator (new).** Passive. 2099 scraps instead of evading, so the
 meter both raises his power and keeps him in the fight, the way Red's Momentum
@@ -443,8 +445,8 @@ Engine facts to reuse, all in TECHNICAL:
 **Web Yank slice progress:** Web Yank's own code/state, first appended Black row,
 Down+A combo entry, five independent lines and Black-only clips are qualified.
 Native X is restored; Y/Talon Lift are chosen separately. Conductor heavy behavior
-is qualified; the native mini-boss adapter, Boarding follow and capstone gates
-remain open. The first slice's pull/placement was rejected on 2026-10-24;
+is qualified. v0.38.0 also qualifies the native mini-boss adapter and Boarding
+follow; capstone and later skill gates remain open. The first slice's pull/placement was rejected on 2026-10-24;
 v0.34.1's firmer reel received a partial positive verdict, then v0.34.2 removed
 the rejected rake/upward/input behavior. The pure five-target revision is
 agent-tested and published. The player likes Down+A and has requested the next
@@ -458,7 +460,11 @@ Up+A while preserving the other native controls. On 2026-10-27 the player
 accepted Reel In and requested Meteor Catch, with GPT-6.1 Terra review and
 at least 8/10 on every metric before completion. v0.37.0 meets that gate and
 ships Meteor Catch with 30 exact-ROM gameplay/save controls, six native pairs
-and unchanged actual battery bytes. The player gives a verdict before the next slice.
+and unchanged actual battery bytes. On 2026-10-28 the player accepts Meteor
+Catch's overall feel and requests Boarding. v0.38.0 ships it after 727 strict
+tests, 26 gameplay/save controls and all-six-metric Terra review; the player
+accepts preview motion and defers the Conductor sound issue. An in-game verdict
+precedes the next slice.
 
 ## Red kit: the Amazing Spider-Man
 
@@ -549,7 +555,8 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
-| 2026-10-28, v0.37.0 Meteor Catch | Tested the previous skill (called meteor crash); feels pretty good overall. Build the next 2099 skill; GPT-6.1 Terra decides metrics and must rate every one at least 8/10. Publish all previous work to GitHub first | Prior commits pushed through 28620b1 before implementation. Meteor Catch's overall feel is player-confirmed. Boarding with Wing Ripper is next in the approved build order; its six-metric review gate is pending |
+| 2026-10-28, v0.38.0 Boarding preview | Looks pretty good. Sound is bad, but it is the Conductor effect and a separate issue; do not worry about it here | Preview motion accepted; existing Conductor sound quality deferred. Terra closes its six-metric gate at 8.0..8.5. In-game feel and campaign balance remain unconfirmed |
+| 2026-10-28, v0.37.0 Meteor Catch | Tested the previous skill (called meteor crash); feels pretty good overall. Build the next 2099 skill; GPT-6.1 Terra decides metrics and must rate every one at least 8/10. Publish all previous work to GitHub first | Prior commits pushed through 28620b1 before implementation. Meteor Catch's overall feel is player-confirmed. Boarding with Wing Ripper is next in the approved build order; v0.38.0 closes its six-metric gate after the later accepted playback preview |
 | 2026-10-27, v0.36.0 Reel In | Tested Reel In; feels great. Implement the next skill with a GPT-6.1 Terra reviewer creating criteria; every metric must reach 8/10 | Reel In player-confirmed. v0.37.0 ships Meteor Catch after Terra scores presentation/feel/lean 8.0 and gameplay/correctness/evidence 8.5, with no must-fix findings. Meteor Catch remains player-unconfirmed |
 | 2026-10-26, after v0.35.2 | Implement the next 2099 skill; make it fun/impressive; a subagent must review and score it at least 8/10 before completion | v0.36.0 ships Reel In on airborne Up+A. Independent weighted score 8.53/10: presentation 8.2, feel 8.4, correctness9.0, evidence 8.5; no must-fix issue. Its overall and separate presentation/feel gates pass. Agent-tested; no new player verdict implied |
 | 2026-10-25, v0.35.1 Sky Rake finisher | Enemy gets kicked behind Spider-Man instead of landing slightly ahead | v0.35.2 biases the accepted light-target launch toward a three-unit forward landing while retaining native vertical launch and collision. Player confirmation is pending; no emulator check ran for this follow-up |

@@ -2347,7 +2347,7 @@ only; unmodified E's separate Conductor run qualifies heavy mechanics. Source:
 
 ### Boarding (v0.38 research)
 
-**Implemented private candidate, 2026-10-28 (SHA21c7a051; not installed):** the
+**Published v0.38.0, 2026-10-28 (SHA21c7a051):** the
 exact-v0.37 post-pass adds independent Black event397/bit88 for 275 XP, preserving
 all eleven prior purchase records. Four chained think/resource/update/effect
 hooks use a separate 8 KiB autoload allocation; the original 32 KiB player kit,
@@ -2387,11 +2387,14 @@ release before acceptance; it does not claim an accepted blocked strike.
 Exact candidate: 727 strict tests, 26 gameplay/save controls, clean-source hash
 match and six code-identical native input pairs pass. Both-facing and smallest-
 rig same-ride rakes/tears have every-frame native-size sheets, two-frame action
-entry and stable anchors. Terra's six numeric scores reach 8/10, but its original
-normal-speed/audio playback gate remains open because neither model can perceive
-audio in this interface. Player playback is requested; no publication, player
-acceptance or hardware/full-route balance claim follows. Mega Venom and later
-Talon Pounce integration remain unqualified. Sources: `boarding*`,
+entry and stable anchors. Terra closes all six metrics at 8.0..8.5 using its
+code/frame/timing review and the player's direct normal-speed playback verdict.
+The player says motion looks pretty good and explicitly defers the bad existing
+Conductor sound as separate. Neither model claims auditory perception. The
+protected publisher installs exact reviewed bytes, preserves v0.37 ROM/metadata/
+recipe, and leaves the actual battery byte-identical to its validated checkpoint.
+In-game feel, hardware pacing and full-route balance remain unconfirmed.
+Mega Venom and later Talon Pounce integration remain unqualified. Sources: `boarding*`,
 `tests/test_boarding.py`, `reference/boarding.json` and `work/boarding/readable/`.
 
 ### Meteor Catch (v0.37 research)
