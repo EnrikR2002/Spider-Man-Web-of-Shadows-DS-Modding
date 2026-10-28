@@ -5995,7 +5995,7 @@ Objectives phases, upper Quay loft and no destination boards. Engine lever is
 visually reviewed in walk-control-gates/frame-03300.png; native Pier Objectives
 still displays its original goal. Final receipts live in rework/publication.json.
 
-### Long Arm three acts and boss meter (v0.38 candidate, 2026-10-28)
+### Long Arm three acts and boss meter (v0.39 candidate, 2026-10-28)
 
 Player asked (2026-10-28) to make Crane Row as fun as Midnight Line; an Opus
 advisor review (read-only, `tools/crane_arm.py` is its first slice) found nine
@@ -6043,7 +6043,7 @@ room 96 here, for the parent too; `crane_walk.py machine` (no JIT) works.
 (3) Do not run labs concurrently: one run reported "DS rejected ROM". (4)
 `crane_walk entry` fails on published v0.37.0; not a regression of this work.
 
-### Crane Row ring map (v0.38 candidate, 2026-10-28)
+### Crane Row ring map (v0.39 candidate, 2026-10-28)
 
 Player (2026-10-28): the Crane map looked weird and its rooms did not connect;
 make it like the base game's. **Unpublished, agent-tested**: unit tests plus one
@@ -6074,7 +6074,7 @@ Glob like `crane_arm.py` (512 bytes on v0.37.0). Entry type byte 1 marks the
 Office as a save row; it draws no visible sprite (capture), so saves are pixel
 glyphs.
 
-### Long Arm harbour vista (v0.38 candidate, 2026-10-28)
+### Long Arm harbour vista (v0.39 candidate, 2026-10-28)
 
 Advisor item 3 and the player's "make Crane Row impressive". **Unpublished,
 agent-tested**; receipt `reference/crane_vista.json`. The published hoist room had
@@ -6101,7 +6101,7 @@ a full-width quay of stacks rebuilt the wall (first candidate hid the freighter)
 and a texture-dark hull looked like a wall until brightened with a red waterline
 and portholes. No player verdict; hardware is untested.
 
-### Crane cargo drops (v0.38 candidate, 2026-10-28)
+### Crane cargo drops (v0.39 candidate, 2026-10-28)
 
 Advisor item 2 ("the crane never acts"). **Unpublished, agent-tested**; code
 `tools/crane_drop.py`, composed into `tools/crane_arm.py` (which also chains

@@ -1,4 +1,4 @@
-"""Exact v0.37.0 post-pass: the Long Arm hoist becomes a three-act crane fight.
+"""Exact v0.38.0 post-pass: Crane Row becomes a crane fight, cargo drops, a ring map and a harbour.
 
 Act I keeps the published slam/sweep loop with no add, so the lanes are learned
 alone. Act II (core at two thirds of its health) calls a Maw as backup. Act III
@@ -26,9 +26,9 @@ from tools.room_events import Command, EventGroup
 from tools.room_objects import RoomObjects
 from tools.room_events import Events
 
-PARENT = 'c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6'
-PARENT_PATH = ROOT/'build/version-0.37.0-final/Versioned.nds'
-VERSION, DATE = '0.38.0', '2026-10-28'
+PARENT = '21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca'
+PARENT_PATH = ROOT/'build/version-0.38.0-final/Versioned.nds'
+VERSION, DATE = '0.39.0', '2026-10-28'
 ROOM, OBJ = 106, 'zz_AR_LongArm_app.obj'
 PHASE, WAVE_A, WAVE_B, CHAIN = ev.HOIST_PHASE, 0x12D, 0x12E, 0x130
 HALF_HP, FURY_HP = 0x18000, 0xC000   # core health (Q12, 36 units full) at Acts II and III; the published marker is 0x12000
@@ -179,26 +179,18 @@ def script(raw, blob):
     return s.extend_group(raw, 1, 0, [s.set_var(v, 0) for v in (WAVE_A, WAVE_B, CHAIN)], prepend=True)
 
 
-def next_version(meta):
-    major, minor, _ = map(int, meta['release_version'].split('.'))
-    return f'{major}.{minor+1}.0'
-
-
-def apply_rom(rom, *, meter=True, version=VERSION, parent_meta=None, compose=True):
-    """Exact v0.37.0 by default. With `parent_meta` (its build json) any later ROM that still has the
-    published hooks, scripts and tables is accepted: every site and room edit is asserted structurally.
-    `compose` then applies the chainable room-scenery and map passes (crane_vista, crane_map) to the finished ROM."""
+def apply_rom(rom, *, meter=True, parent_meta=None, compose=True):
+    """Exact v0.38.0 only. `parent_meta` is the build log of the passes before this one (`mod.create_build`
+    supplies it); without it the published parent's build json is read. `compose` then applies the
+    chainable room-scenery and map passes (crane_vista, crane_map) to the finished ROM."""
     from tools import release_info
     h = w.parse_header(rom)
     arm = rom[h['arm9_offset']:h['arm9_offset']+h['arm9_size']]
-    if parent_meta is None:
-        if w.sha256(rom) != PARENT:
-            raise ValueError('Crane Row finale requires exact published v0.37.0 (--source another ROM to rebase it)')
-        if w.sha256(arm) != release_info.PROFILE_INFO['tasm-v0.37.0']['arm9_sha256']:
-            raise ValueError('Published parent ARM9 differs')
-        meta = json.loads(PARENT_PATH.with_suffix('.build.json').read_text(encoding='utf-8'))
-    else:
-        meta = parent_meta
+    if w.sha256(rom) != PARENT:
+        raise ValueError('Crane Row requires exact published v0.38.0')
+    if w.sha256(arm) != release_info.PROFILE_INFO['tasm-v0.38.0']['arm9_sha256']:
+        raise ValueError('Published parent ARM9 differs')
+    meta = parent_meta or json.loads(PARENT_PATH.with_suffix('.build.json').read_text(encoding='utf-8'))
     sr = meta['chapter_spectacle']['scripted_runtime']
     names, blobs = assets.resources(rom)
     base_names, before = list(names), tuple(blobs)
@@ -213,7 +205,7 @@ def apply_rom(rom, *, meter=True, version=VERSION, parent_meta=None, compose=Tru
     for name in ('American.strings', 'English.strings'):
         i, n = names.index(name), native_names.index(name)
         raw = StringSlots(glob[offsets[n]:offsets[n+1]]).grown(blobs[i], {
-            50: f'TASM v{version}\nPress a button to start', 74: f'Options v{version}'})
+            50: f'TASM v{VERSION}\nPress a button to start', 74: f'Options v{VERSION}'})
         blobs[i] = raw+bytes((len(before[i])-len(raw)) % 4)
     # The Freight, Dry Dock and Crown crews arrive by crane: three room scripts and two appended models.
     for room, cfg in drop.ROOMS.items():
@@ -309,7 +301,7 @@ def apply_rom(rom, *, meter=True, version=VERSION, parent_meta=None, compose=Tru
     expected = {OBJ, 'American.strings', 'English.strings', 'GlobFiles.txt', *(f'zz_{cfg[0]}_app.obj' for cfg in drop.ROOMS.values())}
     if set(changed) != expected:
         raise ValueError('Unexpected Crane Row resource scope: '+str(sorted(set(changed) ^ expected)))
-    report = dict(version=version, parent_sha256=w.sha256(rom), rom_sha256=w.sha256(result), arm9_sha256=w.sha256(new_arm),
+    report = dict(version=VERSION, parent_sha256=w.sha256(rom), rom_sha256=w.sha256(result), arm9_sha256=w.sha256(new_arm),
         modified_resources=changed, nitrofs_relocation_bytes=max(growth, 0),
         runtime=dict(fury_hook=entry, meter_cells=cells, boss_finder=resolver if meter else None, fury_old=old, half_hp_q12=HALF_HP, fury_hp_q12=FURY_HP, bytes=len(code)),
         script=dict(phase_var=PHASE, wave_vars=(WAVE_A, WAVE_B), chain_var=CHAIN, fury_tell_frames=FURY_TELL),
@@ -334,38 +326,31 @@ def apply_rom(rom, *, meter=True, version=VERSION, parent_meta=None, compose=Tru
                       modified_resources=sorted(everything), nitrofs_relocation_bytes=report['nitrofs_relocation_bytes']
                       +vista_report['nitrofs_relocation_bytes']+map_report['nitrofs_relocation_bytes'],
                       composed=dict(crane_arm_rom_sha256=mine, vista=vista_report, map=map_report))
-    # Only a profile registered for this pass (marked 'crane') is its release pin: another feature's
-    # candidate may own the same version number until one of them publishes.
-    pin = release_info.PROFILE_INFO.get('tasm-v'+version, {})
+    # Only the release composition is pinned (once its pins exist); --bare and --no-meter are candidate experiments.
+    pin = release_info.PROFILE_INFO.get('tasm-v'+VERSION, {})
     for key in ('rom_sha256', 'arm9_sha256'):
-        if pin.get('crane') and pin.get(key) != report[key]:
+        if pin.get(key) and pin.get('crane_arm') and meter and compose and pin[key] != report[key]:
             raise ValueError('Crane Row build differs from its immutable release pin')
     return result, report
 
 
-def generate(output, source_path=PARENT_PATH, meter=True, version=None, compose=True):
+def generate(output, source_path=PARENT_PATH, meter=True, compose=True):
     output, source_path = Path(output), Path(source_path)
     if not output.resolve().is_relative_to((ROOT/'build').resolve()):
         raise ValueError('Candidates belong in build/')
-    rom = source_path.read_bytes()
-    parent_meta = None
-    if w.sha256(rom) != PARENT:
-        # Rebase onto a later ROM (for example a published v0.38.0): its own build json carries the hook map.
-        parent_meta = json.loads(source_path.with_suffix('.build.json').read_text(encoding='utf-8'))
-    version = version or (VERSION if parent_meta is None else next_version(parent_meta))
-    result, report = apply_rom(rom, meter=meter, version=version, parent_meta=parent_meta, compose=compose)
+    result, report = apply_rom(source_path.read_bytes(), meter=meter, compose=compose)
     path = output/'Versioned.nds'
     validation = w.validate_rom(result, target=True)
     meta = json.loads(source_path.with_suffix('.build.json').read_text(encoding='utf-8'))
     ge = next(e for e in validation['nitrofs'] if e['name'] == 'Glob.bin')
-    meta.update(crane_arm=report, release_version=version, release_date=DATE, output_rom_sha256=w.sha256(result),
+    meta.update(crane_arm=report, release_version=VERSION, release_date=DATE, output_rom_sha256=w.sha256(result),
         output=str(path.resolve()), rom_size=len(result), used_rom_size=validation['header']['used_rom_size'],
         nitrofs=validation['nitrofs'], header_crc16=validation['header']['header_crc16'],
         output_glob_sha256=w.sha256(result[ge['start']:ge['end']]), verified_resource_count=len(assets.resources(result)[0]))
     w.atomic_write(path, result, sources=(source_path,))
     w.write_json(path.with_suffix('.build.json'), meta)
     recipe = json.loads((ROOT/'reference/gameplay_profile.json').read_text(encoding='utf-8'))
-    recipe.update(profile='tasm-v'+version, release_version=version)
+    recipe.update(profile='tasm-v'+VERSION, release_version=VERSION)
     w.write_json(output/'gameplay_profile.json', recipe)
     w.write_json(output/'changes.json', report)
     print(json.dumps(dict(path=str(path), sha256=report['rom_sha256'], runtime=report['runtime'])), flush=True)
@@ -378,6 +363,5 @@ if __name__ == '__main__':
     p.add_argument('--source', type=Path, default=PARENT_PATH)
     p.add_argument('--no-meter', action='store_true', help='Leave the native boss meter and its shared finder untouched')
     p.add_argument('--bare', action='store_true', help='Skip the chained vista and map passes (hoist and cargo drops only)')
-    p.add_argument('--version', help='Output version; default 0.38.0 on v0.37.0, else the next minor of the source')
     a = p.parse_args()
-    generate(a.out, a.source, not a.no_meter, a.version, not a.bare)
+    generate(a.out, a.source, not a.no_meter, not a.bare)

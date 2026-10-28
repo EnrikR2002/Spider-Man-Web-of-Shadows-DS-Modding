@@ -72,7 +72,7 @@ class Arm(unittest.TestCase):
         self.assertEqual((a.HALF_HP, a.FURY_HP), (cb.HEALTH*2//3, cb.HEALTH//3))
 
 
-@unittest.skipUnless(a.PARENT_PATH.exists(), 'published v0.37.0 candidate missing')
+@unittest.skipUnless(a.PARENT_PATH.exists(), 'published v0.38.0 build missing')
 class Script(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

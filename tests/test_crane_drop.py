@@ -93,7 +93,7 @@ class Meshes(unittest.TestCase):
         self.assertEqual(struct.unpack_from('<5I', rows, 20), (97, d.OPEN, d.DROP, 0x140, 0x140))
 
 
-@unittest.skipUnless(a.PARENT_PATH.exists(), 'published v0.37.0 candidate missing')
+@unittest.skipUnless(a.PARENT_PATH.exists(), 'published v0.38.0 build missing')
 class Script(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -153,7 +153,7 @@ class Script(unittest.TestCase):
         with self.assertRaises(ValueError):d.script(new, 97, self.native)
 
 
-@unittest.skipUnless(a.PARENT_PATH.exists(), 'published v0.37.0 candidate missing')
+@unittest.skipUnless(a.PARENT_PATH.exists(), 'published v0.38.0 build missing')
 class Build(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -194,8 +194,7 @@ class Build(unittest.TestCase):
         self.assertEqual(target(tick, w.u32(arm, tick-0x02000000)), self.report['cargo_drop']['motion_hook'])
         self.assertEqual(w.u32(arm, 0x77F8), len(assets.resources(self.rom)[0]))
 
-    def test_rebase_names_the_next_minor_and_the_strict_path_still_pins_v0_37_0(self):
-        self.assertEqual(a.next_version({'release_version': '0.38.0'}), '0.39.0')
+    def test_only_the_published_parent_is_accepted(self):
         with self.assertRaises(ValueError):a.apply_rom(self.rom)
 
 

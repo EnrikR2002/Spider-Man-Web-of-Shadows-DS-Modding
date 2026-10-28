@@ -53,7 +53,7 @@ flag: `chapter`, `crane`, `midnight_rework`, `chapter_renewal`,
 `midnight_reliability`, `chapter_finish`, `spider2099`, `spider2099_polish`,
 `spider2099_movie`, `spider2099_enemy_texture`, `vortex_forge`,
 `hunters_return`, `hunters_return_fix`, `talon_lift`, `spider2099_presence`,
-`hunter_kit`, `web_yank_fix`, `web_yank_combo`, `sky_rake`, `sky_rake_polish`, `sky_rake_front`, `reel_in`, `meteor_catch`, `boarding`. Recent
+`hunter_kit`, `web_yank_fix`, `web_yank_combo`, `sky_rake`, `sky_rake_polish`, `sky_rake_front`, `reel_in`, `meteor_catch`, `boarding`, `crane_arm`. Recent
 profiles copy their parent's flags and add one (v0.31.0 is v0.30.3 plus
 `vortex_forge`), so the current release is the whole stack. A post-pass refuses
 any input except its exact published parent ROM and checks its output against
@@ -132,6 +132,7 @@ Copy the established shape (`tools/vortex_forge.py`, `.s`, `_art.py`,
 | Purchased airborne Reel In | [Reel In](TECHNICAL.md#airborne-reel-in-v036-research) | `reel_in.py`, `.s`, `_art`, `_lab`; exact v0.35.2 post-pass, bit84 with Web Yank dependency. Lab `--case` covers native controls, real floor-contact release, heavy zip and native purchase/save. |
 | Purchased airborne Meteor Catch | [Meteor Catch](TECHNICAL.md#meteor-catch-v037-research) | `meteor_catch.py`, `.s`, `_art`, `_lab`; exact v0.36.0 post-pass, bit86 requiring Sky Rake. Lab cases include low-floor contact, chosen follow-up, lethal cleanup, native fallbacks, Conductor and purchase/save. |
 | Purchased 2099 Boarding / Wing Ripper | [Boarding](TECHNICAL.md#boarding-v038-research) | `boarding.py`, `.s`, `_art`, `_lab`; exact v0.37.0 post-pass, independent bit88. Copied-save Conductor, native MiniBoss and wall fixtures, interruption and shop controls; exact v0.38.0 qualification is in `reference/boarding.json`. |
+| Crane Row finale: Long Arm acts, cargo drops, ring map, harbour | [Long Arm three acts](TECHNICAL.md#long-arm-three-acts-and-boss-meter-v039-candidate-2026-10-28), [Crane cargo drops](TECHNICAL.md#crane-cargo-drops-v039-candidate-2026-10-28) | `crane_arm.py` (exact v0.38.0 post-pass, composes `crane_drop.py`, `crane_vista.py`, `crane_map.py`); `crane_walk.py` labs; `reference/crane_arm.json` |
 | Remaining 2099 Black kit | ROADMAP [implementation guide](ROADMAP.md#implementation-guide) | Follow [Add a feature](#add-a-feature-as-a-new-post-pass); native mini-boss adapters still require qualification. |
 
 Tool filenames in this table are under `tools/`. Find a CLI's actual arguments
