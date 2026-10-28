@@ -2,9 +2,9 @@
   "schema_version": 1,
   "status": "unpublished candidate; agent-tested; no player verdict",
   "feature": "Crane Row ring overview map",
-  "source": "tools/crane_navigation.py, tools/crane_map.py",
+  "source": "tools/crane_ring.py, tools/crane_map.py",
   "tests": [
-    "tests/test_crane_navigation.py",
+    "tests/test_crane_ring.py",
     "tests/test_crane_map.py"
   ],
   "applies_to": "any Crane Row ROM that kept the published area-6 map table (found by structure, no parent pin)",

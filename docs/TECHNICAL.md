@@ -6051,7 +6051,7 @@ melonDS capture on v0.37.0 (`crane_walk.py map AR_EngineHouse --spawn 1`, every
 room visited); receipt `reference/crane_map.json`. Supersedes the 2026-10-12
 wire-and-letter diagram (two rows of boxes, A..D codes, long bent wires).
 
-**Layout (`tools/crane_navigation.py`, high confidence).** The door graph is one
+**Layout (`tools/crane_ring.py`, high confidence; `crane_navigation.py` stays the published pre-v0.39 module the older Crane passes consume).** The door graph is one
 ring: Quay, Freight, Yard, Dock and Engine along the ground, the tall Shaft up
 the right edge, then Gantry, Crown, Arm and Breakwater back along the roofs to
 Quay, with Engine's two shortcut doors as chords (Freight bridge, Crown neck),

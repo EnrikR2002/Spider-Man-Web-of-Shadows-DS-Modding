@@ -1,4 +1,4 @@
-"""Crane Row overview map post-pass: the ring layout of tools/crane_navigation.py.
+"""Crane Row overview map post-pass: the ring layout of tools/crane_ring.py.
 
 Replaces the four progress screens and rewrites the area-6 room list in place;
 nothing else moves. The map table is found by structure (the area row whose
@@ -14,7 +14,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from tools import wos_tool as w, tasm_kit as kit, spider2099 as assets, midnight_voltage as extension
-from tools import crane_navigation as nav, crane_rooms as cr, midnight_chapter as ch
+from tools import crane_ring as nav, crane_rooms as cr, midnight_chapter as ch
 
 BASE = 0x02000000
 ENTRY = 20

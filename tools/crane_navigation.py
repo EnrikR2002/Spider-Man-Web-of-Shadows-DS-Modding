@@ -18,17 +18,9 @@ OBJECTIVE_SITE=0x020E0F28
 OBJECTIVE_NATIVE=0x020D13CC
 GOAL_TITLES=('Restore cargo power','Clear the Crown crew','Defeat the hoist','Return to the Pier')
 GOAL_BODIES=('objective_power','objective_crown','objective_hoist','objective_done')
-# One ring, as the doors run: Quay, Freight, Yard, Dock and Engine along the
-# ground, the Shaft up the right edge, then Gantry, Crown, Arm and Breakwater
-# back along the roofs to Quay. Every pair of doors is a short neck between
-# touching rooms, as on the native maps; only the Pier exit is a dotted arrow.
-# Both rows sit on their floors, so a room's height reads as its height.
-RECTS=dict(zip(cr.NAMES,((12,80,33,118),(36,76,61,118),(36,58,61,69),
-    (64,90,86,118),(89,98,112,118),(115,70,147,118),(171,18,189,118),
-    (126,38,167,54),(151,86,167,100),(90,32,123,54),(46,30,87,54),(12,36,43,54))))
-# Extra rectangles joined to a room's main one: roofs, towers and stacks.
-EXTRA={cr.NAMES[3]:((64,84,76,90),),cr.NAMES[4]:((95,88,106,98),),cr.NAMES[9]:((98,18,114,32),),
-       cr.NAMES[10]:((60,24,74,30),),cr.NAMES[1]:((53,70,61,76),)}
+RECTS=dict(zip(cr.NAMES,((10,92,38,114),(48,84,76,114),(46,62,86,80),
+    (86,96,114,114),(124,96,152,114),(162,84,190,114),(10,22,42,52),
+    (50,32,82,50),(148,62,190,80),(90,22,122,52),(130,20,154,38),(162,20,190,38))))
 LABELS=dict(zip(cr.NAMES,('QUAY','FRGT','OFFC','YARD','DOCK','ENG','SHAFT','GNTR','CACHE','CROWN','ARM','BWTR')))
 HEADERS=(('POWER: ENGINE', ''),('CROWN CREW', ''),('HOIST', ''),('RETURN: PIER', ''))
 TARGETS=(cr.NAMES[5],cr.NAMES[9],cr.NAMES[10],cr.NAMES[0])
@@ -38,25 +30,25 @@ SCREENS=('zz_CraneOverview.cbmp',*(f'zz_CraneGuide{i}.cbmp' for i in range(1,4))
 class Link:
     source:tuple
     destination:tuple|None
-    neck:tuple|None=None                  # filled strip between the two touching rooms
-    arrow:tuple|None=None                 # (x,y,dx): dotted exit stub leaving a room
+    code:str|None=None
+    bends:tuple=()
 
 LINKS=(
-    Link((cr.NAMES[0],2),(cr.NAMES[1],1),(33,108,36,111)),
-    Link((cr.NAMES[1],2),(cr.NAMES[3],1),(61,108,64,111)),
-    Link((cr.NAMES[3],2),(cr.NAMES[4],1),(86,108,89,111)),
-    Link((cr.NAMES[4],2),(cr.NAMES[5],1),(112,108,115,111)),
-    Link((cr.NAMES[5],2),(cr.NAMES[6],1),(147,112,171,115)),
-    Link((cr.NAMES[6],2),(cr.NAMES[7],1),(167,41,171,44)),
-    Link((cr.NAMES[7],2),(cr.NAMES[9],1),(123,46,126,49)),
-    Link((cr.NAMES[9],3),(cr.NAMES[10],1),(87,46,90,49)),
-    Link((cr.NAMES[10],2),(cr.NAMES[11],1),(43,46,46,49)),
-    Link((cr.NAMES[11],2),(cr.NAMES[0],3),(15,54,18,80)),
-    Link((cr.NAMES[1],4),(cr.NAMES[5],3),(61,80,115,83)),
-    Link((cr.NAMES[5],5),(cr.NAMES[9],2),(117,54,120,70)),
-    Link((cr.NAMES[1],3),(cr.NAMES[2],1),(47,69,50,76)),
-    Link((cr.NAMES[5],4),(cr.NAMES[8],1),(147,92,151,95)),
-    Link((cr.NAMES[0],1),None,arrow=(12,114,-1)),
+    Link((cr.NAMES[0],2),(cr.NAMES[1],1)),
+    Link((cr.NAMES[1],2),(cr.NAMES[3],1)),
+    Link((cr.NAMES[3],2),(cr.NAMES[4],1)),
+    Link((cr.NAMES[4],2),(cr.NAMES[5],1)),
+    Link((cr.NAMES[5],2),(cr.NAMES[6],1),'A'),
+    Link((cr.NAMES[6],2),(cr.NAMES[7],1),bends=((46,None),)),
+    Link((cr.NAMES[7],2),(cr.NAMES[9],1),bends=((86,None),)),
+    Link((cr.NAMES[9],3),(cr.NAMES[10],1),bends=((126,None),)),
+    Link((cr.NAMES[10],2),(cr.NAMES[11],1)),
+    Link((cr.NAMES[11],2),(cr.NAMES[0],3),'B'),
+    Link((cr.NAMES[1],4),(cr.NAMES[5],3),'C'),
+    Link((cr.NAMES[5],5),(cr.NAMES[9],2),'D'),
+    Link((cr.NAMES[1],3),(cr.NAMES[2],1),bends=((42,None),(42,82),(90,82),(90,None))),
+    Link((cr.NAMES[5],4),(cr.NAMES[8],1),bends=((196,None),(196,82),(142,82),(142,None))),
+    Link((cr.NAMES[0],1),None,'P'),
 )
 
 def phase(flags):
@@ -68,36 +60,28 @@ def phase_flags(stage):
     return sum(1<<cr.FLAGS[k] for k in ('power','upper','crown','boss')
                if stage>={'power':1,'upper':2,'crown':2,'boss':3}[k])
 
-def locked(key,flags):
-    return key in cr.LOCKS and not flags>>cr.FLAGS[cr.LOCKS[key][0]]&1
+def port(key):
+    name,group=key;side,_,floor,_=cr.PORTS[name][group-1]
+    x0,y0,x1,y1=RECTS[name]
+    levels=sorted({p[2] for p in cr.PORTS[name]})
+    y=y1-3 if len(levels)==1 else round(y1-3-levels.index(floor)*(y1-y0-6)/(len(levels)-1))
+    return (x0 if side=='left' else x1-1,y)
 
-def rects(name):return (RECTS[name],*EXTRA.get(name,()))
+def path(link):
+    start,end=port(link.source),port(link.destination)
+    if not link.bends:return (start,end)
+    if len(link.bends)==1:
+        x=link.bends[0][0];return (start,(x,start[1]),(x,end[1]),end)
+    return (start,*((x,start[1] if i==0 else end[1] if i==len(link.bends)-1 else y)
+                     for i,(x,y) in enumerate(link.bends)),end)
 
-def rect_gap(x,y,rect):
-    x0,y0,x1,y1=rect
-    return max(x0-x,0,x-x1+1)+max(y0-y,0,y-y1+1)
-
-def shape(name):
-    return {(x,y) for x0,y0,x1,y1 in rects(name) for x in range(x0,x1) for y in range(y0,y1)}
-
-def neck_pixels(link,flags):
-    """Pixels of one connecting neck: each half belongs to the room it touches
-    and turns red while that room's door is still locked."""
-    out={}
-    x0,y0,x1,y1=link.neck
-    for x in range(x0,x1):
-        for y in range(y0,y1):
-            key=min((link.source,link.destination),key=lambda k:min(rect_gap(x,y,r) for r in rects(k[0])))
-            out[x,y]=(key[0],LOCK if locked(key,flags) else ch.EDGE)
+def stroke(points):
+    out=set()
+    for (x0,y0),(x1,y1) in zip(points,points[1:]):
+        if x0!=x1 and y0!=y1:raise ValueError('Map connector must be orthogonal')
+        n=max(abs(x1-x0),abs(y1-y0),1)
+        out.update((round(x0+(x1-x0)*i/n),round(y0+(y1-y0)*i/n)) for i in range(n+1))
     return out
-
-def arrow_pixels(link):
-    """A dotted stub and arrow head leaving the room's side, as the native maps mark their exits."""
-    x,y,dx=link.arrow
-    dots=[(x+dx*(2+2*i),y) for i in range(3)]
-    tip=x+dx*8
-    head=[(tip,y),(tip-dx,y-1),(tip-dx,y+1),(tip-2*dx,y-2),(tip-2*dx,y+2)]
-    return dots+head
 
 def text(text,x,y):
     out=set()
@@ -106,38 +90,61 @@ def text(text,x,y):
             out.update((x+6*n+xx,y+yy) for xx,value in enumerate(row) if value=='1')
     return out
 
+def code_marker(key):
+    name,group=key;side=cr.PORTS[name][group-1][0];x,y=port(key)
+    if side=='left':return ((x,y),(x-2,y)),(x-8,y-3)
+    return ((x,y),(x+2,y)),(x+4,y-3)
+
 def map_pixels(stage,*,extra_saves=()):
     out={};flags=phase_flags(stage)
-    icons={cr.NAMES[5]:('00110','01100','11111','00110','01100'),
-           cr.NAMES[9]:('10001','10101','11111','01110','01110'),
-           cr.NAMES[10]:('11111','00100','00100','00100','01100'),
-           cr.NAMES[8]:('01110','11111','11011','11111','11111')}
     for name,(x0,y0,x1,y1) in RECTS.items():
-        inside=shape(name)
-        for x,y in inside:
-            edge=any((x+dx,y+dy) not in inside for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)))
-            out[x,y]=(name,GOAL if edge and name==TARGETS[stage] else ch.EDGE if edge else ch.FILL)
-        # Only landmarks get an icon, in the upper left so the native
-        # you-are-here marker keeps the room centre.
-        for yy,row in enumerate(icons.get(name,())):
+        for x in range(x0,x1):
+            for y in range(y0,y1):
+                edge=x in (x0,x1-1) or y in (y0,y1-1)
+                out[x,y]=(name,GOAL if edge and name==TARGETS[stage] else ch.EDGE if edge else ch.FILL)
+        # Keep the room shapes and real ports; only meaningful landmarks
+        # get an icon. Repeated labels made a tiny DS map a wall of text.
+        icons={cr.NAMES[2]:('11111','10001','10101','10001','11111'),
+               cr.NAMES[5]:('00110','01100','11111','00110','01100'),
+               cr.NAMES[9]:('10001','10101','11111','01110','01110'),
+               cr.NAMES[10]:('11111','00100','00100','00100','01100'),
+               cr.NAMES[8]:('01110','11111','11011','11111','11111')}
+        icon=icons.get(name,());tx=(x0+x1-5)//2;ty=(y0+y1-5)//2
+        for yy,row in enumerate(icon):
             for xx,value in enumerate(row):
-                if value=='1':out[x0+3+xx,y0+3+yy]=(name,ch.EDGE)
-        if name in extra_saves or name==cr.NAMES[2]:
+                if value=='1':out[tx+xx,ty+yy]=(name,ch.EDGE)
+        if name in extra_saves:
             for yy,row in enumerate(('11111','10000','11111','00001','11111')):
                 for xx,value in enumerate(row):
-                    if value=='1':out[x0+3+xx,y1-8+yy]=(name,ch.EDGE)
+                    if value=='1':out[x0+3+xx,y1-7+yy]=(name,ch.EDGE)
     for link in LINKS:
-        if link.neck:out.update(neck_pixels(link,flags))
+        if link.code:
+            for key in (link.source,link.destination):
+                if key is None:continue
+                name,group=key;line,xy=code_marker(key)
+                locked=key in cr.LOCKS and not flags>>cr.FLAGS[cr.LOCKS[key][0]]&1
+                for p in stroke(line)|text(link.code,*xy):out[p]=(name,LOCK if locked else ch.EDGE)
         else:
-            for p in arrow_pixels(link):out[p]=(link.source[0],ch.EDGE)
+            pixels=stroke(path(link));keys=(link.source,link.destination)
+            for p in pixels:
+                nearest=min(keys,key=lambda k:abs(port(k)[0]-p[0])+abs(port(k)[1]-p[1]))
+                out[p]=(nearest[0],ch.EDGE)
+            for key in keys:
+                locked=key in cr.LOCKS and not flags>>cr.FLAGS[cr.LOCKS[key][0]]&1
+                x,y=port(key)
+                # A fixed footprint keeps the palette/list allocation equal
+                # in all four progress screens. Red bars mean locked exits.
+                for dy in (-1,0,1):out[x,y+dy]=(key[0],LOCK if locked else ch.EDGE)
     return out
 
 def overview(raw,stage=0,*,extra_saves=()):
     palettes=tuple(p for p in ch.MAP_PALETTES if p!=11)
     colours=(0x1042,0x03FF,0x3548,0x001F,0x5E30)
-    with patch.multiple(ch,MAP_ROOMS={n:list(rects(n)) for n in RECTS},MAP_PALETTES=palettes,
+    with patch.multiple(ch,MAP_ROOMS={n:[r] for n,r in RECTS.items()},MAP_PALETTES=palettes,
                         SLOT_DEFAULT=colours,_map_pixels=lambda:map_pixels(stage,extra_saves=extra_saves)):
         result,listing=ch.map_layout(raw)
+    listing=[(n,slot,24+RECTS[n][0]+5,24+RECTS[n][1]+9) if n==cr.NAMES[2] else (n,slot,x,y)
+             for n,slot,x,y in listing]
     screen=Cbmp.parse(result)
     # Palette11 is reserved from room allocation. B6..BA = current room,
     # BB..BF = unvisited; both keep objective/lock accents unchanged.

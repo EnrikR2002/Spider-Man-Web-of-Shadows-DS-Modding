@@ -19,37 +19,25 @@ class NavigationGraphTests(unittest.TestCase):
                 self.assertEqual(cr.LINKS[b,h],(a,cr.PORTS[a][g-1][3]))
         self.assertCountEqual(seen,cr.LINKS)
 
-    def test_necks_join_touching_rooms_without_overlap_and_make_one_connected_map(self):
-        shapes={name:n.shape(name) for name in cr.NAMES}
-        owner={}
-        for name,pixels in shapes.items():
-            for xy in pixels:
-                self.assertNotIn(xy,owner,(name,owner.get(xy)));owner[xy]=name
-        def touching(pixels,other):
-            return any((x+dx,y+dy) in other for x,y in pixels for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)))
-        neck_owner={};graph={name:set() for name in cr.NAMES}
+    def test_connectors_leave_actual_sides_and_do_not_cross_other_rooms_or_links(self):
+        wires=[]
         for link in n.LINKS:
-            if link.neck is None:continue
-            x0,y0,x1,y1=link.neck
-            pixels={(x,y) for x in range(x0,x1) for y in range(y0,y1)}
-            self.assertFalse(pixels&owner.keys(),link)
-            self.assertFalse(pixels&neck_owner.keys(),link)
-            neck_owner.update({xy:link for xy in pixels})
-            a,b=link.source[0],link.destination[0]
-            self.assertTrue(touching(pixels,shapes[a]) and touching(pixels,shapes[b]),link)
-            graph[a].add(b);graph[b].add(a)
-        seen={cr.NAMES[0]};stack=[cr.NAMES[0]]
-        while stack:
-            for other in graph[stack.pop()]-seen:seen.add(other);stack.append(other)
-        self.assertEqual(seen,set(cr.NAMES))
-
-    def test_only_the_pier_exit_is_an_arrow_and_it_leaves_the_quays_left_wall(self):
-        arrows=[link for link in n.LINKS if link.neck is None]
-        self.assertEqual([link.source for link in arrows],[(cr.NAMES[0],1)])
-        x,y,dx=arrows[0].arrow;x0,y0,x1,y1=n.RECTS[cr.NAMES[0]]
-        self.assertEqual((x,dx,cr.PORTS[cr.NAMES[0]][0][0]),(x0,-1,'left'))
-        self.assertTrue(y0<=y<y1)
-        self.assertFalse(set(n.arrow_pixels(arrows[0]))&set().union(*(n.shape(name) for name in cr.NAMES)))
+            if link.code:
+                for key in (link.source,link.destination):
+                    if key is not None:
+                        points,xy=n.code_marker(key);way=-1 if cr.PORTS[key[0]][key[1]-1][0]=='left' else 1
+                        self.assertGreater((points[1][0]-points[0][0])*way,0)
+                continue
+            points=n.path(link);a,b=link.source,link.destination
+            for key,p,q in ((a,points[0],points[1]),(b,points[-1],points[-2])):
+                way=-1 if cr.PORTS[key[0]][key[1]-1][0]=='left' else 1
+                self.assertEqual(p[1],q[1]);self.assertGreater((q[0]-p[0])*way,0)
+            wire=n.stroke(points);wires.append((link,wire))
+            for xy in wire-{points[0],points[-1]}:
+                for name,(x0,y0,x1,y1) in n.RECTS.items():
+                    self.assertFalse(x0<=xy[0]<x1 and y0<=xy[1]<y1,(link,name,xy))
+        for i,(link,pixels) in enumerate(wires):
+            for other,other_pixels in wires[i+1:]:self.assertFalse(pixels&other_pixels,(link,other))
 
     def test_all_pixels_fit_panel_and_lock_target_state_tracks_progress(self):
         for stage in range(4):
@@ -57,13 +45,8 @@ class NavigationGraphTests(unittest.TestCase):
             self.assertTrue(all(0<=x<200 and 16<=y<120 for x,y in p))
             self.assertEqual(n.phase(n.phase_flags(stage)),stage)
             self.assertTrue(any(name==n.TARGETS[stage] and role==n.GOAL for name,role in p.values()))
-        # Each locked door reddens only its own half of its neck until its flag is earned.
-        unlock={'power':1,'upper':2,'crown':2,'boss':3}
-        for key,(flag,_) in cr.LOCKS.items():
-            link=next(link for link in n.LINKS if key in (link.source,link.destination))
-            for stage in range(4):
-                roles={role for name,role in n.neck_pixels(link,n.phase_flags(stage)).values() if name==key[0]}
-                self.assertEqual(roles,{n.LOCK if stage<unlock[flag] else ch.EDGE},(key,stage))
+            key=(cr.NAMES[1],4);xy=n.port(key)
+            self.assertEqual(p[xy][1],n.LOCK if stage==0 else ch.EDGE)
 
     def test_hints_and_detail_captions_refer_to_real_destinations(self):
         for name in cr.NAMES:

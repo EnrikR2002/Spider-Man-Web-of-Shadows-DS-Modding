@@ -2,7 +2,7 @@
 import struct
 import unittest
 import mod
-from tools import crane_map as m, crane_navigation as nav, crane_rooms as cr, midnight_chapter as ch
+from tools import crane_map as m, crane_ring as nav, crane_rooms as cr, midnight_chapter as ch
 from tools import wos_tool as w, spider2099 as assets
 from tools.minimap_cbmp import Cbmp
 
