@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.36.0. Each section records behavior,
+The latest numbered release below is v0.37.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,41 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.37.0 - 2026-10-27 - Meteor Catch grab, flip and floor slam
+
+Meteor Catch adds one 200 XP Black row (event395 / bit86), requiring Sky Rake.
+Plain air A near an airborne light foe ahead starts a continuous grab and flip,
+then both bodies fall through bounded native velocity and collision. One native
+floor knockdown costs two HP and gives one small bounce for a chosen Talon Lift.
+The private cast/flip, dive and planted impact use 18/24/10 authored samples.
+
+R, hurt, death, room/form changes, target loss and lethal impact release owned
+state and weak links. Ground R uses native evade without requiring Air Dodge;
+unpaid airborne R releases into native fall. No target, heavy, unowned or Red
+paths remain native. Reel In Up+A, native air Down+A, X, base strings and
+traversal retain their roles. Released directional A commands cannot later
+become Meteor Catch; a two-frame plain-A tap qualifies. Eleven Black rows total
+1,650 XP within the unchanged 2,450 XP planned budget; prior purchases/prices remain.
+
+The requested GPT-6.1 Terra review passes every metric: presentation 8.0, feel
+8.0, gameplay contract 8.5, correctness/isolation/save safety 8.5, evidence 8.5
+and lean integration 8.0. No must-fix findings remain. All 691 strict tests pass
+with zero skips across 95 module subprocesses, plus 30 exact-ROM gameplay/save
+cases and six controlled native input pairs. The reviewer independently reran
+seventeen focused tests and inspected native-size regular/mirrored frames.
+
+The protected clean build, qualified canonical and installed ROM match; boot
+and Options identify 0.37.0. The freshly read actual battery matches its
+pre-build checkpoint byte for byte, including the 634-byte DSV wrapper and
+512-byte payload. Prior v0.36.0 ROM/metadata/recipe remain preserved.
+
+Fixture labels, failed attempts, hashes and review are in
+`reference/meteor_catch.json`. Native sound data, rooms, original assets and
+bindings, the 32 KiB player kit and save format remain exact. Native mini-boss
+adapters, hardware pacing, full-route balance and player feel remain unqualified;
+mixed PCM is captured without a perceptual audio review. No player acceptance
+of Meteor Catch is implied.
 
 ## v0.36.0 - 2026-10-26 - Reel In aerial combo extension
 

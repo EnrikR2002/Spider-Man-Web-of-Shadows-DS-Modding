@@ -19,6 +19,7 @@ objective/build and next action: [TASKS](TASKS.md).
 | Player kit and native combat | [Player state machine and Red kit hooks](#player-state-machine-and-red-kit-hooks-v020), [animation authoring](#kit-animation-authoring) | Later named kit sections describe extensions; use the current release recipe |
 | Hunter revision-3 X input, Web Yank, Black shop row and heavy approach | [Web Yank](#hunter-revision-3-web-yank-v0340), [input correction](#transitions-states-and-inputs) | Earlier Hunter's Return/Talon Lift remain baseline mechanics until their revision-3 slices qualify |
 | Airborne Reel In and native landing/reaction ownership | [Reel In](#airborne-reel-in-v036-research) | [Pure pull](#pure-pull-input-and-catch-effects-v0342-research), [kit extension](#kit-extension-contract) |
+| Meteor Catch grip, floor impact and native rebound | [Meteor Catch](#meteor-catch-v037-research) | [Reel In](#airborne-reel-in-v036-research), [hit pipeline](#hit-pipeline-v040-runtime-probed) |
 | Skyjack velocity correction | [Scoped finish (0.29)](#scoped-movement-and-chapter-finish-v0290) | [Parent audit and unshipped prototypes](#shared-crowd-hit-backend-candidates); the old source/hex still reproduce their historical releases |
 | Binary formats and preservation | [Format boundaries](#format-boundaries-and-confirmed-structures), [SCA/rig contract](#animation-authoring-and-current-evidence) | [Baseline inventory](#rom-baseline-and-inventory) |
 | Emulator/rendering and performance | [Performance and visuals](#performance-and-visuals) | Dated renderer/JIT observations are not current performance guarantees |
@@ -2321,6 +2322,119 @@ The forced entrance-depth pose exaggerates the model's size, and the diagnostic
 does not pass its chosen-Y damage predicate. It qualifies the visual anchor
 only; unmodified E's separate Conductor run qualifies heavy mechanics. Source:
 `work/reel-in/review-final/review.json` and `reference/reel_in.json`.
+
+### Meteor Catch (v0.37 research)
+
+**Published final Q (2026-10-27; high confidence within the declared fixtures):**
+v0.37.0 qualifies 30 exact-ROM gameplay/save cases, six controlled native pairs
+and 691 strict tests with zero skips. GPT-6.1 Terra independently passes all
+six metrics at 8/10 or above. Clean-source, canonical and installed bytes match;
+the actual latest Battery matches its protected checkpoint. The earlier
+candidate findings below are historical and superseded where noted.
+Final evidence, limitations and scores: `reference/meteor_catch.json`.
+
+2026-10-27, exact v0.36.0 parent / private A..D candidates. High confidence
+from native disassembly and C's copied-current-save Talon Lift/B/Y/A trace;
+D's floor-detach correction still requires live qualification. Saved bit86,
+event395 requires Sky Rake event394. A light foe already in native air reactions
+can sit about 8.4 units above Miguel after a real rake, so the starting catch
+window is ten horizontal/twelve vertical units, facing forward. A zero-HP native
+launch probe precedes consuming A; ignored hits delegate to native Hammer Spike.
+Known Conductor config is excluded before probing. Private weak hero/target
+tokens retain motion/config/room ownership. No coordinates or clocks are written.
+
+Native launch39 transitions to fall48 well before touching the floor; it then
+enters down49 in the controller update before post-controller hook0x02073B60.
+Testing only launch39 misses the actual floor arrival. C accepts the owned
+39/48/49 continuation, then delivers one kind1F hit for 0x2000 HP at a positive
+floor normal with nonpositive vertical velocity. Catch/dive/impact use separate
+authored clips: restarting the same short flip after native air action advancement
+visibly repeated it. Native land24 gives the chosen follow-up its normal recovery.
+
+C's delayed bounce check never sees state41 in that hook: the floor hit settles
+back to 49 in the next controller update. Native launch entry0x0209D2F4 calls
+actor helper0x020739B4 when positive Y velocity must leave a resolved floor.
+That helper detaches the native collision contact (including normal+0x2AC),
+without changing position. D sets one 0x1800 upward velocity and invokes the
+same helper synchronously after its floor hit; gravity/collision then own the
+bounce. Sources: `meteor_catch.s`, `tests/test_meteor_catch.py`,
+`work/meteor-catch/c-regular/result.json`. These research observations do not
+establish final presentation, feel or player acceptance.
+
+**D..H corrections (2026-10-27; high confidence for observed mechanics, visual
+gate still open):** D's synchronous native floor detach produces one real
+bounce; F's ordinary native purchase/refund/repurchase, save and fresh Continue
+preserve every measured ability word/XP/checkpoint/HP and the actual Battery.
+Initial origin-only grip curves leave the victim too high. The replacement
+bakes CATCH's mean wrists (joints9/19), including the existing 12.5% height,
+then transforms those local vectors with the live hero draw matrix and steers
+the victim's native transformed model-bound center toward them. Near-side
+offsets keep the horizontal victim from hiding Miguel. Both positive native
+floor contacts must precede the impact; target liveness is revalidated after
+damage before applying bounce velocity. H's final presentation remains unapproved.
+
+Native actor updates can straddle an emulator VBlank: E's HP decrement appears
+one capture before the successful impact counter. Lab receipts retain that raw
+phase and accept only a counter increment within two frames as impact damage.
+G's low-height control begins with an explicitly disclosed falling-target RAM
+fixture, then real B/A; all capture/fall/impact/bounce checks pass. Its failed
+predecessor retained the old collision normal after teleport and stayed down49
+in midair; it is not mechanics evidence.
+
+For actual SCA identity, wrapper=`motion+0x58`; active playback slot is
+`wrapper+0x1AC + 0x78 * word(wrapper+0x29C)`. Slot+0x18 is the resource ID,
+slot+0x14/+0x16 are u16 sample/joint counts. F frame176 holds private Impact
+ID5978, ten samples/37 joints; G's independent mesh render is upright kneeling.
+Motion+0x16C confirms GAB only. Native land24 initially exited before the short
+impact recovered; F retains it until its own clip clock or chosen input is
+ready. Native ReceiveHit reaction pause explains the short rebound hang; no
+custom freeze is added. Sources: `work/meteor-catch/f-regular/`, `f-shop/`,
+`g-low/`, `g-impact-offline.png` and native0x02013BF8/0x02013884 disassembly.
+
+**World-height correction (2026-10-27, H/I; high confidence from model/SCA
+decoding, in-engine I still pending):** `spider2099_sculpt.posed_mesh` recenters
+the pelvis at Y5.724 for turntables. Its uncorrected preview therefore cannot
+establish a grounded authored pose's height. Restore the sampled pelvis offset
+before checking mesh feet. I's raised impact root gives actual mesh foot minima
+-0.040..0.186 units across ten samples; its highest vertex is 7.998 units.
+The earlier normalized preview masked the low impact silhouette. Native active
+SCA IDs do confirm F's actual private Impact selection, so wrong-resource
+selection is superseded as a diagnosis. I also predicts one update of the wrist
+anchor's movement before bounded victim steering, removing the half-error lag;
+both velocity axes cap at four units/update before native gravity. Sources:
+`work/meteor-catch/i-impact-geometry.json`, `i-impact-actual-offline.png`, the
+independent mesh regression in `tests/test_meteor_catch.py`.
+
+**K/M contact timing and effect correction (2026-10-27; high confidence for K's
+grip, M's VFX still pending):** J frame140 exposes native clock6, stored
+post-controller clock5 and the last wrist from sample4. Enemy steering occurs
+before the hero's animation/physics step; using the stored clock plus velocity
+extrapolation therefore still lags by two samples. K samples live motion+0x178
+plus one and adds native hero velocity, eliminating the extra prediction state.
+Independent review withdraws the former visible grip-separation finding in both
+facings; the raised impact also passes that focused look check. The next review
+finding is a native hit flash at the earlier air-hit height. The fallback effect
+uses cached native bounds, inappropriate for the utility's later floor contact.
+M scopes the existing effect hook to the exact synchronous 0x2000-HP impact,
+matching both attacker and victim, writes only native caller Point3+0x160..168
+from live victim XY/draw depth and resumes0x020955E0's original effect
+creation/release. Other hits retain their prior path and registers/flags.
+Sources: `work/meteor-catch/j-regular/`, `k-regular/`, `k-mirror/` and ARM tests.
+
+**Final input/release contract (2026-10-27, Q; high confidence from ARM and real
+input controls):** controller direction+0x24 may lag simultaneous Up/Down+A,
+and command5 can remain queued past release during a native air string. Meteor
+therefore checks native combined held pad+2 for A and rejects Up/Down before
+selecting or consuming that command. A two-video-frame plain-A tap still
+completes the move; both directional chords retain their native roles. On a
+resolved floor, R delegates to native evade before checking paid Air Dodge;
+the cleared-bit ground control enters state53 immediately at frame180. Air R
+without that purchase releases into native fall19. A victim already touching
+the floor has X stopped while waiting for Miguel's contact, avoiding a carried
+four-unit slide out of reach. Aborted private air routes use the native state
+setter to fall, only for the same weak-linked hero/controller still in51;
+later native reactions retain their velocities. Sources: `final-q/`, the
+`cancel-land-no-air-dodge` control and `tests/test_meteor_catch.py`.
 
 ### Freeze root cause and crash hunting (v0.4.1)
 

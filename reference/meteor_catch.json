@@ -1,0 +1,618 @@
+{
+  "actual_battery": {
+    "adopted_research_save": false,
+    "fresh_sha256": "664ba82651b1aaebb67324abdcb7a8a0b868305bef8140f7ca742879f56ff9e5",
+    "measured_profile": "work/meteor-catch/owned/owned-player-profile.json",
+    "payload_bytes": 512,
+    "source_sha256": "664ba82651b1aaebb67324abdcb7a8a0b868305bef8140f7ca742879f56ff9e5",
+    "wrapper_bytes": 634
+  },
+  "behavior": "Owned Black plain airborne A catches a forward airborne light foe, flips and falls by native velocity/collision, then deals one two-HP floor knockdown with one small bounce. R/hurt/death/form/room/target loss release ownership. Heavy/no-target/unowned/Red retain native paths; Up+A Reel In and Down+A native slam have priority.",
+  "candidate": {
+    "arm9_sha256": "0399022f9a2049780ef06a0cd0bf09f3186cd67d2b7d831a5b747bc59bcf6945",
+    "path": "build/version-0.37.0-final/Versioned.nds",
+    "rom_sha256": "c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6"
+  },
+  "date": "2026-10-27",
+  "feature": "Meteor Catch",
+  "limits": [
+    "Normal Continue/Test Upgrades on latest actual DSV copies. Ownership/form, initial player/target layout/HP and idle-enemy prefix are fixtures; later inputs/AI/physics/hits are native.",
+    "Low case starts with a disclosed falling-enemy fixture; lethal presets target HP and removes training immortality before A. Named interruption cases inject one event.",
+    "Controlled native pairs additionally reset the initial player controller/velocity and enemy controllers through frame75; raw comparisons remain available.",
+    "Shop purchase/refund/repurchase/in-game save/fresh Continue have no purchase, XP, room or HP RAM writes.",
+    "Conductor uses native approach/B/A/AI/HP/poses/collision, with only declared room/story/ownership/player-heal fixtures; no boss position, HP or state writes.",
+    "Native mini-boss adapters remain deferred and unhandled targets retain native A. No room or door resources changed; earlier route qualification is inherited by byte scope.",
+    "Native-size timed frames and mixed PCM are retained. Audio input is unsupported for perceptual review; native sound data remains exact. Hardware pacing, full-route balance and player feel remain unconfirmed."
+  ],
+  "ownership": {
+    "bit": 86,
+    "black_shop_rows": 11,
+    "current_black_total_xp": 1650,
+    "event": 395,
+    "parent_event": 394,
+    "planned_fourteen_total_xp": 2450,
+    "price_xp": 200,
+    "requires": "Sky Rake"
+  },
+  "parent": {
+    "path": "build/version-0.36.0-final/Versioned.nds",
+    "rom_sha256": "399bf220c8d3f036f95a6a748b24aada27b4b71a6b2d61e3de3c08f7c106875d",
+    "version": "0.36.0"
+  },
+  "preservation": {
+    "arm7_exact": true,
+    "existing_purchases_and_prices_retained": true,
+    "native_actor_positions_or_animation_clocks_written": false,
+    "original_assets_bindings_rooms_audio_and_save_format_exact": true,
+    "original_resources_modified": [
+      "American.strings",
+      "English.strings",
+      "GlobFiles.txt"
+    ],
+    "player_kit_32k_exact": true
+  },
+  "publication": {
+    "actual_battery_equals_checkpoint": true,
+    "battery_checkpoint": "before-build-dsv-664ba82651b1aaebb67324abdcb7a8a0b868305bef8140f7ca742879f56ff9e5",
+    "battery_sha256": "664ba82651b1aaebb67324abdcb7a8a0b868305bef8140f7ca742879f56ff9e5",
+    "clean_canonical_candidate_stable_exact": true,
+    "final_document_contract_passed": true,
+    "original_rom_unchanged": true,
+    "previous_rom_sha256": "399bf220c8d3f036f95a6a748b24aada27b4b71a6b2d61e3de3c08f7c106875d",
+    "prior_recipe": "build/releases/399bf220c8d3f036f95a6a748b24aada27b4b71a6b2d61e3de3c08f7c106875d/gameplay_profile.json",
+    "review_gate_passed_before_install": true,
+    "rom_sha256": "c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6",
+    "schema_version": 1,
+    "stable_rom": "F:\\Coding Projects\\Spider-Man-Web-of-Shadows-DS-Modding\\build\\Spider-Man-WoS-modded.nds",
+    "version": "0.37.0"
+  },
+  "qualification": {
+    "clean_source_composition_matches": true,
+    "document_tests": 8,
+    "document_tests_log": "work/meteor-catch/document-check-after-publish.log",
+    "focused_tests": 17,
+    "focused_tests_log": "work/meteor-catch/strict/tests.test_meteor_catch-final-q.log",
+    "gameplay_save_cases": [
+      {
+        "case": "mirror",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_impact_hp_loss": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "native_air_entry": true,
+          "no_damage_during_grab": true,
+          "one_actual_floor_impact": true,
+          "one_small_bounce": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/mirror/result.json"
+      },
+      {
+        "case": "regular",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_impact_hp_loss": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "native_air_entry": true,
+          "no_damage_during_grab": true,
+          "one_actual_floor_impact": true,
+          "one_small_bounce": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/regular/result.json"
+      },
+      {
+        "case": "low",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_impact_hp_loss": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "native_air_entry": true,
+          "no_damage_during_grab": true,
+          "one_actual_floor_impact": true,
+          "one_small_bounce": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/low/result.json"
+      },
+      {
+        "case": "tap",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_impact_hp_loss": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "native_air_entry": true,
+          "no_damage_during_grab": true,
+          "one_actual_floor_impact": true,
+          "one_small_bounce": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/tap/result.json"
+      },
+      {
+        "case": "wall",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_impact_hp_loss": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "native_air_entry": true,
+          "no_damage_during_grab": true,
+          "one_actual_floor_impact": true,
+          "one_small_bounce": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/wall/result.json"
+      },
+      {
+        "case": "hold",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_impact_hp_loss": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "native_air_entry": true,
+          "no_damage_during_grab": true,
+          "one_actual_floor_impact": true,
+          "one_small_bounce": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/hold/result.json"
+      },
+      {
+        "case": "lethal",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_impact_hp_loss": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "native_air_entry": true,
+          "native_lethal_impact_cleans_up": true,
+          "no_damage_during_grab": true,
+          "one_actual_floor_impact": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/lethal/result.json"
+      },
+      {
+        "case": "unowned",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_meteor_started": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/unowned/result.json"
+      },
+      {
+        "case": "followup",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "actual_impact_hp_loss": true,
+          "catch_started_once": true,
+          "chosen_talon_lift_continues": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "native_air_entry": true,
+          "no_damage_during_grab": true,
+          "one_actual_floor_impact": true,
+          "one_small_bounce": true,
+          "single_chosen_lift_hits_bounced_foe": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/followup/result.json"
+      },
+      {
+        "case": "red",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_meteor_started": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/red/result.json"
+      },
+      {
+        "case": "no-parent",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_meteor_started": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/no-parent/result.json"
+      },
+      {
+        "case": "whiff",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_meteor_started": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/whiff/result.json"
+      },
+      {
+        "case": "behind",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_meteor_started": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/behind/result.json"
+      },
+      {
+        "case": "ground-target",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_meteor_started": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/ground-target/result.json"
+      },
+      {
+        "case": "ground-a",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_meteor_started": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/ground-a/result.json"
+      },
+      {
+        "case": "air-down-a",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_meteor_started": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/air-down-a/result.json"
+      },
+      {
+        "case": "air-up-a",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_meteor_started": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/air-up-a/result.json"
+      },
+      {
+        "case": "air-x",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "no_meteor_started": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/air-x/result.json"
+      },
+      {
+        "case": "cancel",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "native_air_entry": true,
+          "no_impact_after_release": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/cancel/result.json"
+      },
+      {
+        "case": "cancel-no-air-dodge",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "native_air_entry": true,
+          "no_impact_after_release": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/cancel-no-air-dodge/result.json"
+      },
+      {
+        "case": "cancel-land-no-air-dodge",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "native_air_entry": true,
+          "native_ground_evade_without_paid_air_dodge": true,
+          "no_impact_after_release": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/cancel-land-no-air-dodge/result.json"
+      },
+      {
+        "case": "swap",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "native_air_entry": true,
+          "no_impact_after_release": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/swap/result.json"
+      },
+      {
+        "case": "hurt",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "native_air_entry": true,
+          "no_impact_after_release": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/hurt/result.json"
+      },
+      {
+        "case": "death",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "native_air_entry": true,
+          "no_impact_after_release": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/death/result.json"
+      },
+      {
+        "case": "room",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "native_air_entry": true,
+          "no_impact_after_release": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/room/result.json"
+      },
+      {
+        "case": "form",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "native_air_entry": true,
+          "no_impact_after_release": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/form/result.json"
+      },
+      {
+        "case": "target-dead",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "native_air_entry": true,
+          "no_impact_after_release": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/target-dead/result.json"
+      },
+      {
+        "case": "target-reaction",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "catch_started_once": true,
+          "cleanup_complete": true,
+          "collision_bounds": true,
+          "interruption_releases": true,
+          "native_air_entry": true,
+          "no_impact_after_release": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/target-reaction/result.json"
+      },
+      {
+        "case": "shop",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "fresh_continue_keeps_purchase": true,
+          "native_checkpoint_and_hp": true,
+          "native_purchase": true,
+          "native_refund": true,
+          "native_repurchase": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/shop/result.json"
+      },
+      {
+        "case": "boss",
+        "checks": {
+          "actual_battery_unchanged": true,
+          "heavy_never_launched": true,
+          "native_air_a_requested": true,
+          "no_heavy_catch": true,
+          "real_boss_encounter": true
+        },
+        "passed": true,
+        "receipt": "work/meteor-catch/final-q/boss/result.json"
+      }
+    ],
+    "native_control_comparison_rule": "Compare state-entry state/facing/X and action events lasting at least two video frames, with at most two video frames per transition. Raw mixed old-action/new-state frames and startup are retained, not treated as complete engine updates. Observed final jitter is at most one frame.",
+    "native_control_pairs": [
+      {
+        "candidate": "work/meteor-catch/paired-q/ground-a-candidate/result.json",
+        "case": "ground-a",
+        "max_event_jitter_frames": 0,
+        "parent": "work/meteor-catch/paired/ground-a-parent/result.json",
+        "passed": true,
+        "stable_action_events": 4,
+        "state_events": 4
+      },
+      {
+        "candidate": "work/meteor-catch/paired-q/air-a-candidate/result.json",
+        "case": "air-a",
+        "max_event_jitter_frames": 1,
+        "parent": "work/meteor-catch/paired/air-a-parent/result.json",
+        "passed": true,
+        "stable_action_events": 7,
+        "state_events": 5
+      },
+      {
+        "candidate": "work/meteor-catch/paired-q/air-down-a-candidate/result.json",
+        "case": "air-down-a",
+        "max_event_jitter_frames": 0,
+        "parent": "work/meteor-catch/paired/air-down-a-parent/result.json",
+        "passed": true,
+        "stable_action_events": 6,
+        "state_events": 4
+      },
+      {
+        "candidate": "work/meteor-catch/paired-q/air-x-candidate/result.json",
+        "case": "air-x",
+        "max_event_jitter_frames": 1,
+        "parent": "work/meteor-catch/paired/air-x-parent/result.json",
+        "passed": true,
+        "stable_action_events": 6,
+        "state_events": 4
+      },
+      {
+        "candidate": "work/meteor-catch/paired-q/regular-candidate/result.json",
+        "case": "regular",
+        "max_event_jitter_frames": 1,
+        "parent": "work/meteor-catch/paired/regular-parent/result.json",
+        "passed": true,
+        "stable_action_events": 8,
+        "state_events": 5
+      },
+      {
+        "candidate": "work/meteor-catch/paired-q/red-candidate/result.json",
+        "case": "red",
+        "max_event_jitter_frames": 0,
+        "parent": "work/meteor-catch/paired/red-parent/result.json",
+        "passed": true,
+        "stable_action_events": 5,
+        "state_events": 4
+      }
+    ],
+    "protected_build_log": "work/meteor-catch/protected-clean-build.log",
+    "strict_module_subprocesses": 95,
+    "strict_module_subprocesses_before_document_check": 94,
+    "strict_receipt": "work/meteor-catch/strict/summary.json",
+    "strict_skips": 0,
+    "strict_tests": 691,
+    "strict_tests_before_final_document_check": 683
+  },
+  "resolved_review_findings": [
+    "calibrated actual impact height instead of normalized turntable height",
+    "synchronized wrist steering with the next live animation sample",
+    "corrected native impact flash local Point3",
+    "rejected released directional A commands while retaining a two-frame plain-A tap",
+    "delegated grounded R before the paid Air Dodge check"
+  ],
+  "review": {
+    "candidate_sha256": "c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6",
+    "metric_count": 6,
+    "metrics": {
+      "correctness_isolation_save_safety": {
+        "evidence": "Weak-link cleanup and R, hurt, death, form, room and target-loss controls; owned/unowned/Red checks, purchase/refund/save/fresh Continue and six native control pairs pass. Clean candidate hash matches qualified Q; copied latest battery remains unchanged. Independent focused tests verify ARM and resource scope.",
+        "score": 8.5
+      },
+      "evidence": {
+        "evidence": "30 exact-Q gameplay/save cases, six paired controls, clean-source hash equality and 691 strict tests are reported with fixture limits and raw receipts. Independently reran all 17 focused tests successfully. Presentation reviewed via native-size dense frames, not perceptual sound or interactive hardware play.",
+        "score": 8.5
+      },
+      "feel": {
+        "evidence": "Exact-Q native-input two-frame A tap, R release, and single chosen Talon Lift follow-up pass; follow-up enters at frame 180 after impact 174 and hits at 190. This is an agent assessment from timed captures and input evidence, not a player or hardware feel verdict.",
+        "score": 8.0
+      },
+      "gameplay_contract": {
+        "evidence": "Exact-Q regular, mirrored, low, lethal, Conductor, target and chord controls cover bounded velocity, one floor hit and bounce, heavy/native fallbacks and preservation of Up+A and Down+A. Fixtures and unsupported mini-boss adapters are disclosed in reference/meteor_catch.json.",
+        "score": 8.5
+      },
+      "lean_integration": {
+        "evidence": "Scoped post-pass reuses existing helper and native movement and hit paths; composition tests preserve 32 KiB kit, existing resources and bindings. New code and tests are specific to the requested skill, its safety and native control boundaries.",
+        "score": 8.0
+      },
+      "presentation_animation": {
+        "evidence": "Independently inspected exact-Q dense native-size regular and mirrored frames: connected flip, distinct crouched impact and victim-attached flash. Actual authored clips and planted-foot geometry are tested. Brief low landing silhouette and native reaction pause remain visible; perceptual mixed-audio review was unavailable.",
+        "score": 8.0
+      }
+    },
+    "model": "gpt-6.1-terra",
+    "must_fix": [],
+    "required_minimum_each": 8,
+    "status": "passed"
+  },
+  "runtime": {
+    "allocation_bytes": 4096,
+    "bounce_q12": 6144,
+    "bytes": 3388,
+    "catch_damage_q12": 0,
+    "impact_damage_q12": 8192,
+    "metadata": "build/version-0.37.0-final/Versioned.build.json",
+    "samples": [
+      18,
+      24,
+      10
+    ],
+    "velocity_limits_q12": {
+      "enemy_x": 16384,
+      "enemy_y": 16384,
+      "player_drop": 8192
+    }
+  },
+  "schema_version": 1,
+  "source_files": {
+    "tests/test_meteor_catch.py": "47d2f91846bfbdfadb74165e375bbaf54e4d4ce71baf31986650117b514557fa",
+    "tools/meteor_catch.py": "2cea2cdcce9dad200ba076dbc1b3797f74e37b48a6662642e2667dc3aa87df0b",
+    "tools/meteor_catch.s": "a9c45ca5bb4ab4315bf82340020295e3516c19c972cf01829e1a80ba4f3078fa",
+    "tools/meteor_catch_art.py": "513d86aa3af89c6ac80c97547a27fdd7096812d10453b0d7cfdda4e53a4a0efa",
+    "tools/meteor_catch_lab.py": "6462d6623b4b19431099cc04f0abd629aea1631e09045a3e21771a82909c288c"
+  },
+  "status": "published-agent-tested-player-verdict-open",
+  "superseded_attempts": "Private build/meteor-a through meteor-p and work/meteor-catch reports retain failed or superseded attempts; only Q is final evidence. Earlier broad run caught an immutable pin change; final focused rerun replaces it. Superseded clean builds were held before installation.",
+  "version": "0.37.0"
+}

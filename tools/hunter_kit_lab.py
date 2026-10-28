@@ -294,10 +294,13 @@ def shop(a, *, row=7, bit=83, price=None):
     script += [press(button, frame) for frame, button in
                ((1800, 'X'), (1860, 'Down'), (1920, 'A'), (2200, 'R'), (2260, 'R'))]
     script += [press('Down', 2340+40*i) for i in range(row)]
-    script += [press(button, frame) for frame, button in (
+    delay = max(0, row-7)*40  # Extra rows must finish scrolling before the first confirmation.
+    script += [press(button, frame+delay) for frame, button in (
         (2660, 'A'), (2700, 'A'), (2800, 'A'), (2840, 'A'), (2940, 'A'), (2980, 'A'),
         (3100, 'B'), (3160, 'B'), (3220, 'X'), (3280, 'A'), (3360, 'A'), (3440, 'A'))]
     marks = {1740: 'before', 2620: 'row', 2760: 'bought', 2900: 'refunded', 3040: 'rebought', 3579: 'saved'}
+    marks = {frame+(delay if frame >= 2620 else 0): name for frame, name in marks.items()}
+    saved_frame = 3579+delay
     seen = {}
     def observe(frame, lib):
         if frame not in marks:
@@ -306,11 +309,11 @@ def shop(a, *, row=7, bit=83, price=None):
         stats = w.u32(ram, k.STATS_POINTER-k.p.BASE)-k.p.BASE
         seen[marks[frame]] = dict(words=list(struct.unpack_from('<3I', ram, stats+12)),
             xp=w.u32(ram, stats+0x44), room=w.u32(ram, stats), hp=w.u32(ram, stats+0x84))
-    route = emu.run(a.rom.resolve(), 3580, set(marks), save_path=copied, script=script,
-        label=a.tag+'-buy', frame_hook=observe, battery_captures={3579},
+    route = emu.run(a.rom.resolve(), saved_frame+1, set(marks), save_path=copied, script=script,
+        label=a.tag+'-buy', frame_hook=observe, battery_captures={saved_frame},
         core_options={b'melonds_jit_enable': b'enabled', b'melonds_jit_block_size': b'12'})
     earned = a.out/'purchased.sav'
-    w.atomic_write(earned, (route/'battery-03579.sav').read_bytes(), sources=(actual, copied))
+    w.atomic_write(earned, (route/f'battery-{saved_frame:05d}.sav').read_bytes(), sources=(actual, copied))
     reloaded = {}
     def continued(frame, lib):
         if frame == 3500:

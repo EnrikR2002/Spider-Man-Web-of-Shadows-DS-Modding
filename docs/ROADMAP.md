@@ -17,7 +17,7 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Reel In shipped in v0.36.0; independent review 8.5/10, player verdict open | Try air Up+A -> Y on a fresh foe during an air combo; give a verdict before Meteor Catch |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Meteor Catch v0.37.0 ships; Terra rates every metric at least 8/10. Reel In player-confirmed | Buy Meteor Catch after Sky Rake; try air A -> Up+A on the bounce and give a verdict |
 | 2 | Taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
@@ -71,8 +71,10 @@ at least 8/10 before completion. Reel In is the next sky-slice move, with airbor
 Up+A chosen locally to preserve X, plain air A and air Down+A. Its reviewer also
 requires 8/10 separately for presentation and feel. v0.36.0 passes at 8.5 overall,
 8.2 presentation and 8.4 feel; 674 tests and 28 final-ROM gameplay/save cases pass.
-Ten Black rows total 1,450 XP. Receipt: `reference/reel_in.json`. This request and
-agent review do not confirm the previous finisher landing or the new skill.
+Ten Black rows total 1,450 XP. Receipt: `reference/reel_in.json`. The player
+tested Reel In on 2026-10-27 and says it feels great; Meteor Catch is requested
+with GPT-6.1 Terra review of at least 8/10 on every metric. The earlier finisher
+landing remains player-unconfirmed.
 Remaining revision-3 behavior below is designed; retain baseline
 mechanics until each replacement qualifies.
 The remote design's 2026-10-24 dates are retained as source provenance. Machine-readable rows are in
@@ -194,7 +196,7 @@ affordable prices on 2026-10-25 because this kit has fourteen skills, then
 rejected v0.35.0's 1,600 XP budget as too cheap. The moderate v0.35.1 budget is:
 native slots 75/125/150/150/200/225/125 XP; Web Yank 100, Reel In 150, Sky Rake
 150, Meteor Catch 200, Roof Pin 225, Boarding 275, Apex Predator 300. Total
-2,450 XP; only implemented rows enter the shop (1,300 XP now). Existing
+2,450 XP; only implemented rows enter the shop (1,650 XP now). Existing
 purchases stay owned.
 
 **1. Rundown (Webbed Fury).** After a Power Dash hit, press A again within the
@@ -260,7 +262,7 @@ the line. Plain air A, air Down+A and native X remain. The agent-tested move use
 a zero-HP native launch plus bounded X/Y velocity, with natural gravity/collision;
 a reel from a descending claw string gives one brief upward recoil to make the
 next catch usable. Independent review is 8.5/10 overall, 8.2 presentation and
-8.4 feel; the player's verdict remains open.
+8.4 feel; the player tested it on 2026-10-27 and says it feels great.
 
 **10. Sky Rake (polished v0.35.1, 150 XP).** Black's air Y string plays four talon rakes (air
 juggle 0x14) and a flip kick that pops the target higher. The native air-chain
@@ -275,11 +277,15 @@ launch toward a three-unit point ahead while retaining native vertical launch
 and collision. This follow-up has not been checked in the emulator; player
 confirmation remains open.
 
-**11. Meteor Catch (new, requires Sky Rake).** Air A with an airborne enemy
+**11. Meteor Catch (shipped v0.37.0, requires Sky Rake, 200 XP).** Air A with an airborne enemy
 within about 10 units in front: grab it, flip and fall together (both by
 bounded velocity, as Vortex steers bodies), and slam it into the floor
 (knockdown) with one small bounce, ready for Talon Lift or Roof Pin. Otherwise,
-and against heavy targets, the native Hammer Spike runs.
+and against heavy targets, the native Hammer Spike runs. The agent-tested move
+has continuous private grab/flip, dive and planted impact clips, one two-HP
+floor hit and one small bounce. R/interruption and target loss release it;
+the player chooses the next attack. GPT-6.1 Terra rates all six metrics at least
+8/10, with presentation/feel 8.0 each. Player feel remains open; Roof Pin is later.
 
 **12. Roof Pin (new).** Down+Y on the ground with a downed enemy within about 10
 units in front: the train-roof moment as one short fixed finisher. Pin it with a
@@ -447,8 +453,11 @@ The player rejected that animation and found the prices too low. v0.35.1's
 connected phrase and moderate price increase qualify, including the required
 independent 8/10 look/feel gate. The player's 2026-10-26 instruction authorizes
 Reel In next with its own independent 8/10 gate. v0.36.0 meets it and ships air
-Up+A while preserving the other native controls. The player checks Reel In
-before Meteor Catch; prior and new player quality verdicts remain separate.
+Up+A while preserving the other native controls. On 2026-10-27 the player
+accepted Reel In and requested Meteor Catch, with GPT-6.1 Terra review and
+at least 8/10 on every metric before completion. v0.37.0 meets that gate and
+ships Meteor Catch with 30 exact-ROM gameplay/save controls, six native pairs
+and unchanged actual battery bytes. The player gives a verdict before the next slice.
 
 ## Red kit: the Amazing Spider-Man
 
@@ -539,6 +548,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-10-27, v0.36.0 Reel In | Tested Reel In; feels great. Implement the next skill with a GPT-6.1 Terra reviewer creating criteria; every metric must reach 8/10 | Reel In player-confirmed. v0.37.0 ships Meteor Catch after Terra scores presentation/feel/lean 8.0 and gameplay/correctness/evidence 8.5, with no must-fix findings. Meteor Catch remains player-unconfirmed |
 | 2026-10-26, after v0.35.2 | Implement the next 2099 skill; make it fun/impressive; a subagent must review and score it at least 8/10 before completion | v0.36.0 ships Reel In on airborne Up+A. Independent weighted score 8.53/10: presentation 8.2, feel 8.4, correctness9.0, evidence 8.5; no must-fix issue. Its overall and separate presentation/feel gates pass. Agent-tested; no new player verdict implied |
 | 2026-10-25, v0.35.1 Sky Rake finisher | Enemy gets kicked behind Spider-Man instead of landing slightly ahead | v0.35.2 biases the accepted light-target launch toward a three-unit forward landing while retaining native vertical launch and collision. Player confirmation is pending; no emulator check ran for this follow-up |
 | 2026-10-25, v0.35.0 Sky Rake | Animation looks bad; feel is okay but can improve. Skills are priced too low. Rework Sky Rake until an independent sub-agent rates both look and feel at least 8/10 | v0.35.1 ships open, connected descending/rising claws and a clear heel kick; independent look/feel 8/10 each. Sky Rake 150 XP, nine Black rows 1,300; purchases retained. Player verdict pending |

@@ -3,7 +3,7 @@
   "archived_expanded_design": "TASM_EXPANDED_ROADMAP.md",
   "black_slot": "2099-classic",
   "current_recipe": "gameplay_profile.json",
-  "current_release": "0.36.0",
+  "current_release": "0.37.0",
   "expanded_design": "../docs/ROADMAP.md",
   "historical_notes_archive": "../docs/archive/legacy-notes.zip",
   "historical_snapshot": {
@@ -26,7 +26,7 @@
     "Dragnet",
     "Vortex"
   ],
-  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 is authoritative with later player overrides: player-liked Down+A Web Yank, polished Sky Rake/forward finisher and v0.36.0 airborne Up+A Reel In ship alongside the taller cape-free appearance, Hunter's Return and manual-jump Talon Lift. Ten Black rows cost 1,450 XP within a 2,450-XP fourteen-row budget. Preserve purchases, native controls and progression; later abilities await individual qualification and player verdicts.",
+  "policy": "One combined TASM1/2 Red kit; Overclock, Dragnet and Vortex are its final added skills. Hunter revision 3 with later player overrides remains authoritative. Player-confirmed Reel In and Web Yank, Sky Rake and v0.37.0 Meteor Catch ship alongside the retained appearance and earlier abilities. Eleven Black rows cost 1,650 XP within the 2,450-XP fourteen-row budget. Preserve purchases, native controls and progression; later skills await individual qualification and player verdicts.",
   "prototype_reference": "../docs/ROADMAP.md#now",
   "schema_version": 1,
   "session_tasks": "../docs/TASKS.md",
@@ -118,7 +118,7 @@
             "input": "Owned Black airborne Up+A: reel an eligible foe below/ahead into claw range; choose Y for Sky Rake. Heavy targets pull Miguel. R lets go; native air A/Down+A/X remain.",
             "move": "Reel In",
             "planned_price": 150,
-            "player_confirmed": false,
+            "player_confirmed": true,
             "price": 150,
             "price_provisional": false,
             "price_version": "0.36.0",
@@ -143,10 +143,17 @@
           },
           {
             "ability_bit": 86,
+            "agent_tested": true,
             "event_id": 395,
-            "input": "Air A with an airborne enemy in reach",
+            "evidence": "meteor_catch.json",
+            "implemented_version": "0.37.0",
+            "input": "Owned Black plain air A near an airborne light foe: grab, flip, fall and floor knockdown with one small bounce. Choose Up+A afterward; R releases. Heavy/no-target retains native Hammer Spike; air Up+A Reel In and air Down+A remain.",
             "move": "Meteor Catch",
             "planned_price": 200,
+            "player_confirmed": false,
+            "price": 200,
+            "price_provisional": false,
+            "price_version": "0.37.0",
             "requires": "Sky Rake"
           },
           {
@@ -182,7 +189,7 @@
           "meter"
         ],
         "price_budget": {
-          "implemented_total_xp": 1450,
+          "implemented_total_xp": 1650,
           "native_rows_xp": [
             75,
             125,
@@ -226,12 +233,12 @@
           94,
           95
         ],
-        "status": "reel-in-shipped-remaining-slices-designed",
+        "status": "meteor-catch-shipped-remaining-slices-designed",
         "supersedes": "Hunter revision 2 (15 rows, 2026-10-23), revision 1 and the 2026-10-22 catch/carry/crash/chase proposal; local 2026-10-23 seven-row air/guard proposal (archived at docs/TASM_ROADMAP-local-2026-10-23.md)"
       },
       "design_reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
       "id": "2099-classic",
-      "implementation_order": "Player checks v0.36.0 Reel In before Meteor Catch. Its independent 8/10 gate passes; airborne Up+A preserves native X/plain air A/air Down+A. Retain authoritative claude/zen-clarke-p0wo8j design with later player overrides; qualify native mini-boss adapters before expanding targeting/Boarding coverage.",
+      "implementation_order": "Player checks v0.37.0 Meteor Catch before the next slice. GPT-6.1 Terra passes all six metrics at least 8/10; Reel In was player-confirmed on 2026-10-27. Native mini-boss adapters remain deferred.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Fuller chest/back/arms on the preserved native rig; unrelated native motion clips retained",
@@ -243,14 +250,15 @@
         "Purchased Talon Lift with manual held-B air follow-up and native R exit",
         "Purchased Web Yank: grounded/combo Down+A gathers up to five distant enemies with independent scarlet lines and weak refs; pure zero-HP pull, no close/rake/upward attack or catch impact flash; Conductor/resistant-target hero zip. Independent bit83/event392; v0.35.1 price 100 XP.",
         "Purchased Sky Rake (bit85/event394, 150 XP): connected private Black-only air claws and heel flip (v0.35.1), with v0.35.2 horizontal launch bias toward a three-unit forward landing. Native upward launch/gravity/collision, chain/hit timing and paid/unpaid R remain. Independent look/feel review on v0.35.1 was 8/10 each; v0.35.2 landing remains player-unconfirmed and was not rechecked in emulator.",
-        "Purchased Reel In (bit84/event393, 150 XP, requires Web Yank): airborne Up+A uses one scarlet tether and continuous cast/heave/recovery to bring a foe below/ahead into claw range for chosen Y. Heavy targets zip Miguel. Native velocity/gravity/collision, floor/R/interruption release and unchanged other inputs. Independent review 8.53/10 overall, presentation 8.2 and feel 8.4; player verdict pending.",
-        "Ten Black rows cost 75/125/150/150/200/225/125/100/150/150 XP: 1,450 XP now and 2,450 XP for the full planned fourteen rows. Existing owned bits, dependencies and prices retained."
+        "Purchased Reel In (bit84/event393, 150 XP, requires Web Yank): airborne Up+A uses one scarlet tether and continuous cast/heave/recovery to bring a foe below/ahead into claw range for chosen Y. Heavy targets zip Miguel. Native velocity/gravity/collision, floor/R/interruption release and unchanged other inputs. Independent review 8.53/10 overall, presentation 8.2 and feel 8.4; player tested it and says it feels great (2026-10-27).",
+        "Purchased Meteor Catch (bit86/event395, 200 XP, requires Sky Rake): private continuous grab/flip/dive/impact, native collision and two-HP floor hit plus one small bounce; native input and cleanup controls qualify. Terra scores every metric at least 8/10; player verdict pending.",
+        "Eleven Black rows total 1,650 XP; the planned fourteen-row total remains 2,450 XP. Existing purchases, prior prices and dependencies remain."
       ],
-      "kit": "Hunter revision 3 (14 planned skills): player-liked pure Down+A Web Yank, polished air-Y Sky Rake and v0.36.0 airborne Up+A Reel In. Talon Lift -> hold B -> Y -> air Up+A catches a fresh foe -> chosen Y continues; heavy targets pull Miguel. R exits. Retain Hunter's Return and native A/B/strings/traversal, purchases and dependencies. Ten current Black rows total 1,450 XP; four remaining new rows stay designed.",
+      "kit": "Hunter revision 3: player-liked pure Down+A Web Yank and Reel In, polished Sky Rake and v0.37.0 Meteor Catch. Talon Lift -> hold B -> Y -> plain air A -> chosen Up+A on the bounce. Air Up+A stays Reel In; air Down+A stays native. R releases. Eleven current Black rows total 1,650 XP; later slices remain designed.",
       "latest_feedback": {
-        "date": "2026-10-26",
-        "source_version": "0.35.2",
-        "summary": "Implement the next 2099 skill; make it fun/impressive; require independent subagent review of at least 8/10. Reel In ships in v0.36.0 after an independent 8.53/10 weighted score, with presentation 8.2 and feel 8.4. This request and agent review do not imply a new player quality verdict."
+        "date": "2026-10-27",
+        "source_version": "0.36.0",
+        "summary": "Player tested Reel In and says it feels great. Requested Meteor Catch next with a GPT-6.1 Terra rubric and every metric at least 8/10. v0.37.0 passes all six metrics; this does not imply player acceptance of Meteor Catch."
       },
       "name": "Spider-Man 2099 - Across the Spider-Verse inspired",
       "prior_design_snapshot": {
@@ -259,8 +267,8 @@
       },
       "replaces_form": "black",
       "selection_date": "2026-10-11",
-      "status": "v0.36.0-reel-in-agent-tested-player-verdict-pending",
-      "validation_limit": "See reel_in.json: 674 strict tests with zero skips across 94 modules, 28 exact final-ROM gameplay/save cases, seven paired native controls, independent 8.53/10 review and protected exact-hash installation with unchanged actual battery/checkpoint. A declared native-jump diagnostic proves posed tether attachment only; unmodified E Conductor input proves heavy mechanics. Player feel, perceptual audio, full campaign balance and hardware pacing remain open. Native mini-boss adapters remain deferred; unhandled targets retain native A."
+      "status": "v0.37.0-meteor-catch-agent-tested-player-verdict-pending",
+      "validation_limit": "See meteor_catch.json: 691 strict tests with zero skips across 95 modules, 30 exact final-ROM gameplay/save cases, six controlled native pairs, six Terra review metrics >=8/10, and protected clean/canonical/stable hash equality with unchanged actual battery/checkpoint. Native mini-boss adapters, player feel, perceptual audio, full-route balance and hardware pacing remain open."
     },
     {
       "id": "scarlet-kaine",
@@ -287,7 +295,7 @@
       "status": "identity-merged-into-tasm1"
     }
   ],
-  "updated": "2026-10-26",
+  "updated": "2026-10-27",
   "upgrade_plan": "tasm_upgrade_plan.json",
   "upgrade_plan_status": "implemented-current-red-rows-progression-expansion-deferred",
   "user_verified": [

@@ -53,7 +53,7 @@ flag: `chapter`, `crane`, `midnight_rework`, `chapter_renewal`,
 `midnight_reliability`, `chapter_finish`, `spider2099`, `spider2099_polish`,
 `spider2099_movie`, `spider2099_enemy_texture`, `vortex_forge`,
 `hunters_return`, `hunters_return_fix`, `talon_lift`, `spider2099_presence`,
-`hunter_kit`, `web_yank_fix`, `web_yank_combo`, `sky_rake`, `sky_rake_polish`, `sky_rake_front`, `reel_in`. Recent
+`hunter_kit`, `web_yank_fix`, `web_yank_combo`, `sky_rake`, `sky_rake_polish`, `sky_rake_front`, `reel_in`, `meteor_catch`. Recent
 profiles copy their parent's flags and add one (v0.31.0 is v0.30.3 plus
 `vortex_forge`), so the current release is the whole stack. A post-pass refuses
 any input except its exact published parent ROM and checks its output against
@@ -130,6 +130,7 @@ Copy the established shape (`tools/vortex_forge.py`, `.s`, `_art.py`,
 | Save safety and publication | AGENTS and this guide's release section | `playtest.py`, `desmume_save.py`, `save_backups.py` |
 | Shop rows, ability bits and prices | [Purchase records](TECHNICAL.md#purchase-records-and-native-ownership), [Shop tables](TECHNICAL.md#shop-tables-menu-and-free-ownership-bits-v0100) | `tasm_kit.py` (Red/Both Suits rows), `release_info.py` (prices), `upgrade_trace.py` |
 | Purchased airborne Reel In | [Reel In](TECHNICAL.md#airborne-reel-in-v036-research) | `reel_in.py`, `.s`, `_art`, `_lab`; exact v0.35.2 post-pass, bit84 with Web Yank dependency. Lab `--case` covers native controls, real floor-contact release, heavy zip and native purchase/save. |
+| Purchased airborne Meteor Catch | [Meteor Catch](TECHNICAL.md#meteor-catch-v037-research) | `meteor_catch.py`, `.s`, `_art`, `_lab`; exact v0.36.0 post-pass, bit86 requiring Sky Rake. Lab cases include low-floor contact, chosen follow-up, lethal cleanup, native fallbacks, Conductor and purchase/save. |
 | Remaining 2099 Black kit | ROADMAP [implementation guide](ROADMAP.md#implementation-guide) | Follow [Add a feature](#add-a-feature-as-a-new-post-pass); native mini-boss adapters still require qualification. |
 
 Tool filenames in this table are under `tools/`. Find a CLI's actual arguments
@@ -324,6 +325,12 @@ uses native aerial evasion/stomps for the Black control. `press` heals unless
 | Audio | A decoded sound reel proves sample authoring; captured PCM establishes in-game playback. Verify cues in the mix as well as runtime request counts. |
 
 Reports have different schemas: inspect top-level keys before scripting extraction.
+Native updates can straddle a video capture, exposing a new controller state
+beside the old animation for one frame. Keep raw rows. For controlled native
+pairs, compare all state-entry events and separately compare action events that
+persist for a full update; declare the capture window, timing tolerance and
+initial controller/velocity fixtures. Do not silently discard an unexplained
+gameplay difference or count a setup fixture as mechanics proof.
 Use unique labels and keep failed controls; do not silently replace a failed
 batch with a passing individual result. Promote the selected passing reports,
 fixture limits, ROM hashes and any inherited controls into a compact
