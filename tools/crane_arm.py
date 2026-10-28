@@ -184,9 +184,10 @@ def next_version(meta):
     return f'{major}.{minor+1}.0'
 
 
-def apply_rom(rom, *, meter=True, version=VERSION, parent_meta=None):
+def apply_rom(rom, *, meter=True, version=VERSION, parent_meta=None, compose=True):
     """Exact v0.37.0 by default. With `parent_meta` (its build json) any later ROM that still has the
-    published hooks, scripts and tables is accepted: every site and room edit is asserted structurally."""
+    published hooks, scripts and tables is accepted: every site and room edit is asserted structurally.
+    `compose` then applies the chainable room-scenery and map passes (crane_vista, crane_map) to the finished ROM."""
     from tools import release_info
     h = w.parse_header(rom)
     arm = rom[h['arm9_offset']:h['arm9_offset']+h['arm9_size']]
@@ -200,7 +201,7 @@ def apply_rom(rom, *, meter=True, version=VERSION, parent_meta=None):
         meta = parent_meta
     sr = meta['chapter_spectacle']['scripted_runtime']
     names, blobs = assets.resources(rom)
-    before = tuple(blobs)
+    base_names, before = list(names), tuple(blobs)
     import mod
     _, glob, _ = mod.load_clean()
     offsets, native_names, _ = w.parse_glob(glob)
@@ -316,6 +317,23 @@ def apply_rom(rom, *, meter=True, version=VERSION, parent_meta=None):
                         world_table=new_table, closed_record=closed, open_record=opened, drop_var=drop.DROP,
                         land_frames=drop.LAND_FRAMES, lift_frames=drop.LIFT_FRAMES),
         player_kit_32k_unchanged=True)
+    if compose:
+        # Both passes find their targets by structure and expect the finished ROM, so they run last.
+        from tools import crane_vista, crane_map
+        mine = report['rom_sha256']
+        result, vista_report = crane_vista.apply_rom(result)
+        result, map_report = crane_map.apply_rom(result)
+        hh = w.parse_header(result)
+        names_now, blobs_now = assets.resources(result)
+        now = dict(zip(names_now, blobs_now))
+        everything = {n for n, a in zip(base_names, before) if now[n] != a}
+        allowed = expected | {crane_vista.MODEL, crane_vista.TEXTURE, *crane_map.nav.SCREENS}
+        if not everything <= allowed:
+            raise ValueError('Unexpected composed resource scope: '+str(sorted(everything-allowed)))
+        report.update(rom_sha256=w.sha256(result), arm9_sha256=w.sha256(result[hh['arm9_offset']:hh['arm9_offset']+hh['arm9_size']]),
+                      modified_resources=sorted(everything), nitrofs_relocation_bytes=report['nitrofs_relocation_bytes']
+                      +vista_report['nitrofs_relocation_bytes']+map_report['nitrofs_relocation_bytes'],
+                      composed=dict(crane_arm_rom_sha256=mine, vista=vista_report, map=map_report))
     # Only a profile registered for this pass (marked 'crane') is its release pin: another feature's
     # candidate may own the same version number until one of them publishes.
     pin = release_info.PROFILE_INFO.get('tasm-v'+version, {})
@@ -325,7 +343,7 @@ def apply_rom(rom, *, meter=True, version=VERSION, parent_meta=None):
     return result, report
 
 
-def generate(output, source_path=PARENT_PATH, meter=True, version=None):
+def generate(output, source_path=PARENT_PATH, meter=True, version=None, compose=True):
     output, source_path = Path(output), Path(source_path)
     if not output.resolve().is_relative_to((ROOT/'build').resolve()):
         raise ValueError('Candidates belong in build/')
@@ -335,7 +353,7 @@ def generate(output, source_path=PARENT_PATH, meter=True, version=None):
         # Rebase onto a later ROM (for example a published v0.38.0): its own build json carries the hook map.
         parent_meta = json.loads(source_path.with_suffix('.build.json').read_text(encoding='utf-8'))
     version = version or (VERSION if parent_meta is None else next_version(parent_meta))
-    result, report = apply_rom(rom, meter=meter, version=version, parent_meta=parent_meta)
+    result, report = apply_rom(rom, meter=meter, version=version, parent_meta=parent_meta, compose=compose)
     path = output/'Versioned.nds'
     validation = w.validate_rom(result, target=True)
     meta = json.loads(source_path.with_suffix('.build.json').read_text(encoding='utf-8'))
@@ -359,6 +377,7 @@ if __name__ == '__main__':
     p.add_argument('--out', type=Path, required=True)
     p.add_argument('--source', type=Path, default=PARENT_PATH)
     p.add_argument('--no-meter', action='store_true', help='Leave the native boss meter and its shared finder untouched')
+    p.add_argument('--bare', action='store_true', help='Skip the chained vista and map passes (hoist and cargo drops only)')
     p.add_argument('--version', help='Output version; default 0.38.0 on v0.37.0, else the next minor of the source')
     a = p.parse_args()
-    generate(a.out, a.source, not a.no_meter, a.version)
+    generate(a.out, a.source, not a.no_meter, a.version, not a.bare)

@@ -6041,8 +6041,8 @@ and portholes. No player verdict; hardware is untested.
 ### Crane cargo drops (v0.38 candidate, 2026-10-28)
 
 Advisor item 2 ("the crane never acts"). **Unpublished, agent-tested**; code
-`tools/crane_drop.py`, composed into `tools/crane_arm.py`, receipt
-`reference/crane_arm.json`. A hook lowers a red container into Freight and Dry Dock
+`tools/crane_drop.py`, composed into `tools/crane_arm.py` (which also chains
+`crane_vista` and `crane_map` last), receipt `reference/crane_arm.json`. A hook lowers a red container into Freight and Dry Dock
 when the player crosses a gate, and into Crown after the first crew dies; it lands,
 swaps to an open container, the crew spawns and the crane lifts the shell away.
 

@@ -67,10 +67,11 @@
   ],
   "rebase": "python tools/crane_arm.py --out build/<dir> --source <any later ROM with the published hooks and rooms> builds the same changes with the next minor version (all hook sites, scripts and tables are asserted); built once onto the unpublished boarding candidate, not run in the engine",
   "composition": {
-    "with": "tools/crane_vista.py and tools/crane_map.py",
-    "composed_candidate": "build/crane-composed-vm/Versioned.nds",
+    "with": "tools/crane_vista.py and tools/crane_map.py, called at the end of crane_arm.apply_rom (--bare skips them)",
+    "composed_candidate": "build/crane-final/Versioned.nds (python tools/crane_arm.py --out build/crane-final)",
     "composed_sha256": "372dfeccf16641ab5e55ebcfd81c113b82f0ddb133254016cdf0d607a14ae768",
-    "order": "vista then map equals map then vista (same sha)"
+    "bare_sha256": "a82d051331c4cd6f59a5366b4f54fc1840d217abcc45d2c182562ee72ed85780",
+    "order": "vista then map equals map then vista (same sha); the one-command build matches the manual chain byte for byte"
   },
   "cargo_drop": {
     "rooms": {

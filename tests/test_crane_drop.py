@@ -159,13 +159,23 @@ class Build(unittest.TestCase):
     def setUpClass(cls):
         cls.rom, cls.report = a.apply_rom(a.PARENT_PATH.read_bytes())
 
-    def test_resource_scope_is_the_three_rooms_the_text_and_two_appended_models(self):
+    def test_resource_scope_is_the_three_rooms_the_text_two_appended_models_and_the_chained_passes(self):
+        from tools import crane_map, crane_vista
         r = self.report
-        self.assertEqual(set(r['modified_resources']), {a.OBJ, 'American.strings', 'English.strings', 'GlobFiles.txt',
-                         *(f'zz_{cfg[0]}_app.obj' for cfg in d.ROOMS.values())})
+        mine = {a.OBJ, 'American.strings', 'English.strings', 'GlobFiles.txt', *(f'zz_{cfg[0]}_app.obj' for cfg in d.ROOMS.values())}
+        self.assertEqual(set(r['modified_resources']), mine | {crane_vista.MODEL, crane_vista.TEXTURE, *crane_map.nav.SCREENS})
+        self.assertEqual(r['composed']['crane_arm_rom_sha256'] == r['rom_sha256'], False)
+        self.assertEqual(set(r['composed']['map']['modified_resources']) <= set(crane_map.nav.SCREENS), True)
+        self.assertEqual(r['composed']['vista']['collision_identical'], True)
         self.assertEqual([n for n in r['cargo_drop']['appended_resources'] if n.endswith('.nsbmd')], list(d.MODELS))
         names = assets.resources(self.rom)[0]
         self.assertEqual(names[-2:], list(d.MODELS))
+
+    def test_bare_build_stops_before_the_chained_passes(self):
+        rom, report = a.apply_rom(a.PARENT_PATH.read_bytes(), compose=False)
+        self.assertNotIn('composed', report)
+        self.assertNotEqual(w.sha256(rom), w.sha256(self.rom))
+        self.assertEqual(report['rom_sha256'], self.report['composed']['crane_arm_rom_sha256'])
 
     def test_world_table_gains_exactly_the_six_container_rows_and_the_tick_hook_is_chained(self):
         h = w.parse_header(self.rom)

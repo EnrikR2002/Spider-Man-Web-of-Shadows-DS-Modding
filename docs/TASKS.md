@@ -29,10 +29,11 @@ Fourth slice, same date, **unpublished**: `tools/crane_drop.py`, composed into
 `tools/crane_arm.py`, makes the crane act. Freight and Dry Dock hang a container
 that lowers on its hook when the player nears, lands, opens and releases the crew;
 Crown's Hunters arrive the same way (TECHNICAL "Crane cargo drops"). Scenery only;
-the published crew spawners and callbacks are untouched. The four passes compose
-into `build/crane-composed-vm/Versioned.nds` (sha `372dfecc...`, vista and map in
-either order give the same ROM). `crane_arm` also rebases onto a later ROM:
-`--source <rom>` asserts every hook, room and table and bumps the next minor.
+the published crew spawners and callbacks are untouched. `tools/crane_arm.py` now
+chains the vista and map passes itself: `python tools/crane_arm.py --out
+build/crane-final` gives the composed ROM (sha `372dfecc...`; `--bare` skips them),
+and it also rebases onto a later ROM with `--source <rom>`, asserting every hook,
+room and table and bumping the next minor.
 
 Evidence: 24 unit checks for the hoist and cargo drops run the assembled ARM
 against fixtures and the script edits against the published rooms. Native-input
@@ -67,8 +68,8 @@ Midnight sweeps, the Black no-refill fight on the cargo build, any save/Continue
 case and any hardware run; the JIT-warp labs fail in a fresh worktree and
 `crane_walk entry` and three ground-door crossings fail on the published build too
 (DEVELOPMENT "Labs in a fresh git worktree"). Fairness and fun are player gates.
-Next exact action: the player tries `build/crane-composed-vm/Versioned.nds` (or
-regenerates it from the tools) and gives a verdict; to publish, rebase onto the
+Next exact action: the player tries `build/crane-final/Versioned.nds` (regenerate it
+with the command above) and gives a verdict; to publish, rebase onto the
 then-current published ROM (the unpublished boarding v0.38 candidate lives on
 another branch), add the profile, run the missing controls serially and use
 `tools/playtest.py build`. Unbuilt follow-ups are in ROADMAP. Meteor Catch's
