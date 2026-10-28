@@ -316,10 +316,12 @@ def apply_rom(rom, *, meter=True, version=VERSION, parent_meta=None):
                         world_table=new_table, closed_record=closed, open_record=opened, drop_var=drop.DROP,
                         land_frames=drop.LAND_FRAMES, lift_frames=drop.LIFT_FRAMES),
         player_kit_32k_unchanged=True)
+    # Only a profile registered for this pass (marked 'crane') is its release pin: another feature's
+    # candidate may own the same version number until one of them publishes.
     pin = release_info.PROFILE_INFO.get('tasm-v'+version, {})
     for key in ('rom_sha256', 'arm9_sha256'):
-        if pin.get(key) and pin[key] != report[key]:
-            raise ValueError('Long Arm finale differs from its immutable release pin')
+        if pin.get('crane') and pin.get(key) != report[key]:
+            raise ValueError('Crane Row build differs from its immutable release pin')
     return result, report
 
 
