@@ -14,6 +14,12 @@ slam and a left-side Maw at a third) with the native boss meter. Receipt:
 `reference/crane_arm.json`; design: ROADMAP "Crane Row"; contracts: TECHNICAL
 "Long Arm three acts".
 
+Second slice, same date, **unpublished**: the player also found the Crane map
+weird and unconnected. `tools/crane_navigation.py` now draws one ring of touching
+rooms with short necks, and `tools/crane_map.py` is a structure-found, chainable
+post-pass for it (receipt `reference/crane_map.json`; TECHNICAL "Crane Row ring
+map"). It must run last on the composed candidate.
+
 Evidence: 11 new unit checks run the assembled ARM against fixtures and the
 script edits against the published room. Native-input Black no-refill and Red
 hoist fights reach all three acts; Red wins untouched, the Black bot is
@@ -39,7 +45,9 @@ published game; this tooling task adds no gameplay qualification or player verdi
 
 ## Blockers and next exact action
 
-Not verified: the Conductor's boss meter in-engine (build with `--no-meter` to
+The ring map is agent-tested (unit tests, one melonDS capture on v0.37.0) and
+not yet chained into the composed candidate. Not verified: the Conductor's boss
+meter in-engine (build with `--no-meter` to
 drop the change), the full 30-door and Midnight sweeps, and any save/Continue
 case; the JIT-warp labs fail in a fresh worktree and `crane_walk entry` fails on
 the published build too (DEVELOPMENT "Labs in a fresh git worktree"). Fairness

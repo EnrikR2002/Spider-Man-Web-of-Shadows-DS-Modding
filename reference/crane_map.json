@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "status": "unpublished candidate; agent-tested; no player verdict",
+  "feature": "Crane Row ring overview map",
+  "source": "tools/crane_navigation.py, tools/crane_map.py",
+  "tests": [
+    "tests/test_crane_navigation.py",
+    "tests/test_crane_map.py"
+  ],
+  "applies_to": "any Crane Row ROM that kept the published area-6 map table (found by structure, no parent pin)",
+  "parent_checked": "build/version-0.37.0-final/Versioned.nds (c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6)",
+  "candidate": "build/crane-map-a/Versioned.nds (ignored; regenerate with python tools/crane_map.py --out build/crane-map-a --source build/version-0.37.0-final/Versioned.nds)",
+  "candidate_sha256": "4f836dc077f01d62885417868b29f3c9a8fe38b68e5a459f82985ac956df54a4",
+  "changed_resources": [
+    "zz_CraneOverview.cbmp",
+    "zz_CraneGuide1.cbmp",
+    "zz_CraneGuide2.cbmp",
+    "zz_CraneGuide3.cbmp"
+  ],
+  "room_list_rows": {
+    "old": 20,
+    "new": 18
+  },
+  "nitrofs_relocation_bytes": 512,
+  "arm9_bytes_changed": 107,
+  "evidence": {
+    "unit": "14 tests: every door pair is one neck between touching rooms, no overlaps, one connected map, per-door lock halves, row layout, exact resource and ARM scope, idempotence, refusal of the original ROM",
+    "engine": "melonDS capture, crane_walk map AR_EngineHouse --spawn 1 --rom build/crane-map-a/Versioned.nds: ring shown at x2, Engine lit, locked halves red, Office and checkpoint save glyphs, same four screens share slots"
+  },
+  "limits": [
+    "Only v0.37.0 was patched and captured; chaining after the cargo-drop build is the composer's job and is not yet tested.",
+    "Not tried on hardware or by the player; legibility and the removal of door-side necks are judgements for the player.",
+    "No door sweep was needed or run: no room, door or flag changed."
+  ]
+}

@@ -516,6 +516,13 @@ lane and calls a Maw from the left. Player questions: is every slam avoidable, d
 the chains feel exciting or cheap, do the openings still reward combos, is the
 fight length right, any slowdown.
 
+**Map (2026-10-28 request: weird, rooms do not connect; make it like the base
+game's):** unpublished candidate `tools/crane_map.py`. The overview is now one ring of
+touching rooms with short necks, red locked halves and a dotted Pier exit
+(TECHNICAL "Crane Row ring map"). Player questions: is the ring readable on
+hardware, is the current room obvious, does the bridge over Yard and Dock read
+as the power shortcut.
+
 **Advisor diagnosis, still unbuilt (ranked):** (1) nine rooms are the same
 spawner fight with no ramp (Quay Maw only, Yard Spore on roofs, Freight introduces
 Ballast, Engine/Breakwater quiet, Gantry Maw ambush, Crown the largest crew; use
@@ -567,6 +574,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-10-28, v0.37.0 | Also improve the Crane Row map: it looks too weird and the rooms do not properly connect; make it similar to the base game map | Ring map with touching rooms and necks (unpublished candidate, agent-tested only); no player verdict |
 | 2026-10-28, v0.37.0 | Go through Crane Row and make it as cool and fun as possible; it feels lame and a worse Midnight Line | Opus advisor review; first slice is the Long Arm three-act fight and boss meter (unpublished candidate, agent-tested only). Ramp, Freight crane delivery and backdrop remain proposals; no player verdict |
 | 2026-10-27, v0.36.0 Reel In | Tested Reel In; feels great. Implement the next skill with a GPT-6.1 Terra reviewer creating criteria; every metric must reach 8/10 | Reel In player-confirmed. v0.37.0 ships Meteor Catch after Terra scores presentation/feel/lean 8.0 and gameplay/correctness/evidence 8.5, with no must-fix findings. Meteor Catch remains player-unconfirmed |
 | 2026-10-26, after v0.35.2 | Implement the next 2099 skill; make it fun/impressive; a subagent must review and score it at least 8/10 before completion | v0.36.0 ships Reel In on airborne Up+A. Independent weighted score 8.53/10: presentation 8.2, feel 8.4, correctness9.0, evidence 8.5; no must-fix issue. Its overall and separate presentation/feel gates pass. Agent-tested; no new player verdict implied |

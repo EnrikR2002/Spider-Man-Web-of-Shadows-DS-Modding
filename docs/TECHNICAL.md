@@ -5265,8 +5265,9 @@ native screen/title fields because static initialization originally fills
 them later. Native world overview still draws its five original districts;
 Crane has its own local overview and per-room detail maps. Native map-item
 ownership bits are untouched; Crane's local map follows the chapter's
-unlocked extra-area path. The current diagram uses 22 entries for 12 rooms
-because of palette/cell boundaries. Do not force it into Pier's spare strip.
+unlocked extra-area path. The current diagram (superseded 2026-10-28 by the
+ring map below) used 22 entries for 12 rooms because of palette/cell
+boundaries. Do not force it into Pier's spare strip.
 Old appended message entries are copied exactly into an owned contiguous
 extension; native IDs stay native and new message bounds remain below 256.
 
@@ -5977,6 +5978,37 @@ path used by `chapter_spectacle_lab hoist*` and `chapter_finish_lab` starts in
 room 96 here, for the parent too; `crane_walk.py machine` (no JIT) works.
 (3) Do not run labs concurrently: one run reported "DS rejected ROM". (4)
 `crane_walk entry` fails on published v0.37.0; not a regression of this work.
+
+### Crane Row ring map (v0.38 candidate, 2026-10-28)
+
+Player (2026-10-28): the Crane map looked weird and its rooms did not connect;
+make it like the base game's. **Unpublished, agent-tested**: unit tests plus one
+melonDS capture on v0.37.0 (`crane_walk.py map AR_EngineHouse --spawn 1`, every
+room visited); receipt `reference/crane_map.json`. Supersedes the 2026-10-12
+wire-and-letter diagram (two rows of boxes, A..D codes, long bent wires).
+
+**Layout (`tools/crane_navigation.py`, high confidence).** The door graph is one
+ring: Quay, Freight, Yard, Dock and Engine along the ground, the tall Shaft up
+the right edge, then Gantry, Crown, Arm and Breakwater back along the roofs to
+Quay, with Engine's two shortcut doors as chords (Freight bridge, Crown neck),
+Office above Freight, Cache beside Engine. Every one of the 14 door pairs is a
+3-pixel neck between touching rooms (`Link.neck`); only the Pier exit is a dotted
+arrow. A neck's halves belong to the rooms they touch and turn red while that
+room's door is locked, so progress still opens them one by one. Necks may leave a
+room's top or bottom: the old rule that connectors leave the real door side is
+dropped, because the ring needs the roof row to run right-to-left. Rooms are
+unions of rectangles (`EXTRA`) that fit the native room-slot palettes (18 list
+rows, was 20) and share one slot allocation across the four progress screens.
+
+**Release pass (`tools/crane_map.py`, high confidence).** `apply_rom` replaces only
+`zz_CraneOverview.cbmp` and `zz_CraneGuide1..3.cbmp` and rewrites the area-6 room
+list (20-byte rows, count at row+12) in place. It finds the table by structure,
+not by parent SHA: the area row whose screen is `zz_CraneOverview.cbmp`, reached
+from any owned-table pointer, must validate exactly once. It is idempotent and
+chains after any Crane build that kept the published table; it relocates the
+Glob like `crane_arm.py` (512 bytes on v0.37.0). Entry type byte 1 marks the
+Office as a save row; it draws no visible sprite (capture), so saves are pixel
+glyphs.
 
 ### Native parent-area maps
 
