@@ -5,20 +5,20 @@ workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design.
 
 ## Current objective
 
-All six repository-audit findings are fixed: failed qualifications return a
-failing exit code, enemy scans reject stale
-motion ownership, checkpoint failures allow retry, archive failures recover the
-ZIP/index pair, the spectacle lab refreshes its player copy, and publication
-rejects mismatched retained build metadata. Navigator report APIs remain usable
-by their callers. No gameplay or release bytes were edited.
+Crane Row feels lame next to Midnight Line (player, 2026-10-28). An Opus
+advisor diagnosed nine same-spawner rooms with no ramp, a crane that never acts
+and a wall-box hoist with no boss meter. First slice, **unpublished and
+agent-tested only**: `tools/crane_arm.py` makes the Long Arm a three-act fight
+(no start add; Maw backup at two thirds health; 28-frame tells, chained second
+slam and a left-side Maw at a third) with the native boss meter. Receipt:
+`reference/crane_arm.json`; design: ROADMAP "Crane Row"; contracts: TECHNICAL
+"Long Arm three acts".
 
-All 45 focused tooling tests pass, including actual command exit codes,
-synthetic stale actors, refreshed copies, injected write/verification/rename
-failures, recovery retries and retained backups after a failed rollback.
-All 705 strict tests pass with zero skips across 96 module subprocesses. The
-final archive interruption checks also pass. The documentation contract holds;
-exact protected-file observations and validation receipts are in
-`reference/tooling_safety.json`.
+Evidence: 11 new unit checks run the assembled ARM against fixtures and the
+script edits against the published room. Native-input Black no-refill and Red
+hoist fights reach all three acts; Red wins untouched, the Black bot is
+marginal. Win, 700 quiet frames and a cleared revisit pass; the four Long Arm
+doors pass like the parent. No gameplay or release bytes were published.
 
 ## Published build
 
@@ -39,11 +39,13 @@ published game; this tooling task adds no gameplay qualification or player verdi
 
 ## Blockers and next exact action
 
-No implementation blocker remains. Meteor Catch's player feel, hardware pacing
-and full-route balance remain unconfirmed. Next exact action: launch normally,
-buy Meteor Catch after Sky Rake, and try Talon Lift -> hold B -> Y -> plain air A
--> Up+A on the bounce.
-Check both facings and R release, then give a verdict before the next skill.
-No new skill, release publication or push is requested.
+Not verified: the Conductor's boss meter in-engine (build with `--no-meter` to
+drop the change), the full 30-door and Midnight sweeps, and any save/Continue
+case; the JIT-warp labs fail in a fresh worktree and `crane_walk entry` fails on
+the published build too (DEVELOPMENT "Labs in a fresh git worktree"). Fairness
+and fun are player gates. Next exact action: the player decides whether to try
+the candidate; to publish, add its profile, run the missing controls serially and
+use `tools/playtest.py build`. Unbuilt follow-ups are in ROADMAP. Meteor Catch's
+verdict is still pending.
 
 Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.

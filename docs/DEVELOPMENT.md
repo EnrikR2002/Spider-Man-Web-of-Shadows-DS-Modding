@@ -161,6 +161,18 @@ and native material dimensions affecting UV sampling. Those discoveries belong
 in the engine contract and regressions. The reusable workflow lesson is to test
 the complete native path before scaling authoring or publishing.
 
+### Labs in a fresh git worktree
+
+A worktree has none of the ignored private inputs. Before any lab copy from the
+full checkout: the clean ROM to `original/`, `mods/*` (then `git checkout --
+mods/README.md`, which the copy overwrites), the parent `build/version-<n>-final`,
+and `work/{emulator,research-libs,playtest.json,save-backups,glob,rom,kit}`.
+Missing `save-backups`/`glob` makes a lab boot a fresh game and stall on the
+health-orb tutorial. Run labs one at a time. `crane_walk.py machine --rom <rom>
+[--black] --no-heal --purchased-kit --combat-frames 10000 [--verify-clear]`
+fights the hoist with native inputs; `chapter_spectacle_lab hoist*` and
+`chapter_finish_lab` use a JIT static warp that starts in room 96 here.
+
 ## Run focused qualification
 
 Always pass the candidate ROM explicitly; some legacy defaults point to old

@@ -5931,6 +5931,53 @@ Objectives phases, upper Quay loft and no destination boards. Engine lever is
 visually reviewed in walk-control-gates/frame-03300.png; native Pier Objectives
 still displays its original goal. Final receipts live in rework/publication.json.
 
+### Long Arm three acts and boss meter (v0.38 candidate, 2026-10-28)
+
+Player asked (2026-10-28) to make Crane Row as fun as Midnight Line; an Opus
+advisor review (read-only, `tools/crane_arm.py` is its first slice) found nine
+rooms with the same spawner fight and no ramp, a crane that never acts, and a
+hoist that is a wall box with free 130-310 frame openings and no boss meter.
+Only the hoist slice exists; ramp, Freight crane delivery and the open backdrop
+are unbuilt. **Unpublished, agent-tested**, receipt `reference/crane_arm.json`.
+
+**Mechanism (high confidence, source v0.37.0).** Room 106 script is the published
+80 groups edited in place with `chapter_spectacle_events.rewrite`: eg ids are
+1-based, `activate(ag=)` takes the 0-based batch index returned by `append_batch`.
+Room scratch bytes live at `manager+0x99+var`: RUN 0x127 (+0x1C0) ... act marker
+0x12F (+0x1C8); only 0x12D/0x12E/0x130 were free. The act marker is written by an
+HP wrapper chained at `crane_boss.HP_SITE` after the published `core_phase`
+(0x215F610): it sets 2 at core HP <= 0xC000 and mirrors HP into private cells.
+The published half-health word `cmp r0,#0x12000` is the only instruction patched
+inside published code; it becomes 0x18000, so the damaged phase and guard visual
+now start at two thirds. A tell is any `0x1C` command with the published delay:
+steady 0x30, damaged 0x24, fury 28. The chain hands every `Hit*_Go` to
+`Slam_Aftermath`, which re-enters the guarded `Next` once per opening.
+
+**Native boss meter (medium-high).** `midnight_encore` hud/meter adapters call one
+boss finder via `bl` at `hud+8` and `meter+8`; both are repointed to a stub that
+returns a 0x4C-byte cell block (+0x44 current, +0x48 maximum, Q12) while room 106
+RUN is 1, refills it when idle, and tail-branches to the Conductor finder in every
+other case. The Black capture shows the meter full, draining with real core HP.
+The Conductor meter after this change is **not** regression-tested.
+
+**Start add removed, budget widened.** Room 106's patrol goal row (five words per
+room at `scripted_runtime.goal_table`) pointed to a one-total/one-live goal; it now
+uses the existing three/two goal. With that budget the 45-frame start crew spawned
+a Maw plus a Ballast and killed the lab player at frame 577, so the start crew
+call (batch 12) is dropped and each act brings its own backup. Ballast hits 8029,
+Spore 3453 per hit against a 24576 lab player; Spore plus chained slams killed the
+bot, so both backups use the room's Maw pattern. Spawner window 30 frames yields
+one or two Maws (native roll).
+
+**Lab traps found.** (1) A fresh worktree needs private `work/save-backups`,
+`work/glob`, `work/rom`, `work/kit`, `work/emulator`, `work/research-libs`,
+`work/playtest.json`, `mods/` and the parent build; without the first four the lab
+runs a fresh game and stalls on the health-orb tutorial. (2) The JIT static-warp
+path used by `chapter_spectacle_lab hoist*` and `chapter_finish_lab` starts in
+room 96 here, for the parent too; `crane_walk.py machine` (no JIT) works.
+(3) Do not run labs concurrently: one run reported "DS rejected ROM". (4)
+`crane_walk entry` fails on published v0.37.0; not a regression of this work.
+
 ### Native parent-area maps
 
 The actual runtime order was observed from `0x0213B840`, not guessed:

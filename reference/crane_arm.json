@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "unpublished candidate; agent-tested; no player verdict",
+  "feature": "Long Arm three-act hoist fight and native boss meter",
+  "source": "tools/crane_arm.py",
+  "tests": "tests/test_crane_arm.py",
+  "version_if_published": "0.38.0",
+  "parent_version": "0.37.0",
+  "parent_sha256": "c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6",
+  "candidate": "build/crane-arm-e/Versioned.nds (ignored; regenerate with python tools/crane_arm.py --out build/crane-arm-e)",
+  "candidate_sha256": "a534d536de91f9e5b80525ad441b1a38986ab3e6be6154a04d718e0896ada228",
+  "candidate_arm9_sha256": "80ba8c4df7715b98fc0e1cdcc6716a802fccc673d5f096726c94770e732f8dc4",
+  "changed_resources": ["zz_AR_LongArm_app.obj", "American.strings", "English.strings"],
+  "nitrofs_relocation_bytes": 1536,
+  "new_arm_bytes": 156,
+  "acts": {
+    "I": "core above two thirds of its health: published slam/sweep loop, no start add",
+    "II": "core at or below 24 of 36 units (published marker moved from 18): damaged tells and openings, one Hoist Backup call, one or two Maws",
+    "III": "core at or below 12 units (new marker value 2): 28-frame tells, each slam chains a second tell on the player's new lane, one Hoist Reserve call from the left"
+  },
+  "scratch_variables": {"0x12D": "backup called", "0x12E": "reserve called", "0x12F": "act marker 0/1/2", "0x130": "chain used this opening"},
+  "runtime": {"goal_row_106": "patrol goal repointed to the existing three-total/two-live goal", "boss_meter": "hoist-first boss finder at both published bl sites; cells mirror real core health"},
+  "evidence": {
+    "baseline_v0_37_0": "Black no-refill kit bot wins at frame 2550 with no add pressure until its start Maw; 5 hits in the lab",
+    "candidate_D_no_meter": "Black wins at 2812, 5 hits, ending at 21% HP; Act II 1152, Act III 2040, chain slam 2424, reserve 2544",
+    "candidate_E_black": "Black bot defeated at 2665 with the hoist almost dead; same schedule; its Act II backup spawned two Maws instead of one",
+    "candidate_E_red": "Red wins at 2074, takes no damage",
+    "persistence": "Red --verify-clear: win 2048, victory saved in RAM, 700 frames without hazard damage, earned cleared revisit through real doors",
+    "doors": "Long Arm 1/2, Crown 3, Breakwater 1 pass on parent and candidate",
+    "meter": "native HUDBossMeter visible in the Black hoist capture and draining with core health",
+    "unit": "tests.test_crane_arm: 11 checks run the assembled ARM against fixtures and the script edits against the published room"
+  },
+  "limits": [
+    "Bots are not players: Black no-refill is marginal in Acts II-III, Red is untouched. Fun, fairness and pacing are player gates.",
+    "Conductor meter regression was not established in-engine: the chapter_spectacle_lab conductor case starts in a harbour room for the parent too (warp fixture failing here), and no Midnight route reaches the Conductor. Unit tests prove the stub falls through to the published finder outside room 106. Build with --no-meter to drop the meter and leave that path untouched.",
+    "chapter_spectacle_lab hoist/hoist-save and chapter_finish_lab save cases use the JIT static-warp fixture, which starts in room 96 in this worktree for the parent too; crane_walk machine is the working path here.",
+    "crane_walk entry fails on the published v0.37.0 as well; the full 30-door sweep and midnight_walk all were not completed.",
+    "Backup spawn count is the native spawner's roll inside a 30-frame window: one or two Maws.",
+    "Act II arrives at two thirds rather than half health because the published marker word was patched; every damaged-phase timing and guard visual follows it."
+  ]
+}

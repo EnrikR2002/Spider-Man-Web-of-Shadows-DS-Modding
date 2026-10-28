@@ -507,6 +507,25 @@ deciding whether upper roofs need navigation work or the finale needs pacing.
 Two tested roofs do not prove every pursuit path. Moving counterweights stay
 scenery above fixed landings.
 
+**Player request (2026-10-28):** it feels lame and like a worse Midnight Line;
+make it cool and fun. **Unpublished candidate** (`reference/crane_arm.json`): the
+Long Arm becomes three acts with a native boss meter. Act I teaches the lanes with
+no add; Act II (two thirds health) calls a Maw and keeps the damaged tells; Act III
+(a third) shortens tells to 28 frames, chains a second slam onto the player's new
+lane and calls a Maw from the left. Player questions: is every slam avoidable, do
+the chains feel exciting or cheap, do the openings still reward combos, is the
+fight length right, any slowdown.
+
+**Advisor diagnosis, still unbuilt (ranked):** (1) nine rooms are the same
+spawner fight with no ramp (Quay Maw only, Yard Spore on roofs, Freight introduces
+Ballast, Engine/Breakwater quiet, Gantry Maw ambush, Crown the largest crew; use
+existing goal pairs); (2) the crane never acts: Freight could have the hook deliver
+its crew, reusing the hoist objects but needing hook motion for room 97; (3) the
+Long Arm backdrop is a quiet wall: open it onto the harbour with Crown's far-box
+technique; (4) test whether live hazard strips hurt enemies, which would let Web
+Yank throw foes under the hook. Do not add new creature meshes before the Skitter
+verdict, a fourth material pass, rideable loads, timers or counterweight crushes.
+
 ### Creature presentation
 
 **Status:** One complete example (Rail Skitter) shipped; verdict open. If the
@@ -548,6 +567,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-10-28, v0.37.0 | Go through Crane Row and make it as cool and fun as possible; it feels lame and a worse Midnight Line | Opus advisor review; first slice is the Long Arm three-act fight and boss meter (unpublished candidate, agent-tested only). Ramp, Freight crane delivery and backdrop remain proposals; no player verdict |
 | 2026-10-27, v0.36.0 Reel In | Tested Reel In; feels great. Implement the next skill with a GPT-6.1 Terra reviewer creating criteria; every metric must reach 8/10 | Reel In player-confirmed. v0.37.0 ships Meteor Catch after Terra scores presentation/feel/lean 8.0 and gameplay/correctness/evidence 8.5, with no must-fix findings. Meteor Catch remains player-unconfirmed |
 | 2026-10-26, after v0.35.2 | Implement the next 2099 skill; make it fun/impressive; a subagent must review and score it at least 8/10 before completion | v0.36.0 ships Reel In on airborne Up+A. Independent weighted score 8.53/10: presentation 8.2, feel 8.4, correctness9.0, evidence 8.5; no must-fix issue. Its overall and separate presentation/feel gates pass. Agent-tested; no new player verdict implied |
 | 2026-10-25, v0.35.1 Sky Rake finisher | Enemy gets kicked behind Spider-Man instead of landing slightly ahead | v0.35.2 biases the accepted light-target launch toward a three-unit forward landing while retaining native vertical launch and collision. Player confirmation is pending; no emulator check ran for this follow-up |
