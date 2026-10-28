@@ -25,11 +25,22 @@ Arm's backdrop (lattice towers, rail, moored freighter, far quay; collision
 byte-identical; receipt `reference/crane_vista.json`). The map and vista passes
 commute; chain them after the composed `crane_arm` build.
 
-Evidence: 11 new unit checks run the assembled ARM against fixtures and the
-script edits against the published room. Native-input Black no-refill and Red
-hoist fights reach all three acts; Red wins untouched, the Black bot is
-marginal. Win, 700 quiet frames and a cleared revisit pass; the four Long Arm
-doors pass like the parent. No gameplay or release bytes were published.
+Fourth slice, same date, **unpublished**: `tools/crane_drop.py`, composed into
+`tools/crane_arm.py`, makes the crane act. Freight and Dry Dock hang a container
+that lowers on its hook when the player nears, lands, opens and releases the crew;
+Crown's Hunters arrive the same way (TECHNICAL "Crane cargo drops"). Scenery only;
+the published crew spawners and callbacks are untouched. The four passes compose
+into `build/crane-composed-vm/Versioned.nds` (sha `372dfecc...`, vista and map in
+either order give the same ROM). `crane_arm` also rebases onto a later ROM:
+`--source <rom>` asserts every hook, room and table and bumps the next minor.
+
+Evidence: 24 unit checks for the hoist and cargo drops run the assembled ARM
+against fixtures and the script edits against the published rooms. Native-input
+Red hoist fights win untouched on the cargo and the composed candidates (frame
+2044) with a saved win, 700 quiet frames and a cleared revisit; the Black bot is
+marginal. Lab frame sheets show the drop in Freight and Dry Dock; Crown's was
+traced by variables. Six of nine cleared-room door crossings pass; the other three
+fail identically on v0.37.0. No gameplay or release bytes were published.
 
 ## Published build
 
@@ -50,15 +61,17 @@ published game; this tooling task adds no gameplay qualification or player verdi
 
 ## Blockers and next exact action
 
-The ring map is agent-tested (unit tests, one melonDS capture on v0.37.0) and
-not yet chained into the composed candidate. Not verified: the Conductor's boss
-meter in-engine (build with `--no-meter` to
-drop the change), the full 30-door and Midnight sweeps, and any save/Continue
-case; the JIT-warp labs fail in a fresh worktree and `crane_walk entry` fails on
-the published build too (DEVELOPMENT "Labs in a fresh git worktree"). Fairness
-and fun are player gates. Next exact action: the player decides whether to try
-the candidate; to publish, add its profile, run the missing controls serially and
-use `tools/playtest.py build`. Unbuilt follow-ups are in ROADMAP. Meteor Catch's
+The composed candidate is agent-tested only. Not verified: the Conductor's boss
+meter in-engine (build with `--no-meter` to drop the change), the full 30-door and
+Midnight sweeps, the Black no-refill fight on the cargo build, any save/Continue
+case and any hardware run; the JIT-warp labs fail in a fresh worktree and
+`crane_walk entry` and three ground-door crossings fail on the published build too
+(DEVELOPMENT "Labs in a fresh git worktree"). Fairness and fun are player gates.
+Next exact action: the player tries `build/crane-composed-vm/Versioned.nds` (or
+regenerates it from the tools) and gives a verdict; to publish, rebase onto the
+then-current published ROM (the unpublished boarding v0.38 candidate lives on
+another branch), add the profile, run the missing controls serially and use
+`tools/playtest.py build`. Unbuilt follow-ups are in ROADMAP. Meteor Catch's
 verdict is still pending.
 
 Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.

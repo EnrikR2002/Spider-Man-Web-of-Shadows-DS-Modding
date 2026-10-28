@@ -5938,8 +5938,9 @@ Player asked (2026-10-28) to make Crane Row as fun as Midnight Line; an Opus
 advisor review (read-only, `tools/crane_arm.py` is its first slice) found nine
 rooms with the same spawner fight and no ramp, a crane that never acts, and a
 hoist that is a wall box with free 130-310 frame openings and no boss meter.
-Only the hoist slice exists; ramp, Freight crane delivery and the open backdrop
-are unbuilt. **Unpublished, agent-tested**, receipt `reference/crane_arm.json`.
+The hoist is its first slice; the open backdrop and the crane deliveries have their
+own sections, the room ramp is unbuilt. **Unpublished, agent-tested**, receipt
+`reference/crane_arm.json`.
 
 **Mechanism (high confidence, source v0.37.0).** Room 106 script is the published
 80 groups edited in place with `chapter_spectacle_events.rewrite`: eg ids are
@@ -6036,6 +6037,47 @@ still wins at frame 2058 with lanes, pads, motor and hook readable. Design traps
 a full-width quay of stacks rebuilt the wall (first candidate hid the freighter),
 and a texture-dark hull looked like a wall until brightened with a red waterline
 and portholes. No player verdict; hardware is untested.
+
+### Crane cargo drops (v0.38 candidate, 2026-10-28)
+
+Advisor item 2 ("the crane never acts"). **Unpublished, agent-tested**; code
+`tools/crane_drop.py`, composed into `tools/crane_arm.py`, receipt
+`reference/crane_arm.json`. A hook lowers a red container into Freight and Dry Dock
+when the player crosses a gate, and into Crown after the first crew dies; it lands,
+swaps to an open container, the crew spawns and the crane lifts the shell away.
+
+**Mechanism (high confidence).** Two native `Hazard_Electric` kinds, `0x12`
+(closed, hanging) and `0x1F` (open), take the published harmless record through six
+new rows (room, kind, flag, model, model) appended to the world-data table at
+`scripted_runtime.world_table`; the adapter's table literal is repointed. The two
+models `zz_CD38_closed/open.nsbmd` are appended resources (Glob count at ARM9
+0x77F8). A motion adapter chained in front of the published tick (`TICK_SITE`)
+moves only `y`, through the native get/set position calls the hoist hook uses,
+at 1.6 units per tick toward a per-room row (room, hanging y, deck y, speed):
+closed goes down while room var `0x12B` is 1, open rises while it is 2. Rooms
+97/100/105 are the only rows; any other room, kind or dead object is the
+published tick. The container is scenery at z -18..-6 with no collision, damage or
+player/enemy position write. Script delays and the object tick run at two lab
+frames per script frame: 51 frames to land is about 100 lab frames.
+
+**Crew timing (medium-high, lab).** The native crew spawner (ambush bytes 2,1) only
+spawns into off-screen sectors of its zone, so a zone moved or shrunk onto the
+container stalled (first enemy after 300 more frames) and stopped altogether when
+the player left it (Crown's reinforcement never came). The published spawners are
+untouched; Freight and Dry Dock add a plain spawner (bytes 0) at the container for
+30 script frames, which put two enemies in view at landing. It spends goal budget
+but is not the callback owner, so the published crew-cleared flags stay with the
+native crew. Crown has no burst: its gate callback stays the published one.
+
+**Gates.** The camera shows about 80 units across, so a gate must sit within about
+40 units of the landing: Freight x=212 over the blue stack (landing 244), Dry Dock
+x=176 (landing 214). A gate needs about 12 lab frames of dwell to fire. A saved
+clear takes the published patrol branch with no container.
+
+**Lab.** `crane_walk.py view` with `kit_lab._run` wrapped to denser `caps` shows
+the sequence; `mw.until` over `s.room_vars` (index var-0x127) times it. The Crown
+`--fight` fixture is flaky (the 1-HP crew sometimes never dies in 1,500 frames,
+the baseline too). No player verdict, no hardware run.
 
 ### Native parent-area maps
 

@@ -1,34 +1,53 @@
 {
   "schema_version": 1,
   "status": "unpublished candidate; agent-tested; no player verdict",
-  "feature": "Long Arm three-act hoist fight and native boss meter",
+  "feature": "Long Arm three-act hoist fight, native boss meter and crane cargo drops",
   "source": "tools/crane_arm.py",
-  "tests": "tests/test_crane_arm.py",
+  "tests": "tests/test_crane_arm.py, tests/test_crane_drop.py",
   "version_if_published": "0.38.0",
   "parent_version": "0.37.0",
   "parent_sha256": "c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6",
-  "candidate": "build/crane-arm-e/Versioned.nds (ignored; regenerate with python tools/crane_arm.py --out build/crane-arm-e)",
-  "candidate_sha256": "a534d536de91f9e5b80525ad441b1a38986ab3e6be6154a04d718e0896ada228",
-  "candidate_arm9_sha256": "80ba8c4df7715b98fc0e1cdcc6716a802fccc673d5f096726c94770e732f8dc4",
-  "changed_resources": ["zz_AR_LongArm_app.obj", "American.strings", "English.strings"],
-  "nitrofs_relocation_bytes": 1536,
+  "candidate": "build/crane-drop-f/Versioned.nds (ignored; regenerate with python tools/crane_arm.py --out build/crane-drop-f)",
+  "candidate_sha256": "a82d051331c4cd6f59a5366b4f54fc1840d217abcc45d2c182562ee72ed85780",
+  "candidate_arm9_sha256": "af921ca359f899fd7ee585fd38e68fd8f4500b84ec11ff8c80cf198e011fc143",
+  "changed_resources": [
+    "zz_AR_LongArm_app.obj",
+    "zz_AR_FreightExchange_app.obj",
+    "zz_AR_DryDock_app.obj",
+    "zz_AR_CraneCrown_app.obj",
+    "American.strings",
+    "English.strings",
+    "GlobFiles.txt"
+  ],
+  "nitrofs_relocation_bytes": 11776,
   "new_arm_bytes": 156,
   "acts": {
     "I": "core above two thirds of its health: published slam/sweep loop, no start add",
     "II": "core at or below 24 of 36 units (published marker moved from 18): damaged tells and openings, one Hoist Backup call, one or two Maws",
     "III": "core at or below 12 units (new marker value 2): 28-frame tells, each slam chains a second tell on the player's new lane, one Hoist Reserve call from the left"
   },
-  "scratch_variables": {"0x12D": "backup called", "0x12E": "reserve called", "0x12F": "act marker 0/1/2", "0x130": "chain used this opening"},
-  "runtime": {"goal_row_106": "patrol goal repointed to the existing three-total/two-live goal", "boss_meter": "hoist-first boss finder at both published bl sites; cells mirror real core health"},
+  "scratch_variables": {
+    "0x12D": "backup called",
+    "0x12E": "reserve called",
+    "0x12F": "act marker 0/1/2",
+    "0x130": "chain used this opening"
+  },
+  "runtime": {
+    "goal_row_106": "patrol goal repointed to the existing three-total/two-live goal",
+    "boss_meter": "hoist-first boss finder at both published bl sites; cells mirror real core health"
+  },
   "evidence": {
     "baseline_v0_37_0": "Black no-refill kit bot wins at frame 2550 with no add pressure until its start Maw; 5 hits in the lab",
     "candidate_D_no_meter": "Black wins at 2812, 5 hits, ending at 21% HP; Act II 1152, Act III 2040, chain slam 2424, reserve 2544",
     "candidate_E_black": "Black bot defeated at 2665 with the hoist almost dead; same schedule; its Act II backup spawned two Maws instead of one",
     "candidate_E_red": "Red wins at 2074, takes no damage",
     "persistence": "Red --verify-clear: win 2048, victory saved in RAM, 700 frames without hazard damage, earned cleared revisit through real doors",
-    "doors": "Long Arm 1/2, Crown 3, Breakwater 1 pass on parent and candidate",
+    "doors": "cross --fight with every crew flag set: Freight 3,4, Dry Dock 1,2, Crown 1,3 pass; Freight 1,2 and Crown 2 (ground doors) fail identically on the published v0.37.0 (player stops at y 19.8), so they are lab-environment findings, not regressions",
     "meter": "native HUDBossMeter visible in the Black hoist capture and draining with core health",
-    "unit": "tests.test_crane_arm: 11 checks run the assembled ARM against fixtures and the script edits against the published room"
+    "unit": "tests.test_crane_arm 11 + tests.test_crane_drop 13: motion adapter on ArmProbe (lowering, hanging, lifting, other rooms/kinds/dead objects), meshes, world rows, the three room scripts against the published rooms, whole-build scope and hooks",
+    "cargo_lab": "melonDS frame sheets: Freight, Dry Dock (container descends on its hook, lands, opens, enemies arrive) and Crown (var trace: first crew dead, reinforcement drop begins, Hunters spawn, lift); Freight timing: crew in view about 30 frames after landing, burst of two at landing",
+    "hoist": "Red --verify-clear on the cargo candidate and on the composed candidate: win at frame 2044, victory saved, 700 quiet frames, cleared revisit",
+    "counterweight": "Shaft counterweight still appears and moves (chained tick falls through to the published adapter)"
   },
   "limits": [
     "Bots are not players: Black no-refill is marginal in Acts II-III, Red is untouched. Fun, fairness and pacing are player gates.",
@@ -36,6 +55,45 @@
     "chapter_spectacle_lab hoist/hoist-save and chapter_finish_lab save cases use the JIT static-warp fixture, which starts in room 96 in this worktree for the parent too; crane_walk machine is the working path here.",
     "crane_walk entry fails on the published v0.37.0 as well; the full 30-door sweep and midnight_walk all were not completed.",
     "Backup spawn count is the native spawner's roll inside a 30-frame window: one or two Maws.",
-    "Act II arrives at two thirds rather than half health because the published marker word was patched; every damaged-phase timing and guard visual follows it."
-  ]
+    "Act II arrives at two thirds rather than half health because the published marker word was patched; every damaged-phase timing and guard visual follows it.",
+    "Cargo drops are agent-tested only; whether the drop reads as spectacle or delay, the size and darkness of the open container and the pace of the arriving crew are player verdicts.",
+    "Crown reinforcement was checked by variable trace (and a first-version capture), not by a clean frame sheet: the 1-HP crew in the lab fight fixture sometimes never dies in 1500 frames, the published ROM included.",
+    "Crew-active Freight door crossing fails the same way on v0.37.0; the full 30-door sweep, midnight_walk all, save/Continue and the Black no-refill fight on the cargo build were not run.",
+    "The published room rosters and budgets already vary per room; the room ramp was not retuned."
+  ],
+  "appended_resources": [
+    "zz_CD38_closed.nsbmd",
+    "zz_CD38_open.nsbmd"
+  ],
+  "rebase": "python tools/crane_arm.py --out build/<dir> --source <any later ROM with the published hooks and rooms> builds the same changes with the next minor version (all hook sites, scripts and tables are asserted); built once onto the unpublished boarding candidate, not run in the engine",
+  "composition": {
+    "with": "tools/crane_vista.py and tools/crane_map.py",
+    "composed_candidate": "build/crane-composed-vm/Versioned.nds",
+    "composed_sha256": "372dfeccf16641ab5e55ebcfd81c113b82f0ddb133254016cdf0d607a14ae768",
+    "order": "vista then map equals map then vista (same sha)"
+  },
+  "cargo_drop": {
+    "rooms": {
+      "97 Freight": "gate x=212, lands x=244 on deck 0, crew Dock Crew, plus plain burst",
+      "100 Dry Dock": "gate x=176, lands x=214 on deck 68, crew Dock Crew, plus plain burst",
+      "105 Crown": "no gate; the Crown Hunters reinforcement call lowers it at x=164 on deck 16, no burst"
+    },
+    "kinds": {
+      "closed (hanging, lowering)": "0x12",
+      "open (waiting, lifting)": "0x1F"
+    },
+    "drop_var": "0x12B: 0 hanging, 1 lowering, 2 lifting",
+    "timing_script_frames": {
+      "land": 51,
+      "lift_after_land": 170,
+      "clear_after_lift": 90,
+      "burst_live": 30
+    },
+    "models": [
+      "zz_CD38_closed.nsbmd",
+      "zz_CD38_open.nsbmd"
+    ],
+    "world_table_rows_added": 6,
+    "untouched": "every crew spawner (zone, mode bytes, clear callback), goals, rosters and exits"
+  }
 }

@@ -530,14 +530,23 @@ the bay behind. Scenery only; collision is byte-identical. Player questions: doe
 the arena feel open, is the freighter attractive or distracting behind the motor,
 are the lanes and green refuges still obvious.
 
-**Advisor diagnosis, still unbuilt (ranked):** (1) nine rooms are the same
-spawner fight with no ramp (Quay Maw only, Yard Spore on roofs, Freight introduces
-Ballast, Engine/Breakwater quiet, Gantry Maw ambush, Crown the largest crew; use
-existing goal pairs); (2) the crane never acts: Freight could have the hook deliver
-its crew, reusing the hoist objects but needing hook motion for room 97; (3) the
-Long Arm backdrop is a quiet wall (built, see below); (4) test whether live hazard strips hurt enemies, which would let Web
-Yank throw foes under the hook. Do not add new creature meshes before the Skitter
-verdict, a fourth material pass, rideable loads, timers or counterweight crushes.
+**Crane delivers the crews (built 2026-10-28, unpublished; `tools/crane_drop.py`,
+composed into `tools/crane_arm.py`):** Freight and Dry Dock hang a red container
+over the fight deck; stepping toward it lowers it on its hook, it lands, swaps to an
+open container with a bang and two enemies leap out of it before the native crew
+arrives; the crane then lifts the empty shell away. Crown's Hunters arrive the same
+way after the first crew falls. Scenery only; no collision or damage. Player
+questions: does the drop read as a surprise or a delay, is the open container too
+big or too dark, do the crews arriving from beside the container feel connected to
+it, should Crown's first crew arrive by crane as well.
+
+**Advisor diagnosis, still unbuilt (ranked):** (1) the nine rooms are the same
+spawner fight (published rosters already cycle Maw/Spore/Ballast per room, so a ramp
+means retuning goal pairs and orders rather than new code paths); (4) test whether
+live hazard strips hurt enemies, which would let Web Yank throw foes under a hook.
+Items 2 (crane delivery) and 3 (backdrop) are built above. Do not add new creature
+meshes before the Skitter verdict, a fourth material pass, rideable loads, timers
+or counterweight crushes.
 
 ### Creature presentation
 

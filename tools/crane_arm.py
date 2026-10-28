@@ -16,6 +16,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from tools import wos_tool as w, tasm_kit as kit, spider2099 as assets, midnight_voltage as extension
+from tools import crane_drop as drop, oscorp_resources
 from tools import midnight_rooms as mr, room_script as s, crane_boss, chapter_spectacle_events as ev
 from tools import chapter_spectacle_audio as audio
 from tools.assemble_tasm_kit import literal_errors, native_branch_errors, self_branch_errors
@@ -178,15 +179,25 @@ def script(raw, blob):
     return s.extend_group(raw, 1, 0, [s.set_var(v, 0) for v in (WAVE_A, WAVE_B, CHAIN)], prepend=True)
 
 
-def apply_rom(rom, *, meter=True):
-    if w.sha256(rom) != PARENT:
-        raise ValueError('Long Arm finale requires exact published v0.37.0')
+def next_version(meta):
+    major, minor, _ = map(int, meta['release_version'].split('.'))
+    return f'{major}.{minor+1}.0'
+
+
+def apply_rom(rom, *, meter=True, version=VERSION, parent_meta=None):
+    """Exact v0.37.0 by default. With `parent_meta` (its build json) any later ROM that still has the
+    published hooks, scripts and tables is accepted: every site and room edit is asserted structurally."""
     from tools import release_info
     h = w.parse_header(rom)
     arm = rom[h['arm9_offset']:h['arm9_offset']+h['arm9_size']]
-    if w.sha256(arm) != release_info.PROFILE_INFO['tasm-v0.37.0']['arm9_sha256']:
-        raise ValueError('Published parent ARM9 differs')
-    meta = json.loads(PARENT_PATH.with_suffix('.build.json').read_text(encoding='utf-8'))
+    if parent_meta is None:
+        if w.sha256(rom) != PARENT:
+            raise ValueError('Crane Row finale requires exact published v0.37.0 (--source another ROM to rebase it)')
+        if w.sha256(arm) != release_info.PROFILE_INFO['tasm-v0.37.0']['arm9_sha256']:
+            raise ValueError('Published parent ARM9 differs')
+        meta = json.loads(PARENT_PATH.with_suffix('.build.json').read_text(encoding='utf-8'))
+    else:
+        meta = parent_meta
     sr = meta['chapter_spectacle']['scripted_runtime']
     names, blobs = assets.resources(rom)
     before = tuple(blobs)
@@ -201,8 +212,18 @@ def apply_rom(rom, *, meter=True):
     for name in ('American.strings', 'English.strings'):
         i, n = names.index(name), native_names.index(name)
         raw = StringSlots(glob[offsets[n]:offsets[n+1]]).grown(blobs[i], {
-            50: f'TASM v{VERSION}\nPress a button to start', 74: f'Options v{VERSION}'})
+            50: f'TASM v{version}\nPress a button to start', 74: f'Options v{version}'})
         blobs[i] = raw+bytes((len(before[i])-len(raw)) % 4)
+    # The Freight, Dry Dock and Crown crews arrive by crane: three room scripts and two appended models.
+    for room, cfg in drop.ROOMS.items():
+        i = names.index(f'zz_{cfg[0]}_app.obj')
+        raw = drop.script(before[i], room, native)
+        blobs[i] = raw+bytes((len(before[i])-len(raw)) % 4)
+    extras = drop.models()
+    if sum(map(len, blobs)) % 4:
+        extras = {'zz_CD38_align.bin': bytes(-sum(map(len, blobs)) % 4), **extras}
+    changed = [n for n, a, b in zip(names, before, blobs) if a != b]
+    names, blobs = oscorp_resources.append_resources(names, blobs, extras)
     rt = extension.Runtime.__new__(extension.Runtime)
     rt.rom, rt.header, rt.arm, rt.new = rom, h, arm, bytearray(arm)
     rt.end, rt.data = len(arm)-36, bytearray()
@@ -241,6 +262,29 @@ def apply_rom(rom, *, meter=True):
     one_one, two_live = w.u32(arm, off(goals)+20*row+4), w.u32(arm, off(goals)+20*row+8)
     if one_one == two_live:raise ValueError('Published hoist budget differs')
     struct.pack_into('<I', rt.new, off(goals)+20*row+4, two_live)
+    # Container models join the published world-object table; the hook moves them on the published tick.
+    wd, wt = sr['world_data'], sr['world_table']
+    rows, at = [], off(wt)
+    while w.u32(arm, at):
+        rows.append(bytes(arm[at:at+20]));at += 20
+    template = bytes(arm[off(struct.unpack_from('<I', rows[0], 12)[0]):][:64])
+    if w.u32(template, 0) or w.u32(template, 4) != 0xB6:raise ValueError('Published harmless world record differs')
+    def record(name):
+        raw = bytearray(template);struct.pack_into('<I', raw, 8, names.index(name));return rt.alloc(bytes(raw))
+    closed, opened = (record(n) for n in drop.MODELS)
+    new_table = rt.alloc(b''.join(rows)+drop.world_rows(sorted(drop.ROOMS), closed, opened)+bytes(20))
+    adapter = bytes(arm[off(wd):off(wd)+0x100])
+    hits = [i for i in range(0, 0xFC, 4) if adapter[i:i+4] == struct.pack('<I', wt)]
+    if len(hits) != 1:raise ValueError('Published world-data table literal differs')
+    struct.pack_into('<I', rt.new, off(wd)+hits[0], new_table)
+    tick = crane_boss.TICK_SITE
+    if w.u32(arm, tick-BASE) >> 24 != 0xEA:raise ValueError('Published hook tick differs')
+    rows_at = rt.alloc(drop.table())
+    entry_drop = rt.alloc()
+    rt.data.extend(drop.drop_motion(entry_drop, target(tick, w.u32(arm, tick-BASE)), rows_at))
+    rt.hook(tick, entry_drop)
+    if w.u32(arm, oscorp_resources.COUNT_OFFSET) != len(before):raise ValueError('Published resource count differs')
+    struct.pack_into('<I', rt.new, oscorp_resources.COUNT_OFFSET, len(names))
     result = rt.finish()
     packed = w.pack_glob(names, blobs)
     ge = next(e for e in w.nitrofs_entries(result) if e['name'] == 'Glob.bin')
@@ -260,38 +304,48 @@ def apply_rom(rom, *, meter=True):
     w.validate_rom(result, target=True)
     hh = w.parse_header(result)
     new_arm = result[hh['arm9_offset']:hh['arm9_offset']+hh['arm9_size']]
-    changed = [n for n, a, b in zip(names, before, blobs) if a != b]
-    if set(changed) != {OBJ, 'American.strings', 'English.strings'}:
-        raise ValueError('Unexpected Long Arm resource scope')
-    report = dict(version=VERSION, parent_sha256=PARENT, rom_sha256=w.sha256(result), arm9_sha256=w.sha256(new_arm),
+    changed += ['GlobFiles.txt']
+    expected = {OBJ, 'American.strings', 'English.strings', 'GlobFiles.txt', *(f'zz_{cfg[0]}_app.obj' for cfg in drop.ROOMS.values())}
+    if set(changed) != expected:
+        raise ValueError('Unexpected Crane Row resource scope: '+str(sorted(set(changed) ^ expected)))
+    report = dict(version=version, parent_sha256=w.sha256(rom), rom_sha256=w.sha256(result), arm9_sha256=w.sha256(new_arm),
         modified_resources=changed, nitrofs_relocation_bytes=max(growth, 0),
         runtime=dict(fury_hook=entry, meter_cells=cells, boss_finder=resolver if meter else None, fury_old=old, half_hp_q12=HALF_HP, fury_hp_q12=FURY_HP, bytes=len(code)),
         script=dict(phase_var=PHASE, wave_vars=(WAVE_A, WAVE_B), chain_var=CHAIN, fury_tell_frames=FURY_TELL),
+        cargo_drop=dict(rooms=sorted(drop.ROOMS), appended_resources=list(extras), motion_hook=entry_drop, rows=rows_at,
+                        world_table=new_table, closed_record=closed, open_record=opened, drop_var=drop.DROP,
+                        land_frames=drop.LAND_FRAMES, lift_frames=drop.LIFT_FRAMES),
         player_kit_32k_unchanged=True)
-    pin = release_info.PROFILE_INFO.get('tasm-v'+VERSION, {})
+    pin = release_info.PROFILE_INFO.get('tasm-v'+version, {})
     for key in ('rom_sha256', 'arm9_sha256'):
         if pin.get(key) and pin[key] != report[key]:
             raise ValueError('Long Arm finale differs from its immutable release pin')
     return result, report
 
 
-def generate(output, source_path=PARENT_PATH, meter=True):
+def generate(output, source_path=PARENT_PATH, meter=True, version=None):
     output, source_path = Path(output), Path(source_path)
     if not output.resolve().is_relative_to((ROOT/'build').resolve()):
         raise ValueError('Candidates belong in build/')
-    result, report = apply_rom(source_path.read_bytes(), meter=meter)
+    rom = source_path.read_bytes()
+    parent_meta = None
+    if w.sha256(rom) != PARENT:
+        # Rebase onto a later ROM (for example a published v0.38.0): its own build json carries the hook map.
+        parent_meta = json.loads(source_path.with_suffix('.build.json').read_text(encoding='utf-8'))
+    version = version or (VERSION if parent_meta is None else next_version(parent_meta))
+    result, report = apply_rom(rom, meter=meter, version=version, parent_meta=parent_meta)
     path = output/'Versioned.nds'
     validation = w.validate_rom(result, target=True)
     meta = json.loads(source_path.with_suffix('.build.json').read_text(encoding='utf-8'))
     ge = next(e for e in validation['nitrofs'] if e['name'] == 'Glob.bin')
-    meta.update(crane_arm=report, release_version=VERSION, release_date=DATE, output_rom_sha256=w.sha256(result),
+    meta.update(crane_arm=report, release_version=version, release_date=DATE, output_rom_sha256=w.sha256(result),
         output=str(path.resolve()), rom_size=len(result), used_rom_size=validation['header']['used_rom_size'],
         nitrofs=validation['nitrofs'], header_crc16=validation['header']['header_crc16'],
         output_glob_sha256=w.sha256(result[ge['start']:ge['end']]), verified_resource_count=len(assets.resources(result)[0]))
     w.atomic_write(path, result, sources=(source_path,))
     w.write_json(path.with_suffix('.build.json'), meta)
     recipe = json.loads((ROOT/'reference/gameplay_profile.json').read_text(encoding='utf-8'))
-    recipe.update(profile='tasm-v'+VERSION, release_version=VERSION)
+    recipe.update(profile='tasm-v'+version, release_version=version)
     w.write_json(output/'gameplay_profile.json', recipe)
     w.write_json(output/'changes.json', report)
     print(json.dumps(dict(path=str(path), sha256=report['rom_sha256'], runtime=report['runtime'])), flush=True)
@@ -303,5 +357,6 @@ if __name__ == '__main__':
     p.add_argument('--out', type=Path, required=True)
     p.add_argument('--source', type=Path, default=PARENT_PATH)
     p.add_argument('--no-meter', action='store_true', help='Leave the native boss meter and its shared finder untouched')
+    p.add_argument('--version', help='Output version; default 0.38.0 on v0.37.0, else the next minor of the source')
     a = p.parse_args()
-    generate(a.out, a.source, not a.no_meter)
+    generate(a.out, a.source, not a.no_meter, a.version)
