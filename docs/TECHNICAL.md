@@ -5995,14 +5995,14 @@ Objectives phases, upper Quay loft and no destination boards. Engine lever is
 visually reviewed in walk-control-gates/frame-03300.png; native Pier Objectives
 still displays its original goal. Final receipts live in rework/publication.json.
 
-### Long Arm three acts and boss meter (v0.39 candidate, 2026-10-28)
+### Long Arm three acts and boss meter (v0.39.0, 2026-10-28)
 
 Player asked (2026-10-28) to make Crane Row as fun as Midnight Line; an Opus
 advisor review (read-only, `tools/crane_arm.py` is its first slice) found nine
 rooms with the same spawner fight and no ramp, a crane that never acts, and a
 hoist that is a wall box with free 130-310 frame openings and no boss meter.
 The hoist is its first slice; the open backdrop and the crane deliveries have their
-own sections, the room ramp is unbuilt. **Unpublished, agent-tested**, receipt
+own sections, the room ramp is unbuilt. **Shipped in v0.39.0, agent-tested**, receipt
 `reference/crane_arm.json`.
 
 **Mechanism (high confidence, source v0.37.0).** Room 106 script is the published
@@ -6043,10 +6043,10 @@ room 96 here, for the parent too; `crane_walk.py machine` (no JIT) works.
 (3) Do not run labs concurrently: one run reported "DS rejected ROM". (4)
 `crane_walk entry` fails on published v0.37.0; not a regression of this work.
 
-### Crane Row ring map (v0.39 candidate, 2026-10-28)
+### Crane Row ring map (v0.39.0, 2026-10-28)
 
 Player (2026-10-28): the Crane map looked weird and its rooms did not connect;
-make it like the base game's. **Unpublished, agent-tested**: unit tests plus one
+make it like the base game's. **Shipped in v0.39.0, agent-tested**: unit tests plus one
 melonDS capture on v0.37.0 (`crane_walk.py map AR_EngineHouse --spawn 1`, every
 room visited); receipt `reference/crane_map.json`. Supersedes the 2026-10-12
 wire-and-letter diagram (two rows of boxes, A..D codes, long bent wires).
@@ -6074,10 +6074,9 @@ Glob like `crane_arm.py` (512 bytes on v0.37.0). Entry type byte 1 marks the
 Office as a save row; it draws no visible sprite (capture), so saves are pixel
 glyphs.
 
-### Long Arm harbour vista (v0.39 candidate, 2026-10-28)
+### Long Arm harbour vista (v0.39.0, 2026-10-28)
 
-Advisor item 3 and the player's "make Crane Row impressive". **Unpublished,
-agent-tested**; receipt `reference/crane_vista.json`. The published hoist room had
+Advisor item 3 and the player's "make Crane Row impressive". **Shipped in v0.39.0, agent-tested**; receipt `reference/crane_vista.json`. The published hoist room had
 a 68x24 steel slab (`crane_rooms`, z -22..-12) and two 6x92 pillars
 (`chapter_spectacle_art`, z -42..-34) in front of the bay; the back wall was
 already open, so only the foreground hid the water.
@@ -6101,9 +6100,9 @@ a full-width quay of stacks rebuilt the wall (first candidate hid the freighter)
 and a texture-dark hull looked like a wall until brightened with a red waterline
 and portholes. No player verdict; hardware is untested.
 
-### Crane cargo drops (v0.39 candidate, 2026-10-28)
+### Crane cargo drops (v0.39.0, 2026-10-28)
 
-Advisor item 2 ("the crane never acts"). **Unpublished, agent-tested**; code
+Advisor item 2 ("the crane never acts"). **Shipped in v0.39.0, agent-tested**; code
 `tools/crane_drop.py`, composed into `tools/crane_arm.py` (which also chains
 `crane_vista` and `crane_map` last), receipt `reference/crane_arm.json`. A hook lowers a red container into Freight and Dry Dock
 when the player crosses a gate, and into Crown after the first crew dies; it lands,

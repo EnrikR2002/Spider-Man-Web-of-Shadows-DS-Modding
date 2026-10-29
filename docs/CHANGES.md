@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.38.0. Each section records behavior,
+The latest numbered release below is v0.39.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,55 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.39.0 - 2026-10-28 - Crane Row finale: three-act Long Arm, cargo drops, ring map and harbour
+
+Crane Row stops being one fight repeated. The Long Arm hoist is now three acts
+with the native boss meter. Act I has no add, so the lanes are learned alone.
+At two thirds core health Act II calls a Maw as backup and keeps the damaged
+tells. At a third Act III shortens every lane tell to 28 frames, chains a second
+slam onto the lane the player dodged to and calls a second Maw from the left.
+Hoist health, damage, collision, hook motion and the saved victory are the
+published ones; the Conductor's boss meter path is unchanged.
+
+Freight Exchange, Dry Dock and the Crane Crown now receive their crews by crane.
+A red container hangs on its hook over the fight deck; stepping toward it lowers
+it, it lands, swaps to an open container with a bang, two enemies leap out and
+the published crew follows, and the crane lifts the empty shell away. The
+Crown's Hunter reinforcement arrives the same way after its first crew falls.
+This is scenery on the published room scripts: no spawner zone, roster, goal,
+collision or damage changed, and two container models are appended.
+
+The Crane overview map is one ring of touching rooms with short necks, red
+locked halves and a dotted Pier exit. The Long Arm's slab and pillars give way
+to see-through lattice towers, a deck rail, a moored freighter and a far
+container quay; its collision is byte-identical. Boot and Options show v0.39.0.
+Boarding, every purchase, the 32 KiB player kit, saves, prices and every other
+room are unchanged. No Red skill or save expansion is included.
+
+The pass is `tools/crane_arm.py`, an exact v0.38.0 post-pass registered as the
+`crane_arm` flag. It composes `crane_drop.py`, `crane_vista.py` and
+`crane_map.py` (layout in `crane_ring.py`) and hooks the published hoist tick,
+core-health marker and boss-meter calls. `crane_navigation.py` stays the
+published module that the older Crane passes consume.
+
+Qualification on the exact final ROM: a from-clean `mod.py build` equals the
+standalone `crane_arm.py` output byte for byte. Native-input Long Arm fights
+win: Red at frame 2045 with the victory saved, 700 quiet frames and a cleared
+revisit through real doors; Black with no healing at frame 2809. Twenty-three of
+30 Crane door crossings pass; the same seven fail identically on the published
+v0.38.0 in this lab, so they are lab findings, not regressions. All nine
+Midnight Line route pairs (18 directed doors) pass, the Harbour Office save and
+reload pass, and on this ROM Boarding's Conductor ride, lethal tear and shop
+purchase, refund, repurchase and fresh Continue pass with the actual battery
+unchanged; the native boss meter shows in the Conductor fight. Cargo drops were
+read from lab frame sheets and variable traces. Receipts: `reference/crane_arm.json`,
+`crane_map.json` and `crane_vista.json`.
+
+Agent-tested only. Whether the drops read as spectacle or delay, whether the three
+acts are fair and exciting, how the harbour and map look, hardware pacing and
+full-route balance are player verdicts. The Black no-refill bot is marginal in
+Acts II and III. The room ramp was not retuned.
 
 ## v0.38.0 - 2026-10-28 - Boarding and Wing Ripper
 

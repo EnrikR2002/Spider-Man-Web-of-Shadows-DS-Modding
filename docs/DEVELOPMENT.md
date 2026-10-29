@@ -70,6 +70,8 @@ Copy the established shape (`tools/vortex_forge.py`, `.s`, `_art.py`,
 `_lab.py`, `tests/test_vortex_forge.py`, `reference/vortex_forge.json`):
 
 1. Start only from a ROADMAP item the player approved, with acceptance criteria.
+   Never edit a module an older pass imports (`crane_navigation.py` once broke every
+   pre-v0.39 Crane build): add a new module beside it.
 2. `tools/<feature>.py` pins `PARENT` to the published ROM SHA
    (`release_info.PROFILE_INFO['tasm-v<current>']['rom_sha256']`) and its path
    under `build/version-<current>-final/`. `apply_rom(rom)` rejects any other
@@ -132,7 +134,7 @@ Copy the established shape (`tools/vortex_forge.py`, `.s`, `_art.py`,
 | Purchased airborne Reel In | [Reel In](TECHNICAL.md#airborne-reel-in-v036-research) | `reel_in.py`, `.s`, `_art`, `_lab`; exact v0.35.2 post-pass, bit84 with Web Yank dependency. Lab `--case` covers native controls, real floor-contact release, heavy zip and native purchase/save. |
 | Purchased airborne Meteor Catch | [Meteor Catch](TECHNICAL.md#meteor-catch-v037-research) | `meteor_catch.py`, `.s`, `_art`, `_lab`; exact v0.36.0 post-pass, bit86 requiring Sky Rake. Lab cases include low-floor contact, chosen follow-up, lethal cleanup, native fallbacks, Conductor and purchase/save. |
 | Purchased 2099 Boarding / Wing Ripper | [Boarding](TECHNICAL.md#boarding-v038-research) | `boarding.py`, `.s`, `_art`, `_lab`; exact v0.37.0 post-pass, independent bit88. Copied-save Conductor, native MiniBoss and wall fixtures, interruption and shop controls; exact v0.38.0 qualification is in `reference/boarding.json`. |
-| Crane Row finale: Long Arm acts, cargo drops, ring map, harbour | [Long Arm three acts](TECHNICAL.md#long-arm-three-acts-and-boss-meter-v039-candidate-2026-10-28), [Crane cargo drops](TECHNICAL.md#crane-cargo-drops-v039-candidate-2026-10-28) | `crane_arm.py` (exact v0.38.0 post-pass, composes `crane_drop.py`, `crane_vista.py`, `crane_map.py`); `crane_walk.py` labs; `reference/crane_arm.json` |
+| Crane Row finale: Long Arm acts, cargo drops, ring map, harbour | [Long Arm three acts](TECHNICAL.md#long-arm-three-acts-and-boss-meter-v0390-2026-10-28), [Crane cargo drops](TECHNICAL.md#crane-cargo-drops-v0390-2026-10-28) | `crane_arm.py` (exact v0.38.0 post-pass, composes `crane_drop.py`, `crane_vista.py`, `crane_map.py`); `crane_walk.py` labs; `reference/crane_arm.json` |
 | Remaining 2099 Black kit | ROADMAP [implementation guide](ROADMAP.md#implementation-guide) | Follow [Add a feature](#add-a-feature-as-a-new-post-pass); native mini-boss adapters still require qualification. |
 
 Tool filenames in this table are under `tools/`. Find a CLI's actual arguments
@@ -170,7 +172,9 @@ full checkout: the clean ROM to `original/`, `mods/*` (then `git checkout --
 mods/README.md`, which the copy overwrites), the parent `build/version-<n>-final`,
 and `work/{emulator,research-libs,playtest.json,save-backups,glob,rom,kit}`.
 Missing `save-backups`/`glob` makes a lab boot a fresh game and stall on the
-health-orb tutorial. Run labs one at a time. `crane_walk.py machine --rom <rom>
+health-orb tutorial. A fresh worktree also cannot reproduce pinned ROM hashes (its CRLF checkout changes
+the bytes of hashed tool sources) or run old-version tests; build, test and publish
+in the full checkout. Run labs one at a time. `crane_walk.py machine --rom <rom>
 [--black] --no-heal --purchased-kit --combat-frames 10000 [--verify-clear]`
 fights the hoist with native inputs; `chapter_spectacle_lab hoist*` and
 `chapter_finish_lab` use a JIT static warp that starts in room 96 here.

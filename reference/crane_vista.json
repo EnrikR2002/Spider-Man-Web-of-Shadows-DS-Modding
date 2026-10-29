@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "unpublished candidate; agent-tested; no player verdict",
+  "status": "shipped in v0.39.0 (composed into crane_arm); agent-tested; no player verdict",
   "feature": "Long Arm harbour vista",
   "source": "tools/crane_vista.py",
   "tests": "tests/test_crane_vista.py",

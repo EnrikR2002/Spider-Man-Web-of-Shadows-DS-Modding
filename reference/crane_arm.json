@@ -1,25 +1,30 @@
 {
   "schema_version": 1,
-  "status": "unpublished candidate; agent-tested; no player verdict",
+  "status": "shipped in v0.39.0; agent-tested; no player verdict",
   "feature": "Long Arm three-act hoist fight, native boss meter and crane cargo drops",
   "source": "tools/crane_arm.py",
-  "tests": "tests/test_crane_arm.py, tests/test_crane_drop.py",
-  "version_if_published": "0.38.0",
-  "parent_version": "0.37.0",
-  "parent_sha256": "c5ab085a749065a5d180f340086df66de1df67598c3b920c3a21b639928b93c6",
-  "candidate": "build/crane-drop-f/Versioned.nds (ignored; regenerate with python tools/crane_arm.py --out build/crane-drop-f)",
-  "candidate_sha256": "a82d051331c4cd6f59a5366b4f54fc1840d217abcc45d2c182562ee72ed85780",
-  "candidate_arm9_sha256": "af921ca359f899fd7ee585fd38e68fd8f4500b84ec11ff8c80cf198e011fc143",
+  "tests": "tests/test_crane_arm.py, tests/test_crane_drop.py, tests/test_crane_map.py, tests/test_crane_ring.py, tests/test_crane_vista.py",
+  "parent_version": "0.38.0",
+  "parent_sha256": "21c7a05140a4ac17bf1061f5336c53e9a7480e8152c2797243329bd8799643ca",
+  "candidate": "the published release: python mod.py build with profile tasm-v0.39.0 (reference/gameplay_profile.json); standalone equivalent python tools/crane_arm.py --out build/<dir>",
+  "candidate_sha256": "b53e3879cc575e63979f1a65a7d29fc610a3d1d44080f2205b29aec26075d37c",
+  "candidate_arm9_sha256": "891c23785abece0c279d6fa25f90391791ac77ffa8b6eb34a8689fb53a1e8799",
   "changed_resources": [
-    "zz_AR_LongArm_app.obj",
-    "zz_AR_FreightExchange_app.obj",
-    "zz_AR_DryDock_app.obj",
-    "zz_AR_CraneCrown_app.obj",
     "American.strings",
     "English.strings",
-    "GlobFiles.txt"
+    "GlobFiles.txt",
+    "zz_AR_CraneCrown_app.obj",
+    "zz_AR_DryDock_app.obj",
+    "zz_AR_FreightExchange_app.obj",
+    "zz_AR_LongArm_app.obj",
+    "zz_CraneGuide1.cbmp",
+    "zz_CraneGuide2.cbmp",
+    "zz_CraneGuide3.cbmp",
+    "zz_CraneOverview.cbmp",
+    "zz_R21_AR_LongArm.nsbmd",
+    "zz_R21_AR_LongArm.nsbtx"
   ],
-  "nitrofs_relocation_bytes": 11776,
+  "nitrofs_relocation_bytes": 26112,
   "new_arm_bytes": 156,
   "acts": {
     "I": "core above two thirds of its health: published slam/sweep loop, no start add",
@@ -47,31 +52,37 @@
     "unit": "tests.test_crane_arm 11 + tests.test_crane_drop 13: motion adapter on ArmProbe (lowering, hanging, lifting, other rooms/kinds/dead objects), meshes, world rows, the three room scripts against the published rooms, whole-build scope and hooks",
     "cargo_lab": "melonDS frame sheets: Freight, Dry Dock (container descends on its hook, lands, opens, enemies arrive) and Crown (var trace: first crew dead, reinforcement drop begins, Hunters spawn, lift); Freight timing: crew in view about 30 frames after landing, burst of two at landing",
     "hoist": "Red --verify-clear on the cargo candidate and on the composed candidate: win at frame 2044, victory saved, 700 quiet frames, cleared revisit",
-    "counterweight": "Shaft counterweight still appears and moves (chained tick falls through to the published adapter)"
+    "counterweight": "Shaft counterweight still appears and moves (chained tick falls through to the published adapter)",
+    "v0_39_0_qualification": {
+      "rom": "sha256 b53e3879..., chain built from the clean ROM with mod.py in the full checkout",
+      "hoist_red": "crane_walk machine --no-heal --purchased-kit --verify-clear: hoist defeated frame 2045, victory saved in RAM, hazards clear for 700 frames, earned cleared revisit through real doors (7 of 7 checks)",
+      "hoist_black": "same fixture with --black: hoist defeated frame 2809 without healing, victory saved (5 of 5 checks)",
+      "doors": "crane_walk all: 23 of 30 pass; the same seven (entry, FreightExchange1, FreightExchange2, EngineHouse1, EngineHouse2, CraneCrown2, CraneQuay1) fail on the published v0.38.0 in this lab, so they are lab findings, not regressions",
+      "midnight_walk_all": "9 of 9 route pairs, 18 directed doors pass",
+      "save": "crane_walk save (Harbour Office save and reload) passes",
+      "boarding_regression": "boarding_lab conductor regular and lethal, and shop (purchase, refund, repurchase, fresh Continue) pass on this ROM with the actual battery unchanged; the native boss meter shows in the Conductor fight capture",
+      "older_releases": "crane_navigation.py was restored byte-identical (sha256 ec4e4f58...) so the older Crane passes reproduce again; the ring layout lives in crane_ring.py"
+    }
   },
   "limits": [
-    "Bots are not players: Black no-refill is marginal in Acts II-III, Red is untouched. Fun, fairness and pacing are player gates.",
-    "Conductor meter regression was not established in-engine: the chapter_spectacle_lab conductor case starts in a harbour room for the parent too (warp fixture failing here), and no Midnight route reaches the Conductor. Unit tests prove the stub falls through to the published finder outside room 106. Build with --no-meter to drop the meter and leave that path untouched.",
-    "chapter_spectacle_lab hoist/hoist-save and chapter_finish_lab save cases use the JIT static-warp fixture, which starts in room 96 in this worktree for the parent too; crane_walk machine is the working path here.",
-    "crane_walk entry fails on the published v0.37.0 as well; the full 30-door sweep and midnight_walk all were not completed.",
-    "Backup spawn count is the native spawner's roll inside a 30-frame window: one or two Maws.",
-    "Act II arrives at two thirds rather than half health because the published marker word was patched; every damaged-phase timing and guard visual follows it.",
-    "Cargo drops are agent-tested only; whether the drop reads as spectacle or delay, the size and darkness of the open container and the pace of the arriving crew are player verdicts.",
-    "Crown reinforcement was checked by variable trace (and a first-version capture), not by a clean frame sheet: the 1-HP crew in the lab fight fixture sometimes never dies in 1500 frames, the published ROM included.",
-    "Crew-active Freight door crossing fails the same way on v0.37.0; the full 30-door sweep, midnight_walk all, save/Continue and the Black no-refill fight on the cargo build were not run.",
-    "The published room rosters and budgets already vary per room; the room ramp was not retuned."
+    "Agent-tested only. Bots are not players: fun, fairness, pacing and whether the drops read as spectacle are player verdicts.",
+    "Black no-refill is marginal in Acts II and III; Red is untouched by the bot.",
+    "Seven Crane door crossings fail in the lab on the published v0.38.0 as well; their real-input behaviour is therefore unproven here, not worse.",
+    "Crown reinforcement was checked by variable trace; its 1-HP lab crew sometimes never dies, baseline included.",
+    "Backup spawn count is the native spawner roll inside a 30-frame window: one or two Maws.",
+    "Act II arrives at two thirds rather than half health because the published marker word was patched.",
+    "The room ramp was not retuned; no hardware run."
   ],
   "appended_resources": [
     "zz_CD38_closed.nsbmd",
     "zz_CD38_open.nsbmd"
   ],
-  "rebase": "python tools/crane_arm.py --out build/<dir> --source <any later ROM with the published hooks and rooms> builds the same changes with the next minor version (all hook sites, scripts and tables are asserted); built once onto the unpublished boarding candidate, not run in the engine",
+  "rebase": "Superseded: the pass is now an exact v0.38.0 post-pass (the lax rebase path and next_version were removed); mod.create_build hands it the chain's chapter_spectacle and midnight_encore reports instead of a build json.",
   "composition": {
-    "with": "tools/crane_vista.py and tools/crane_map.py, called at the end of crane_arm.apply_rom (--bare skips them)",
-    "composed_candidate": "build/crane-final/Versioned.nds (python tools/crane_arm.py --out build/crane-final)",
-    "composed_sha256": "372dfeccf16641ab5e55ebcfd81c113b82f0ddb133254016cdf0d607a14ae768",
-    "bare_sha256": "a82d051331c4cd6f59a5366b4f54fc1840d217abcc45d2c182562ee72ed85780",
-    "order": "vista then map equals map then vista (same sha); the one-command build matches the manual chain byte for byte"
+    "with": "tools/crane_vista.py and tools/crane_map.py (layout tools/crane_ring.py), called at the end of crane_arm.apply_rom (--bare skips them)",
+    "release_sha256": "b53e3879cc575e63979f1a65a7d29fc610a3d1d44080f2205b29aec26075d37c",
+    "bare_sha256_on_v0_37_0": "a82d051331c4cd6f59a5366b4f54fc1840d217abcc45d2c182562ee72ed85780 (history: first candidate, hoist and cargo drops only)",
+    "order": "vista then map equals map then vista (same sha); the one-command build matches the manual chain, and a from-clean mod.py build matches the standalone crane_arm.py output byte for byte"
   },
   "cargo_drop": {
     "rooms": {
@@ -96,5 +107,6 @@
     ],
     "world_table_rows_added": 6,
     "untouched": "every crew spawner (zone, mode bytes, clear callback), goals, rosters and exits"
-  }
+  },
+  "version": "0.39.0"
 }

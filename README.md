@@ -4,7 +4,10 @@ Private USA CS5E research. ROMs/extracted assets/builds/saves stay private.
 
 **Play:** `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
 The agent handles the stable ROM, releases and progress backups.
-Current release: **v0.38.0**. **Boarding** costs 275 XP in Black upgrades.
+Current release: **v0.39.0**. **Crane Row** is rebuilt: the Long Arm is a
+three-act fight with a boss meter, crews arrive by crane cargo drop, the map is
+one connected ring and the harbour opens behind the boss. Agent-tested; your
+verdict is open. **Boarding** (v0.38.0) costs 275 XP in Black upgrades.
 Jump into a supported boss while holding toward it, or hold toward during a
 heavy Web Yank zip. Y rakes; A tears and kicks off; R releases.
 Boss attacks shake Miguel off. The Conductor and four native mini-boss types

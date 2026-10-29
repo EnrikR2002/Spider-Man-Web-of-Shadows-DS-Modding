@@ -515,7 +515,7 @@ Two tested roofs do not prove every pursuit path. Moving counterweights stay
 scenery above fixed landings.
 
 **Player request (2026-10-28):** it feels lame and like a worse Midnight Line;
-make it cool and fun. **Unpublished candidate** (`reference/crane_arm.json`): the
+make it cool and fun. **Shipped in v0.39.0, agent-tested** (`reference/crane_arm.json`): the
 Long Arm becomes three acts with a native boss meter. Act I teaches the lanes with
 no add; Act II (two thirds health) calls a Maw and keeps the damaged tells; Act III
 (a third) shortens tells to 28 frames, chains a second slam onto the player's new
@@ -524,20 +524,20 @@ the chains feel exciting or cheap, do the openings still reward combos, is the
 fight length right, any slowdown.
 
 **Map (2026-10-28 request: weird, rooms do not connect; make it like the base
-game's):** unpublished candidate `tools/crane_map.py`. The overview is now one ring of
+game's):** shipped in v0.39.0 as `tools/crane_map.py` (layout `crane_ring.py`). The overview is now one ring of
 touching rooms with short necks, red locked halves and a dotted Pier exit
 (TECHNICAL "Crane Row ring map"). Player questions: is the ring readable on
 hardware, is the current room obvious, does the bridge over Yard and Dock read
 as the power shortcut.
 
-**Backdrop (built 2026-10-28, unpublished candidate `tools/crane_vista.py`):** the
+**Backdrop (shipped in v0.39.0, `tools/crane_vista.py`):** the
 Long Arm's steel slab and two tall pillars are gone. See-through lattice towers and
 a deck rail stand in front; a moored freighter, a far container quay and lamps fill
 the bay behind. Scenery only; collision is byte-identical. Player questions: does
 the arena feel open, is the freighter attractive or distracting behind the motor,
 are the lanes and green refuges still obvious.
 
-**Crane delivers the crews (built 2026-10-28, unpublished; `tools/crane_drop.py`,
+**Crane delivers the crews (shipped in v0.39.0; `tools/crane_drop.py`,
 composed into `tools/crane_arm.py`):** Freight and Dry Dock hang a red container
 over the fight deck; stepping toward it lowers it on its hook, it lands, swaps to an
 open container with a bang and two enemies leap out of it before the native crew
@@ -598,8 +598,8 @@ Newest first. Record each new verdict here the day it is given.
 |---|---|---|
 | 2026-10-28, v0.38.0 Boarding preview | Looks pretty good. Sound is bad, but it is the Conductor effect and a separate issue; do not worry about it here | Preview motion accepted; existing Conductor sound quality deferred. Terra closes its six-metric gate at 8.0..8.5. In-game feel and campaign balance remain unconfirmed |
 | 2026-10-28, v0.37.0 Meteor Catch | Tested the previous skill (called meteor crash); feels pretty good overall. Build the next 2099 skill; GPT-6.1 Terra decides metrics and must rate every one at least 8/10. Publish all previous work to GitHub first | Prior commits pushed through 28620b1 before implementation. Meteor Catch's overall feel is player-confirmed. Boarding with Wing Ripper is next in the approved build order; v0.38.0 closes its six-metric gate after the later accepted playback preview |
-| 2026-10-28, v0.37.0 | Also improve the Crane Row map: it looks too weird and the rooms do not properly connect; make it similar to the base game map | Ring map with touching rooms and necks (unpublished candidate, agent-tested only); no player verdict |
-| 2026-10-28, v0.37.0 | Go through Crane Row and make it as cool and fun as possible; it feels lame and a worse Midnight Line | Opus advisor review; first slice is the Long Arm three-act fight and boss meter (unpublished candidate, agent-tested only). Ramp, Freight crane delivery and backdrop remain proposals; no player verdict |
+| 2026-10-28, v0.37.0 | Also improve the Crane Row map: it looks too weird and the rooms do not properly connect; make it similar to the base game map | Ring map with touching rooms and necks (ships in v0.39.0, agent-tested only); no player verdict |
+| 2026-10-28, v0.37.0 | Go through Crane Row and make it as cool and fun as possible; it feels lame and a worse Midnight Line | Opus advisor review; first slice is the Long Arm three-act fight and boss meter (ships in v0.39.0, agent-tested only). Crane cargo drops and the harbour backdrop followed in the same release; the room ramp remains a proposal; no player verdict |
 | 2026-10-27, v0.36.0 Reel In | Tested Reel In; feels great. Implement the next skill with a GPT-6.1 Terra reviewer creating criteria; every metric must reach 8/10 | Reel In player-confirmed. v0.37.0 ships Meteor Catch after Terra scores presentation/feel/lean 8.0 and gameplay/correctness/evidence 8.5, with no must-fix findings. Meteor Catch remains player-unconfirmed |
 | 2026-10-26, after v0.35.2 | Implement the next 2099 skill; make it fun/impressive; a subagent must review and score it at least 8/10 before completion | v0.36.0 ships Reel In on airborne Up+A. Independent weighted score 8.53/10: presentation 8.2, feel 8.4, correctness9.0, evidence 8.5; no must-fix issue. Its overall and separate presentation/feel gates pass. Agent-tested; no new player verdict implied |
 | 2026-10-25, v0.35.1 Sky Rake finisher | Enemy gets kicked behind Spider-Man instead of landing slightly ahead | v0.35.2 biases the accepted light-target launch toward a three-unit forward landing while retaining native vertical launch and collision. Player confirmation is pending; no emulator check ran for this follow-up |
