@@ -63,6 +63,15 @@ unchanged; the native boss meter shows in the Conductor fight. Cargo drops were
 read from lab frame sheets and variable traces. Receipts: `reference/crane_arm.json`,
 `crane_map.json` and `crane_vista.json`.
 
+The full strict suite ran 774 tests with zero skips before publication; its only
+two failures were the version and frozen-section checks, which pass once this
+release is recorded. The protected publisher installs exact SHA256
+`b53e3879cc575e63979f1a65a7d29fc610a3d1d44080f2205b29aec26075d37c`, matching the
+clean-chain build, with boot and Options both v0.39.0 in American and English.
+The actual 634-byte DSV is unchanged from its pre-build checkpoint, and the
+v0.38.0 ROM, metadata and recipe stay preserved as the rollback. No research save
+is adopted.
+
 Agent-tested only. Whether the drops read as spectacle or delay, whether the three
 acts are fair and exciting, how the harbour and map look, hardware pacing and
 full-route balance are player verdicts. The Black no-refill bot is marginal in
