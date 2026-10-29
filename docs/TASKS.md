@@ -7,8 +7,8 @@ workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design.
 
 Codex's Boarding (v0.38.0) and the Crane Row finale (v0.39.0) are merged and
 published from `main`. Nothing is pushed; `main` is ahead of `origin/main`.
-`codex/2099-boarding` and `claude/crane-row-improvements-edb9b0` are ancestors of
-`main` and can be deleted.
+`codex/2099-boarding` is deleted; `claude/crane-row-improvements-edb9b0` (the Crane
+Row worktree under `.claude/worktrees`) is an ancestor of `main` and can be removed.
 
 Crane Row (player, 2026-10-28: it felt lame next to Midnight Line): the Long Arm
 is a three-act fight with the native boss meter; Freight Exchange, Dry Dock and
