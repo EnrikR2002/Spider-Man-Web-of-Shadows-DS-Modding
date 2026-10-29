@@ -432,6 +432,16 @@ does not cover the boss. A compact boss-only 64px RGB555 texture with halved UVs
 is qualified in v0.31.0 with format7 and actual rendered colors; shared crowd I4 artwork remains unchanged. The precise
 native palette ownership failure is unconfirmed.
 
+**Crane enemy magenta (2026-10-29; high confidence in the visual, cause unknown).**
+On published v0.39.0 `b53e3879`, a room-start Crown run from the latest copied
+battery shows a bright magenta enemy at frame 1554 while both sampled enemy HP
+values still match frame 1394; magenta also appears at 1864 and 2060. Source:
+`work/crane-review-2026-10-29/target-105/` and
+`reference/crane_review_20261029.json`. The room start used the Test Upgrades
+warp; enemy HP and player abilities were not altered. The actor's species,
+material binding versus status effect, DeSmuME and hardware parity are not yet
+established. This does not establish the earlier Conductor defect's cause.
+
 English/American STRINGS: hash-bounded Huffman tree plus1,049 UTF-16LE slots
 round-trip; unknown prefix and untouched slot tails survive. Same-slot localized
 names/input/prerequisite edits are supported, other languages unproved. Native
@@ -6064,6 +6074,13 @@ dropped, because the ring needs the roof row to run right-to-left. Rooms are
 unions of rectangles (`EXTRA`) that fit the native room-slot palettes (18 list
 rows, was 20) and share one slot allocation across the four progress screens.
 
+**Objective refresh observation (medium confidence, v0.39.0).** In a normal
+copied-latest-save route, the Engine lever showed its activated visual and the
+low-right powered door opened, but the map still said `POWER: ENGINE` at frames
+6705 and 6780. It said `CROWN: CREW` after entering Counterweight at frame 7225.
+Source: `work/crane-review-2026-10-29/session.json` and matching screenshots.
+Reproduce before attributing this to a map refresh defect.
+
 **Release pass (`tools/crane_map.py`, high confidence).** `apply_rom` replaces only
 `zz_CraneOverview.cbmp` and `zz_CraneGuide1..3.cbmp` and rewrites the area-6 room
 list (20-byte rows, count at row+12) in place. It finds the table by structure,
@@ -6135,6 +6152,17 @@ native crew. Crown has no burst: its gate callback stays the published one.
 40 units of the landing: Freight x=212 over the blue stack (landing 244), Dry Dock
 x=176 (landing 214). A gate needs about 12 lab frames of dwell to fire. A saved
 clear takes the published patrol branch with no container.
+
+**Upper-route camera miss (high confidence for this approach, v0.39.0).** A
+fresh Freight-clear flag was unset in disposable RAM and the room was entered
+via Test Upgrades. Normal movement reached x208/y45 with drop var `0x12B`=1 at
+frame 1954; the descending container was clipped at frames 1974 and 2009 and
+not visible at 2034 and 2094 while the player stood on the upper deck. Source:
+`work/crane-review-2026-10-29/target-97/`; limits and save hash in
+`reference/crane_review_20261029.json`. The earlier horizontal-distance check
+does not establish visibility from elevated approaches. Continuous capture is
+needed to distinguish viewport clipping from foreground occlusion; Dry Dock and
+Crown have not been checked for the same issue.
 
 **Lab.** `crane_walk.py view` with `kit_lab._run` wrapped to denser `caps` shows
 the sequence; `mw.until` over `s.room_vars` (index var-0x127) times it. The Crown

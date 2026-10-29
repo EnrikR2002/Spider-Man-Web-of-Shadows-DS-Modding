@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-29",
+  "rom_version": "0.39.0",
+  "rom_sha256": "b53e3879cc575e63979f1a65a7d29fc610a3d1d44080f2205b29aec26075d37c",
+  "battery_source_sha256": "ff62fa34c48e2bf1530449209d162b2254ddca8e95c44e9ee8ea75998a05aea1",
+  "battery_unchanged": true,
+  "emulator": "melonDS DS 1.1.5, software renderer, JIT disabled",
+  "limits": "Agent-operated, frame-stepped Black-suit inputs; screenshots are samples, not continuous motion or audio review. The normal route did not clear Crown. Focused room starts use a Test Upgrades warp in disposable RAM. No player verdict, hardware result, Red playthrough, complete encounter or save-persistence qualification is claimed.",
+  "evidence_root": "work/crane-review-2026-10-29/",
+  "normal_route": {
+    "trace": "session.json",
+    "rooms": ["Pier_Save02", "AR_CraneQuay", "AR_FreightExchange", "AR_ContainerWarren", "AR_DryDock", "AR_EngineHouse", "AR_Counterweight", "AR_GantrySpine", "AR_CraneCrown"],
+    "notes": "Latest copied battery; no warp, HP, enemy or ownership writes. Freight and Dry Dock clear flags were already set. Power lever was used; Crown first crew was not cleared. The native health-orb minigame used an image-based pen-tap helper."
+  },
+  "fresh_freight": {
+    "trace": "target-97/session.json",
+    "fixture": "Test Upgrades room warp; saved Freight-clear flag 144 cleared in disposable RAM before room initialization. HP and enemies remain native.",
+    "observation": "Upper approach reached x208 y45 at frame 1954 with drop var 1. The descending container is clipped at 1974 and 2009, then not visible at 2034 and 2094 while the player waits on the upper deck. Continuous capture is needed to distinguish viewport clipping from foreground occlusion."
+  },
+  "fresh_crown": {
+    "trace": "target-105/session.json",
+    "fixture": "Test Upgrades room warp; the copied save's Crown-clear flag was already unset. HP and enemies remain native.",
+    "observation": "Frame 1554 shows a bright magenta enemy; the two sampled enemy HP values are unchanged from frame 1394. Magenta is also visible at 1864 and 2060. Enemy identity, effect/texture cause and other emulators remain unverified. The first crew was not cleared."
+  },
+  "long_arm": {
+    "trace": "target-106/session.json",
+    "fixture": "Test Upgrades room warp from the copied save; native player ownership, HP, enemies and button inputs; no refills or combat placement.",
+    "observation": "Fight running at frame 2044; at 4169 the fight is inactive, phase marker is 2, the meter is gone and two enemies remain. Player HP fell from 77824 to 51688. Real inputs reached Breakwater at 4329, Quay at 4749 and Pier at 5459; the objective displayed RETURN: PIER on Breakwater. No save/reload was tested."
+  },
+  "room_views": {
+    "office": "target-98/session.json: brief room-start inspection",
+    "cache": "target-104/session.json: brief room-start inspection; reward not collected"
+  },
+  "prior_door_lab": "v0.39.0 qualification recorded 23/30 passes and seven failures matching v0.38.0. This review separately crossed Pier-to-Quay, Freight-to-Warren, Engine-to-Counterweight and Quay-to-Pier with real inputs under the stated save/warp conditions; it does not resolve every lab failure."
+}

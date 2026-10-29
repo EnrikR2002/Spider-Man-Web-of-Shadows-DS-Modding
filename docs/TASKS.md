@@ -1,23 +1,29 @@
 # Current work and handoff
 
-Updated 2026-10-28 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
+Updated 2026-10-29 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
 workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design.
 
 ## Current objective
 
-Codex's Boarding (v0.38.0) and the Crane Row finale (v0.39.0) are merged and
-published from `main`. Nothing is pushed; `main` is ahead of `origin/main`.
-`codex/2099-boarding` is deleted; `claude/crane-row-improvements-edb9b0` (the Crane
-Row worktree under `.claude/worktrees`) is an ancestor of `main` and can be removed.
+The player requested an agent playthrough and comprehensive improvement analysis
+of Crane Row. The v0.39.0 review is complete; proposals and their priorities are
+in ROADMAP "Crane Row", and the scoped evidence is in
+`reference/crane_review_20261029.json`. This is an agent assessment, not a player
+verdict or an implementation request. `main` remains unpushed.
 
-Crane Row (player, 2026-10-28: it felt lame next to Midnight Line): the Long Arm
-is a three-act fight with the native boss meter; Freight Exchange, Dry Dock and
-Crane Crown crews arrive by crane cargo drop; the map is one connected ring; the
-harbour opens behind the boss. `tools/crane_arm.py` is an exact v0.38.0 post-pass
-(flag `crane_arm`) composing `crane_drop`, `crane_vista` and `crane_map` (layout
-`crane_ring`). Receipts: `reference/crane_arm.json`, `crane_map.json`,
-`crane_vista.json`. Contracts: TECHNICAL "Long Arm three acts", "Crane cargo
-drops", "Crane Row ring map"; design: ROADMAP "Crane Row". Agent-tested only.
+From a copy of the latest battery, frame-stepped Black inputs traversed Pier,
+Quay, Freight, Warren, Dry Dock, Engine, Shaft and Gantry to Crown. The agent
+restored power but did not clear Crown. All 12 rooms were seen across that run
+and labelled room-start inspections; Office and Cache were brief. In a separate
+unhealed Long Arm room-start fixture, the agent defeated the hoist and returned
+through Breakwater and Quay to Pier. No save/reload was tested.
+
+Two high-priority visual findings: Crown shows an intense magenta enemy before
+either sampled enemy loses HP; cause and emulator parity remain unknown. A fresh
+Freight drop can be triggered from the upper deck, but its landing and opening
+were not visible in sampled frames. Engine's map objective remained "POWER:
+ENGINE" after the lever, updating to "CROWN: CREW" on the next room entry.
+Technical observations and limits are in the corresponding TECHNICAL sections.
 
 Boarding (independent 275 XP Black row, event397/bit88): jump or heavy Web Yank
 zip toward a supported boss; Y rakes, A tears and kicks off, R releases. Receipt:
@@ -37,8 +43,9 @@ Stable `build/Spider-Man-WoS-modded.nds` is **v0.39.0**, SHA256
 `tools/playtest.py build` and equal to the clean-chain and standalone builds.
 American and English boot and Options both read v0.39.0. The v0.38.0 ROM, build
 metadata and recipe are kept under `build/releases` and `build/version-0.38.0-final`.
-The actual Battery (634-byte DSV, SHA256 `dc013246...`) is unchanged and matches
-its before-build checkpoint; future saves may differ, so read them freshly.
+The actual Battery is a 634-byte DSV. At this review its SHA256 was
+`ff62fa34c48e2bf1530449209d162b2254ddca8e95c44e9ee8ea75998a05aea1` and it
+remained unchanged; future saves may differ, so read them freshly.
 
 Evidence: 774 strict tests, zero skips, passed before publication except the two
 version checks that need this release recorded; those pass now. Native-input Long
@@ -50,12 +57,14 @@ purchase/refund/repurchase/Continue pass on this ROM.
 
 ## Blockers and next exact action
 
-No blocker. Launch normally and try the Long Arm (three acts, boss meter), the
-Freight Exchange, Dry Dock and Crown cargo drops, the Crane map and the harbour
-backdrop; then try Boarding. Give in-game verdicts before another skill or Crane
-change. Unverified: fun and fairness, hardware pacing, full-route balance, the
-seven lab-failing Crane doors in real play. Build, test and publish only in the
-full checkout; a fresh worktree cannot reproduce pinned hashes. Do not push
-without a request.
+No implementation was requested in this review. Next, use the ROADMAP priorities
+to choose a Crane slice; first reproduce the magenta enemy with controlled
+species/status and DeSmuME, and check the cargo camera from upper and lower
+approaches. Do not call the seven lab door failures regressions: this review
+crossed several affected doors in different real-input conditions. Still open:
+a continuous full-route clear, fresh Dry Dock/Crown drops, actual mixed audio,
+Red, hardware pacing, save/reload and a player verdict. Build, test and publish
+only in the full checkout; a fresh worktree cannot reproduce pinned hashes. Do
+not push without a request.
 
 Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.

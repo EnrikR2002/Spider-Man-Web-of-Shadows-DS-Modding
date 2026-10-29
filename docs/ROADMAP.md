@@ -555,6 +555,52 @@ Items 2 (crane delivery) and 3 (backdrop) are built above. Do not add new creatu
 meshes before the Skitter verdict, a fourth material pass, rideable loads, timers
 or counterweight crushes.
 
+**Agent review (2026-10-29, v0.39.0; proposals, not player verdicts):** all
+12 rooms were seen, but Crown was not cleared on the continuous route; Office
+and Cache were brief room-start views. The Long Arm and fresh Freight drop used
+separate room-start fixtures. Inputs, screenshots and limits are recorded in
+`reference/crane_review_20261029.json`. Prioritize:
+
+1. **Enemy rendering and readability.** A Crown enemy appeared bright magenta
+   before either sampled enemy lost HP, and again across later combat frames.
+   Identify the species and distinguish palette/binding defects from a status
+   effect in DeSmuME and melonDS. Then improve contrast, silhouettes, tells,
+   hit reactions and recovery at native scale; one complete enemy presentation
+   remains the gate before roster-wide art or animation work.
+2. **Visible crane delivery.** The fresh Freight trigger fired on the upper
+   deck, but the landing and opening were not visible in sampled frames.
+   Re-stage or gate the sequence for both upper and lower approaches without
+   forcing player movement; check Dry Dock and Crown independently, including
+   retries and saved revisits.
+3. **Encounter rhythm and space.** Give Maw, Spore and Ballast recognisable
+   roles, teach them apart and then combine them in different room situations.
+   In Gantry and Crown, clustered creatures and a tall crate wall made the fight
+   hard to read and escape. Test spacing, pursuit across elevations, counterplay
+   and recovery before tuning HP or crowd size. The agent's losses do not prove
+   unfair balance.
+4. **Distinct rooms.** Keep the harbour skyline and connected ring. Make Quay a
+   clear arrival, Freight an unmistakable cargo exchange, Warren a readable
+   container maze, Dry Dock recognisably a ship, Engine a working power room,
+   Shaft a purposeful climb, and Gantry/Crown progressively more exposed. Use
+   stronger foreground edges, silhouettes, landmarks and quieter spaces instead
+   of another uniform recolour. Preserve the Office save and Cache reward.
+5. **A more legible finale.** The open cyan motor reads, but the hoist still
+   resembles a small wall box; stage the crane arm, phases and victory aftermath
+   so the encounter has a stronger identity. Its two stacked native health-bar
+   sections drain in sequence and could use a clearer explanation or single
+   visual. Keep safe lanes and real combo openings; test both suits before
+   changing timing or damage. Give the return path a satisfying aftermath.
+6. **Navigation and feedback.** The Engine lever changed the map objective only
+   after leaving the room in this run. Reproduce and refresh it immediately if
+   confirmed. Make the current room, shortcut and locked doors easy to interpret
+   at DS scale. Several previously lab-failing doors were crossed manually under
+   different conditions; diagnose the harness and remaining routes before
+   declaring a player-facing blockage.
+7. **Sound and finish.** Review actual mixed enemy tells, attacks, crane impacts
+   and music alongside motion; this review did not listen to the audio. Confirm
+   rewards, optional Cache, checkpoint/retry, both suits and hardware pacing in
+   a continuous route before claiming the chapter is fun or balanced.
+
 ### Creature presentation
 
 **Status:** One complete example (Rail Skitter) shipped; verdict open. If the
@@ -596,6 +642,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-10-29, v0.39.0 | Play through Crane Row and analyze potential improvements across enemies, visuals, map and everything else | Agent review and ranked proposals above; no new player quality verdict or implementation request |
 | 2026-10-28, v0.38.0 Boarding preview | Looks pretty good. Sound is bad, but it is the Conductor effect and a separate issue; do not worry about it here | Preview motion accepted; existing Conductor sound quality deferred. Terra closes its six-metric gate at 8.0..8.5. In-game feel and campaign balance remain unconfirmed |
 | 2026-10-28, v0.37.0 Meteor Catch | Tested the previous skill (called meteor crash); feels pretty good overall. Build the next 2099 skill; GPT-6.1 Terra decides metrics and must rate every one at least 8/10. Publish all previous work to GitHub first | Prior commits pushed through 28620b1 before implementation. Meteor Catch's overall feel is player-confirmed. Boarding with Wing Ripper is next in the approved build order; v0.38.0 closes its six-metric gate after the later accepted playback preview |
 | 2026-10-28, v0.37.0 | Also improve the Crane Row map: it looks too weird and the rooms do not properly connect; make it similar to the base game map | Ring map with touching rooms and necks (ships in v0.39.0, agent-tested only); no player verdict |
