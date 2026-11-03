@@ -68,3 +68,9 @@ only in the full checkout; a fresh worktree cannot reproduce pinned hashes. Do
 not push without a request.
 
 Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.
+
+Side research (2026-11-03): the external EUR decompilation was read for asset
+pipeline knowledge. Its findings, limits and the EUR-to-USA address rule are in
+TECHNICAL "External EUR decompilation and asset load path"; query it with
+`tools/decomp_xref.py` over a private `work/decomp` clone. It adds no asset
+format parsers, and the Crane objective above is unchanged.

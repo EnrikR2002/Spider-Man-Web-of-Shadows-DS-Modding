@@ -1,0 +1,30 @@
+{
+  "purpose": "Receipt for reading the external EUR decompilation against the clean USA CS5E ARM9. Narrative and limits: TECHNICAL 'External EUR decompilation and asset load path (2026-11-03)'. Query tool: tools/decomp_xref.py.",
+  "date": "2026-11-03",
+  "decomp": {
+    "url": "https://github.com/liolu/spider-man-web-of-shadows-decomp",
+    "commit": "d5b8e4287ec9e7ab244531614f961bf4a1287ade",
+    "commit_date": "2026-11-02",
+    "license": "CC0-1.0",
+    "target": "EUR CS5X SPIDERMANWOS",
+    "baserom_sha1": "c024ce8adc276dfdaed48bf3396c152853fa6b34",
+    "toolchain": "dsd (ds-decomp) + mwccarm 2.0/sp1p5 -O4,p; 5 files 1.2/sp2p3",
+    "progress": "2486/5847 functions (9.57% code, 0% data); 2439 raw m2c + 47 donor",
+    "overlays": 0,
+    "local_checkout": "work/decomp (ignored; never commit decomp files)"
+  },
+  "usa_arm9_sha256": "e541bfcd02441db86b43b8649aaa13570be301d302ddfb198804b78528d215dc",
+  "address_rule": {
+    "code_same_below_eur": "0x02084AA4",
+    "code_minus_4_from_eur_to": "0x021193C0",
+    "itcm": "identical; USA ARM9 source offset 0x13E140",
+    "data_rodata_bss": "not linear; verify each address in USA literals",
+    "cause": "USA 0x02084A54 title-language switch has one fewer literal word"
+  },
+  "verification": {
+    "functions_main_and_itcm": 5846,
+    "arm_bl_b_relocations_ok": 14350,
+    "arm_bl_b_relocations_bad": 0,
+    "unverified": ["Thumb BLX relocations", "DTCM", "data/BSS addresses except 0x0213FF40, 0x0213FD24, 0x021280A0 read from USA literals"]
+  }
+}

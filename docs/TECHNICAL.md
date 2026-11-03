@@ -22,6 +22,7 @@ objective/build and next action: [TASKS](TASKS.md).
 | Meteor Catch grip, floor impact and native rebound | [Meteor Catch](#meteor-catch-v037-research) | [Reel In](#airborne-reel-in-v036-research), [hit pipeline](#hit-pipeline-v040-runtime-probed) |
 | Skyjack velocity correction | [Scoped finish (0.29)](#scoped-movement-and-chapter-finish-v0290) | [Parent audit and unshipped prototypes](#shared-crowd-hit-backend-candidates); the old source/hex still reproduce their historical releases |
 | Binary formats and preservation | [Format boundaries](#format-boundaries-and-confirmed-structures), [SCA/rig contract](#animation-authoring-and-current-evidence) | [Baseline inventory](#rom-baseline-and-inventory) |
+| Asset loading, decompression, SDK calls and the external EUR decompilation | [External EUR decompilation](#external-eur-decompilation-and-asset-load-path-2026-11-03) | [Glob.bin](#globbin-and-bounded-additions) |
 | Emulator/rendering and performance | [Performance and visuals](#performance-and-visuals) | Dated renderer/JIT observations are not current performance guarantees |
 | Hook/trace failures | [Research workflow and pitfalls](#research-workflow-and-pitfalls-red-kit-sessions), then the affected feature | Old candidate claims remain scoped to their recorded build |
 | Built hits, reaction kinds and web lines | [Hit pipeline](#hit-pipeline-v040-runtime-probed), [web lines](#web-lines-built-hits-and-the-web-skills-v0130) | [Crowd-hit candidates](#shared-crowd-hit-backend-candidates) |
@@ -225,6 +226,9 @@ is patched3733 ->3736. Getter `0x020079F0`, name lookup `0x02007A04` remain
 native. Fixed-name/layout/hash guards, append/repack/strip-exact-revert tests
 and runtime qualification are confirmed; general additions remain unsupported.
 Details: [ANIMATION](TECHNICAL.md), `tools/oscorp_resources.py`.
+**Correction (2026-11-03, medium-high; clean CS5E):** `0x02007A04` maps an ID
+to its name (record `id*64` of ID805), not a name to an ID. Glob names are
+strictly byte-sorted. See [External EUR decompilation](#external-eur-decompilation-and-asset-load-path-2026-11-03).
 
 ### XBD bindings
 
@@ -480,6 +484,10 @@ and the other Python tools build/patch the ROM and bake animation resources,
 they do not run on the DS. `tools/assemble_tasm_kit.py` is optional reassembly;
 normal builds use the pinned `tools/tasm_kit.hex`. Confidence: likely C++ for at
 least the native object-oriented engine; exact language/toolchain unknown.
+**Update (2026-11-03, medium):** the EUR decompilation byte-matches functions
+with Metrowerks mwccarm 2.0/sp1p5 `-O4,p`, plus five files with 1.2/sp2p3. Its
+ARM9 includes `.exceptix` and `.ctor` tables. This supports C++ for at least part
+of the engine. It does not identify the original source. See [External EUR decompilation](#external-eur-decompilation-and-asset-load-path-2026-11-03).
 
 Native21 purchase records, flags, costs and dependencies are mapped; read
 [GAMEPLAY](OG_GAMEPLAY.md) before paid route changes. The v0.2.0 snapshot used
@@ -544,6 +552,106 @@ including four archive integrity/reader checks. Those are historical counts;
 emulator/player coverage was established by that maintenance.
 New facts should update the relevant section here,
 with focused evidence links; avoid appending another duplicate release log.
+
+### External EUR decompilation and asset load path (2026-11-03)
+
+Source: [liolu/spider-man-web-of-shadows-decomp](https://github.com/liolu/spider-man-web-of-shadows-decomp)
+at `d5b8e42` (2026-11-02, CC0, AI-assisted). It is a matching decompilation of
+the **EUR CS5X** ROM (baserom SHA1 `c024ce8a…`), not our CS5E. It uses dsd and
+mwccarm. Progress: 2,486 of 5,847 functions (9.57%), almost all raw m2c drafts
+of small leaf/SDK routines, and 0% data. Names exist only for BIOS stubs,
+`Entry`, `main` and exception labels. Everything else is `func_<addr>`, and
+`include/engine.h` is empty. It ships no assets and no format code. Its only
+extraction is `dsd rom extract`, which splits NitroFS as `wos_tool.py` already
+does. Like CS5E, it has no overlays. Receipt: `reference/decomp_eur_20261103.json`.
+
+**Address mapping (high confidence; clean CS5E ARM9 `e541bfcd`).** The decomp
+provides boundaries for 5,846 ARM9/ITCM functions plus a full relocation
+(cross-reference) graph. All 14,350 ARM BL/B relocations reach their targets in
+the USA bytes under one rule:
+
+- USA code equals EUR below EUR `0x02084AA4`.
+- From there to the end of `.init`, USA code is EUR−4.
+- ITCM code is identical. Its USA ARM9 source offset is `0x13E140`.
+
+The cause is the title-language switch `0x02084A54`. It returns per-language
+title XBD IDs: USA `0x7A6` `StartMain.xbd` or `0x7A8` `StartMainFrench.xbd`.
+EUR adds Italian `0x7AA` and Spanish `0x7AC`, and its literal pool has one
+extra word. Data, rodata and BSS do not map linearly. Fewer than half of the
+load relocations agree, so read each such address from USA literals. Glob state
+`0x0213FF40` is the same in both. Thumb BLX relocations and DTCM are unverified.
+
+EUR sections: `.text` to `0x0210FF20`, `.exception`/`.exceptix` to `0x02110358`,
+`.init` to `0x021193C0`, `.rodata` to `0x02127634`, `.ctor` to `0x0212790C`,
+`.data` `0x02127920`–`0x0213E140`, `.bss` to `0x0214F420`. dsd failed to split
+`0x02000BA0`–`0x02005A84` into functions and labels it all `main`. Treat
+addresses inside that range as separate routines.
+
+**SDK libraries (medium-high; donor code reused from other decompilations; USA
+addresses):**
+
+- NitroSystem sound player and archive (`snd_arc.c`, `snd_arcload.c`,
+  `snd_arcstrm.c`): `0x0204011C`–`0x020437BC`. It loads SDAT sequences, banks,
+  wave archives and streams.
+- NNS_Fnd lists and expanded heap: `0x020F3848`–`0x020F3E84`.
+- NNS_Gfd VRAM-transfer queue: donor `0x0200706C`, with helpers `0x02006F18`,
+  `0x02006FD8` and `0x02007000`.
+- `FS_ConvertPathToFileID`: `0x02103098`.
+- `FS_OpenFileFast`: `0x02103120`.
+- Path-open wrapper that calls both: `0x02103190`.
+
+**Glob load path (medium-high; cross-references plus hand decoding of USA
+words):**
+
+- Boot routine `0x02006620` calls two functions:
+  - `0x02004C04` stores the ITCM routines `0x01FF8000`/`0x01FF84A8` at `0x0213FD24`/`+4`.
+  - `0x02007954` opens `Glob.bin` (through `0x02007CBC` and FS `0x02103190`),
+    then calls `0x02007758` to read the offset table.
+- State `0x0213FF40`: `+0x18` holds the offset-table pointer. Other fields are unknown.
+- `0x020079F0` returns `offset(id)`.
+- `0x020079BC` returns `size(id)`. It returns 0 for the null ID `0x7FFFFFFF`.
+- `0x02007B44 read(dst,id,offset,size)` seeks and reads part of one resource
+  from the open file. It has seven callers, so partial (header) reads are native.
+- `0x02007A04` maps an ID to its name (correction above). It reads record
+  `id*64` of ID805, truncates at the first byte whose ctype entry has flag
+  `0x100` (the whitespace padding), then copies it. The null ID copies a fixed
+  default string.
+- `0x02007BAC` loads a whole resource.
+- `0x0200786C` loads and then decompresses. `0x02004C28` returns `header>>8` as
+  the decoded size. `0x02005E78` allocates from the heap at `[0x021280A0]`.
+  `0x02004C70` decodes. `0x02007804` is the other caller of that pair.
+- Dispatcher `0x02004C70` switches on `(first byte >> 4) & 7`:
+  - 1 (`0x10` LZ77): `0x021002DC`.
+  - 2 (Huffman): `0x021003B4`.
+  - 3 (RL): Thumb `0x0210048C`. These three are SDK-region decoders,
+    identified by position (medium).
+  - 6 (`0x60` Griptonite PuCrunch, the GMB/2LZ wrapper): the callback at
+    `[0x0213FD24]`, i.e. the 0x4A8-byte ITCM routine `0x01FF8000`.
+  - 0: game routine `0x02006020`. It is probably a raw copy (unverified).
+  - 4, 5 and 7 fail.
+  - The decoder runs only where a loader requests it, so a first byte alone
+    does not mark a file as compressed.
+- NNS G3d is linked. `0x020F7980` holds the only `BTX0` literal in the ARM9. It
+  returns the TEX0 block of a one-block BTX0 file, or the second block of a
+  multi-block file. This matches NNS_G3dGetTex (medium-high). Its callers are
+  `0x02014DD0`, `0x02016B44`, `0x0201D1E4` and `0x0201D3BC`. The ARM9 has no
+  BMD0/BCA0/BTA0/BTP0/BMA0/SDAT literals, and Glob ships no `.nsbca`.
+  Skeletal motion is SCA. Its loader `0x0201C958` is reached from `0x0201CB9C`,
+  which sizes and loads data through `0x02044218` and the getters.
+
+**Resource IDs (high; clean census).** A Glob ID is the position of its name in
+a strictly byte-ordered, case-sensitive list of all 3,733 names. For example,
+`BV_Walk.sca` precedes `Back.2lz`. Code embeds IDs as literals; XBD tables hold
+indices. The getters index the offset table directly. No runtime name-to-ID
+search was found, though one is not proven absent. Appending preserves every ID,
+and a `zz_` name also keeps the order. Inserting mid-list would renumber all
+later IDs and every literal or XBD reference to them.
+
+**Not provided:** the decomp offers no parsers for models, textures, animation,
+sprites, UI or rooms. It also gives no struct layouts, no game-function names,
+no data matching and no extraction or reinsertion beyond NitroFS. Formats
+remain owned by the sections above. To find each per-type loader, run
+`decomp_xref.py callers` from the decoder, the BTX0 helper and the getters.
 
 ## Animation authoring and current evidence
 
