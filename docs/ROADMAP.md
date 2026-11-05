@@ -571,7 +571,8 @@ separate room-start fixtures. Inputs, screenshots and limits are recorded in
    deck, but the landing and opening were not visible in sampled frames.
    Re-stage or gate the sequence for both upper and lower approaches without
    forcing player movement; check Dry Dock and Crown independently, including
-   retries and saved revisits.
+   retries and saved revisits. The v0.39 burst can spawn far from its container;
+   do not claim the crew visibly emerges until placement is proven.
 3. **Encounter rhythm and space.** Give Maw, Spore and Ballast recognisable
    roles, teach them apart and then combine them in different room situations.
    In Gantry and Crown, clustered creatures and a tall crate wall made the fight
@@ -642,6 +643,8 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-11-04, unpublished candidate `bf9b63a9` | Both short Freight-drop clips sound good in the game mix | Player-approved those sampled cargo sounds; enemy audio, gameplay, visuals and the complete mix still await player judgment |
+| 2026-10-29, v0.39.0 | Improve Crane Row using these priorities, starting with the magenta enemy and Freight cargo visibility; an independent 6.1 Terra agent must rate the improvements at least 8/10 before completion | v0.40.0 ships the scoped color and delivery changes; Terra scored 8.0/10. Audio clips were accepted; visual and gameplay verdicts remain open |
 | 2026-10-29, v0.39.0 | Play through Crane Row and analyze potential improvements across enemies, visuals, map and everything else | Agent review and ranked proposals above; no new player quality verdict or implementation request |
 | 2026-10-28, v0.38.0 Boarding preview | Looks pretty good. Sound is bad, but it is the Conductor effect and a separate issue; do not worry about it here | Preview motion accepted; existing Conductor sound quality deferred. Terra closes its six-metric gate at 8.0..8.5. In-game feel and campaign balance remain unconfirmed |
 | 2026-10-28, v0.37.0 Meteor Catch | Tested the previous skill (called meteor crash); feels pretty good overall. Build the next 2099 skill; GPT-6.1 Terra decides metrics and must rate every one at least 8/10. Publish all previous work to GitHub first | Prior commits pushed through 28620b1 before implementation. Meteor Catch's overall feel is player-confirmed. Boarding with Wing Ripper is next in the approved build order; v0.38.0 closes its six-metric gate after the later accepted playback preview |

@@ -1,0 +1,166 @@
+{
+  "date": "2026-10-29",
+  "status": "published v0.40.0 after independent 8.0/10 review",
+  "published_parent": {
+    "version": "0.39.0",
+    "rom_sha256": "b53e3879cc575e63979f1a65a7d29fc610a3d1d44080f2205b29aec26075d37c",
+    "actual_battery_sha256_at_copy": "ff62fa34c48e2bf1530449209d162b2254ddca8e95c44e9ee8ea75998a05aea1"
+  },
+  "current_candidate": {
+    "version": "0.40.0",
+    "rom_sha256": "bf9b63a95bff3c1edfea1e3f8acbc4503a9521fb87bdcb333a87bedfef9fd0c6",
+    "path": "build/crane-visibility-g2/Versioned.nds",
+    "scope": "Private Ballast direct-color atlas; Freight-only cargo staging and models; one enlarged burst activation zone and guarded native floor-anchor coordinates with two destinations per approach.",
+    "limits": "Published locally. The player approved two short cargo audio clips; normal-HP full clear, hardware and visual/gameplay verdict remain open."
+  },
+  "magenta": {
+    "species": "Ballast",
+    "melonds": "A v0.39.0 Crown frame and a private direct-color control matched the sampled actor positions and HP; only the control lost the magenta. The actual battery was unchanged.",
+    "desmume": "A separate software/interpreter run showed magenta before Ballast damage in the parent and ordinary color with a 64px format7 Ballast material in the control. The accompanying species differed between runs.",
+    "desmume_core_sha256": "1e69487b97548907ceb298b4737a2e088eabad8b839c821c036ffe38d270f716",
+    "evidence": [
+      "work/crane-review-2026-10-29/target-105/",
+      "work/crane-investigation/105-9d4d95ac/",
+      "work/crane-investigation/105-b53e3879-desmume/",
+      "work/crane-investigation/105-9d4d95ac-desmume/",
+      "work/crane-investigation/105-e0cb32ad-desmume-final-d/"
+    ],
+    "limits": "The precise indexed-palette failure and hardware parity remain unknown."
+  },
+  "freight": {
+    "preceding_candidate_sha256": "e0cb32ad40541600a5d2b0c45edf6a7e71a12bc48fabe0f52a5839c3e955f2e6",
+    "observation": "Upper and right-ground native-input starts showed the shorter descent, opening and lift in melonDS and DeSmuME. A fresh copied saved-clear revisit remained on the patrol branch with drop var zero.",
+    "evidence": [
+      "work/crane-investigation/97-e0cb32ad-upper-final-d/",
+      "work/crane-investigation/97-e0cb32ad-lower-right-final-d/",
+      "work/crane-investigation/97-e0cb32ad-upper-desmume-final-d/",
+      "work/crane-investigation/97-e0cb32ad-lower-right-desmume-final-d/",
+      "work/crane-investigation/97-e0cb32ad-revisit-saved/"
+    ],
+    "inherited_issue": "The published burst zone does not bound enemy placement. Live spawner cost showed Ballast spawn far from the container; mode2 and delayed-crew controls failed. Instrumented research later used guarded existing floor-anchor coordinates and native collision checks; F removes the research counters and needs qualification.",
+    "limits": "These are sampled, disposable Test Upgrades starts, not a complete encounter or proof of enemy emergence.",
+    "two_point_control": {
+      "date": "2026-11-04",
+      "diagnostic_sha256": "b45973d20852f0de2181253762cf223ac32fc3ef5fba012b2cc71ff96c263612",
+      "result": "With native inputs holding the player at each of four possible destinations in separate runs, the burst placed an enemy at the other destination and charged its normal cost. The source-anchor address selects a stable delivery point for all native reads. No actor coordinates or HP were written.",
+      "evidence": [
+        "work/crane-investigation/97-b45973d2-upper-block-alternate/",
+        "work/crane-investigation/97-b45973d2-upper-alt-block-alternate/",
+        "work/crane-investigation/97-b45973d2-lower-right-block-alternate/",
+        "work/crane-investigation/97-b45973d2-lower-right-alt-block-alternate/"
+      ],
+      "limits": "Instrumented diagnostic and one sample per occupied point; it cannot guarantee placement if both points are occupied."
+    },
+    "candidate_g_samples": {
+      "result": "Both suits on both Freight approaches in melonDS, both approaches in DeSmuME, movement-away and saved-clear revisit; route variable cleared after the burst. A matched Dry Dock sample and the published parent both remained in drop state 1 through frame 2215.",
+      "evidence": [
+        "work/crane-investigation/97-bf9b63a9-upper-g/",
+        "work/crane-investigation/97-bf9b63a9-lower-right-g/",
+        "work/crane-investigation/97-bf9b63a9-upper-red-g/",
+        "work/crane-investigation/97-bf9b63a9-lower-right-red-g/",
+        "work/crane-investigation/97-bf9b63a9-upper-desmume-g/",
+        "work/crane-investigation/97-bf9b63a9-lower-right-desmume-g/",
+        "work/crane-investigation/97-bf9b63a9-revisit-g/",
+        "work/crane-investigation/100-bf9b63a9-lower-g/",
+        "work/crane-investigation/100-b53e3879-lower-parent/"
+      ],
+      "limits": "Sampled event states and appearances; the paired Dry Dock sample does not establish a full drop or encounter clear."
+    }
+  },
+  "lifecycle": {
+    "candidate_sha256": "34cad9659d30aee86ee7ee487352ff39a1236c0f6eaae71239d6e5024eaa3f7c",
+    "result": "A healed Black native-input test observed all three species and Ballast damage but timed out with two enemies alive; intended single-species isolation did not hold. The first bootstrap did not enter Freight and is not a gameplay failure.",
+    "report": "work/crane-row/creatures/creature-duel-ballast-black-base-a-black-retry-34cad965.json",
+    "assisted_controls": {
+      "candidate_f": "20361c794823b12c3fe554f1f17c81d6825e0fa9979fa6a500d05f439ce16706",
+      "result": "Black native-input upper and right-route encounters set the Freight clear flag with a healed player and enemy HP capped to one. E also cleared upper under the same assistance.",
+      "reports": [
+        "work/crane-row/creatures/creature-duel-mixed-black-base-f-upper-cap-20361c79.json",
+        "work/crane-row/creatures/creature-duel-mixed-black-base-f-right-cap2-20361c79.json",
+        "work/crane-row/creatures/creature-duel-mixed-black-base-e-upper-cap-0d4fd98f.json"
+      ],
+      "limits": "Progression/callback controls only, not normal-HP difficulty, complete animation lifecycles or player acceptance."
+    },
+    "candidate_g_controls": {
+      "result": "On exact G, Black-upper and Red-right mixed encounters set Freight clear and increased XP. The paired E Red-right control also cleared.",
+      "reports": [
+        "work/crane-row/creatures/creature-duel-mixed-black-base-g-upper-cap-bf9b63a9.json",
+        "work/crane-row/creatures/creature-duel-mixed-red-base-g-right-red-cap-bf9b63a9.json",
+        "work/crane-row/creatures/creature-duel-mixed-red-base-e-right-red-cap-0d4fd98f.json",
+        "work/crane-row/creatures/creature-duel-mixed-crown-black-base-g-crown-cap2-bf9b63a9.json"
+      ],
+      "limits": "Fresh copied DSV, cleared flag in disposable RAM, enemy HP capped at one, player healed. Real controls and native enemy spawning; not normal-HP difficulty or fun validation.",
+      "crown": "After correcting an early bootstrap, a Black assisted mixed fight advanced Crown reinforcement/drop states 0\u20132, returned via a real door after knockback, set flag 146, and awarded XP."
+    },
+    "candidate_g_native_ballast": {
+      "result": "With a copied latest save, isolated Ballast roster/budget, native enemy HP and no healing, the driver observed Ballast attack, knockdown and recovery. At the damaged Ballast position, a zero-HP actor progressed through death states and disappeared after 126 sampled frames, with XP increasing. The player later lost and a health-orb tutorial blocked the driver; the encounter timed out with one enemy alive.",
+      "report": "work/crane-row/creatures/creature-duel-ballast-black-base-g-ballast-native-bf9b63a9.json",
+      "limits": "The zero-HP telemetry lacks actor ID; roster isolation, position and screenshots support Ballast identity. The driver loss is not a balance verdict or an unassisted encounter clear.",
+      "death_trace": "build/boot-tests/Versioned-bf9b63a9/walk-creature-duel-ballast-black-base-g-ballast-native/observations.json"
+    },
+    "earned_save_reload": {
+      "result": "An assisted Black mixed fight set Freight flag 144 and awarded XP; native inputs entered the Office, saved at the sphere, and fresh Continue restored room 98 with Freight flag 144.",
+      "combat_report": "work/crane-row/creatures/creature-duel-mixed-black-base-g-save2-bf9b63a9.json",
+      "reload_report": "work/crane-investigation/lifecycle-g-save2/reload.json",
+      "limits": "The fight capped enemy HP at one and healed the player; the save was a disposable copied SRAM. The actual battery was unchanged."
+    },
+    "interruption": {
+      "result": "The exact G upper approach used a one-unit disposable player-HP fixture; native damage reduced HP to zero during the cargo burst, touchscreen input led to native in-room revival, the burst route byte cleared and the Freight clear flag stayed unset. The shell reached lift state 2.",
+      "report": "work/crane-investigation/97-bf9b63a9-upper-death-g/observations.json",
+      "limits": "One sampled native revival and re-entry using a one-unit health fixture and healing during navigation; no enemy HP or actor positions written. Actual battery unchanged.",
+      "reentry": "After native revival, real inputs and player healing carried Freight\u2192Office\u2192Freight; re-entry was uncleared with drop/mode zero, the player returned to the trigger, the drop restarted and burst mode cleared again with four enemies live.",
+      "reentry_report": "work/crane-investigation/97-bf9b63a9-upper-retry-death-g4/retry.json"
+    }
+  },
+  "door_control": {
+    "candidate_sha256": "bf9b63a95bff3c1edfea1e3f8acbc4503a9521fb87bdcb333a87bedfef9fd0c6",
+    "result": "9 of 9 Midnight pairs, 18 directed doors, passed with native arrivals and controller movement; enemies parked and player healed. Actual latest battery unchanged.",
+    "report": "work/crane-investigation/g-doors/midnight-doors.json",
+    "limits": "Initial room warp is compiled into a disposable ROM before JIT; no traversal placement fixtures. Affected Crane doors require separate control.",
+    "freight_connected": {
+      "result": "All eight directed crossings between Freight and Quay, Warren, Office and Engine passed on exact G; each report confirmed candidate SHA and no traversal placement. Actual battery unchanged.",
+      "report": "work/crane-investigation/g-crane-doors/results.json",
+      "limits": "Copied-save flags, native arrivals and controller movement; enemies parked and player healed."
+    }
+  },
+  "review": {
+    "reviewer": "GPT-6.1 Terra",
+    "final_score": 8.0,
+    "scope": "Candidate G bf9b63a9 scoped Ballast and Freight improvements",
+    "findings": "No remaining must-fix findings in the reviewed implementation and qualification. Assisted clears and healed/parked-enemy door tests do not establish an unassisted normal-HP clear. Hardware presentation and player visual judgment remain open. Player approval covers the two short audio clips."
+  },
+  "audio_review": {
+    "date": "2026-11-04",
+    "candidate_sha256": "bf9b63a95bff3c1edfea1e3f8acbc4503a9521fb87bdcb333a87bedfef9fd0c6",
+    "clips": [
+      "work/crane-investigation/audio-review-g/upper.wav",
+      "work/crane-investigation/audio-review-g/lower-right.wav"
+    ],
+    "player_verdict": "Both short Freight-drop clips sound good in the game mix.",
+    "limits": "Applies only to these two captured sequences; not a complete game-audio review."
+  },
+  "tests": {
+    "date": "2026-11-04",
+    "strict": true,
+    "modules": 104,
+    "tests": 788,
+    "failures": 0,
+    "skips": 0,
+    "runner": "Each tests/test_*.py module ran through tools/run_tests.py --strict in a separate process to bound memory.",
+    "logs": "work/crane-investigation/strict-modules/"
+  },
+  "clean_build": {
+    "rom_sha256": "bf9b63a95bff3c1edfea1e3f8acbc4503a9521fb87bdcb333a87bedfef9fd0c6",
+    "result": "The clean-source mod.py build using the optional tasm-v0.40.0 candidate recipe reproduced G byte for byte.",
+    "path": "build/crane-visibility-clean/Spider-Man-WoS-modded.nds",
+    "log": "work/crane-investigation/clean-build-g.log"
+  },
+  "publication": {
+    "version": "0.40.0",
+    "rom_sha256": "bf9b63a95bff3c1edfea1e3f8acbc4503a9521fb87bdcb333a87bedfef9fd0c6",
+    "previous_rom_sha256": "b53e3879cc575e63979f1a65a7d29fc610a3d1d44080f2205b29aec26075d37c",
+    "battery_sha256_at_publication": "ea33136000a3938c96769d67ec65f13d0b1d3b4764bdcb3413f4fbb5a44750fc",
+    "battery_checkpoint": "before-build-dsv-ea33136000a3938c96769d67ec65f13d0b1d3b4764bdcb3413f4fbb5a44750fc",
+    "stable_rom": "build/Spider-Man-WoS-modded.nds"
+  }
+}

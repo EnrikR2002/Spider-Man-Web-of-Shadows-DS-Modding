@@ -446,6 +446,32 @@ warp; enemy HP and player abilities were not altered. The actor's species,
 material binding versus status effect, DeSmuME and hardware parity are not yet
 established. This does not establish the earlier Conductor defect's cause.
 
+**Ballast direct-color control (2026-10-29; high confidence in the sampled
+melonDS Crown scene).** The unknown species above is Ballast: in a matched
+copied-battery replay, its 236475 HP and position match the magenta actor before
+damage. A disposable v0.39.0 control changes Ballast's model UV scale and its
+model-sheet texture binding to a private 64px RGB555 atlas using the established
+Conductor path; the same inputs, positions and HP now show ordinary colors at
+frames 1554, 1704 and 1864. Ballast binds format7/64px; the accompanying Spore
+still binds format3/128px. Source `work/crane-investigation/105-9d4d95ac/`; the
+actual DSV remained unchanged. This supersedes the species-unknown observation,
+but does not establish the exact indexed-palette failure, DeSmuME or hardware
+parity, all crowd combinations, or the player's verdict.
+
+**DeSmuME parity control (2026-10-29; high confidence in the sampled Crown
+scene).** A separate DeSmuME libretro software/interpreter run with the same
+copied battery also shows magenta Ballast on v0.39.0 before its HP changes; the
+direct-color control shows ordinary Ballast colors with its 64px format7
+material bound. The two runs selected different accompanying species, so this is
+not a frame-matched combat comparison. Source `work/crane-investigation/` dirs
+`105-b53e3879-desmume` and `105-9d4d95ac-desmume`; core SHA256
+`1e69487b97548907ceb298b4737a2e088eabad8b839c821c036ffe38d270f716`.
+This supersedes the DeSmuME-unknown qualification above, not the hardware limit.
+On the later scoped candidate `e0cb32ad`, DeSmuME samples 1704 and 2009 also
+show Ballast in its ordinary brighter colors with format7/64px, while Spore
+remains format3/128px; source
+`work/crane-investigation/105-e0cb32ad-desmume-final-d/`.
+
 English/American STRINGS: hash-bounded Huffman tree plus1,049 UTF-16LE slots
 round-trip; unknown prefix and untouched slot tails survive. Same-slot localized
 names/input/prerequisite edits are supported, other languages unproved. Native
@@ -6271,6 +6297,257 @@ not visible at 2034 and 2094 while the player stood on the upper deck. Source:
 does not establish visibility from elevated approaches. Continuous capture is
 needed to distinguish viewport clipping from foreground occlusion; Dry Dock and
 Crown have not been checked for the same issue.
+
+**Freight staging controls (2026-10-29, v0.39.0-derived disposable candidates;
+medium confidence for the sampled routes).** A raised landing alone puts the
+open container on screen for the upper deck but leaves the closed model absent
+until opening and obscures it from a lower approach. A shorter 20-unit descent
+is visible on the upper route. A separate right-side trigger and a lower landing
+show a drop and a Ballast arrival on a right-entry input run; the upper run shows
+the drop and a Maw arrival. Source `work/crane-investigation/97-2185be6f-lower`
+and `97-2185be6f-lower-right`. These controls change cargo model size in all
+three rooms and are not release candidates: clips are partially cut off, and
+retries, saved revisits, Dry Dock, Crown, audio and full route remain open.
+
+**Freight spawn variability (2026-10-29; medium confidence, melonDS).** The
+scoped v0.40.0 candidate `34cad965` shows the right-ground container descend and
+open, but in one native-input arrival no creature appeared beside it during the
+burst window; several native crew spawned elsewhere. An earlier `0509dbfd`
+control showed a Maw beside the container. Source `work/crane-investigation/`
+dirs `97-34cad965-lower-right` and `97-0509dbfd-lower-right`. The reason for the
+variation is unproved; a visible container alone does not prove the delivery.
+Delaying the native crew by the burst window in disposable candidate
+`fb823962` did not establish a nearby arrival in one right-entry run, so that
+timing experiment was discarded; it does not prove the underlying cause.
+
+**Burst zone does not bound observed spawn positions (2026-10-29; high confidence
+for one melonDS right-entry run of candidate `34cad965`).** At frame 1739 the
+live plain burst spawner reports center (248,22), half-size (28,15), charged and
+active cost 8192, while the only live creature is a Ballast at (144,24.7).
+The native crew spawner has zero charged/active cost in that sample. Thus this
+burst consumed a Ballast cost without placing it in or near its own box; do not
+infer emergence from the spawner center alone. Source
+`work/crane-investigation/97-34cad965-lower-right-spawners/observations.json`;
+the precise native placement rule is still unknown.
+
+**Scoped Freight visibility candidate (2026-10-29; sampled melonDS controls,
+candidate `e0cb32ad`).** Both approaches use the exact v0.39.0 burst and native
+crew records; the right approach no longer adds a relocated burst. The smaller
+Freight-only box descends, opens and lifts in upper and right-ground input runs.
+In the right run the unchanged burst charged 8192 while a Ballast appeared far
+away; this preserves rather than resolves the published spawn-placement issue.
+With the latest copied battery's Freight-clear bit already set, an upper revisit
+showed the patrol and drop var stayed zero through frame 2094. Sources
+`work/crane-investigation/97-e0cb32ad-{upper-final-d,lower-right-final-d,revisit-saved}/`.
+No real clear/reload, death retry, complete route, mixed-audio review or player
+verdict is established.
+The same candidate's DeSmuME software/interpreter upper and right-ground
+copied-save runs show descent, opening and the lift state, with the actual DSV
+unchanged (`97-e0cb32ad-upper-desmume-final-d/` and
+`97-e0cb32ad-lower-right-desmume-final-d/`).
+Candidate `0d4fd98f` changes only the Freight open-model resource from D:
+four interior ribs and a lighter back wall. Its upper and right-ground samples
+show the opening in both emulators, with the latest actual battery unchanged
+(`work/crane-investigation/97-0d4fd98f-*`). The visual review rated this
+presentation provisionally 7.5/10; it did not qualify the encounter or audio.
+
+**Central-sector burst control (2026-10-29; two melonDS samples).** Disposable
+candidate `d79e3a04` changes the two Freight burst spawners from plain mode to
+the existing native mode2/1. On one right-entry run the burst charged Ballast's
+8192 cost and Ballast appeared near the cargo at (268,25); the native crew
+continued separately. In a second run the burst again charged 8192 while Ballast
+appeared on the blue roof at (228,45), above the ground-level container. Sources
+`work/crane-investigation/97-d79e3a04-lower-right-mode2/` and `-mode2b/`.
+This does not establish reliable emergence, callback safety or a release fix.
+In an upper-route control the mode2 burst stayed at zero charged/active cost
+through its sampled lifetime while the native crew spawned elsewhere
+(`97-d79e3a04-upper-mode2-upper/`). Moving the burst zone down allowed it to
+charge in `fddb5def`, but the only Ballast spawned at (166.7,69.2), far from
+the upper container at (220,40). Source `97-fddb5def-upper-mode2-centered/`.
+The mode2 experiment is not adopted.
+
+**Native floor-anchor control (2026-10-29; one disposable melonDS sample).**
+Research ROM `95d758dd` intercepts three coordinate reads in the native spawn
+constructor only when its saved caller, Freight room, original burst-spawner
+vtable/center, route byte and selected floor kind match. It supplies an existing
+floor anchor's coordinates before native actor setup, not a later actor movement.
+In one right-entry run the burst charged Ballast's 8192 cost while Ballast
+appeared at (260,5.1), beside the open box; the native crew remained separate.
+Source `work/crane-investigation/97-95d758dd-lower-right-targeted/` and the
+ignored research scripts. ARM guard/prologue simulations pass, but the native
+frame/owner, anchor metadata, collision, stacking, retries and callbacks require
+independent qualification. This is not part of candidate E or a release fix.
+
+**Burst anchor trace (2026-10-29; one upper melonDS control).** Instrumented
+research ROM `99401237` enlarges the single burst activation zone and restricts
+the route byte to its 30-frame lifetime. The real constructor made three guarded
+coordinate reads, including its floor-actor placement site, and replaced a
+selected (346,62) floor point with existing Freight floor anchor (228,42).
+The burst charged 8192 while Ballast appeared at (228,45.1) beside the open box;
+the route byte returned to zero after the burst. Source
+`work/crane-investigation/97-99401237-upper-anchortrace/observations.json`.
+Static disassembly shows no stack adjustment on paths to the three reads except
+the constructor prologue and return epilogues. The original anchor's identity
+and other metadata still differ from the substituted coordinates; duplicate
+ownership, collision/stacking, clearability, rewards, retries and other-room
+fallback remain unqualified. This diagnostic is not part of candidate E.
+In a second, right-entry control the same guarded reads changed a selected
+(112,22) floor point to existing anchor (260,2); the charged burst's sole
+Ballast appeared at (260,5.1). The traced owner matched the live burst object
+in both samples. Source `97-99401237-lower-right-anchortrace/`. These two
+observations do not prove repeatability or safe multi-actor occupancy.
+
+Instrumented research `9def6158` additionally records one actual call at each
+of the three guarded sites on a Red upper-route run; it reads the same burst
+owner, substitutes (228,42) for (346,62), and the burst's Ballast appears at
+(228,45). Latest actual DSV remained unchanged. Source
+`work/crane-investigation/97-9def6158-upper-red-red/observations.json`. The
+three published private creature configurations have none of native spawn
+selector flags 0x33 set, which selects floor-kind anchors in the disassembled
+constructor; other enemy types still require a fallback control.
+In a Red right-entry run the same three sites each executed once, replacing
+(212,86) with (260,2); the burst charged Ballast and the actor appeared at
+(260,5.3). Source `97-9def6158-lower-right-red-red/`. The player used native
+inputs and the actual DSV was unchanged; this remains a single-species sample.
+With a disposable roster/budget fixture selecting Maw at native HP, upper
+`97-9def6158-upper-isolate-maw/` charged two 4096-cost burst actors. The trace
+recorded six first/check reads but only two placement reads; at the second
+sampled arrival their x positions were 218.2 and 226.1. The intervening aborted
+attempts are consistent with native occupancy rejection, but the reason is not
+independently proven. Hero/enemy placements and enemy HP were not written, and
+the actual DSV remained unchanged. With a disposable Spore-only roster/budget
+fixture and native enemy HP, the upper burst placed one Spore at (228,44.4); in
+the lower run the native crew already occupied (260,4.3), the burst made
+repeated guarded reads but charged no cost before its timer ended. Sources
+`97-9def6158-upper-isolate-spore/` and `97-9def6158-lower-right-isolate-spore/`.
+These samples do not guarantee a visible second arrival or a complete clear.
+The same disposable Maw roster/budget fixture on the right approach produced two
+guarded floor placements; sampled x positions were 248.5 and 258.8 after the
+second arrival (`97-9def6158-lower-right-isolate-maw/`). The burst was removed
+between samples, so its final cost is not observed. This is a spacing observation,
+not proof of the full encounter or rewards.
+In disposable `1421a481` occupied-point controls, native inputs held the player
+at (231.1,45) on the upper route and (260.5,5) on the lower. The burst made
+repeated first/check reads but no placement and charged no cost while the player
+occupied each point; player HP stayed unchanged over those sampled windows.
+Sources `97-1421a481-upper-block-occupied/` and `-lower-right-block-occupied/`.
+In `b1cbbc13` a native upper-route retreat vacated the point during the burst:
+after 22 guarded first/check attempts with zero placements or cost, a Maw was
+placed and charged 4096 once the player had moved to x215. Runtime source-anchor
+samples retained z=0, unknown=0 and floor kind1; all 56 published Freight floor
+records also have those values. Source `97-b1cbbc13-upper-release-recovery/`.
+The helper now rejects different source z/unknown fields. Normal completion,
+other-room controls and release after the timer remain open.
+The matching lower-route retreat also recovered during the active window: after
+15 blocked guarded attempts, the burst charged a Maw once the player moved from
+x260.5 to x250.4; mode reset at the end and sampled player HP stayed unchanged
+(`97-b1cbbc13-lower-right-release-recovery/`).
+
+**Uninstrumented Freight candidate (2026-10-29; two sampled melonDS arrivals).**
+Candidate `20361c79` incorporates the guarded native floor-coordinate helper,
+without research trace writes. Its single widened burst charged Ballast at
+(228,45.3) on the upper approach and (260,5.2) on the lower; mode returned to zero
+after each burst. Sources `97-20361c79-upper-f/` and `97-20361c79-lower-right-f/`.
+Twelve focused checks cover the native ABI, rejection guards, unique spawner
+signature, original crew/reward resources, actual Freight floor points and
+unchanged Dry Dock/Crown records. Completion, re-entry and broader controls are
+still open; these samples do not establish player acceptance.
+
+**Freight lifecycle control did not clear (2026-10-29; limited evidence,
+candidate `34cad965`).** A copied-latest-battery Black run with real combat
+inputs and player healing was intended to isolate Ballast, but all three species
+appeared. It observed Ballast damage and incoming damage, then timed out after
+4500 combat frames with two live enemies and the driver in the x80/y-7 gap.
+The first attempt never reached Freight because the old bootstrap expected a
+different save; the corrected attempt is
+`work/crane-row/creatures/creature-duel-ballast-black-base-a-black-retry-34cad965.json`.
+Neither run proves a regression or a completed Ballast lifecycle; the isolation
+and route failure still require diagnosis against the published parent.
+
+**Two-point burst fallback (2026-11-04; four instrumented melonDS samples).**
+Research ROM `b45973d2` selects between existing upper anchors (208,42) and
+(228,42), or lower anchors (236,2) and (260,2), from the source anchor's address;
+the choice remains stable across the native check and placement reads. Native
+input held the player at each of the four destinations in separate runs. In
+each, the burst charged and placed an enemy at the other point, without writing
+actor positions or HP. Sources `work/crane-investigation/97-b45973d2-{upper-block,upper-alt-block,lower-right-block,lower-right-alt-block}-alternate/`.
+The real DSV was unchanged in each run. Candidate `bf9b63a9` removes the trace,
+checks all four existing anchors and their floor points, and retains the native
+occupancy test. Samples do not guarantee a burst when both points are occupied;
+exact-candidate lifecycle, retry, other-room and door qualification remain open.
+Uninstrumented G `bf9b63a9` subsequently showed a charged burst at the open
+box on both approaches in Red and Black input samples. In these four runs the
+latest copied DSV was `ea331360…`, unchanged after each; source observations
+are `work/crane-investigation/97-bf9b63a9-{upper,lower-right,upper-red,lower-right-red}-g/`.
+The `-red` label reflects an older save's starting form: the observed form was
+Black in those two runs and Red in the unlabelled runs.
+In sampled three-species moments, including DeSmuME right-entry frame 1804,
+Ballast's loaded material still reported 64x64 direct color while Maw and Spore
+were live. This is a material-residency observation, not proof that every actor
+was simultaneously visible. Source `97-bf9b63a9-lower-right-desmume-g/`.
+The exact G upper and right approaches also showed the descent, open state and
+lift in DeSmuME, and a saved-clear revisit kept the drop variable zero. Movement
+away from each trigger left the route variable zero. In a paired Dry Dock input
+sample, both the published parent and G retained drop state 1 through frame 2215
+and spawned a Ballast; this does not prove a complete Dry Dock sequence. Sources
+`work/crane-investigation/97-bf9b63a9-{upper-desmume,lower-right-desmume,revisit,upper-run,lower-right-run}-g/`
+and `100-{b53e3879-lower-parent,bf9b63a9-lower-g}/`. All used fresh DSV copies.
+On F `20361c79`, assisted Black runs cleared Freight on the upper and right
+approaches: enemy HP was capped to one, the player healed, and the clear flag
+set with real combat inputs. E `0d4fd98f` also cleared the upper control. These
+are callback checks, not normal-HP difficulty or presentation acceptance.
+G also set the clear flag and increased XP in assisted mixed-enemy runs with
+Black from the upper approach and Red from the right; the real DSV was unchanged.
+The disposable tests capped enemy HP to one and healed the player. Sources
+`work/crane-row/creatures/creature-duel-mixed-{black-base-g-upper-cap,red-base-g-right-red-cap}-bf9b63a9.json`.
+G passed all nine Midnight pairs (18 directed doors), with native arrivals and
+controller inputs, enemies parked and the player healed; no traversal placement
+fixtures were used. Source `work/crane-investigation/g-doors/midnight-doors.json`.
+All eight directions joining Freight to Quay, Warren, Office and Engine also
+passed on G with the same arrival and movement limits. Each report identifies
+G and records no player placement; source
+`work/crane-investigation/g-crane-doors/results.json` and its `crane/` reports.
+The clean build using the optional `tasm-v0.40.0` recipe reproduced G byte for
+byte (`work/crane-investigation/clean-build-g.log`).
+The exact-G Crown control entered room 105 after correcting a too-early lab
+bootstrap, spawned all three species, advanced reinforcement/drop states 0–2,
+returned through the real reciprocal door after knockback and set flag 146.
+Enemy HP was capped and the player healed; the real DSV was unchanged. Source
+`work/crane-row/creatures/creature-duel-mixed-crown-black-base-g-crown-cap2-bf9b63a9.json`.
+The first Crown control was stopped because the driver had already left for room
+103 before its test began; it is not evidence of an encounter failure.
+In an exact-G interruption probe, one disposable write reduced player health to
+one unit after the upper drop began; native damage took it to zero during the
+burst, the route byte returned to zero, and touchscreen input completed native
+revival in Freight with the clear flag still unset. The shell reached lift state
+2. The actual DSV was unchanged. Source
+`work/crane-investigation/97-bf9b63a9-upper-death-g/observations.json`.
+This is an in-room revival sample, not a saved checkpoint reload or re-entry.
+In the follow-up exact-G control the same one-health fixture and native revival
+were followed by real-input Freight -> Office -> Freight movement, with player
+healing during navigation. Re-entry had the clear flag unset and drop/mode zero;
+the player retriggered the drop at frame 3840, and the burst mode was zero again
+at frame 4020. Enemy HP and actor positions remained native; the actual DSV was
+unchanged. Source `work/crane-investigation/97-bf9b63a9-upper-retry-death-g4/retry.json`.
+The preceding retry driver's generic travel loop stalled at the first crate lip
+after successful re-entry; the follow-up used the established periodic jump input.
+In G `bf9b63a9`, an assisted Black mixed fight earned Freight flag 144 and XP,
+entered the Office through the real door, saved at its sphere, and a fresh native
+Continue restored room 98 with that earned flag. Enemy HP was capped at one and
+the player healed; no real battery was written. Sources
+`work/crane-row/creatures/creature-duel-mixed-black-base-g-save2-bf9b63a9.json`
+and `work/crane-investigation/lifecycle-g-save2/reload.json`. The preceding save
+attempt reached “Save Complete” but its lab snapshot command had an invalid
+tuple; this was a test-harness error, not a game failure.
+One native-HP, unhealed, Ballast-only roster/budget fixture showed attack,
+knockdown and get-up, but the driver lost and stayed at the health-orb tutorial
+with one Ballast alive. Source `work/crane-row/creatures/creature-duel-ballast-black-base-g-ballast-native-bf9b63a9.json`.
+The per-frame core telemetry in the matching `build/boot-tests/Versioned-bf9b63a9/walk-creature-duel-ballast-black-base-g-ballast-native/observations.json`
+also shows an actor at the damaged Ballast's position reach zero HP at relative
+frame 3064, progress through states 37/52/53, disappear after frame 3189 and award XP;
+the isolated roster and screenshots support the identity, but the zero-HP row
+does not retain its actor ID. This is one sampled death, not a balance verdict
+or a complete unassisted encounter clear.
 
 **Lab.** `crane_walk.py view` with `kit_lab._run` wrapped to denser `caps` shows
 the sequence; `mw.until` over `s.room_vars` (index var-0x127) times it. The Crown

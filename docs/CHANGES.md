@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.39.0. Each section records behavior,
+The latest numbered release below is v0.40.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,33 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.40.0 - 2026-11-04 - Crane Row enemy and cargo visibility
+
+Ballast now uses a private direct-color texture with brighter body details. The
+sampled magenta appearance disappeared in melonDS and a DeSmuME software core;
+the exact underlying indexed-palette failure and hardware behavior remain unknown.
+Other enemies retain their existing shared texture and the player kit is unchanged.
+
+Freight stages a smaller red container at the upper or right-ground approach so
+its descent and open interior stay in view. Its native burst uses one of two
+nearby existing floor anchors for that approach, retaining native collision and
+occupancy checks, crew callback and rewards. Actors appear near the opening;
+the placement is not a newly authored leap. If both points are obstructed, a
+burst can still produce no actor. Dry Dock and Crown retain their existing cargo
+models and room scripts. Boot and Options show v0.40.0.
+
+The clean-source build matches SHA256
+`bf9b63a95bff3c1edfea1e3f8acbc4503a9521fb87bdcb333a87bedfef9fd0c6`.
+Qualification included both suits and approaches, both emulator cores, assisted
+mixed Freight and Crown clears, an earned Office save and fresh Continue, and a
+native revival followed by Office re-entry and a successful Freight retrigger.
+All nine Midnight pairs and eight Freight-connected directions passed with real
+movement, enemies parked and the player healed. The strict suite passed 788 tests
+in 104 isolated modules with no skips. GPT-6.1 Terra independently rated this
+scoped change 8.0/10 with no remaining must-fix findings. The player approved
+two short cargo audio clips; a full unassisted normal-HP clear, hardware pacing,
+other audio and the player's visual verdict remain open.
 
 ## v0.39.0 - 2026-10-28 - Crane Row finale: three-act Long Arm, cargo drops, ring map and harbour
 

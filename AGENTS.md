@@ -38,14 +38,14 @@ override conflicting local work (player instruction, 2026-10-23).
 | docs/ROADMAP.md | Whole-game design, player feedback log and idea backlog |
 
 README is the short entry point; mods/README is the overlay-loader exception.
-`reference/doc_contract.json` is the machine-checked documentation contract:
-document set, word limits, required headings, routing (what goes where),
-forbidden edits, one current version and frozen CHANGES sections.
-`python tools/doc_contract.py check` (run by tests.test_document_layout) must
-pass before every commit. Change the contract only when the user changes
-documentation policy, never to make a check pass. Archive a retired design with
-`tools/doc_archive.py add` before removing it. Record discoveries in their
-owning TECHNICAL section immediately, with confidence and source version; mark
+`reference/doc_contract.json` enforces document set, limits, headings, routing,
+forbidden edits, one current version and frozen CHANGES sections. Run
+`python tools/doc_contract.py check` before every commit (also in tests.test_document_layout).
+Change contract policy only when the user changes documentation policy. Freezing
+newly published CHANGES sections is allowed; never alter rules or existing hashes
+to pass checks. Archive retired designs with `tools/doc_archive.py add` before
+removal. Record discoveries in their TECHNICAL section immediately, with confidence
+and source version; mark
 superseded assumptions. Distinguish implemented, agent-tested and
 player-confirmed. Record player verdicts in ROADMAP's feedback log.
 

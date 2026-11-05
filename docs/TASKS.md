@@ -1,73 +1,56 @@
 # Current work and handoff
 
-Updated 2026-10-29 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
+Updated 2026-11-04 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
 workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design.
 
 ## Current objective
 
-The player requested an agent playthrough and comprehensive improvement analysis
-of Crane Row. The v0.39.0 review is complete; proposals and their priorities are
-in ROADMAP "Crane Row", and the scoped evidence is in
-`reference/crane_review_20261029.json`. This is an agent assessment, not a player
-verdict or an implementation request. `main` remains unpushed.
+The player requested Crane Row improvements, starting with the magenta enemy
+and Freight cargo visibility, with an independent GPT-6.1 Terra rating of at
+least 8/10. v0.40.0 implements those scoped improvements; Terra's final overall
+score was 8.0/10 with no must-fix findings. The player approved two short cargo
+sound clips. Visual and gameplay feedback has not yet been given.
 
-From a copy of the latest battery, frame-stepped Black inputs traversed Pier,
-Quay, Freight, Warren, Dry Dock, Engine, Shaft and Gantry to Crown. The agent
-restored power but did not clear Crown. All 12 rooms were seen across that run
-and labelled room-start inspections; Office and Cache were brief. In a separate
-unhealed Long Arm room-start fixture, the agent defeated the hoist and returned
-through Breakwater and Quay to Pier. No save/reload was tested.
-
-Two high-priority visual findings: Crown shows an intense magenta enemy before
-either sampled enemy loses HP; cause and emulator parity remain unknown. A fresh
-Freight drop can be triggered from the upper deck, but its landing and opening
-were not visible in sampled frames. Engine's map objective remained "POWER:
-ENGINE" after the lever, updating to "CROWN: CREW" on the next room entry.
-Technical observations and limits are in the corresponding TECHNICAL sections.
+Ballast uses a private direct-color material. Freight stages its container for
+upper and right-ground approaches and uses two existing native floor anchors per
+approach with native occupancy and crew callbacks. The burst can still be
+blocked if both points are occupied. The remaining ranked ideas and player
+feedback are in ROADMAP "Crane Row"; evidence is in TECHNICAL and
+`reference/crane_visibility_research_20261029.json`.
 
 Boarding (independent 275 XP Black row, event397/bit88): jump or heavy Web Yank
 zip toward a supported boss; Y rakes, A tears and kicks off, R releases. Receipt:
 `reference/boarding.json`. The player liked the preview motion; the Conductor
 sound issue is deferred by request.
 
-Review of codex's Boarding found no crash-level defect. Lower-severity notes,
-unfixed: `boarding.apply_rom` reads `build/version-0.37.0-final` build json instead
-of the chain's reports; its asm is spliced from other modules by text anchors; the
-MiniBoss `attacking` list ejects the rider on any unlisted state; the effect hook
-dereferences caller registers unchecked; its pin check is skipped when no pin exists.
+The prior Boarding review found no crash-level defect. Unfixed lower-severity
+notes: `boarding.apply_rom` reads v0.37 metadata instead of chain reports; its asm
+uses text anchors; unlisted MiniBoss states eject the rider; the effect hook has
+unchecked caller registers; and its pin check is skipped when no pin exists.
 
 ## Published build
 
-Stable `build/Spider-Man-WoS-modded.nds` is **v0.39.0**, SHA256
-`b53e3879cc575e63979f1a65a7d29fc610a3d1d44080f2205b29aec26075d37c`, built by
-`tools/playtest.py build` and equal to the clean-chain and standalone builds.
-American and English boot and Options both read v0.39.0. The v0.38.0 ROM, build
-metadata and recipe are kept under `build/releases` and `build/version-0.38.0-final`.
-The actual Battery is a 634-byte DSV. At this review its SHA256 was
-`ff62fa34c48e2bf1530449209d162b2254ddca8e95c44e9ee8ea75998a05aea1` and it
-remained unchanged; future saves may differ, so read them freshly.
+Stable `build/Spider-Man-WoS-modded.nds` is **v0.40.0**, SHA256
+`bf9b63a95bff3c1edfea1e3f8acbc4503a9521fb87bdcb333a87bedfef9fd0c6`,
+installed by `tools/playtest.py build` and equal to the clean-chain candidate.
+Boot and Options show v0.40.0. The v0.39.0 ROM, metadata and recipe are preserved
+under `build/releases` and `build/version-0.39.0-final`. The actual 634-byte DSV
+was `ea33136000a3938c96769d67ec65f13d0b1d3b4764bdcb3413f4fbb5a44750fc` at publication and matched its checkpoint; always read the
+latest battery afresh because future saves may differ.
 
-Evidence: 774 strict tests, zero skips, passed before publication except the two
-version checks that need this release recorded; those pass now. Native-input Long
-Arm fights win (Red frame 2045 with saved victory and cleared revisit; Black without
-healing frame 2809). Crane doors: 23 of 30 pass, the same seven fail identically on
-published v0.38.0 (lab findings). Midnight Line: 9 of 9 pairs, 18 doors. Harbour
-Office save and reload pass. Boarding Conductor ride, lethal tear and shop
-purchase/refund/repurchase/Continue pass on this ROM.
+The strict suite passed 788 tests in 104 isolated modules, with no skips. All
+nine Midnight pairs and eight Freight-connected crossings passed with native
+movement, enemies parked and the player healed. Assisted Freight/Crown clears,
+earned Office save/reload, and an interrupted Freight re-entry/retrigger passed.
+One native-HP Ballast-only driver observed a death but lost the overall fight.
+Those controls do not establish unassisted normal-HP balance or hardware quality.
 
 ## Blockers and next exact action
 
-No implementation was requested in this review. Next, use the ROADMAP priorities
-to choose a Crane slice; first reproduce the magenta enemy with controlled
-species/status and DeSmuME, and check the cargo camera from upper and lower
-approaches. Do not call the seven lab door failures regressions: this review
-crossed several affected doors in different real-input conditions. Still open:
-a continuous full-route clear, fresh Dry Dock/Crown drops, actual mixed audio,
-Red, hardware pacing, save/reload and a player verdict. Build, test and publish
-only in the full checkout; a fresh worktree cannot reproduce pinned hashes. Do
-not push without a request.
-
-Player flow: Play Spider-Man.cmd -> Continue -> play -> save in-game -> close.
+The player can now use Play Spider-Man.cmd -> Continue -> play -> save in-game ->
+close, then report whether Ballast and Freight feel and look right. Hardware,
+full unassisted normal-HP play and the remaining enemy/encounter priorities are
+open. Do not push without a request.
 
 Side research (2026-11-03): the external EUR decompilation was read for asset
 pipeline knowledge. Its findings, limits and the EUR-to-USA address rule are in
