@@ -127,6 +127,7 @@ Copy the established shape (`tools/vortex_forge.py`, `.s`, `_art.py`,
 | Baseline formats, bindings, animation events | [Format boundaries](TECHNICAL.md#format-boundaries-and-confirmed-structures) | `wos_tool.py`, `actor_actions.py`, `animation_rig.py`, `model_geometry.py` |
 | Native loaders, decompression, SDK calls and callers/callees of an ARM9 address | [External EUR decompilation](TECHNICAL.md#external-eur-decompilation-and-asset-load-path-2026-11-03) | `decomp_xref.py` over a private `work/decomp` checkout; `reference/decomp_eur_20261103.json` |
 | Main-RAM heap headroom (free / largest block per native heap) | [External EUR decompilation](TECHNICAL.md#external-eur-decompilation-and-asset-load-path-2026-11-03), 2026-11-05 update | `heap_report.py` over a `kit_lab.py --ram` capture; `reference/heap_headroom_20261105.json`; texture VRAM is not covered |
+| Character model to Blender and back | [Blender model bridge](TECHNICAL.md#blender-model-bridge-2026-11-05) | `model_bridge.py` `export`/`import`/`rom`; `reference/model_bridge_20261105.json` |
 | Classic 2099 Black-slot appearance | [SCA / model / textures](TECHNICAL.md#sca--model--textures) | `spider2099.py`, `spider2099_art.py`; `reference/spider2099.json`; native rig/skin preservation and exact v0.29 parent |
 | Current 2099 physique/cape/blades and real draw selection | [2099 draw correction](TECHNICAL.md#sca--model--textures) | `spider2099_polish.py`, `_sculpt`, `_visual`; `reference/spider2099_polish.json`. Both forms load shared `spd`; qualify actual lists and crowded texture residency, not only previews. |
 | Cape-free Across the Spider-Verse 2099 | [SCA / model / textures](TECHNICAL.md#sca--model--textures) | `spider2099_movie.py`, `spider2099_movie_art.py`; `reference/spider2099_movie.json`. Exact v0.30.1 post-pass, existing selector literals only; the v0.30.3 I4 follow-up resolves the sampled crowd. |
@@ -153,6 +154,35 @@ map: read them from USA literals. Before you hook an address, confirm the USA
 instruction words with `python tools/kit_lab.py disasm ADDR` (capstone from
 `work/research-libs`) rather than by hand. Treat m2c drafts as reading aids, not
 as verified semantics.
+
+### Blender model bridge
+
+`tools/model_bridge.py` moves a native character model to Blender and back.
+Read TECHNICAL "Blender model bridge (2026-11-05)" for its scope and limits.
+
+1. `python tools/model_bridge.py export spd.nsbmd spd.nsbtx work/model-bridge/spd.glb`
+   writes the bind-pose mesh, its armature (native joint names) and the texture.
+2. In Blender: File > Import > glTF 2.0, edit, then File > Export > glTF 2.0
+   (.glb). Keep bone names, keep the armature at the origin, weight new geometry
+   to one existing bone and keep one material. UVs and the image may change.
+3. `python tools/model_bridge.py import EDIT.glb spd.nsbmd spd.nsbtx build/model-bridge/NAME`
+   writes the model, texture and `report.json`. Read its warnings.
+4. `python tools/model_bridge.py rom build/model-bridge/NAME build/model-bridge/NAME.nds`
+   makes a disposable clean-based ROM. View it in a lab (`kit_lab.py` arena with
+   `caps`/`rams`) and check heap 2 with `heap_report.py`.
+
+Outputs are private: keep them in `build/` or `work/`, never in `mods/` or the
+stable build. A bridged model enters a release only through a guarded post-pass;
+the published 2099 selector depends on its own `spd` layout. After a Blender
+upgrade, re-check the unchanged round trip headless and confirm the import
+reproduces the native faces. `--factory-startup` skips user add-ons:
+
+```bash
+"C:/Program Files/Blender Foundation/Blender 4.5/blender.exe" --background --factory-startup --python-expr "import bpy,sys;a=sys.argv[sys.argv.index('--')+1:];bpy.ops.wm.read_factory_settings(use_empty=True);bpy.ops.import_scene.gltf(filepath=a[0]);bpy.ops.export_scene.gltf(filepath=a[1],export_format='GLB')" -- IN.glb OUT.glb
+```
+
+Never send game meshes or textures to a Blender add-on feature that calls an
+online service (asset search/import, AI generation, telemetry).
 
 ## Prove one complete example first
 
@@ -453,7 +483,8 @@ A documentation-only cleanup does not add emulator coverage or player acceptance
 
 Production generators use standard-library Python plus the existing pinned ARM
 assembler support (Keystone in `work/research-libs`, loaded by the kit tools), plus Pillow
-when building painted creature materials. Emulator tools
+when building painted creature materials or using `model_bridge.py`. The optional
+Blender step was proven with a local Blender 4.5. Emulator tools
 use the pinned melonDS core under `work/emulator`; its fetch/integrity code is in
 `emulator_smoke.py`. Image review also needs Pillow. Offline sound authoring additionally
 needs NumPy and FFmpeg (`creature_forge_sound_author.py` declares its local path);

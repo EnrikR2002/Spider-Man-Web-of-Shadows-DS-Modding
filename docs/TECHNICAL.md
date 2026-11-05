@@ -22,6 +22,7 @@ objective/build and next action: [TASKS](TASKS.md).
 | Meteor Catch grip, floor impact and native rebound | [Meteor Catch](#meteor-catch-v037-research) | [Reel In](#airborne-reel-in-v036-research), [hit pipeline](#hit-pipeline-v040-runtime-probed) |
 | Skyjack velocity correction | [Scoped finish (0.29)](#scoped-movement-and-chapter-finish-v0290) | [Parent audit and unshipped prototypes](#shared-crowd-hit-backend-candidates); the old source/hex still reproduce their historical releases |
 | Binary formats and preservation | [Format boundaries](#format-boundaries-and-confirmed-structures), [SCA/rig contract](#animation-authoring-and-current-evidence) | [Baseline inventory](#rom-baseline-and-inventory) |
+| Editing character models in Blender | [Blender model bridge](#blender-model-bridge-2026-11-05) | [2099 appended geometry](#sca--model--textures) |
 | Asset loading, decompression, SDK calls and the external EUR decompilation | [External EUR decompilation](#external-eur-decompilation-and-asset-load-path-2026-11-03) | [Glob.bin](#globbin-and-bounded-additions) |
 | Emulator/rendering and performance | [Performance and visuals](#performance-and-visuals) | Dated renderer/JIT observations are not current performance guarantees |
 | Hook/trace failures | [Research workflow and pitfalls](#research-workflow-and-pitfalls-red-kit-sessions), then the affected feature | Old candidate claims remain scoped to their recorded build |
@@ -425,6 +426,66 @@ Terminal crowd bind/render correctly on the exact published composition.
 Player acceptance, exhaustive edge culling and actual
 DeSmuME/hardware presentation require separate qualification.
 
+#### Blender model bridge (2026-11-05)
+
+`tools/model_bridge.py`, clean CS5E. Confidence is high for the checks listed
+here. It extends the 2099 appended-geometry path to replacing a model's whole
+draw list. It is still not a general skeleton or skin editor.
+
+- **Contract.** One model, one shape and one material, unscaled bind nodes, no
+  weighted SBC skin (op `0x09`), and an SBC matrix restore (op 3) before the
+  shape. That slot is the list's starting matrix. Vertices are bone-local Q12
+  coordinates behind stored-matrix restores (GPU `0x14`). Native character lists
+  use only `0x14`, `0x22`, `0x23`–`0x28` and `0x40`/`0x41`: no normals or
+  colours. Native faces decode counter-clockwise with outward normals (all 40
+  `spd` head faces), the same as glTF. The player material draws front faces
+  only (polygon attribute `0x1F00A0`).
+- **Export.** The bind-pose mesh: vertices are shared by slot, position and UV,
+  and strip joins that repeat a vertex are dropped. The armature uses native
+  joint names and bind translations only, because Q12 rotations are not exactly
+  orthonormal. The bound texture is written as a PNG. UVs are normalised by the
+  material's declared size (`+32`/`+34`).
+- **Import.**
+  - Each vertex's position is joint global × inverse bind × vertex, so Blender's
+    bone re-orientation cancels out.
+  - The largest weight wins. Its joint is matched by name, then mapped to its
+    nearest ancestor with a stored matrix. The local position uses the exact
+    inverse of the native bind rotation.
+  - The bridge writes one triangle list and sets the header counts (vertices,
+    polygons, triangles, quads) to (3n, n, n, 0). It only grows the box, keeps
+    the rig and SBC, and decodes its own output again as a check.
+  - A changed image is re-quantised to I4/I8 (median cut; colour 0 is reserved
+    when the template marks it transparent) or written as direct colour. Names,
+    flags and format are kept, and a new size updates material `+32`.
+- **Evidence.**
+  - 46 native models round-trip exactly: every local Q12 coordinate, UV and
+    slot, with texture bytes unchanged. They include `spd`/`spdB`, the Brutes,
+    the Hive enemies, civilians and symbiotes.
+  - Out of scope: 162 multi-shape models, 43 scaled rigs, 24 static props
+    without a matrix restore and 2 multi-block files. Also excluded are
+    crow/gull (I2 textures) and one model that uses normals.
+  - Bridge positions agree with apicula's DAE within 5e-7 units on `brt` and
+    `hLpr`. Apicula's glTF output differs by up to 0.003 because it refits the
+    rest pose, so it is not a reference.
+  - Blender 4.5 (headless, factory startup): an unchanged import and export
+    reproduces all 480 `spd` faces exactly.
+  - In engine: clean-based research ROMs in the kit_lab arena. A Blender-added
+    white head crest (`Head_M`) and forearm lance (`Elbow_R`) render textured and
+    follow their bones through a Y string. The unchanged control shows the
+    native suit.
+  - Arena spawns and camera vary between runs, so these frames are visual
+    controls, not pixel controls.
+- **Cost.** A triangle list is larger than native strips. `spd` goes from 402
+  native polygons to 480 and grows by 21,844 bytes, because the native stream
+  stays as dead bytes. Models live in heap 2: the edited `spd` is resident at
+  37,288 bytes against 15,108 native. VRAM, crowded scenes and hardware are not
+  measured.
+- **Not supported.** New bones, blended weights, SCA animation, texture formats
+  1/2/5/6, and more than one shape or material. v0.40.0's shared `spd` carries
+  the 2099 Black list and a footer that the selector checks, so a bridged `spd`
+  needs integration into that composition first. That has not been done.
+  Receipt: `reference/model_bridge_20261105.json`.
+
 ### Text / UI / rooms / audio
 
 **Boss-only palette rendering defect (2026-10-22; high confidence in copied-save
@@ -808,6 +869,8 @@ copied into SCA. Calibrate with neutral pose and isolated positive-axis rotation
 retain omitted helpers. Detailed conversion hypothesis and primary-source links
 are preserved in archived `ANIMATION_AUTHORING.md`, section `Rig mapping and
 Blender conversion`. No tested Blender import/export is claimed.
+Update 2026-11-05: mesh (not animation) Blender import and export is tested;
+see [Blender model bridge](#blender-model-bridge-2026-11-05).
 
 ### Oscorp Rush (historical, superseded by Split Decision in v0.2.0)
 
@@ -1173,7 +1236,7 @@ the current recipe/adjacent metadata for counts and composition.
 | NDS / NitroFS | Validated FNT/FAT/CRC/bounds, exact baseline no-op, resized/generated ROMs | Guarded known layout and capacity growth; preserve opaque bytes and original ROM. |
 | Glob.bin | Ordered original IDs, size changes and bounded generated additions | Three Rush + twelve kit SCAs are fixed overlay additions; chapter/creature builders append their own scoped resources. Arbitrary names/manual GlobFiles edits remain rejected. |
 | NSBTX / textures | Player I8 repaint and RGB555 shared creature/room atlases | Bounded palette/material/UV paths; native material dimensions and alignment matter. General format-5 authoring remains outside the proven path. |
-| NSBMD / rig | Authored creature meshes/weights on native rigs, room geometry, native SBC/material tint preservation | This is a deterministic bounded authoring pipeline, not a general skeleton/skin editor. |
+| NSBMD / rig | Authored creature meshes/weights on native rigs, room geometry, native SBC/material tint preservation | This is a deterministic bounded authoring pipeline, not a general skeleton/skin editor. 2026-11-05: `model_bridge.py` replaces the whole list of 46 in-scope models from Blender (one bone per vertex). |
 | NSBTA | Inventory and XBD material-animation bindings | General payload editing remains unproved. |
 | XBD actors | Actor/action/resource bindings and scoped private animation/model routes | Preserve other users and opaque tails. GroundAttack15 is shared; G11/16/17 have m6 users. |
 | GAB / GMB | Lossless original framing, timed contact events, resampled motion/contact volumes | Bounded native event/carrier contracts; active windows and counters alone do not prove native contacts or damage. |

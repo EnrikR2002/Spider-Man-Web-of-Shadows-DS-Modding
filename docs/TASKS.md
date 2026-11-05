@@ -59,4 +59,7 @@ TECHNICAL "External EUR decompilation and asset load path"; query it with
 format parsers. Its 2026-11-05 follow-up maps the native heaps (models in heap 2,
 textures freed after VRAM upload); measure main-RAM headroom with
 `tools/heap_report.py`. Texture VRAM headroom is still unmeasured.
+Blender model bridge (2026-11-05): `tools/model_bridge.py` exports in-scope
+character models to glTF and imports Blender edits on the native rig; DEVELOPMENT
+"Blender model bridge" has the workflow. No bridged model is in a release.
 The Crane objective above is unchanged.

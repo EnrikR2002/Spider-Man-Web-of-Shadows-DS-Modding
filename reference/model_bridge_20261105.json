@@ -1,0 +1,104 @@
+{
+  "purpose": "Receipt for the Blender model bridge (tools/model_bridge.py). Narrative, contract and limits: TECHNICAL 'Blender model bridge (2026-11-05)'.",
+  "date": "2026-11-05",
+  "source": "clean CS5E Glob via mod.load_clean()",
+  "scope_census_of_280_nsbmd": {
+    "round_trip_exact": 46,
+    "multi_shape": 162,
+    "scaled_bind_nodes": 43,
+    "no_matrix_restore_before_shape": 24,
+    "multi_block": 2,
+    "in_scope_texture_format_2": 2,
+    "in_scope_uses_normals": 1
+  },
+  "round_trip_exact_models": [
+    "BV",
+    "FW",
+    "FWblack",
+    "bc",
+    "brt",
+    "brtHive",
+    "brtR",
+    "brtU",
+    "bzkr",
+    "cf1",
+    "cm",
+    "cm1",
+    "cm2",
+    "dogHive",
+    "hBlkr",
+    "hLpr",
+    "hRng",
+    "ha",
+    "hd",
+    "hl",
+    "hlAdv",
+    "hm",
+    "hmAdv",
+    "hr",
+    "hrAdv",
+    "ig",
+    "ig02",
+    "ig03",
+    "ig04",
+    "im",
+    "im02",
+    "im03",
+    "imAd",
+    "m1",
+    "m2",
+    "m3",
+    "m4",
+    "m5",
+    "moo",
+    "nc",
+    "spd",
+    "spdB",
+    "symGE",
+    "symGT",
+    "wing",
+    "wingAdv"
+  ],
+  "exact_means": "sorted rotation-normalised native triangles (slot, bone-local Q12 xyz, 1/16-texel st) equal; bound texture bytes unchanged",
+  "independent_check": {
+    "tool": "apicula 0.1.1-dev (3d4e91e), DAE output",
+    "models": [
+      "brt",
+      "hLpr"
+    ],
+    "max_position_difference_units": 4.73e-07,
+    "note": "apicula glb output differs by up to 0.003 units because it refits the rest pose; DAE is the reference"
+  },
+  "blender": {
+    "version": "4.5",
+    "mode": "--background --factory-startup, bundled glTF importer/exporter, no user add-ons",
+    "unchanged_round_trip": "spd: all 480 native faces exact, texture bytes unchanged",
+    "edit": "two white spikes (6 triangles each) weighted to spd:Head_M and spd:Elbow_R; 492 triangles imported, 0 collapsed weights"
+  },
+  "in_engine": {
+    "base": "clean ROM with spd.nsbmd/spd.nsbtx replaced (model_bridge.py rom)",
+    "control_rom_sha256": "d94aec934057283ecbc31aff7fa0c2b700a3509375325e6dcfb138c9b5135e64",
+    "edit_rom_sha256": "58df310d620cfba0270873938b2e1ac95474964beefd67153b5b398224e303b0",
+    "control_model_sha256": "a89546e9ef3c72b039454bc0c1039cb3c84c3c8ec7c5e7781b87ed0b4492852f",
+    "edit_model_sha256": "7b19b159ef298692558a63fd60ceb1fa86715e338e3851bf643d82234d8c157e",
+    "run": "kit_lab arena, copied ARENA_SAVE, Y at relative frames 20/34/48, captures 10/24/30/38/44/56/70, RAM at 110",
+    "observed": "edit: textured white crest on the head and lance along the right forearm follow their bones through the Y string; control: native suit",
+    "resident_player_model_bytes": {
+      "clean": 15108,
+      "control": 36952,
+      "edit": 37288
+    },
+    "limits": [
+      "arena spawns and camera vary between runs, so frames are visual not pixel controls",
+      "texture VRAM, crowded scenes, DeSmuME pacing and hardware not measured"
+    ]
+  },
+  "cost": {
+    "spd_polygons": {
+      "native": 402,
+      "bridged": 480
+    },
+    "spd_bytes_added_unchanged": 21844,
+    "note": "the native stream stays in the file as dead bytes"
+  }
+}

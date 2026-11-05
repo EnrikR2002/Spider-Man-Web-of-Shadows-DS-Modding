@@ -47,9 +47,14 @@ def gpu_commands(raw):
 
 def bind_matrices(raw):
     """CS5E player-only, unscaled native bind transforms; no general rig editor."""
-    rig = AnimationRig.parse(raw)
-    if len(rig.names) != 37:
+    if len(AnimationRig.parse(raw).names) != 37:
         raise ValueError('Expected native 37-node player rig')
+    return bind_transforms(raw)
+
+
+def bind_transforms(raw):
+    """(rig, global rotations, global positions, {slot: joint}) of unscaled bind nodes."""
+    rig = AnimationRig.parse(raw)
     rotations, positions = [], []
     for joint, at in enumerate(rig.object_offsets):
         flags, m0 = struct.unpack_from('<Hh', raw, at)
