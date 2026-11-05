@@ -709,8 +709,19 @@ The fixed-size heaps 0–2 keep their sizes, so heap 3 loses exactly that. One
 room at one frame is not a peak: busy rooms, cutscenes and transitions remain
 unmeasured. Texture VRAM is a separate pool. Its NNS_Gfd manager is not
 donor-matched, so VRAM headroom (implicated, not proved, in the white-enemy
-failures above) is still unmeasured. Main-RAM growth from larger models is now measurable
-directly.
+failures above) is still unmeasured.
+
+- **Where models and textures live (high for this scene).** Every resident
+  `BMD0` in both dumps sits in a heap-2 used block: 11 clean, 13 in v0.40.0.
+  They include the 149,528-byte room model and the player model, which is
+  15,108 bytes clean and 30,372 with v0.40.0's appended 2099 list. `0x020158D4`
+  allocates from heap 2 explicitly (align 4) and calls `0x020165C0` if that
+  fails (not traced); `0x0201AB58` also allocates there. `BTX0` files appear
+  only in free heap-3 space, so texture files are freed after upload. They need
+  heap 3 transiently while loading and VRAM while resident. Heap 2's free space
+  (one block: 326,040 clean, 304,380 v0.40.0) is therefore the measured
+  main-RAM budget for added model bytes in this scene. Texture growth is bound
+  by VRAM instead.
 
 - **Decoders (medium-high).** ITCM `0x01FF84A8` is a Nintendo-RL decoder that
   writes halfwords (VRAM-safe); its size is header>>8. A second dispatcher,

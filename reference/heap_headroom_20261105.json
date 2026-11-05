@@ -10,7 +10,12 @@
   "heap_config": {
     "setup": "0x02005D60",
     "table": "0x0211B93C {arena, size}",
-    "sizes": ["0x82000", "0x30000", "0x81400", "rest of arena 0"],
+    "sizes": [
+      "0x82000",
+      "0x30000",
+      "0x81400",
+      "rest of arena 0"
+    ],
     "handles": "0x0213FD60, 0x14 bytes each",
     "default_selector": "0x021280A0 = 3 (static data and both captures)"
   },
@@ -18,22 +23,99 @@
     "clean": {
       "rom_sha256": "61a6ed6e67fcce5cc63843fafeb0c0e6072bb750f552d5ff5d690cda02ea9203",
       "heaps": [
-        {"index": 0, "start": "0x0214F458", "size": 532424, "free": 142008, "largest_free": 142000, "used": 389408, "used_blocks": 31},
-        {"index": 1, "start": "0x021D1458", "size": 196552, "free": 44600, "largest_free": 39216, "used": 151264, "used_blocks": 21},
-        {"index": 2, "start": "0x02201458", "size": 529352, "free": 326040, "largest_free": 326040, "used": 203120, "used_blocks": 11},
-        {"index": 3, "start": "0x02282858", "size": 1431460, "free": 1203064, "largest_free": 1199956, "used": 220972, "used_blocks": 435}
+        {
+          "index": 0,
+          "start": "0x0214F458",
+          "size": 532424,
+          "free": 142008,
+          "largest_free": 142000,
+          "used": 389408,
+          "used_blocks": 31
+        },
+        {
+          "index": 1,
+          "start": "0x021D1458",
+          "size": 196552,
+          "free": 44600,
+          "largest_free": 39216,
+          "used": 151264,
+          "used_blocks": 21
+        },
+        {
+          "index": 2,
+          "start": "0x02201458",
+          "size": 529352,
+          "free": 326040,
+          "largest_free": 326040,
+          "used": 203120,
+          "used_blocks": 11
+        },
+        {
+          "index": 3,
+          "start": "0x02282858",
+          "size": 1431460,
+          "free": 1203064,
+          "largest_free": 1199956,
+          "used": 220972,
+          "used_blocks": 435
+        }
       ]
     },
     "v0.40.0": {
       "rom_sha256": "bf9b63a95bff3c1edfea1e3f8acbc4503a9521fb87bdcb333a87bedfef9fd0c6",
       "heaps": [
-        {"index": 0, "start": "0x02177A58", "size": 532424, "free": 142008, "largest_free": 142000, "used": 389408, "used_blocks": 31},
-        {"index": 1, "start": "0x021F9A58", "size": 196552, "free": 60216, "largest_free": 26624, "used": 135648, "used_blocks": 21},
-        {"index": 2, "start": "0x02229A58", "size": 529352, "free": 304380, "largest_free": 304380, "used": 224748, "used_blocks": 13},
-        {"index": 3, "start": "0x022AAE58", "size": 1266084, "free": 1025804, "largest_free": 1013516, "used": 232104, "used_blocks": 465}
+        {
+          "index": 0,
+          "start": "0x02177A58",
+          "size": 532424,
+          "free": 142008,
+          "largest_free": 142000,
+          "used": 389408,
+          "used_blocks": 31
+        },
+        {
+          "index": 1,
+          "start": "0x021F9A58",
+          "size": 196552,
+          "free": 60216,
+          "largest_free": 26624,
+          "used": 135648,
+          "used_blocks": 21
+        },
+        {
+          "index": 2,
+          "start": "0x02229A58",
+          "size": 529352,
+          "free": 304380,
+          "largest_free": 304380,
+          "used": 224748,
+          "used_blocks": 13
+        },
+        {
+          "index": 3,
+          "start": "0x022AAE58",
+          "size": 1266084,
+          "free": 1025804,
+          "largest_free": 1013516,
+          "used": 232104,
+          "used_blocks": 465
+        }
       ]
     }
   },
-  "checks": ["all heap heads read EXPH; all blocks read FR/UD", "every used block's group ID equals its heap index"],
-  "limits": ["one room at one frame, not a peak", "texture VRAM not measured", "busy rooms, cutscenes and transitions not measured"]
+  "checks": [
+    "all heap heads read EXPH; all blocks read FR/UD",
+    "every used block's group ID equals its heap index"
+  ],
+  "limits": [
+    "one room at one frame, not a peak",
+    "texture VRAM not measured",
+    "busy rooms, cutscenes and transitions not measured",
+    "heap 2 is the model budget only as observed here; other loaders may differ"
+  ],
+  "residency": {
+    "models": "every 4-aligned BMD0 in both dumps lies in a heap-2 used block (clean 11, v0.40.0 13); player model 15108 clean, 30372 v0.40.0; room model 149528",
+    "model_allocator": "0x020158D4 allocates from heap 2 (align 4), calling 0x020165C0 on failure; 0x0201AB58 also allocates from heap 2",
+    "textures": "BTX0 files found only in free heap-3 space (clean 4772/81040/8332/2840 bytes; v0.40.0 17060/81040/4772/2840): freed after VRAM upload"
+  }
 }

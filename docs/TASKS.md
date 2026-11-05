@@ -56,6 +56,7 @@ Side research (2026-11-03): the external EUR decompilation was read for asset
 pipeline knowledge. Its findings, limits and the EUR-to-USA address rule are in
 TECHNICAL "External EUR decompilation and asset load path"; query it with
 `tools/decomp_xref.py` over a private `work/decomp` clone. It adds no asset
-format parsers. Its 2026-11-05 follow-up maps the native heaps; measure main-RAM
-headroom with `tools/heap_report.py`. Texture VRAM headroom is still unmeasured.
+format parsers. Its 2026-11-05 follow-up maps the native heaps (models in heap 2,
+textures freed after VRAM upload); measure main-RAM headroom with
+`tools/heap_report.py`. Texture VRAM headroom is still unmeasured.
 The Crane objective above is unchanged.
