@@ -118,6 +118,7 @@ class NativeRoundTripTests(unittest.TestCase):
         self.assertEqual(b.material(model)[1:], (2 * w, 2 * h))
         self.assertIs(b.encode_texture(tr, mr, w, h, rgba), tr)
         self.assertTrue(json.dumps(b.write_model(mr, b.triangles(mr))[1]))
+        self.assertEqual(b.sharing(mr, 'spd.nsbtx'), ['spdB.nsbtx'])   # Black suit binds the same names
 
 
 if __name__ == '__main__':

@@ -473,8 +473,11 @@ draw list. It is still not a general skeleton or skin editor.
     white head crest (`Head_M`) and forearm lance (`Elbow_R`) render textured and
     follow their bones through a Y string. The unchanged control shows the
     native suit.
-  - Arena spawns and camera vary between runs, so these frames are visual
-    controls, not pixel controls.
+  - A texture edit (image doubled to 128×128 with red and green swapped) renders
+    in engine. Its re-quantised I8 suit draws green at the correct scale with the
+    material size set to 128.
+  - Two runs of the unmodified clean ROM differ in every frame (spawns and
+    camera), so these frames are visual controls, not pixel controls.
 - **Cost.** A triangle list is larger than native strips. `spd` goes from 402
   native polygons to 480 and grows by 21,844 bytes, because the native stream
   stays as dead bytes. Models live in heap 2: the edited `spd` is resident at
@@ -483,8 +486,12 @@ draw list. It is still not a general skeleton or skin editor.
 - **Not supported.** New bones, blended weights, SCA animation, texture formats
   1/2/5/6, and more than one shape or material. v0.40.0's shared `spd` carries
   the 2099 Black list and a footer that the selector checks, so a bridged `spd`
-  needs integration into that composition first. That has not been done.
-  Receipt: `reference/model_bridge_20261105.json`.
+  needs integration into that composition first. That has not been done. The
+  clean `spd.nsbtx` and `spdB.nsbtx` both hold `Cartoon64`/`Cartoon64_pl`, and
+  the game swaps them on the shared `spd` model. A UV or image-size edit must
+  therefore also regenerate the Black texture; `import` warns about every other
+  archive holding a bound texture name. Receipt:
+  `reference/model_bridge_20261105.json`.
 
 ### Text / UI / rooms / audio
 

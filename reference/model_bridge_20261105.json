@@ -89,9 +89,16 @@
       "edit": 37288
     },
     "limits": [
-      "arena spawns and camera vary between runs, so frames are visual not pixel controls",
+      "arena spawns and camera vary between runs (two clean runs differ in every frame), so frames are visual not pixel controls",
       "texture VRAM, crowded scenes, DeSmuME pacing and hardware not measured"
-    ]
+    ],
+    "texture_edit": {
+      "rom_sha256": "60a2c2ebd8064a93316a9d00e483cbcb812defeb06cf8442178041e02d8da078",
+      "edit": "the Blender edit glb with its image doubled to 128x128 and red/green swapped",
+      "import": "492 triangles; texture 4772 -> 17060 bytes, material size 128x128",
+      "observed": "green re-quantised I8 suit at correct scale, white crest and lance; heap 2 used 246844 bytes in that run"
+    },
+    "variance_check": "a second run of the unmodified clean ROM differs from the first in all seven frames"
   },
   "cost": {
     "spd_polygons": {
@@ -100,5 +107,9 @@
     },
     "spd_bytes_added_unchanged": 21844,
     "note": "the native stream stays in the file as dead bytes"
+  },
+  "shared_texture_names": {
+    "spd": "spd.nsbtx and spdB.nsbtx both hold Cartoon64/Cartoon64_pl; the game swaps them on shared spd",
+    "hLpr": "hl.nsbtx also holds HostedLeaper"
   }
 }

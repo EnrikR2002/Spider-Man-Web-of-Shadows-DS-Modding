@@ -164,7 +164,9 @@ Read TECHNICAL "Blender model bridge (2026-11-05)" for its scope and limits.
    writes the bind-pose mesh, its armature (native joint names) and the texture.
 2. In Blender: File > Import > glTF 2.0, edit, then File > Export > glTF 2.0
    (.glb). Keep bone names, keep the armature at the origin, weight new geometry
-   to one existing bone and keep one material. UVs and the image may change.
+   to one existing bone and keep one material. UVs and the image may change,
+   but `spd` shares its texture names with `spdB.nsbtx` (Black suit): a UV or
+   size change needs a matching Black texture. `import` lists such archives.
 3. `python tools/model_bridge.py import EDIT.glb spd.nsbmd spd.nsbtx build/model-bridge/NAME`
    writes the model, texture and `report.json`. Read its warnings.
 4. `python tools/model_bridge.py rom build/model-bridge/NAME build/model-bridge/NAME.nds`

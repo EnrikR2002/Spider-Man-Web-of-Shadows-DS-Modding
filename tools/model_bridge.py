@@ -478,6 +478,20 @@ def _clean(name):
     return glob[offsets[i]:offsets[i + 1]]
 
 
+def sharing(model_raw, texture):
+    """Other clean archives holding a texture name this model binds (e.g. spdB.nsbtx for spd)."""
+    import mod
+    _, glob, _ = mod.load_clean()
+    offsets, names, _ = w.parse_glob(glob)
+    bound, out = set(bound_names(model_raw)[0]), []
+    for i, name in enumerate(names):
+        if name.endswith('.nsbtx') and name != texture:
+            try: held = {t.name for t in nb.archive_parts(glob[offsets[i]:offsets[i + 1]])[0]}
+            except ValueError: continue
+            if bound & held: out.append(name)
+    return out
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = parser.add_subparsers(dest='command', required=True)
@@ -490,6 +504,11 @@ def main(argv=None):
     elif args.command == 'import':
         out = _private(args.outdir)
         model, texture, report = import_glb(Path(args.glb).read_bytes(), _clean(args.model), _clean(args.texture))
+        shared = sharing(_clean(args.model), args.texture)
+        if shared:
+            report['warnings'].append(f'{", ".join(shared)} hold the same texture name. If the game binds one to this '
+                                      'model (spdB.nsbtx is the Black suit on spd), UV or image-size changes need a '
+                                      'matching texture there too.')
         w.atomic_write(out / args.model, model)
         w.atomic_write(out / args.texture, texture)
         w.write_json(out / 'report.json', report)
