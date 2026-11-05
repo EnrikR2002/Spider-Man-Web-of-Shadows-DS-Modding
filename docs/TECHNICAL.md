@@ -630,7 +630,8 @@ addresses):**
 words):**
 
 - Boot routine `0x02006620` calls two functions:
-  - `0x02004C04` stores the ITCM routines `0x01FF8000`/`0x01FF84A8` at `0x0213FD24`/`+4`.
+  - `0x02004C04` stores the ITCM routines `0x01FF8000`/`0x01FF84A8` at `0x0213FD24`/`+4`
+    (PuCrunch and a 16-bit-write RL decoder; see the 2026-11-05 update).
   - `0x02007954` opens `Glob.bin` (through `0x02007CBC` and FS `0x02103190`),
     then calls `0x02007758` to read the offset table.
 - State `0x0213FF40`: `+0x18` holds the offset-table pointer. Other fields are unknown.
@@ -644,7 +645,8 @@ words):**
   default string.
 - `0x02007BAC` loads a whole resource.
 - `0x0200786C` loads and then decompresses. `0x02004C28` returns `header>>8` as
-  the decoded size. `0x02005E78` allocates from the heap at `[0x021280A0]`.
+  the decoded size. `0x02005E78` allocates from the heap selected by
+  `[0x021280A0]` (heap 3; see the 2026-11-05 update).
   `0x02004C70` decodes. `0x02007804` is the other caller of that pair.
 - Dispatcher `0x02004C70` switches on `(first byte >> 4) & 7`:
   - 1 (`0x10` LZ77): `0x021002DC`.
@@ -653,7 +655,8 @@ words):**
     identified by position (medium).
   - 6 (`0x60` Griptonite PuCrunch, the GMB/2LZ wrapper): the callback at
     `[0x0213FD24]`, i.e. the 0x4A8-byte ITCM routine `0x01FF8000`.
-  - 0: game routine `0x02006020`. It is probably a raw copy (unverified).
+  - 0: `memcpy(dst, src+4, header>>8)` at `0x02006020`, i.e. stored data behind
+    the 4-byte header (confirmed 2026-11-05 by disassembly; was "probably raw").
   - 4, 5 and 7 fail.
   - The decoder runs only where a loader requests it, so a first byte alone
     does not mark a file as compressed.
@@ -672,6 +675,50 @@ indices. The getters index the offset table directly. No runtime name-to-ID
 search was found, though one is not proven absent. Appending preserves every ID,
 and a `zz_` name also keeps the order. Inserting mid-list would renumber all
 later IDs and every literal or XBD reference to them.
+
+**Update (2026-11-05): native heaps and second decoder path.** Disassembled with
+capstone (`kit_lab.py disasm`) on clean CS5E; heap layout also walked in live RAM.
+
+- **Heaps (high).** Boot `0x02005D60` initialises lock `0x0213FD48`, reads the
+  nine OS arenas and creates four NitroSystem expanded heaps from arena 0 (main
+  RAM). Table `0x0211B93C` holds `{arena, size}`: `0x82000`, `0x30000`,
+  `0x81400`, then 0 = the rest up to arena-hi−4. Handles are at `0x0213FD60`,
+  0x14 bytes each (handle + NNSFndAllocator). `alloc(index, align, size)`
+  `0x02005E10` sets the heap's group ID to its index; free `0x02005E8C` reads
+  that group ID from the block header. `new`-style `0x02006104`/`0x02006128`/
+  `0x02006158` and the Glob loaders `0x0200786C`/`0x02007BAC` use the heap
+  index at `[0x021280A0]`. It is 3 in the static data and in both captures, and
+  only those five functions reference it as a literal.
+- **Library (medium-high, donor-matched plus matching call graph):**
+  `NNS_FndCreateExpHeapEx` `0x020F4020`, `AllocFromExpHeapEx` `0x020F4058`
+  (head `0x020F3E84`/tail `0x020F3DD0`), `FreeToExpHeap` `0x020F4088`,
+  set-group-ID `0x020F40EC`, block-group-ID `0x020F40FC`, set-alloc-mode
+  `0x020F40C4`. Head `EXPH`, start `+0x18`, end `+0x1C`, free list `+0x24`,
+  used list `+0x2C`; block headers `FR`/`UD` with size `+4` and next `+0xC`.
+- **Measured headroom (high for this scene only).** `tools/heap_report.py`
+  over a `kit_lab.py` arena capture (sewer room, live enemies, copied save,
+  frame 2180). Every used block's group ID equals its heap index.
+
+| Build | Heap 3 size | Heap 3 free | Largest free | Heaps 0–2 free |
+|---|---|---|---|---|
+| Clean | 1,431,460 | 1,203,064 | 1,199,956 | 142,008 / 44,600 / 326,040 |
+| v0.40.0 | 1,266,084 | 1,025,804 | 1,013,516 | 142,008 / 60,216 / 304,380 |
+
+The mod's larger static ARM9 image moves the arena start up by 165,376 bytes.
+The fixed-size heaps 0–2 keep their sizes, so heap 3 loses exactly that. One
+room at one frame is not a peak: busy rooms, cutscenes and transitions remain
+unmeasured. Texture VRAM is a separate pool. Its NNS_Gfd manager is not
+donor-matched, so VRAM headroom (implicated, not proved, in the white-enemy
+failures above) is still unmeasured. Main-RAM growth from larger models is now measurable
+directly.
+
+- **Decoders (medium-high).** ITCM `0x01FF84A8` is a Nintendo-RL decoder that
+  writes halfwords (VRAM-safe); its size is header>>8. A second dispatcher,
+  `0x0200A49C(mode, src, dst, size)`, takes the codec from the caller instead of
+  the header: 0 memcpy, 1 RL `0x0210048C`, 2 LZ77 `0x021002DC`, 3 PuCrunch
+  `0x01FF8000`. Its only caller, `0x0200A500`, copies BG character tiles at
+  32/64 bytes per tile (4/8 bpp) to the character base computed by `0x02009C4C`.
+  The mode arrives through `0x0200A5DC`; which records supply it is not traced.
 
 **Not provided:** the decomp offers no parsers for models, textures, animation,
 sprites, UI or rooms. It also gives no struct layouts, no game-function names,
