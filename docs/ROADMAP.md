@@ -551,9 +551,10 @@ it, should Crown's first crew arrive by crane as well.
 spawner fight (published rosters already cycle Maw/Spore/Ballast per room, so a ramp
 means retuning goal pairs and orders rather than new code paths); (4) test whether
 live hazard strips hurt enemies, which would let Web Yank throw foes under a hook.
-Items 2 (crane delivery) and 3 (backdrop) are built above. Do not add new creature
-meshes before the Skitter verdict, a fourth material pass, rideable loads, timers
-or counterweight crushes.
+Items 2 (crane delivery) and 3 (backdrop) are built above. The 2026-11-05
+request to improve Crane enemy models supersedes the earlier mesh deferral; finish
+one complete in-engine example before expanding the roster. A fourth material
+pass, rideable loads, timers and counterweight crushes remain deferred.
 
 **Agent review (2026-10-29, v0.39.0; proposals, not player verdicts):** all
 12 rooms were seen, but Crown was not cleared on the continuous route; Office
@@ -643,6 +644,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-11-05, v0.40.0 | Improve the Crane Row enemy models using Blender; a Luna agent must rate the work at least 8/10 before completion | In progress. Ballast has an 8/10 interim still-image score; the full roster and presentation gate remain open |
 | 2026-11-04, unpublished candidate `bf9b63a9` | Both short Freight-drop clips sound good in the game mix | Player-approved those sampled cargo sounds; enemy audio, gameplay, visuals and the complete mix still await player judgment |
 | 2026-10-29, v0.39.0 | Improve Crane Row using these priorities, starting with the magenta enemy and Freight cargo visibility; an independent 6.1 Terra agent must rate the improvements at least 8/10 before completion | v0.40.0 ships the scoped color and delivery changes; Terra scored 8.0/10. Audio clips were accepted; visual and gameplay verdicts remain open |
 | 2026-10-29, v0.39.0 | Play through Crane Row and analyze potential improvements across enemies, visuals, map and everything else | Agent review and ranked proposals above; no new player quality verdict or implementation request |

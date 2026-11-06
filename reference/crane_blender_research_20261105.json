@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-05",
+  "purpose": "Private Blender research toward the requested Crane Row enemy-model improvements; not a published release.",
+  "parent": {
+    "version": "0.40.0",
+    "sha256": "bf9b63a95bff3c1edfea1e3f8acbc4503a9521fb87bdcb333a87bedfef9fd0c6"
+  },
+  "candidate": {
+    "path": "build/crane-models/ballast-v5/Versioned.nds",
+    "sha256": "5f011cbe2e0aa5125aed335c28e044e9a9d3cb24194090e78d768165e9f90652",
+    "model_sha256": "186c60dd24d9bc0c966220622be54dd98f58ef07bdac880af71cb4aeda3ee896",
+    "modified_resources": ["zz_F22_ballast.nsbmd"],
+    "unchanged": ["other Glob resources", "native rig and animation bindings", "Ballast texture and material", "effect-bone faces", "quad and vertex counts"],
+    "model_bytes_before_after": [44524, 44744],
+    "quads_before_after": [266, 266],
+    "authoring": "Blender 4.5.10 LTS; twenty added quads replace twenty older shoulder and wrist faces. tools/crane_blender.py reproduced this exact ROM hash and records the Blender version in its metadata."
+  },
+  "interim_luna_review": {
+    "model": "gpt-6-luna",
+    "first_draft_stills": 5.5,
+    "v3_stills": 7.5,
+    "v5_stills": 8.0,
+    "v5_sampled_gameplay_frames": 8.0,
+    "scope": "Ballast appearance only; reviewer could not play or hear the video. No full-roster or motion/audio approval.",
+    "code_review": "No must-fix loss, rig, UV or output-safety finding. The reviewer requested Blender-version reporting and a ROM/sidecar test; both were added and the reviewer marked the finding resolved."
+  },
+  "combat": {
+    "report": "work/crane-row/creatures/creature-duel-ballast-red-kit-modelb5a-5f011cbe.json",
+    "result": "Timed out after 6000 combat frames; all three species took damage, incoming player damage was observed, Ballast action 91 (get-up) was sampled, and up to five live actors appeared.",
+    "fixtures": "Copied save, healed player, native enemy HP and inputs. The labelled single-species Freight setup admitted a mixed roster after cargo delivery.",
+    "frames": "build/boot-tests/5f011cbe-walk-creature-duel-ballast-red-kit-modelb5a-b9d35666/walk-creature-duel-ballast-red-kit-modelb5a",
+    "audio": "work/crane-models/ballast-v5-combat.wav",
+    "clip": "work/crane-models/ballast-v5-4sec.mp4",
+    "end_snapshot_heap2": {
+      "ram": "work/crane-row/walk-creature-duel-ballast-red-kit-modelb5a-5f011cbe-aborted-ram.bin",
+      "free_bytes": 336900,
+      "largest_free_block_bytes": 336900,
+      "limit": "One end-of-timeout snapshot with three enemies; not peak crowd headroom or a controlled comparison."
+    }
+  },
+  "death_control": {
+    "report": "work/crane-models/ballast-death-fixture2.json",
+    "captures": "build/boot-tests/5f011cbe-walk-creature-duel-ballast-red-kit-b5death2-b9d35666/walk-creature-duel-ballast-red-kit-b5death2",
+    "result": "One selected Ballast was set to 1 HP in disposable RAM at frame 643; its native HP reached zero at frame 656 after a hit. The mixed route did not clear.",
+    "limit": "This establishes an observed lethal hit under the fixture, not normal-HP clearability or presentation quality."
+  },
+  "reward_fixture_attempts": [
+    "work/crane-row/rework/reward-ballast-native-b5-5f011cbe.json: no spawn while the driver waited at the entrance",
+    "work/crane-row/rework/reward-ballast-native-b5walk-5f011cbe.json: native approach saw an enemy, but the driver exited the room and no Ballast death was sampled"
+  ],
+  "open": [
+    "Review the first enemy's normal-speed motion and mixed audio; neither available reviewer could play or hear the clip.",
+    "Improve and independently review Maw and Spore only after the first example qualifies.",
+    "Qualify the final composition and achieve a Luna score of at least 8/10 for the requested work before publication.",
+    "Player feedback, hardware presentation, VRAM and peak-crowd heap headroom are unconfirmed."
+  ]
+}

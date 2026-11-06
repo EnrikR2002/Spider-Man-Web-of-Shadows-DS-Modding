@@ -5,11 +5,20 @@ workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design.
 
 ## Current objective
 
-The player requested Crane Row improvements, starting with the magenta enemy
-and Freight cargo visibility, with an independent GPT-6.1 Terra rating of at
-least 8/10. v0.40.0 implements those scoped improvements; Terra's final overall
-score was 8.0/10 with no must-fix findings. The player approved two short cargo
-sound clips. Visual and gameplay feedback has not yet been given.
+The player requested improved Crane Row enemy models using Blender, with an
+independent Luna rating of at least 8/10 before completion. A private Ballast
+study retains its rig, texture and 266-quad budget; its exact v0.40.0-based
+candidate is `build/crane-models/ballast-v5/Versioned.nds`, SHA256
+`5f011cbe2e0aa5125aed335c28e044e9a9d3cb24194090e78d768165e9f90652`.
+Luna rated Ballast's Blender stills and sampled gameplay frames 8/10, but could
+not review the clip's normal-speed motion or audio. That is not an overall
+rating or completion of the three-enemy request. Reproduce the study with
+`python tools/crane_blender.py --out build/crane-models/reproduce/Versioned.nds`;
+evidence and limitations are in `reference/crane_blender_research_20261105.json`.
+
+The prior v0.40.0 Crane color/cargo changes received Terra's 8/10 overall
+review; the player approved two short cargo sounds, with visual and gameplay
+feedback still open.
 
 Ballast uses a private direct-color material. Freight stages its container for
 upper and right-ground approaches and uses two existing native floor anchors per
@@ -47,10 +56,14 @@ Those controls do not establish unassisted normal-HP balance or hardware quality
 
 ## Blockers and next exact action
 
-The player can now use Play Spider-Man.cmd -> Continue -> play -> save in-game ->
-close, then report whether Ballast and Freight feel and look right. Hardware,
-full unassisted normal-HP play and the remaining enemy/encounter priorities are
-open. Do not push without a request.
+Review Ballast's captured normal-speed motion and mixed audio before expanding
+to Maw and Spore: neither available reviewer can play or hear the clip, so the
+player was asked to check `work/crane-models/ballast-v5-4sec.mp4`. The healed
+6,000-frame mixed fight timed out but sampled a get-up; a separate 1-HP RAM
+fixture observed a native Ballast death, not a normal-HP clear. Then test the
+remaining models, review the final composition with Luna, and publish only
+after all required qualification. The player can still play stable v0.40.0
+through the normal Play -> Continue -> save -> close flow. Do not push.
 
 Side research (2026-11-03): the external EUR decompilation was read for asset
 pipeline knowledge. Its findings, limits and the EUR-to-USA address rule are in
@@ -62,4 +75,3 @@ textures freed after VRAM upload); measure main-RAM headroom with
 Blender model bridge (2026-11-05): `tools/model_bridge.py` exports in-scope
 character models to glTF and imports Blender edits on the native rig; DEVELOPMENT
 "Blender model bridge" has the workflow. No bridged model is in a release.
-The Crane objective above is unchanged.

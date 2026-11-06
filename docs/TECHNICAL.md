@@ -493,6 +493,35 @@ draw list. It is still not a general skeleton or skin editor.
   archive holding a bound texture name. Receipt:
   `reference/model_bridge_20261105.json`.
 
+#### Crane Blender study (2026-11-05, v0.40.0)
+
+The published private Ballast, Maw and Spore resources fit the one-shape bridge;
+they contain 266, 296 and 260 native quads respectively. Ballast binds its
+private 64px direct-color archive; Maw and Spore share `zz_F22_Atlas.nsbtx`.
+The Ballast research tool `crane_blender.py` uses Blender 4.5 on that exact
+parent, replaces 20 old shoulder/wrist quads with 20 authored armor quads and
+retains the original rig, material, texture, effect bones and polygon/vertex
+counts. The model grows by 220 bytes. At the end of the mixed timeout, heap 2
+reported 336,900 free bytes in one block; this is a single snapshot, not peak
+crowd headroom. Hardware pacing is unmeasured. A second generation reproduced
+the same candidate hash. Confidence is high for the byte and geometry checks;
+the candidate is not published.
+
+In a healed Freight combat fixture on candidate `5f011cbe`, all three species
+appeared, took damage, and five live actors were observed; the driver timed out
+without a clear at 6,000 combat frames. The fixture labelled single-species
+also admitted other species after the cargo delivery, so it is mixed evidence.
+The mixed trace sampled Ballast action 91, the native get-up. A separate Freight
+fixture set one Ballast to 1 HP in disposable RAM and sampled its HP reach zero
+after a native hit; the route did not clear. Luna rated Ballast's supplied
+Blender stills and sampled native-size frames 8/10, but could not watch or hear
+the clip; normal-speed motion, audio and presentation remain unqualified. The
+original Counterweight 1-HP reward driver
+waited at the entrance without an enemy; walking in encountered one but the
+driver retreated through a door without a sampled Ballast death. These are
+fixture failures, not proof of a model or encounter defect. See
+`reference/crane_blender_research_20261105.json` for the candidate and logs.
+
 ### Text / UI / rooms / audio
 
 **Boss-only palette rendering defect (2026-10-22; high confidence in copied-save
