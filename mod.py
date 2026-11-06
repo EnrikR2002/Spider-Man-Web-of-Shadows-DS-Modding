@@ -333,6 +333,13 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
         report = w.validate_rom(result, target=True)
         ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
         new_glob = result[ge['start']:ge['end']]
+    freefall = None
+    if release.get('freefall'):
+        from tools import freefall as fall
+        result, freefall = fall.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
+        new_glob = result[ge['start']:ge['end']]
     log = {'schema_version': 1, 'clean_rom_sha256': w.sha256(rom), 'output_rom_sha256': w.sha256(result),
            'clean_glob_sha256': manifest['sha256'], 'output_glob_sha256': w.sha256(new_glob),
            'rom_size': len(result), 'used_rom_size': report['header']['used_rom_size'],
@@ -347,6 +354,8 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
            'verified_resource_count': len(w.parse_glob(new_glob)[1]), 'unchanged_resource_count': len(names) - len(replacements)-len(added)}
     if crane_visibility is not None:
         log['crane_visibility'] = crane_visibility
+    if freefall is not None:
+        log['freefall'] = freefall
     if gameplay_profile in release_info.PROFILES:
         release = release_info.PROFILE_INFO[gameplay_profile]
         log['release_version'] = release['version']

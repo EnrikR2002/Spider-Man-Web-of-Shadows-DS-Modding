@@ -4,17 +4,11 @@ Private USA CS5E research. ROMs/extracted assets/builds/saves stay private.
 
 **Play:** `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
 The agent handles the stable ROM, releases and progress backups.
-Current release: **v0.40.0**. **Crane Row** gives Ballast a clearer private
-texture and stages Freight cargo drops for the upper and right-ground approaches.
-Terra rated the scoped changes 8.0/10; your audio feedback was positive, while
-gameplay and visual verdicts remain open. **Boarding** (v0.38.0) costs 275 XP in Black upgrades.
-Jump into a supported boss while holding toward it, or hold toward during a
-heavy Web Yank zip. Y rakes; A tears and kicks off; R releases.
-Boss attacks shake Miguel off. The Conductor and four native mini-boss types
-are qualified. Existing purchases remain; twelve Black rows total 1,925 XP.
-GPT-6.1 Terra rated every metric **8/10 or higher**. The player likes the
-preview motion; in-game feel, hardware pacing and full-route balance remain open.
-The existing Conductor sound issue is deferred at the player's request.
+Current release: **v0.41.0**. **Freefall** uses Ground Rebound's 150 XP slot
+in the Black upgrade list. Press Down+A in the air for a talons-first dive.
+Taller drops widen the impact, light enemies rebound, and R cancels.
+Luna scored the reviewed build 8.5/10 for look and 8.2/10 for in-engine feel
+from timestamped emulator frames and controller tests.
 Details: [Changes](docs/CHANGES.md). What comes next: [Roadmap](docs/ROADMAP.md#now).
 
 ## Find what you need

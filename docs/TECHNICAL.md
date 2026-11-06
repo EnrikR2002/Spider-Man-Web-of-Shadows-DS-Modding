@@ -19,6 +19,7 @@ objective/build and next action: [TASKS](TASKS.md).
 | Player kit and native combat | [Player state machine and Red kit hooks](#player-state-machine-and-red-kit-hooks-v020), [animation authoring](#kit-animation-authoring) | Later named kit sections describe extensions; use the current release recipe |
 | Hunter revision-3 X input, Web Yank, Black shop row and heavy approach | [Web Yank](#hunter-revision-3-web-yank-v0340), [input correction](#transitions-states-and-inputs) | Earlier Hunter's Return/Talon Lift remain baseline mechanics until their revision-3 slices qualify |
 | Airborne Reel In and native landing/reaction ownership | [Reel In](#airborne-reel-in-v036-research) | [Pure pull](#pure-pull-input-and-catch-effects-v0342-research), [kit extension](#kit-extension-contract) |
+| Hammer Slam landing, Ground Rebound and Freefall | [Freefall](#freefall-hammer-slam-research) | [Hit pipeline](#hit-pipeline-v040-runtime-probed), [Kit animation authoring](#kit-animation-authoring) |
 | Meteor Catch grip, floor impact and native rebound | [Meteor Catch](#meteor-catch-v037-research) | [Reel In](#airborne-reel-in-v036-research), [hit pipeline](#hit-pipeline-v040-runtime-probed) |
 | Skyjack velocity correction | [Scoped finish (0.29)](#scoped-movement-and-chapter-finish-v0290) | [Parent audit and unshipped prototypes](#shared-crowd-hit-backend-candidates); the old source/hex still reproduce their historical releases |
 | Binary formats and preservation | [Format boundaries](#format-boundaries-and-confirmed-structures), [SCA/rig contract](#animation-authoring-and-current-evidence) | [Baseline inventory](#rom-baseline-and-inventory) |
@@ -2647,6 +2648,48 @@ The forced entrance-depth pose exaggerates the model's size, and the diagnostic
 does not pass its chosen-Y damage predicate. It qualifies the visual anchor
 only; unmodified E's separate Conductor run qualifies heavy mechanics. Source:
 `work/reel-in/review-final/review.json` and `reference/reel_in.json`.
+
+### Freefall Hammer Slam research
+
+**Native v0.40.0, 2026-11-06, high confidence from ARM9 and copied-save
+frames:** Air Down+A enters state35/action73. In the flat training fixture the
+dive remains nearly level through sample9, then falls at five units per game
+update beginning at sample10. Native floor contact enters state36/action74 and
+the land GMB uses its attack channel at samples 0 and 1. The horizontal half
+extent is 0x47C3 Q12, about 4.49 units, with a 1.23-unit forward center.
+The landing entry calls the native camera shake at 0x020C28D8. Ground Rebound
+is bit22/event331. Action74's hit-kind getter at 0x020B26CC chooses 0x10 with
+Rebound or 0x0F without it, and 0x12/0x11 respectively with story bit5
+Sledgehammer Slam. The contact dispatcher passes the same native value as the
+initial info strength and fifth HP argument. Change the receiver's info copy
+to separate the two. Source: exact v0.40.0 disassembly and the training traces
+in `work/freefall/`.
+
+**v0.41.0, 2026-11-06, ARM-probed and emulator-tested:** route
+private SCA only for owned Black state35/action73 and its native floor
+transition to state36/action74. The original GMB and GAB retain collision,
+windup and hit samples. The land entry compares the start and actual contact
+Y. The bonus rises above 27 units and reaches its cap near 81. The two
+horizontal extents grow from 0x47C3 to at most 0xD749. The vertical extent
+and center are unchanged. The extent copy starts at 0x0207112C. The later
+0x02071194/0x0207119C stores affect offsets and failed the first range probes.
+A Brute nine units ahead took damage at cap where the paired native slam
+missed. The native vertical shake gains up to half a unit.
+
+The native dispatcher still assigns victim credit and the fifth HP argument.
+The Freefall receiver copies hit info, adds up to half its strength, and
+substitutes stagger kind4 for the Conductor and the native MiniBoss class.
+An open Conductor hit reached state37. Committed Conductor poise can absorb
+the stagger while taking damage. Other receiver classes retain their native
+payload, including the original Downtown smashable floor and its story gate.
+The move owns a temporary motion token, cleared on interruption or owner loss.
+Air R calls native Air Dodge with its purchase or releases into native fall.
+Ground R selects the native ground evade. An instrumented candidate showed
+R consumption before a stale action74 contact in the same update. The final
+adapter keeps a one-update release token, ignores only that player's pending
+slam contact and clears the token on the next player think.
+Sources: `tools/freefall.s`, `tools/freefall_lab.py` and
+`reference/freefall.json`.
 
 ### Boarding (v0.38 research)
 

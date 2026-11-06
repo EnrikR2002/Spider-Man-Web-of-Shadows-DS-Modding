@@ -1,18 +1,26 @@
 # Current work and handoff
 
-Updated 2026-11-05 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
+Updated 2026-11-06 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
 workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design.
 
 ## Current objective
 
-The player requested improved Crane Row enemy models using Blender, with an
-independent Luna rating of at least 8/10 before completion. A private Ballast
-study retains its rig, texture and 266-quad budget; its exact v0.40.0-based
-candidate is `build/crane-models/ballast-v5/Versioned.nds`, SHA256
-`5f011cbe2e0aa5125aed335c28e044e9a9d3cb24194090e78d768165e9f90652`.
-Luna rated Ballast's Blender stills and sampled gameplay frames 8/10, but could
-not review the clip's normal-speed motion or audio. That is not an overall
-rating or completion of the three-enemy request. Reproduce the study with
+Freefall, the next 2099 skill after Boarding, is installed through Ground
+Rebound's existing purchase. The player required Luna to score both look and
+feel at least 8/10.
+It reaches an enemy nine units away where the parent misses, and a 53-unit
+drop bounces three Brutes into a manual Talon Lift. The earlier review found
+a stale contact on the same update as a ground R cancel. The final candidate
+clears that contact on both neutral and backward R. All 14 copied-save
+controls and 83 targeted strict tests passed. Luna independently rechecked
+both cancels and rated the installed ROM 8.5/10 look and 8.2/10 in-engine feel
+from timestamped frames and controller traces. Evidence is in
+`reference/freefall.json`.
+
+Separate Crane Row Blender request: the private Ballast study retains its rig,
+texture and 266-quad budget. Luna's 8/10 covers Ballast stills and sampled
+frames. Normal-speed motion, mixed audio and the other two enemies remain open.
+Reproduce the study with
 `python tools/crane_blender.py --out build/crane-models/reproduce/Versioned.nds`;
 evidence and limitations are in `reference/crane_blender_research_20261105.json`.
 The strict suite passed 800 tests across 107 isolated modules, with no skips.
@@ -40,31 +48,27 @@ unchecked caller registers; and its pin check is skipped when no pin exists.
 
 ## Published build
 
-Stable `build/Spider-Man-WoS-modded.nds` is **v0.40.0**, SHA256
-`bf9b63a95bff3c1edfea1e3f8acbc4503a9521fb87bdcb333a87bedfef9fd0c6`,
-installed by `tools/playtest.py build` and equal to the clean-chain candidate.
-Boot and Options show v0.40.0. The v0.39.0 ROM, metadata and recipe are preserved
-under `build/releases` and `build/version-0.39.0-final`. The actual 634-byte DSV
-was `ea33136000a3938c96769d67ec65f13d0b1d3b4764bdcb3413f4fbb5a44750fc` at publication and matched its checkpoint; always read the
-latest battery afresh because future saves may differ.
-
-The strict suite passed 788 tests in 104 isolated modules, with no skips. All
-nine Midnight pairs and eight Freight-connected crossings passed with native
-movement, enemies parked and the player healed. Assisted Freight/Crown clears,
-earned Office save/reload, and an interrupted Freight re-entry/retrigger passed.
-One native-HP Ballast-only driver observed a death but lost the overall fight.
-Those controls do not establish unassisted normal-HP balance or hardware quality.
+Stable `build/Spider-Man-WoS-modded.nds` is **v0.41.0**, SHA256
+`d411a9cbce8cb0d679da23673b32b4be2de543ecd60b9ceb2ff25ffeeb7ff70d`.
+`tools/playtest.py build` installed the exact reviewed ROM from the clean
+source. Boot and Options show v0.41.0. The v0.40.0 ROM, metadata and recipe
+are preserved under `build/releases` and `build/version-0.40.0-final`.
+The actual 634-byte DSV matched its validated checkpoint byte for byte.
+Read the actual battery afresh before the next lab or release.
 
 ## Blockers and next exact action
 
-Review Ballast's captured normal-speed motion and mixed audio before expanding
+Open `Play Spider-Man.cmd`, Continue, and try Black Freefall on air Down+A
+from both a jump and a taller fall. Buy Freefall for 150 XP if the Ground
+Rebound slot is still unowned. A player feel and hardware verdict is open.
+
+For the Crane Row study, review Ballast's motion and mixed audio before expanding
 to Maw and Spore: neither available reviewer can play or hear the clip, so the
 player was asked to check `work/crane-models/ballast-v5-4sec.mp4`. The healed
 6,000-frame mixed fight timed out but sampled a get-up; a separate 1-HP RAM
 fixture observed a native Ballast death, not a normal-HP clear. Then test the
-remaining models, review the final composition with Luna, and publish only
-after all required qualification. The player can still play stable v0.40.0
-through the normal Play -> Continue -> save -> close flow. Do not push.
+remaining models, review the final composition with Luna, and publish after
+all required qualification. Do not push.
 
 Side research (2026-11-03): the external EUR decompilation was read for asset
 pipeline knowledge. Its findings, limits and the EUR-to-USA address rule are in

@@ -1,0 +1,294 @@
+{
+  "added_resources": [
+    "zz_F41_Dive.sca",
+    "zz_F41_Land.sca"
+  ],
+  "arm9_sha256": "cc007c2c0094e8910f71055e9d6309cf71141fd985fc1c181f4f53b60d04b4e7",
+  "date": "2026-11-06",
+  "height": {
+    "cap_units_approx": 81,
+    "max_added_vertical_camera_shake_units": 0.5,
+    "max_horizontal_extent_multiplier": 3,
+    "max_reaction_strength_multiplier": 1.5,
+    "threshold_units": 27
+  },
+  "input": "Black air Down+A. R releases into native fall or evade.",
+  "modified_resources": [
+    "American.strings",
+    "English.strings",
+    "GlobFiles.txt"
+  ],
+  "name": "Freefall",
+  "nitrofs_relocation_bytes": 46080,
+  "ownership": {
+    "bit": 22,
+    "event": 331,
+    "price": 150
+  },
+  "parent_sha256": "bf9b63a95bff3c1edfea1e3f8acbc4503a9521fb87bdcb333a87bedfef9fd0c6",
+  "publication": {
+    "actual_battery_matches_checkpoint": true,
+    "battery_bytes": 634,
+    "battery_sha256": "ea33136000a3938c96769d67ec65f13d0b1d3b4764bdcb3413f4fbb5a44750fc",
+    "checkpoint": "before-build-dsv-ea33136000a3938c96769d67ec65f13d0b1d3b4764bdcb3413f4fbb5a44750fc",
+    "exact_clean_candidate_matches": true,
+    "previous_rom_sha256": "bf9b63a95bff3c1edfea1e3f8acbc4503a9521fb87bdcb333a87bedfef9fd0c6",
+    "reviewed_candidate_matches": true,
+    "rom_sha256": "d411a9cbce8cb0d679da23673b32b4be2de543ecd60b9ceb2ff25ffeeb7ff70d",
+    "version": "0.41.0"
+  },
+  "replaces": "Ground Rebound",
+  "review": {
+    "in_engine_feel": 8.2,
+    "independent_cases": [
+      "work/freefall/luna-g-land/result.json",
+      "work/freefall/luna-g-land-back/result.json"
+    ],
+    "limitations": "Luna used timestamped frames and emulator input traces. Its session could not play the MP4 or assess the mix. Player and hardware verdicts are open.",
+    "look": 8.5,
+    "model": "gpt-6-luna",
+    "motion": "Chronological native-update frame strips from the reviewed ROM",
+    "preview": "work/freefall/review/Freefall-v0.41.0.mp4",
+    "prior_boundary": "The earlier diagnostic recorded native R consumption before one lingering slam dispatch. The final release token suppresses that contact only.",
+    "rom_sha256": "d411a9cbce8cb0d679da23673b32b4be2de543ecd60b9ceb2ff25ffeeb7ff70d",
+    "threshold_each": 8
+  },
+  "rom_sha256": "d411a9cbce8cb0d679da23673b32b4be2de543ecd60b9ceb2ff25ffeeb7ff70d",
+  "runtime": {
+    "allocation_bytes": 4096,
+    "bytes": 1456,
+    "entry": 35093040,
+    "hooks": [
+      {
+        "link": false,
+        "old": 3926134278,
+        "site": 34014340,
+        "target": 35093040
+      },
+      {
+        "link": true,
+        "old": 3959353147,
+        "site": 34351320,
+        "target": 35093044
+      },
+      {
+        "link": false,
+        "old": 3851272360,
+        "site": 34017580,
+        "target": 35093048
+      },
+      {
+        "link": false,
+        "old": 3926122848,
+        "site": 34047528,
+        "target": 35093052
+      },
+      {
+        "link": false,
+        "old": 3926064388,
+        "site": 34293896,
+        "target": 35093056
+      }
+    ],
+    "state": 35093024,
+    "values": {
+      "BOSS_CONFIG": 34972972,
+      "DIVE_SCA": 6006,
+      "LAND_SCA": 6007,
+      "NATIVE_DIVE": 3407,
+      "NATIVE_LAND": 3410,
+      "OLD_ANIMATION": 35077284,
+      "OLD_CONTACT": 35064752,
+      "OLD_THINK": 35077280,
+      "STATE": 35093024
+    }
+  },
+  "samples": [
+    24,
+    19
+  ],
+  "schema_version": 1,
+  "validation": {
+    "boot_and_options": {
+      "capture_directory": "build/boot-tests/Versioned-d411a9cb/freefall-g-labels",
+      "version": "0.41.0"
+    },
+    "crowd_followup": {
+      "rebound_frame": 129,
+      "rebound_targets": 3,
+      "talon_lift_frame": 166,
+      "talon_lift_targets": 2
+    },
+    "earlier_strict_regressions_before_ground_r_guard": 806,
+    "exact_candidate_cases": {
+      "boss": {
+        "checks": {
+          "battery_unchanged": true,
+          "boss_hp_loss_on_slam": true,
+          "boss_not_launched": true,
+          "boss_stagger": true,
+          "native_room": true,
+          "real_slam": true
+        },
+        "trace": "work/freefall/g-boss/result.json"
+      },
+      "cancel": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "native_r_exit": true,
+          "no_post_cancel_damage": true,
+          "real_air_slam": true
+        },
+        "trace": "work/freefall/g-cancel/result.json"
+      },
+      "cancel-land": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "native_r_exit": true,
+          "no_post_cancel_damage": true,
+          "real_air_slam": true
+        },
+        "trace": "work/freefall/g-cancel-land/result.json"
+      },
+      "cancel-land-back": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "native_r_exit": true,
+          "no_post_cancel_damage": true,
+          "real_air_slam": true
+        },
+        "trace": "work/freefall/g-cancel-land-back/result.json"
+      },
+      "cancel-no-air-dodge": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "native_r_exit": true,
+          "no_post_cancel_damage": true,
+          "real_air_slam": true
+        },
+        "trace": "work/freefall/g-cancel-no-air-dodge/result.json"
+      },
+      "floor": {
+        "checks": {
+          "battery_unchanged": true,
+          "native_room": true,
+          "real_slam": true,
+          "story_gate": true
+        },
+        "trace": "work/freefall/g-floor/result.json"
+      },
+      "floor-locked": {
+        "checks": {
+          "battery_unchanged": true,
+          "native_room": true,
+          "real_slam": true,
+          "story_gate": true
+        },
+        "trace": "work/freefall/g-floor-locked/result.json"
+      },
+      "followup": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "height_bonus": true,
+          "juggle_after_rebound": true,
+          "native_floor_landing": true,
+          "native_rebound": true,
+          "private_clips": true,
+          "real_air_slam": true,
+          "scaled_radius": true
+        },
+        "trace": "work/freefall/g-followup/result.json"
+      },
+      "high": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "extended_range_at_nine_units": true,
+          "height_bonus": true,
+          "native_floor_landing": true,
+          "native_rebound": true,
+          "private_clips": true,
+          "real_air_slam": true,
+          "scaled_radius": true
+        },
+        "trace": "work/freefall/g-high/result.json"
+      },
+      "low": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "height_bonus": true,
+          "native_floor_landing": true,
+          "native_rebound": true,
+          "private_clips": true,
+          "real_air_slam": true,
+          "scaled_radius": true
+        },
+        "trace": "work/freefall/g-low/result.json"
+      },
+      "mirror": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "height_bonus": true,
+          "left_facing_whiff_recovers": true,
+          "native_floor_landing": true,
+          "private_clips": true,
+          "real_air_slam": true,
+          "scaled_radius": true
+        },
+        "trace": "work/freefall/g-mirror/result.json"
+      },
+      "red": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "native_red_air_attack": true,
+          "private_clips": true
+        },
+        "trace": "work/freefall/g-red/result.json"
+      },
+      "shop": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "fresh_continue_keeps_purchase": true,
+          "native_checkpoint_and_hp": true,
+          "native_purchase": true,
+          "native_refund": true,
+          "native_repurchase": true
+        },
+        "trace": "work/freefall/g-shop/result.json"
+      },
+      "unowned": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "native_floor_landing": true,
+          "private_clips": true,
+          "real_air_slam": true
+        },
+        "trace": "work/freefall/g-unowned/result.json"
+      }
+    },
+    "final_targeted_strict_tests": 83,
+    "native_limits": "Copied save and native controller inputs. The height controls preset the initial air start. Boss and floor cases use an entry fixture and a cleared story flag. No hardware pacing or full campaign balance qualification.",
+    "native_pairs_before_contact": {
+      "red": 37,
+      "unowned_black": 44
+    },
+    "reviewed_conductor_stagger_frame": 922,
+    "source_battery_sha256": "ea33136000a3938c96769d67ec65f13d0b1d3b4764bdcb3413f4fbb5a44750fc",
+    "wide_pair": {
+      "candidate_contact_distance_units": 9,
+      "candidate_hp_loss_q12": 10752,
+      "stock_contact_count": 0,
+      "stock_trace": "work/freefall/stock-high/result.json"
+    }
+  },
+  "version": "0.41.0"
+}

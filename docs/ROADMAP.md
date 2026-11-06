@@ -17,7 +17,7 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Boarding v0.38.0 ships; Terra every metric 8.0..8.5; preview motion accepted | Buy Boarding, try jump/heavy zip -> hold toward -> Y -> A; give an in-game verdict |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Freefall v0.41.0 ships. Luna rated look 8.5 and in-engine feel 8.2 | Try air Down+A at different heights and give an in-game verdict |
 | 2 | Taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
@@ -210,12 +210,12 @@ shoulder check that stops on contact (one stagger). No target: native recovery.
 velocity, ready for Sky Rake; let go and he stays grounded. Heavy: no launch,
 Miguel rises to head height and the claw lands as a stagger.
 
-**3. Freefall (Ground Rebound).** The native air Down+A slam becomes a
-head-first, talons-first dive. Record the height where the slam starts; at the
-native slam contact, scale hit strength and the impact radius by drop height.
-No bonus below a held jump (about 27 units); cap near three jump heights. The
-native rebound bounce stays for bystanders, and bounced enemies can be
-juggled. Heavy: a height-scaled stagger hit. Floor breaking stays native.
+**3. Freefall (Ground Rebound, shipped v0.41.0, 150 XP).** Air Down+A becomes
+a talons-first dive with a planted recovery. Drop distance above 27 units
+widens the impact and increases reaction strength, capped near 81 units.
+Light foes rebound and can be juggled. Supported bosses stagger when open,
+and floor breaking keeps its story gate. R releases. Luna rated look 8.5/10
+and in-engine feel 8.2/10. The player verdict remains open.
 
 **4. Talon Line (Black Widowmaker).** The native late-pause branch
 (Y,Y,Y, pause, Y,Y) plays three advancing slashes (stagger kind 0x04), then a
@@ -463,8 +463,10 @@ ships Meteor Catch with 30 exact-ROM gameplay/save controls, six native pairs
 and unchanged actual battery bytes. On 2026-10-28 the player accepts Meteor
 Catch's overall feel and requests Boarding. v0.38.0 ships it after 727 strict
 tests, 26 gameplay/save controls and all-six-metric Terra review; the player
-accepts preview motion and defers the Conductor sound issue. An in-game verdict
-precedes the next slice.
+accepts preview motion and defers the Conductor sound issue. On 2026-11-06 the
+player requested the next skill and a Luna score of at least 8/10 for look and
+feel. v0.41.0 ships Freefall after Luna's recheck of the exact release build.
+An in-game verdict precedes the next slice.
 
 ## Red kit: the Amazing Spider-Man
 
@@ -644,6 +646,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-11-06, v0.40.0 | Implement the next 2099 skill. Luna must score its look and feel at least 8/10 | Freefall ships in v0.41.0 after Luna rates look 8.5/10 and in-engine feel 8.2/10. The player's in-game verdict is open |
 | 2026-11-05, v0.40.0 | Improve the Crane Row enemy models using Blender; a Luna agent must rate the work at least 8/10 before completion | In progress. Ballast has an 8/10 interim still-image score; the full roster and presentation gate remain open |
 | 2026-11-04, unpublished candidate `bf9b63a9` | Both short Freight-drop clips sound good in the game mix | Player-approved those sampled cargo sounds; enemy audio, gameplay, visuals and the complete mix still await player judgment |
 | 2026-10-29, v0.39.0 | Improve Crane Row using these priorities, starting with the magenta enemy and Freight cargo visibility; an independent 6.1 Terra agent must rate the improvements at least 8/10 before completion | v0.40.0 ships the scoped color and delivery changes; Terra scored 8.0/10. Audio clips were accepted; visual and gameplay verdicts remain open |

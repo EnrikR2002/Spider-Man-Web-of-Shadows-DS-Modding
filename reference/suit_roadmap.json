@@ -244,12 +244,12 @@
           94,
           95
         ],
-        "status": "boarding-shipped-remaining-slices-designed",
+        "status": "freefall-shipped-remaining-slices-designed",
         "supersedes": "Hunter revision 2 (15 rows, 2026-10-23), revision 1 and the 2026-10-22 catch/carry/crash/chase proposal; local 2026-10-23 seven-row air/guard proposal (archived at docs/TASM_ROADMAP-local-2026-10-23.md)"
       },
       "design_reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
       "id": "2099-classic",
-      "implementation_order": "Boarding v0.38.0 ships with every Terra metric at least 8/10; preview motion accepted and existing Conductor sound deferred. Player in-game verdict before the next skill. Later Freefall/Talon Pounce/Relentless and capstone remain designed; Mega Venom adapter remains unqualified.",
+      "implementation_order": "Freefall ships in v0.41.0 after Boarding. Luna rated look 8.5/10 and in-engine feel 8.2/10. Talon Pounce is next in the approved order after the player verdict.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Fuller chest/back/arms on the preserved native rig; unrelated native motion clips retained",
@@ -264,9 +264,10 @@
         "Purchased Reel In (bit84/event393, 150 XP, requires Web Yank): airborne Up+A uses one scarlet tether and continuous cast/heave/recovery to bring a foe below/ahead into claw range for chosen Y. Heavy targets zip Miguel. Native velocity/gravity/collision, floor/R/interruption release and unchanged other inputs. Independent review 8.53/10 overall, presentation 8.2 and feel 8.4; player tested it and says it feels great (2026-10-27).",
         "Purchased Meteor Catch (bit86/event395, 200 XP, requires Sky Rake): private continuous grab/flip/dive/impact, native collision and two-HP floor hit plus one small bounce; native input and cleanup controls qualify. Terra scores every metric at least 8/10; overall feel accepted by the player (2026-10-28).",
         "Purchased Boarding / Wing Ripper (bit88/event397, 275 XP): native jump/heavy-zip shoulder entry, authored Y rake/A tear and kick-off, native attack shake-off and R/interruption/lifetime cleanup. Conductor and four native MiniBoss types qualified; no riding timer or NPC position/velocity writes. All six Terra metrics >=8 and preview motion accepted; in-game verdict remains open.",
+        "Purchased Freefall (native Ground Rebound bit22/event331, 150 XP): authored air Down+A with height-scaled landing reach and reaction strength. Light foes rebound for a chosen follow-up. Supported bosses take stagger when open. R releases and cancels a pending landing hit.",
         "Twelve Black rows total 1,925 XP; the planned fourteen-row total remains 2,450 XP. Existing purchases, prior prices and dependencies remain."
       ],
-      "kit": "Hunter revision 3 retains Talon Lift, pure Down+A Web Yank, Sky Rake, Reel In and player-liked Meteor Catch. Boarding now latches a supported boss during jump/heavy zip while holding toward: Y rakes, A tears/kicks, R releases. Twelve Black rows total 1,925 XP; remaining slices stay designed.",
+      "kit": "Hunter revision 3 retains Talon Lift, pure Down+A Web Yank, Sky Rake, Reel In, Meteor Catch and Boarding. Freefall adds height-scaled air Down+A through Ground Rebound. Twelve Black rows total 1,925 XP.",
       "latest_feedback": {
         "date": "2026-10-28",
         "source_version": "0.38.0",
@@ -279,8 +280,8 @@
       },
       "replaces_form": "black",
       "selection_date": "2026-10-11",
-      "status": "v0.38.0-boarding-shipped-preview-motion-accepted-ingame-verdict-open",
-      "validation_limit": "See boarding.json:727 strict tests,26 gameplay/save controls, six code-identical native pairs, exact clean/canonical/stable hash, unchanged actual battery/checkpoint, all Terra metrics >=8. Original Conductor and four native MiniBoss types qualify; Mega Venom and later Up-pounce remain unqualified. Hardware pacing/full-route balance/in-game feel remain open; Conductor sound deferred."
+      "status": "v0.41.0-freefall-shipped-player-verdict-open",
+      "validation_limit": "See freefall.json for exact emulator and save controls. Luna scored timestamped frames and in-engine input response. The audio mix, player feel and hardware pacing remain open. Boarding retains its separate evidence in boarding.json."
     },
     {
       "id": "scarlet-kaine",

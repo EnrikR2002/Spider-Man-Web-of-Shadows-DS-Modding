@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.40.0. Each section records behavior,
+The latest numbered release below is v0.41.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,28 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.41.0 - 2026-11-06 - Spider-Man 2099 Freefall
+
+Freefall uses the existing Black Ground Rebound purchase for 150 XP. Air
+Down+A plays an authored talons-first dive and planted recovery. A drop over
+27 units grows the native landing hitbox and reaction strength, up to about
+81 units. Light foes rebound for a follow-up. Supported bosses take a stagger
+when open. Sledgehammer Slam still gates floor breaking. R uses native fall
+or evade and clears a pending landing hit.
+
+The installed ROM matches the exact reviewed SHA256
+`d411a9cbce8cb0d679da23673b32b4be2de543ecd60b9ceb2ff25ffeeb7ff70d`.
+Boot and Options show v0.41.0. The protected build preserved the previous
+ROM and the current battery. Fourteen exact-ROM gameplay and save cases
+and 83 targeted strict tests passed. The wider landing hit a foe nine units
+away where the parent missed. Three Brutes rebounded in one impact, and
+the chosen Talon Lift hit two. The Conductor staggered without being lifted.
+
+GPT-6 Luna rated look 8.5/10 and in-engine feel 8.2/10 using timestamped
+native-update frames and its own neutral and backward R tests. Audio,
+physical hardware and the player's in-game verdict remain open. See
+`reference/freefall.json` for the exact controls and fixture limits.
 
 ## v0.40.0 - 2026-11-04 - Crane Row enemy and cargo visibility
 
