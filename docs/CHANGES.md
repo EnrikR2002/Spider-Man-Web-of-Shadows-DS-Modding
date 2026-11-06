@@ -4,7 +4,7 @@ Current stable release status is in [TASKS](TASKS.md). Proposed mechanics are
 in the [roadmap](ROADMAP.md) (formerly TASM_ROADMAP); a proposal is not shipped
 behavior. Historical exact evidence is preserved in the archive.
 
-The latest numbered release below is v0.41.0. Each section records behavior,
+The latest numbered release below is v0.42.0. Each section records behavior,
 tests and limits at that publication; later fixes and player feedback supersede
 earlier pending work. Historical battery hashes are observations, never restore
 instructions. The current design queue and verdicts are in ROADMAP/TASKS.
@@ -18,6 +18,28 @@ During development we start at 0.1.0. Each published number identifies one exact
 ROM; the publisher rejects a reused version with a different hash. Build logs,
 `reference/releases.json` and per-ROM release metadata record what shipped when.
 This file is the only human-readable release/change log. No per-release Markdown.
+
+## v0.42.0 - 2026-11-06 - Spider-Man 2099 Talon Pounce
+
+Talon Pounce takes over the Black Super Charge row for 225 XP. Hold Y through
+the coil, then release for a low leap and knockdown. Up on release raises the
+strike into an air juggle. A fresh Y can follow into Sky Rake. Holding toward
+a supported boss in the upward leap can enter purchased Boarding. Quick
+Charge still halves the coil, short taps use the native strings, and R releases.
+
+The exact reviewed ROM is
+`41bb7db548c40dee7c0c290ff88c14dbbcc86be1c139facd0fc15e8784039cd0`.
+The low pounce hit a Brute 24.69 units away at takeoff. The rising strike
+fed three manual Sky Rake contacts. The Conductor staggered and boarded in
+the sampled encounter. Native collision and the room trace blocked a wall
+crossing and its strike. The native 225 XP purchase survived refund,
+repurchase, save and fresh Continue. The protected build matched the clean
+rebuild, retained the prior ROM and left the actual battery byte-identical.
+
+Luna rated look 8.1/10 and in-engine feel 8.0/10 from timestamped emulator
+frames and controller traces. The coil and close Boarding transition were
+less distinct than the strikes. Player feel, the audible mix and DS hardware
+remain open. See `reference/talon_pounce.json` for the exact controls and limits.
 
 ## v0.41.0 - 2026-11-06 - Spider-Man 2099 Freefall
 

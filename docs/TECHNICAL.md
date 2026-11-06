@@ -20,6 +20,7 @@ objective/build and next action: [TASKS](TASKS.md).
 | Hunter revision-3 X input, Web Yank, Black shop row and heavy approach | [Web Yank](#hunter-revision-3-web-yank-v0340), [input correction](#transitions-states-and-inputs) | Earlier Hunter's Return/Talon Lift remain baseline mechanics until their revision-3 slices qualify |
 | Airborne Reel In and native landing/reaction ownership | [Reel In](#airborne-reel-in-v036-research) | [Pure pull](#pure-pull-input-and-catch-effects-v0342-research), [kit extension](#kit-extension-contract) |
 | Hammer Slam landing, Ground Rebound and Freefall | [Freefall](#freefall-hammer-slam-research) | [Hit pipeline](#hit-pipeline-v040-runtime-probed), [Kit animation authoring](#kit-animation-authoring) |
+| Native Super Charge and Talon Pounce | [Talon Pounce](#talon-pounce-and-native-super-charge) | [Boarding](#boarding-v038-research), [Hit pipeline](#hit-pipeline-v040-runtime-probed) |
 | Meteor Catch grip, floor impact and native rebound | [Meteor Catch](#meteor-catch-v037-research) | [Reel In](#airborne-reel-in-v036-research), [hit pipeline](#hit-pipeline-v040-runtime-probed) |
 | Skyjack velocity correction | [Scoped finish (0.29)](#scoped-movement-and-chapter-finish-v0290) | [Parent audit and unshipped prototypes](#shared-crowd-hit-backend-candidates); the old source/hex still reproduce their historical releases |
 | Binary formats and preservation | [Format boundaries](#format-boundaries-and-confirmed-structures), [SCA/rig contract](#animation-authoring-and-current-evidence) | [Baseline inventory](#rom-baseline-and-inventory) |
@@ -2691,6 +2692,44 @@ slam contact and clears the token on the next player think.
 Sources: `tools/freefall.s`, `tools/freefall_lab.py` and
 `reference/freefall.json`.
 
+### Talon Pounce and native Super Charge
+
+**Native v0.41.0, 2026-11-06, high confidence from disassembly and copied-save
+inputs.** In Black ground state46, the action's charge event sets actor+0x28
+to 2. The held-Y flag is controller+0x64 bit4 and the combined pad reads Y as
+0x800. The state update at 0x020C32D8 checks ownership bit25, then increments
+the signed byte at controller+0x8F from 0 to 16. Bit26 Quick Charge counts two
+per update. In the training opener, the native animation stays at sample1
+until release or full charge. Holding through full charge automatically resumes
+the original strike on the next update. The counter increment starts at
+0x020C3374. Source: exact parent and `work/pounce/p-native/result.json`.
+
+**Published v0.42.0, 2026-11-06, high confidence from in-engine probes.**
+Returning directly from state46 to air string51 loses positive vertical
+velocity at the floor. Native jump15 lifts cleanly, then state51 can carry
+the private action and GMB. The four authored routes keep the native 16- or
+8-update charge window, clamp at the ready pose and start flight on release.
+Short holds resume the original Y strike. A fresh Y after a rising hit re-enters
+the air string with a reset node and preserved forward velocity.
+
+The native receiver dispatches Pounce as kind0x14. The earlier Sky Rake hook
+also recognizes its carrier action1 and would replace Pounce's receiver.
+Dispatch the private GMB through the existing chain below Sky Rake. The local
+hit-info and contact copies select grounded knockdown0x1F, air juggle0x14 or
+boss stagger4 and preserve native HP and credit. Native body collision stopped
+the player at X236.47 but a wide sample hit the parked foe beyond the wall.
+The guarded point sweep at 0x02029240 uses the live room BSP at [0x02145C3C],
+start bounds and displacement. Result+0x10 is 0x2000 for a clear path. Both
+contact and the upward Boarding handoff require a clear path.
+
+Native Boarding owns the latch. A high pounce holding toward a boss checks
+its existing selector before yielding the player controller. Boss attacks
+still own the shake-off, and a neutral pounce only strikes. Five guarded
+hooks and four private action routes use a separate 4 KiB autoload block.
+All original shop records, the 32 KiB player kit and the native save layout
+retain their bytes. Sources are `tools/talon_pounce.s`,
+`tools/talon_pounce_lab.py` and `reference/talon_pounce.json`.
+
 ### Boarding (v0.38 research)
 
 **Published v0.38.0, 2026-10-28 (SHA21c7a051):** the
@@ -2740,7 +2779,8 @@ Conductor sound as separate. Neither model claims auditory perception. The
 protected publisher installs exact reviewed bytes, preserves v0.37 ROM/metadata/
 recipe, and leaves the actual battery byte-identical to its validated checkpoint.
 In-game feel, hardware pacing and full-route balance remain unconfirmed.
-Mega Venom and later Talon Pounce integration remain unqualified. Sources: `boarding*`,
+Mega Venom remains unqualified. Talon Pounce was qualified later in v0.42.0.
+Sources: `boarding*`,
 `tests/test_boarding.py`, `reference/boarding.json` and `work/boarding/readable/`.
 
 ### Meteor Catch (v0.37 research)

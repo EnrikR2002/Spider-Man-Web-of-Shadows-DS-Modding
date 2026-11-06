@@ -244,12 +244,12 @@
           94,
           95
         ],
-        "status": "freefall-shipped-remaining-slices-designed",
+        "status": "talon-pounce-shipped-remaining-slices-designed",
         "supersedes": "Hunter revision 2 (15 rows, 2026-10-23), revision 1 and the 2026-10-22 catch/carry/crash/chase proposal; local 2026-10-23 seven-row air/guard proposal (archived at docs/TASM_ROADMAP-local-2026-10-23.md)"
       },
       "design_reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
       "id": "2099-classic",
-      "implementation_order": "Freefall ships in v0.41.0 after Boarding. Luna rated look 8.5/10 and in-engine feel 8.2/10. Talon Pounce is next in the approved order after the player verdict.",
+      "implementation_order": "Talon Pounce ships in v0.42.0 after Freefall. Luna rated look 8.1/10 and in-engine feel 8.0/10. Relentless is next in the approved order.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Fuller chest/back/arms on the preserved native rig; unrelated native motion clips retained",
@@ -265,9 +265,10 @@
         "Purchased Meteor Catch (bit86/event395, 200 XP, requires Sky Rake): private continuous grab/flip/dive/impact, native collision and two-HP floor hit plus one small bounce; native input and cleanup controls qualify. Terra scores every metric at least 8/10; overall feel accepted by the player (2026-10-28).",
         "Purchased Boarding / Wing Ripper (bit88/event397, 275 XP): native jump/heavy-zip shoulder entry, authored Y rake/A tear and kick-off, native attack shake-off and R/interruption/lifetime cleanup. Conductor and four native MiniBoss types qualified; no riding timer or NPC position/velocity writes. All six Terra metrics >=8 and preview motion accepted; in-game verdict remains open.",
         "Purchased Freefall (native Ground Rebound bit22/event331, 150 XP): authored air Down+A with height-scaled landing reach and reaction strength. Light foes rebound for a chosen follow-up. Supported bosses take stagger when open. R releases and cancels a pending landing hit.",
+        "Purchased Talon Pounce (native Super Charge bit25/event334, 225 XP): hold Y through the coil and release for a low knockdown. Up on release rises into an air juggle or purchased Boarding when held toward a supported boss. Quick Charge keeps its native dependency and halves the coil.",
         "Twelve Black rows total 1,925 XP; the planned fourteen-row total remains 2,450 XP. Existing purchases, prior prices and dependencies remain."
       ],
-      "kit": "Hunter revision 3 retains Talon Lift, pure Down+A Web Yank, Sky Rake, Reel In, Meteor Catch and Boarding. Freefall adds height-scaled air Down+A through Ground Rebound. Twelve Black rows total 1,925 XP.",
+      "kit": "Hunter revision 3 retains Talon Lift, Web Yank, Sky Rake, Reel In, Meteor Catch, Boarding and Freefall. Talon Pounce takes over Super Charge. Twelve Black rows total 1,925 XP.",
       "latest_feedback": {
         "date": "2026-10-28",
         "source_version": "0.38.0",
@@ -280,8 +281,8 @@
       },
       "replaces_form": "black",
       "selection_date": "2026-10-11",
-      "status": "v0.41.0-freefall-shipped-player-verdict-open",
-      "validation_limit": "See freefall.json for exact emulator and save controls. Luna scored timestamped frames and in-engine input response. The audio mix, player feel and hardware pacing remain open. Boarding retains its separate evidence in boarding.json."
+      "status": "v0.42.0-talon-pounce-shipped-player-verdict-open",
+      "validation_limit": "See talon_pounce.json for exact emulator and save controls. Luna scored timestamped frames and in-engine input response. The audible mix, player feel and hardware pacing remain open."
     },
     {
       "id": "scarlet-kaine",

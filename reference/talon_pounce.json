@@ -1,0 +1,399 @@
+{
+  "added_resources": [
+    "zz_P42_Coil.sca",
+    "zz_P42_Coil.gmb",
+    "zz_P42_Coil.gab",
+    "zz_P42_Quick.sca",
+    "zz_P42_Quick.gmb",
+    "zz_P42_Quick.gab",
+    "zz_P42_Low.sca",
+    "zz_P42_Low.gmb",
+    "zz_P42_Low.gab",
+    "zz_P42_High.sca",
+    "zz_P42_High.gmb",
+    "zz_P42_High.gab"
+  ],
+  "arm9_sha256": "a6c2f137e36275257e7b3ed5a393969fbfacf9f378834c0dd06205d9d407f6d8",
+  "date": "2026-11-06",
+  "input": "Hold Y through the coil and release. Hold Up on release to rise. R releases.",
+  "modified_resources": [
+    "American.strings",
+    "English.strings",
+    "GlobFiles.txt"
+  ],
+  "name": "Talon Pounce",
+  "nitrofs_relocation_bytes": 72192,
+  "ownership": {
+    "bit": 25,
+    "event": 334,
+    "price": 225
+  },
+  "parent_sha256": "d411a9cbce8cb0d679da23673b32b4be2de543ecd60b9ceb2ff25ffeeb7ff70d",
+  "publication": {
+    "actual_battery_matches_checkpoint": true,
+    "battery_bytes": 634,
+    "battery_sha256": "ea33136000a3938c96769d67ec65f13d0b1d3b4764bdcb3413f4fbb5a44750fc",
+    "checkpoint": "before-build-dsv-ea33136000a3938c96769d67ec65f13d0b1d3b4764bdcb3413f4fbb5a44750fc",
+    "exact_clean_candidate_matches": true,
+    "previous_rom_sha256": "d411a9cbce8cb0d679da23673b32b4be2de543ecd60b9ceb2ff25ffeeb7ff70d",
+    "reviewed_candidate_matches": true,
+    "rom_sha256": "41bb7db548c40dee7c0c290ff88c14dbbcc86be1c139facd0fc15e8784039cd0",
+    "version": "0.42.0"
+  },
+  "qualification": {
+    "cases": {
+      "air-fall": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "no_late_hit": true,
+          "private_leap_drawn": true,
+          "r_ends_attack": true,
+          "takeoff_on_release": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/q-air-fall/result.json"
+      },
+      "air-r": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "no_late_hit": true,
+          "private_leap_drawn": true,
+          "r_ends_attack": true,
+          "takeoff_on_release": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/q-air-r/result.json"
+      },
+      "boss": {
+        "checks": {
+          "battery_unchanged": true,
+          "boarding_from_pounce": true,
+          "native_boss_room": true,
+          "rake_while_boarded": true,
+          "releases_on_r": true
+        },
+        "path": "work/pounce/g-boss/result.json"
+      },
+      "boss-strike": {
+        "checks": {
+          "battery_unchanged": true,
+          "boss_staggers": true,
+          "boss_stays_grounded": true,
+          "heavy_contact": true,
+          "native_boss_room": true
+        },
+        "path": "work/pounce/g-boss-strike/result.json"
+      },
+      "cancel-land-back": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "native_r_exit": true,
+          "no_post_cancel_damage": true,
+          "real_air_slam": true
+        },
+        "path": "work/pounce/freefall-control/result.json"
+      },
+      "coil-r": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "r_ends_coil": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/q-coil-r/result.json"
+      },
+      "early": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "early_release_resumes_strike": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/q-early/result.json"
+      },
+      "hold": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "native_reaction": true,
+          "private_leap_drawn": true,
+          "single_pounce_contact": true,
+          "stays_coiled_until_release": true,
+          "takeoff_on_release": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/q-hold/result.json"
+      },
+      "left": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "left_leap": true,
+          "native_reaction": true,
+          "private_leap_drawn": true,
+          "single_pounce_contact": true,
+          "takeoff_on_release": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/q-left/result.json"
+      },
+      "miss": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "private_leap_drawn": true,
+          "takeoff_on_release": true,
+          "trained_in_requested_form": true,
+          "whiff_is_bounded": true
+        },
+        "path": "work/pounce/q-miss/result.json"
+      },
+      "q-shop": {
+        "checks": {
+          "actual_battery_unchanged": true,
+          "fresh_continue_keeps_purchase": true,
+          "native_checkpoint_and_hp": true,
+          "native_purchase": true,
+          "native_refund": true,
+          "native_repurchase": true
+        },
+        "path": "work/pounce/q-shop/result.json"
+      },
+      "quick": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "half_charge_window": true,
+          "private_leap_drawn": true,
+          "quick_coil": true,
+          "takeoff_on_release": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/g-quick/result.json"
+      },
+      "range": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "native_reaction": true,
+          "private_leap_drawn": true,
+          "single_pounce_contact": true,
+          "takeoff_on_release": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/g2-range/result.json"
+      },
+      "red": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "native_path": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/q-red/result.json"
+      },
+      "release-r": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "no_late_hit": true,
+          "private_leap_drawn": true,
+          "r_ends_attack": true,
+          "takeoff_on_release": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/g-release-r/result.json"
+      },
+      "rising": {
+        "checks": {
+          "battery_unchanged": true,
+          "chosen_sky_rake_hits": true,
+          "cleanup": true,
+          "native_reaction": true,
+          "private_leap_drawn": true,
+          "single_pounce_contact": true,
+          "takeoff_on_release": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/g-rising/result.json"
+      },
+      "swap": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "private_leap_drawn": true,
+          "switch_ends_attack": true,
+          "takeoff_on_release": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/q-swap/result.json"
+      },
+      "taps": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "native_path": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/q-taps/result.json"
+      },
+      "unowned": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "native_path": true,
+          "trained_in_requested_form": true
+        },
+        "path": "work/pounce/q-unowned/result.json"
+      },
+      "wall": {
+        "checks": {
+          "battery_unchanged": true,
+          "cleanup": true,
+          "private_leap_drawn": true,
+          "takeoff_on_release": true,
+          "trained_in_requested_form": true,
+          "wall_blocks_motion_and_contact": true
+        },
+        "path": "work/pounce/g-wall/result.json"
+      }
+    },
+    "labels": "work/pounce/labels/result.json",
+    "limits": "The cases use a copied latest DSV and isolated training fixtures. Boss cases have four private entry words and a retry flag. Native inputs, movement, damage, reactions, shop and save behavior are observed.",
+    "native_pairs": {
+      "red": {
+        "frames": 246,
+        "isolated_transition_samples": [
+          156,
+          254
+        ],
+        "states_facing_velocity_and_node_identical": true
+      },
+      "taps": {
+        "frames": 246,
+        "isolated_transition_samples": [
+          46,
+          48,
+          84,
+          172,
+          254,
+          256
+        ],
+        "states_facing_velocity_and_node_identical": true
+      },
+      "unowned": {
+        "frames": 246,
+        "isolated_transition_samples": [
+          48
+        ],
+        "states_facing_velocity_and_node_identical": true
+      }
+    },
+    "samples": {
+      "boarding_latch_frame": 166,
+      "boss_strike_frame": 160,
+      "low_contact_frames": [
+        100
+      ],
+      "low_gap_at_takeoff_units": 24.6875,
+      "rising_all_contact_frames": [
+        92,
+        106,
+        118,
+        132
+      ],
+      "rising_contact_frames": [
+        92
+      ]
+    },
+    "strict": {
+      "modules": 109,
+      "skips": 0,
+      "tests": 810
+    }
+  },
+  "quick_charge": {
+    "ability_bit": 26,
+    "normal_updates": 16,
+    "quick_updates": 8
+  },
+  "replaces": "Super Charge",
+  "review": {
+    "in_engine_feel": 8.0,
+    "limits": "Timestamped emulator frames and controller traces with an independent low-range replay. Audio listening, physical controller feel and DS hardware remain open.",
+    "look": 8.1,
+    "model": "gpt-6-luna",
+    "notes": "Readable level lunge and rising claw. Clear impact and follow-ups. The coil is modest and the Boarding overlap compresses the silhouette.",
+    "preview": "work/pounce/review/Talon-Pounce-v0.42.0.mp4",
+    "rom_sha256": "41bb7db548c40dee7c0c290ff88c14dbbcc86be1c139facd0fc15e8784039cd0",
+    "threshold_each": 8
+  },
+  "rom_sha256": "41bb7db548c40dee7c0c290ff88c14dbbcc86be1c139facd0fc15e8784039cd0",
+  "runtime": {
+    "allocation_bytes": 4096,
+    "bytes": 2524,
+    "entry": 35097156,
+    "hooks": [
+      {
+        "old": 3789031647,
+        "site": 34354036,
+        "target": 35097156
+      },
+      {
+        "old": 3926068332,
+        "site": 34293896,
+        "target": 35097160
+      },
+      {
+        "old": 3926138217,
+        "site": 34014340,
+        "target": 35097164
+      },
+      {
+        "old": 3926130768,
+        "site": 34028384,
+        "target": 35097168
+      },
+      {
+        "old": 3926129923,
+        "site": 34047528,
+        "target": 35097172
+      }
+    ],
+    "state": 35097120,
+    "values": {
+      "BOARD_STATE": 35076640,
+      "BOARD_TARGET": 35079060,
+      "BOSS_CONFIG": 34972972,
+      "COIL_GAB": 6010,
+      "COIL_GMB": 6009,
+      "COIL_SCA": 6008,
+      "HIGH_GAB": 6019,
+      "HIGH_GMB": 6018,
+      "HIGH_SCA": 6017,
+      "LOW_GAB": 6016,
+      "LOW_GMB": 6015,
+      "LOW_SCA": 6014,
+      "OLD_ANIMATION": 35093040,
+      "OLD_CONTACT": 35093052,
+      "OLD_THINK": 35093056,
+      "OLD_UPDATE": 35077288,
+      "POUNCE_CONTACT": 35053796,
+      "QUICK_GAB": 6013,
+      "QUICK_GMB": 6012,
+      "QUICK_SCA": 6011,
+      "STATE": 35097120
+    }
+  },
+  "samples": [
+    16,
+    9,
+    17,
+    17
+  ],
+  "schema_version": 1,
+  "version": "0.42.0"
+}

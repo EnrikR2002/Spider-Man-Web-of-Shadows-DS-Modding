@@ -4,11 +4,10 @@ Private USA CS5E research. ROMs/extracted assets/builds/saves stay private.
 
 **Play:** `Play Spider-Man.cmd` -> Continue -> play -> save in-game -> close.
 The agent handles the stable ROM, releases and progress backups.
-Current release: **v0.41.0**. **Freefall** uses Ground Rebound's 150 XP slot
-in the Black upgrade list. Press Down+A in the air for a talons-first dive.
-Taller drops widen the impact, light enemies rebound, and R cancels.
-Luna scored the reviewed build 8.5/10 for look and 8.2/10 for in-engine feel
-from timestamped emulator frames and controller tests.
+Current release: **v0.42.0**. **Talon Pounce** uses Super Charge's 225 XP slot
+in the Black upgrade list. Hold Y to coil, then release for a low pounce.
+Hold Up on release to rake upward into a juggle or approach a boss for
+Boarding. Luna scored the build 8.1/10 for look and 8.0/10 for in-engine feel.
 Details: [Changes](docs/CHANGES.md). What comes next: [Roadmap](docs/ROADMAP.md#now).
 
 ## Find what you need

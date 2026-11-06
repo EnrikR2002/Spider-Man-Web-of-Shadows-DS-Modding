@@ -17,7 +17,7 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Freefall v0.41.0 ships. Luna rated look 8.5 and in-engine feel 8.2 | Try air Down+A at different heights and give an in-game verdict |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Talon Pounce v0.42.0 ships. Luna rated look 8.1 and in-engine feel 8.0 | Try low and rising pounces and give an in-game verdict |
 | 2 | Taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
@@ -230,12 +230,13 @@ picks the ender: Up launches (0x25), Forward blasts back (0x1F), Down smashes
 the enemy to the floor (knockdown plus one small bounce). Heavy: flurry
 staggers, then a heavy rip.
 
-**6. Talon Pounce (Super Charge).** Hold Y to coil (the native Super Charge
-hold and charge time), release to leap talons-first at the enemy ahead, or
-above with Up held, up to about 25 units in under half a second. A grounded
-target takes a knockdown; an airborne one takes an air-juggle hit (0x14) and
-Miguel stays airborne for Sky Rake. Heavy: a strike; an Up-pounce into a boss
-while holding toward it starts Boarding. Never passes through walls.
+**6. Talon Pounce (Super Charge, shipped v0.42.0, 225 XP).** Hold Y through the
+coil, then release for a talons-first leap. Hold Up on release to aim high.
+A grounded foe takes a knockdown. An airborne foe takes an air-juggle hit
+(0x14) and Miguel stays airborne for Sky Rake. Supported bosses take a
+stagger, and an upward pounce while holding toward an eligible boss can
+enter purchased Boarding. The low strike reached 24.69 units in the lab.
+Walls block movement and contact. Quick Charge halves the native coil time.
 
 **7. Relentless (Quick Charge).** Passive. Halves the Pounce coil. During any
 2099 ender's recovery, holding Y fires Pounce and Down+A fires Web Yank the
@@ -466,7 +467,9 @@ tests, 26 gameplay/save controls and all-six-metric Terra review; the player
 accepts preview motion and defers the Conductor sound issue. On 2026-11-06 the
 player requested the next skill and a Luna score of at least 8/10 for look and
 feel. v0.41.0 ships Freefall after Luna's recheck of the exact release build.
-An in-game verdict precedes the next slice.
+The player's next request moves Talon Pounce into v0.42.0. Luna rated the
+exact build 8.1/10 look and 8.0/10 in-engine feel. The player verdict remains
+open. Relentless follows in the approved order.
 
 ## Red kit: the Amazing Spider-Man
 
@@ -646,6 +649,7 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-11-06, v0.41.0 | Implement the next 2099 skill. Luna must rate look and feel at least 8/10 | Talon Pounce ships in v0.42.0 after Luna rates look 8.1/10 and in-engine feel 8.0/10. The player's in-game verdict is open |
 | 2026-11-06, v0.40.0 | Implement the next 2099 skill. Luna must score its look and feel at least 8/10 | Freefall ships in v0.41.0 after Luna rates look 8.5/10 and in-engine feel 8.2/10. The player's in-game verdict is open |
 | 2026-11-05, v0.40.0 | Improve the Crane Row enemy models using Blender; a Luna agent must rate the work at least 8/10 before completion | In progress. Ballast has an 8/10 interim still-image score; the full roster and presentation gate remain open |
 | 2026-11-04, unpublished candidate `bf9b63a9` | Both short Freight-drop clips sound good in the game mix | Player-approved those sampled cargo sounds; enemy audio, gameplay, visuals and the complete mix still await player judgment |

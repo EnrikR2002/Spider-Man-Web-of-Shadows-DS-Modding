@@ -340,6 +340,13 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
         report = w.validate_rom(result, target=True)
         ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
         new_glob = result[ge['start']:ge['end']]
+    talon_pounce = None
+    if release.get('talon_pounce'):
+        from tools import talon_pounce as pounce
+        result, talon_pounce = pounce.apply_rom(result)
+        report = w.validate_rom(result, target=True)
+        ge = next(e for e in report['nitrofs'] if e['name']=='Glob.bin')
+        new_glob = result[ge['start']:ge['end']]
     log = {'schema_version': 1, 'clean_rom_sha256': w.sha256(rom), 'output_rom_sha256': w.sha256(result),
            'clean_glob_sha256': manifest['sha256'], 'output_glob_sha256': w.sha256(new_glob),
            'rom_size': len(result), 'used_rom_size': report['header']['used_rom_size'],
@@ -356,6 +363,8 @@ def create_build(rom: bytes, glob: bytes, manifest: dict, overlay: dict[str, byt
         log['crane_visibility'] = crane_visibility
     if freefall is not None:
         log['freefall'] = freefall
+    if talon_pounce is not None:
+        log['talon_pounce'] = talon_pounce
     if gameplay_profile in release_info.PROFILES:
         release = release_info.PROFILE_INFO[gameplay_profile]
         log['release_version'] = release['version']

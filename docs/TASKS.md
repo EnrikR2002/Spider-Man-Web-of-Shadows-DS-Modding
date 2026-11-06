@@ -5,17 +5,16 @@ workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design.
 
 ## Current objective
 
-Freefall, the next 2099 skill after Boarding, is installed through Ground
-Rebound's existing purchase. The player required Luna to score both look and
-feel at least 8/10.
-It reaches an enemy nine units away where the parent misses, and a 53-unit
-drop bounces three Brutes into a manual Talon Lift. The earlier review found
-a stale contact on the same update as a ground R cancel. The final candidate
-clears that contact on both neutral and backward R. All 14 copied-save
-controls and 83 targeted strict tests passed. Luna independently rechecked
-both cancels and rated the installed ROM 8.5/10 look and 8.2/10 in-engine feel
-from timestamped frames and controller traces. Evidence is in
-`reference/freefall.json`.
+Talon Pounce is installed through Super Charge's existing 225 XP purchase.
+Luna rated the exact ROM 8.1/10 for look and 8.0/10 for in-engine feel. A low
+pounce connected across 24.69 units. A rising pounce fed manual Sky Rake and
+handed off to Boarding on the Conductor. Nineteen copied-save gameplay and
+shop controls passed, plus the Freefall cancel regression. Ground R, paid and
+unpaid air R, the wall and form-change controls passed. The full qualification
+and review limits are in `reference/talon_pounce.json`.
+
+Freefall remains in the existing Ground Rebound purchase. Evidence and Luna's
+separate review are in `reference/freefall.json`. The player verdict is open.
 
 Separate Crane Row Blender request: the private Ballast study retains its rig,
 texture and 266-quad budget. Luna's 8/10 covers Ballast stills and sampled
@@ -23,7 +22,7 @@ frames. Normal-speed motion, mixed audio and the other two enemies remain open.
 Reproduce the study with
 `python tools/crane_blender.py --out build/crane-models/reproduce/Versioned.nds`;
 evidence and limitations are in `reference/crane_blender_research_20261105.json`.
-The strict suite passed 800 tests across 107 isolated modules, with no skips.
+The strict suite passed 810 tests across 109 isolated modules, with no skips.
 
 The prior v0.40.0 Crane color/cargo changes received Terra's 8/10 overall
 review; the player approved two short cargo sounds, with visual and gameplay
@@ -48,19 +47,21 @@ unchecked caller registers; and its pin check is skipped when no pin exists.
 
 ## Published build
 
-Stable `build/Spider-Man-WoS-modded.nds` is **v0.41.0**, SHA256
-`d411a9cbce8cb0d679da23673b32b4be2de543ecd60b9ceb2ff25ffeeb7ff70d`.
+Stable `build/Spider-Man-WoS-modded.nds` is **v0.42.0**, SHA256
+`41bb7db548c40dee7c0c290ff88c14dbbcc86be1c139facd0fc15e8784039cd0`.
 `tools/playtest.py build` installed the exact reviewed ROM from the clean
-source. Boot and Options show v0.41.0. The v0.40.0 ROM, metadata and recipe
-are preserved under `build/releases` and `build/version-0.40.0-final`.
+source. Boot and Options show v0.42.0. The v0.41.0 ROM, metadata and recipe
+are preserved under `build/releases` and `build/version-0.41.0-final`.
 The actual 634-byte DSV matched its validated checkpoint byte for byte.
 Read the actual battery afresh before the next lab or release.
 
 ## Blockers and next exact action
 
-Open `Play Spider-Man.cmd`, Continue, and try Black Freefall on air Down+A
-from both a jump and a taller fall. Buy Freefall for 150 XP if the Ground
-Rebound slot is still unowned. A player feel and hardware verdict is open.
+Open `Play Spider-Man.cmd`, Continue, and buy Talon Pounce in the Black
+upgrade list if Super Charge was unowned. Hold Y until Miguel coils, then
+release. Try Up on release against a jumping enemy or while holding toward
+a boss with Boarding owned. Player feel, audible mix and hardware verdicts
+are open. Relentless is next in the approved order.
 
 For the Crane Row study, review Ballast's motion and mixed audio before expanding
 to Maw and Spore: neither available reviewer can play or hear the clip, so the
