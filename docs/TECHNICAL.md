@@ -501,7 +501,9 @@ private 64px direct-color archive; Maw and Spore share `zz_F22_Atlas.nsbtx`.
 The Ballast research tool `crane_blender.py` uses Blender 4.5 on that exact
 parent, replaces 20 old shoulder/wrist quads with 20 authored armor quads and
 retains the original rig, material, texture, effect bones and polygon/vertex
-counts. The model grows by 220 bytes. At the end of the mixed timeout, heap 2
+counts. The model grows by 220 bytes and increases matrix/primitive groups from
+20 to 40, so equal polygon counts do not prove equal GPU time. At the end of
+the mixed timeout, heap 2
 reported 336,900 free bytes in one block; this is a single snapshot, not peak
 crowd headroom. Hardware pacing is unmeasured. A second generation reproduced
 the same candidate hash. Confidence is high for the byte and geometry checks;

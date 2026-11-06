@@ -15,6 +15,7 @@ not review the clip's normal-speed motion or audio. That is not an overall
 rating or completion of the three-enemy request. Reproduce the study with
 `python tools/crane_blender.py --out build/crane-models/reproduce/Versioned.nds`;
 evidence and limitations are in `reference/crane_blender_research_20261105.json`.
+The strict suite passed 800 tests across 107 isolated modules, with no skips.
 
 The prior v0.40.0 Crane color/cargo changes received Terra's 8/10 overall
 review; the player approved two short cargo sounds, with visual and gameplay

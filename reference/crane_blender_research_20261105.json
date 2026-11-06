@@ -13,6 +13,7 @@
     "unchanged": ["other Glob resources", "native rig and animation bindings", "Ballast texture and material", "effect-bone faces", "quad and vertex counts"],
     "model_bytes_before_after": [44524, 44744],
     "quads_before_after": [266, 266],
+    "matrix_primitive_groups_before_after": [20, 40],
     "authoring": "Blender 4.5.10 LTS; twenty added quads replace twenty older shoulder and wrist faces. tools/crane_blender.py reproduced this exact ROM hash and records the Blender version in its metadata."
   },
   "interim_luna_review": {
@@ -43,6 +44,10 @@
     "captures": "build/boot-tests/5f011cbe-walk-creature-duel-ballast-red-kit-b5death2-b9d35666/walk-creature-duel-ballast-red-kit-b5death2",
     "result": "One selected Ballast was set to 1 HP in disposable RAM at frame 643; its native HP reached zero at frame 656 after a hit. The mixed route did not clear.",
     "limit": "This establishes an observed lethal hit under the fixture, not normal-HP clearability or presentation quality."
+  },
+  "validation": {
+    "strict_suite": "800 tests across 107 isolated modules passed with no skips",
+    "log": "work/crane-models/tests-isolated.log"
   },
   "reward_fixture_attempts": [
     "work/crane-row/rework/reward-ballast-native-b5-5f011cbe.json: no spawn while the driver waited at the entrance",
