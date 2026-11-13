@@ -1,17 +1,19 @@
 # Current work and handoff
 
-Updated 2026-11-06 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
+Updated 2026-11-13 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
 workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design.
 
 ## Current objective
 
-Talon Pounce is installed through Super Charge's existing 225 XP purchase.
-Luna rated the exact ROM 8.1/10 for look and 8.0/10 for in-engine feel. A low
-pounce connected across 24.69 units. A rising pounce fed manual Sky Rake and
-handed off to Boarding on the Conductor. Nineteen copied-save gameplay and
-shop controls passed, plus the Freefall cancel regression. Ground R, paid and
-unpaid air R, the wall and form-change controls passed. The full qualification
-and review limits are in `reference/talon_pounce.json`.
+Trial [Relentless Pursuit](ROADMAP.md#relentless-pursuit-ground-evade-follow-up),
+Miguel's ground evade follow-up, in the existing 225 XP Super Charge slot.
+The player rejected v0.42.0's Talon Pounce because A was faster, chained
+better and avoided accidental charging in ground strings. Implementation and
+playtesting are pending.
+
+The [Pounce receipt](../reference/talon_pounce.json) covers the shipped move.
+Red Spider Reflex carries a string node across a dodge. The existing Vortex
+interaction shows where Drill Kick can take priority.
 
 Freefall remains in the existing Ground Rebound purchase. Evidence and Luna's
 separate review are in `reference/freefall.json`. The player verdict is open.
@@ -57,11 +59,30 @@ Read the actual battery afresh before the next lab or release.
 
 ## Blockers and next exact action
 
-Open `Play Spider-Man.cmd`, Continue, and buy Talon Pounce in the Black
-upgrade list if Super Charge was unowned. Hold Y until Miguel coils, then
-release. Try Up on release against a jumping enemy or while holding toward
-a boss with Boarding owned. Player feel, audible mix and hardware verdicts
-are open. Relentless is next in the approved order.
+Next session, implement a private candidate against exact v0.42.0. Follow
+DEVELOPMENT's guarded post-pass workflow and read the latest actual battery
+before creating a disposable copy. This handoff is documentation only.
+
+1. Trace a native Black grounded Y hit → R → Y with Drill Kick and Enhanced
+   Dodge toggled on the copy. Read TECHNICAL's [player state machine](TECHNICAL.md#player-state-machine-and-red-kit-hooks-v020)
+   and [Vortex evade precedent](TECHNICAL.md#conditional-tether-vortex-and-conductor-armor-v031-research).
+   Use current string contact evidence, the native node and the actual evade
+   transition. Check how a buffered Y survives to the normal attack window.
+2. Replace the Pounce routes for owned Black bit 25, including the coil and
+   upward Boarding handoff. Keep event 334, the 225 XP price, existing save
+   ownership and the bit 26 dependency. Update shop text to describe the
+   follow-up and retire the coil description. Defer Quick Charge's new effect.
+3. Qualify the candidate with real inputs against a counterattacking enemy:
+   Y → Y → R → one buffered Y must land the next strike and deal real HP
+   damage. Repeat turning toward a second enemy. Check late taps, holding Y,
+   whiffs, ignored hits, second R, terminal and late-branch nodes, and cleanup
+   on hurt, death, leaving the ground, room or form change. Check deliberate
+   Down+R → Drill Kick and ordinary evade priority with both shared upgrades,
+   Red and unowned behavior, Web Yank/Talon Lift, native air and
+   Boarding routes, and the existing purchase on fresh Continue.
+4. Prepare the qualified candidate and normal-speed footage for the player
+   trial. Responsiveness, spacing and value against real counters still need
+   the player's verdict.
 
 For the Crane Row study, review Ballast's motion and mixed audio before expanding
 to Maw and Spore: neither available reviewer can play or hear the clip, so the

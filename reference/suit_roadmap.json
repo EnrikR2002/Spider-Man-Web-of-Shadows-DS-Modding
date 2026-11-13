@@ -90,7 +90,7 @@
           "Poison Pummel": "Shredder",
           "Power Launch": "Talon Lift",
           "Quick Charge": "Relentless",
-          "Super Charge": "Talon Pounce",
+          "Super Charge": "Relentless Pursuit",
           "Webbed Fury": "Rundown"
         },
         "new_rows": [
@@ -244,12 +244,12 @@
           94,
           95
         ],
-        "status": "talon-pounce-shipped-remaining-slices-designed",
+        "status": "talon-pounce-shipped-evade-follow-up-designed",
         "supersedes": "Hunter revision 2 (15 rows, 2026-10-23), revision 1 and the 2026-10-22 catch/carry/crash/chase proposal; local 2026-10-23 seven-row air/guard proposal (archived at docs/TASM_ROADMAP-local-2026-10-23.md)"
       },
       "design_reference": "../docs/ROADMAP.md#spider-man-2099-black-kit-the-hunter",
       "id": "2099-classic",
-      "implementation_order": "Talon Pounce ships in v0.42.0 after Freefall. Luna rated look 8.1/10 and in-engine feel 8.0/10. Relentless is next in the approved order.",
+      "implementation_order": "Trial Relentless Pursuit in the existing Super Charge purchase next. The player rejected the shipped v0.42.0 Talon Pounce. Defer Quick Charge's new effect until after the trial.",
       "implemented": [
         "Guarded per-form selection in shared player model; exact Red list/texture retained",
         "Fuller chest/back/arms on the preserved native rig; unrelated native motion clips retained",
@@ -270,9 +270,9 @@
       ],
       "kit": "Hunter revision 3 retains Talon Lift, Web Yank, Sky Rake, Reel In, Meteor Catch, Boarding and Freefall. Talon Pounce takes over Super Charge. Twelve Black rows total 1,925 XP.",
       "latest_feedback": {
-        "date": "2026-10-28",
-        "source_version": "0.38.0",
-        "summary": "Player likes Boarding preview motion. Existing Conductor effect sounds bad but is explicitly a separate deferred issue. Terra closes all six metrics8.0..8.5 using direct player playback observation plus its own code/frame/timing review; no in-game/hardware/full-route verdict implied."
+        "date": "2026-11-13",
+        "source_version": "0.42.0",
+        "summary": "Player found Talon Pounce slow, clunky and hard to combo with, preferred ground A, and reported accidental charging during normal Y strings. The player agreed to try a ground evade follow-up in the same purchase and requested a documentation handoff before implementation."
       },
       "name": "Spider-Man 2099 - Across the Spider-Verse inspired",
       "prior_design_snapshot": {
@@ -281,8 +281,8 @@
       },
       "replaces_form": "black",
       "selection_date": "2026-10-11",
-      "status": "v0.42.0-talon-pounce-shipped-player-verdict-open",
-      "validation_limit": "See talon_pounce.json for exact emulator and save controls. Luna scored timestamped frames and in-engine input response. The audible mix, player feel and hardware pacing remain open."
+      "status": "v0.42.0-talon-pounce-shipped-player-rejected",
+      "validation_limit": "See talon_pounce.json for exact emulator and save controls. Luna scored timestamped frames and in-engine input response. The player rejected Pounce in normal play. The evade follow-up awaits implementation and testing."
     },
     {
       "id": "scarlet-kaine",

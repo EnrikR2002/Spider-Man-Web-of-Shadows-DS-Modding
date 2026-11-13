@@ -2,7 +2,7 @@
   "schema_version": 1,
   "snapshot_date": "2026-10-05",
   "purpose": "Historical source notes; current status is in docs/TASKS.md. Read only a selected entry/section with tools/doc_archive.py.",
-  "archive_sha256": "bec597eeb7b22009258f11336f8905a578a7d01fda4a427bc044fd176260647b",
+  "archive_sha256": "20f809390755bf837335ad846713a4618da9083e8a519a19f3e6e648f089f4dc",
   "entries": [
     {
       "path": "AGENTS.md",
@@ -2142,6 +2142,112 @@
       "words": 171,
       "sha256": "0ea444179f31650db0f64781499f1c177a68369c41443d7dbceb45b903c524c2",
       "sections": []
+    },
+    {
+      "path": "docs/ROADMAP-PRE-EVADE-FOLLOWUP-2026-11-13.md",
+      "title": "2099 Talon Pounce and Quick Charge design before the evade follow-up",
+      "snapshot_date": "2026-11-13",
+      "source_revision": "424a3d6c6a59f51beb10e27ab920b5b4b0d19213",
+      "bytes": 50359,
+      "words": 7831,
+      "sha256": "a3767b5596e2a974c06130b35e7eeb742bae990d25cfe8c59fbcd0dac283b992",
+      "sections": [
+        {
+          "line": 1,
+          "heading": "Roadmap",
+          "level": 1
+        },
+        {
+          "line": 16,
+          "heading": "Now",
+          "level": 2
+        },
+        {
+          "line": 26,
+          "heading": "Player direction",
+          "level": 2
+        },
+        {
+          "line": 42,
+          "heading": "Spider-Man 2099 Black kit: the Hunter",
+          "level": 2
+        },
+        {
+          "line": 94,
+          "heading": "Identity",
+          "level": 3
+        },
+        {
+          "line": 126,
+          "heading": "Rules every 2099 move obeys",
+          "level": 3
+        },
+        {
+          "line": 148,
+          "heading": "Controls in Black form (all rows owned)",
+          "level": 3
+        },
+        {
+          "line": 169,
+          "heading": "The fourteen skills",
+          "level": 3
+        },
+        {
+          "line": 353,
+          "heading": "What fights should look like",
+          "level": 3
+        },
+        {
+          "line": 371,
+          "heading": "Implementation guide",
+          "level": 3
+        },
+        {
+          "line": 474,
+          "heading": "Red kit: the Amazing Spider-Man",
+          "level": 2
+        },
+        {
+          "line": 496,
+          "heading": "Chapters",
+          "level": 2
+        },
+        {
+          "line": 498,
+          "heading": "Midnight Line",
+          "level": 3
+        },
+        {
+          "line": 512,
+          "heading": "Crane Row",
+          "level": 3
+        },
+        {
+          "line": 611,
+          "heading": "Creature presentation",
+          "level": 3
+        },
+        {
+          "line": 619,
+          "heading": "Acceptance for any future release",
+          "level": 2
+        },
+        {
+          "line": 631,
+          "heading": "Idea backlog",
+          "level": 2
+        },
+        {
+          "line": 645,
+          "heading": "Player feedback log",
+          "level": 2
+        },
+        {
+          "line": 686,
+          "heading": "Historical designs",
+          "level": 2
+        }
+      ]
     }
   ]
 }

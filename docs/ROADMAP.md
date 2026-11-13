@@ -17,7 +17,7 @@ says go; record every verdict in the [feedback log](#player-feedback-log).
 
 | # | Item | Status | Next step |
 |---|---|---|---|
-| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Talon Pounce v0.42.0 ships. Luna rated look 8.1 and in-engine feel 8.0 | Try low and rising pounces and give an in-game verdict |
+| 1 | [Spider-Man 2099 Black kit](#spider-man-2099-black-kit-the-hunter) | Player rejected the shipped Talon Pounce and agreed to try a [ground evade follow-up](#relentless-pursuit-ground-evade-follow-up) | Implement and qualify the replacement in a candidate for player testing |
 | 2 | Taller 2099, scarlet webs, Hunter's Return and Talon Lift; retained Vortex/Conductor/Vitality | Shipped, agent-tested | Player plays and gives a verdict |
 | 3 | [Midnight Line](#midnight-line) full-route verdict | Shipped, agent-tested | Player replays the full route |
 | 4 | [Crane Row](#crane-row) full vertical route | Shipped, agent-tested | Player replays the full route |
@@ -109,11 +109,11 @@ floor) and uses it against the rest. What he cannot move, he climbs.
 
 | Pillar | Verbs | Skills |
 |---|---|---|
-| Talons | slash, hook, shred, tackle, pin | Rundown, Talon Line, Shredder, Roof Pin |
+| Talons | slash, hook, shred, evade, pin | Rundown, Talon Line, Shredder, Relentless Pursuit, Roof Pin |
 | Webs | yank, reel, zip | Web Yank, Reel In |
-| Air | lift, rake, catch, dive, pounce | Talon Lift, Sky Rake, Meteor Catch, Freefall, Talon Pounce |
+| Air | lift, rake, catch, dive | Talon Lift, Sky Rake, Meteor Catch, Freefall |
 | Boss | board, ride, rip | Boarding (Wing Ripper) |
-| Meter | escalate | Relentless, Apex Predator |
+| Meter | escalate | Apex Predator |
 
 Mobs already support this vocabulary in the engine: stagger, knockdown, launch,
 air juggle, web yank and hold, floor drag and far throw (TECHNICAL
@@ -145,12 +145,12 @@ a varied kit also scores better.
 7. **Original motion.** Every move gets its own continuous authored clip; never
    rename a stock attack as a new move.
 
-### Controls in Black form (all rows owned)
+### Planned controls in Black form (all rows owned)
 
 | Input | Action |
 |---|---|
 | Y, Y, Y... | Native Black string; late-pause branches become Talon Line and Shredder |
-| Hold Y, release | Talon Pounce (Up held at release aims high) |
+| Land ground Y, R, tap Y | Relentless Pursuit (planned). Resume the string after one native evade |
 | Air Y | Sky Rake |
 | Down+Y next to a downed enemy | Roof Pin (otherwise native Down+Y) |
 | A on the ground | Native Power Dash; A again after a dash hit = Rundown |
@@ -159,7 +159,7 @@ a varied kit also scores better.
 | Air Down+A | Native Hammer Slam with Freefall's height bonus |
 | Down+A on the ground or in a ground combo | Web Yank: pure pull into melee range; no point-blank attack |
 | Air Up+A | Reel In on an eligible foe below/ahead; otherwise native air A |
-| Web Yank zip, Up-pounce or jump into a boss while holding toward it | Boarding; while riding, Y rakes and A is Wing Ripper |
+| Web Yank zip or jump into a boss while holding toward it | Boarding; while riding, Y rakes and A is Wing Ripper |
 | R | Native evade; lets go of any 2099 move |
 | B | Native jump, swing and Enemy Kick-Off |
 
@@ -180,8 +180,8 @@ Distances and timings below are starting values for tuning, not measurements.
 | 3 | Ground Rebound (22) | Freefall | - | Air |
 | 4 | Black Widowmaker (23) | Talon Line | - | Talons |
 | 5 | Poison Pummel (24) | Shredder | Black Widowmaker | Talons |
-| 6 | Super Charge (25) | Talon Pounce | - | Air |
-| 7 | Quick Charge (26) | Relentless | Super Charge | Meter |
+| 6 | Super Charge (25) | Relentless Pursuit | - | Talons |
+| 7 | Quick Charge (26) | Relentless | Super Charge | Deferred |
 | 8 | New (83) | Web Yank | - | Webs |
 | 9 | New (84) | Reel In | Web Yank | Webs |
 | 10 | New (85) | Sky Rake | - | Air |
@@ -230,18 +230,12 @@ picks the ender: Up launches (0x25), Forward blasts back (0x1F), Down smashes
 the enemy to the floor (knockdown plus one small bounce). Heavy: flurry
 staggers, then a heavy rip.
 
-**6. Talon Pounce (Super Charge, shipped v0.42.0, 225 XP).** Hold Y through the
-coil, then release for a talons-first leap. Hold Up on release to aim high.
-A grounded foe takes a knockdown. An airborne foe takes an air-juggle hit
-(0x14) and Miguel stays airborne for Sky Rake. Supported bosses take a
-stagger, and an upward pounce while holding toward an eligible boss can
-enter purchased Boarding. The low strike reached 24.69 units in the lab.
-Walls block movement and contact. Quick Charge halves the native coil time.
+**6. Relentless Pursuit (Super Charge, designed, 225 XP).** Working name for
+the ground evade follow-up below. Reuses bit 25 and event 334.
 
-**7. Relentless (Quick Charge).** Passive. Halves the Pounce coil. During any
-2099 ender's recovery, holding Y fires Pounce and Down+A fires Web Yank the
-moment the ender ends, so the hunt moves to the next target without a reset.
-One stored cancel; hurt, R, a form switch or a room change clears it.
+**7. Relentless (Quick Charge, deferred).** Keep bit 26 and the Super Charge
+dependency. The coil and Pounce-based cancel plan is retired. Decide the
+row's new role separately after the player tests the evade follow-up.
 
 **8. Web Yank (new; pure-pull revision approved 2026-10-25).** Ground Down+A,
 including during a ground combo, ties separate scarlet lines to up to five enemies
@@ -306,8 +300,8 @@ not claimed. All six Terra metrics reach 8.0..8.5. The player likes the normal-
 speed preview motion and defers the bad existing Conductor sound as separate.
 In-game feel, hardware pacing and full-route balance remain player gates.
 
-**14. Apex Predator (new).** Passive. 2099 scraps instead of evading, so the
-meter both raises his power and keeps him in the fight, the way Red's Momentum
+**14. Apex Predator (new).** Passive. The meter raises 2099's power and keeps
+him in the fight, the way Red's Momentum
 (speed by tier) and Overclock (tier-5 web shot) reward Red. It reads the native
 combo tier every update; effects and visuals stack by tier and vanish the moment
 the tier drops. It never spends the meter and adds no damage beyond native tier
@@ -350,10 +344,41 @@ Open questions for the capstone lab:
   existing player draw adapter (`spider2099_visual`) select it. If no material
   palette field can be switched, fall back to red web lines plus HUD tint.
 
+### Relentless Pursuit ground evade follow-up
+
+**Designed for a player trial, 2026-11-13.** Talon Pounce still ships in
+v0.42.0. The replacement removes the hold-Y coil, both leaps and the upward
+Boarding entry from Pounce. Existing Super Charge purchases carry over.
+
+- **Use case.** Land Y → Y, evade a counter with R, then tap Y to land the next
+  strike. Use the evade to stay on the same enemy or turn toward another
+  enemy already within claw range. Ground A remains the approach tool.
+- **Entry and timing.** A real accepted hit from the current grounded Y
+  string earns one continuation. R enters a native ground evade. A fresh
+  plain Y during the evade or shortly after it buffers one strike for the
+  first normal attack window. Tune the grace period with real input. Keep
+  native evade movement, protection and recovery.
+- **Strike and facing.** Advance to the normal next string strike with the
+  player's facing and native hitboxes. A finished string starts fresh.
+  Evade time does not qualify as the deliberate Black Widowmaker or Poison
+  Pummel pause. Native spacing, damage, reactions and combo meter rules apply.
+- **Scope and cleanup.** A whiff, ignored hit, neutral evade or second dodge
+  leaves the ordinary controls in charge. A new landed ground Y hit can earn
+  another continuation. Hurt, death, leaving the ground, room or form change
+  and expiry clear it. The saved continuation belongs to the current player
+  and string and needs no enemy lock.
+- **Input priority to qualify.** Deliberate Down+R roll → Y keeps native
+  Drill Kick. A plain Y on a qualifying ordinary evade gets the string
+  continuation ahead of Drill Kick. Check Enhanced Dodge alone and with
+  Drill Kick owned. Directional Y and other actions retain their native or
+  purchased routes. After the dodge, Down+A can gather with Web Yank and
+  Up+A can launch with Talon Lift. Air skills and Boarding retain their own
+  R release paths and jump/heavy-zip Boarding entrances.
+
 ### What fights should look like
 
-- **Hunt:** Web Yank the enemy at the back -> Talon Line through it -> hook it
-  behind -> Relentless pounce onto the next.
+- **Hunt:** Web Yank the enemy at the back -> land a ground string -> evade
+  its counter -> resume on that enemy or turn the next strike into another.
 - **Sky:** Talon Lift holding Up -> Sky Rake -> Meteor Catch into the floor ->
   Talon Lift the bounce, or Reel In a fresh victim from the air.
 - **Crowd:** Shredder's Forward ender into a group -> Rundown through the
@@ -362,7 +387,7 @@ Open questions for the capstone lab:
 - **Meter:** vary the string to reach tier 3 and every ender knocks the room
   flat; base Web Yank gathers up to five. Hold tier 5 and every hit feeds
   health back while the suit glows red.
-- **Boss (the Vulture plan):** Web Yank or Up-pounce to close in -> Boarding,
+- **Boss (the Vulture plan):** Heavy Web Yank zip or jump into range -> Boarding,
   raking from behind -> Wing Ripper forces a stagger and throws Miguel clear ->
   Sky Rake at head height -> Freefall from above -> the next boss attack throws
   a rider off -> R or Kick-Off out -> board again. No forced boss movement,
@@ -437,8 +462,8 @@ Engine facts to reuse, all in TECHNICAL:
 1. **Pipeline proof:** Web Yank alone (ground Down+A, web lines, Black-only clip
    routing, heavy rule, one new shop row).
 2. **Sky slice:** Talon Lift, Sky Rake, Reel In, Meteor Catch.
-3. **Boss slice:** Boarding with Wing Ripper, Freefall, Talon Pounce,
-   Relentless.
+3. **Boss slice:** Boarding with Wing Ripper and Freefall shipped. Next,
+   trial Relentless Pursuit in the Super Charge slot. Quick Charge is deferred.
 4. **Ground slice:** Rundown, Talon Line, Shredder, Roof Pin.
 5. **Meter capstone:** Apex Predator, last because it modifies the others.
    Tiers 2..5 must be distinguishable side by side in native-scale footage.
@@ -467,9 +492,10 @@ tests, 26 gameplay/save controls and all-six-metric Terra review; the player
 accepts preview motion and defers the Conductor sound issue. On 2026-11-06 the
 player requested the next skill and a Luna score of at least 8/10 for look and
 feel. v0.41.0 ships Freefall after Luna's recheck of the exact release build.
-The player's next request moves Talon Pounce into v0.42.0. Luna rated the
-exact build 8.1/10 look and 8.0/10 in-engine feel. The player verdict remains
-open. Relentless follows in the approved order.
+Talon Pounce shipped in v0.42.0 after Luna rated the exact build 8.1/10 look
+and 8.0/10 in-engine feel. The player rejected it in normal play and chose to
+try the ground evade follow-up. The prior Talon Pounce and Quick Charge design
+is archived as `docs/ROADMAP-PRE-EVADE-FOLLOWUP-2026-11-13.md`.
 
 ## Red kit: the Amazing Spider-Man
 
@@ -649,6 +675,8 @@ Newest first. Record each new verdict here the day it is given.
 
 | Date / build | Player said | What it decided |
 |---|---|---|
+| 2026-11-13, v0.42.0 | Agreed to try the ground evade follow-up and asked for a docs handoff before implementation. | Trial the one-dodge ground string follow-up in the same slot. Implement it in a new session. |
+| 2026-11-12, v0.42.0 | Most changes are good. A is faster and chains better than Talon Pounce, which feels slow, clunky and one-off. Holding Y slightly too long interrupts normal ground strings. | Player rejected Talon Pounce and preferred exploring a ground evade follow-up. |
 | 2026-11-06, v0.41.0 | Implement the next 2099 skill. Luna must rate look and feel at least 8/10 | Talon Pounce ships in v0.42.0 after Luna rates look 8.1/10 and in-engine feel 8.0/10. The player's in-game verdict is open |
 | 2026-11-06, v0.40.0 | Implement the next 2099 skill. Luna must score its look and feel at least 8/10 | Freefall ships in v0.41.0 after Luna rates look 8.5/10 and in-engine feel 8.2/10. The player's in-game verdict is open |
 | 2026-11-05, v0.40.0 | Improve the Crane Row enemy models using Blender; a Luna agent must rate the work at least 8/10 before completion | In progress. Ballast has an 8/10 interim still-image score; the full roster and presentation gate remain open |
