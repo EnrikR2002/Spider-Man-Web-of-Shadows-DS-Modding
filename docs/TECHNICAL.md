@@ -3,7 +3,9 @@
 This is the technical notebook; sections carry their own version/date and evidence.
 Older sections describe earlier contracts or experiments. Start with the topic map
 below, search headings and read bounded sections. Never bulk-read it at startup.
-Confirmed fields, hypotheses, unknown bytes and confidence belong here. Reusable
+Confirmed fields, hypotheses, unknown bytes and confidence belong here. Before
+reading prose about an address, run `python tools/engine_map.py <address>`: it
+names the address and lists every line here that mentions it. Reusable
 commands/evidence workflow: [DEVELOPMENT](DEVELOPMENT.md); shipped behavior/history:
 [CHANGES](CHANGES.md); native gameplay: [OG_GAMEPLAY](OG_GAMEPLAY.md); current
 objective/build and next action: [TASKS](TASKS.md).
@@ -12,6 +14,7 @@ objective/build and next action: [TASKS](TASKS.md).
 
 | Working on | Start here | Historical context when needed |
 |---|---|---|
+| Any engine address, class, vtable slot, struct field, state, action, ability bit or mod hook | `python tools/engine_map.py`, then [Engine map](#engine-map-rtti-classes-state-tables-and-hook-census-2026-11-14) | The topic rows below hold the prose evidence each entry cites |
 | Current Midnight boss contact, guard/counter handling, active route/map and ramp | [Reliability correction (0.28)](#reliability-and-active-route-correction-028-research) | [Combo openings/anatomy (0.27)](#combo-openings-and-coherent-creature-motion-027-research), [audio/poise (0.26)](#voltage-correction-quiet-cues-and-ineffective-poise-026-research) |
 | Current Skitter and Crane pursuit/hoist finish | [Scoped finish (0.29)](#scoped-movement-and-chapter-finish-v0290) | [Contact/lifecycle correction (0.24)](#midnight-enemy-rejection-contact-diagnosis-2026-10-18), [Midnight anatomy (0.27)](#combo-openings-and-coherent-creature-motion-027-research), [Creature Forge](#creature-forge) |
 | Current room envelopes, roofs, shutters and persistence | [Room/contact correction (0.24)](#midnight-enemy-rejection-contact-diagnosis-2026-10-18), [active-route correction (0.28)](#reliability-and-active-route-correction-028-research) | [Chapter spectacle](#chapter-spectacle-implementation-v0230-2026-10-17), [chapter renewal](#chapter-renewal-v0210-2026-10-17), [Crane terrain](#crane-row-terrain-overhaul-v0170-2026-10-15) |
@@ -837,6 +840,148 @@ sprites, UI or rooms. It also gives no struct layouts, no game-function names,
 no data matching and no extraction or reinsertion beyond NitroFS. Formats
 remain owned by the sections above. To find each per-type loader, run
 `decomp_xref.py callers` from the decoder, the BTX0 helper and the getters.
+
+### Engine map: RTTI classes, state tables and hook census (2026-11-14)
+
+Clean CS5E ARM9 `e541bfcd`; hook census for published v0.42.0. The facts below
+are stored as data, not only prose: `reference/engine_classes.json` (generated,
+`tools/arm9_rtti.py`), `reference/engine_hooks.json` (generated,
+`tools/arm9_hooks.py`) and `reference/engine_symbols.json` (curated). Read them
+through `python tools/engine_map.py`; DEVELOPMENT "Engine map lookups" has the
+commands. Record a new verified name, field or enum value in the curated file
+and its evidence in the owning section here.
+
+**RTTI (high; structural read of the image).** The ARM9 keeps Itanium-ABI
+run-time type information. Each polymorphic class has a `type_info` record
+`{vptr, mangled-name pointer, bases}`: the vptr is `0x0213DF90`
+(`__class_type_info`, no base), `0x0213DF80` (`__si_class_type_info`, one base
+pointer) or `0x0213DF70` (`__vmi_class_type_info`: flags, count, then
+`{base, offset << 8 | flags}` pairs). Each vtable is `[offset-to-top,
+type_info, slots...]`. The scan finds 365 classes and 374 vtables with 4,013
+slots (1,933 distinct virtual functions) and no unresolved base. A null slot is
+a pure virtual. Mangled names demangle to the original C++ names
+(`SpideyStateMachine`, `gfx3d::AnimModel`, `xbd::ModelSet`).
+
+- **Layout rule (high).** `Actor` = `Process` at +0 and `GameActor` at +8;
+  `Process` = `noncopyable` at +0 and `Weakable` at +4; `Character` and
+  `WorldObject` add `GameAnimCommandObserver` at +20. This is why actor+4 is the
+  weak-reference link, actor+8 the hit interface and actor+0x14 a third vptr.
+- **One contiguous table group (high).** A class's vtables follow each other in
+  memory and a subclass's new virtuals are appended to the last one, yet native
+  code calls them through the first vptr. `[[actor]+0x184]` (Spidey
+  `HasAbility`) is therefore slot +0x64 of the third table. The tools print
+  offsets from the first vtable, which is the number in the disassembly.
+- **Thunks (high).** Secondary-table entries are `ldr ip,[pc,#4]; add rX,rX,ip;
+  b target; .word -offset`. `GameActor+0x40` (`ReceiveHit`) reaches
+  `Character` vtable+0xAC `0x02074AC8`; `GameActor+0x5C/+0x60/+0x64` reach
+  Spidey `GetHealth`/`GetMaxHealth`/`SetHealth` at vtable+0x170/+0x174/+0x15C.
+- **Gameplay classes.** `Character` <- `Spidey` <- `MiniBoss`; `Character` <-
+  `Enemy` <- `NormalEnemy`, `Venom`, `MegaVenom`; `Character` <- `NPC`;
+  `InteractiveGameActor` <- `WorldObject` <- `WorldObjectMobile` <-
+  `WorldObjectThrowable`, `DoorObject`, `Projectile`; `Actor` <- `EnemySpawner`,
+  `WebLine`, `SavePoint`, `ScriptTimer`, `TimerWatcher`, `SoundEmitter`,
+  `RewardSetSpewer`, `ProjectileSpawner`, the trigger family and the orbs.
+  `CharacterStateMachine` <- `SpideyStateMachine` <- `MiniBossStateMachine`,
+  and <- `EnemyStateMachine` <- `VenomStateMachine`, `MegaVenomStateMachine`.
+  `CharacterControl` <- `HumanController`, `EnemyController`,
+  `MiniBossController`, `NPCController` (7 slots; not studied).
+- **Factory signatures (high for the types, low for the use).** The
+  `CallerDetail::CallerImpl<...New<T>...>` names carry constructor argument
+  types, for example `New<EnemySpawner>(EEnemyEncounterType,
+  EEnemySpawnIntent, int, bool)` and `New<DoorObject>(EDoorObjectType)`. Which
+  OBJ command builds each one is not traced.
+
+**State machine core (high; disassembly 2026-11-14, fields seen in RAM).**
+`CharacterStateMachine::Update` `0x020776BC` calls vtable+0xA4 (`PreThink`),
++0xA8 (`Think`, returns a state or `0x7FFFFFFF`), `SetState` `0x02077844` when
+the result differs or byte +4 is set, then +0xB4 (`UpdateState`). `LateUpdate`
+`0x02077734` does the same with +0xAC (`LateThink`), else counts +0x08, then
+calls +0xBC. `SetState` calls +0xB8 (`ExitState`), stores +0x18 previous and
++0x14 state, calls `Character::RequestAction(actor, &table[state])` with the
+table pointer at +0x10 and the actor at +0x0C, then +0xB0 (`EnterState`).
+
+- **Per-state tables (high).** Each state machine has four parallel tables:
+  default action (u32) and enter, update and exit member pointers (8 bytes:
+  function or vtable offset, then adjust; bit 0 of adjust marks a virtual).
+  Player: 92 states, `0x0213483C`, `0x021349AC`, `0x02134C8C`, `0x02134F6C`.
+  Enemy: 54 states, `0x02132CC0`, `0x02132D98`, `0x02132F48`, `0x021330F8`.
+  The action tables are zero in the ROM and filled at start-up. They were read
+  from RAM and are identical in about 100 dumps from clean to v0.40 builds;
+  the enemy table reproduces every state/action pair recorded in "Hit
+  pipeline". `engine_map.py enum PlayerState` and `enum EnemyState` list them.
+- **Transition lists (high).** Player `Think` `0x020B4888` runs exactly one
+  list: `0x021346B4` if `IsHurtState` (62..78, 80, 81), else `0x02134590` if
+  `IsCarryState` (82..90), else `0x0213478C` if `IsAirState`, else `0x02134560`
+  if `IsCrawlState` (7..14, 61), else the ground list `0x021346FC` (17
+  entries). `LateThink` runs `0x021345C0`. List order is priority. `engine_map.py
+  table GroundTransitions` prints each entry with a static digest (inputs read,
+  ability bits tested, states returned). The digest matches compiler idioms
+  only; confirm in `dis`.
+- **OBJ opcode handlers (high).** `Obj::DispatchEvent` `0x0203B400` indexes
+  12-byte records at `0x021199F8`: a member pointer to the handler, then a
+  second function (not decoded). Opcodes run 0x00..0x26. `engine_map.py table
+  EventHandlers` lists all 39 with the named functions each calls; only the
+  nine in `enum ObjOpcode` have a documented meaning. `0x0203970C`, just
+  before them, is an empty `Character` virtual (vtable+0xC0), not a handler.
+- **Correction (medium).** `0x020B5774`, called the evade transition above,
+  first handles roll follow-ups: in states 57/58/25 a queued Y returns 49
+  (Drill Kick, bit 7) or 50 (Launching Uppercut, bit 6, Up). It handles R after
+  that. The v0.2 state table labels 1 "walk" and 6 "run", but their default
+  actions are Run and Crawl. Which is right was not re-traced.
+- **Dodge follow-up window (high for the code; timing not runtime-checked).**
+  In dodge state 53 the same function, from `0x020B5950`, reads
+  `updates_in_state`. Once it exceeds 8, a queued Y, B or A makes the function
+  return `0x7FFFFFFF`, so the later ground transitions (jump, web moves,
+  `AttackTransition`) take that input. Otherwise it returns 57 when
+  controller+0x24 is 6, takes an Enhanced Dodge branch (bit 9 and
+  controller+0x20 != 8 return 54 or 55; not decoded), or stays for the first 8
+  updates (12 while flag 0x40 is set). After that, bit 9 with a queued R
+  returns 54. "Ground string nodes" gives a string node 10 updates of life
+  after state 46, so a Y buffered through a native dodge can continue the
+  string only in about two updates.
+
+**Action ids (high).** An action id is the position of its animation name in
+one global alphabetical list, 1 (`AirAttack1`) to 185 (`ZipUp`). All 152 actor
+XBDs that parse agree apart from a few alias clips. `enum Action` lists it.
+
+**Ability bits (high).** Bits 0..72 were read from the six native shop tables
+and named from the game's strings: 0..5 story, 6..12 Both Suits, 13..19 Red,
+20..26 Black, 27..54 stat upgrade levels, 56..67 base moves, 68..72 maps.
+`enum AbilityBit` adds the mod rows on bits 74..88.
+
+**Live objects (high for the scenes read).** `engine_map.py objects RAM`
+classifies every used heap block by its vtable. Block sizes: `Spidey` 0xF4,
+`SpideyStateMachine` 0x98, `HumanController` 0x68, `NormalEnemy` 0x8C,
+`EnemyStateMachine` 0x80, `EnemyController` 0xAC, `SideScrollCamera` 0x204,
+`DoorObject` 0x1D0, `SavePoint` 0x10C, `InvisibleTrigger` 0xA8.
+The "motion" block at actor+0x30 is 0x300 bytes and is not a class. It starts
+with the owner pointer and embeds an `SRTRenderableWrapper` at +4 and a
+`ShadowVolume` at +0x188. **Hazard:** "motion+0x310" in the hit notes is the
+next heap block, not a motion field. In training-room dumps it is the player's
+`gfx3d::AnimModel`, whose real pointer is motion+0x58; in other rooms it was a
+different block. Built hits have worked with it, but nothing guarantees the
+neighbour.
+
+**Hook census (high; byte comparison of 59 retained release ROMs).** v0.42.0
+differs from the clean native image in 144 words: 113 in code, 24 in rodata, 6
+in data and 1 in ITCM. The appended image runs `0x0214F420`-`0x02179A20` in 33
+blocks. `engine_hooks.json` gives every site its clean word, its current word
+(the preimage the next post-pass must expect) and its history. The longest
+chains are `Character::CommitAction+0x5C` `0x02070484` (10 links),
+`Character::Update+0xF8` `0x02073B60`, `Contact::Dispatch` `0x02078628` and
+`SpideyStateMachine::Think`. The mod also replaces four `EnemyStateMachine`
+vtable words (`Think`, `LateThink`, `EnterState`, `UpdateState`).
+
+**Function entries (medium-high).** Calls, vtable slots, table entries and
+stored pointers to a push prologue give 6,659 ARM entries. That recovers 95% of
+the EUR decomp's bounds and about 1,000 entries it merges (thunks, call
+targets). Thumb code and leaf functions reached only by pointer are not found,
+so "inside function X" can name the previous entry.
+
+**Unknown.** Most vtable slots are unnamed. Not decoded: the four enemy think
+lists' conditions, the `CharacterControl` classes, the camera, HUD component
+slots, the factory-to-OBJ-command mapping, `Stats` beyond the listed fields
+and the hit reaction records.
 
 ## Animation authoring and current evidence
 

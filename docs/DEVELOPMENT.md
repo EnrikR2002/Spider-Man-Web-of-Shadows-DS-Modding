@@ -84,7 +84,9 @@ Copy the established shape (`tools/vortex_forge.py`, `.s`, `_art.py`,
    `gameplay_profile.json` and `changes.json`.
 3. ARM code goes in `tools/<feature>.s`, assembled with Keystone from
    `work/research-libs`; run the literal/branch checks from
-   `tools/assemble_tasm_kit.py`. Keep the 32 KiB player kit exact unless the
+   `tools/assemble_tasm_kit.py`. Take each hook site's expected word and chain
+   target from `python tools/engine_map.py hooks <site>`, not from an older
+   tool. Keep the 32 KiB player kit exact unless the
    change deliberately extends it, and give new code its own guarded block.
 4. Authored motion uses `tools/kit_choreography.py` (see TECHNICAL
    [Kit animation authoring](TECHNICAL.md#kit-animation-authoring)).
@@ -100,12 +102,14 @@ Copy the established shape (`tools/vortex_forge.py`, `.s`, `_art.py`,
    `reference/<feature>.json`, the release as a new top CHANGES section, the
    README "Current release" line and TASKS "Published build" (the contract
    checks that all of them name the same version), then run
-   `python tools/doc_contract.py freeze` to freeze the new CHANGES section.
+   `python tools/doc_contract.py freeze` to freeze the new CHANGES section and
+   `python tools/arm9_hooks.py` to refresh `reference/engine_hooks.json`.
 
 ## Find the implementation
 
 | Task | Read first in TECHNICAL | Implementation / evidence |
 |---|---|---|
+| What an address, class, vtable slot, field, state, action, ability bit or hooked site is | [Engine map](TECHNICAL.md#engine-map-rtti-classes-state-tables-and-hook-census-2026-11-14) | `engine_map.py` over `reference/engine_classes.json`, `engine_hooks.json`, `engine_symbols.json`; see [Engine map lookups](#engine-map-lookups) |
 | v0.29 Skyjack/Skitter/Crane finish and current qualification | [Scoped finish](TECHNICAL.md#scoped-movement-and-chapter-finish-v0290) | `chapter_finish.py`, `_kit`, `_motion`, `_skitter`, `_audio`, `_crane`, `_lab`; `reference/chapter_finish.json` |
 | Current Midnight route/map and reliable boss/ramp contact | [Reliability correction](TECHNICAL.md#reliability-and-active-route-correction-028-research) | `midnight_reliability.py`, helpers `_combat/_rooms/_lab`; `owned_player_lab.py`; `reference/midnight_reliability.json` |
 | Inherited Midnight anatomy/motion and ordinary combo openings; apply the newer reliability layer too | [Combo openings](TECHNICAL.md#combo-openings-and-coherent-creature-motion-027-research) | `midnight_finale.py`, helpers `_combat/_motion/_art`; `reference/midnight_finale.json` |
@@ -157,6 +161,47 @@ map: read them from USA literals. Before you hook an address, confirm the USA
 instruction words with `python tools/kit_lab.py disasm ADDR` (capstone from
 `work/research-libs`) rather than by hand. Treat m2c drafts as reading aids, not
 as verified semantics.
+
+### Engine map lookups
+
+Ask the engine map before you grep prose or disassemble by hand. It needs no
+decomp checkout. The first six commands work in a fresh clone; the rest need
+the clean ROM.
+
+```bash
+python tools/engine_map.py 0x020B5774         # name, class slot, mod hooks, callers, every doc/tool mention
+python tools/engine_map.py find health        # symbols, classes, fields, enum values by text
+python tools/engine_map.py class Spidey       # bases, subclasses, named vtable slots (--slots: all)
+python tools/engine_map.py struct Motion      # curated fields; `enum PlayerState` for values
+python tools/engine_map.py table GroundTransitions   # a native table with a digest per entry
+python tools/engine_map.py hooks 0x02070484   # changed sites: by address, version or release title
+python tools/engine_map.py refs StartMain.xbd # code that loads a literal: address, number or Glob name
+python tools/engine_map.py dis 0x020B5774 60  # annotated disassembly; --rom ROM reads a modded image
+python tools/engine_map.py objects ram.bin    # live heap objects by class in a kit_lab --ram dump
+```
+
+- **Hooking a native site.** `hooks ADDRESS` shows its clean word, its word in
+  the published ROM and the release that last changed it. That current word is
+  the preimage your post-pass must expect, and its branch target is the chain
+  link you must call. `ADDRESS` also lists other changed sites in the same
+  function. `dis --rom build/Spider-Man-WoS-modded.nds` reads the published
+  code, extension blocks included.
+- **Finding the code for a behaviour.** Start from the state: `enum
+  PlayerState`, then `table EnterHandlers` (or `Update`, `Exit`, the transition
+  lists). Each row names its function and what it reads and returns. The
+  digest is pattern matching: confirm the branch you need in `dis`.
+- **Finding an object in RAM.** `objects` gives each class's live addresses and
+  block sizes; `class NAME` gives the vtable words labs can search for.
+- **Recording what you learn.** Add a verified name, field, enum value or table
+  to `reference/engine_symbols.json` (its `conventions` block explains the
+  fields) and the evidence to TECHNICAL, then run
+  `python tools/engine_map.py check`. Name a vtable slot once, on the class that
+  declares it; every override inherits the name. For a new member-pointer
+  table, paste the output of `engine_map.py ptmf ADDRESS [COUNT]` as its
+  `entries`. Do not edit the two generated catalogs. `python tools/arm9_rtti.py` rewrites the class catalog from the
+  clean ROM. `python tools/arm9_hooks.py` rewrites the hook catalog from the
+  retained release ROMs: run it after every publication, or
+  `tests.test_engine_map` fails.
 
 ### Blender model bridge
 

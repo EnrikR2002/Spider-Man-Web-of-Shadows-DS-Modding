@@ -1,6 +1,6 @@
 # Current work and handoff
 
-Updated 2026-11-13 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
+Updated 2026-11-14 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
 workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design.
 
 ## Current objective
@@ -14,6 +14,13 @@ playtesting are pending.
 The [Pounce receipt](../reference/talon_pounce.json) covers the shipped move.
 Red Spider Reflex carries a string node across a dodge. The existing Vortex
 interaction shows where Drill Kick can take priority.
+
+**Engine map (2026-11-14, no game change).** `python tools/engine_map.py`
+answers what an engine address, class, state, action, ability bit or
+mod-changed site is. All 365 game classes, both state machines' tables, the
+action list, the native ability bits and every native word the mod changed are
+catalogued in `reference/engine_*.json`. Evidence and unknowns: TECHNICAL
+"Engine map". Commands: DEVELOPMENT "Engine map lookups".
 
 Freefall remains in the existing Ground Rebound purchase. Evidence and Luna's
 separate review are in `reference/freefall.json`. The player verdict is open.
@@ -68,6 +75,11 @@ before creating a disposable copy. This handoff is documentation only.
    and [Vortex evade precedent](TECHNICAL.md#conditional-tether-vortex-and-conductor-armor-v031-research).
    Use current string contact evidence, the native node and the actual evade
    transition. Check how a buffered Y survives to the normal attack window.
+   Static head start, unconfirmed in a trace (`engine_map.py table
+   GroundTransitions`, `dis 0x020B5950`): in dodge state 53 the evade
+   transition ignores a queued Y for 8 updates, then lets the attack
+   transition take it; the string node lives 10 updates after state 46.
+   Existing hooks there: `0x020B57A0`, `0x020B5C58`.
 2. Replace the Pounce routes for owned Black bit 25, including the coil and
    upward Boarding handoff. Keep event 334, the 225 XP price, existing save
    ownership and the bit 26 dependency. Update shop text to describe the
@@ -92,13 +104,8 @@ fixture observed a native Ballast death, not a normal-HP clear. Then test the
 remaining models, review the final composition with Luna, and publish after
 all required qualification. Do not push.
 
-Side research (2026-11-03): the external EUR decompilation was read for asset
-pipeline knowledge. Its findings, limits and the EUR-to-USA address rule are in
-TECHNICAL "External EUR decompilation and asset load path"; query it with
-`tools/decomp_xref.py` over a private `work/decomp` clone. It adds no asset
-format parsers. Its 2026-11-05 follow-up maps the native heaps (models in heap 2,
-textures freed after VRAM upload); measure main-RAM headroom with
-`tools/heap_report.py`. Texture VRAM headroom is still unmeasured.
-Blender model bridge (2026-11-05): `tools/model_bridge.py` exports in-scope
-character models to glTF and imports Blender edits on the native rig; DEVELOPMENT
-"Blender model bridge" has the workflow. No bridged model is in a release.
+Engine map follow-ups: name more vtable slots and fields, decode the enemy
+think lists and `CharacterControl`, map OBJ commands to factory classes. Run `python tools/arm9_hooks.py` after each publication.
+Other research tools (see DEVELOPMENT): `decomp_xref.py`, `heap_report.py`
+(texture VRAM still unmeasured) and `model_bridge.py` (no bridged model is in
+a release).

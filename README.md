@@ -18,6 +18,7 @@ Then read the relevant section; routine startup does not require every document.
 ```powershell
 python tools/run_tests.py          # tests; a fresh clone skips private-input cases
 python tools/tool_index.py vortex  # find a tool by name or purpose
+python tools/engine_map.py find evade  # what an engine address, class or state is
 python tools/doc_contract.py check # every documentation rule, links included
 ```
 
