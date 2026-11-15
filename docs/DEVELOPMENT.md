@@ -190,6 +190,11 @@ python tools/engine_map.py objects ram.bin    # live heap objects by class in a 
   PlayerState`, then `table EnterHandlers` (or `Update`, `Exit`, the transition
   lists). Each row names its function and what it reads and returns. The
   digest is pattern matching: confirm the branch you need in `dis`.
+- **Driving an enemy.** Its brain presses the state machine's controls
+  (`class CharacterStateMachine`), and `Think` turns the latched `enum
+  EnemyCommand` bits into states (`table EnemyStateMachine::GroundTransitions`).
+  Shipped builds already replace the enemy `Think`: start from
+  `hooks 0x02133410`.
 - **Finding an object in RAM.** `objects` gives each class's live addresses and
   block sizes; `class NAME` gives the vtable words labs can search for.
 - **Recording what you learn.** Add a verified name, field, enum value or table

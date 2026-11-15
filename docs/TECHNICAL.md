@@ -884,7 +884,8 @@ a pure virtual. Mangled names demangle to the original C++ names
   `CharacterStateMachine` <- `SpideyStateMachine` <- `MiniBossStateMachine`,
   and <- `EnemyStateMachine` <- `VenomStateMachine`, `MegaVenomStateMachine`.
   `CharacterControl` <- `HumanController`, `EnemyController`,
-  `MiniBossController`, `NPCController` (7 slots; not studied).
+  `MiniBossController`, `NPCController`; slot +0x10 is the per-update
+  `Update` (see "Enemy AI" below).
 - **Factory signatures (high for the types, low for the use).** The
   `CallerDetail::CallerImpl<...New<T>...>` names carry constructor argument
   types, for example `New<EnemySpawner>(EEnemyEncounterType,
@@ -940,6 +941,47 @@ table pointer at +0x10 and the actor at +0x0C, then +0xB0 (`EnterState`).
   after state 46, so a Y buffered through a native dodge can continue the
   string only in about two updates.
 
+**Enemy AI (high for the code; disassembly 2026-11-15).** Fields were checked
+in 38 enemies across 40 dumps whose RAM still holds the native enemy `Think`.
+Shipped builds replace the `EnemyStateMachine` `Think`, `LateThink`,
+`EnterState` and `UpdateState` vtable words (`0x02133410`..`0x0213341C`) and
+hook `Config::Character`. Everything below is native behaviour: chain from the
+current words (`engine_map.py hooks 0x02133410`).
+
+- **One control interface (high).** `CharacterStateMachine` slots +0x00..+0x24
+  are press/hold Jump, Attack, SuitAction and Evade, then press SuitSwitch and
+  Object. `HumanController::Update` (`CharacterControl` +0x10) calls them from
+  the `g_Pad` pressed and held bits of six configured buttons. Spidey's
+  overrides queue commands 2, 1, 5, 3, 4 and 6. `EnemyController` and
+  `MiniBossController` call the same slots, so an enemy brain presses buttons.
+  A mini-boss presses them on its `SpideyStateMachine` (controller+0x70), so
+  its inputs pass through the input queue. `NPCController::Update` is empty.
+- **Commands (high).** The enemy overrides latch each press as a bit of state
+  machine+0x74 (`enum EnemyCommand`); the hold slots do nothing. Slot +0x38
+  sets bit 7 (notice) and `OnHit` sets bits 4..6. `PostUpdate` clears +0x74 and
+  sets +0x78 to 8 every update; all 38 dumped enemies read 0 and 8.
+- **Think lists (high).** `Think` `0x02095834` runs the first list whose
+  predicate matches: `HurtTransitions` (states 37..53), `BurrowTransitions`
+  (9..14), `AirTransitions` and `CrawlTransitions` (30..36), else the 12-entry
+  `GroundTransitions` `0x02132C58`. The air predicate also matches 38..45 and
+  48, but those states take the hurt list first. Think writes each list's null
+  terminator on first use, which fixes the lengths. `LateThink` keeps state 53
+  and otherwise runs `LateTransitions`. Ground[5] turns bit 7 into 8, Ground[8]
+  turns bit 8 into 9 `Burrow`, and Ground[10] turns bit 3 into 26 `BlockIdle`
+  when config+4 has 0x200. Late[1] turns bit 6 into
+  `HurtStateByReaction[+0x30]` (`0x02132B94`), or into 53 when config+4 has
+  bit 0. `OnHit` writes +0x30. `EnemyTuning::Init` `0x021154C0` writes that
+  table and `StateActions`; the values match 91 dumps.
+- **Controller (high for fields, medium for roles).** `EnemyController`
+  (0xAC bytes) keeps the config at +0x68 (equal to state machine+0x48 in all
+  38 enemies), a weak link to its own actor at +0x6C and its spawn position at
+  +0x84. `Update` `0x0208BA94` resets while the enemy is hurt, then calls
+  `0x0208BEAC`, `0x0208C40C`, `0x0208CA78` and `Decide` `0x0208DA48`. When
+  `Decide` returns non-zero it calls `Act` `0x0208F0F8`. `Act` presses Attack,
+  SuitAction, Evade and Jump; `Decide` presses Attack, Object and Jump. Their
+  conditions, most config+4 flags and the controller's other timers are not
+  decoded.
+
 **Action ids (high).** An action id is the position of its animation name in
 one global alphabetical list, 1 (`AirAttack1`) to 185 (`ZipUp`). All 152 actor
 XBDs that parse agree apart from a few alias clips. `enum Action` lists it.
@@ -978,10 +1020,10 @@ the EUR decomp's bounds and about 1,000 entries it merges (thunks, call
 targets). Thumb code and leaf functions reached only by pointer are not found,
 so "inside function X" can name the previous entry.
 
-**Unknown.** Most vtable slots are unnamed. Not decoded: the four enemy think
-lists' conditions, the `CharacterControl` classes, the camera, HUD component
-slots, the factory-to-OBJ-command mapping, `Stats` beyond the listed fields
-and the hit reaction records.
+**Unknown.** Most vtable slots are unnamed. Not decoded: the enemy brain's
+decision conditions (`Decide`, `Act`), most config+4 flags, the camera, HUD
+component slots, the factory-to-OBJ-command mapping, `Stats` beyond the listed
+fields and the hit reaction records.
 
 ## Animation authoring and current evidence
 

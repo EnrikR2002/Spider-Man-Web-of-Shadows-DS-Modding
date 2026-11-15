@@ -1,6 +1,6 @@
 # Current work and handoff
 
-Updated 2026-11-14 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
+Updated 2026-11-15 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
 workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design.
 
 ## Current objective
@@ -105,7 +105,7 @@ remaining models, review the final composition with Luna, and publish after
 all required qualification. Do not push.
 
 Engine map follow-ups: name more vtable slots and fields, decode the enemy
-think lists and `CharacterControl`, map OBJ commands to factory classes. Run `python tools/arm9_hooks.py` after each publication.
+brain's `Decide`/`Act` conditions, map OBJ commands to factory classes. Run `python tools/arm9_hooks.py` after each publication.
 Other research tools (see DEVELOPMENT): `decomp_xref.py`, `heap_report.py`
 (texture VRAM still unmeasured) and `model_bridge.py` (no bridged model is in
 a release).
