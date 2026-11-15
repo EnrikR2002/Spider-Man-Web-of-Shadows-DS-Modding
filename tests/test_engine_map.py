@@ -169,6 +169,7 @@ class EngineMapTests(unittest.TestCase):
         m.words(f, 0xE92D4010,                                   # push {r4, lr}
                 0xE3A02003, 0xE58D2000, 0xE28D1000, branch(f + 16, 0x020CFF0C, True),   # peek command 3
                 0xE3A01007, 0xE5922184,                          # mov r1,#7; ldr r2,[r2,#0x184]
+                0xE3A01005, 0xE59D2184,                          # mov r1,#5; ldr r2,[sp,#0x184]: a local, not HasAbility
                 0x03A00039, 0x08BD8010,                          # moveq r0,#57; popeq {r4, pc}
                 0xE3A0002E, 0xE8BD8010)                          # mov r0,#46; pop {r4, pc}
         m.words(f + 0x40, 0xE59FC004, 0xE081100C, branch(f + 0x48, f), 0xFFFFFFF8)     # this-adjusting thunk

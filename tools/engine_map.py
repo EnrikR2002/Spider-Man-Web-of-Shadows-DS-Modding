@@ -282,7 +282,7 @@ class Static:
             target = arm9_hooks.branch_target(entry + 4 * i, w)
             if is_mov(w, 0) and any(x & 0x0FFF8000 == 0x08BD8000 for x in words[i + 1:i + 4]):
                 out['returns'].add(immediate(w))
-            if w & 0x0FF00FFF == 0x05900000 | ABILITY_SLOT:
+            if w & 0x0FF00FFF == 0x05900000 | ABILITY_SLOT and (w >> 16) & 15 != 13:   # not a stack slot
                 bit = back(i, 1, 6)
                 if bit is not None: out['abilities'].add(bit)
             if w >> 28 != 0xF and (w >> 24) & 0xF == 0xB and target in QUEUE:

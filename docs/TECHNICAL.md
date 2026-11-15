@@ -954,8 +954,10 @@ current words (`engine_map.py hooks 0x02133410`).
   the `g_Pad` pressed and held bits of six configured buttons. Spidey's
   overrides queue commands 2, 1, 5, 3, 4 and 6. `EnemyController` and
   `MiniBossController` call the same slots, so an enemy brain presses buttons.
-  A mini-boss presses them on its `SpideyStateMachine` (controller+0x70), so
-  its inputs pass through the input queue. `NPCController::Update` is empty.
+  A mini-boss presses them on its `MiniBossStateMachine` (controller+0x70,
+  set by the constructor), which keeps Spidey's Attack, SuitAction and Evade
+  slots, so those inputs pass through the input queue. `NPCController::Update`
+  is empty.
 - **Commands (high).** The enemy overrides latch each press as a bit of state
   machine+0x74 (`enum EnemyCommand`); the hold slots do nothing. Slot +0x38
   sets bit 7 (notice) and `OnHit` sets bits 4..6. `PostUpdate` clears +0x74 and
@@ -966,21 +968,27 @@ current words (`engine_map.py hooks 0x02133410`).
   `GroundTransitions` `0x02132C58`. The air predicate also matches 38..45 and
   48, but those states take the hurt list first. Think writes each list's null
   terminator on first use, which fixes the lengths. `LateThink` keeps state 53
-  and otherwise runs `LateTransitions`. Ground[5] turns bit 7 into 8, Ground[8]
+  and otherwise runs `LateTransitions`. `VenomStateMachine` and
+  `MegaVenomStateMachine` override the think and dispatch slots, so these lists
+  do not drive the bosses; they keep the command latch, and their controllers
+  reuse `Act`. Ground[5] turns bit 7 into 8, Ground[8]
   turns bit 8 into 9 `Burrow`, and Ground[10] turns bit 3 into 26 `BlockIdle`
   when config+4 has 0x200. Late[1] turns bit 6 into
   `HurtStateByReaction[+0x30]` (`0x02132B94`), or into 53 when config+4 has
   bit 0. `OnHit` writes +0x30. `EnemyTuning::Init` `0x021154C0` writes that
-  table and `StateActions`; the values match 91 dumps.
+  table and all 54 `StateActions`; both match the dumps.
 - **Controller (high for fields, medium for roles).** `EnemyController`
   (0xAC bytes) keeps the config at +0x68 (equal to state machine+0x48 in all
   38 enemies), a weak link to its own actor at +0x6C and its spawn position at
-  +0x84. `Update` `0x0208BA94` resets while the enemy is hurt, then calls
-  `0x0208BEAC`, `0x0208C40C`, `0x0208CA78` and `Decide` `0x0208DA48`. When
-  `Decide` returns non-zero it calls `Act` `0x0208F0F8`. `Act` presses Attack,
-  SuitAction, Evade and Jump; `Decide` presses Attack, Object and Jump. Their
-  conditions, most config+4 flags and the controller's other timers are not
-  decoded.
+  +0x84. `Update` `0x0208BA94` resets while the enemy is hurt, then takes one
+  of three branches. If `0x02081C68(+0xA4)` returns 0 it calls `0x0208BEAC` and
+  clears bits 0 and 1 of the actor's 7-bit set at +0x88. Otherwise, while bit 0
+  is clear, it calls `0x0208BEAC` and `0x0208C40C`. Otherwise it calls
+  `0x0208CA78`, then `Decide` `0x0208DA48`, then `Act` `0x0208F0F8` when
+  `Decide` returns non-zero. Finally, with bit 0 set and bit 1 clear, it calls
+  `0x02090850`. `Act` presses Attack, SuitAction, Evade and Jump; `Decide`
+  presses Attack, Object and Jump. Their conditions, most config+4 flags and
+  the controller's other timers are not decoded.
 
 **Action ids (high).** An action id is the position of its animation name in
 one global alphabetical list, 1 (`AirAttack1`) to 185 (`ZipUp`). All 152 actor
