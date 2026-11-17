@@ -10,20 +10,23 @@ override conflicting local work (player instruction, 2026-10-23).
 
 1. Read AGENTS, then docs/TASKS (the live handoff). Inspect the working
    tree; preserve unrelated changes.
-2. Check the workspace (DEVELOPMENT "Know your environment"). If original/ holds
-   only PUT_ROM_HERE.txt, edit docs, design and Python and run
-   `python tools/run_tests.py`; you cannot build, run labs, read batteries or
-   claim in-game results.
-3. On a full setup, verify TASKS' build against reference/gameplay_profile.json,
-   tools/release_info.py, reference/releases.json and the stable ROM metadata.
-   Past save hashes are observations, not instructions; always read the actual
-   latest battery.
-4. DEVELOPMENT covers builds/validation; TECHNICAL has a topic map. Search
-   headings and read bounded sections. Find tools with
-   `python tools/tool_index.py <word>`; read `--help` before use.
+2. Check the workspace (DEVELOPMENT "Know your environment"): without the ROM
+   you cannot build, run labs, read batteries or claim in-game results.
+3. On a full setup, verify TASKS' build against the version sources in
+   DEVELOPMENT "Establish the current state". Past save hashes are
+   observations; always read the actual latest battery.
+4. Read bounded sections; TECHNICAL has a topic map. Find
+   tools with `python tools/tool_index.py <word>`; read `--help` before use.
    Never bulk-read TECHNICAL, CHANGES, catalogs or the archive.
 5. Dated designs and old release sections are history; check later work
    before reusing them. Archive: `tools/doc_archive.py list`, then `read`.
+
+## Lead and worker agents
+
+The user wants every task split: the session's model plans, briefs, reviews
+diffs, commits and keeps the handoff; cheaper fresh-context workers code, build,
+test and playtest. At 85% of the 5-hour or weekly limit, refresh TASKS and
+stop. Rules: DEVELOPMENT "Lead and worker agents".
 
 ## Documentation ownership
 
@@ -38,12 +41,10 @@ override conflicting local work (player instruction, 2026-10-23).
 | docs/ROADMAP.md | Whole-game design, player feedback log and idea backlog |
 
 README is the short entry point; mods/README is the overlay-loader exception.
-`reference/doc_contract.json` enforces document set, limits, headings, routing,
-forbidden edits, one current version and frozen CHANGES sections. Run
-`python tools/doc_contract.py check` before every commit (also in tests.test_document_layout).
-Change contract policy only when the user changes documentation policy. Freezing
-newly published CHANGES sections is allowed; never alter rules or existing hashes
-to pass checks. Archive retired designs with `tools/doc_archive.py add` before
+`reference/doc_contract.json` enforces these rules; run
+`python tools/doc_contract.py check` before every commit.
+Change contract policy only when the user changes documentation policy; never
+alter rules or existing hashes to pass checks (freezing new CHANGES sections is fine). Archive retired designs with `tools/doc_archive.py add` before
 removal. Record discoveries in their TECHNICAL section immediately, with confidence
 and source version; mark
 superseded assumptions. Distinguish implemented, agent-tested and
@@ -51,16 +52,15 @@ player-confirmed. Record player verdicts in ROADMAP's feedback log.
 
 ## Task completion and Git
 
-Before finishing, refresh TASKS with the current objective, evidence, blocker
-and next exact action, and update other owning docs the task touched. Commit
+Before finishing, refresh TASKS (objective, evidence, blocker, next exact
+action) and other owning docs the task touched. Commit
 all and only the task's changes with a concise message; exclude unrelated
 pre-existing edits, or report the blocker if they cannot be separated. Do not
 push unless the user asks; in an ephemeral cloud session, push only to the
 branch that session designates.
 
-Receipts/catalogs go in reference/; scratch, traces and captures in ignored
-work/ or build/. A reusable research tool belongs in tools/ with a docstring
-and tests.
+Receipts/catalogs go in reference/, scratch and captures in ignored work/ or
+build/, reusable tools in tools/ with a docstring and tests.
 
 ## Safety and validation
 

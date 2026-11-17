@@ -23,6 +23,81 @@ module with its purpose, grouped by feature family. Check links and anchors with
 `python tools/doc_links.py`, and every documentation rule with
 `python tools/doc_contract.py check` (both run by `tests.test_document_layout`).
 
+## Lead and worker agents
+
+The user asked (2026-11-16) for this split on every task to stretch the plan's
+5-hour limit. Each lead call re-reads the lead's whole context, so cost is
+roughly lead calls × lead context size. In a 2026-11-14 Codex session the lead
+consumed 98% of all input tokens, and polling workers and CI consumed about half
+of the total cost. Two workers did their share of the work for about 2%.
+
+**Roles.** The lead is the session's own model. It reads TASKS, splits the work
+into units, writes briefs, reviews each diff and report, decides, edits
+TASKS/ROADMAP/CHANGES, commits and publishes. It does not write code or run
+builds, labs, the emulator or screenshot sweeps. Anything that takes only a few
+tool calls, such as a question or a one-line doc fix, it does itself. A worker
+implements, tests or playtests one unit and reports back. It never commits,
+publishes, pushes or spawns its own agents.
+
+**Pick the worker by tier, not by model ID.** Use the newest model one tier
+below the lead, and never a lighter tier than Sonnet/Terra for code.
+
+| Tool | Worker | Spawn |
+|---|---|---|
+| Claude Code | `model: "sonnet"`; the alias tracks the newest Sonnet. `haiku` is for read-only searches | Agent tool with `subagent_type: "general-purpose"`. Never `"fork"`: it copies the lead's whole context and runs on the lead's model |
+| Codex | The balanced tier from the model list in `spawn_agent`'s description. On 2026-11-16 that was `gpt-6.1-terra` (Astra > Sol > Terra > Luna; Luna for read-only lookups) | `spawn_agent` with `fork_turns: "none"`, `model`, and `reasoning_effort: "medium"` (`"high"` for asm, hook ABI or failing-test diagnosis). The defaults copy the lead's history and inherit its `xhigh` effort |
+
+If the list no longer offers the recorded model, choose by the same rule and
+update this table.
+
+**Brief.** Write it self-contained: the goal; the files and the TASKS or
+TECHNICAL sections to read; the constraints that apply; done-when, meaning the
+tests or labs to run; and the report format. The worker loads AGENTS itself, so
+do not paste docs into the brief.
+
+**Report, at most 200 words:** the files changed; the commands run, with
+pass/fail counts; the defects found; open questions; and the paths to evidence
+under `work/`. Captures, logs and screenshots stay on disk. The report names at
+most two images for the lead to view.
+
+**Wait; don't poll.** Claude Code notifies the lead when a background worker
+finishes. In Codex, call `wait_agent` once per job with a long timeout. Never
+loop `list_agents`, shell sleeps or status checks. Send fixes to the same worker
+(SendMessage, or `send_message` in Codex), since its context is already loaded
+and cheap.
+
+**Concurrency.** Run parallel workers only on disjoint files. Run one
+emulator/playtest worker at a time, because they share DeSmuME and the battery.
+
+**Keep the lead small.** Review with `git diff --stat` and targeted hunks, not
+whole files or worker transcripts. After a milestone, or once the lead passes
+roughly 200K context tokens, checkpoint as below and continue in a fresh
+session from TASKS.
+
+**Usage budget.** Plan limits are account-wide, and workers draw from the same
+pool. Read usage only at checkpoints: at session start, before each spawn and
+after each report.
+
+- Claude desktop app: the `get_usage` tool (`mcp__ccd_session_mgmt__get_usage`)
+  shows the 5-hour and weekly windows.
+- Codex: `python tools/usage_limit.py`. It also covers the Claude Code CLI once
+  its status line is set up; `--help` shows how.
+
+Below 80%, work normally. From 80% to 84%, start no new workers and finish the
+units in flight. At 85% or more of either window:
+
+1. Stop any worker that is not in its final check.
+2. Commit the finished, reviewed work.
+3. Refresh TASKS with the in-flight state (branches, uncommitted files, worker
+   findings) and the next exact action.
+4. End the turn, reporting the percentage and the reset time.
+
+The prompt cache expires during any 5-hour wait. Stopping at 85% preserves a
+clean handoff and avoids being cut off mid-edit; it does not preserve the cache.
+After the reset, the cheapest restart is `/clear` (or a new chat) followed by
+"continue from TASKS". Resuming the old long context, or running `/compact` on
+it, re-reads all of it uncached.
+
 ## Establish the current state
 
 Read AGENTS/TASKS, inspect the working tree, then verify the relevant files.

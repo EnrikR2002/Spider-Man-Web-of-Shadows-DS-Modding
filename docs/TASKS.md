@@ -1,6 +1,6 @@
 # Current work and handoff
 
-Updated 2026-11-15 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
+Updated 2026-11-16 (America/Edmonton). Read AGENTS first. DEVELOPMENT owns
 workflow, TECHNICAL engine contracts, CHANGES releases and ROADMAP design.
 
 ## Current objective
@@ -68,7 +68,7 @@ Read the actual battery afresh before the next lab or release.
 
 Next session, implement a private candidate against exact v0.42.0. Follow
 DEVELOPMENT's guarded post-pass workflow and read the latest actual battery
-before creating a disposable copy. This handoff is documentation only.
+before creating a disposable copy. Lead and workers split each step (AGENTS).
 
 1. Trace a native Black grounded Y hit → R → Y with Drill Kick and Enhanced
    Dodge toggled on the copy. Read TECHNICAL's [player state machine](TECHNICAL.md#player-state-machine-and-red-kit-hooks-v020)

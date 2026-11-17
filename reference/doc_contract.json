@@ -10,6 +10,7 @@
       "required_headings": [
         "# Project instructions",
         "## Start and find the current truth",
+        "## Lead and worker agents",
         "## Documentation ownership",
         "## Task completion and Git",
         "## Safety and validation",
@@ -63,6 +64,7 @@
       "required_headings": [
         "# Development and validation",
         "## Know your environment",
+        "## Lead and worker agents",
         "## Establish the current state",
         "## How a release is built",
         "## Add a feature as a new post-pass",
