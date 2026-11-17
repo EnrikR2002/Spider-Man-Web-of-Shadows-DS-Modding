@@ -78,13 +78,17 @@ session from TASKS.
 pool. Read usage only at checkpoints: at session start, before each spawn and
 after each report.
 
-- Claude desktop app: the `get_usage` tool (`mcp__ccd_session_mgmt__get_usage`)
-  shows the 5-hour and weekly windows.
+- Claude desktop app: the `get_usage` tool shows the 5-hour and weekly
+  windows. It is deferred, so load it first with ToolSearch
+  `select:mcp__ccd_session_mgmt__get_usage`.
 - Codex: `python tools/usage_limit.py`. It also covers the Claude Code CLI once
   its status line is set up; `--help` shows how.
 
-Below 80%, work normally. From 80% to 84%, start no new workers and finish the
-units in flight. At 85% or more of either window:
+The bands apply to the 5-hour window. Below 80%, work normally. From 80% to
+84%, start no new workers and finish the units in flight. Under weekly pressure,
+keep delegating, since workers are the cheaper path. Ignore per-model weekly
+windows for models the session does not use. At 85% of the 5-hour window, or
+95% of the weekly all-models window:
 
 1. Stop any worker that is not in its final check.
 2. Commit the finished, reviewed work.

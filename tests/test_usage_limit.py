@@ -26,7 +26,7 @@ class UsageLimitTests(unittest.TestCase):
                 '{"type":"response_item","payload":{}}']), encoding='utf-8')
             reading = usage_limit.codex_reading(tmp)
         self.assertEqual(reading['windows'], {'5h': (86.0, 2_000_000_000), 'weekly': (9.0, 2_000_009_999)})
-        self.assertTrue(usage_limit.verdict(reading, now=1_900_000_000)[1].startswith('STOP'))
+        self.assertTrue(usage_limit.verdict(reading, now=1_900_000_000).startswith('STOP'))
 
     def test_claude_statusline_round_trip_and_reset_window(self):
         payload = {'rate_limits': {'five_hour': {'used_percentage': 82.4, 'resets_at': 1000},
@@ -36,9 +36,15 @@ class UsageLimitTests(unittest.TestCase):
             self.assertEqual(usage_limit.statusline(json.dumps(payload), dump, now=900), '5h 82% · weekly 40%')
             reading = usage_limit.claude_reading(dump)
             self.assertEqual(usage_limit.statusline('{}', dump), 'usage: waiting for first reply')
-        self.assertEqual(usage_limit.verdict(reading, now=950)[1][:7], 'WRAP UP')
-        self.assertEqual(usage_limit.verdict(reading, now=2000), (40.0, 'OK'))  # 5h window has reset
+        self.assertEqual(usage_limit.verdict(reading, now=950)[:7], 'WRAP UP')
+        self.assertEqual(usage_limit.verdict(reading, now=2000), 'OK')  # 5h window has reset
         self.assertIsNone(usage_limit.claude_reading(Path(tmp, 'missing.json')))
+
+    def test_weekly_pressure_keeps_delegating_until_95(self):
+        windows = {'5h': (2.0, None), 'weekly': (82.0, None)}
+        self.assertEqual(usage_limit.verdict({'windows': windows}), 'OK')
+        windows['weekly'] = (95.0, None)
+        self.assertTrue(usage_limit.verdict({'windows': windows}).startswith('STOP'))
 
 
 if __name__ == '__main__':

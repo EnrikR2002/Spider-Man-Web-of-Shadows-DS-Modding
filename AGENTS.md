@@ -25,8 +25,7 @@ override conflicting local work (player instruction, 2026-10-23).
 
 The user wants every task split: the session's model plans, briefs, reviews
 diffs, commits and keeps the handoff; cheaper fresh-context workers code, build,
-test and playtest. At 85% of the 5-hour or weekly limit, refresh TASKS and
-stop. Rules: DEVELOPMENT "Lead and worker agents".
+test and playtest. At 85% of the 5-hour limit, refresh TASKS and stop. Rules: DEVELOPMENT "Lead and worker agents".
 
 ## Documentation ownership
 

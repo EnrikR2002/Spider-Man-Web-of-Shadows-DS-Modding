@@ -22,8 +22,9 @@ import sys
 import tempfile
 import time
 
-NO_NEW_WORK = 80  # percent: start no new workers
-STOP = 85         # percent: checkpoint and end the turn
+NO_NEW_WORK = 80  # 5-hour percent: start no new workers
+STOP = 85         # 5-hour percent: checkpoint and end the turn
+WEEKLY_STOP = 95  # weekly percent; below it keep delegating, the cheaper path
 CLAUDE_DUMP = Path(tempfile.gettempdir()) / 'claude-plan-usage.json'
 TAIL = 4 << 20    # rollout files grow large; the newest record is near the end
 LABELS = {300: '5h', 10080: 'weekly'}
@@ -83,15 +84,16 @@ def claude_reading(dump=CLAUDE_DUMP):
 
 
 def verdict(reading, now=None):
-    """(worst live percent, advice). A window past its reset counts as 0."""
+    """Advice for the lead. A window past its reset counts as 0."""
     now = now or time.time()
-    live = [pct if not resets or resets > now else 0.0 for pct, resets in reading['windows'].values()]
-    worst = max(live)
-    if worst >= STOP:
-        return worst, 'STOP: checkpoint now (finish or stop workers, commit, refresh the handoff, end the turn)'
-    if worst >= NO_NEW_WORK:
-        return worst, 'WRAP UP: start no new workers; finish the units in flight'
-    return worst, 'OK'
+    live = {label: pct if not resets or resets > now else 0.0
+            for label, (pct, resets) in reading['windows'].items()}
+    short = max((pct for label, pct in live.items() if label != 'weekly'), default=0.0)
+    if short >= STOP or live.get('weekly', 0.0) >= WEEKLY_STOP:
+        return 'STOP: checkpoint now (finish or stop workers, commit, refresh the handoff, end the turn)'
+    if short >= NO_NEW_WORK:
+        return 'WRAP UP: start no new workers; finish the units in flight'
+    return 'OK'
 
 
 def describe(reading, now=None):
@@ -106,7 +108,7 @@ def describe(reading, now=None):
                          f'in {left // 60}h{left % 60:02d}m)')
         else:
             parts.append(f'{label} {pct:.0f}%')
-    advice = verdict(reading, now)[1]
+    advice = verdict(reading, now)
     age = int(now - reading['at']) // 60
     age = f'{age} min' if age < 120 else f'{age // 60} h'
     return f"{reading['source']}: {', '.join(parts)}; read {age} ago\n  -> {advice}"
